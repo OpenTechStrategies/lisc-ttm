@@ -1,0 +1,137 @@
+<?php
+/*teacher surveys are different pre and post.  This is pre only.
+ * 
+ *  add a new survey: */
+if ($_POST['new_survey']==1){
+$save_survey_answers = "INSERT INTO PM_Teacher_Survey (
+    School_Name,
+    Teacher_Name,
+    Grade,
+    Classroom_Language,
+    Years_In_Program,
+    Languages,
+    Years_As_Teacher,
+    Years_At_School,
+    Num_Students,
+    Num_ELL_Students,
+    Num_IEP_Students,
+    Num_Students_Below_Grade_Level,
+    PM_Activities_Training,
+    Teacher_Activities_Training,
+    Task_1,
+    Task_2,
+    Task_3,
+    Task_4,
+    Task_5,
+    Task_6,
+    Task_7,
+    Task_8,
+    Task_9,
+    Task_10,
+    Task_Other_Text,
+    Teacher_Involvement_A,
+    Teacher_Involvement_B,
+    Teacher_Involvement_C,
+    Teacher_Involvement_D,
+    Teacher_Involvement_E,
+    Teacher_Involvement_F,
+    Teacher_Involvement_G,
+    Teacher_Involvement_H,
+    Teacher_Involvement_I,
+    Teacher_Involvement_J,
+    Teacher_Parent_Network_K,
+    Teacher_Parent_Network_L,
+	Parent_Mentor_ID)
+    VALUES (    
+                   '" . $_POST['school'] . "',
+                   '" . $_POST['teacher'] . "',
+                   '" . $_POST['grade'] . "',
+                   '" . $_POST['class_lang'] . "',
+                   '" . $_POST['years_pm_program'] . "',
+                   '" . $_POST['teacher_language'] . "',
+                   '" . $_POST['years_teacher'] . "',
+                   '" . $_POST['years_at_school'] . "',
+                   '" . $_POST['num_students'] . "',
+                   '" . $_POST['num_ell'] . "',
+                   '" . $_POST['num_iep'] . "',
+                   '" . $_POST['num_below_grade'] . "',
+                   '" . $_POST['training_pms'] . "',
+                   '" . $_POST['training_teachers'] . "',                       
+                   '" . $_POST['grade_checkbox'] . "',
+                   '" . $_POST['tutor_checkbox'] . "',
+                   '" . $_POST['half_checkbox'] . "',
+                   '" . $_POST['hallway_checkbox'] . "',
+                   '" . $_POST['discipline_checkbox'] . "',
+                   '" . $_POST['homework_checkbox'] . "',
+                   '" . $_POST['groups_checkbox'] . "',
+                   '" . $_POST['whole_checkbox'] . "',
+                   '" . $_POST['organize_checkbox'] . "',
+                   '" . $_POST['other_checkbox'] . "',
+                   '" . $_POST['other_task_text'] . "',                   
+                   '" . $_POST['A'] . "',
+                   '" . $_POST['B'] . "',
+                   '" . $_POST['C'] . "',
+                   '" . $_POST['D'] . "',
+                   '" . $_POST['E'] . "',
+                   '" . $_POST['F'] . "',
+                   '" . $_POST['G'] . "',
+                   '" . $_POST['H'] . "',
+                   '" . $_POST['I'] . "',
+                   '" . $_POST['J'] . "',
+                   '" . $_POST['K'] . "',
+                   '" . $_POST['L'] . "',
+				   '" . $_COOKIE['participant'] . "')";
+echo $save_survey_answers;
+include "../include/dbconnopen.php";
+mysqli_query($cnnLSNA, $save_survey_answers);
+include "../include/dbconnclose.php";
+} 
+/* edit survey responses: */
+else {
+	$edit_survey = "UPDATE PM_Teacher_Survey SET 
+	School_Name='" . $_POST['school'] . "',
+    Teacher_Name='" . $_POST['teacher'] . "',
+    Grade='" . $_POST['grade'] . "',
+    Classroom_Language='" . $_POST['class_lang'] . "',
+    Years_In_Program='" . $_POST['years_pm_program'] . "',
+    Languages='" . $_POST['teacher_language'] . "',
+    Years_As_Teacher='" . $_POST['years_teacher'] . "',
+    Years_At_School='" . $_POST['years_at_school'] . "',
+    Num_Students='" . $_POST['num_students'] . "',
+    Num_ELL_Students='" . $_POST['num_ell'] . "',
+    Num_IEP_Students='" . $_POST['num_iep'] . "',
+    Num_Students_Below_Grade_Level='" . $_POST['num_below_grade'] . "',
+    PM_Activities_Training='" . $_POST['training_pms'] . "',
+    Teacher_Activities_Training='" . $_POST['training_teachers'] . "',
+    Task_1='" . $_POST['grade_checkbox'] . "',
+    Task_2='" . $_POST['tutor_checkbox'] . "',
+    Task_3='" . $_POST['half_checkbox'] . "',
+    Task_4='" . $_POST['hallway_checkbox'] . "',
+    Task_5='" . $_POST['discipline_checkbox'] . "',
+    Task_6='" . $_POST['homework_checkbox'] . "',
+    Task_7='" . $_POST['groups_checkbox'] . "',
+    Task_8='" . $_POST['whole_checkbox'] . "',
+    Task_9='" . $_POST['organize_checkbox'] . "',
+    Task_10='" . $_POST['other_checkbox'] . "',
+    Task_Other_Text='" . $_POST['other_task_text'] . "',
+    Teacher_Involvement_A='" . $_POST['A'] . "',
+    Teacher_Involvement_B='" . $_POST['B'] . "',
+    Teacher_Involvement_C='" . $_POST['C'] . "',
+    Teacher_Involvement_D='" . $_POST['D'] . "',
+    Teacher_Involvement_E='" . $_POST['E'] . "',
+    Teacher_Involvement_F='" . $_POST['F'] . "',
+    Teacher_Involvement_G='" . $_POST['G'] . "',
+    Teacher_Involvement_H='" . $_POST['H'] . "',
+    Teacher_Involvement_I='" . $_POST['I'] . "',
+    Teacher_Involvement_J='" . $_POST['J'] . "',
+    Teacher_Parent_Network_K='" . $_POST['K'] . "',
+    Teacher_Parent_Network_L='" . $_POST['L'] . "',
+	Parent_Mentor_ID='" . $_COOKIE['participant'] . "'
+	WHERE PM_Teacher_Survey_ID='" . $_POST['survey_id'] . "'";
+	
+	include "../include/dbconnopen.php";
+	echo $edit_survey;
+	mysqli_query($cnnLSNA, $edit_survey);
+	include "../include/dbconnclose.php";
+}
+?>

@@ -1,0 +1,1123 @@
+/* 
+    Document   : styles
+    Created on : Aug 22, 2012, 2:06:47 PM
+    Author     : cdonnelly
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/*root { 
+    display: block;
+}*/
+
+body{
+	margin:0;
+	font-family: Arial,Verdana,Geneva,Helvetica,sans-serif;
+}
+
+h2 {
+	text-align:center;
+}
+
+h3 {
+	text-align:center;
+	font-size: 1.5em;
+	margin:0;
+}
+
+h4 {
+	text-align: center;
+	font-style:italic;
+	font-size: 18px;
+	margin:3px;
+	color: #3954A2;
+}
+
+h5 {
+	font-style: italic;
+	font-size: 16px;
+	color: #3954A2;
+	margin: 0;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+a {
+	font-weight:bold;
+	font-style:italic;
+	color:#696969;
+	cursor: pointer;
+}
+
+a img {
+	text-decoration: none;
+	border: 0px;
+}
+
+a.download {
+	font-size:12px;
+}
+
+a.search_toggle {
+	text-decoration: underline;
+	color: #3954A2;
+}
+
+.helptext{
+	font-size: 12px;
+	color: #696969;
+	font-style: italic;
+	font-weight:bold;
+}
+
+hr {
+	border-style: solid;
+	color: #696969;
+}
+
+div#header{
+	height: 36px;
+	width:1012px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-bottom:10px;
+	border-left: 1px solid #696969;
+	border-right: 1px solid #696969;
+	margin-top:0;
+	margin-bottom:0;
+	padding:6px 5px 10px 3px;
+}
+
+div#header span {
+	float:left;
+}
+
+div#header img{
+	float:right;
+	height:40px;
+	margin-right:20px;
+}
+
+div#header a{
+	font-family: Verdana, sans-serif;
+	font-size: 30px;
+	font-weight:bold;
+	font-style:italic;
+	color:#3954A2;
+	text-decoration:none;
+}
+
+div#manage_privileges {
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.content_narrow{
+	width:550px;
+	margin-left:auto;
+	margin-right:auto;
+	padding-bottom:20px;
+}
+
+div.content_wide{
+	padding-bottom:20px;
+}
+
+hr.divider{
+	color:#696969;
+	height:1px;
+	background-color:#696969;
+	width:100%;
+	margin:0;
+	border:0;
+	position: absolute;
+}
+
+a.add_new span{
+	border:4px solid #3954A2;
+	border-radius: 15px;
+	color: #3954A2;
+	background-color: white;
+	font-weight:bold;
+	font-style:italic;
+	font-size: 1.2em;
+	padding:5px;
+	margin-bottom:10px;
+	behavior: url(/include/PIE.htc);
+}
+
+a.add_new {
+	text-decoration:none;
+}
+
+a.selected span.add_new_button {
+	background-color: white;
+	box-shadow: 5px 5px 5px #888888;
+	behavior: url(/include/PIE.htc);
+}
+
+
+div#main_wrapper {
+	width: 1000px;
+	margin-left:auto;
+	margin-right:auto;
+	border-left: 1px solid #696969;
+	border-right: 1px solid #696969;
+	margin-top:0;
+	margin-bottom:0;
+	padding:3px 10px 3px 10px;
+	/*height:100%;*/
+	min-height:350px;
+	}
+
+.navigation {
+  /*background: url(images/navigation.png) top left repeat-x;*/
+  height: 35px;
+  overflow: auto;
+  display: block;
+  float: left;
+  width: 100%;
+}
+.navigation * {
+  padding:0;
+  margin:0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+.navigation ul {
+  display: block;
+  float: left;
+  padding: 10px 0 0 0;
+  margin: 37px 0 0 20px;
+}
+.navigation ul li {
+  list-style: none;
+  float: left;
+  margin: 0 0 0 5px;
+}
+
+/* Bickerdike */
+
+div#bickerdike_header h3 {
+	margin: 0;
+}
+
+div#bickerdike_header img {
+	vertical-align: middle;
+	height: 90px;
+}
+
+div#bickerdike_header td.menu_item {
+	padding-left: 50px;
+	padding-top: 8px;
+	/*width: 25%;*/
+	text-align:center;
+}
+
+div#bickerdike_header td.menu_item a {
+	text-decoration: none;
+	color: #696969;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+div#bickerdike_header td.select a {
+	text-decoration: underline;
+}
+
+div#bickerdike_header td.menu_item a.selected {
+	text-decoration:underline;
+	color: #3954A2;
+}
+
+table#health_survey_menu a.selected {
+	text-decoration:underline;
+	color: #3954A2;
+}
+
+table#data_menu a.selected {
+	text-decoration: underline;
+	color: #3954A2;
+}
+
+table#data_menu td.menu_item {
+	width: 25%;
+}
+
+table#reports_menu a.selected {
+	text-decoration: underline;
+	color: #3954A2;
+}
+
+div#bickerdike_header td#logo {
+	width: 110px;
+}
+
+div#participant_survey_data h4{
+	text-align:left;
+}
+
+input.health_metric{
+	width: 50px;
+}
+
+span.survey_type {
+	padding: 5px 10px 5px 10px;
+	margin: 0 5px 0 5px;
+	cursor:pointer;
+}
+
+span.survey_type.selected {
+	background-color: #696969;
+}
+
+span.survey_type.selected a {
+	color: white;
+}
+
+table#health_calendar_table td{
+	vertical-align: top;
+	height: 100px;
+	width: 140px;
+}
+
+table#health_calendar_table {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+table#health_calendar_table span.health_event {
+	font-size: .8em;
+	font-style: italic;
+}
+
+table#health_calendar_table caption {
+	font-size: 1.5em;
+	margin-bottom: 25px;
+}
+
+table#all_programs {
+	width:100%;
+}
+
+table#all_programs td{
+	vertical-align:top;
+	text-align: left;
+}
+
+table#contextual_stats_table {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+table.program_table{
+	font-size: .9em;
+	margin-left:auto;
+	margin-right:auto;
+	/*width: 450px;*/
+}
+
+table.program_table td {
+	padding: 3px;
+}
+
+table.program_table th {
+	font-size: .8em;
+}
+
+table#program_schedule_table {
+	/*width: 900px;*/
+	margin-left:auto;
+	margin-right:auto;
+}
+
+table.search_table{
+	font-size: .9em;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+table.search_table td {
+	padding: 3px;
+}
+
+table.search_table strong {
+	font-size:.9em;
+}
+
+table.all_participants {
+	width: 450px;
+}
+
+table#user_search {
+	font-size: .9em;
+}
+
+table#reports_and_data {
+	margin-left:auto;
+	margin-right:auto;
+}
+
+table#reports_and_data td {
+	vertical-align:top;
+	/*width:50%;*/
+}
+
+div#bickerdike_stats {
+	width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div#download_list{
+	margin-left:auto;
+	margin-right:auto;
+	width:800px;
+}
+
+div#corner_store_stats {
+	margin-left: auto;
+	margin-right: auto;
+	width: 700px;
+}
+
+div#corner_store_stats table {
+	font-size: .85em;
+	width: 100%;
+}
+
+div#corner_store_stats table th {
+	border-bottom: 1px solid black;
+}
+
+table#cws_table td {
+	padding: 3px;
+	border-bottom: 1px solid black;
+	vertical-align: top;
+}
+
+table#cws_table {
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div#show_user_ok {
+	color: #990000;
+	font-weight: bold;
+	font-size: .9em;
+	padding-left: 25px;
+}
+
+div#show_ok {
+	color: #990000;
+	font-weight: bold;
+	font-size: .9em;
+	padding-left: 25px;
+}
+
+div.jqplot-target {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+input#new_user_address_number {
+	width: 40px;
+}
+
+input#new_user_address_street {
+	width: 100px;
+}
+
+input#new_user_address_direction {
+	width: 25px;
+}
+
+input#new_user_address_street_type {
+	width: 40px;
+}
+
+div.remove_step{
+	width: 500px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+/* end of Bickerdike-specific style rules */
+
+/* -----------------------------------------------------------------------------------------------------------*/
+
+/* begin Logan Square-specific style rules */
+
+div#lsna_header img {
+	vertical-align: middle;
+	width: 250px;
+}
+
+div#lsna_header td.menu_item {
+	padding-left: 30px;
+	padding-top: 8px;
+	width: 20%;
+	text-align:center;
+}
+
+div#lsna_header td.menu_item a {
+	text-decoration: none;
+	color: #696969;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+div#lsna_header td.select a {
+	text-decoration: underline;
+}
+
+div#lsna_header td.menu_item a.selected {
+	text-decoration:underline;
+	color: #3954A2;
+}
+
+h2#lsna_welcome {
+	margin:0;
+}
+
+table#new_participant_table {
+	font-size: .9em;
+	margin-left: auto;
+	margin-right: auto;
+	width: 900px;
+}
+
+table#new_participant_table td {
+	padding: 3px;
+	border-bottom: 1px solid black;
+	vertical-align: top;
+}
+
+table#new_participant_table td.blank {
+	border: 0px;
+}
+
+table#new_participant_table strong {
+	font-size:.9em;
+}
+
+table.survey_input td.blank {
+	border: 0px;
+}
+
+table.pm_survey {
+	font-size: .8em;
+	padding: 7px;
+	border: 2px solid #696969;
+    border-collapse: collapse;
+    width: 800px;
+	margin-left:auto;
+	margin-right:auto;
+}
+/*th {
+border-width: 1px;
+border-style: solid;
+border-color: #696969;
+}*/
+td.pm_survey{
+    border-width: 1px;
+    border-style: solid;
+    border-color: #696969;
+    text-align: left;
+	padding: 0 10px;
+}
+
+ul.programs_by_category {
+	list-style-type: none;
+}
+
+ul.programs_by_category h4{
+	text-align: left;
+	
+}
+
+div.program_by_category_list {
+	margin-left: 30px;
+}
+
+table#lsna_programs td{
+	vertical-align: top;
+}
+
+a.survey_select {
+	padding: 0 15px;
+}
+
+a.selected {
+	color: #3954A2;
+}
+
+
+table#survey_list_table td {
+	padding:3px;
+}
+
+a.report_tab {
+	padding: 5px 15px;
+	font-size:.95em;
+}
+
+table.program_involvement_table {
+	border-collapse:collapse;
+}
+
+table.program_involvement_table th{
+	font-size:.8em;
+	padding: 3px 5px;
+}
+
+table.program_involvement_table td {
+	border: 1px solid gray;
+	text-align:right;
+}
+
+table.program_involvement_table td strong{
+	font-size:.9em;
+}
+
+table#attendance_table td {
+	padding:3px;
+	vertical-align:middle;
+}
+
+div.question_summary {
+	font-size: .9em;
+	padding-left: 30px;
+	margin-bottom: 15px;
+}
+
+table#school_records th {
+	text-align:center;
+}
+
+table#school_records td {
+	text-align:center;
+}
+
+/* end Logan Square-specific style rules */
+
+/* Pilsen-specific style rules */
+
+div#trp_header td {
+	text-align: center;
+}
+
+div#trp_header td.menu_item a {
+	text-decoration: none;
+	color: #696969;
+	font-size: 1.1em;
+	font-weight: normal;
+}
+
+div#trp_header td.select a {
+	text-decoration: underline;
+}
+
+div#trp_header h2 {
+	margin:20px 0 0 0;
+}
+
+hr {
+	margin: 3px;
+}
+
+div#trp_header td.menu_item a.selected {
+	color: #3954A2;
+	font-weight:bold;
+}
+
+div.trp_content_block h2 {
+	margin:0;
+	color: #3954A2;
+}
+
+div.trp_content_block h3 {
+	margin:3px;
+	color: #696969;
+	font-style:italic;
+	font-size:18px;
+	text-align: left;
+}
+
+div.trp_content_block td {
+	vertical-align: top;
+	padding:3px;
+}
+
+div#new_trp_event table {
+	font-size:.9em;
+	text-align:left;
+	margin-left:auto;
+	margin-right:auto;
+	
+}
+
+ul#outcomes_list {
+	list-style-type:none;
+}
+
+ul#outcomes_list table{
+	border-collapse:collapse;
+}
+
+ul#outcomes_list table th {
+	border-bottom: 1px solid #696969;
+}
+
+ul#outcomes_list h3 {
+	cursor:pointer;
+}
+
+ul#events_list {
+	list-style-type:none;
+}
+
+ul#events_list strong {
+	font-size:.9em;
+}
+
+ul#events_list li {
+	background-color:#F2F2F2;
+}
+
+ul#events_list li div.event_info {
+	background-color:white;
+}
+
+ul#events_list h4 {
+	text-align:left;
+	cursor:pointer;
+	border: 1px solid #696969;
+	margin:5px 0 0 0;
+	padding-left:10px;
+}
+
+table#engagement_summary_table {
+	width:1000px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+div.event_info {
+	margin: 0 0 10px 0;
+	padding: 5px;
+	border: 1px solid #696969;
+	border-radius: 0 0 10px 10px;
+	border-top:0;
+}
+
+div#add_participant td {
+	border-bottom:1px solid #696969;
+	border-top:1px solid #696969;
+	padding: 5px 10px;
+	vertical-align:top;
+}
+
+div.add_family table td{
+	padding:2px;
+}
+
+div#programs_home h4 {
+	cursor:pointer;
+	text-align:left;
+}
+
+div#programs_home div.program_summary {
+	padding: 0 0 25px 30px;
+}
+
+div#program_profile table {
+	margin-left:auto;
+	margin-right:auto;
+}
+
+div#program_profile td {
+	vertical-align:top;
+}
+
+div#participant_profile div.program_details {
+	border: 2px solid gray;
+	padding: 10px;
+	margin-bottom: 20px;
+	width: 85%;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+table#gold_scores_table {
+	/*border-collapse:collapse;*/
+	width:100%;
+}
+
+table#gold_scores_table th {
+	font-size:.7em;
+	border-bottom:1px solid black;
+}
+
+table#gold_scores_table td {
+	font-size:.8em;
+	border-bottom:1px solid #696969;
+	padding: 2px 0 2px 15px;
+	vertical-align:middle;
+}
+
+table#gold_scores_table td.gold_category {
+	font-weight:bold;
+	font-style:italic;
+	padding: 3px;
+	background-color:#F2F2F2;
+}
+
+table#gold_scores_table td.gold_score_cell {
+	padding:0;
+	width:10%;
+}
+
+table.profile_table table.grades_table th {
+	font-size:.75em;
+	text-align:center;
+}
+
+table.profile_table table.grades_table td {
+	padding:3px;
+	text-align:center;
+}
+
+input.gold_score {
+	width: 25px;
+}
+
+input.date_field {
+	width:70px;
+}
+
+div.add_participant {
+	text-align:center;
+}
+
+div#search_to_add_participant {
+	text-align:left;
+	border:1px solid #696969;
+	padding:3px;
+	font-size: .85em;
+	margin-right:10px;
+	margin-top: 5px;
+}
+
+table.survey_table {
+	margin-left:auto;
+	margin-right:auto;
+	border-collapse: collapse;
+}
+
+div#nmma_survey table.survey_table {
+	width: 650px;
+}
+
+table.survey_table td {
+	border-bottom:1px solid black;
+	padding:3px;
+}
+
+td.blank {
+	border:0px;
+}
+
+table#nmma_survey_summary th {
+	font-size:.75em;
+	border-bottom:1px solid #696969;
+}
+
+table#nmma_survey_summary td {
+	font-size:.9em;
+	border-bottom:1px solid #696969;
+	padding:3px 3px 3px 15px;
+}
+
+table#nmma_survey_summary tr.divider {
+	background-color: #F2F2F2;
+}
+
+table.gpa_isat_table th {
+	font-size:.75em;
+}
+
+table.gpa_isat_table tr.divider {
+	background-color: #F2F2F2;
+	font-size:.75em;
+}
+
+table.gpa_isat_table td {
+	padding: 3px;
+	text-align:center;
+	vertical-align:middle;
+}
+
+/* end Pilsen-specific style rules */
+
+/* SWOP-specific style rules */
+
+div#swop_header td.menu_item a {
+	text-decoration: none;
+	color: #696969;
+	font-size: 1.1em;
+	font-weight:normal;
+}
+
+div#swop_header td.menu_item a.selected {
+	color: #3954A2;
+}
+
+div#swop_header td.select a {
+	text-decoration: underline;
+}
+
+div#swop_header h2 {
+	margin:0;
+}
+
+div#pool_member_profile table.inner_table {
+	width: auto;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+
+table#inst_conex th {
+	font-size:.8em;
+	padding-left: 3px;
+}
+
+table#inst_conex td {
+	padding: 5px;
+}
+
+table#linked_properties_table td{
+	vertical-align:top;
+	padding: 3px;
+}
+
+table#linked_properties_table th{
+	font-size:.9em;
+}
+
+table#leadership_table td {
+	padding:2px 1px 1px 1px;
+	font-size:12px;
+}
+
+table#leadership_table strong {
+	font-size:12px;
+}
+
+tr.current_residence {
+	background-color: #b9c5e6;
+}
+
+table.inner_table strong {
+	font-size: .8em;
+}
+
+table.activity_history strong {
+	font-size: 1em;
+}
+
+table.leader_report_table {
+	width:60%;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+table.leader_report_table th {
+	font-size:.8em;
+}
+
+table#edit_dropdowns th {
+	font-size: .9em;
+}
+
+table#edit_dropdowns th.subheader {
+	padding: 4px;
+	background-color: #EEEEEE;
+	font-style: italic;
+}
+
+table#edit_dropdowns td {
+	vertical-align:top;
+	font-size:.8em;
+}
+
+table#edit_dropdowns td.dropdown_name {
+	font-size:.9em;
+	font-weight:bold;
+	font-style:italic;
+}
+
+/* end SWOP-specific style rules */
+
+/* Enlace-specific style rules */
+
+div#enlace_header td.menu_item a {
+	text-decoration: none;
+	color: #696969;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+div#enlace_header td.menu_item a.selected {
+	color: #3954A2;
+}
+
+div#enlace_header td.select a {
+	text-decoration: underline;
+}
+
+div#enlace_header h2 {
+	margin:20px 0 0 0;
+}
+
+div#enlace_participants strong {
+	font-size: .8em;
+}
+
+div#enlace_participants table td.all_projects {
+	text-align:left;
+}
+
+div#enlace_participants table.search_table td {
+	padding: 3px 8px;
+}
+
+input.hasDatepicker {
+	width:65px;
+}
+
+/* end Enlace-specific style rules */
+
+table.all_projects {
+	font-size: .8em;
+	padding: 7px;
+	border: 2px solid #696969;
+    border-collapse: collapse;
+    width: 800px;
+	margin-left:auto;
+	margin-right:auto;
+}
+/*th {
+border-width: 1px;
+border-style: solid;
+border-color: #696969;
+}*/
+td.all_projects{
+    border-width: 1px;
+    border-style: solid;
+    border-color: #696969;
+    text-align:center;
+	padding: 0 10px;
+}
+
+table.homescreen_table {
+	width:100%;
+	text-align:center;
+}
+
+table.homescreen_table td{
+	vertical-align:top;
+}
+
+table.homescreen_table td input {
+	width: 140px;
+}
+
+table.homescreen_table div#show_results table.program_table {
+	width: 550px;
+	font-size: .75em;
+}
+
+div#search_participant_div table.program_table {
+	width: 700px;
+}
+
+table.survey_input {
+	border-collapse:collapse;
+}
+
+table.survey_input td {
+	border-bottom: 1px solid black;
+	padding:5px;
+	vertical-align:top;
+	}
+	
+table.profile_table {
+	font-size: .9em;
+	width: 100%;
+}
+
+table.profile_table td {
+	vertical-align: top;
+	padding:10px;
+}
+
+table.profile_table th {
+	text-align: left;
+	border-bottom: 1px solid black;
+	/*font-size:.8em;*/
+}
+
+div#program_profile_div table.participant_list th {
+	font-size: .8em;
+}
+
+table.inner_table {
+	width:100%;
+}
+
+table.inner_table td {
+	padding: 5px 5px 5px 10px;
+	border-bottom: 1px solid #696969;
+	text-align: left;
+}
+
+table.inner_table td.blank {
+	border: 0px;
+}
+	
+div#footer {
+	width: 1014px;
+	margin-left:auto;
+	margin-right:auto;
+	height: 40px;
+	border-left: 1px solid #696969;
+	border-right: 1px solid #696969;
+	margin-top:0;
+	margin-bottom:0;
+	padding:3px;
+	}
+
+div#footer img#ch_logo{
+	height:30px;
+	float:left;
+	padding-bottom:8px;
+	margin:5px 0 0 3px;
+}
+
+div#footer span#byline{
+	font-weight:bold;
+	font-style:italic;
+	float:right;
+	color:#696969;
+	font-family:Georgia, serif;
+	font-size:12px;
+	margin-top:5px;
+	margin-right:20px;
+}
