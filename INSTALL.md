@@ -69,19 +69,19 @@ Steps to install:
 
     Define an httpd configuration block for the site like this:
 
+        # TBD: Update all of this for SSL/TLS on port 443.
         <VirtualHost *:80>
           ServerAdmin webmaster@localhost
-          ServerName your-ttm-hostname.com
+          # TODO: will need to update this:
+          ServerName your-server-name-here.com
           DocumentRoot /var/www/ttm
+          LogFormat "%h %l %u %t \"%r\" %>s %b" common
+          LogFormat "%{Referer}i -> %U" referer
+          LogFormat "%{User-agent}i" agent
+          CustomLog ${APACHE_LOG_DIR}/ttm_access.log common
           ErrorLog ${APACHE_LOG_DIR}/ttm_error.log
           LogLevel debug
         </VirtualHost>
-        
-        <Directory /var/www/ttm>
-          AllowOverride all
-        </Directory>
-
-        ### TBD: Update for SSL/TLS cert ###
 
     On Debian, the standard is to put that in a file named (e.g.)
     `/etc/apache2/sites-available/ttm.conf`, and then install it like
@@ -95,7 +95,7 @@ Steps to install:
 
         $ sudo service apache2 restart
 
-5.  Set up the MySQL database:
+5.  Set up the MySQL databases:
 
         $ mysql -u root -p
         Password: ********
@@ -124,3 +124,5 @@ Steps to install:
             ${EDITOR} `dirname ${name}`/`basename ${name} .tmpl`;    \  
           done
         $
+
+7. TBD, etc, etc.
