@@ -26,7 +26,7 @@ date_default_timezone_set('America/Chicago');
         <div id="header">
 
             <span><a href="/index.php">Testing the Model Data Center</a></span>
-			<img src="/images/lisc-chicago-logo.gif" id="lisc_logo" />
+			<a href="http://lisc-chicago.org/" ><img src="/images/lisc-chicago-logo.gif" id="lisc_logo" /></a>
 
         </div>			
 		<hr class="divider">

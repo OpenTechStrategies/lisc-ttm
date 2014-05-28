@@ -1104,20 +1104,27 @@ div#footer {
 	padding:3px;
 	}
 
-div#footer img#ch_logo{
+div#footer img#ots_logo,img#ots_logo{
 	height:30px;
 	float:left;
 	padding-bottom:8px;
 	margin:5px 0 0 3px;
 }
 
+div#footer img#ch_logo{
+	height:30px;
+	float:right;
+	padding-bottom:8px;
+	margin:5px 0 0 3px;
+        margin-right: 20px;
+}
+
 div#footer span#byline{
 	font-weight:bold;
 	font-style:italic;
-	float:right;
+	float:center;
 	color:#696969;
 	font-family:Georgia, serif;
 	font-size:12px;
 	margin-top:5px;
-	margin-right:20px;
 }
