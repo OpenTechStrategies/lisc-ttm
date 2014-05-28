@@ -63,7 +63,7 @@ Steps to install:
 
 3.  Download the latest version of the TTM code:
    
-        $ git clone https://github.com/OpenTechStrategies/lisc-ttm.git
+        $ git clone https://github.com/OpenTechStrategies/lisc-ttm.git ttm
 
 4.  Configure Apache to serve the site.
 
@@ -114,4 +114,13 @@ Steps to install:
         mysql> quit;
         $ 
 
-Rest TBD.
+6.  Put the corresponding authentication info in the web tree, by
+    first renaming `dbconnopen.php.tmpl` to `dbconnopen.php` in the
+    appropriate places, and then editing each of the latter:
+
+        $ cd /var/www/ttm
+        $ for name in `find . -name dbconnopen.php.tmpl`; do         \
+            cp ${name} `dirname ${name}`/`basename ${name} .tmpl`;   \
+            ${EDITOR} `dirname ${name}`/`basename ${name} .tmpl`;    \  
+          done
+        $
