@@ -125,4 +125,22 @@ Steps to install:
           done
         $
 
-7. TBD, etc, etc.
+7. Make sure the export data directories are writeable by the web
+   server.  The `chown` step below is probably redundant, because
+   presumably you installed the web tree with ownership by the web
+   server user anyway, but the `chmod` may be important:
+
+       $ for name in                             \
+           bickerdike/data/downloads             \
+	   enlace/reports/export_container       \
+	   lsna/reports/export_data              \
+	   swop/reports/downloads                \
+	   swop/reports/export_holder            \
+           trp/reports/data                      \
+         ;                                       \
+         do                                      \
+           chown www-data.www-data ${name};      \
+           chmod ug+rwx ${name};                 \
+         done
+
+8. TBD
