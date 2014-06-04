@@ -5,6 +5,7 @@ USE `ttm-bickerdike`;
 -- Host: localhost    Database: ttm-bickerdike
 -- ------------------------------------------------------
 -- Server version	5.5.25a
+/*test*/
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
