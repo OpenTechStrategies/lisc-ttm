@@ -144,19 +144,24 @@ Steps to install:
         $ sudo service apache2 restart
 
 5.  Load the MySQL stored procedures:
-
     Ensure that you have downloaded and saved the "sql" folders in the TTM core and in each of the five group folders.
-	bickerdike/sql
-	enlace/sql
-	lsna/sql
-	swop/sql
-	trp/sql
+
+    bickerdike/sql
+
+    enlace/sql
+
+    lsna/sql
+
+    swop/sql
+
+    trp/sql
+
     These folders include .sql files that comprise the routines necessary for the correct operation of TTM.
     If these folders and files exist on your server, then start mysql.
 
-	$ mysql -u username -p mysql
-	Enter password:
-	mysql> source file/path/to/routine/file.sql
+        $ mysql -u username -p mysql
+        Enter password:
+        mysql> source file/path/to/routine/file.sql
 
     Use the source command for each routine file to load the stored procedures into your databases.  The files include 
 "use-database" lines, so there is no need to switch databases in the command line.
