@@ -19,15 +19,16 @@ echo $user_query;
 $storedpass=mysqli_query($cnnLISC, $user_query);
 $storedhash=mysqli_fetch_row($storedpass);
 $stored_hash=$storedhash[0];
-
+echo "found stored hash";
 $check=$hasher->CheckPassword($password, $stored_hash);
-
+echo "<br> check: " .$check;
 
 //$is_user = mysqli_num_rows($user);
 $user_id = $storedhash[1];
 
 //if this user exists in the database
 if ($check){
+    echo 'check matched';
     //record this login in the Log
     $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT(" . $username . ", ' - Logged In'))";
     
