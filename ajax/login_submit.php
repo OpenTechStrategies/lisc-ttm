@@ -1,20 +1,32 @@
 <?php
 
+require("../include/PasswordHash.php");
+$hasher=new PasswordHash(8, false);
+
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 if (isset($_POST['username'])){
     $username = "'" . $_POST["username"] . "'";
     $password = "'". $_POST["password"]. "'";
 }
+if (strlen($password) > 72) { die('Password must be 72 characters or less'); }
 
-$user_query = "SELECT * FROM  Users WHERE User_Email = $username AND User_Password = $password";
+//$hash=$hasher->HashPassword($password); don't need this to check password against stored password, only to store new password
 
-$user = mysqli_query($cnnLISC, $user_query);
 
-$is_user = mysqli_num_rows($user);
-$user_id = mysqli_fetch_array($user);
+$user_query = "SELECT User_Password, User_ID FROM  Users WHERE User_Email = $username";
+echo $user_query;
+$storedpass=mysqli_query($cnnLISC, $user_query);
+$storedhash=mysqli_fetch_row($storedpass);
+$stored_hash=$storedhash[0];
+
+$check=$hasher->CheckPassword($password, $stored_hash);
+
+
+//$is_user = mysqli_num_rows($user);
+$user_id = $storedhash[1];
 
 //if this user exists in the database
-if ($is_user>0){
+if ($check){
     //record this login in the Log
     $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT(" . $username . ", ' - Logged In'))";
     
@@ -39,9 +51,8 @@ if ($is_user>0){
            else{
                /*set a site cookie for each of the sites this person has access to.*/
                setcookie('sites['.$i.']', $privilege['Privilege_Id'], time() + 10800, '/');
-               $get_level_of_access = "SELECT Site_Privilege_ID FROM Users_Privileges INNER JOIN Users
-                    ON Users_Privileges.User_ID=Users.User_ID WHERE User_Email = $username AND User_Password = $password";
-              
+               $get_level_of_access = "SELECT Site_Privilege_ID FROM Users_Privileges WHERE User_ID=$user_id";
+               echo $get_level_of_access;
               include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
                $access_level = mysqli_query($cnnLISC, $get_level_of_access);
                $level = mysqli_fetch_row($access_level);
