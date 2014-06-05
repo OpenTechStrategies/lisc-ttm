@@ -5,6 +5,7 @@ $hasher=new PasswordHash(8, false);
 
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 if (isset($_POST['username'])){
+    
     $username = "'" . $_POST["username"] . "'";
     $password = "'". $_POST["password"]. "'";
 }

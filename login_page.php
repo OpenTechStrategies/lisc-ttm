@@ -84,6 +84,7 @@
                         password: document.getElementById('password').value
                     },
             function(response) {
+                alert(response);
                 if (response != '0') {
                     window.location.href = '/';
                 } else {

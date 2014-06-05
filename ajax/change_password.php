@@ -8,7 +8,7 @@ if (isset($_POST['current_pw'])){
 }
 $username = $_POST['username']; 
 $user_query = "SELECT User_Password, User_ID FROM  Users WHERE User_Email = '$username'";
-
+echo $user_query;
 $stored_hash="*";
 $user = mysqli_query($cnnLISC, $user_query);
 $user_hash = mysqli_fetch_row($user);
@@ -19,7 +19,7 @@ $check=$hasher->CheckPassword($current_pw, $stored_hash);
 /*
  * Test to make sure that the username and password match:
  */
-if ($check){
+if ($check || $current_pw==$stored_hash){ //obviously I won't keep that, this is only for changing my password to test whether the hashing is working.
        /*if they match, then reset the password to the new password:
         */
         $new_pw = $_POST['new_pw'];
