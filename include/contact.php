@@ -37,7 +37,7 @@ if (!isset($_POST["submit"])) {
   <tr><th class="contact" colspan="2"><input type="submit" name="submit" value="Send Message"></th></tr>
  </table>
   </form><p></p>
-<p>Or, email us directly at ttmhelp@opentechstrategies.com.</p>
+<p>Or, email us directly at <tt>ttmhelp{AT}opentechstrategies{DOT}com</tt> <span class="helptext">(replacing "{AT}" with an "@"-sign and {DOT} with a ".")</span>.</p>
   <?php 
 } else {  // the user has submitted the form
   // Check if the "from" input field is filled out
@@ -65,8 +65,6 @@ if (!isset($_POST["submit"])) {
 </html>
 
 
-<!--Alternatively: 
-<p>Or, email us directly at ttmhelp[at]opentechstrategies[dot]com. <span class="helptext">(replacing [at] with @ and [dot] with . where appropriate)</span></p>-->
 <!--When the git repository is open, add a line here about submitting issues on GitHub. -->
     
     <?php
