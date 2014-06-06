@@ -5,7 +5,7 @@ include "../header.php";
 <body>
 <h2>Contact Us</h2>
 
-<span class="helptext">Fill out this form:</span>
+
 
 
 <?php
@@ -28,6 +28,7 @@ function spamcheck($field) {
 // display form if user has not clicked submit
 if (!isset($_POST["submit"])) {
   ?>
+<span class="helptext">Fill out this form:</span>
   <form method="post" action="<?php echo $_SERVER["PHP_SELF"];?>">
  <table class="all_projects">
      <tr><th class="contact">Full Name:</th><td class="contact"> <input type="text" name="subject"></td></tr>
@@ -35,7 +36,8 @@ if (!isset($_POST["submit"])) {
   <tr><th class="contact">Message: </th><td class="contact"> <textarea rows="10" cols="40" name="message"></textarea></td></tr>
   <tr><th class="contact" colspan="2"><input type="submit" name="submit" value="Send Message"></th></tr>
  </table>
-  </form>
+  </form><p></p>
+<p>Or, email us directly at ttmhelp@opentechstrategies.com.</p>
   <?php 
 } else {  // the user has submitted the form
   // Check if the "from" input field is filled out
@@ -52,7 +54,9 @@ if (!isset($_POST["submit"])) {
       $message = wordwrap($message, 70);
       // send mail
       mail("ttmhelp@opentechstrategies.com",$subject,$message,"From: $from\n");
-      echo "Thank you for your message.  Someone will respond to you as soon as possible.";
+      ?><span class="helptext">Thank you for your message.  Someone will respond to you as soon as possible.
+          <a href="/index.php">Back to homepage.</a><span>
+          <?php
     }
   }
 }
@@ -60,8 +64,7 @@ if (!isset($_POST["submit"])) {
 </body>
 </html>
 
-<p></p>
-<p>Or, email us directly at ttmhelp@opentechstrategies.com.</p>
+
 <!--Alternatively: 
 <p>Or, email us directly at ttmhelp[at]opentechstrategies[dot]com. <span class="helptext">(replacing [at] with @ and [dot] with . where appropriate)</span></p>-->
 <!--When the git repository is open, add a line here about submitting issues on GitHub. -->
