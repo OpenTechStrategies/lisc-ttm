@@ -15,39 +15,9 @@ $user_hash = mysqli_fetch_row($user);
 $stored_hash=$user_hash[0];
 $user_id=$user_hash[1];
 $check=$hasher->CheckPassword($current_pw, $stored_hash);
-//echo "<br>check: " . $check;
-
-//echo "<br>----------------";
-/*require("../include/PasswordHash.php");
-$hasher=new PasswordHash(8, false);
-
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
-if (isset($_POST['username'])){
-    
-    $username = "'" . $_POST["username"] . "'";
-    $password = "'". $_POST["password"]. "'";
-}
-if (strlen($password) > 72) { die('Password must be 72 characters or less'); }
-
-//$hash=$hasher->HashPassword($password); don't need this to check password against stored password, only to store new password
 
 
-$user_query = "SELECT User_Password, User_ID FROM  Users WHERE User_Email = $username";
-echo $user_query;
-$stored_hash="*";
-$storedpass=mysqli_query($cnnLISC, $user_query);
-$storedhash=mysqli_fetch_row($storedpass);
-$stored_hash=$storedhash[0];
-echo "found stored hash";
-echo "<br> pass: " . $password;
-echo "<br> hash: " . $stored_hash;
-$check=$hasher->CheckPassword($password, $stored_hash);
-echo "<br> check: " .$check;
-
-//$is_user = mysqli_num_rows($user);
-$user_id = $storedhash[1];
-*/
-//if this user exists in the database
+//if the password is correct:
 if ($check){
    // echo 'check matched';
     //record this login in the Log
@@ -77,7 +47,7 @@ if ($check){
                /*set a site cookie for each of the sites this person has access to.*/
                setcookie('sites['.$i.']', $privilege['Privilege_Id'], time() + 10800, '/');
                $get_level_of_access = "SELECT Site_Privilege_ID FROM Users_Privileges WHERE User_ID=$user_id";
-               echo $get_level_of_access;
+               //echo $get_level_of_access;
               include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
                $access_level = mysqli_query($cnnLISC, $get_level_of_access);
                $level = mysqli_fetch_row($access_level);

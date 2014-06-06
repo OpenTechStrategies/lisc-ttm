@@ -8,14 +8,14 @@ if (isset($_POST['current_pw'])){
 }
 $username = $_POST['username']; 
 $user_query = "SELECT User_Password, User_ID FROM  Users WHERE User_Email = '$username'";
-echo $user_query;
+//echo $user_query;
 $stored_hash="*";
 $user = mysqli_query($cnnLISC, $user_query);
 $user_hash = mysqli_fetch_row($user);
 $stored_hash=$user_hash[0];
 
 $check=$hasher->CheckPassword($current_pw, $stored_hash);
-echo "<br>check: " . $check;
+//echo "<br>check: " . $check;
 /*
  * Test to make sure that the username and password match:
  */
