@@ -15,11 +15,11 @@ $user_hash = mysqli_fetch_row($user);
 $stored_hash=$user_hash[0];
 
 $check=$hasher->CheckPassword($current_pw, $stored_hash);
-
+echo "<br>check: " . $check;
 /*
  * Test to make sure that the username and password match:
  */
-if ($check || $current_pw==$stored_hash){ //obviously I won't keep that, this is only for changing my password to test whether the hashing is working.
+if ($check){ //obviously I won't keep that, this is only for changing my password to test whether the hashing is working.
        /*if they match, then reset the password to the new password:
         */
         $new_pw = $_POST['new_pw'];

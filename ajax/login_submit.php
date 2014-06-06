@@ -1,6 +1,24 @@
 <?php
-
 require("../include/PasswordHash.php");
+$hasher=new PasswordHash(8, false);
+
+include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+if (isset($_POST['password'])){
+    $current_pw = $_POST['password'];
+}
+$username = $_POST['username']; 
+$user_query = "SELECT User_Password, User_ID FROM  Users WHERE User_Email = '$username'";
+//echo $user_query;
+$stored_hash="*";
+$user = mysqli_query($cnnLISC, $user_query);
+$user_hash = mysqli_fetch_row($user);
+$stored_hash=$user_hash[0];
+$user_id=$user_hash[1];
+$check=$hasher->CheckPassword($current_pw, $stored_hash);
+//echo "<br>check: " . $check;
+
+//echo "<br>----------------";
+/*require("../include/PasswordHash.php");
 $hasher=new PasswordHash(8, false);
 
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
@@ -16,19 +34,22 @@ if (strlen($password) > 72) { die('Password must be 72 characters or less'); }
 
 $user_query = "SELECT User_Password, User_ID FROM  Users WHERE User_Email = $username";
 echo $user_query;
+$stored_hash="*";
 $storedpass=mysqli_query($cnnLISC, $user_query);
 $storedhash=mysqli_fetch_row($storedpass);
 $stored_hash=$storedhash[0];
 echo "found stored hash";
+echo "<br> pass: " . $password;
+echo "<br> hash: " . $stored_hash;
 $check=$hasher->CheckPassword($password, $stored_hash);
 echo "<br> check: " .$check;
 
 //$is_user = mysqli_num_rows($user);
 $user_id = $storedhash[1];
-
+*/
 //if this user exists in the database
 if ($check){
-    echo 'check matched';
+   // echo 'check matched';
     //record this login in the Log
     $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT(" . $username . ", ' - Logged In'))";
     
@@ -38,10 +59,12 @@ if ($check){
        setcookie("user", $username, time() + 10800, '/');
       
        //now find which, if any, privileges they have and set an appropriate cookie
-       $privileges_query = "CALL User__Find_Privileges($username)";
+       $privileges_query = "CALL User__Find_Privileges('$username')";
+       echo $privileges_query;
        include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
        $privileges = mysqli_query($cnnLISC, $privileges_query);
-       
+       echo "privileges: ";
+       print_r($privileges);
        $i=0;
        while ($privilege = mysqli_fetch_array($privileges)){
            if ($privilege['Privilege_Id'] == '1'){
