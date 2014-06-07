@@ -1,5 +1,5 @@
 <?php
-require("../include/PasswordHash.php");
+require("../include/phpass-0.3/PasswordHash.php");
 $hasher=new PasswordHash(8, false);
 
 $new_password=$_POST['password'];

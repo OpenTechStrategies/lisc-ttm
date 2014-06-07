@@ -1,5 +1,5 @@
 <?php
-require("../include/PasswordHash.php");
+require("../include/phpass-0.3/PasswordHash.php");
 $hasher=new PasswordHash(8, false);
 
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
