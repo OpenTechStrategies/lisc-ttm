@@ -1,0 +1,50 @@
+#!/bin/bash
+
+read -d '' USAGE << EOF
+Usage: 'make-backup-script'
+
+This script is meant to be invoked from the top of lisc-ttm git tree,
+or from the maintenance subdir of same (it will figure out either way).
+
+It prompts you for the DB read-only user, password, and the backup
+destination, then creates 'maintenance/backup-ttm' based on that.
+
+  NOTE: Keep the resultant script private, as it will contain a
+  password that allows read-only access to all the TTM databases!
+EOF
+
+read -p "Top destination directory for backups: " DEST_DIR
+read -p "DB user with read-only access to TTM databases: " DB_USER
+read -s -p "Password for DB user: " DB_PASS
+
+TMPL=backup-ttm.tmpl
+OUTPUT=`basename ${TMPL} .tmpl`
+
+if [ -d maintenance ]; then
+  if [ -f maintenance/${TMPL} ]; then
+    TMPL=maintenance/${TMPL}
+    OUTPUT=maintenance/`basename ${TMPL} .tmpl`
+  fi
+fi
+
+if [ ! -f ${TMPL} ]; then
+  echo "ERROR: could not find '${TMPL}' file."
+  exit 1
+fi
+
+cp ${TMPL} ${OUTPUT}
+
+sed -e "s|__DEST_DIR__|${DEST_DIR}|g" < ${OUTPUT} > ${OUTPUT}.tmp
+mv ${OUTPUT}.tmp ${OUTPUT}
+
+sed -e "s|__DB_USER__|${DB_USER}|g" < ${OUTPUT} > ${OUTPUT}.tmp
+mv ${OUTPUT}.tmp ${OUTPUT}
+
+sed -e "s|__DB_PASS__|${DB_PASS}|g" < ${OUTPUT} > ${OUTPUT}.tmp
+mv ${OUTPUT}.tmp ${OUTPUT}
+
+chmod a+x ${OUTPUT}
+
+echo ""
+echo "Backup script created: '${OUTPUT}'"
+echo ""

@@ -1,0 +1,91 @@
+#!/bin/bash
+
+# Here's one way to do backups on the production server:
+#
+# Create a user named 'ttmbackup', whose shell is set to /bin/false,
+# and whose home dir is readable only by the 'ttmbackup' user & group.
+#
+# Create also a MySQL user named 'ttmro' (for "TTM read-only"), with
+# read access to all of the TTM databases and MySQL procecdures:
+#
+#   GRANT USAGE ON *.*                                \
+#         TO ttmro@localhost IDENTIFIED BY 'PASSWD';
+#   GRANT SELECT ON `mysql`.`proc`                    \
+#         TO ttmro@localhost IDENTIFIED BY 'PASSWD';
+#   GRANT SELECT, LOCK TABLES ON `ttm-core`.*         \
+#         TO ttmro@localhost IDENTIFIED BY 'PASSWD';
+#   GRANT SELECT, LOCK TABLES ON `ttm-trp`.*          \
+#         TO ttmro@localhost IDENTIFIED BY 'PASSWD';
+#   GRANT SELECT, LOCK TABLES ON `ttm-swop`.*         \
+#         TO ttmro@localhost IDENTIFIED BY 'PASSWD';
+#   GRANT SELECT, LOCK TABLES ON `ttm-lsna`.*         \
+#         TO ttmro@localhost IDENTIFIED BY 'PASSWD';
+#   GRANT SELECT, LOCK TABLES ON `ttm-enlace`.*       \
+#         TO ttmro@localhost IDENTIFIED BY 'PASSWD';
+#   GRANT SELECT, LOCK TABLES ON `ttm-bickerdike`.*   \
+#         TO ttmro@localhost IDENTIFIED BY 'PASSWD';
+#
+# (PASSWD should be the same for all of them.)
+#
+# Then run ./make-backup-script, for example like this:
+#
+#   $ ./make-backup-script
+#   Top destination directory for backups: /home/ttmbackup/backups
+#   DB user with read-only access to TTM databases: ttmro
+#   Password for DB user: (same PASSWD from above)
+#
+#   Backup script created: 'backup-ttm'
+#
+#   $ 
+#
+# Now you have a 'backup-ttm' script that you can run as in a cron job
+# as user 'ttmbackup', assuming you set up permissions appropriately.
+#
+#  ************************ <<< IMPORTANT NOTE >>> ************************
+#  **                                                                    **
+#  **  Keep the generated 'backup-ttm' script private!  It contains a    **
+#  **  password that allows read-only access to all your TTM databases.  **
+#  **                                                                    **
+#  ************************************************************************
+
+DEST_DIR=__DEST_DIR__
+BACKUP_USER=__USER__
+DB_USER=__DB_USER__
+DB_PASS=__DB_PASS__
+
+# You could customize this if you want, but there's no real reason to:
+BACKUP_PREFIX=ttm_db_backup
+
+# Remove backup from two weeks ago
+if [ $(date +%u) = 1 ]; then
+  rm -fR ${DEST_DIR}/`date -d'monday-fortnight ago' +\%Y-\%m-\%d`
+fi
+if [ $(date +%u) = 2 ]; then
+  rm -fR ${DEST_DIR}/`date -d'tuesday-fortnight ago' +\%Y-\%m-\%d`
+fi
+if [ $(date +%u) = 3 ]; then
+  rm -fR ${DEST_DIR}/`date -d'wednesday-fortnight ago' +\%Y-\%m-\%d`
+fi
+if [ $(date +%u) = 4 ]; then
+  rm -fR ${DEST_DIR}/`date -d'thursday-fortnight ago' +\%Y-\%m-\%d`
+fi
+if [ $(date +%u) = 5 ]; then
+  rm -fR ${DEST_DIR}/`date -d'friday-fortnight ago' +\%Y-\%m-\%d`
+fi
+if [ $(date +%u) = 6 ]; then
+  rm -fR ${DEST_DIR}/`date -d'saturday-fortnight ago' +\%Y-\%m-\%d`
+fi
+if [ $(date +%u) = 7 ]; then
+  rm -fR ${DEST_DIR}/`date -d'sunday-fortnight ago' +\%Y-\%m-\%d`
+fi
+
+THIS_BACKUP_DIR=${DEST_DIR}/`(date +\%Y-\%m-%d)`;
+
+test -d "${THIS_BACKUP_DIR}" || mkdir -p "${THIS_BACKUP_DIR}"
+
+for name in $(mysql -B -s -u $DB_USER --password=$DB_PASS -e 'show databases' | grep "ttm-")
+do
+  mysqldump -u ${DB_USER} --password=${DB_PASS}        \
+            --single-transaction --routines "${name}"  \
+     | gzip > "${THIS_BACKUP_DIR}/${name}-backup.`date +\%Y-\%m-\%d`.sql.gz"
+done

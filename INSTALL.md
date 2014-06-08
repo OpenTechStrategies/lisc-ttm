@@ -208,3 +208,7 @@ Steps to install:
 8. Load the sample data (or live data, if you have it):
 
         $ mysql -u root -p < my_data.sql
+
+9. Set up backups.  Read `maintenance/backup-ttm.tmpl`, then run
+   `maintenance/make-backup-script` to create a backup script that is
+   customized for your site.
