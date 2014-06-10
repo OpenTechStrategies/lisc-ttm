@@ -1,0 +1,59 @@
+#!/bin/sh
+
+# Usage: './export-ttm-backup'
+#
+# Grab today's backup of the TTM databases, package it as an encrypted
+# file, and put it in a place from which it can be downloaded.
+#
+# This script takes no arguments, but expects the following to be true
+# (adjust paths and users as needed for your system, of course):
+#
+#    - Directory ${EXPORT_DEST} exists and is writeable whatever
+#      user or group this script runs as (but that user/group should
+#      not be the web server -- see below);
+#
+#    - Directory ${EXPORT_DEST}/sandbox exists, is readable+writeable
+#      by the user or group this script runs as, and is *not* readable
+#      by the web server user. 
+#
+# See also 'get-ttm-prod-backup', this script's counterpart for the
+# remote server.
+
+EXPORT_DEST=__EXPORT_DEST__
+SANDBOX=${EXPORT_DEST}/sandbox
+KEY=__KEY__
+PREFIX=ttm-prod-backup
+
+# GnuPG gives errors if it can't find its run-time conf dir.  Due to
+# the user this script may be running as, ~/.gnupg won't always work,
+# so we create a temporary conf dir, with exactly the permissions that
+# make GnuPG happiest, and tell GnuPG to use that dir instead.  Note
+# this is all silly because we're using symmetric encryption anyway,
+# so GnuPG really shouldn't demand a conf dir at all, since no changes
+# to keyrings are involved.
+GPG_LOSSAGE_DIR=${SANDBOX}/.gnupg_lossage
+rm -rf ${GPG_LOSSAGE_DIR}
+mkdir ${GPG_LOSSAGE_DIR}
+chmod go-rwx ${GPG_LOSSAGE_DIR}
+GNUPGHOME=${GPG_LOSSAGE_DIR}
+export GNUPGHOME
+
+THIS_DATE=`(date +\%Y-\%m-%d)`
+
+cd ${SANDBOX}
+
+cp -a /home/ttmbackup/backups/${THIS_DATE} ${PREFIX}-${THIS_DATE}
+tar zcvf ${PREFIX}-${THIS_DATE}.tgz ${PREFIX}-${THIS_DATE}
+# https://bugs.g10code.com/gnupg/issue1403 results from this gpg command:
+echo -n "${KEYFILE}" | gpg --no-options --lock-never --quiet      \
+                           --no-tty                               \
+                           --passphrase-fd 0 -ca                  \
+                           ${SANDBOX}/${PREFIX}-${THIS_DATE}.tgz
+
+# Clean up the various temporary files and directories.
+rm -rf ${PREFIX}-${THIS_DATE}
+rm ${PREFIX}-${THIS_DATE}.tgz
+rm -rf ${GPG_LOSSAGE_DIR}
+
+# Put the encrypted backup in a place it can be downloaded from.
+mv ${PREFIX}-${THIS_DATE}.tgz.asc ${EXPORT_DEST}/${PREFIX}-${THIS_DATE}.tgz.asc

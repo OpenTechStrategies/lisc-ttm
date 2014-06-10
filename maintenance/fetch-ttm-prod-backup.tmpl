@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# This script runs on a remote server and pulls the prod backup to
+# that remote server; see also export-backup.tmpl.
+
+URL=__URL__
+PREFIX=ttm-prod-backup
+
+cd __DEST_DIR__
+
+### TODO: Neither of these is working on dev yet, although the curl
+### works locally.  Not sure what the problem is, but we need to solve
+### it, or we'll be copying backup files by hand forever.
+
+# wget --no-check-certificate ${URL}/${PREFIX}-`(date +\%Y-\%m-%d)`.tgz.asc
+curl -k ${URL}/${PREFIX}-`(date +\%Y-\%m-%d)`.tgz.asc \
+  > ${PREFIX}-`(date +\%Y-\%m-%d)`.tgz.asc

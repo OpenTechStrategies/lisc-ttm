@@ -1,0 +1,56 @@
+#!/bin/bash
+
+read -d '' USAGE << EOF
+Usage: 'make-backup-script'
+
+This script is meant to be invoked from the top of lisc-ttm git tree,
+or from the maintenance subdir of same (it will figure out either way).
+
+It prompts you for various pieces of information (the DB read-only
+user and password, the backup destination, etc),  then creates
+'maintenance/backup-ttm' and 'maintenance/export-backup' from that.
+
+  NOTE: Keep the resultant scripts private, as they will contain a
+  password that allows read-only access to all the TTM databases and
+  perhaps other sensitive information as well!
+EOF
+
+read -p "Top destination directory for backups: " DEST_DIR
+read -p "DB user with read-only access to TTM databases: " DB_USER
+read -s -p "Password for DB user: " DB_PASS
+read -s -p "Directory where exported backups go: " EXPORT_DEST
+read -s -p "Encryption key for exported backup: " EXPORT_KEY
+
+# If we're above the maintenance/ directory, compensate for that.
+MAYBE_MAINTENANCE_PREFIX=""
+if [ -d maintenance -a -f maintenance/backup-ttm.tmpl ]; then
+    MAYBE_MAINTENANCE_PREFIX="maintenance/"
+  fi
+fi
+
+B_TMPL=${MAYBE_MAINTENANCE_PREFIX}backup-ttm.tmpl
+B_OUT=${MAYBE_MAINTENANCE_PREFIX}`basename ${B_TMPL} .tmpl`
+E_TMPL=${MAYBE_MAINTENANCE_PREFIX}export-backup.tmpl
+E_OUT=${MAYBE_MAINTENANCE_PREFIX}`basename ${E_TMPL} .tmpl`
+
+if [ ! -f ${B_TMPL} ]; then
+  echo "ERROR: could not find '${B_TMPL}' file."
+  exit 1
+fi
+
+cp ${B_TMPL} ${B_OUT}
+
+sed -e "s|__DEST_DIR__|${DEST_DIR}|g" < ${B_OUT} > ${B_OUT}.tmp
+mv ${B_OUT}.tmp ${B_OUT}
+
+sed -e "s|__DB_USER__|${DB_USER}|g" < ${B_OUT} > ${B_OUT}.tmp
+mv ${B_OUT}.tmp ${B_OUT}
+
+sed -e "s|__DB_PASS__|${DB_PASS}|g" < ${B_OUT} > ${B_OUT}.tmp
+mv ${B_OUT}.tmp ${B_OUT}
+
+chmod a+x ${B_OUT}
+
+echo ""
+echo "Backup script created: '${B_OUT}'"
+echo ""
