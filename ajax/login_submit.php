@@ -64,6 +64,7 @@ if ($check){
                    }
                }
                else{
+                   /* if user is an admin, unset the view_only and view_restricted cookes */
                    setcookie('view_only', $level[0], time()-10800, '/');
                    setcookie('view_restricted', $level[0], time()-10800, '/');
                }
