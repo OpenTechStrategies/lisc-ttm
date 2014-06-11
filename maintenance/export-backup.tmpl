@@ -24,7 +24,7 @@
 EXPORT_DEST=__EXPORT_DEST__
 SANDBOX=${EXPORT_DEST}/sandbox
 EXPORT_KEY=__EXPORT_KEY__
-PREFIX=ttm-prod-backup
+BACKUP_PREFIX=__BACKUP_PREFIX__
 
 # GnuPG gives errors if it can't find its run-time conf dir.  Due to
 # the user this script may be running as, ~/.gnupg won't always work,
@@ -40,23 +40,26 @@ chmod go-rwx ${GPG_LOSSAGE_DIR}
 GNUPGHOME=${GPG_LOSSAGE_DIR}
 export GNUPGHOME
 
+BACKUPS_TOP=__BACKUPS_TOP__
+
 DATE_YMD_PREFIX="__DATE_YMD_PREFIX__"
 THIS_DATE=`(date +${DATE_YMD_PREFIX})`
 
 cd ${SANDBOX}
 
-cp -a /home/ttmbackup/backups/${THIS_DATE} ${PREFIX}-${THIS_DATE}
-tar zcvf ${PREFIX}-${THIS_DATE}.tgz ${PREFIX}-${THIS_DATE}
-# https://bugs.g10code.com/gnupg/issue1403 results from this gpg command:
-echo -n "${EXPORT_KEY}" | gpg --no-options --lock-never --quiet      \
-                              --no-tty                               \
-                              --passphrase-fd 0 -ca                  \
-                              ${SANDBOX}/${PREFIX}-${THIS_DATE}.tgz
+for tgz_backup in ${BACKUPS_TOP}/${BACKUP_PREFIX}-${THIS_DATE}*.tar.gz; do
+  tgz_basename=`basename ${tgz_backup}`
+  cp -a ${tgz_backup} ./${tgz_basename}
+  # https://bugs.g10code.com/gnupg/issue1403 results from this gpg command:
+  echo -n "${EXPORT_KEY}" | gpg --no-options --lock-never --quiet      \
+                                --no-tty                               \
+                                --passphrase-fd 0 -ca                  \
+                                ${SANDBOX}/${tgz_basename}
 
-# Clean up the various temporary files and directories.
-rm -rf ${PREFIX}-${THIS_DATE}
-rm ${PREFIX}-${THIS_DATE}.tgz
-rm -rf ${GPG_LOSSAGE_DIR}
-
-# Put the encrypted backup in a place it can be downloaded from.
-mv ${PREFIX}-${THIS_DATE}.tgz.asc ${EXPORT_DEST}/${PREFIX}-${THIS_DATE}.tgz.asc
+  # Clean up the temporary files and directories.
+  rm ${tgz_basename}
+  rm -rf ${GPG_LOSSAGE_DIR}
+  
+  # Put the encrypted backup in a place it can be downloaded from.
+  mv ${tgz_basename}.asc ${EXPORT_DEST}/${tgz_basename}.asc
+done

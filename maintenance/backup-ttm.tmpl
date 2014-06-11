@@ -56,52 +56,55 @@
 #  **                                                                    **
 #  ************************************************************************
 
-DEST_DIR=__DEST_DIR__
+BACKUPS_TOP=__BACKUPS_TOP__
 BACKUP_USER=__USER__
 DB_USER=__DB_USER__
 DB_PASS=__DB_PASS__
 DATE_YMD_PREFIX="__DATE_YMD_PREFIX__"
-DATE_FORMAT="__DATE_FORMAT__"
+DATE_FULL_FORMAT="__DATE_FULL_FORMAT__"
 
 # You could customize this if you want, but there's no real reason to:
-BACKUP_PREFIX=ttm-db-backup
+BACKUP_PREFIX=__BACKUP_PREFIX__
 
-# Set the date now, so that even if intermediate steps are so slow as
-# to let more than a second pass, or even to pass midnight and change
-# the day, it won't affect the name of the backup.
-BACKUP_TIME=`(date +"${DATE_FORMAT}")`
+# Get the date now, so that even if intermediate steps are so slow as
+# to let more than a second pass, or if they cross midnight and change
+# the day, none of that will affect the name of the backup.
+BACKUP_TIME=`(date +"${DATE_FULL_FORMAT}")`
 
 # Remove backup(s) from two weeks ago
 if [ $(date +%u) = 1 ]; then
-  rm -f ${DEST_DIR}/`date -d'monday-fortnight ago' +${DATE_YMD_PREFIX}`*
+  rm -f ${BACKUPS_TOP}/`date -d'monday-fortnight ago' +${DATE_YMD_PREFIX}`*
 fi
 if [ $(date +%u) = 2 ]; then
-  rm -f ${DEST_DIR}/`date -d'tuesday-fortnight ago' +${DATE_YMD_PREFIX}`*
+  rm -f ${BACKUPS_TOP}/`date -d'tuesday-fortnight ago' +${DATE_YMD_PREFIX}`*
 fi
 if [ $(date +%u) = 3 ]; then
-  rm -f ${DEST_DIR}/`date -d'wednesday-fortnight ago' +${DATE_YMD_PREFIX}`*
+  rm -f ${BACKUPS_TOP}/`date -d'wednesday-fortnight ago' +${DATE_YMD_PREFIX}`*
 fi
 if [ $(date +%u) = 4 ]; then
-  rm -f ${DEST_DIR}/`date -d'thursday-fortnight ago' +${DATE_YMD_PREFIX}`*
+  rm -f ${BACKUPS_TOP}/`date -d'thursday-fortnight ago' +${DATE_YMD_PREFIX}`*
 fi
 if [ $(date +%u) = 5 ]; then
-  rm -f ${DEST_DIR}/`date -d'friday-fortnight ago' +${DATE_YMD_PREFIX}`*
+  rm -f ${BACKUPS_TOP}/`date -d'friday-fortnight ago' +${DATE_YMD_PREFIX}`*
 fi
 if [ $(date +%u) = 6 ]; then
-  rm -f ${DEST_DIR}/`date -d'saturday-fortnight ago' +${DATE_YMD_PREFIX}`*
+  rm -f ${BACKUPS_TOP}/`date -d'saturday-fortnight ago' +${DATE_YMD_PREFIX}`*
 fi
 if [ $(date +%u) = 7 ]; then
-  rm -f ${DEST_DIR}/`date -d'sunday-fortnight ago' +${DATE_YMD_PREFIX}`*
+  rm -f ${BACKUPS_TOP}/`date -d'sunday-fortnight ago' +${DATE_YMD_PREFIX}`*
 fi
 
-THIS_BACKUP_NAME=${DEST_DIR}/${BACKUP_PREFIX}-${BACKUP_TIME}
+# Do everything within BACKUPS_TOP, to avoid leading-"/" warnings from tar.
+cd ${BACKUPS_TOP}
 
-test -d "${THIS_BACKUP_NAME}" || mkdir -p "${THIS_BACKUP_NAME}"
+THIS_BACKUP_DIR=${BACKUP_PREFIX}-${BACKUP_TIME}
+
+test -d "${THIS_BACKUP_DIR}" || mkdir -p "${THIS_BACKUP_DIR}"
 for name in $(mysql -B -s -u $DB_USER --password=$DB_PASS -e 'show databases' | grep "ttm-")
 do
   mysqldump -u ${DB_USER} --password=${DB_PASS}                  \
             --single-transaction --routines "${name}"            \
-    > "${THIS_BACKUP_NAME}/${name}-backup-${BACKUP_TIME}.sql"
+    > "${THIS_BACKUP_DIR}/${name}-backup-${BACKUP_TIME}.sql"
 done
-tar zcvf ${THIS_BACKUP_NAME}-${BACKUP_TIME}.tar.gz ${THIS_BACKUP_NAME}
-rm -rf ${THIS_BACKUP_NAME}
+tar zcf ${THIS_BACKUP_DIR}.tar.gz ${THIS_BACKUP_DIR}
+rm -rf ${THIS_BACKUP_DIR}

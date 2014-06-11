@@ -4,7 +4,7 @@
 # that remote server; see also export-backup.tmpl.
 
 URL=__URL__
-PREFIX=ttm-prod-backup
+BACKUP_PREFIX=__BACKUP_PREFIX__
 
 cd __DEST_DIR__
 
@@ -15,6 +15,6 @@ DATE_YMD_PREFIX="__DATE_YMD_PREFIX__"
 ### it, or we'll be copying backup files by hand forever.
 
 # wget --no-check-certificate \
-#      ${URL}/${PREFIX}-`(date +${DATE_YMD_PREFIX})`.tgz.asc
-curl -k ${URL}/${PREFIX}-`(date +${DATE_YMD_PREFIX})`.tgz.asc \
-  > ${PREFIX}-`(date +${DATE_YMD_PREFIX})`.tgz.asc
+#      ${URL}/${BACKUP_PREFIX}-`(date +${DATE_YMD_PREFIX})`.tar.gz.asc
+curl -k ${URL}/${BACKUP_PREFIX}-`(date +${DATE_YMD_PREFIX})`.tar.gz.asc \
+  > ${BACKUP_PREFIX}-`(date +${DATE_YMD_PREFIX})`.tar.gz.asc
