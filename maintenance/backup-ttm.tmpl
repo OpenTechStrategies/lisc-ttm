@@ -60,40 +60,48 @@ DEST_DIR=__DEST_DIR__
 BACKUP_USER=__USER__
 DB_USER=__DB_USER__
 DB_PASS=__DB_PASS__
+DATE_YMD_PREFIX="__DATE_YMD_PREFIX__"
+DATE_FORMAT="__DATE_FORMAT__"
 
 # You could customize this if you want, but there's no real reason to:
-BACKUP_PREFIX=ttm_db_backup
+BACKUP_PREFIX=ttm-db-backup
 
-# Remove backup from two weeks ago
+# Set the date now, so that even if intermediate steps are so slow as
+# to let more than a second pass, or even to pass midnight and change
+# the day, it won't affect the name of the backup.
+BACKUP_TIME=`(date +"${DATE_FORMAT}")`
+
+# Remove backup(s) from two weeks ago
 if [ $(date +%u) = 1 ]; then
-  rm -fR ${DEST_DIR}/`date -d'monday-fortnight ago' +\%Y-\%m-\%d`
+  rm -f ${DEST_DIR}/`date -d'monday-fortnight ago' +${DATE_YMD_PREFIX}`*
 fi
 if [ $(date +%u) = 2 ]; then
-  rm -fR ${DEST_DIR}/`date -d'tuesday-fortnight ago' +\%Y-\%m-\%d`
+  rm -f ${DEST_DIR}/`date -d'tuesday-fortnight ago' +${DATE_YMD_PREFIX}`*
 fi
 if [ $(date +%u) = 3 ]; then
-  rm -fR ${DEST_DIR}/`date -d'wednesday-fortnight ago' +\%Y-\%m-\%d`
+  rm -f ${DEST_DIR}/`date -d'wednesday-fortnight ago' +${DATE_YMD_PREFIX}`*
 fi
 if [ $(date +%u) = 4 ]; then
-  rm -fR ${DEST_DIR}/`date -d'thursday-fortnight ago' +\%Y-\%m-\%d`
+  rm -f ${DEST_DIR}/`date -d'thursday-fortnight ago' +${DATE_YMD_PREFIX}`*
 fi
 if [ $(date +%u) = 5 ]; then
-  rm -fR ${DEST_DIR}/`date -d'friday-fortnight ago' +\%Y-\%m-\%d`
+  rm -f ${DEST_DIR}/`date -d'friday-fortnight ago' +${DATE_YMD_PREFIX}`*
 fi
 if [ $(date +%u) = 6 ]; then
-  rm -fR ${DEST_DIR}/`date -d'saturday-fortnight ago' +\%Y-\%m-\%d`
+  rm -f ${DEST_DIR}/`date -d'saturday-fortnight ago' +${DATE_YMD_PREFIX}`*
 fi
 if [ $(date +%u) = 7 ]; then
-  rm -fR ${DEST_DIR}/`date -d'sunday-fortnight ago' +\%Y-\%m-\%d`
+  rm -f ${DEST_DIR}/`date -d'sunday-fortnight ago' +${DATE_YMD_PREFIX}`*
 fi
 
-THIS_BACKUP_DIR=${DEST_DIR}/`(date +\%Y-\%m-%d)`;
+THIS_BACKUP_NAME=${DEST_DIR}/${BACKUP_PREFIX}-${BACKUP_TIME}
 
-test -d "${THIS_BACKUP_DIR}" || mkdir -p "${THIS_BACKUP_DIR}"
-
+test -d "${THIS_BACKUP_NAME}" || mkdir -p "${THIS_BACKUP_NAME}"
 for name in $(mysql -B -s -u $DB_USER --password=$DB_PASS -e 'show databases' | grep "ttm-")
 do
-  mysqldump -u ${DB_USER} --password=${DB_PASS}        \
-            --single-transaction --routines "${name}"  \
-     | gzip > "${THIS_BACKUP_DIR}/${name}-backup.`date +\%Y-\%m-\%d`.sql.gz"
+  mysqldump -u ${DB_USER} --password=${DB_PASS}                  \
+            --single-transaction --routines "${name}"            \
+    > "${THIS_BACKUP_NAME}/${name}-backup-${BACKUP_TIME}.sql"
 done
+tar zcvf ${THIS_BACKUP_NAME}-${BACKUP_TIME}.tar.gz ${THIS_BACKUP_NAME}
+rm -rf ${THIS_BACKUP_NAME}

@@ -8,10 +8,13 @@ PREFIX=ttm-prod-backup
 
 cd __DEST_DIR__
 
+DATE_YMD_PREFIX="__DATE_YMD_PREFIX__"
+
 ### TODO: Neither of these is working on dev yet, although the curl
 ### works locally.  Not sure what the problem is, but we need to solve
 ### it, or we'll be copying backup files by hand forever.
 
-# wget --no-check-certificate ${URL}/${PREFIX}-`(date +\%Y-\%m-%d)`.tgz.asc
-curl -k ${URL}/${PREFIX}-`(date +\%Y-\%m-%d)`.tgz.asc \
-  > ${PREFIX}-`(date +\%Y-\%m-%d)`.tgz.asc
+# wget --no-check-certificate \
+#      ${URL}/${PREFIX}-`(date +${DATE_YMD_PREFIX})`.tgz.asc
+curl -k ${URL}/${PREFIX}-`(date +${DATE_YMD_PREFIX})`.tgz.asc \
+  > ${PREFIX}-`(date +${DATE_YMD_PREFIX})`.tgz.asc

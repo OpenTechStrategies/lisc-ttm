@@ -5,6 +5,8 @@
 # Grab today's backup of the TTM databases, package it as an encrypted
 # file, and put it in a place from which it can be downloaded.
 #
+# Don't run this as the web server user; run it as the backup user.
+#
 # This script takes no arguments, but expects the following to be true
 # (adjust paths and users as needed for your system, of course):
 #
@@ -21,7 +23,7 @@
 
 EXPORT_DEST=__EXPORT_DEST__
 SANDBOX=${EXPORT_DEST}/sandbox
-KEY=__KEY__
+EXPORT_KEY=__EXPORT_KEY__
 PREFIX=ttm-prod-backup
 
 # GnuPG gives errors if it can't find its run-time conf dir.  Due to
@@ -38,17 +40,18 @@ chmod go-rwx ${GPG_LOSSAGE_DIR}
 GNUPGHOME=${GPG_LOSSAGE_DIR}
 export GNUPGHOME
 
-THIS_DATE=`(date +\%Y-\%m-%d)`
+DATE_YMD_PREFIX="__DATE_YMD_PREFIX__"
+THIS_DATE=`(date +${DATE_YMD_PREFIX})`
 
 cd ${SANDBOX}
 
 cp -a /home/ttmbackup/backups/${THIS_DATE} ${PREFIX}-${THIS_DATE}
 tar zcvf ${PREFIX}-${THIS_DATE}.tgz ${PREFIX}-${THIS_DATE}
 # https://bugs.g10code.com/gnupg/issue1403 results from this gpg command:
-echo -n "${KEYFILE}" | gpg --no-options --lock-never --quiet      \
-                           --no-tty                               \
-                           --passphrase-fd 0 -ca                  \
-                           ${SANDBOX}/${PREFIX}-${THIS_DATE}.tgz
+echo -n "${EXPORT_KEY}" | gpg --no-options --lock-never --quiet      \
+                              --no-tty                               \
+                              --passphrase-fd 0 -ca                  \
+                              ${SANDBOX}/${PREFIX}-${THIS_DATE}.tgz
 
 # Clean up the various temporary files and directories.
 rm -rf ${PREFIX}-${THIS_DATE}
