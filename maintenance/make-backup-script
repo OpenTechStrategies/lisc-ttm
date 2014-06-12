@@ -8,7 +8,7 @@ or from the maintenance subdir of same (it will figure out either way).
 
 It prompts you for various pieces of information (the DB read-only
 user and password, the backup destination, etc),  then creates
-'maintenance/backup-ttm' based on the answers.
+'maintenance/ttm-backup' based on the answers.
 
   NOTE: Keep the resultant scripts private, as they will contain a
   password that allows read-only access to all the TTM databases and
@@ -18,10 +18,10 @@ EOF
 # Set up all the template file and output file paths.
 # If we're above the maintenance/ directory, compensate for that.
 MAYBE_MAINTENANCE_PREFIX=""
-if [ -d maintenance -a -f maintenance/backup-ttm.tmpl ]; then
+if [ -d maintenance -a -f maintenance/ttm-backup.tmpl ]; then
     MAYBE_MAINTENANCE_PREFIX="maintenance/"
 fi
-TMPL=${MAYBE_MAINTENANCE_PREFIX}backup-ttm.tmpl
+TMPL=${MAYBE_MAINTENANCE_PREFIX}ttm-backup.tmpl
 OUTPUT=${MAYBE_MAINTENANCE_PREFIX}`basename ${TMPL} .tmpl`
 
 # Check that we have everything we need to succeed.
