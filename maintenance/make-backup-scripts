@@ -91,6 +91,8 @@ sed -e "s|__URL__|${URL}|g" < ${F_OUT} > ${F_OUT}.tmp
 mv ${F_OUT}.tmp ${F_OUT}
 sed -e "s|__DEST_DIR__|${REMOTE_DEST_DIR}|g" < ${F_OUT} > ${F_OUT}.tmp
 mv ${F_OUT}.tmp ${F_OUT}
+sed -e "s|__BACKUP_PREFIX__|${BACKUP_PREFIX}|g" < ${F_OUT} > ${F_OUT}.tmp
+mv ${F_OUT}.tmp ${F_OUT}
 sed -e "s|__DATE_YMD_PREFIX__|${DATE_YMD_PREFIX}|g" < ${F_OUT} > ${F_OUT}.tmp
 mv ${F_OUT}.tmp ${F_OUT}
 
@@ -104,5 +106,5 @@ echo "Backup scripts created:"
 echo ""
 echo "  ${B_OUT}"
 echo "  ${E_OUT}"
-echo "  ${F_OUT}"
+echo "  ${F_OUT}  ### (copy to off-site server and run there) ###"
 echo ""

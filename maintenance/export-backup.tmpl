@@ -26,6 +26,11 @@ SANDBOX=${EXPORT_DEST}/sandbox
 EXPORT_KEY=__EXPORT_KEY__
 BACKUP_PREFIX=__BACKUP_PREFIX__
 
+# This almost certainly isn't necessary in the cron-ish environment
+# in which this script normally runs.  But if DISPLAY *were* set, it
+# could cause gpg (>= v2) to behave in ways we don't want.
+unset DISPLAY
+
 # GnuPG gives errors if it can't find its run-time conf dir.  Due to
 # the user this script may be running as, ~/.gnupg won't always work,
 # so we create a temporary conf dir, with exactly the permissions that

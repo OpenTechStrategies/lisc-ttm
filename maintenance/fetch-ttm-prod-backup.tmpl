@@ -1,20 +1,26 @@
 #!/bin/sh
 
-# This script runs on a remote server and pulls the prod backup to
-# that remote server; see also export-backup.tmpl.
+# This script runs on an off-site server and fetches an exported prod
+# backup there.  This script is the counterpart to export-backup.tmpl.
 
 URL=__URL__
 BACKUP_PREFIX=__BACKUP_PREFIX__
 
 cd __DEST_DIR__
 
-DATE_YMD_PREFIX="__DATE_YMD_PREFIX__"
+TODAY_YMD_PREFIX=`(date +__DATE_YMD_PREFIX__)`
 
-### TODO: Neither of these is working on dev yet, although the curl
-### works locally.  Not sure what the problem is, but we need to solve
-### it, or we'll be copying backup files by hand forever.
+# We don't know the exact filename we're looking for because we don't
+# know the exact time of day the backup was made.  But we know most of
+# the filename, because we know the day we're interested in.  So we get
+# a listing of the server directory and parse out the needed filename.
+EXACT_FILENAMES=`wget -q --no-check-certificate -O - ${URL}   \
+  | grep ${BACKUP_PREFIX}-${TODAY_YMD_PREFIX}                 \
+  | sed -E                                                    \
+    "s|.*(${BACKUP_PREFIX}-${TODAY_YMD_PREFIX}_[0-9.]+\.tar\.gz\.asc).*|\\\\1|"`
 
-# wget --no-check-certificate \
-#      ${URL}/${BACKUP_PREFIX}-`(date +${DATE_YMD_PREFIX})`.tar.gz.asc
-curl -k ${URL}/${BACKUP_PREFIX}-`(date +${DATE_YMD_PREFIX})`.tar.gz.asc \
-  > ${BACKUP_PREFIX}-`(date +${DATE_YMD_PREFIX})`.tar.gz.asc
+for name in ${EXACT_FILENAMES}; do
+  echo "Fetching ${URL}/${name} ..."
+  wget --no-check-certificate ${URL}/${name}
+  echo "Done."
+done
