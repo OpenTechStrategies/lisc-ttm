@@ -40,8 +40,10 @@ done
 read    -p "Directory where backups live on prod server: " BACKUPS_TOP
 read    -p "DB user with read-only access to TTM databases: " DB_USER
 read -s -p "Password for DB user: " DB_PASS
+echo ""    # compensate for swallowed newline
 read    -p "Directory where exported backups go: " EXPORT_DEST
 read -s -p "Encryption key for exported backup: " EXPORT_KEY
+echo ""    # compensate for swallowed newline
 read    -p "Base URL for remotely fetching exported backups: " URL
 read    -p "Destination directory for exported backup: " REMOTE_DEST_DIR
 
