@@ -1,0 +1,70 @@
+#!/bin/bash
+
+read -d '' USAGE << EOF
+Usage: 'make-backup-script'
+
+This script is meant to be invoked from the top of lisc-ttm git tree,
+or from the maintenance subdir of same (it will figure out either way).
+
+It prompts you for various pieces of information (the DB read-only
+user and password, the backup destination, etc),  then creates
+'maintenance/backup-ttm' based on the answers.
+
+  NOTE: Keep the resultant scripts private, as they will contain a
+  password that allows read-only access to all the TTM databases and
+  perhaps other sensitive information as well!
+EOF
+
+# Set up all the template file and output file paths.
+# If we're above the maintenance/ directory, compensate for that.
+MAYBE_MAINTENANCE_PREFIX=""
+if [ -d maintenance -a -f maintenance/backup-ttm.tmpl ]; then
+    MAYBE_MAINTENANCE_PREFIX="maintenance/"
+fi
+TMPL=${MAYBE_MAINTENANCE_PREFIX}backup-ttm.tmpl
+OUTPUT=${MAYBE_MAINTENANCE_PREFIX}`basename ${TMPL} .tmpl`
+
+# Check that we have everything we need to succeed.
+if [ ! -f ${TMPL} ]; then
+  echo "ERROR: could not find '${TMPL}' file."
+  exit 1
+fi
+
+# Interactively obtain the user-chosen parameters.
+read    -p "Directory where backups live on prod server: " BACKUPS_TOP
+read    -p "DB user with read-only access to TTM databases: " DB_USER
+read -s -p "Password for DB user: " DB_PASS
+
+# We don't expose date format parameterization to the user the way
+# we do the others, but they're here in case one wants to tweak them.
+# Note that the prefix must be a true prefix of the full format --
+# otherwise certain wildcard formulations in the backup script won't
+# succeed in cleaning out backups from a fortnight ago.
+DATE_YMD_PREFIX="\%Y-\%m-\%d"
+DATE_FULL_FORMAT="\%Y-\%m-\%d_\%H.\%M.\%S"
+
+# Similarly, we don't expose the backup prefix parameterization to the
+# user, but we centralize it here in case anyone wants to tweak it.
+BACKUP_PREFIX="ttm-prod-backup"
+
+# Create the backup script that runs on prod.
+cp ${TMPL} ${OUTPUT}
+sed -e "s|__BACKUPS_TOP__|${BACKUPS_TOP}|g" < ${OUTPUT} > ${OUTPUT}.tmp
+mv ${OUTPUT}.tmp ${OUTPUT}
+sed -e "s|__DB_USER__|${DB_USER}|g" < ${OUTPUT} > ${OUTPUT}.tmp
+mv ${OUTPUT}.tmp ${OUTPUT}
+sed -e "s|__DB_PASS__|${DB_PASS}|g" < ${OUTPUT} > ${OUTPUT}.tmp
+mv ${OUTPUT}.tmp ${OUTPUT}
+sed -e "s|__BACKUP_PREFIX__|${BACKUP_PREFIX}|g" < ${OUTPUT} > ${OUTPUT}.tmp
+mv ${OUTPUT}.tmp ${OUTPUT}
+sed -e "s|__DATE_YMD_PREFIX__|${DATE_YMD_PREFIX}|g" < ${OUTPUT} > ${OUTPUT}.tmp
+mv ${OUTPUT}.tmp ${OUTPUT}
+sed -e "s|__DATE_FULL_FORMAT__|${DATE_FULL_FORMAT}|g" < ${OUTPUT} > ${OUTPUT}.tmp
+mv ${OUTPUT}.tmp ${OUTPUT}
+
+# Make sure the outputs are all executable.
+chmod a+x ${OUTPUT}
+
+echo ""
+echo "Backup script created: '${OUTPUT}'"
+echo ""
