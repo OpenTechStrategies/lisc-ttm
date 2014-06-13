@@ -135,12 +135,12 @@ Steps to install:
         (output trimmed on the left for brevity)
         mods-enabled/php5.conf -> ../mods-available/php5.conf
         mods-enabled/php5.load -> ../mods-available/php5.load
-        mods-enabled/php5_cgi.conf -> ../mods-available/php5_cgi.conf
-        mods-enabled/php5_cgi.load -> ../mods-available/php5_cgi.load
         mods-enabled/ssl.conf -> ../mods-available/ssl.conf
         mods-enabled/ssl.load -> ../mods-available/ssl.load
         mods-enabled/rewrite.load -> ../mods-available/rewrite.load
-        # You may or may not need the following three:
+        ### You may or may not need to enable the following too: ###
+        mods-enabled/php5_cgi.conf -> ../mods-available/php5_cgi.conf
+        mods-enabled/php5_cgi.load -> ../mods-available/php5_cgi.load
         mods-enabled/socache_dbm.load -> ../mods-available/socache_dbm.load
         mods-enabled/socache_memcache.load -> ../mods-available/socache_memcache.load
         mods-enabled/socache_shmcb.load -> ../mods-available/socache_shmcb.load
