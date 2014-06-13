@@ -10,7 +10,7 @@ It prompts you for various pieces of information (the DB read-only
 user and password, the backup destination, etc),  then creates
 'maintenance/ttm-backup' based on the answers.
 
-  NOTE: Keep the resultant scripts private, as they will contain a
+  NOTE: Keep 'maintenance/ttm-backup' private, as it will contain a
   password that allows read-only access to all the TTM databases and
   perhaps other sensitive information as well!
 EOF
