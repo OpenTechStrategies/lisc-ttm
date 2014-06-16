@@ -1,0 +1,1 @@
+TRUNCATE ttm-core.Users;  INSERT INTO ttm-core.Users VALUES ('user', '$2a$08$6.gtl5ONQosUaiyGHnOkU.BajiSVKjdcgPAbMWRgHHLPwybMH44Kq'), ('cecilia', '$2a$08$3Qd1H47gXICJ8JVjw2pDF.tWUe/ZrY4kwwGaCVOaAIjq3gvD4cTCS');
