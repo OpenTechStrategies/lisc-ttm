@@ -16,13 +16,24 @@ while(! feof($file))
   $this_line=fgets($file);
   $line_array=explode(',', $this_line);
   print_r($line_array); //testing only
-  if ($line_array[1]){   //if is hashed (how to check that?)
-      //restore from original file
-  }
-  else{
-  //else if is plaintext
+  $hashpass=$hasher->HashPassword($line_array[1]);
+  //get the stored hash - do we need to read from another file that is a current
+  //export from the db?
+  /* get $storedhash here */
+  
+  //here we don't know if we read a hashed password or a plaintext password.
+  //if the read password (line_array[1]) matches the stored password through
+  //CheckPassword, then the read password is plaintext.
+  if (($hasher->CheckPassword($line_array[1], $stored_hash))==1){  
+      //it is the correct plaintext
       //hash and save each hashed password corresponding to the user ID
-      $new_passes[$line_array[0]]=$hasher->HashPassword($line_array[1]);
+      $new_passes[$line_array[0]]=$hashpass;
+  }
+  //if the read password does NOT match the stored (hashed) password through CheckPassword,
+  //then the read password is itself already a hash (or is wrong, but we assume the passwords read
+  //into this script are correct)
+  else{
+     //restore from original file
   }
 fclose($file);
 
