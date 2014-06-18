@@ -41,9 +41,12 @@ $file_ext   = $path_parts['extension'];
 $file_path  = '/ajax/' . $file_name;
 echo "<br>" .$file_path; //TESTING ONLY by cdonnelly
 
+/*
 // allow a file to be streamed instead of sent as an attachment
 $is_attachment = isset($_REQUEST['stream']) ? false : true;
+*/
 
+echo "Right before the is_file if <br>";
 // make sure the file exists
 if (is_file($file_path))
 {
@@ -151,6 +154,7 @@ if (is_file($file_path))
 }
 else
 {
+    echo "The File does not exist!";
 	// file does not exist
 	header("HTTP/1.0 404 Not Found");
 	exit;
