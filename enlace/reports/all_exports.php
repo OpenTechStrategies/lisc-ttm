@@ -51,7 +51,7 @@ Export files for all tables.  This is going to change once Taryn determines what
             include "../include/dbconnclose.php";
             fclose($fp);
             ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="<?php echo '/include/download.php?'.$infile; ?>">Download.</a>
         </td>
         <td class="all_projects">---</td>
     </tr>

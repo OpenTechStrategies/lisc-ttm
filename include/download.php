@@ -29,6 +29,7 @@ if(!isset($_REQUEST['file']) || empty($_REQUEST['file']))
 // sanitize the file request, keep just the name and extension
 // also, replaces the file location with a preset one ('./myfiles/' in this example)
 $file_path  = $_REQUEST['file'];
+echo $file_path;
 $path_parts = pathinfo($file_path);
 $file_name  = $path_parts['basename'];
 $file_ext   = $path_parts['extension'];
