@@ -46,7 +46,7 @@ echo "<br>" .$file_path; //TESTING ONLY by cdonnelly
 $is_attachment = isset($_REQUEST['stream']) ? false : true;
 */
 $test_filename="../ajax/test.txt";
-if (is_file($test_filename)){ echo "Test entry ".$test_filename." is a file <br>";}
+if (is_file($file_path)){ echo "Test entry ".$file_path." is a file <br>";}
 else{echo "Test entry is not a file.  Sorry! <br>";}
 
 echo "Right before the is_file if <br>";
