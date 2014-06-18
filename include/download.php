@@ -45,7 +45,7 @@ echo "<br>" .$file_path; //TESTING ONLY by cdonnelly
 // allow a file to be streamed instead of sent as an attachment
 $is_attachment = isset($_REQUEST['stream']) ? false : true;
 */
-if (is_file('test.txt')){ echo "Test entry is a file <br>";}
+if (is_file('add_staff.php')){ echo "Test entry is a file <br>";}
 else{echo "Test entry is not a file.  Sorry! <br>";}
 
 echo "Right before the is_file if <br>";
