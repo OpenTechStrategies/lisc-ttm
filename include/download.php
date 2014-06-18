@@ -20,10 +20,6 @@
 @apache_setenv('no-gzip', 1);
 @ini_set('zlib.output_compression', 'Off');
 
-print_r($_REQUEST);//TESTING ONLY by cdonnelly
-echo "<br> get:";
-print_r($_GET); //TESTING ONLY by cdonnelly
-
 
 if(!isset($_REQUEST['file']) || empty($_REQUEST['file'])) 
 {
@@ -34,22 +30,21 @@ if(!isset($_REQUEST['file']) || empty($_REQUEST['file']))
 // sanitize the file request, keep just the name and extension
 // also, replaces the file location with a preset one ('./myfiles/' in this example)
 $file_path  = $_REQUEST['file'];
-echo $file_path . "<br>";//TESTING ONLY by cdonnelly
 $path_parts = pathinfo($file_path);
 $file_name  = $path_parts['basename'];
 $file_ext   = $path_parts['extension'];
 $file_path  = '../ajax/' . $file_name;
-echo "<br>" .$file_path; //TESTING ONLY by cdonnelly
 
-/*
+/* CDONNELLY: irrelevant to our purposes at the moment:
 // allow a file to be streamed instead of sent as an attachment
 $is_attachment = isset($_REQUEST['stream']) ? false : true;
 */
+
 $test_filename="../ajax/test.txt";
 if (is_file($file_path)){ echo "Test entry ".$file_path." is a file <br>";}
 else{echo "Test entry is not a file.  Sorry! <br>";}
 
-echo "Right before the is_file if <br>";
+echo "Second test of: " .$file_path;
 // make sure the file exists
 if (is_file($file_path))
 {
