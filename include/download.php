@@ -20,6 +20,8 @@
 @apache_setenv('no-gzip', 1);
 @ini_set('zlib.output_compression', 'Off');
 
+print_r($_REQUEST);//TESTING ONLY by cdonnelly
+
 if(!isset($_REQUEST['file']) || empty($_REQUEST['file'])) 
 {
 	header("HTTP/1.0 400 Bad Request");
