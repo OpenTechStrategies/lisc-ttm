@@ -33,7 +33,7 @@ Export files for all tables.  This is going to change once Taryn determines what
         </td>
         <td class="all_projects">
             <?php
-            $infile = "export_container/events_" . date('m_d_Y') . ".csv";
+            $infile = "events_" . date('m_d_Y') . ".csv";
             $fp = fopen($infile, "w") or die('can\'t open file');
             $title_array = array("Event_Name", "Event_Date", "Address_Num", "Address_Dir", "Address_Street", "Address_Suffix", "Event Type",
                 "File_Name of upload", "Campaign_Name");
@@ -51,7 +51,7 @@ Export files for all tables.  This is going to change once Taryn determines what
             include "../include/dbconnclose.php";
             fclose($fp);
             ?>
-            <a href="<?php echo '/include/download.php?file=test.txt'; ?>">Download.</a>
+            <a href="<?php echo '/include/download.php?file='.$infile; ?>">Download.</a>
         </td>
         <td class="all_projects">---</td>
     </tr>

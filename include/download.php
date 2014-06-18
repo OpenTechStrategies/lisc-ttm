@@ -33,7 +33,7 @@ $file_path  = $_REQUEST['file'];
 $path_parts = pathinfo($file_path);
 $file_name  = $path_parts['basename'];
 $file_ext   = $path_parts['extension'];
-$file_path  = '../ajax/' . $file_name;
+$file_path  = '../enlace/export_container/' . $file_name;
 
 /* CDONNELLY: irrelevant to our purposes at the moment:
 // allow a file to be streamed instead of sent as an attachment
