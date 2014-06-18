@@ -39,22 +39,22 @@ $file_path  = '../ajax/' . $file_name;
 // allow a file to be streamed instead of sent as an attachment
 $is_attachment = isset($_REQUEST['stream']) ? false : true;
 */
-
+/*
 $test_filename="../ajax/test.txt";
 if (is_file($file_path)){ echo "Test entry ".$file_path." is a file <br>";}
 else{echo "Test entry is not a file.  Sorry! <br>";}
 
-echo "Second test of: " .$file_path;
+echo "Second test of: " .$file_path;*/
 // make sure the file exists
 if (is_file($file_path))
 {
-    echo "yes, this is a file <br>";//TESTING ONLY by cdonnelly
+    //echo "yes, this is a file <br>";//TESTING ONLY by cdonnelly
 	$file_size  = filesize($file_path);
-        echo "File size: ".$file_size."<br>";//TESTING ONLY by cdonnelly
+      //  echo "File size: ".$file_size."<br>";//TESTING ONLY by cdonnelly
 	$file = @fopen($file_path,"rb");
 	if ($file)
 	{
-            echo "File opened successfully <br>";//TESTING ONLY by cdonnelly
+          //  echo "File opened successfully <br>";//TESTING ONLY by cdonnelly
 		// set the headers, prevent caching
 		header("Pragma: public");
 		header("Expires: -1");
@@ -152,7 +152,7 @@ if (is_file($file_path))
 }
 else
 {
-    echo "The File does not exist!";
+   // echo "The File does not exist!";
 	// file does not exist
 	header("HTTP/1.0 404 Not Found");
 	exit;
