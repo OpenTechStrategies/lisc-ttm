@@ -21,6 +21,9 @@
 @ini_set('zlib.output_compression', 'Off');
 
 print_r($_REQUEST);//TESTING ONLY by cdonnelly
+echo "\n get:";
+print_r($_GET); //TESTING ONLY by cdonnelly
+
 
 if(!isset($_REQUEST['file']) || empty($_REQUEST['file'])) 
 {
@@ -36,7 +39,7 @@ $path_parts = pathinfo($file_path);
 $file_name  = $path_parts['basename'];
 $file_ext   = $path_parts['extension'];
 $file_path  = './myfiles/' . $file_name;
-
+echo "\n" .$file_path;
 // allow a file to be streamed instead of sent as an attachment
 $is_attachment = isset($_REQUEST['stream']) ? false : true;
 
