@@ -38,7 +38,7 @@ echo $file_path . "<br>";//TESTING ONLY by cdonnelly
 $path_parts = pathinfo($file_path);
 $file_name  = $path_parts['basename'];
 $file_ext   = $path_parts['extension'];
-$file_path  = '/ajax/' . $file_name;
+$file_path  = '../ajax/' . $file_name;
 echo "<br>" .$file_path; //TESTING ONLY by cdonnelly
 
 /*
