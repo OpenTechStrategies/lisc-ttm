@@ -1,4 +1,0 @@
-
-    /* To load this sql file and save all user passwords as hashes...(instructions) */
-    TRUNCATE ttm-core.Users;  
-    INSERT INTO ttm-core.Users (User_ID, User_Password) VALUES ('4', '_zzD.ENNeGmgghoM8sl2'), ('11', '_zzD.lOoUBPRp9Kr4rXA'), ('12', '_zzD.C6/f9gZMps6SASs'), ('13', '_zzD.7Q799EINLjV0U1A'), ('14', '_zzD.omlr2C.rTkIJmVw'), ('15', '_zzD.1C0CTvILyntgkMw'), ('16', '_zzD.ihAjhoUvIalHiJM'), ('17', '_zzD.HAbZnQB.ig8ip3Y'), ('18', '_zzD.Fdrwk0xtGhEOvnI'), ('19', '_zzD.L36JY/b/EtpSEh.'), ('20', '_zzD.qUwklhisNMGKMkE'), ('21', '_zzD.vZZgYU37EwuSlpc'), ('22', '_zzD.x/NIF3mK2oNBnHw'), ('23', '_zzD.1t.pEGutJwlqsrM'), ('25', '_zzD.r3rVDfkhWRqCYn6'), ('26', '_zzD.solPyXjNLS8FRSY'), ('27', '_zzD.2BGP3CnTMnCj9lU'), ('28', '_zzD.ecdqDcWNg2g/9tk'), ('29', '_zzD.qtFIHU9kL46tfzw'), ('', '_zzD.2QoSNvH5iu3qIzQ');
