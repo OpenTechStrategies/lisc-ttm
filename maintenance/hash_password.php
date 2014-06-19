@@ -4,7 +4,7 @@
  * In command line:
  * $ php /path/to/this/file.php <name of file with plaintext passwords> <action to take>
  * 
- * $argv[0] is the name of this file.
+ * $argv[0] is the name of this file, which includes the user ID and the user password, separated by commas.
  * $argv[1] is the file to read plaintext passwords from
  * $argv[2] is whether to hash passwords or not
  * if $argv[2]=='hash' then the passwords are being passed in plaintext and should
@@ -38,7 +38,7 @@ while(! feof($file))
   $line_array=explode(',', $this_line);//separates the line into an array
   if ($line_array[1]){$line_array[1]=trim($line_array[1]);
   $line_array[1]=str_replace('"', '', $line_array[1]);}
-  else{echo "Line did not read properly";}
+  else{echo "Line did not read correctly.";}
   //here we don't know if we read a hashed password or a plaintext password.
   //if the passed argument says 'hash' then we hash and save
   if ($argv[2]=='hash'){  
@@ -64,20 +64,11 @@ $insert_values="
       Database changed
       mysql> source 'user_load.sql';
 */
-    TRUNCATE ttm-core.Users;  
-    INSERT INTO ttm-core.Users (User_ID, User_Password) VALUES "; 
+";
 $counter=0;
 foreach ($new_passes as $id=>$password){
-    $insert_values.="('$id', '$password')";
+    $insert_values.="UPDATE ttm-core.Users SET User_Password='$password' WHERE User_ID='$id';\n";
     $counter++;
-    //add comma if not last pair
-    if ($counter<count($new_passes)){
-        $insert_values .=", ";
-    }
-    //if last pair add a semicolon
-    else{
-        $insert_values.=";";
-    }
 }
   
 fwrite($load_file, $insert_values);
