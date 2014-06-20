@@ -10,8 +10,13 @@ For authenticated user:
 1. Click on "Download" link on exports page and the file begins downloading 
 seamlessly.  This is how downloads work for users currently.
      
+     ### What does the URL of that link look like?
+
      a. Will the script know that the user is authenticated simply by virtue of 
         the user navigating to the script from the exports page?
+
+        ### Wouldn't the script do authentication the same way the
+        ### rest of the system does -- that is, by checking the cookie?
 
 2. What will happen is that the link will trigger some script to retrieve the
 file from a directory that is not visible to users.
@@ -22,6 +27,14 @@ file from a directory that is not visible to users.
      b. Put another way, what are the options for creating these files?  
         At the moment they are created with "fopen."  Is that the best/most
         secure mechanism?
+
+     ### But aren't we creating those files on-the-fly each time
+     ### anyway?  That is, it's not a cron job that runs in batch mode
+     ### each night or something like that.  Right now, when the user
+     ### clicks on the Download or Exports link, the files are
+     ### (re)created right then and there.  So, if we're going through
+     ### a script now anyway, maybe we don't need to ever have files
+     ### on disk?  Can we just send the data to the user directly?
 
 3. The script should read the file in the directory and send headers that cause
 the file to be downloaded onto the user's computer.
