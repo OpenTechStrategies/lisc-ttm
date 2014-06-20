@@ -77,9 +77,9 @@ if ($check){
 else{
     
     /*inserting shim here: */
-    echo "Password hash did not match. <br>";
+   // echo "Password hash did not match. <br>";
     
-    if ($user_hash[0]==$current_pw){ //if plaintext password matches stored password
+    if ($stored_hash==$current_pw){ //if plaintext password matches stored password
         //record this login in the Log
         $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT(" . $username . ", ' - Logged In'))";
     
