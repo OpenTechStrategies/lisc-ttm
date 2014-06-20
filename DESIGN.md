@@ -5,13 +5,16 @@
 Downloading Files Desired Behavior
 --------------
 
-For authenticated user:
+I. For authenticated user:
 
 1. Click on "Download" link on exports page and the file begins downloading 
 seamlessly.  This is how downloads work for users currently.
      
      a. Will the script know that the user is authenticated simply by virtue of 
         the user navigating to the script from the exports page?
+
+         i. The script can check the user's cookie before starting for auth
+            purposes.
 
 2. What will happen is that the link will trigger some script to retrieve the
 file from a directory that is not visible to users.
@@ -26,16 +29,20 @@ file from a directory that is not visible to users.
 3. The script should read the file in the directory and send headers that cause
 the file to be downloaded onto the user's computer.
 
-For logged-in user without download permission (does this exist?):
+II. For logged-in user without download permission (does this exist?):
 
-For non-logged-in person who accesses URL directly:
+III. For non-logged-in person who accesses URL directly:
 
 1. The files will be placed in a directory that is not visible to the web/not
    user-facing, so this will not happen.
 2. If the download script is accessed directly, it should redirect 
    to the login screen.
-   a. This means that it needs to have a system for finding out where a user
+
+     a. This means that it needs to have a system for finding out where a user
       was directed from.
+
+         i. No, if the user cookie is not set (see I.1.a.i.) then the script will
+            redirect to the login screen.
 
 
 Possible resources:
