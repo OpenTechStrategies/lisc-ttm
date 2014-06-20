@@ -87,14 +87,14 @@ while (($this_line = fgets(STDIN)) != FALSE)
   $line_array[1] = rtrim($line_array[1], "\n");
 
   // Output the SQL.
-  fwrite(STDOUT, "UPDATE ttm-core.Users SET User_Password='");
+  fwrite(STDOUT, "UPDATE Users SET User_Password='");
   if ($Hashing == TRUE) {  
     fwrite(STDOUT, $hasher->HashPassword($line_array[1]));
   }
   else {
     fwrite(STDOUT, $line_array[1]);
   }
-  fwrite(STDOUT, "' WHERE User_ID='$line_array[0]';\n");
+  fwrite(STDOUT, "' WHERE User_Email='$line_array[0]';\n");
 }
 
 ?>
