@@ -1,4 +1,13 @@
 <?php
+if (!isset($_COOKIE['user'])) {
+    /* if the user isn't logged in or their log in has expired, the header
+     * returns them to the login screen.
+     */
+    ?>
+                window.location = '/index.php';
+    <?php
+}
+
 /**
  * Copyright 2012 Armand Niculescu - MediaDivision.com
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
