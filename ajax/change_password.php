@@ -1,28 +1,39 @@
 <?php
+require("../include/phpass-0.3/PasswordHash.php");
+$hasher=new PasswordHash(8, false);
+
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 if (isset($_POST['current_pw'])){
     $current_pw = $_POST['current_pw'];
 }
 $username = $_POST['username']; 
-$user_query = "SELECT * FROM  Users WHERE User_Email = '$username' AND User_Password = '$current_pw'";
+$user_query = "SELECT User_Password, User_ID FROM  Users WHERE User_Email = '$username'";
 //echo $user_query;
+$stored_hash="*";
 $user = mysqli_query($cnnLISC, $user_query);
-//print_r($user);
-$is_user = mysqli_num_rows($user);
+$user_hash = mysqli_fetch_row($user);
+$stored_hash=$user_hash[0];
+
+$check=$hasher->CheckPassword($current_pw, $stored_hash);
+//echo "<br>check: " . $check;
 /*
  * Test to make sure that the username and password match:
  */
-if ($is_user>0){
+if ($check){ //obviously I won't keep that, this is only for changing my password to test whether the hashing is working.
        /*if they match, then reset the password to the new password:
         */
         $new_pw = $_POST['new_pw'];
         $confirm_pw = $_POST['new_pw_2'];
         /*make sure the new and confirmed passwords match:*/
         if ($new_pw == $confirm_pw){
-            $change_pw_query = "UPDATE Users SET User_Password ='". $_POST['new_pw'] . "' WHERE User_Email='$username'";
+            $hash=$hasher->HashPassword($new_pw);
+            if (strlen($hash)>=20){
+            $change_pw_query = "UPDATE Users SET User_Password ='". $hash . "' WHERE User_ID=$user_hash[1]";
             //echo $change_pw_query;
             mysqli_query($cnnLISC, $change_pw_query);
             echo "Password updated! <a href='/index.php'>Back to main site</a>";
+            }
+            else{echo "Something went wrong.";}
         }
         else{
             echo "The new passwords you entered do not match.  Please try again.";
