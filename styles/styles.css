@@ -1026,30 +1026,6 @@ td.all_projects{
 	padding: 0 10px;
 }
 
-th.all_projects{
-    border-width: 1px;
-    border-style: solid;
-    border-color: #696969;
-    text-align:center;
-	padding: 0 10px;
-}
-
-td.contact{
-    border-width: 1px;
-    border-style: solid;
-    border-color: #696969;
-    text-align: left;
-	padding: 0 10px;
-}
-
-th.contact{
-    border-width: 1px;
-    border-style: solid;
-    border-color: #696969;
-    text-align:left;
-	padding: 0 10px;
-}
-
 table.homescreen_table {
 	width:100%;
 	text-align:center;
@@ -1139,14 +1115,6 @@ div#footer img#ots_logo,img#ots_logo{
 div#footer img#ch_logo{
 	height:30px;
 	float:right;
-	padding-bottom:8px;
-	margin:5px 0 0 3px;
-        margin-right: 20px;
-}
-
-div#footer span#helplink{
-	height:30px;
-	float:center;
 	padding-bottom:8px;
 	margin:5px 0 0 3px;
         margin-right: 20px;
