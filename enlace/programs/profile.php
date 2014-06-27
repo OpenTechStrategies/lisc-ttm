@@ -539,39 +539,9 @@ Shows all program information.
                                     ?></td>
                             <td>
                                 <?php
-                                //calculate maximum hours = daily hours*num days
-                                //no, use the max hrs in case they overrode the calculated amount
-                                $denom_hours = ($program->max_hrs);
-
-                                //get number of absences
-                                $get_absences = "SELECT COUNT(*) FROM Absences INNER JOIN Program_Dates ON Program_Date=Program_Date_ID
-                                WHERE Participant_ID='" . $all_p['Participant_ID'] . "' AND Program_ID='" . $all_p['Session_ID'] . "';";
-                                $days = mysqli_query($cnnEnlace, $get_absences);
-                                $num_days = mysqli_fetch_row($days);
-                                $absences = $num_days[0];
-                                //echo $get_absences;
-                                //count program dates
-                                $count_dates = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID='" . $all_p['Session_ID'] . "';";
-                                //echo $count_dates;
-                                $all_days = mysqli_query($cnnEnlace, $count_dates);
-                                $num_all_days = mysqli_fetch_row($all_days);
-                                $ct_days = $num_all_days[0];
-
-                                //calculate percentage of time present
-                                if ($denom_hours != 0 & $program->daily_hrs != '') {
-                                    $perc_abs = ((($absences * $program->daily_hrs) / $denom_hours) / $ct_days);
-                                    //echo $absences . "<br>";
-                                    //echo $denom_hours . "<br>";
-                                    //echo $program->daily_hrs . "<br>";
-                                } elseif ($denom_hours != 0 & $program->daily_hrs == '') {
-                                    $perc_abs = ($absences / $ct_days);
-                                    //echo $perc_abs;
-                                } elseif ($denom_hours == 0 & $ct_days != 0) {
-                                    //just figure out the number of absences and the total number of days and get percentage
-                                    $perc_abs = $absences / $ct_days;
-                                }
-                                $perc_present = 1 - $perc_abs;
-                                echo number_format($perc_present * 100) . '%';
+                                include "../include/dosage_percentage.php";                                
+                                $return_array= calculate_dosage($all_p['Session_ID'], $all_p['Participant_ID']);
+                                echo $return_array[0];
                                 ?>
                             </td>
                             <td><?php

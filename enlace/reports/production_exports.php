@@ -1018,7 +1018,10 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 "Number of days attended",
                 "Sum of hours for this session", "Dosage percentage for this session"); //"Total hours across sessions and programs", "Total hours including mentorship"
             fputcsv($fp, $title_array);
-
+            
+            include "../include/dosage_percentage.php";
+            
+            
             $non_admin_string = "";
             //if not an administrator
             if ($access != 'a') {
@@ -1041,7 +1044,9 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
            /*equivalent to here*/
             include "../include/dbconnopen.php";
             $event_info = mysqli_query($cnnEnlace, $get_events);
+            include "../include/dosage_percentage.php";
             while ($event = mysqli_fetch_row($event_info)) {
+                
                 //this should hold the max hours.
                 $get_program_times = "SELECT * FROM Programs WHERE Program_ID=$event[3]";
                 $program_times = mysqli_query($cnnEnlace, $get_program_times);
