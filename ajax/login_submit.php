@@ -1,20 +1,45 @@
 <?php
+require("../include/phpass-0.3/PasswordHash.php");
+$hasher=new PasswordHash(8, false);
 
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 if (isset($_POST['username'])){
     $username = $_POST["username"];
-    $password = $_POST["password"];
+    $password_received = $_POST["password"];
 }
 
-$user_query = "SELECT * FROM  Users WHERE User_Email = '$username' AND User_Password = '$password'";
+// Will be set to the password exactly as found in the DB.
+// Initialized to "*" because that's PHPass's signal of invalidity.
+$password_in_db="*";
 
-$user = mysqli_query($cnnLISC, $user_query);
+$user_query = "SELECT User_ID, User_Password FROM Users WHERE User_Email = '$username'";
+$query_result = mysqli_query($cnnLISC, $user_query);
 
-$is_user = mysqli_num_rows($user);
-$user_id = mysqli_fetch_array($user);
+// Will be > 0 iff $username is in the database.
+//
+// However, if > 1, then this is an instance of issue #15.  For now,
+// we'll tolerate it, but in the long run there shouldn't be any
+// duplicate usernames, and resolving issue #15 means raising an
+// error here if the number of rows in the result != 1.
+$user_exists = mysqli_num_rows($query_result);
+if (! $user_exists) {
+    $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username . "', ' - Unknown username'))";
+    mysqli_query($cnnLISC, $log_call);
+    echo '0'; // signal to caller that something here failed
+    return 0;
+}
 
-//if this user exists in the database
-if ($is_user>0){
+$user_row = mysqli_fetch_row($query_result);
+$user_id=$user_row[0];
+$password_in_db=$user_row[1];
+$hash_match = $hasher->CheckPassword($password_received, $password_in_db);
+
+// Temporary shim: Because some passwords in the database are still
+// stored in the old non-hashed form, we try both ways.  Once all the
+// passwords in the DB are converted to hashed, the shim will go away.
+$plain_match = ($password_in_db == $password_received);
+
+if ($hash_match || $plain_match) {
     //record this login in the Log
     $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username . "', ' - Logged In'))";
     
@@ -38,9 +63,7 @@ if ($is_user>0){
            else{
                /*set a site cookie for each of the sites this person has access to.*/
                setcookie('sites['.$i.']', $privilege['Privilege_Id'], time() + 10800, '/');
-               $get_level_of_access = "SELECT Site_Privilege_ID FROM Users_Privileges INNER JOIN Users
-                    ON Users_Privileges.User_ID=Users.User_ID WHERE User_Email = '$username' AND User_Password = '$password'";
-              
+               $get_level_of_access = "SELECT Site_Privilege_ID FROM Users_Privileges WHERE User_ID=$user_id";
                $access_level = mysqli_query($cnnLISC, $get_level_of_access);
                $level = mysqli_fetch_row($access_level);
                if ($level[0] !=1){
@@ -67,12 +90,10 @@ if ($is_user>0){
            
        }
 }
-else{
-    $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username . "', ' - Invalid Login'))";
-    
-    
+else {
+    // TODO: Same question about username.
+    $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username . "', ' - Failed login'))";
     mysqli_query($cnnLISC, $log_call);
-
     echo '0';
 }
 
