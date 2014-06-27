@@ -2,11 +2,11 @@
 
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 if (isset($_POST['username'])){
-    $username = "'" . $_POST["username"] . "'";
-    $password = "'". $_POST["password"]. "'";
+    $username = $_POST["username"];
+    $password = $_POST["password"];
 }
 
-$user_query = "SELECT * FROM  Users WHERE User_Email = $username AND User_Password = $password";
+$user_query = "SELECT * FROM  Users WHERE User_Email = '$username' AND User_Password = '$password'";
 
 $user = mysqli_query($cnnLISC, $user_query);
 
@@ -16,7 +16,7 @@ $user_id = mysqli_fetch_array($user);
 //if this user exists in the database
 if ($is_user>0){
     //record this login in the Log
-    $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT(" . $username . ", ' - Logged In'))";
+    $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username . "', ' - Logged In'))";
     
     mysqli_query($cnnLISC, $log_call);
     
@@ -40,7 +40,7 @@ if ($is_user>0){
                /*set a site cookie for each of the sites this person has access to.*/
                setcookie('sites['.$i.']', $privilege['Privilege_Id'], time() + 10800, '/');
                $get_level_of_access = "SELECT Site_Privilege_ID FROM Users_Privileges INNER JOIN Users
-                    ON Users_Privileges.User_ID=Users.User_ID WHERE User_Email = $username AND User_Password = $password";
+                    ON Users_Privileges.User_ID=Users.User_ID WHERE User_Email = '$username' AND User_Password = '$password'";
               
               include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
                $access_level = mysqli_query($cnnLISC, $get_level_of_access);
@@ -70,7 +70,7 @@ if ($is_user>0){
        }
 }
 else{
-    $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT(" . $username . ", ' - Invalid Login'))";
+    $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username . "', ' - Invalid Login'))";
     
     
     mysqli_query($cnnLISC, $log_call);
