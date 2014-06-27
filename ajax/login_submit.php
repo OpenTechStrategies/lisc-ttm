@@ -25,7 +25,6 @@ if ($is_user>0){
       
        //now find which, if any, privileges they have and set an appropriate cookie
        $privileges_query = "CALL User__Find_Privileges('$username')";
-       include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
        $privileges = mysqli_query($cnnLISC, $privileges_query);
        
        $i=0;
@@ -42,7 +41,6 @@ if ($is_user>0){
                $get_level_of_access = "SELECT Site_Privilege_ID FROM Users_Privileges INNER JOIN Users
                     ON Users_Privileges.User_ID=Users.User_ID WHERE User_Email = '$username' AND User_Password = '$password'";
               
-              include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
                $access_level = mysqli_query($cnnLISC, $get_level_of_access);
                $level = mysqli_fetch_row($access_level);
                if ($level[0] !=1){
