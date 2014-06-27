@@ -91,7 +91,6 @@ if ($hash_match || $plain_match) {
        }
 }
 else {
-    // TODO: Same question about username.
     $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username . "', ' - Failed login'))";
     mysqli_query($cnnLISC, $log_call);
     echo '0';
