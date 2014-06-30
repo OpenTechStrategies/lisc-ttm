@@ -1043,7 +1043,9 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             include "../include/dosage_percentage.php";
             while ($event = mysqli_fetch_row($event_info)) {
                 $dosage=calculate_dosage($event[5], $event[0]);
-                array_push($event, $dosage);
+                array_push($event, $dosage[0]);
+                array_push($event, $dosage[1]);
+                array_push($event, $dosage[2]);
                 fputcsv($fp, $event);
             }
             include "../include/dbconnclose.php";
