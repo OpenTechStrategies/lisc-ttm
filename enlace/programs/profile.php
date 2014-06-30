@@ -539,59 +539,22 @@ Shows all program information.
                                     ?></td>
                             <td>
                                 <?php
-                                //calculate maximum hours = daily hours*num days
-                                //no, use the max hrs in case they overrode the calculated amount
-                                $denom_hours = ($program->max_hrs);
-
-                                //get number of absences
-                                $get_absences = "SELECT COUNT(*) FROM Absences INNER JOIN Program_Dates ON Program_Date=Program_Date_ID
-                                WHERE Participant_ID='" . $all_p['Participant_ID'] . "' AND Program_ID='" . $all_p['Session_ID'] . "';";
-                                $days = mysqli_query($cnnEnlace, $get_absences);
-                                $num_days = mysqli_fetch_row($days);
-                                $absences = $num_days[0];
-                                //echo $get_absences;
-                                //count program dates
-                                $count_dates = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID='" . $all_p['Session_ID'] . "';";
-                                //echo $count_dates;
-                                $all_days = mysqli_query($cnnEnlace, $count_dates);
-                                $num_all_days = mysqli_fetch_row($all_days);
-                                $ct_days = $num_all_days[0];
-
-                                //calculate percentage of time present
-                                if ($denom_hours != 0 & $program->daily_hrs != '') {
-                                    $perc_abs = ((($absences * $program->daily_hrs) / $denom_hours) / $ct_days);
-                                    //echo $absences . "<br>";
-                                    //echo $denom_hours . "<br>";
-                                    //echo $program->daily_hrs . "<br>";
-                                } elseif ($denom_hours != 0 & $program->daily_hrs == '') {
-                                    $perc_abs = ($absences / $ct_days);
-                                    //echo $perc_abs;
-                                } elseif ($denom_hours == 0 & $ct_days != 0) {
-                                    //just figure out the number of absences and the total number of days and get percentage
-                                    $perc_abs = $absences / $ct_days;
-                                }
-                                $perc_present = 1 - $perc_abs;
-                                echo number_format($perc_present * 100) . '%';
+                                include "../include/dosage_percentage.php";
+                                $return_array= calculate_dosage($all_p['Session_ID'], $all_p['Participant_ID']);
+                                echo $return_array[2];
                                 ?>
                             </td>
                             <td><?php
-                            //take count of absences ($absences) and multiply by daily hours
-                            // echo "Denominator: " . $denom_hours . "<br>";
-                            if ($denom_hours != 0) {
-                                $hrs_dosage = $denom_hours - ($absences * $program->daily_hrs);
-                            } else {
-                                $hrs_dosage = ($perc_present * $ct_days) * $program->daily_hrs;
-                            }
-                            echo $hrs_dosage;
+                            echo $return_array[1];
                                 ?>
                             </td>
                             <td>
     <?php
     $all_hours = 0;
     ////ok.  first let's get the other programs that she's in
-    $get_progs = "SELECT Programs.*, COUNT(Program_Date_ID) as count FROM Participants_Programs
-                                INNER JOIN Programs ON Participants_Programs.Program_ID=Programs.Program_ID
-                                INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID
+    $get_progs = "SELECT Programs.*, Session_Names.Session_ID FROM Participants_Programs
+                                INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
+                                INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID
                                 WHERE Participant_ID='" . $all_p['Participant_ID'] . "'
                                 AND Participants_Programs.Program_ID!='" . $all_p['Session_ID'] . "'";
     $other_progs = mysqli_query($cnnEnlace, $get_progs);
@@ -599,7 +562,7 @@ Shows all program information.
 
         //get absences from programs that are not this one
         $get_other_absences = "SELECT COUNT(*) FROM Absences INNER JOIN Program_Dates ON Program_Date=Program_Date_ID
-                                WHERE Participant_ID='" . $all_p['Participant_ID'] . "' AND Program_ID='$prog[0]]';";
+                                WHERE Participant_ID='" . $all_p['Participant_ID'] . "' AND Program_ID='".$prog['Session_ID']."';";
         $other_days = mysqli_query($cnnEnlace, $get_other_absences);
         $num_other_days = mysqli_fetch_row($other_days);
         $other_absences = $num_other_days[0];
@@ -620,7 +583,6 @@ Shows all program information.
             $finish = 0;
         }
         $daily_hrs = (($finish) - ($begin));
-
         //get the hours spent in this program (max hours minus absent hours)
         if ($prog['Max_Hours'] != '') {
             $max_hrs = $prog['Max_Hours'];
@@ -632,7 +594,8 @@ Shows all program information.
         //add the hours for this program to all_hours
         $all_hours+=$present_hours;
     }
-    $all_hours+=$hrs_dosage;
+    //add hours from "Total hours in this program" column:
+    $all_hours+=$return_array[1];
     echo $all_hours;
     ?>
                             </td>
