@@ -552,9 +552,9 @@ Shows all program information.
     <?php
     $all_hours = 0;
     ////ok.  first let's get the other programs that she's in
-    $get_progs = "SELECT Programs.*, COUNT(Program_Date_ID) as count FROM Participants_Programs
-                                INNER JOIN Programs ON Participants_Programs.Program_ID=Programs.Program_ID
-                                INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID
+    $get_progs = "SELECT Programs.*, Session_Names.Session_ID FROM Participants_Programs
+                                INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
+                                INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID
                                 WHERE Participant_ID='" . $all_p['Participant_ID'] . "'
                                 AND Participants_Programs.Program_ID!='" . $all_p['Session_ID'] . "'";
     $other_progs = mysqli_query($cnnEnlace, $get_progs);
@@ -562,7 +562,7 @@ Shows all program information.
 
         //get absences from programs that are not this one
         $get_other_absences = "SELECT COUNT(*) FROM Absences INNER JOIN Program_Dates ON Program_Date=Program_Date_ID
-                                WHERE Participant_ID='" . $all_p['Participant_ID'] . "' AND Program_ID='$prog[0]]';";
+                                WHERE Participant_ID='" . $all_p['Participant_ID'] . "' AND Program_ID='".$prog['Session_ID']."';";
         $other_days = mysqli_query($cnnEnlace, $get_other_absences);
         $num_other_days = mysqli_fetch_row($other_days);
         $other_absences = $num_other_days[0];
@@ -583,7 +583,6 @@ Shows all program information.
             $finish = 0;
         }
         $daily_hrs = (($finish) - ($begin));
-
         //get the hours spent in this program (max hours minus absent hours)
         if ($prog['Max_Hours'] != '') {
             $max_hrs = $prog['Max_Hours'];

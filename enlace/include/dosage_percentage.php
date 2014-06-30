@@ -18,7 +18,7 @@ function calculate_dosage($session, $participant){
         LEFT JOIN Absences ON ( Program_Date_ID = Program_Date AND Participants_Programs.Participant_ID=
         Absences.Participant_ID)
             WHERE Absence_ID IS NULL AND Participants_Programs.Participant_ID='$participant'
-            GROUP BY Session_ID;";
+            AND Session_ID='$session';";
     $attended_days=mysqli_query($cnnEnlace, $num_days_attended);
     $num_attended=mysqli_fetch_row($attended_days);
     /* This select finds the total number of days that this program was 
