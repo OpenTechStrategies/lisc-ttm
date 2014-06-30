@@ -1013,12 +1013,17 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
         <td class="all_projects">
             <?php
             $infile = "export_container/dosage_" . date('m_d_Y') . ".csv";
+            $deid_infile = "export_container/deid_dosage_" . date('m_d_Y') . ".csv";
             $fp = fopen($infile, "w") or die('can\'t open file');
+            $deid_fp = fopen($deid_infile, "w") or die('can\'t open file');
             $title_array = array("Participant ID", "First Name", "Last Name", "Program ID", "Program Name", "Session ID", "Session Name",
                 "Number of days attended",
-                "Sum of hours for this session", "Dosage percentage for this session"); //"Total hours across sessions and programs", "Total hours including mentorship"
+                "Sum of hours for this session", "Dosage percentage for this session");
+            $deid_title_array = array("Participant ID", "Program ID", "Program Name", "Session ID", "Session Name",
+                "Number of days attended",
+                "Sum of hours for this session", "Dosage percentage for this session");
             fputcsv($fp, $title_array);
-            
+            fputcsv($deid_fp, $deid_title_array);
             include "../include/dosage_percentage.php";
             
             
@@ -1046,90 +1051,17 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 array_push($event, $dosage[0]);
                 array_push($event, $dosage[1]);
                 array_push($event, $dosage[2]);
+                $deid_array=array($event[0], $event[3], $event[4], $event[5], $event[6], $dosage[0], $dosage[1], $dosage[2]);
                 fputcsv($fp, $event);
+                fputcsv($deid_fp, $deid_array);
             }
             include "../include/dbconnclose.php";
             fclose($fp);
+            fclose($deid_fp)
             ?><a href="<?php echo $infile ?>">Download.</a>
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/deid_dosage_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Participant ID", "Program ID", "Program Name", "Session ID", "Session Name",
-                "Number of days attended",
-                "Sum of hours for this session", "Dosage percentage for this session"); //"Total hours across sessions and programs", "Total hours including mentorship"
-            fputcsv($fp, $title_array);
-
-            $non_admin_string = "";
-            //if not an administrator
-            if ($access != 'a') {
-                //$non_admin_string = " AND Participants.Participant_ID IN "
-                //        . "(SELECT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access . ")";
-                $non_admin_string = " AND Programs.Program_ID = " . $access . " ";
-            }
-
-            $get_events = "SELECT Participants_Programs.Participant_ID, Programs.Program_ID,
-                            Name, Session_ID, Session_Name, COUNT(Program_Date_ID) FROM Participants_Programs
-                            INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID
-                            INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
-                            INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID
-                            INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID
-                            LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID=
-                            Absences.Participant_ID)
-                            WHERE Absence_ID IS NULL "
-                            . $non_admin_string
-                            . "GROUP BY Session_ID, Participants.Participant_ID;";
-           /*equivalent to here*/
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                //this should hold the max hours.
-                $get_program_times = "SELECT * FROM Programs WHERE Program_ID=$event[3]";
-               // echo $get_program_times . "<br>";
-                $program_times = mysqli_query($cnnEnlace, $get_program_times);
-                $program_info = mysqli_fetch_array($program_times);
-                if ($program_info['Start_Suffix'] == 'am') {
-                    $begin = $program_info['Start_Hour'];
-                } elseif ($program_info['Start_Suffix'] == 'pm') {
-                    $begin = $program_info['Start_Hour'] + 12;
-                } else {
-                    $begin = 0;
-                }
-                if ($program_info['End_Suffix'] == 'am') {
-                    $finish = $program_info['End_Hour'];
-                } elseif ($program_info['End_Suffix'] == 'pm') {
-                    $finish = $program_info['End_Hour'] + 12;
-                } else {
-                    $finish = 0;
-                }
-                $daily_hrs = (($finish) - ($begin));
-                // echo $daily_hrs . "&nbsp";
-                if ($program_info['Max_Hours'] != '') {
-                    $max_hrs = $program_info['Max_Hours'];
-                } else {
-                    $max_hrs = ($daily_hrs);
-                }
-               //  echo $max_hrs . "<br>";
-               //  echo "event[5]" . $event[5] . "<br>";
-                $total_hrs = $max_hrs * $event[5];
-               // echo "total hours" . $total_hrs . "<br>";
-                array_push($event, $total_hrs);
-                $get_max_days = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID = $event[3]";
-               // echo $get_max_days . "<bR>";
-                $max_days = mysqli_query($cnnEnlace, $get_max_days);
-                $max = mysqli_fetch_row($max_days);
-                if ($max[0] != 0) {
-                    $percentage = number_format(($event[5] / $max[0]) * 100, 2) . '%';
-                } else {
-                    $percentage = 'N/A';
-                }
-                array_push($event, $percentage);
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?><a href="<?php echo $infile ?>">Download.</a>
+            <a href="<?php echo $deid_infile ?>">Download.</a>
         </td>
     </tr>
 
