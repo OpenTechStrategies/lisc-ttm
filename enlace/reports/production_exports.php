@@ -1031,14 +1031,10 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             }
 
             $get_events = "SELECT Participants_Programs.Participant_ID, First_Name, Last_Name, Programs.Program_ID,
-                            Name, Session_ID, Session_Name, COUNT(Program_Date_ID) FROM Participants_Programs
-                            INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID
+                            Name, Session_ID, Session_Name FROM Participants_Programs
                             INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
                             INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID
-                            INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID
-                            LEFT JOIN Absences ON ( Program_Date_ID = Program_Date AND Participants_Programs.Participant_ID=
-                            Absences.Participant_ID)
-                            WHERE Absence_ID IS NULL"
+                            INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID"
                     . $non_admin_string .
                     " GROUP BY Session_ID, Participants.Participant_ID;";
            /*equivalent to here*/
@@ -1046,45 +1042,8 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             $event_info = mysqli_query($cnnEnlace, $get_events);
             include "../include/dosage_percentage.php";
             while ($event = mysqli_fetch_row($event_info)) {
-                
-                //this should hold the max hours.
-                $get_program_times = "SELECT * FROM Programs WHERE Program_ID=$event[3]";
-                $program_times = mysqli_query($cnnEnlace, $get_program_times);
-                $program_info = mysqli_fetch_array($program_times);
-                if ($program_info['Start_Suffix'] == 'am') {
-                    $begin = $program_info['Start_Hour'];
-                } elseif ($program_info['Start_Suffix'] == 'pm') {
-                    $begin = $program_info['Start_Hour'] + 12;
-                } else {
-                    $begin = 0;
-                }
-                if ($program_info['End_Suffix'] == 'am') {
-                    $finish = $program_info['End_Hour'];
-                } elseif ($program_info['End_Suffix'] == 'pm') {
-                    $finish = $program_info['End_Hour'] + 12;
-                } else {
-                    $finish = 0;
-                }
-                $daily_hrs = (($finish) - ($begin));
-                // echo $daily_hrs . "&nbsp";
-                if ($program_info['Max_Hours'] != '') {
-                    $max_hrs = $program_info['Max_Hours'];
-                } else {
-                    $max_hrs = ($daily_hrs);
-                }
-                // echo $max_hrs . "<br>";
-                $total_hrs = $max_hrs * $event[7];
-                array_push($event, $total_hrs);
-                $get_max_days = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID=$event[5]";
-               // echo $get_max_days . "<bR>";
-                $max_days = mysqli_query($cnnEnlace, $get_max_days);
-                $max = mysqli_fetch_row($max_days);
-                if ($max[0] != 0) {
-                    $percentage = number_format(($event[7] / $max[0]) * 100, 2) . '%';
-                } else {
-                    $percentage = 'N/A';
-                }
-                array_push($event, $percentage);
+                $dosage=calculate_dosage($event[5], $event[0]);
+                array_push($event, $dosage);
                 fputcsv($fp, $event);
             }
             include "../include/dbconnclose.php";
