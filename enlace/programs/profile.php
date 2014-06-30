@@ -545,14 +545,7 @@ Shows all program information.
                                 ?>
                             </td>
                             <td><?php
-                            //take count of absences ($absences) and multiply by daily hours
-                            // echo "Denominator: " . $denom_hours . "<br>";
-                            if ($denom_hours != 0) {
-                                $hrs_dosage = $denom_hours - ($absences * $program->daily_hrs);
-                            } else {
-                                $hrs_dosage = ($perc_present * $ct_days) * $program->daily_hrs;
-                            }
-                            echo $hrs_dosage;
+                            echo $return_array[1];
                                 ?>
                             </td>
                             <td>
@@ -602,7 +595,8 @@ Shows all program information.
         //add the hours for this program to all_hours
         $all_hours+=$present_hours;
     }
-    $all_hours+=$hrs_dosage;
+    //add hours from "Total hours in this program" column:
+    $all_hours+=$return_array[1];
     echo $all_hours;
     ?>
                             </td>
