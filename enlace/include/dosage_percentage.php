@@ -33,8 +33,9 @@ function calculate_dosage($session, $participant){
             . " ON Session_Names.Program_ID=Programs.Program_ID";
     $daily_hours = mysqli_query($cnnEnlace, $program_daily_hours);
     $hours = mysqli_fetch_row($daily_hours);
+    print_r($hours); //testing output
     /*if max hours not specified for program, use start and end times:*/
-    if ($hours[4]==''){
+    if ($hours[4]=='' || $hours[4] == NULL){
         if ($hours[3]=='pm'){
             $hours[2]=$hours[2]+12;
         }
@@ -42,6 +43,7 @@ function calculate_dosage($session, $participant){
             $hours[0]=$hours[0]+12;
         }
         $max_daily_hours_calc=$hours[2]-$hours[0];
+        echo $max_daily_hours_calc . "<br>";
         $sum_hours=$num_attended[0]*$max_daily_hours_calc;
     }
     else{
