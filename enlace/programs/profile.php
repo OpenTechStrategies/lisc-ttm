@@ -551,23 +551,20 @@ Shows all program information.
                             <td>
     <?php
     $all_hours = 0;
-    ////ok.  first let's get the other programs that she's in
-    $get_progs = "SELECT Programs.*, Session_Names.Session_ID FROM Participants_Programs
-                                INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
-                                INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID
-                                WHERE Participant_ID='" . $all_p['Participant_ID'] . "'
-                                AND Participants_Programs.Program_ID!='" . $all_p['Session_ID'] . "'";
-    $other_progs = mysqli_query($cnnEnlace, $get_progs);
-    while ($prog = mysqli_fetch_array($other_progs)) {
-
-        //get absences from programs that are not this one
-        $get_other_absences = "SELECT COUNT(*) FROM Absences INNER JOIN Program_Dates ON Program_Date=Program_Date_ID
-                                WHERE Participant_ID='" . $all_p['Participant_ID'] . "' AND Program_ID='".$prog['Session_ID']."';";
-        $other_days = mysqli_query($cnnEnlace, $get_other_absences);
-        $num_other_days = mysqli_fetch_row($other_days);
-        $other_absences = $num_other_days[0];
-
-        //get daily hours for this other program
+    //Find the dates that this person has attended programs:
+    $get_progs = "SELECT * FROM Participants_Programs 
+        INNER JOIN Program_Dates ON Program_Dates.Program_ID=Participants_Programs.Program_ID
+        INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
+        INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID
+        LEFT JOIN Absences ON (Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID=Absences.Participant_ID)
+        WHERE Participants_Programs.Participant_ID='" . $all_p['Participant_ID'] . "' AND Absence_ID IS NULL;";
+    $dates_attended = mysqli_query($cnnEnlace, $get_progs);
+    while ($dates = mysqli_fetch_array($dates_attended)) {
+        //get daily hours for each date
+        if ($dates['Max_Hours']!='' && $dates['Max_Hours']!=NULL){
+            $daily_hrs=$dates['Max_Hours'];
+        }
+        else{
         if ($prog['Start_Suffix'] == 'am') {
             $begin = $prog['Start_Hour'];
         } elseif ($prog['Start_Suffix'] == 'pm') {
@@ -583,19 +580,13 @@ Shows all program information.
             $finish = 0;
         }
         $daily_hrs = (($finish) - ($begin));
-        //get the hours spent in this program (max hours minus absent hours)
-        if ($prog['Max_Hours'] != '') {
-            $max_hrs = $prog['Max_Hours'];
-        } else {
-            $max_hrs = ($daily_hrs) * $prog['count'];
         }
-        $present_hours = ($max_hrs - ($other_absences * $daily_hrs));
-
+        
         //add the hours for this program to all_hours
-        $all_hours+=$present_hours;
+        $all_hours+=$daily_hrs;
+        echo "Hours in progress" . $all_hours . "<br>"; // testing output
     }
-    //add hours from "Total hours in this program" column:
-    $all_hours+=$return_array[1];
+    
     echo $all_hours;
     ?>
                             </td>
