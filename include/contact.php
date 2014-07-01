@@ -1,7 +1,7 @@
 <?php
 if (!isset($_COOKIE['user'])) {
     header("HTTP/1.1 401 Unauthorized");
-    exit;
+    //exit;
 }
 include "../header.php";
 
