@@ -579,13 +579,11 @@ Shows all program information.
         } else {
             $finish = $dates['End_Hour'];
         }
-        echo "Start time: " . $begin . "<br>";
-        echo "Finish time: " . $finish . "<br>";
         $daily_hrs = (($finish) - ($begin));
         }
         }
         //add the hours for this program to all_hours
-        $all_hours+=$daily_hrs; // testing output
+        $all_hours+=$daily_hrs; 
     }
     
     echo $all_hours;
