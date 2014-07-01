@@ -569,15 +569,15 @@ Shows all program information.
             $daily_hrs=$dates['Max_Hours'];
         }
         else{
-        if ($prog['Start_Suffix'] == 'pm') {
-            $begin = $prog['Start_Hour'] + 12;
+        if ($dates['Start_Suffix'] == 'pm') {
+            $begin = $dates['Start_Hour'] + 12;
         } else{
-            $begin = $prog['Start_Hour'];
+            $begin = $dates['Start_Hour'];
         }
-        if ($prog['End_Suffix'] == 'pm') {
-            $finish = $prog['End_Hour']+12;
+        if ($dates['End_Suffix'] == 'pm') {
+            $finish = $dates['End_Hour']+12;
         } else {
-            $finish = $prog['End_Hour'];
+            $finish = $dates['End_Hour'];
         }
         echo "Start time: " . $begin . "<br>";
         echo "Finish time: " . $finish . "<br>";
