@@ -560,15 +560,14 @@ Shows all program information.
         WHERE Participants_Programs.Participant_ID='" . $all_p['Participant_ID'] . "' AND Absence_ID IS NULL;";
     $dates_attended = mysqli_query($cnnEnlace, $get_progs);
     while ($dates = mysqli_fetch_array($dates_attended)) {
+        print_r($dates);
         //get daily hours for each date
         if ($dates['Max_Hours']==0 && $dates['Start_Hour']==0 && $dates['End_Hour']==0){
             $daily_hrs=0;
-            echo "All zero: " . $daily_hrs;
         }
         else{
         if ($dates['Max_Hours']!='' && $dates['Max_Hours']!=NULL && $dates['Max_Hours']!='0' && $dates['Max_Hours']!=0){
             $daily_hrs=$dates['Max_Hours'];
-            echo "Max hours: " . $daily_hrs;
         }
         else{
         if ($prog['Start_Suffix'] == 'am') {
@@ -588,12 +587,10 @@ Shows all program information.
         echo "Start time: " . $begin . "<br>";
         echo "Finish time: " . $finish . "<br>";
         $daily_hrs = (($finish) - ($begin));
-        echo "Begin/End hours: " . $daily_hrs;
         }
         }
         //add the hours for this program to all_hours
-        $all_hours+=$daily_hrs;
-        echo "Hrs:" . $all_hours . "<br>"; // testing output
+        $all_hours+=$daily_hrs; // testing output
     }
     
     echo $all_hours;
