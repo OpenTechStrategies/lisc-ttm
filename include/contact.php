@@ -1,6 +1,6 @@
 <?php
 if (!isset($_COOKIE['user'])) {
-    header("Location: /index.php");
+    header($_SERVER['SERVER_PROTOCOL'] . " 401 Unauthorized");
     exit;
 }
 include "../header.php";
