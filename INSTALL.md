@@ -95,6 +95,12 @@ Steps to install:
           SSLCertificateKeyFile "/etc/apache2/certs/ttm/ttm.example.com.key"
           SSLCertificateChainFile "/etc/apache2/certs/ttm/DigiCertCA.crt"
           
+          # Disable directory indexes.  One example is no one should
+          # be able to see a list of files in an export directory.
+          <Directory /var/www/ttm>
+            Options -Indexes
+          </Directory>
+
           <FilesMatch "\.(cgi|shtml|phtml|php)$">
               SSLOptions +StdEnvVars
           </FilesMatch>
