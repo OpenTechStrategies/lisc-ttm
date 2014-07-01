@@ -1,8 +1,7 @@
 <?php
 if (!isset($_COOKIE['user'])) {
-    ?>
-            window.location = '/index.php';
-    <?php
+    header("Location: /index.php");
+    exit;
 }
 include "../header.php";
 
