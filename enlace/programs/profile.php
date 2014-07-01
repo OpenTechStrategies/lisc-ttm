@@ -563,6 +563,7 @@ Shows all program information.
         //get daily hours for each date
         if ($dates['Max_Hours']==0 && $dates['Start_Hour']==0 && $dates['End_Hour']==0){
             $daily_hrs=0;
+            echo "All zero: " . $daily_hrs;
         }
         else{
         if ($dates['Max_Hours']!='' && $dates['Max_Hours']!=NULL && $dates['Max_Hours']!='0' && $dates['Max_Hours']!=0){
@@ -584,6 +585,8 @@ Shows all program information.
         } else {
             $finish = 0;
         }
+        echo "Start time: " . $begin . "<br>";
+        echo "Finish time: " . $finish . "<br>";
         $daily_hrs = (($finish) - ($begin));
         echo "Begin/End hours: " . $daily_hrs;
         }
