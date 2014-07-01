@@ -561,8 +561,13 @@ Shows all program information.
     $dates_attended = mysqli_query($cnnEnlace, $get_progs);
     while ($dates = mysqli_fetch_array($dates_attended)) {
         //get daily hours for each date
-        if ($dates['Max_Hours']!='' && $dates['Max_Hours']!=NULL && $dates['Max_Hours']!=0){
+        if ($dates['Max_Hours']==0 && $dates['Start_Hour']==0 && $dates['End_Hour']==0){
+            $daily_hrs=0;
+        }
+        else{
+        if ($dates['Max_Hours']!='' && $dates['Max_Hours']!=NULL && $dates['Max_Hours']!='0' && $dates['Max_Hours']!=0){
             $daily_hrs=$dates['Max_Hours'];
+            echo "Max hours: " . $daily_hrs;
         }
         else{
         if ($prog['Start_Suffix'] == 'am') {
@@ -580,8 +585,9 @@ Shows all program information.
             $finish = 0;
         }
         $daily_hrs = (($finish) - ($begin));
+        echo "Begin/End hours: " . $daily_hrs;
         }
-        echo $daily_hrs;
+        }
         //add the hours for this program to all_hours
         $all_hours+=$daily_hrs;
         echo "Hrs:" . $all_hours . "<br>"; // testing output
