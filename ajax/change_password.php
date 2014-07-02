@@ -4,7 +4,10 @@ if (isset($_POST['current_pw'])){
     $current_pw = $_POST['current_pw'];
 }
 $username = $_POST['username']; 
-$user_query = "SELECT * FROM  Users WHERE User_Email = '$username' AND User_Password = '$current_pw'";
+$username_sqlsafe=mysqli_real_escape_string($cnnLISC, $username);
+$current_pw_sqlsafe=mysqli_real_escape_string($cnnLISC, $current_pw);
+$new_pw_sqlsafe=mysqli_real_escape_string($cnnLISC, $_POST['new_pw']);
+$user_query = "SELECT * FROM  Users WHERE User_Email = '$username_sqlsafe' AND User_Password = '$current_pw_sqlsafe'";
 //echo $user_query;
 $user = mysqli_query($cnnLISC, $user_query);
 //print_r($user);
@@ -19,7 +22,7 @@ if ($is_user>0){
         $confirm_pw = $_POST['new_pw_2'];
         /*make sure the new and confirmed passwords match:*/
         if ($new_pw == $confirm_pw){
-            $change_pw_query = "UPDATE Users SET User_Password ='". $_POST['new_pw'] . "' WHERE User_Email='$username'";
+            $change_pw_query = "UPDATE Users SET User_Password ='". $new_pw_sqlsafe . "' WHERE User_Email='$username_sqlsafe'";
             //echo $change_pw_query;
             mysqli_query($cnnLISC, $change_pw_query);
             echo "Password updated! <a href='/index.php'>Back to main site</a>";
