@@ -2,8 +2,7 @@
 if (!isset($_COOKIE['user'])) {
     if (function_exists(http_response_code)){
         http_response_code(401);
-        header("Status: 401");
-        var_dump(http_response_code());//testing output
+        include "error.html";
     }
     exit;
 }
