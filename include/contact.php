@@ -1,9 +1,8 @@
 <?php
-header("HTTP/1.0 404 Not Found");
-?>
-<?php
 if (!isset($_COOKIE['user'])) {
-    header("HTTP/1.0 401 Unauthorized");
+    if (function_exists(http_response_code)){
+        http_response_code(401);
+    }
     exit;
 }
 include "../header.php";
