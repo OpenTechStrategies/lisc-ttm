@@ -2,9 +2,11 @@
 /*
  * On the creation of a new user, checks for a user that already exists and has the same name
  */
-$get_duplicate_users = "SELECT COUNT(User_ID) FROM Users WHERE First_Name='" . $_POST['first_name'] . "' AND Last_Name='" . $_POST['last_name'] . "'";
-//echo $get_duplicate_users;
 include "../include/dbconnopen.php";
+$first_name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['first_name']);
+$last_name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['last_name']);
+$get_duplicate_users = "SELECT COUNT(User_ID) FROM Users WHERE First_Name='" . $first_name_sqlsafe . "' AND Last_Name='" . $last_name_sqlsafe . "'";
+//echo $get_duplicate_users;
 $is_duplicate = mysqli_query($cnnBickerdike, $get_duplicate_users);
 $duplicate = mysqli_fetch_row($is_duplicate);
 /*

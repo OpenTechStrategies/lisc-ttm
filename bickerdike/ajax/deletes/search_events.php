@@ -1,15 +1,20 @@
 <?php
-if ($_POST['name']==''){$first='';}else{$first=' AND Activity_Name LIKE "%' . $_POST['name'] . '%"';};
-if ($_POST['org']==''){$last='';}else{$last=" AND Activity_Org='" . $_POST['org'] . "'";}
-if ($_POST['type']==''){$type='';}else{$type=" AND Activity_Type='" .$_POST['type'] . "'";}
-if ($_POST['start']==''){$start='';}else{$start=" AND Activity_Date>='" . $_POST['start'] . "'";}
-if ($_POST['end']==''){$end='';}else{$end=" AND Activity_Date<='" .$_POST['end'] . "'";}
+include "../include/dbconnopen.php";
+$name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['name']);
+$org_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['org']);
+$type_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['type']);
+$start_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['start']);
+$end_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['end']);
+if ($_POST['name']==''){$first='';}else{$first=' AND Activity_Name LIKE "%' . $name_sqlsafe . '%"';};
+if ($_POST['org']==''){$last='';}else{$last=" AND Activity_Org='" . $org_sqlsafe . "'";}
+if ($_POST['type']==''){$type='';}else{$type=" AND Activity_Type='" .$type_sqlsafe . "'";}
+if ($_POST['start']==''){$start='';}else{$start=" AND Activity_Date>='" . $start_sqlsafe . "'";}
+if ($_POST['end']==''){$end='';}else{$end=" AND Activity_Date<='" .$end_sqlsafe . "'";}
 
 
 $uncertain_search_query = "SELECT * FROM User_Established_Activities WHERE User_Established_Activities_ID!='' " . $first . $last .  $type . $start . $end;
 //echo $uncertain_search_query;
 
-include "../include/dbconnopen.php";
 $results =mysqli_query($cnnBickerdike, $uncertain_search_query);
 ?>
     <table class="program_table">

@@ -1,5 +1,12 @@
 <?php
 /* if the person has chosen search terms, then include those in the query: */
+include "../include/dbconnopen.php";
+
+$type_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['type']);
+$program_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['program']);
+$year_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['year']);
+$time_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['time']);
+
 if ($_POST['type']==''){$type="";}else{$type= " AND Pre_Responses.Participant_Type='".$_POST['type'] ."' ";}
 if ($_POST['program']==''){$program="";}else{$program=" AND Pre_Responses.Program_ID='".$_POST['program']."' ";}
 if ($_POST['year']==''){$year="";}else{$year=" AND YEAR(Pre_Responses.Date_Survey_Administered)='".$_POST['year']."' ";}
@@ -11,7 +18,7 @@ if ($_POST['time']==''){$timing="";
         INNER JOIN Users ON Users.User_ID=Pre_Responses.User_ID
         WHERE Participant_Survey_ID IS NOT NULL " . $timing . $type . $program . $year;
 }
-elseif ($_POST['time']==1){$timing=" AND Pre_Post_Late='".$_POST['time']."' ";
+elseif ($_POST['time']==1){$timing=" AND Pre_Post_Late='".$time_sqlsafe."' ";
     $survey_query="SELECT First_Name, Last_Name, Pre_Responses.* FROM Participant_Survey_Responses AS Pre_Responses
         INNER JOIN Users ON Users.User_ID=Pre_Responses.User_ID
     WHERE Participant_Survey_ID IS NOT NULL " . $timing . $type . $program . $year;
@@ -49,7 +56,6 @@ $get_col_names="SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `
   $get_col_names="SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='liscttm-bickerdike.chapinhall.org' AND `TABLE_NAME`='Participant_Survey_Responses'";
 
 //echo $get_col_names;
-include "../include/dbconnopen.php";
 $cols=mysqli_query($cnnBickerdike, $get_col_names);
 /*use column names as the headings for the results file: */
 $columns=array("First Name", "Last Name");

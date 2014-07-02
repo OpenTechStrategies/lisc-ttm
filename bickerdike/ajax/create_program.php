@@ -7,13 +7,20 @@
 /*Test here to see whether the program is associated with a new organization or type.  If so, add the organization,
  *  type, and program here.
 */
-if (isset($_POST['new_org']) && isset($_POST['new_type']) && $_POST['new_org']!='' && $_POST['new_type']!=''){
-    $make_org="INSERT INTO Org_Partners (Partner_Name) VALUES ('" . $_POST['new_org'] ."')";
-    include "../include/dbconnopen.php";
+include "../include/dbconnopen.php";
+$name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['name']);
+$org_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['org']);
+$type_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['type']);
+$new_org_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['new_org']);
+$new_type_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['new_type']);
+
+if (isset($new_org_sqlsafe) && isset($new_type_sqlsafe) && $new_org_sqlsafe!='' && $new_type_sqlsafe!=''){
+    $make_org="INSERT INTO Org_Partners (Partner_Name) VALUES ('" . $new_org_sqlsafe ."')";
+    
     mysqli_query($cnnBickerdike, $make_org);
     $org_id= mysqli_insert_id($cnnBickerdike);
     include "../include/dbconnclose.php";
-    $make_type="INSERT INTO Program_Types (Program_Type_Name) VALUES ('" . $_POST['new_type'] ."')";
+    $make_type="INSERT INTO Program_Types (Program_Type_Name) VALUES ('" . $new_type_sqlsafe ."')";
     include "../include/dbconnopen.php";
     mysqli_query($cnnBickerdike, $make_type);
     $type_id= mysqli_insert_id($cnnBickerdike);
@@ -22,7 +29,7 @@ if (isset($_POST['new_org']) && isset($_POST['new_type']) && $_POST['new_org']!=
                     Program_Name,
                     Program_Organization,
                     Program_Type) VALUES(
-                    '" . $_POST['name'] ."',
+                    '" . $name_sqlsafe ."',
                     '" . $org_id ."',
                     '" . $type_id ."'
                     )";
@@ -34,8 +41,8 @@ include "../include/dbconnclose.php";
 
 /*This adds a new organization and program if only a new organization has been created (i.e. not a new type
  * of program).*/
-elseif (isset($_POST['new_org']) && $_POST['new_org']!=''){
-    $make_org="INSERT INTO Org_Partners (Partner_Name) VALUES ('" . $_POST['new_org'] ."')";
+elseif (isset($new_org_sqlsafe) && $new_org_sqlsafe!=''){
+    $make_org="INSERT INTO Org_Partners (Partner_Name) VALUES ('" . $new_org_sqlsafe ."')";
     include "../include/dbconnopen.php";
     mysqli_query($cnnBickerdike, $make_org);
     $org_id= mysqli_insert_id($cnnBickerdike);
@@ -44,9 +51,9 @@ elseif (isset($_POST['new_org']) && $_POST['new_org']!=''){
                     Program_Name,
                     Program_Organization,
                     Program_Type) VALUES(
-                    '" . $_POST['name'] ."',
+                    '" . $name_sqlsafe ."',
                     '" . $org_id ."',
-                    '" . $_POST['type'] ."'
+                    '" . $type_sqlsafe ."'
                     )";
 include "../include/dbconnopen.php";
 mysqli_query($cnnBickerdike, $make_program);
@@ -55,8 +62,8 @@ include "../include/dbconnclose.php";
 }
 
 /*This adds a new program type and program if only a new type has been created (i.e. not a new organization).*/
-elseif (isset($_POST['new_type']) && $_POST['new_type']!=''){
-    $make_type="INSERT INTO Program_Types (Program_Type_Name) VALUES ('" . $_POST['new_type'] ."')";
+elseif (isset($new_type_sqlsafe) && $new_type_sqlsafe!=''){
+    $make_type="INSERT INTO Program_Types (Program_Type_Name) VALUES ('" . $new_type_sqlsafe ."')";
     include "../include/dbconnopen.php";
     mysqli_query($cnnBickerdike, $make_type);
     $type_id= mysqli_insert_id($cnnBickerdike);
@@ -65,8 +72,8 @@ elseif (isset($_POST['new_type']) && $_POST['new_type']!=''){
                     Program_Name,
                     Program_Organization,
                     Program_Type) VALUES(
-                    '" . $_POST['name'] ."',
-                    '" . $_POST['org'] ."',
+                    '" . $name_sqlsafe ."',
+                    '" . $org_sqlsafe ."',
                     '" . $type_id ."'
                     )";
 include "../include/dbconnopen.php";
@@ -85,9 +92,9 @@ $make_program="INSERT INTO Programs (
                     Program_Name,
                     Program_Organization,
                     Program_Type) VALUES(
-                    '" . $_POST['name'] ."',
-                    '" . $_POST['org'] ."',
-                    '" . $_POST['type'] ."'
+                    '" . $name_sqlsafe ."',
+                    '" . $org_sqlsafe ."',
+                    '" . $type_sqlsafe ."'
                     )";
 include "../include/dbconnopen.php";
 mysqli_query($cnnBickerdike, $make_program);
