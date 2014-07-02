@@ -1,6 +1,9 @@
 <?php
 if (!isset($_COOKIE['user'])) {
-    header("Location: /index.php");
+    if (function_exists(http_response_code)){
+        http_response_code(401);
+        include "error.html";
+    }
     exit;
 }
 include "../header.php";
