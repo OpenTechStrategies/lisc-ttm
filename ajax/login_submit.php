@@ -21,7 +21,8 @@ if ($is_user>0){
     mysqli_query($cnnLISC, $log_call);
     
     //set the user cookie
-       setcookie("user", $username, time() + 10800, '/');
+       // FIXME: see issue #33 re the single-quotes around $username here
+       setcookie("user", "'$username'", time() + 10800, '/');
       
        //now find which, if any, privileges they have and set an appropriate cookie
        $privileges_query = "CALL User__Find_Privileges('$username')";
