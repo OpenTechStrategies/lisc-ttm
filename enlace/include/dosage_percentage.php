@@ -1,5 +1,14 @@
 <?php
 
+/* Begin redeclaration-protection wrapper:
+
+   Nested includes seem to cause this file to be included multiple
+   times from somewhere.  While we should trace that down, it may
+   turn out to be unavoidable or at least very difficult to avoid,
+   so we just protect against redeclaration with this wrapper.  
+   See issue #34 and issue #35 for more details. */
+if(!function_exists("calculate_dosage")) {
+
 /* This function is referenced in enlace/programs/profile.php and in 
  * reports/production_exports.php.  It takes the session and participant
  * ID's and returns the number of days that this student attended the session,
@@ -55,4 +64,7 @@ function calculate_dosage($session, $participant){
         $percentage = 'N/A';
     }
     return array($num_attended[0], $sum_hours, $percentage);
+}
+
+/* End redeclaration-protection wrapper: */
 }
