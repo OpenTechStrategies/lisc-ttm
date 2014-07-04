@@ -1024,8 +1024,6 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 "Sum of hours for this session", "Dosage percentage for this session");
             fputcsv($fp, $title_array);
             fputcsv($deid_fp, $deid_title_array);
-            include "../include/dosage_percentage.php";
-            
             
             $non_admin_string = "";
             //if not an administrator
