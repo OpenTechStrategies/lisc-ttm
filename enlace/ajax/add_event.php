@@ -9,19 +9,28 @@
         $block_group=do_it_all($this_address, $map);
         echo $block_group;
 
+ include "../include/dbconnopen.php";
+ $event_name_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['event_name']);
+ $campaign_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['campaign_id']);
+ $date_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['date']);
+ $address_num_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['address_num']);
+ $address_dir_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['address_dir']);
+ $address_street_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['address_street']);
+ $address_suffix_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['address_suffix']);
+ $event_type_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['event_type']);
+ 
 $new_event = "INSERT INTO Campaigns_Events (Event_Name, Campaign_ID, Event_Date,
     Address_Num, Address_Dir, Address_Street, Address_Suffix, Block_Group, Type)
-        VALUES ('".$_POST['event_name']."',
-            '".$_POST['campaign_id']."',
-                '".$_POST['date']."',
-            '".$_POST['address_num']."',
-            '".$_POST['address_dir']."',    
-            '".$_POST['address_street']."',    
-            '".$_POST['address_suffix']."',
+        VALUES ('".$event_name_sqlsafe."',
+            '".$campaign_id_sqlsafe."',
+                '".$date_sqlsafe."',
+            '".$address_num_sqlsafe."',
+            '".$address_dir_sqlsafe."',    
+            '".$address_street_sqlsafe."',    
+            '".$address_suffix_sqlsafe."',
                 '$block_group',
-            '".$_POST['event_type']."')";
+            '".$event_type_sqlsafe."')";
 echo $new_event;
- include "../include/dbconnopen.php";
     mysqli_query($cnnEnlace, $new_event);
     include "../include/dbconnclose.php";
 ?>

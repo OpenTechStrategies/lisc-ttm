@@ -1,12 +1,12 @@
 <?php
 
 /*make a new campaign */
-
+    include "../include/dbconnopen.php";
+    $name_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['name']);
     $make_campaign="INSERT INTO Campaigns (
                 Campaign_Name) VALUES(
-                '" . $_POST['name'] ."')";
+                '" . $name_sqlsafe ."')";
     //echo $make_campaign;
-    include "../include/dbconnopen.php";
     mysqli_query($cnnEnlace, $make_campaign);
     $id= mysqli_insert_id($cnnEnlace);
     include "../include/dbconnclose.php";
