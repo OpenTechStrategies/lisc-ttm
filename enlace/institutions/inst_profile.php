@@ -2,11 +2,12 @@
 include "../../header.php";
 include "../header.php";
 
+include "../include/dbconnopen.php";
+$inst_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['inst']);
 $get_inst_info = "SELECT Institutions.*, First_Name, Last_Name, Type FROM Institutions LEFT JOIN Institution_Types ON Institution_Type=Inst_Type_ID
     LEFT JOIN Participants ON Point_Person=Participant_ID
-    WHERE Inst_ID='" . $_GET['inst'] . "'";
+    WHERE Inst_ID='" . $inst_sqlsafe . "'";
 //echo $get_inst_info;
-include "../include/dbconnopen.php";
 $inst_info = mysqli_query($cnnEnlace, $get_inst_info);
 $inst = mysqli_fetch_array($inst_info);
 include "../include/dbconnclose.php";
@@ -127,8 +128,8 @@ Shows basic institution information
         </td><td><div style="margin-left:50px;"><h4>Related Programs</h4>
                 <?php
                 //get all programs administered by this institution
-                $get_progs = "SELECT Program_ID, Name FROM Programs WHERE Host='" . $inst['Inst_ID'] . "'";
                 include "../include/dbconnopen.php";
+                $get_progs = "SELECT Program_ID, Name FROM Programs WHERE Host='" . $inst['Inst_ID'] . "'";
                 $programs = mysqli_query($cnnEnlace, $get_progs);
                 while ($prog = mysqli_fetch_row($programs)) {
                     ?><a href="javascript:;" onclick="$.post(

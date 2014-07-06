@@ -18,8 +18,10 @@ class Program {
      * @return array Loaded program object array.
      */
     public function load_with_program_id($program_id) {
-        $this->program_id = $program_id;
-        $get_program_info = "SELECT * FROM Programs LEFT JOIN Institutions ON Host=Inst_ID WHERE Program_ID='$program_id'";
+        include "../include/dbconnopen.php";
+        $program_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $program_id);
+        $this->program_id = $program_id_sqlsafe;
+        $get_program_info = "SELECT * FROM Programs LEFT JOIN Institutions ON Host=Inst_ID WHERE Program_ID='$program_id_sqlsafe'";
         include "../include/dbconnopen.php";
         $program_info = mysqli_query($cnnEnlace, $get_program_info);
         $temp_program = mysqli_fetch_array($program_info);

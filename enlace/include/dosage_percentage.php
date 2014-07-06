@@ -6,6 +6,8 @@
  * the sum of hours this student spent in this program (if available), and
  * the dosage percentage. */
 function calculate_dosage($session, $participant){
+    $session_sqlsafe=mysqli_real_escape_string($session);
+    $participant_sqlsafe=mysqli_real_escape_string($participant);
     include "dbconnopen.php";
     /* This select finds the number of days that the student attended this
      * program. */
@@ -17,20 +19,20 @@ function calculate_dosage($session, $participant){
         INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID
         LEFT JOIN Absences ON ( Program_Date_ID = Program_Date AND Participants_Programs.Participant_ID=
         Absences.Participant_ID)
-            WHERE Absence_ID IS NULL AND Participants_Programs.Participant_ID='$participant'
-            AND Session_ID='$session';";
+            WHERE Absence_ID IS NULL AND Participants_Programs.Participant_ID='$participant_sqlsafe'
+            AND Session_ID='$session_sqlsafe';";
     $attended_days=mysqli_query($cnnEnlace, $num_days_attended);
     $num_attended=mysqli_fetch_row($attended_days);
     /* This select finds the total number of days that this program was 
      * offered. */
-    $get_max_days = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID='$session'";
+    $get_max_days = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID='$session_sqlsafe'";
     $max_days = mysqli_query($cnnEnlace, $get_max_days);
     $max = mysqli_fetch_row($max_days);
     /* Find the hours this person spent in the program. */
     /* Get daily hours: */
     $program_daily_hours="SELECT Start_Hour, Start_Suffix, End_Hour, End_Suffix,"
             . " Max_Hours FROM Programs INNER JOIN Session_Names "
-            . " ON Session_Names.Program_ID=Programs.Program_ID WHERE Session_ID='$session'";
+            . " ON Session_Names.Program_ID=Programs.Program_ID WHERE Session_ID='$session_sqlsafe'";
     $daily_hours = mysqli_query($cnnEnlace, $program_daily_hours);
     $hours = mysqli_fetch_row($daily_hours);
     /*if max hours not specified for program, use start and end times:*/
