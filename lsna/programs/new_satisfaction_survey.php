@@ -29,6 +29,8 @@ or unset, though, the user will have trouble.
 -->
 <h4>Program: 
 <?
+        include "../include/dbconnopen.php";
+        $participant_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_COOKIE['participant']);
 	if (isset($_COOKIE['program'])) {echo $program->program_name;}
 	else {
             /*find program based on programs linked to participant: */
@@ -38,7 +40,7 @@ or unset, though, the user will have trouble.
 		<?
 			$get_programs="SELECT * FROM Participants_Subcategories INNER JOIN Subcategories ON 
                             Participants_Subcategories.Subcategory_ID=Subcategories.Subcategory_ID 
-                            WHERE Participants_Subcategories.Participant_ID='".$_COOKIE['participant']."'";
+                            WHERE Participants_Subcategories.Participant_ID='".$participant_sqlsafe."'";
 			include "../include/dbconnopen.php";
 			$programs=mysqli_query($cnnLSNA, $get_programs);
 			while($program=mysqli_fetch_array($programs)){
@@ -60,7 +62,7 @@ or unset, though, the user will have trouble.
 	<select id="set_participant">
 		<option value="">--------</option>
 		<?
-			$get_participants="SELECT * FROM Participants_Subcategories INNER JOIN Participants ON Participants_Subcategories.Participant_ID=Participants.Participant_ID WHERE Participants_Subcategories.Subcategory_ID='".$_COOKIE['program']."'";
+			$get_participants="SELECT * FROM Participants_Subcategories INNER JOIN Participants ON Participants_Subcategories.Participant_ID=Participants.Participant_ID WHERE Participants_Subcategories.Subcategory_ID='".$program_sqlsafe."'";
 			include "../include/dbconnopen.php";
 			$participants=mysqli_query($cnnLSNA, $get_participants);
 			while($participant=mysqli_fetch_array($participants)){
@@ -78,8 +80,10 @@ or unset, though, the user will have trouble.
 
 <?
 	//retrieve survey responses if editing an existing survey
+        include "../include/dbconnopen.php";
+        $survey_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_GET['survey']);
 	if (isset($_GET['survey'])) {
-		$get_responses = "SELECT * FROM Satisfaction_Surveys WHERE Satisfaction_Survey_ID='" . $_GET['survey'] . "'";
+		$get_responses = "SELECT * FROM Satisfaction_Surveys WHERE Satisfaction_Survey_ID='" . $survey_sqlsafe . "'";
 		include "../include/dbconnopen.php";
 		$responses = mysqli_query($cnnLSNA, $get_responses);
 		$response = mysqli_fetch_array($responses);

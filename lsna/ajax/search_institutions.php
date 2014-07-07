@@ -2,22 +2,24 @@
 /* searching institutions: */
 
 //$inst_search_query = "SELECT * FROM `lisc-lsna`.Institutions WHERE Institution_Name LIKE '%" . $_POST['name'] . "%' AND Institution_Type='" . $_POST['type'] . "' ORDER BY Institution_Name";
+include "../include/dbconnopen.php";
+$name_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['name']);
+$type_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['type']);
 if ($_POST['name'] == '') {
     $name = '';
 } else {
-    $name = ' AND Institution_Name LIKE "%' . $_POST['name'] . '%"';
+    $name = ' AND Institution_Name LIKE "%' . $name_sqlsafe . '%"';
 };
 if ($_POST['type'] == '') {
     $type = '';
 } else {
-    $type = " AND Institution_Type LIKE '%" . $_POST['type'] . "%'";
+    $type = " AND Institution_Type LIKE '%" . $type_sqlsafe . "%'";
 }
 
 $inst_search_query = "SELECT * FROM Institutions WHERE Institution_ID!='' " . $name . $type
                     . " ORDER BY Institution_Name";
 //echo $uncertain_search_query;
 //echo $inst_search_query;
-include "../include/dbconnopen.php";
 $inst_results = mysqli_query($cnnLSNA, $inst_search_query);
 include "../include/dbconnclose.php";
 ?>

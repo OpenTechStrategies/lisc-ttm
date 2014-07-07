@@ -1,5 +1,9 @@
 <?php
 if ($_POST['action']=='search'){
+    include "../include/dbconnopen.php";
+    $issue_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['issue']);
+    $issue_month_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['issue_month']);
+    $issue_year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['issue_year']);
     if ($_POST['issue']!=''){ $issue=" AND Issue_Attendance.Issue_ID='".$_POST['issue']."'";}
     if ($_POST['issue_month']!=''){ $month=" AND Month='".$_POST['issue_month']."'";}
     if ($_POST['issue_year']!=''){ $year=" AND Year='".$_POST['issue_year']."'";}
@@ -10,7 +14,6 @@ if ($_POST['action']=='search'){
             LEFT JOIN Participants ON Issue_Attendance.Participant_ID=Participants.Participant_ID
             WHERE Issue_Attendance.Participant_ID IS NOT NULL ". $issue . $month . $year;
    // echo $query;
-    include "../include/dbconnopen.php";
     $response=mysqli_query($cnnLSNA, $query);
     ?>
 <p></p>
@@ -56,9 +59,12 @@ $columns = array( 'First Name', 'Last Name', 'Contact Phone', 'Contact Phone 2',
 }
 elseif($_POST['action']=='filter'){
     include "../include/dbconnopen.php";
-    if ($_POST['issue_year']!=''){$year_query=" AND Year='".$_POST['issue_year']."' ";}
-    if ($_POST['issue_month']!=''){$month_query=" AND Month='".$_POST['issue_month']."' ";}
-     $ytd_num="SELECT * FROM Issue_Attendance WHERE Issue_ID='".$_POST['issue']."' " . $year_query . $month_query;
+    $issue_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['issue']);
+    $issue_month_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['issue_month']);
+    $issue_year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['issue_year']);
+    if ($_POST['issue_year']!=''){$year_query=" AND Year='".$issue_year_sqlsafe."' ";}
+    if ($_POST['issue_month']!=''){$month_query=" AND Month='".$issue_month_sqlsafe."' ";}
+     $ytd_num="SELECT * FROM Issue_Attendance WHERE Issue_ID='".$issue_sqlsafe."' " . $year_query . $month_query;
     // echo $ytd_num;
      $ytd_num_call=mysqli_query($cnnLSNA, $ytd_num);
      echo "<br>". mysqli_num_rows($ytd_num_call);
@@ -66,16 +72,21 @@ elseif($_POST['action']=='filter'){
 }
 elseif($_POST['action']=='new_service'){
     include "../include/dbconnopen.php";
-    $query="INSERT INTO Issue_Areas (Issue_Area) VALUES ('".$_POST['service_name']."')";
+    $service_name_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['service_name']);
+    $query="INSERT INTO Issue_Areas (Issue_Area) VALUES ('".$service_name_sqlsafe."')";
     echo $query;
     mysqli_query($cnnLSNA, $query);
     include "../include/dbconnclose.php";
 }
 else{
-$issue_query="INSERT INTO Issue_Attendance (Issue_ID, Month, Year, Participant_ID) VALUES ('".$_POST['issue']."',"
-        . "'".$_POST['issue_month']."', '".$_POST['issue_year']."', '".$_POST['issue_person']."')";
-echo $issue_query;
 include "../include/dbconnopen.php";
+$issue_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['issue']);
+$issue_month_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['issue_month']);
+$issue_year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['issue_year']);
+$issue_person_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['issue_person']);
+$issue_query="INSERT INTO Issue_Attendance (Issue_ID, Month, Year, Participant_ID) VALUES ('".$issue_sqlsafe."',"
+        . "'".$issue_month_sqlsafe."', '".$issue_year_sqlsafe."', '".$issue_person_sqlsafe."')";
+echo $issue_query;
 mysqli_query($cnnLSNA, $issue_query);
 include "../include/dbconnclose.php";
 }

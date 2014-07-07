@@ -9,9 +9,12 @@ A more current version is at pm_attendance_2.php.
   ?>
     <h4>Parent Mentor Attendance <?if (isset($_POST['month'])){echo ": " . $month_array[$_POST['month']-1] . " " .$_POST['year'];
     if ($_POST['school'] !=''){
-        $get_school_name="SELECT Institution_Name FROM Institutions WHERE Institution_ID='".$_POST['school']."'";
         include "../include/dbconnopen.php";
-            $roles = mysqli_query($cnnLSNA, $get_school_name);
+        $school_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['school']);
+        $month_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['month']);
+        $year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['year']);
+        $get_school_name="SELECT Institution_Name FROM Institutions WHERE Institution_ID='".$school_sqlsafe."'";
+        $roles = mysqli_query($cnnLSNA, $get_school_name);
             while ($school = mysqli_fetch_row($roles)) {
                    echo ": " .$school[0];
             }
@@ -21,7 +24,7 @@ A more current version is at pm_attendance_2.php.
 	<div style="text-align:center;">
 	<?
 		if ($_POST['school'] !='') {
-		$get_school_name="SELECT Institution_Name FROM Institutions WHERE Institution_ID='".$_POST['school']."'";
+		$get_school_name="SELECT Institution_Name FROM Institutions WHERE Institution_ID='".$school_sqlsafe."'";
         include "../include/dbconnopen.php";
 		$school=mysqli_query($cnnLSNA, $get_school_name);
 		$school_name=mysqli_fetch_array($school);
@@ -31,7 +34,7 @@ A more current version is at pm_attendance_2.php.
                 <?
                 $get_PMs = "SELECT DISTINCT Parent_Mentor_ID, Institutions_Participants.* FROM PM_Actual_Attendance
                         INNER JOIN Institutions_Participants ON Participant_ID=Parent_Mentor_ID
-                        WHERE Is_PM=1 AND Institutions_Participants.Institution_ID='" . $_POST['school'] . "'";
+                        WHERE Is_PM=1 AND Institutions_Participants.Institution_ID='" . $school_sqlsafe . "'";
                 //echo $get_PMs;
                 $PMs = mysqli_query($cnnLSNA, $get_PMs);
                 $num_pms_total=mysqli_num_rows($PMs);
@@ -94,9 +97,9 @@ A more current version is at pm_attendance_2.php.
         <?
     //assemble query
     //do it for months that have entered time:
-    if ($_POST['school']!=''){$school=" AND Institution_ID='".$_POST['school']."'";}else{$school="";}
-    if ($_POST['month']!=''){$mo=" AND Month='".$_POST['month']."'";}else{$mo="";}
-    if ($_POST['year']!=''){$year=" AND Year='".$_POST['year']."'";}else{$year="";}
+    if ($_POST['school']!=''){$school=" AND Institution_ID='".$school_sqlsafe."'";}else{$school="";}
+    if ($_POST['month']!=''){$mo=" AND Month='".$month_sqlsafe."'";}else{$mo="";}
+    if ($_POST['year']!=''){$year=" AND Year='".$year_sqlsafe."'";}else{$year="";}
         
         
     if (isset($_POST['month']) && $_POST['school']!=''){
@@ -133,7 +136,7 @@ FROM PM_Possible_Attendance INNER JOIN PM_Actual_Attendance
 ON PM_Possible_Attendance.PM_Possible_Attendance_ID= PM_Actual_Attendance.Possible_Attendance_ID 
 LEFT JOIN Institutions_Participants 
 ON PM_Actual_Attendance.Parent_Mentor_ID=Institutions_Participants.Participant_ID 
-WHERE Institution_ID='".$_POST['school']."' AND Month='".$months[0]."' AND Year='".$months[1]."' AND Is_PM=1 GROUP BY Num_Days_Attended;";
+WHERE Institution_ID='".$school_sqlsafe."' AND Month='".$months[0]."' AND Year='".$months[1]."' AND Is_PM=1 GROUP BY Num_Days_Attended;";
             }
             else{
                 $get_percentages_query="SELECT Num_Days_Attended, COUNT(Num_Days_Attended) as count
