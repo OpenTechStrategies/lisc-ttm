@@ -2,18 +2,18 @@
 /* edit leadership details (these are pieces from the leadership rubric) and leadership levels (primary, secondary, tertiary) */
 if ($_POST['action']=='details'){
     /* add new rubric checkmarks. */
-    $add_details="INSERT INTO Leadership_Development (Participant_ID, Detail_ID) VALUES (".$_POST['user_id'].", ". $_POST['detail_id'].")";
-    echo $add_details;
     include "../include/dbconnopen.php";
-    mysqli_query($cnnSWOP, $add_details);
+    $add_details_sqlsafe="INSERT INTO Leadership_Development (Participant_ID, Detail_ID) VALUES (".mysqli_real_escape_string($cnnSWOP, $_POST['user_id']).", ". mysqli_real_escape_string($cnnSWOP, $_POST['detail_id']).")";
+    echo $add_details_sqlsafe;
+    mysqli_query($cnnSWOP, $add_details_sqlsafe);
     include "../include/dbconnclose.php";
 }
 else{
     /* add new leadership type */
-$leader_edit = "INSERT INTO Participants_Leaders (Participant_ID, Leader_Type, Activity_Type)
-    VALUES ('" . $_POST['participant'] ."', '" . $_POST['leader'] ."', '" .$_POST['type']."')";
-//echo $leader_edit;
  include "../include/dbconnopen.php";
-mysqli_query($cnnSWOP, $leader_edit);
+$leader_edit_sqlsafe = "INSERT INTO Participants_Leaders (Participant_ID, Leader_Type, Activity_Type)
+    VALUES ('" . mysqli_real_escape_string($cnnSWOP, $_POST['participant']) ."', '" . mysqli_real_escape_string($cnnSWOP, $_POST['leader']) ."', '" .mysqli_real_escape_string($cnnSWOP, $_POST['type'])."')";
+//echo $leader_edit_sqlsafe;
+mysqli_query($cnnSWOP, $leader_edit_sqlsafe);
             include "../include/dbconnclose.php";
 }?>
