@@ -4,13 +4,9 @@
 // *First determine the program that the logged-in user has access to.  Usually this will be a program ID number,
 // *but sometimes it will be 'a' (all) or 'n' (none).
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
-echo $_COOKIE['user'] . "<br>"; //testing output
 $user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['user']);
-//$user_sqlsafe=$_COOKIE['user']; // testing only
-echo $user_sqlsafe . "<br>"; //testing output
 $get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
     WHERE User_Email = '" .$user_sqlsafe . "'";
-echo $get_program_access; //testing output
 $program_access = mysqli_query($cnnLISC, $get_program_access);
 $prog_access = mysqli_fetch_row($program_access);
 $access = $prog_access[0];
