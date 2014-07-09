@@ -1,13 +1,13 @@
 <?php
 /* search institutions by name and type. */
-if ($_POST['name']==''){$name='';}else{$name=' AND Institution_Name LIKE "%' . $_POST['name'] . '%"';};
-if ($_POST['type']==''){$type='';}else{$type=" AND Institution_Type LIKE '%" . $_POST['type'] . "%'";}
+include "../include/dbconnopen.php";
+if ($_POST['name']==''){$name_sqlsafe='';}else{$name_sqlsafe=' AND Institution_Name LIKE "%' . mysqli_real_escape_string($cnnSWOP, $_POST['name']) . '%"';};
+if ($_POST['type']==''){$type_sqlsafe='';}else{$type_sqlsafe=" AND Institution_Type LIKE '%" . mysqli_real_escape_string($cnnSWOP, $_POST['type']) . "%'";}
 
-$uncertain_search_query = "SELECT * FROM Institutions WHERE Institution_ID!='' " . $name . $type;
+$uncertain_search_query_sqlsafe = "SELECT * FROM Institutions WHERE Institution_ID!='' " . $name_sqlsafe . $type_sqlsafe;
 //echo $uncertain_search_query;
 
-include "../include/dbconnopen.php";
-$results =mysqli_query($cnnSWOP, $uncertain_search_query);
+$results =mysqli_query($cnnSWOP, $uncertain_search_query_sqlsafe);
 ?>
 <br/><h4>Search Results</h4>
     <table class="program_table" width="70%">
