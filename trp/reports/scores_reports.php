@@ -19,7 +19,7 @@ include "report_menu.php";
     <tr><th>School Year</th><th>Program</th><th>GPA Quarter 1</th><th>GPA Quarter 2</th><th>GPA Quarter 3</th><th>GPA Quarter 4</th></tr>
     <?
     /* get average GPA sorted by year, quarter, and program */
-    $somehow_someway_query="SELECT AVG(GPA), 
+    $somehow_someway_query_sqlsafe="SELECT AVG(GPA), 
     Participants_Programs.Program_ID, Quarter, School_Year, Program_Name
 FROM Participants_Programs INNER JOIN Academic_Info 
 ON Participants_Programs.Participant_ID=Academic_Info.Participant_ID 
@@ -28,7 +28,7 @@ WHERE School_Year IS NOT NULL AND School_Year !=''
 GROUP BY Participants_Programs.Program_ID,  Quarter;";
    // echo $somehow_someway_query;
     include "../include/dbconnopen.php";
-    $gpa_avg=mysqli_query($cnnTRP, $somehow_someway_query);
+    $gpa_avg=mysqli_query($cnnTRP, $somehow_someway_query_sqlsafe);
     $current_year="";
     $current_program=0;
     while ($gpa=mysqli_fetch_row($gpa_avg)){
@@ -88,13 +88,13 @@ GROUP BY Participants_Programs.Program_ID,  Quarter;";
     <tr><th>School Year</th><th>Program</th><th>Pre-Explore</th><th>Mid-Explore</th><th>Post-Explore</th><th>Fall-Explore</th></tr>
     <?
     /* pull average explore scores, sorted by year and program. */
-    $somehow_someway_query="SELECT School_Year, Program_Name, AVG(Explore_Score_Pre) AS pre, AVG(Explore_Score_Mid) AS mid, 
+    $somehow_someway_query_sqlsafe="SELECT School_Year, Program_Name, AVG(Explore_Score_Pre) AS pre, AVG(Explore_Score_Mid) AS mid, 
 AVG(Explore_Score_Post) AS post, AVG(Explore_Score_Fall) AS fall FROM Explore_Scores 
 INNER JOIN Programs ON Programs.Program_ID=Explore_Scores.Program_ID
 GROUP BY School_Year, Explore_Scores.Program_ID";
    // echo $somehow_someway_query;
     include "../include/dbconnopen.php";
-    $gpa_avg=mysqli_query($cnnTRP, $somehow_someway_query);
+    $gpa_avg=mysqli_query($cnnTRP, $somehow_someway_query_sqlsafe);
     $current_year="";
     $current_program=0;
     while ($gpa=mysqli_fetch_row($gpa_avg)){

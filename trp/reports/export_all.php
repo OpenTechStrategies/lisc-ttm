@@ -26,11 +26,11 @@ $title_array = array("Participant First Name", "Last Name", "Academic Informatio
         "ISAT Total Score", "Grade in School", "Math Grade", "Language Arts Grade", "Date Information Logged", "School ID (6=No School Selected)",
     "School Name");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT First_Name, Last_Name, Academic_Info.*, School_Name FROM Academic_Info
+$get_peoples_sqlsafe = "SELECT First_Name, Last_Name, Academic_Info.*, School_Name FROM Academic_Info
     LEFT JOIN Schools ON School=School_ID
     LEFT JOIN Participants ON Academic_Info.Participant_ID=Participants.Participant_ID";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -45,9 +45,9 @@ $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Academic Information ID", "Participant ID", "Program ID", "School Year", "Quarter", "GPA", "ISAT Math Score", "ISAT Reading Score",
         "ISAT Total Score", "Grade in School", "Math Grade", "Language Arts Grade", "Date Information Logged", "School ID (6=No School Selected)");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM Academic_Info";
+$get_peoples_sqlsafe = "SELECT * FROM Academic_Info";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -62,9 +62,9 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Event ID", "Event Name", "Event Goal Attendance", "Event Actual Attendance", "Event Date", "Active[1]/Inactive[0]");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM Events";
+$get_peoples_sqlsafe = "SELECT * FROM Events";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -79,10 +79,10 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Event Name", "Event Date", "Attendee First Name", " Attendee Last Name");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT Event_Name, Event_Date, First_Name, Last_Name FROM Events_Participants INNER JOIN Events ON Events_Participants.Event_ID=
+$get_peoples_sqlsafe = "SELECT Event_Name, Event_Date, First_Name, Last_Name FROM Events_Participants INNER JOIN Events ON Events_Participants.Event_ID=
 Events.Event_ID INNER JOIN Participants ON Events_Participants.Participant_ID=Participants.Participant_ID;";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -94,10 +94,10 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Link ID", "Event ID", "Participant ID");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT Event_Name, Event_Date, Participant_ID FROM Events_Participants INNER JOIN Events ON Events_Participants.Event_ID=
+$get_peoples_sqlsafe = "SELECT Event_Name, Event_Date, Participant_ID FROM Events_Participants INNER JOIN Events ON Events_Participants.Event_ID=
 Events.Event_ID";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -114,11 +114,11 @@ $title_array = array("First Name", "Last Name", "Link ID", "Participant ID", "Nu
         "Number of In-school Suspensions", "Number of out of school suspensions", "Office Referrals", "Quarter", "Grade in School",
     "School Year", "Program ID", "School ID", "School Name");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT First_Name, Last_Name, MS_to_HS_Over_Time.*, School_Name FROM MS_to_HS_Over_Time
+$get_peoples_sqlsafe = "SELECT First_Name, Last_Name, MS_to_HS_Over_Time.*, School_Name FROM MS_to_HS_Over_Time
     LEFT JOIN Participants ON Participants.Participant_ID=MS_to_HS_Over_Time.Participant_ID
     LEFT JOIN Schools ON Schools.School_ID=MS_to_HS_Over_Time.School_ID;";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -131,9 +131,9 @@ $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Link ID", "Participant ID", "Number of Tardies", "Number of Excused Absences", "Number of Unexcused Absences", 
         "Number of In-school Suspensions", "Number of out of school suspensions", "Office Referrals", "Quarter", "Grade in School");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM MS_to_HS_Over_Time;";
+$get_peoples_sqlsafe = "SELECT * FROM MS_to_HS_Over_Time;";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -148,11 +148,11 @@ $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("First Name", "Last Name", "Link ID", "Participant ID", "Explore Score Pre", "Explore Score Mid", "Explore Score Post", 
         "Explore Score Fall of 9th Grade", "Reading ISAT", "Math ISAT", "CPS Consent", "Program ID", "School ID", "School Year", "School Name");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT First_Name, Last_Name, Explore_Scores.*, School_Name FROM Explore_Scores
+$get_peoples_sqlsafe = "SELECT First_Name, Last_Name, Explore_Scores.*, School_Name FROM Explore_Scores
     LEFT JOIN Participants on Explore_Scores.Participant_ID=Participants.Participant_ID
     LEFT JOIN Schools ON School=School_ID;";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -166,9 +166,9 @@ $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Link ID", "Participant ID", "Explore Score Pre", "Explore Score Mid", "Explore Score Post", 
         "Explore Score Fall of 9th Grade", "Reading ISAT", "Math ISAT", "CPS Consent", "Program ID", "School ID", "School Year");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM Explore_Scores;";
+$get_peoples_sqlsafe = "SELECT * FROM Explore_Scores;";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -186,10 +186,10 @@ $title_array = array("First Name", "Last Name", "Survey ID", "Participant ID", "
     "Question 3", "Question 4", "Question 5", "Question 6", "Question 7", "Question 8", 
     "Question 9", "Question 10", "Question 11", "Pre or Post", "Date Logged");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT First_Name, Last_Name, NMMA_Identity_Survey.* FROM NMMA_Identity_Survey
+$get_peoples_sqlsafe = "SELECT First_Name, Last_Name, NMMA_Identity_Survey.* FROM NMMA_Identity_Survey
     INNER JOIN Participants ON NMMA_Identity_Survey.Participant_ID=Participants.Participant_ID;";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -205,9 +205,9 @@ $title_array = array("Survey ID", "Participant ID", "Question 1",
     "Question 3", "Question 4", "Question 5", "Question 6", "Question 7", "Question 8", 
     "Question 9", "Question 10", "Question 11", "Pre or Post", "Date Logged");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM NMMA_Identity_Survey;";
+$get_peoples_sqlsafe = "SELECT * FROM NMMA_Identity_Survey;";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -224,10 +224,10 @@ $title_array = array("First Name", "Last Name", "Survey ID", "Participant ID", "
     "Question 3", "Question 4", "Question 5", "Question 6", "Question 7", "Question 8", 
    "Pre or Post", "Date Logged");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT First_Name, Last_Name, NMMA_Traditions_Survey.* FROM NMMA_Traditions_Survey
+$get_peoples_sqlsafe = "SELECT First_Name, Last_Name, NMMA_Traditions_Survey.* FROM NMMA_Traditions_Survey
     LEFT JOIN Participants ON NMMA_Traditions_Survey.Participant_Id=Participants.Participant_ID;";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -243,9 +243,9 @@ $title_array = array("Survey ID", "Participant ID", "Question 1",
     "Question 3", "Question 4", "Question 5", "Question 6", "Question 7", "Question 8", 
    "Pre or Post", "Date Logged");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM NMMA_Traditions_Survey;";
+$get_peoples_sqlsafe = "SELECT * FROM NMMA_Traditions_Survey;";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -261,10 +261,10 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Outcome", "Month", "Goal", "Actual Result");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT Outcome_Name, Month, Goal_Outcome, Actual_Outcome
+$get_peoples_sqlsafe = "SELECT Outcome_Name, Month, Goal_Outcome, Actual_Outcome
 FROM Outcomes_Months INNER JOIN Outcomes ON Outcomes_Months.Outcome_ID=Outcomes.Outcome_ID;";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -279,13 +279,13 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Child First Name", "Child Last Name", "Parent First Name", "Parent Last Name");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT Children.First_Name, Children.Last_Name, Parents.First_Name, Parents.Last_Name
+$get_peoples_sqlsafe = "SELECT Children.First_Name, Children.Last_Name, Parents.First_Name, Parents.Last_Name
 FROM Parents_Children INNER JOIN Participants as Parents ON 
 Parents.Participant_ID=Parent_ID
 INNER JOIN Participants AS Children ON
 Children.Participant_ID=Child_ID;";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -297,9 +297,9 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Linking ID", "Parent ID", "Child ID");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM Parents_Children";
+$get_peoples_sqlsafe = "SELECT * FROM Parents_Children";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -317,9 +317,9 @@ $title_array = array("Participant ID", "First Name", "Last Name", "Address Stree
     "Lunch Price  (0=No Answer; 1=Free; 2=Reduced Price; 3=None)",
         "Neighborhood", "Eval ID", "CPS ID");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM Participants";
+$get_peoples_sqlsafe = "SELECT * FROM Participants";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -332,10 +332,10 @@ $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Participant_ID", "Block Group", "Gender", "Grade_Level", "Classroom", 
     "Lunch_Price (0=No Answer; 1=Free; 2=Reduced Price; 3=None)", "Neighborhood");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT Participant_ID, Block_Group, 
+$get_peoples_sqlsafe = "SELECT Participant_ID, Block_Group, 
     Gender, Grade_Level, Classroom, Lunch_Price, Neighborhood FROM Participants";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
    /* $this_address=$people_array[1]." " . $people_array[2] . " " . $people_array[3] ." ". $people_array[4] ;
    $block_group=do_it_all($this_address, $map);
@@ -353,10 +353,10 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array( "First Name", "Last Name", "Program Name");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT First_Name, Last_Name, Program_Name FROM Participants_Programs INNER JOIN Participants ON Participants.Participant_ID=Participants_Programs.Participant_ID
+$get_peoples_sqlsafe = "SELECT First_Name, Last_Name, Program_Name FROM Participants_Programs INNER JOIN Participants ON Participants.Participant_ID=Participants_Programs.Participant_ID
     INNER JOIN Programs ON Participants_Programs.Program_ID=Programs.Program_ID";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -368,9 +368,9 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Linking ID", "Participant ID", "Program ID");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM Participants_Programs";
+$get_peoples_sqlsafe = "SELECT * FROM Participants_Programs";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
@@ -387,9 +387,9 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Program ID", "Program Name", "Program Organization");
 fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM Programs";
+$get_peoples_sqlsafe = "SELECT * FROM Programs";
 include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
+$people_info = mysqli_query($cnnTRP, $get_peoples_sqlsafe);
 while ($people_array = mysqli_fetch_row($people_info)){
     fputcsv ($fp, $people_array);
 }
