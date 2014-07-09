@@ -7,7 +7,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 $user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['user']);
 $get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
     WHERE User_Email = '" . $user_sqlsafe . "'";
-//echo $get_program_access;
+echo $get_program_access;
 $program_access = mysqli_query($cnnLISC, $get_program_access);
 $prog_access = mysqli_fetch_row($program_access);
 $access = $prog_access[0];
