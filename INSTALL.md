@@ -91,9 +91,9 @@ Steps to install:
           SSLEngine on
           
           # You'll need to adjust these for your cert details, of course:
-          SSLCertificateFile "/etc/apache2/certs/ttm/ttm_example_com.crt"
-          SSLCertificateKeyFile "/etc/apache2/certs/ttm/ttm.example.com.key"
-          SSLCertificateChainFile "/etc/apache2/certs/ttm/DigiCertCA.crt"
+          SSLCertificateFile "/etc/ssl/certs/local/ttm/ttm_example_com.crt"
+          SSLCertificateKeyFile "/etc/ssl/certs/local/ttm/ttm.example.com.key"
+          SSLCertificateChainFile "/etc/ssl/certs/local/ttm/DigiCertCA.crt"
           
           # Disable directory indexes.  One example is no one should
           # be able to see a list of files in an export directory.
@@ -134,24 +134,26 @@ Steps to install:
         $ sudo rm 000-default  # old default site not interesting to us now
         $ sudo ln -s ../sites-available/ttm.conf 000-ttm.conf
 
-    Make sure that the appropriate Apache2 PHP modules are enabled:
+    Make sure that the appropriate Apache2 PHP modules are enabled, by
+    creating symlinks as needed to achieve results like these:
 
         $ cd /etc/apache2/
         $ ls -l mods-enabled/php*
         (output trimmed on the left for brevity)
         mods-enabled/php5.conf -> ../mods-available/php5.conf
         mods-enabled/php5.load -> ../mods-available/php5.load
+        $ ls -l mods-enabled/ssl*
         mods-enabled/ssl.conf -> ../mods-available/ssl.conf
         mods-enabled/ssl.load -> ../mods-available/ssl.load
+        $ ls -l mods-enabled/rewrite*
         mods-enabled/rewrite.load -> ../mods-available/rewrite.load
+
         ### You may or may not need to enable the following too: ###
         mods-enabled/php5_cgi.conf -> ../mods-available/php5_cgi.conf
         mods-enabled/php5_cgi.load -> ../mods-available/php5_cgi.load
         mods-enabled/socache_dbm.load -> ../mods-available/socache_dbm.load
         mods-enabled/socache_memcache.load -> ../mods-available/socache_memcache.load
         mods-enabled/socache_shmcb.load -> ../mods-available/socache_shmcb.load
-
-    (If they're not, then make the appropriate symlinks.)
 
     Finally, don't forget to restart Apache:
 
@@ -163,7 +165,7 @@ Steps to install:
             mysql -u root -p < ${name}/sql/ttm-${name}_routines.sql;  \
           done
 
-6.  Set up the MySQL databases:
+6.  Set up authentication / authorization for the MySQL databases:
 
         $ mysql -u root -p
         Password: ********
@@ -193,7 +195,7 @@ Steps to install:
           done
         $
 
-7. Make sure the export data directories are writeable by the web
+8. Make sure the export data directories are writeable by the web
    server.  The `chown` step below is probably redundant, because
    presumably you installed the web tree with ownership by the web
    server user anyway, but the `chmod` may be important:
@@ -211,10 +213,16 @@ Steps to install:
             chmod ug+rwx ${name};                 \
           done
 
-8. Load the sample data (or live data, if you have it):
+9. Load the sample data (or live data, if you have it).  Either:
 
         $ mysql -u root -p < data/lisc-ttm-sample-data.sql
 
-9. Set up backups.  Read `maintenance/backup-ttm.tmpl`, then run
+   or:
+
+        $ for name in core bickerdike enlace lsna swop trp; do        \
+             mysql -u root -p ttm-${name} < ttm-${name}-backup-*.sql; \
+          done
+
+10. Set up backups.  Read `maintenance/backup-ttm.tmpl`, then run
    `maintenance/make-backup-script` to create a backup script that is
    customized for your site.
