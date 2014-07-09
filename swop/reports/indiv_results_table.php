@@ -4,9 +4,9 @@
 // print_r($_POST['columns']);
 if ($_POST['search_type'] == 'pool') {
     /* first get all the columns that the user has specified: */
-    $very_start = 'SELECT Participants.Participant_ID, ';
-    $select_start="";
-    $props_start="";
+    $very_start_sqlsafe = 'SELECT Participants.Participant_ID, ';
+    $select_start_sqlsafe="";
+    $props_start_sqlsafe="";
     for ($j = 0; $j < count($_POST['columns']); $j++) {
         //check if the participant has asked for address information.  If so, we need to get that from the properties table (by means of the 
         //property join)
@@ -18,90 +18,92 @@ if ($_POST['search_type'] == 'pool') {
         {
           //  echo 'saw a street column';
             $zipcode = 1;
-            $property_join = " LEFT JOIN Properties ON Participants_Properties.Property_ID=Properties.Property_ID ";
-            $property = "";
+            $property_join_sqlsafe = " LEFT JOIN Properties ON Participants_Properties.Property_ID=Properties.Property_ID ";
+            $property_sqlsafe = "";
             $new_col = explode('.', $_POST['columns'][$j]);
-           // $select_start.='Properties.' . $new_col[1] ;
-            $props_start.='Properties.' . $new_col[1] . ", ";
-           // echo "property string: " . $props_start . "<br>";
+            include "../include/dbconnopen.php";
+            $new_col_sqlsafe=mysqli_real_escape_string($new_col[1]);
+           // $select_start_sqlsafe.='Properties.' . $new_col[1] ;
+            $props_start_sqlsafe.='Properties.' . $new_col_sqlsafe . ", ";
+           // echo "property string: " . $props_start_sqlsafe . "<br>";
            /* if ( $zipcode==1){
             $property_start .= ", Properties.Zipcode";
             }*/
-          //  echo $select_start . "<br>";
+          //  echo $select_start_sqlsafe . "<br>";
         }
       /*  elseif($_POST['columns'][$j] == 'Properties.Address_Street_Name'
                 || $_POST['columns'][$j] == 'Properties.Address_Street_Num'
                 || $_POST['columns'][$j] == 'Properties.Address_Street_Direction'
                 || $_POST['columns'][$j] == 'Properties.Address_Street_Type'){
-            $property_join = " LEFT JOIN Properties ON Participants_Properties.Property_ID=Properties.Property_ID ";
+            $property_join_sqlsafe = " LEFT JOIN Properties ON Participants_Properties.Property_ID=Properties.Property_ID ";
             $property = "";
-             $select_start .= $_POST['columns'][$j];
+             $select_start_sqlsafe .= $_POST['columns'][$j];
         }*/
        else {
             //if Participants.ITIN is selected
             if ($_POST['columns'][$j] == 'Participants.ITIN') {
-                $select_start .= "Reports__ITIN.Value AS Participants_ITIN";
-                $join_itin = " JOIN Reports__ITIN ON Participants.ITIN = Reports__ITIN.ID ";
+                $select_start_sqlsafe .= "Reports__ITIN.Value AS Participants_ITIN";
+                $join_itin_sqlsafe = " JOIN Reports__ITIN ON Participants.ITIN = Reports__ITIN.ID ";
             //if member_type.Active is selected
             } elseif ($_POST['columns'][$j] == 'member_type.Active') {
-                $select_start .= "Reports__Active.Value";
-                $join_member_type_active = " JOIN Reports__Active ON member_type.Active = Reports__Active.ID ";
+                $select_start_sqlsafe .= "Reports__Active.Value";
+                $join_member_type_active_sqlsafe = " JOIN Reports__Active ON member_type.Active = Reports__Active.ID ";
             //if member_type.Member_Type is selected
             } elseif ($_POST['columns'][$j] == 'member_type.Member_Type') {
-                $select_start .= "Pool_Member_Types.Type_Name AS Member_Type";
-                $join_member_type = " JOIN Pool_Member_Types ON member_type.Member_Type = Pool_Member_Types.Type_ID ";
+                $select_start_sqlsafe .= "Pool_Member_Types.Type_Name AS Member_Type";
+                $join_member_type_sqlsafe = " JOIN Pool_Member_Types ON member_type.Member_Type = Pool_Member_Types.Type_ID ";
             //if Pool_Progress.More_Info is selected
             } elseif ($_POST['columns'][$j] == 'Pool_Progress.More_Info') {
-                $select_start .= "CONCAT(Pool_Progress_More_Info.Name_First, ' ', Pool_Progress_More_Info.Name_Last) AS More_Info";
-                $join_more_info = " JOIN Participants AS Pool_Progress_More_Info ON Pool_Progress.More_info = Pool_Progress_More_Info.Participant_ID ";
+                $select_start_sqlsafe .= "CONCAT(Pool_Progress_More_Info.Name_First, ' ', Pool_Progress_More_Info.Name_Last) AS More_Info";
+                $join_more_info_sqlsafe = " JOIN Participants AS Pool_Progress_More_Info ON Pool_Progress.More_info = Pool_Progress_More_Info.Participant_ID ";
             //if Pool_Progress.Benchmark_Completed is selected
             } elseif ($_POST['columns'][$j] == 'Pool_Progress.Benchmark_Completed') {
-                $select_start .= "Pool_Benchmarks.Benchmark_Name";
-                $join_benchmark_completed = " JOIN Pool_Benchmarks ON Pool_Progress.Benchmark_Completed = Pool_Benchmarks.Pool_Benchmark_ID ";
+                $select_start_sqlsafe .= "Pool_Benchmarks.Benchmark_Name";
+                $join_benchmark_completed_sqlsafe = " JOIN Pool_Benchmarks ON Pool_Progress.Benchmark_Completed = Pool_Benchmarks.Pool_Benchmark_ID ";
             //if Participants.Activity_Type is selected
             } elseif ($_POST['columns'][$j] == 'Participants.Activity_Type') {
-                $select_start .= "Reports__Activity_Type0.Value";
-                $join_participants_activity_type = " JOIN Reports__Activity_Type AS Reports__Activity_Type0 ON Participants.Activity_Type = Reports__Activity_Type0.ID ";
+                $select_start_sqlsafe .= "Reports__Activity_Type0.Value";
+                $join_participants_activity_type_sqlsafe = " JOIN Reports__Activity_Type AS Reports__Activity_Type0 ON Participants.Activity_Type = Reports__Activity_Type0.ID ";
             //if member_type.Activity_Type is selected
             } elseif ($_POST['columns'][$j] == 'member_type.Activity_Type') {
-                $select_start .= "Reports__Activity_Type1.Value";
-                $join_member_type_activity_type = " JOIN Reports__Activity_Type AS Reports__Activity_Type1 ON member_type.Activity_Type = Reports__Activity_Type1.ID ";
+                $select_start_sqlsafe .= "Reports__Activity_Type1.Value";
+                $join_member_type_activity_type_sqlsafe = " JOIN Reports__Activity_Type AS Reports__Activity_Type1 ON member_type.Activity_Type = Reports__Activity_Type1.ID ";
             //if Pool_Progress.Activity_Type is selected
             } elseif ($_POST['columns'][$j] == 'Pool_Progress.Activity_Type') {
-                $select_start .= "Reports__Activity_Type2.Value";
-                $join_pool_progress_activity_type = " JOIN Reports__Activity_Type AS Reports__Activity_Type2 ON Pool_Progress.Activity_Type = Reports__Activity_Type2.ID ";
+                $select_start_sqlsafe .= "Reports__Activity_Type2.Value";
+                $join_pool_progress_activity_type_sqlsafe = " JOIN Reports__Activity_Type AS Reports__Activity_Type2 ON Pool_Progress.Activity_Type = Reports__Activity_Type2.ID ";
              //if the name is chosen, keep it separate
             } elseif($_POST['columns'][$j]== 'Participants.Name_First'){
-                $first_name_string= 'Participants.Name_First, ';
+                $first_name_string_sqlsafe = 'Participants.Name_First, ';
             }elseif($_POST['columns'][$j]== 'Participants.Name_Last'){
-                $last_name_string= 'Participants.Name_Last, ';
+                $last_name_string_sqlsafe = 'Participants.Name_Last, ';
             }
             elseif ($_POST['columns'][$j]!='Participants.Primary_Organizer' && $_POST['columns'][$j]!='Institutions_Participants.Institution_ID'
     && $_POST['columns'][$j]!='Institutions_Participants.Individual_Connection') {
-                $select_start .= $_POST['columns'][$j];
+                $select_start_sqlsafe .= $_POST['columns'][$j];
               //  echo "in the else <br>";
             }
         }
         
         //if primary_organiser is selected
         if ($_POST['columns'][$j] == 'Participants.Primary_Organizer') {
-            $select_start .= " CONCAT(Organizer_Info_ID_Table.Name_First, ' ', Organizer_Info_ID_Table.Name_Last) AS Primary_Organizer_Name, ";
+            $select_start_sqlsafe .= " CONCAT(Organizer_Info_ID_Table.Name_First, ' ', Organizer_Info_ID_Table.Name_Last) AS Primary_Organizer_Name, ";
             $_POST['columns'][$j] = 'Primary_Organizer_Name';
-            $organizer_join = " LEFT JOIN Participants AS Organizer_Info_ID_Table ON Participants.Primary_Organizer = Organizer_Info_ID_Table.Participant_ID ";
+            $organizer_join_sqlsafe = " LEFT JOIN Participants AS Organizer_Info_ID_Table ON Participants.Primary_Organizer = Organizer_Info_ID_Table.Participant_ID ";
         }
     
         //if institution_id is selected
         if ($_POST['columns'][$j] == 'Institutions_Participants.Institution_ID') {
-            $select_start .= " Institutions.Institution_Name, ";
+            $select_start_sqlsafe .= " Institutions.Institution_Name, ";
             $_POST['columns'][$j] = 'Institutions.Institution_Name';
-            $join_inst = " LEFT JOIN Institutions ON Institutions_Participants.Institution_ID = Institutions.Institution_ID ";
+            $join_inst_sqlsafe = " LEFT JOIN Institutions ON Institutions_Participants.Institution_ID = Institutions.Institution_ID ";
         }
         
         //if individual_connection is selected
         if ($_POST['columns'][$j] == 'Institutions_Participants.Individual_Connection') {
-            $select_start .= "  CONCAT(Connection_Info.Name_First, ' ', Connection_Info.Name_Last) AS Individual_Connection_Name, ";
+            $select_start_sqlsafe .= "  CONCAT(Connection_Info.Name_First, ' ', Connection_Info.Name_Last) AS Individual_Connection_Name, ";
             $_POST['columns'][$j] = 'Connection_Info.Individual_Connection_Name';
-            $join_connection = " LEFT JOIN Participants AS Connection_Info ON Individual_Connection=Connection_Info.Participant_ID ";
+            $join_connection_sqlsafe = " LEFT JOIN Participants AS Connection_Info ON Individual_Connection=Connection_Info.Participant_ID ";
         }
         
         //if it isn't the last item to be pulled, add a comma
@@ -115,7 +117,7 @@ if ($_POST['search_type'] == 'pool') {
                 && $_POST['columns'][$j] != 'Institutions.Institution_Name'
                 && $_POST['columns'][$j] != 'Connection_Info.Individual_Connection_Name'
                 )) {
-            $select_start .= ", ";
+            $select_start_sqlsafe .= ", ";
             //echo "comma";
         } elseif ($j == (count($_POST['columns']) - 1) ) {
               //this is the last item
@@ -129,56 +131,57 @@ if ($_POST['search_type'] == 'pool') {
                 && $_POST['columns'][$j] != 'Institutions.Institution_Name'
                 && $_POST['columns'][$j] != 'Connection_Info.Individual_Connection_Name'
                 )){
-                $select_start .= ", ";}
+                $select_start_sqlsafe .= ", ";}
                 else{
-                    $select_start .=" ";
+                    $select_start_sqlsafe .=" ";
                 }
          }
         
         /* elseif($j == (count($_POST['columns']) - 1) && ($_POST['columns'][$j] == 'Primary_Organizer_Name'
                 || $_POST['columns'][$j] == 'Institutions.Institution_Name'
                 || $_POST['columns'][$j] == 'Connection_Info.Individual_Connection_Name')){
-             $select_start .= " NULL ";
+             $select_start_sqlsafe .= " NULL ";
          }*/
          
-        //echo "medium earlier select: " . $select_start . "<br>";
+        //echo "medium earlier select: " . $select_start_sqlsafe . "<br>";
     }
-   // echo "earlier select: " . $select_start . "<br>";
+   // echo "earlier select: " . $select_start_sqlsafe . "<br>";
     /*
     //if primary_organiser is selected
     if ($_POST['organizer'] != '0') {
-        $select_start .= " CONCAT(Organizer_Info.Name_First, ' ', Organizer_Info.Name_Last) AS Primary_Organizer_Name";
+        $select_start_sqlsafe .= " CONCAT(Organizer_Info.Name_First, ' ', Organizer_Info.Name_Last) AS Primary_Organizer_Name";
     }
     */
     /* now that the columns have been chosen, add the table to the query: */
-    $select_start .= " NULL FROM Participants ";
-//echo $select_start . "<br>";
+    $select_start_sqlsafe .= " NULL FROM Participants ";
+//echo $select_start_sqlsafe . "<br>";
 //I'm going to follow the same partial search mechanism that I've used before.  If a search term
 //is chosen, then I'll use it for searching.  One thing I may have to change is allowing them to search for the
 //null - that is, find people who /don't have/ a primary institution or something like that.
 
+    include "../include/dbconnopen.php";
     if ($_POST['inst'] != 0) {
-        $institution = " AND Institutions_Participants.Institution_ID = '" . $_POST['inst'] . "' AND Is_Primary=1 ";
-        $join_inst = " LEFT JOIN Institutions_Participants ON Participants.Participant_ID = Institutions_Participants.Participant_ID "
-                    . $join_inst;
+        $institution_sqlsafe = " AND Institutions_Participants.Institution_ID = '" . mysqli_real_escape_string($cnnSWOP, $_POST['inst']) . "' AND Is_Primary=1 ";
+        $join_inst_sqlsafe = " LEFT JOIN Institutions_Participants ON Participants.Participant_ID = Institutions_Participants.Participant_ID "
+                    . $join_inst_sqlsafe;
     } else {
-        $institution = "";
-        $join_inst .= "";
+        $institution_sqlsafe = "";
+        $join_inst_sqlsafe .= "";
     }
     if ($_POST['type'] != 0) {
-        $type = " AND member_type.Member_Type='" . $_POST['type'] . "' ";
-        $member_type_join = " INNER JOIN 
+        $type_sqlsafe = " AND member_type.Member_Type='" . mysqli_real_escape_string($cnnSWOP, $_POST['type']) . "' ";
+        $member_type_join_sqlsafe_sqlsafe = " INNER JOIN 
         (SELECT Active, Participant_ID, max(Date_Changed) as lastdate FROM Pool_Status_Changes
         GROUP BY Participant_ID) lasttypestatus
         ON member_type.Date_Changed = lasttypestatus.lastdate ";
     } else {
-        $type = "";
-        $member_type_join = "";
+        $type_sqlsafe = "";
+        $member_type_join_sqlsafe_sqlsafe = "";
     }
     //note that this is a little trickier because we have to get the most recent benchmark completed.  that's where the extra join comes in.
     if ($_POST['step'] != 0) {
         $step = " AND Pool_Progress.Benchmark_Completed = '" . $_POST['step'] . "' AND Pool_Progress.Participant_ID = progress.Participant_ID ";
-        $benchmarks = " INNER JOIN Pool_Progress ON Participants.Participant_ID = Pool_Progress.Participant_ID 
+        $benchmarks_sqlsafe = " INNER JOIN Pool_Progress ON Participants.Participant_ID = Pool_Progress.Participant_ID 
         INNER JOIN (
         SELECT Participant_ID, Benchmark_Completed, MAX(Date_Completed) as LDATE
         FROM Pool_Progress
@@ -186,7 +189,7 @@ if ($_POST['search_type'] == 'pool') {
         ON Pool_Progress.Date_Completed = progress.LDATE ";
     } else {
         $step = "";
-        $benchmarks = "";
+        $benchmarks_sqlsafe = "";
     }
     
     //benchmark that has been completed
@@ -198,7 +201,7 @@ if ($_POST['search_type'] == 'pool') {
     
     if ($_POST['start'] != '') {
         $start = " AND member_type.Date_Changed >= '" . $_POST['start'] . "' AND member_type.Active = 1 ";
-        $date_join = " INNER JOIN 
+        $date_join_sqlsafe = " INNER JOIN 
         (SELECT Active, Participant_ID, max(Date_Changed) as lastdate FROM Pool_Status_Changes
         GROUP BY Participant_ID) laststatus
         ON member_type.Date_Changed = laststatus.lastdate ";
@@ -207,7 +210,7 @@ if ($_POST['search_type'] == 'pool') {
     }
     if ($_POST['end'] != '') {
         $end = " AND member_type.Date_Changed <= '" . $_POST['end'] . "' AND member_type.Active = 1 ";
-        $date_join = " INNER JOIN 
+        $date_join_sqlsafe = " INNER JOIN 
         (SELECT Active, Participant_ID, max(Date_Changed) as lastdate FROM Pool_Status_Changes
         GROUP BY Participant_ID) laststatus
         ON member_type.Date_Changed = laststatus.lastdate ";
@@ -216,10 +219,10 @@ if ($_POST['search_type'] == 'pool') {
     }
 
     if ($_POST['type'] != 0 || $_POST['start'] != '' || $_POST['end'] != '') {
-        $status = " INNER JOIN Pool_Status_Changes as member_type
+        $status_sqlsafe = " INNER JOIN Pool_Status_Changes as member_type
         ON Participants.Participant_ID = member_type.Participant_ID ";
     } else {
-        $status = "";
+        $status_sqlsafe = "";
     }
     if ($_POST['laggers'] != '') {//first get the date based on the number of days ago
         date_default_timezone_set('America/Chicago');
@@ -227,13 +230,13 @@ if ($_POST['search_type'] == 'pool') {
         $last_date = date("Y-m-d", $last_date);
         $lag = " AND Pool_Progress.Date_Completed <= '" . $last_date . "' AND Pool_Progress.Participant_ID 
     = progress.Participant_ID AND still_active.Active = 1 ";
-        $benchmarks = " INNER JOIN Pool_Progress ON Participants.Participant_ID = Pool_Progress.Participant_ID 
+        $benchmarks_sqlsafe = " INNER JOIN Pool_Progress ON Participants.Participant_ID = Pool_Progress.Participant_ID 
         INNER JOIN (
         SELECT Participant_ID, Benchmark_Completed, MAX(Date_Completed) as LDATE
         FROM Pool_Progress
         GROUP BY Participant_ID) progress
     ON Pool_Progress.Date_Completed = progress.LDATE ";
-        $date_join = "INNER JOIN Pool_Status_Changes as still_active ON Participants.Participant_ID = still_active.Participant_ID
+        $date_join_sqlsafe = "INNER JOIN Pool_Status_Changes as still_active ON Participants.Participant_ID = still_active.Participant_ID
  INNER JOIN (SELECT Active, Participant_ID, max(Date_Changed) as lastdate FROM Pool_Status_Changes
         GROUP BY Participant_ID) laststatus
         ON still_active.Date_Changed=laststatus.lastdate ";
@@ -243,11 +246,11 @@ if ($_POST['search_type'] == 'pool') {
 
     if ($_POST['organizer'] != '0') {
         $organizer = " AND Participants.Primary_Organizer='" . $_POST['organizer'] . "' ";
-        $organizer_join = " LEFT JOIN Participants AS Organizer_Info_Chosen ON Participants.Primary_Organizer = Organizer_Info_Chosen.Participant_ID ";
+        $organizer_join_sqlsafe = " LEFT JOIN Participants AS Organizer_Info_Chosen ON Participants.Primary_Organizer = Organizer_Info_Chosen.Participant_ID ";
     } else {
         $organizer = "";
-        if (!isset($organizer_join)) {
-            $organizer_join = "";
+        if (!isset($organizer_join_sqlsafe)) {
+            $organizer_join_sqlsafe = "";
         }
     }
 
@@ -326,9 +329,9 @@ if ($_POST['search_type'] == 'pool') {
     if ($_POST['table_institutions_participants'] != '') {
         $temp_join_inst = 'INNER JOIN Institutions_Participants ON Participants.Participant_ID = Institutions_Participants.Participant_ID';
         //if the join string is not in query, add it
-        if (strpos($join_inst, $temp_join_inst) === false) {
-            $join_inst = " INNER JOIN Institutions_Participants ON Participants.Participant_ID = Institutions_Participants.Participant_ID "
-                        . $join_inst;
+        if (strpos($join_inst_sqlsafe, $temp_join_inst) === false) {
+            $join_inst_sqlsafe = " INNER JOIN Institutions_Participants ON Participants.Participant_ID = Institutions_Participants.Participant_ID "
+                        . $join_inst_sqlsafe;
         }
     }
     
@@ -336,9 +339,9 @@ if ($_POST['search_type'] == 'pool') {
     if ($_POST['table_pool_progress'] != '') {
         $temp_benchmarks = 'JOIN Pool_Progress ON Participants.Participant_ID = Pool_Progress.Participant_ID';
         //if the join string is not in query, add it
-        if (strpos($benchmarks, $temp_benchmarks) === false) {
-            $benchmarks = " JOIN Pool_Progress ON Participants.Participant_ID = Pool_Progress.Participant_ID "
-                        . $benchmarks;
+        if (strpos($benchmarks_sqlsafe, $temp_benchmarks) === false) {
+            $benchmarks_sqlsafe = " JOIN Pool_Progress ON Participants.Participant_ID = Pool_Progress.Participant_ID "
+                        . $benchmarks_sqlsafe;
         }
     }
     
@@ -346,9 +349,9 @@ if ($_POST['search_type'] == 'pool') {
     if ($_POST['table_organizer_info'] != '') {
         $temp_organizer_join = 'INNER JOIN Participants AS Organizer_Info ON Participants.Primary_Organizer = Organizer_Info.Participant_ID';
         //if the join string is not in query, add it
-        if (strpos($organizer_join, $temp_organizer_join) === false) {
-            $organizer_join = " INNER JOIN Participants AS Organizer_Info ON Participants.Primary_Organizer = Organizer_Info.Participant_ID "
-                        . $organizer_join;
+        if (strpos($organizer_join_sqlsafe, $temp_organizer_join) === false) {
+            $organizer_join_sqlsafe = " INNER JOIN Participants AS Organizer_Info ON Participants.Primary_Organizer = Organizer_Info.Participant_ID "
+                        . $organizer_join_sqlsafe;
         }
     }
     
@@ -362,19 +365,19 @@ if ($_POST['search_type'] == 'pool') {
     if ($_POST['group_by'] != '') {
         $group_by = " GROUP BY Participants.Participant_ID";
     }
-   if ($props_start!=""){ $props_start.="Properties.Zipcode, ";}
-   // echo $very_start . "<br>";
-  //  echo "properties: ". $props_start . "<br><p>";
-  //  echo "select: " . $select_start . "<br>";
+   if ($props_start_sqlsafe!=""){ $props_start_sqlsafe.="Properties.Zipcode, ";}
+   // echo $very_start_sqlsafe_sqlsafe . "<br>";
+  //  echo "properties: ". $props_start_sqlsafe . "<br><p>";
+  //  echo "select: " . $select_start_sqlsafe . "<br>";
     /* final query. made up of the columns we put together at the beginning, any additional joins, and the various search terms that were
      * chosen by the user. */
-    $search_pool = $very_start . $first_name_string . $last_name_string . $props_start .$select_start .  " LEFT JOIN Participants_Properties ON Participants.Participant_ID = Participants_Properties.Participant_ID "
-            . $join_inst .$join_connection. $status . $benchmarks . $date_join . $organizer_join . $member_type_join . $property_join
-            . $join_itin . $join_member_type . $join_pool_progress . $join_more_info
-            . $join_benchmark_completed . $join_member_type_active
-            . $join_participants_activity_type . $join_member_type_activity_type . $join_pool_progress_activity_type
+    $search_pool = $very_start_sqlsafe . $first_name_string_sqlsafe . $last_name_string_sqlsafe_sqlsafe . $props_start_sqlsafe .$select_start_sqlsafe .  " LEFT JOIN Participants_Properties ON Participants.Participant_ID = Participants_Properties.Participant_ID "
+            . $join_inst_sqlsafe .$join_connection_sqlsafe. $status_sqlsafe . $benchmarks_sqlsafe . $date_join_sqlsafe . $organizer_join_sqlsafe . $member_type_join_sqlsafe . $property_join_sqlsafe
+            . $join_itin_sqlsafe . $join_member_type_sqlsafe . $join_pool_progress . $join_more_info_sqlsafe
+            . $join_benchmark_completed_sqlsafe . $join_member_type_active_sqlsafe
+            . $join_participants_activity_type_sqlsafe . $join_member_type_activity_type . $join_pool_progress_activity_type_sqlsafe
             . " WHERE Participants.Participant_ID IS NOT NULL "
-            . $institution . $type . $step . $step_done . $start . $end . $lag . $organizer . $property
+            . $institution_sqlsafe . $type_sqlsafe . $step . $step_done . $start . $end . $lag . $organizer . $property
             . $first_name . $middle_name . $last_name . $email . $phone . $notes
             . $date_of_birth . $gender . $has_itin . $ward . $language_spoken
             . $group_by
@@ -405,7 +408,7 @@ if ($_POST['search_type'] == 'pool') {
             <?php
             /* create table heading and the first row of the .csv export: */
             $title_array = array('Participant ID');
-            $search_string= $first_name_string . $last_name_string .$props_start . $select_start;
+            $search_string= $first_name_string_sqlsafe . $last_name_string_sqlsafe .$props_start_sqlsafe . $select_start_sqlsafe;
             $titles_arr=explode(',', $search_string);
             
             foreach ($_POST['columns'] as $col) {
@@ -415,13 +418,13 @@ if ($_POST['search_type'] == 'pool') {
                         $title_array[] = $col;
                         ?></th><?php
                 //if primary organizer selected, show name
-                if (($col == 'Participants.Primary_Organizer') && ($organizer_join != '')) {
+                if (($col == 'Participants.Primary_Organizer') && ($organizer_join_sqlsafe != '')) {
                     ?><th>Primary_Organizer_Name<?php
                         $title_array[] = 'Primary_Organizer_Name';
                         ?></th><?php
                 }
                 //if institution_id selected, show name
-                if (($col == 'Institutions_Participants.Institution_ID') && ($join_inst != '')) {
+                if (($col == 'Institutions_Participants.Institution_ID') && ($join_inst_sqlsafe != '')) {
                     ?><th>Institutions.Institution_Name<?php
                         $title_array[] = 'Institutions.Institution_Name';
                         ?></th><?php
@@ -463,12 +466,12 @@ if ($_POST['search_type'] == 'pool') {
 
 /* for property searches, similar process: */ elseif ($_POST['search_type'] == 'properties') {
     /* get columns chosen by user: */
-    $select_start = 'SELECT Properties.Property_ID, ';
+    $select_start_sqlsafe = 'SELECT Properties.Property_ID, ';
     for ($j = 0; $j < count($_POST['columns']); $j++) {
         if ($j == (count($_POST['columns']) - 1)) {
-            $select_start .= $_POST['columns'][$j];
+            $select_start_sqlsafe .= $_POST['columns'][$j];
         } else {
-            $select_start .= $_POST['columns'][$j] . ", ";
+            $select_start_sqlsafe .= $_POST['columns'][$j] . ", ";
         }
     }
 
@@ -677,13 +680,13 @@ ON Property_Progress.Date_Added = sale_progress.latest_date ";
     //if 
     //echo $_POST['table_institutions_participants'] . "***************";
     if ($_POST['table_institutions_participants'] != '') {
-        if ($join_inst == '') {
-            $join_inst = " INNER JOIN Institutions_Participants ON Participants.Participant_ID = Institutions_Participants.Participant_ID ";
+        if ($join_inst_sqlsafe == '') {
+            $join_inst_sqlsafe = " INNER JOIN Institutions_Participants ON Participants.Participant_ID = Institutions_Participants.Participant_ID ";
         }
     }
 
     /* create final query from the columns, extra table joins, and all the specifications from the user: */
-    $search_properties = $select_start . " FROM Properties INNER JOIN 
+    $search_properties = $select_start_sqlsafe . " FROM Properties INNER JOIN 
             Property_Progress ON Properties.Property_ID=Property_Progress.Property_ID "
             . $vacant_join . $condition_join . $sale_progress .
             " WHERE Properties.Property_ID IS NOT NULL " . $type . $size .
