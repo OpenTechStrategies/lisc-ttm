@@ -57,10 +57,10 @@
                 /* this should give us alist of institutions, but the actual echo has been commented out.
                  * not sure why.
                  *  */
-			$get_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
+			$get_institutions_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name";
                         
 			include "../include/dbconnopen.php";
-			$institutions = mysqli_query($cnnSWOP, $get_institutions);
+			$institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
 			while ($institution = mysqli_fetch_array($institutions)) {?>
 				<a href="javascript:;" onclick="
                             $.post(

@@ -33,9 +33,9 @@ include "../include/datepicker_simple.php";
 include "../classes/participant.php";
 $participant=new Participant();
 $participant->load_with_participant_id($_COOKIE['participant']);
-	$participant_query = "SELECT * FROM Participants WHERE Participant_ID='" . $_COOKIE['participant'] . "'";
 	include "../include/dbconnopen.php";
-	$get_participant = mysqli_query($cnnSWOP, $participant_query);
+	$participant_query_sqlsafe = "SELECT * FROM Participants WHERE Participant_ID='" . mysqli_real_escape_string($cnnSWOP, $_COOKIE['participant']) . "'";
+	$get_participant = mysqli_query($cnnSWOP, $participant_query_sqlsafe);
 	$parti = mysqli_fetch_array($get_participant);
         
 ?>
@@ -154,9 +154,9 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 				<td colspan="3"><select id="inst_quick_search">
     <option value="">-----</option>
     <?php
-			$get_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
+			$get_institutions_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name";
 			include "../include/dbconnopen.php";
-			$institutions = mysqli_query($cnnSWOP, $get_institutions);
+			$institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
 			while ($institution = mysqli_fetch_array($institutions)) {?>
     <option value="<?php echo $institution['Institution_ID'];?>"><?php echo $institution['Institution_ID'] . ": " . $institution['Institution_Name'];?></option>
 			<?php }
@@ -266,11 +266,11 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                         <th></th>
                     </tr>
                     <?
-                    $get_inst_conns = "SELECT * FROM Institutions_Participants INNER JOIN Institutions
-                        ON Institutions_Participants.Institution_ID=Institutions.Institution_ID
-                                                WHERE Institutions_Participants.Participant_ID='" . $_COOKIE['participant'] . "'";
                     include "../include/dbconnopen.php";
-                    $inst_conns = mysqli_query($cnnSWOP, $get_inst_conns);
+                    $get_inst_conns_sqlsafe = "SELECT * FROM Institutions_Participants INNER JOIN Institutions
+                        ON Institutions_Participants.Institution_ID=Institutions.Institution_ID
+                                                WHERE Institutions_Participants.Participant_ID='" . mysqli_real_escape_string($cnnSWOP, $_COOKIE['participant']) . "'";
+                    $inst_conns = mysqli_query($cnnSWOP, $get_inst_conns_sqlsafe);
                     while ($inst = mysqli_fetch_array($inst_conns)){
                         ?>
                     <tr>
@@ -286,8 +286,8 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                          * organizer can pull in this person (the subject of this profile) to an action if necessary.
                          */
                         if ($inst['Individual_Connection']!=''){
-                        $get_name="SELECT Name_First, Name_Last FROM Participants WHERE Participant_ID=".$inst['Individual_Connection'];
-                        $name=mysqli_query($cnnSWOP, $get_name);
+                        $get_name_sqlsafe="SELECT Name_First, Name_Last FROM Participants WHERE Participant_ID=".$inst['Individual_Connection'];
+                        $name=mysqli_query($cnnSWOP, $get_name_sqlsafe);
                         $leader=mysqli_fetch_row($name);
                         echo $leader[0] . " " . $leader[1];}?></td>
                         <td class="blank"><?php if ($inst['Is_Primary']==1){
@@ -318,9 +318,9 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                     <tr><td class="blank"><select id="institution">
                                 <option value="">-----</option>
                                 <?
-                                $get_all_insts="SELECT * FROM Institutions ORDER BY Institution_Name;";
+                                $get_all_insts_sqlsafe="SELECT * FROM Institutions ORDER BY Institution_Name;";
                                 include "../include/dbconnopen.php";
-                                $all_insts=mysqli_query($cnnSWOP, $get_all_insts);
+                                $all_insts=mysqli_query($cnnSWOP, $get_all_insts_sqlsafe);
                                 $count_insts=mysqli_num_rows($all_insts);
                                 while ($inst=mysqli_fetch_row($all_insts)){
                                     ?><option value="<?php echo $inst[0];?>"><?php echo $inst[1];?></option>
@@ -332,13 +332,13 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                             <td class="blank"><select id="connection">
                         <option value="">--Primary Organizers--</option>
                             <?php
-			$get_primarys = "SELECT 
+			$get_primarys_sqlsafe = "SELECT 
                                 Organizer_Info.Participant_ID, Organizer_Info.Name_First, Organizer_Info.Name_Last
                                 FROM Participants INNER JOIN 
                                 Participants AS Organizer_Info ON Participants.Primary_Organizer = Organizer_Info.Participant_ID
                                 GROUP BY Organizer_Info.Participant_ID ORDER BY Organizer_Info.Name_Last;";
 			include "../include/dbconnopen.php";
-			$primarys = mysqli_query($cnnSWOP, $get_primarys);
+			$primarys = mysqli_query($cnnSWOP, $get_primarys_sqlsafe);
 			while ($primary = mysqli_fetch_array($primarys)) {?>
     <option value="<?php echo $primary['Participant_ID'];?>"><?php echo  $primary['Participant_ID'] . ": " .$primary['Name_First'] ." ". $primary['Name_Last'];?></option>
 			<?php }
@@ -385,9 +385,9 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 				<table class="inner_table" style="width:90%;">
 					<tr><th>Date</th><th>Event</th><th>Associated Campaign</th></tr>
 					<?
-						$get_events = "SELECT * FROM Participants_Events INNER JOIN Campaigns_Events ON Participants_Events.Event_ID=Campaigns_Events.Campaign_Event_ID WHERE Participants_Events.Participant_ID='" . $parti['Participant_ID'] . "' ORDER BY Campaigns_Events.Event_Date DESC";
+						$get_events_sqlsafe = "SELECT * FROM Participants_Events INNER JOIN Campaigns_Events ON Participants_Events.Event_ID=Campaigns_Events.Campaign_Event_ID WHERE Participants_Events.Participant_ID='" . $parti['Participant_ID'] . "' ORDER BY Campaigns_Events.Event_Date DESC";
 						include "../include/dbconnopen.php";
-						$events = mysqli_query($cnnSWOP, $get_events);
+						$events = mysqli_query($cnnSWOP, $get_events_sqlsafe);
                                                 $count_events=0;
 						while ($event = mysqli_fetch_array($events)) {
                                                     $count_events++;
@@ -405,8 +405,8 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 								<?php echo $event['Event_Name'];?>
 							</td>
 							<td>
-								<?$get_campaign = "SELECT * FROM Campaigns WHERE Campaign_ID='" . $event['Campaign_ID'] . "'";
-									$campaign = mysqli_query($cnnSWOP, $get_campaign);
+								<?$get_campaign_sqlsafe = "SELECT * FROM Campaigns WHERE Campaign_ID='" . $event['Campaign_ID'] . "'";
+									$campaign = mysqli_query($cnnSWOP, $get_campaign_sqlsafe);
 									$cmpgn = mysqli_fetch_array($campaign);
 									echo $cmpgn['Campaign_Name'];
 								?>
@@ -426,8 +426,8 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 				<select id="event_add">
 					<option value="">----Event Name----</option>
 					<?
-						$get_all_events = "SELECT * FROM Campaigns_Events ORDER BY Event_Date DESC";
-						$all_events = mysqli_query($cnnSWOP, $get_all_events);
+						$get_all_events_sqlsafe = "SELECT * FROM Campaigns_Events ORDER BY Event_Date DESC";
+						$all_events = mysqli_query($cnnSWOP, $get_all_events_sqlsafe);
 						while ($event=mysqli_fetch_array($all_events)){
 					?>
 						<option value="<?php echo $event['Campaign_Event_ID'];?>">
@@ -447,9 +447,9 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 					<option value="">----Role---</option>
 					<?
                                         //get roles
-                                        $select_roles="SELECT * FROM Participants_Roles";
+                                        $select_roles_sqlsafe="SELECT * FROM Participants_Roles";
 										include "../include/dbconnopen.php";
-                                        $roles=mysqli_query($cnnSWOP, $select_roles);
+                                        $roles=mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                                         while ($role=mysqli_fetch_row($roles)){
                                             ?>
                                         <option value="<?php echo $role[0];?>"><?php echo $role[1];?></option>
@@ -479,10 +479,10 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                 might not be able to own a home, but a household of working adults may be able to. -->
 		 <h4>Household</h4>
                  <!-- Link to household (or households, but almost certainly just one) that this person belongs to: -->
-                        <?$find_household="SELECT * FROM Households_Participants INNER JOIN Households ON Household_ID=New_Household_ID
+                        <?$find_household_sqlsafe="SELECT * FROM Households_Participants INNER JOIN Households ON Household_ID=New_Household_ID
                             WHERE Participant_ID='".$parti['Participant_ID']."'";
                         include "../include/dbconnopen.php";
-                        $this_household=mysqli_query($cnnSWOP, $find_household);
+                        $this_household=mysqli_query($cnnSWOP, $find_household_sqlsafe);
                         while ($house=mysqli_fetch_array($this_household)){
                             ?><a href='family_profile.php?household=<?php echo $house['New_Household_ID']?>'><?php echo $house['Household_Name'];?></a><?
                             if ($house['Head_of_Household']=='1'){echo ' (Head) ';}
@@ -495,17 +495,17 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                         <div id="household_addition">
                             <!-- Either choose an existing household... -->
                         Add this person to an existing household: <select id="all_households"><option value="">-----</option>
-                            <?$get_households = "SELECT * FROM Households;";
+                            <?$get_households_sqlsafe = "SELECT * FROM Households;";
                             include "../include/dbconnopen.php";
-                            $all_households=mysqli_query($cnnSWOP, $get_households);
+                            $all_households=mysqli_query($cnnSWOP, $get_households_sqlsafe);
                             while ($household=mysqli_fetch_row($all_households)){
-                                $get_primary_address="SELECT Address_Street_Num, Address_Street_Direction, Address_Street_Name, Address_Street_Type
+                                $get_primary_address_sqlsafe="SELECT Address_Street_Num, Address_Street_Direction, Address_Street_Name, Address_Street_Type
                                     FROM Households INNER JOIN Households_Participants ON New_Household_ID= Household_ID 
                                     INNER JOIN Participants_Properties ON
                                         Participants_Properties.Participant_ID= Households_Participants.Participant_ID
                                     INNER JOIN Properties ON Properties.Property_ID=Participants_Properties.Property_ID
                                     WHERE Head_of_Household=1 AND Primary_Residence=1 AND Household_ID=" . $household[0];
-                                $primary_address=mysqli_query($cnnSWOP, $get_primary_address);
+                                $primary_address=mysqli_query($cnnSWOP, $get_primary_address_sqlsafe);
                                 $address=mysqli_fetch_row($primary_address);
                                 ?><option value="<?php echo $household[0]?>"><?php echo $household[0] . ": " . $household[1] . '--' . $address[0] . " " . $address[1] . " " .
                                         $address[2] . " " . $address[3];?></option><?
@@ -569,11 +569,11 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 								<th>Rent or Own?</th>
 								<th></th>
 							</tr>
-						<?$get_linked_props="SELECT * FROM Participants_Properties INNER JOIN Properties ON 
+						<?$get_linked_props_sqlsafe="SELECT * FROM Participants_Properties INNER JOIN Properties ON 
                             Participants_Properties.Property_ID=Properties.Property_ID WHERE Participant_ID='".$parti['Participant_ID']."'";
                        // echo $get_linked_props;
                         include "../include/dbconnopen.php";
-                        $linked_props =mysqli_query($cnnSWOP, $get_linked_props);
+                        $linked_props =mysqli_query($cnnSWOP, $get_linked_props_sqlsafe);
                         while ($linked=mysqli_fetch_array($linked_props)){
                             ?>
 							<!-- If this property is the person's primary residence (i.e. current address) then
@@ -713,7 +713,7 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 					<table class="inner_table activity_history" style="width:100%">
 						<?php
                                                 /* get info from all relevant tables: */
-							$get_events = "SELECT Date_Changed, Active, Activity_Type, Pool_Status_Change_ID FROM Pool_Status_Changes
+							$get_events_sqlsafe = "SELECT Date_Changed, Active, Activity_Type, Pool_Status_Change_ID FROM Pool_Status_Changes
                                                             WHERE Participant_ID='" . $parti['Participant_ID'] . "'
                                                             UNION ALL
 										SELECT Date_Added, '', Activity_Type, Participant_ID FROM Participants WHERE Participant_ID='".$parti['Participant_ID']."'
@@ -732,7 +732,7 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                                             ORDER BY Date_Changed DESC";
                                                         //echo $get_events;
 							include "../include/dbconnopen.php";
-							$events = mysqli_query($cnnSWOP, $get_events);
+							$events = mysqli_query($cnnSWOP, $get_events_sqlsafe);
                                                         $count_history=0;
 							while ($event = mysqli_fetch_array($events)) {
                                                             $count_history++;
@@ -741,8 +741,8 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 							<td><?php echo $event['Date_Changed']; ?></td>
 								<td><?php if ($event['Activity_Type']==1) { 
                                                                     /* then this is a benchmark, and needs to be marked as such (bold "Benchmark") */
-											$get_benchmark = "SELECT * FROM Pool_Benchmarks WHERE Pool_Benchmark_ID='" . $event['Active'] . "'";
-											$benchmark = mysqli_query($cnnSWOP, $get_benchmark);
+											$get_benchmark_sqlsafe = "SELECT * FROM Pool_Benchmarks WHERE Pool_Benchmark_ID='" . $event['Active'] . "'";
+											$benchmark = mysqli_query($cnnSWOP, $get_benchmark_sqlsafe);
 											$bm = mysqli_fetch_array($benchmark);
 											echo "<strong>Benchmark: </strong>". $bm['Benchmark_Name'];
 										} else if ($event['Activity_Type']==2) {
@@ -753,8 +753,8 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 											elseif ($event['Active']==4){?><span class="hide_on_view">Identified as not being part of leadership development</span><?php }
 										} else if ($event['Activity_Type']==3) {
                                                                                     /* then this is an outcome int, and the corresponding name needs to be pulled from its table. */
-											$get_outcome = "SELECT * FROM Outcomes_for_Pool WHERE Outcome_ID='" . $event['Active'] . "'";
-											$outcome = mysqli_query($cnnSWOP, $get_outcome);
+											$get_outcome_sqlsafe = "SELECT * FROM Outcomes_for_Pool WHERE Outcome_ID='" . $event['Active'] . "'";
+											$outcome = mysqli_query($cnnSWOP, $get_outcome_sqlsafe);
 											$oc = mysqli_fetch_array($outcome);
 											echo $oc['Outcome_Name'];
 										} else if ($event['Activity_Type']==4) {
@@ -763,8 +763,8 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 											else if ($event['Active']==0) {echo "Left the Housing Pool";}
 										}else if ($event['Activity_Type']==6) {
                                                                                     /* then this is an institution link, and the name should be pulled and shown: */
-											$get_institution = "SELECT Institution_Name FROM Institutions WHERE Institution_ID='" . $event['Active'] . "'";
-											$institution = mysqli_query($cnnSWOP, $get_institution);
+											$get_institution_sqlsafe = "SELECT Institution_Name FROM Institutions WHERE Institution_ID='" . $event['Active'] . "'";
+											$institution = mysqli_query($cnnSWOP, $get_institution_sqlsafe);
 											$inst = mysqli_fetch_array($institution);
 											echo "New institutional connection: ".$inst['Institution_Name'];
 											if ($event['Member_Type']==1) {echo " (primary connection)";}
@@ -934,9 +934,9 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 								<td><select id="pool_type">
 									<option value="">--Pool Member Type--</option>
 									<?
-                                        $get_types="SELECT * FROM Pool_Member_Types;";
+                                        $get_types_sqlsafe="SELECT * FROM Pool_Member_Types;";
                                         include "../include/dbconnopen.php";
-                                        $all_types=mysqli_query($cnnSWOP, $get_types);
+                                        $all_types=mysqli_query($cnnSWOP, $get_types_sqlsafe);
                                         while ($type=mysqli_fetch_row($all_types)){
                                           ?><option value="<?php echo $type[0];?>" <?php echo($type[1]==$participant->get_type() ? 'selected="selected"' : null);?>><?php echo $type[1];?></option>
                                               <?

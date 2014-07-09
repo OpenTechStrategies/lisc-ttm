@@ -27,9 +27,9 @@ include "../include/dbconnopen.php";
             
     ?>
     <tr><td class="all_projects"><?echo $year;?> - Quarter <?echo $quarter_array[$counter];?></td> 
-        <td class="all_projects"><?
+        <td class="all_projects"><?php
         //gets all the people added up to the end of the given quarter.
-        $get_current_status = "SELECT COUNT(Active) as count  
+        $get_current_status_sqlsafe = "SELECT COUNT(Active) as count  
             FROM Pool_Status_Changes 
             INNER JOIN (
                 SELECT Pool_Status_Changes.Participant_ID,  MAX(Date_Changed) AS maxdate 
@@ -40,13 +40,13 @@ include "../include/dbconnopen.php";
             Date_Changed<='$year-$end_dates_arr[$counter]' 
             GROUP BY Active;";
        // echo $get_current_status;
-       $current_active=mysqli_query($cnnSWOP, $get_current_status);
+       $current_active=mysqli_query($cnnSWOP, $get_current_status_sqlsafe);
        $current=mysqli_fetch_row($current_active);
        echo $current[0];
     ?></td>
         <td class="all_projects"><?
         /* get people added to the pool for the first time in this quarter */
-        $new_members="SELECT COUNT(Pool_Status_Changes.Participant_ID) as num_participants
+        $new_members_sqlsafe="SELECT COUNT(Pool_Status_Changes.Participant_ID) as num_participants
             FROM Pool_Status_Changes 
             INNER JOIN (
                 SELECT Pool_Status_Changes.Participant_ID,  MIN(Date_Changed) AS firstdate 
@@ -56,20 +56,20 @@ include "../include/dbconnopen.php";
             ) ms ON  Pool_Status_Changes.Participant_ID = ms.Participant_ID AND Date_Changed = firstdate
             WHERE Active=1;";
        // echo $new_members;
-        $members=mysqli_query($cnnSWOP, $new_members);
+        $members=mysqli_query($cnnSWOP, $new_members_sqlsafe);
        $member_num=mysqli_fetch_row($members);
        echo $member_num[0];?></td>
         
         <td class="all_projects"><?
         /* get people exited from pool in this quarter. */
-        $all_exits="SELECT COUNT(*) FROM Pool_Outcomes WHERE Date_Exited>='$year-$start' AND Date_Exited<='$year-$end_dates_arr[$counter]';";
-            $exiters=mysqli_query($cnnSWOP, $all_exits);
+        $all_exits_sqlsafe="SELECT COUNT(*) FROM Pool_Outcomes WHERE Date_Exited>='$year-$start' AND Date_Exited<='$year-$end_dates_arr[$counter]';";
+            $exiters=mysqli_query($cnnSWOP, $all_exits_sqlsafe);
        $exits=mysqli_fetch_row($exiters);
        echo $exits[0];?></td>
         
         <td class="all_projects"><?
         /* get people who were deactivated from the pool in this quarter */
-        $deactivated_members="SELECT COUNT(Active) as count  
+        $deactivated_members_sqlsafe="SELECT COUNT(Active) as count  
             FROM Pool_Status_Changes 
             INNER JOIN (
                 SELECT Pool_Status_Changes.Participant_ID,  MAX(Date_Changed) AS maxdate 
@@ -79,12 +79,12 @@ include "../include/dbconnopen.php";
             WHERE Active=0
             AND Date_Changed<='$year-$end_dates_arr[$counter]' AND Date_Changed>='$year-$start' 
             GROUP BY Active;";
-        $deactivees=mysqli_query($cnnSWOP, $deactivated_members);
+        $deactivees=mysqli_query($cnnSWOP, $deactivated_members_sqlsafe);
        $deactivee_num=mysqli_fetch_row($deactivees);
        echo $deactivee_num[0];?></td>
         <td class="all_projects"><?
         /* get people who re-entered the pool this quarter (after deactivation) */
-        $reactivated_rows="SELECT *
+        $reactivated_rows_sqlsafe="SELECT *
         FROM Pool_Status_Changes 
         INNER JOIN (
             SELECT Pool_Status_Changes.Participant_ID, Date_Changed as zerodate
@@ -93,7 +93,7 @@ include "../include/dbconnopen.php";
             GROUP BY Pool_Status_Changes.Participant_ID
         ) ms ON  Pool_Status_Changes.Participant_ID = ms.Participant_ID
         WHERE Active=1 AND Date_Changed>zerodate GROUP BY Pool_Status_Changes.Participant_ID;";
-        $reactivees=mysqli_query($cnnSWOP, $reactivated_rows);
+        $reactivees=mysqli_query($cnnSWOP, $reactivated_rows_sqlsafe);
        $reactivee_num=mysqli_num_rows($reactivees);
        echo $reactivee_num;
         ?></td></tr>
