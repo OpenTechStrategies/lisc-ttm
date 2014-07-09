@@ -9,8 +9,9 @@ Not currently linked on LSNA live site.  Not sure if they want it or not.
     and school for which the results are being reported: -->
     <h4>Parent Mentor Attendance <?if (isset($_POST['month'])){echo ": " . $month_array[$_POST['month']-1] . " " .$_POST['year'];
     if ($_POST['school'] !=''){
-        $get_school_name="SELECT Institution_Name FROM Institutions WHERE Institution_ID='".$_POST['school']."'";
         include "../include/dbconnopen.php";
+        $school_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['school']);
+        $get_school_name="SELECT Institution_Name FROM Institutions WHERE Institution_ID='".$school_sqlsafe."'";
             $roles = mysqli_query($cnnLSNA, $get_school_name);
             while ($school = mysqli_fetch_row($roles)) {
                    echo ": " .$school[0];

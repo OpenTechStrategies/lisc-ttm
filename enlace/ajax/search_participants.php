@@ -3,9 +3,10 @@
  * First determine if the user is an admin. Usually this will be a program ID number,
  * but sometimes it will be 'a' (all) or 'n' (none).
  */
+$user_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_COOKIE['user']);
 $get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = " . stripslashes($_COOKIE['user']) . "";
-//echo $get_program_access;
+    WHERE User_Email = " . $user_sqlsafe . "";
+echo $get_program_access;
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 $program_access = mysqli_query($cnnLISC, $get_program_access);
 $prog_access = mysqli_fetch_row($program_access);
@@ -15,48 +16,57 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
 
 /* search from the participants homepage. */
 /* if a search term is filled in, then it is included in the query.  otherwise it isn't. */
+include "../include/dbconnopen.php";
 if ($_POST['first'] == '') {
     $first = '';
 } else {
-    $first = ' AND First_Name LIKE "%' . $_POST['first'] . '%" ';
+    $first_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['first']);
+    $first = ' AND First_Name LIKE "%' . $first_sqlsafe . '%" ';
 }
 if ($_POST['last'] == '') {
     $last = '';
 } else {
-    $last = " AND Last_Name LIKE '%" . $_POST['last'] . "%' ";
+    $last_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['last']);
+    $last = " AND Last_Name LIKE '%" . $last_sqlsafe . "%' ";
 }
 if ($_POST['dob'] == '') {
     $dob = '';
 } else {
-    $dob = " AND DOB='" . $_POST['dob'] . "' ";
+    $dob_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['dob']);
+    $dob = " AND DOB='" . $dob_sqlsafe . "' ";
 }
 if ($_POST['gender'] == '') {
     $gender = '';
 } else {
-    $gender = " AND Gender='" . $_POST['gender'] . "' ";
+    $gender_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['gender']);
+    $gender = " AND Gender='" . $gender_sqlsafe . "' ";
 }
 if ($_POST['role'] == '') {
     $role = '';
 } else {
-    $role = " AND Role='" . $_POST['role'] . "' ";
+    $role_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['role']);
+    $role = " AND Role='" . $role_sqlsafe . "' ";
 }
 if ($_POST['grade'] == '') {
     $grade = '';
 } else {
-    $grade = " AND Grade='" . $_POST['grade'] . "' ";
+    $grade_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['grade']);
+    $grade = " AND Grade='" . $grade_sqlsafe . "' ";
 }
 if ($_POST['program'] == 0) {
     $program = '';
     $program_join = '';
 } else {
+    $program_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['program']);
     $program_join = " INNER JOIN Participants_Programs ON Participants_Programs.Participant_ID=
     Participants.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_ID ";
-    $program = " AND Session_Names.Program_ID='" . $_POST['program'] . "' ";
+    $program = " AND Session_Names.Program_ID='" . $program_sqlsafe . "' ";
 }
 if ($_POST['id'] == '') {
     $id = '';
 } else {
-    $id = " AND Participants.Participant_ID='" . $_POST['id'] . "' ";
+    $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['id']);
+    $id = " AND Participants.Participant_ID='" . $id_sqlsafe . "' ";
 }
 
 if (!isset($_POST['order'])) {
@@ -74,7 +84,6 @@ $uncertain_search_query = "SELECT * FROM Participants " . $program_join
         . $role . $grade . $id . $program . " ORDER BY " . $order;
 //echo $uncertain_search_query;
 
-include "../include/dbconnopen.php";
 $results = mysqli_query($cnnEnlace, $uncertain_search_query);
 
 /* show results as dropdown. */

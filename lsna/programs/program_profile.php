@@ -565,9 +565,10 @@ include "../header.php";
                             $agree_array = array();
                             $somewhat_array = array();
                             $disagree_array = array();
+                            $program_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_COOKIE['program']);
                             for ($j = 1; $j < 12; $j++) {
                                 /* get responses to each question.  the for loop goes through all the question columns. */
-                                $count_query = "SELECT COUNT(*), Question_" . $j . " FROM Satisfaction_Surveys WHERE Program_ID='" . $_COOKIE['program'] . "' 
+                                $count_query = "SELECT COUNT(*), Question_" . $j . " FROM Satisfaction_Surveys WHERE Program_ID='" . $program_sqlsafe . "' 
         GROUP BY Question_" . $j . ";";
                                 include "../include/dbconnopen.php";
                                 $count_for_arrays = mysqli_query($cnnLSNA, $count_query);

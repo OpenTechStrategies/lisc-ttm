@@ -2,61 +2,61 @@
 /* search properties.  This is the search backend for the properties home page, not for the query search.
  * Same idea, but fewer moving parts. */
 //print_r($_POST);
+include "../include/dbconnopen.php";
 if ($_POST['name'] == '') {
-    $name = '';
+    $name_sqlsafe = '';
 } else {
-    $name = ' AND ((Address_Street_Name LIKE "%' . $_POST['name'] . '%" OR'
-            . ' Address_Street_Num LIKE "%' . $_POST['name'] . '%" OR'
-            . ' Address_Street_Direction LIKE "%' . $_POST['name'] . '%" OR'
-            . ' Address_Street_Type LIKE "%' . $_POST['name'] . '%") OR'
+    $name_sqlsafe = ' AND ((Address_Street_Name LIKE "%' . mysqli_real_escape_string($cnnSWOP, $_POST['name']) . '%" OR'
+            . ' Address_Street_Num LIKE "%' . mysqli_real_escape_string($cnnSWOP, $_POST['name']) . '%" OR'
+            . ' Address_Street_Direction LIKE "%' . mysqli_real_escape_string($cnnSWOP, $_POST['name']) . '%" OR'
+            . ' Address_Street_Type LIKE "%' . mysqli_real_escape_string($cnnSWOP, $_POST['name']) . '%") OR'
             . ' CONCAT(Address_Street_Num, " ", Address_Street_Direction, " ",'
             . ' Address_Street_Name, " ",'
-            . ' Address_Street_Type) LIKE "%' . $_POST['name'] . '%")';
+            . ' Address_Street_Type) LIKE "%' . mysqli_real_escape_string($cnnSWOP, $_POST['name']) . '%")';
 };
 if ($_POST['pin'] == '') {
-    $pin = '';
+    $pin_sqlsafe = '';
 } else {
-    $pin = " AND PIN LIKE '%" . $_POST['pin'] . "%'";
+    $pin_sqlsafe = " AND PIN LIKE '%" . mysqli_real_escape_string($cnnSWOP, $_POST['pin']) . "%'";
 }
 if ($_POST['vacant'] == 1) {
-    $vacant = " AND Property_Progress.Marker=8 AND Addtl_Info_1='Vacant'
+    $vacant_sqlsafe = " AND Property_Progress.Marker=8 AND Addtl_Info_1='Vacant'
         ";
-    $vacant_join = " INNER JOIN Property_Progress ON Properties.Property_Id=Property_Progress.Property_ID 
+    $vacant_join_sqlsafe = " INNER JOIN Property_Progress ON Properties.Property_Id=Property_Progress.Property_ID 
 INNER JOIN ( SELECT Property_ID as prop_id, Marker, MAX(Date_Added) as latest_date 
 FROM Property_Progress WHERE Marker=8 GROUP BY Property_Progress.Property_ID) vacant_progress 
 ON Property_Progress.Date_Added = vacant_progress.latest_date ";
 } elseif ($_POST['vacant'] == 2) {
-    $vacant = " AND Property_Progress.Marker=8 AND Addtl_Info_1='Not vacant'";
-    $vacant_join = " INNER JOIN Property_Progress ON Properties.Property_Id=Property_Progress.Property_ID 
+    $vacant_sqlsafe = " AND Property_Progress.Marker=8 AND Addtl_Info_1='Not vacant'";
+    $vacant_join_sqlsafe = " INNER JOIN Property_Progress ON Properties.Property_Id=Property_Progress.Property_ID 
 INNER JOIN ( SELECT Property_ID as prop_id, Marker, MAX(Date_Added) as latest_date 
 FROM Property_Progress WHERE Marker=8 GROUP BY Property_Progress.Property_ID) vacant_progress 
 ON Property_Progress.Date_Added = vacant_progress.latest_date ";
 } else {
-    $vacant = "";
-    $vacant_join = "";
+    $vacant_sqlsafe = "";
+    $vacant_join_sqlsafe = "";
 }
 if ($_POST['acquired'] == '') {
-    $acquired = '';
+    $acquired_sqlsafe = '';
 } else {
-    $acquired = " AND Is_Acquired='" . $_POST['acquired'] . "'";
+    $acquired_sqlsafe = " AND Is_Acquired='" . mysqli_real_escape_string($cnnSWOP, $_POST['acquired']) . "'";
 }
 if ($_POST['rehabbed'] == '') {
-    $rehabbed = '';
+    $rehabbed_sqlsafe = '';
 } else {
-    $rehabbed = " AND Is_Rehabbed='" . $_POST['rehabbed'] . "'";
+    $rehabbed_sqlsafe = " AND Is_Rehabbed='" . mysqli_real_escape_string($cnnSWOP, $_POST['rehabbed']) . "'";
 }
 if ($_POST['disposition'] == '') {
-    $disposition = '';
+    $disposition_sqlsafe = '';
 } else {
-    $disposition = " AND Disposition='" . $_POST['disposition'] . "'";
+    $disposition_sqlsafe = " AND Disposition='" . mysqli_real_escape_string($cnnSWOP, $_POST['disposition']) . "'";
 }
 
-$uncertain_search_query = "SELECT * FROM Properties " . $vacant_join . " WHERE Properties.Property_ID!='' " . $name . $pin . $vacant .
-        $acquired . $rehabbed . $disposition . " GROUP BY Properties.Property_ID ORDER BY Address_Street_Name, Address_Street_Direction, Address_Street_Num";
+$uncertain_search_query_sqlsafe = "SELECT * FROM Properties " . $vacant_join_sqlsafe . " WHERE Properties.Property_ID!='' " . $name_sqlsafe . $pin_sqlsafe . $vacant_sqlsafe .
+        $acquired_sqlsafe . $rehabbed_sqlsafe . $disposition_sqlsafe . " GROUP BY Properties.Property_ID ORDER BY Address_Street_Name, Address_Street_Direction, Address_Street_Num";
 //echo $uncertain_search_query;
 
-include "../include/dbconnopen.php";
-$results = mysqli_query($cnnSWOP, $uncertain_search_query);
+$results = mysqli_query($cnnSWOP, $uncertain_search_query_sqlsafe);
 if ($_POST['dropdown'] == 1) {
     ?>
     <select id="choose_property">

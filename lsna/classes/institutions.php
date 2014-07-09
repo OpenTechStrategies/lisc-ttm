@@ -13,9 +13,10 @@ class Institution {
          * @return array of basic institutional info
          */
 	public function load_with_institution_id($institution_id) {
-		$this->institution_id = $institution_id;
-		
 		include "../include/dbconnopen.php";
+                $institution_id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $institution_id);
+		$this->institution_id = $institution_id_sqlsafe;
+		
                 //$inst_query = "Call Institution__Load_With_ID('" . $this->institution_id . "')";
                 $inst_query = "SELECT * FROM Institutions WHERE Institution_ID='" . $this->institution_id . "'";
 		$institution_info = mysqli_query($cnnLSNA, $inst_query);

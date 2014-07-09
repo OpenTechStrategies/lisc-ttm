@@ -49,20 +49,22 @@
 
     <?php
     /* if results are sorted: */
+    include "../include/dbconnopen.php";
+    $pre_post_year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['pre_post_year']);
+    $pre_post_school_post_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['pre_post_school_post']);
     if (isset($_POST['pre_post_year']) && $_POST['pre_post_year'] != '') {
-        $year_post = " AND ((YEAR(Date)='" . $_POST['pre_post_year'] . "' AND MONTH(Date)>6 AND MONTH(Date)<=12) OR (YEAR(Date)='" .($_POST['pre_post_year']+1)."' AND MONTH(Date)<=6 ))";
+        $year_post = " AND ((YEAR(Date)='" . $pre_post_year_sqlsafe . "' AND MONTH(Date)>6 AND MONTH(Date)<=12) OR (YEAR(Date)='" .($pre_post_year_sqlsafe+1)."' AND MONTH(Date)<=6 ))";
     } else {
         $year_post = "";
     }
     if (isset($_POST['pre_post_school_post']) && $_POST['pre_post_school_post'] != '') {
-        $school_post = " AND Parent_Mentor_Survey.School='" . $_POST['pre_post_school_post'] . "' ";
+        $school_post = " AND Parent_Mentor_Survey.School='" . $pre_post_school_post_sqlsafe . "' ";
     } else {
         $school_post = "";
     }
 
     /* create arrays with only the questions from the surveys.  This is much less useful now that only 
      * a few questions are shown in this report. */
-    include "../include/dbconnopen.php";
     $get_pre_averages = "SELECT DISTINCT Parent_Mentor_Survey.Parent_Mentor_Survey_ID,
 		Parent_Mentor_Survey.Participant_ID,
 		Parent_Mentor_Survey.School,

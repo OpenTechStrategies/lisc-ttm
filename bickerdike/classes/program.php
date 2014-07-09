@@ -26,11 +26,13 @@ class Program
      */
     public function load_with_program_id($program_id)
     {
-        //set program_id
-        $this->program_id = $program_id;
-
         //open DB
         include "../include/dbconnopen.php";
+        $program_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $program_id);
+        //set program_id
+        $this->program_id = $program_id_sqlsafe;
+
+        
         //echo "Call Program__Load_With_ID('" . $this->program_id . "')";
         $program_info = mysqli_query($cnnBickerdike, "SELECT * FROM Programs WHERE Program_ID='" . $this->program_id . "'");
         

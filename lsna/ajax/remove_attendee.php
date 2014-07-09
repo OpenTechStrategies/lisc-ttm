@@ -1,12 +1,14 @@
 <?php
 /* delete attendance from program or campaign. */
+include "../include/dbconnopen.php";
+$program_date_id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['program_date_id']);
+$user_id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['user_id']);
 
 $remove_attendee_from_date = "DELETE FROM Subcategory_Attendance WHERE
-                            Subcategory_Date='". $_POST['program_date_id']."'
+                            Subcategory_Date='". $program_date_id_sqlsafe."'
                                 AND
-                            Participant_ID='". $_POST['user_id']."'";
+                            Participant_ID='". $user_id_sqlsafe."'";
 echo $remove_attendee_from_date;
-include "../include/dbconnopen.php";
 mysqli_query($cnnLSNA, $remove_attendee_from_date);
 include "../include/dbconnclose.php";
 

@@ -37,6 +37,19 @@ $this_address=$_POST['address_number'] . " " .$_POST['address_direction'] . " " 
         /*
          * Taking the calculations above, insert this information into the Users table.
          */
+include "../include/dbconnopen.php";
+$first_name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['first_name']);
+$last_name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['last_name']);
+$zip_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['zip']);
+$gender_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['gender']);
+$age_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['age']);
+$race_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['race']);
+$address_street_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['address_street']);
+$address_number_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['address_number']);
+$address_direction_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['address_direction']);
+$address_street_type_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['address_street_type']);
+$email_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['email']);
+$phone_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['phone']);
         
 $create_new_user_query = "INSERT INTO Users (
                            First_Name,
@@ -56,26 +69,25 @@ $create_new_user_query = "INSERT INTO Users (
                     Child,
                     Phone
                     ) VALUES (
-                    '" . $_POST['first_name'] . "',
-                    '" . $_POST['last_name'] . "',
-                    '" . $_POST['zip'] . "',
-                    '" . $_POST['gender'] . "',
-                    '" . $_POST['age'] . "',
-                    '" . $_POST['race'] . "',
-                    '" . $_POST['address_street'] . "',
-                    '" . $_POST['address_number'] . "',
-					'" . $_POST['address_direction'] . "',
-					'" . $_POST['address_street_type'] . "',
+                    '" . $first_name_sqlsafe . "',
+                    '" . $last_name_sqlsafe . "',
+                    '" . $zip_sqlsafe . "',
+                    '" . $gender_sqlsafe . "',
+                    '" . $age_sqlsafe . "',
+                    '" . $race_sqlsafe . "',
+                    '" . $address_street_sqlsafe . "',
+                    '" . $address_number_sqlsafe . "',
+					'" . $address_direction_sqlsafe . "',
+					'" . $address_street_type_sqlsafe . "',
                                         '$block_group',
-					'" . $_POST['email'] . "',
+					'" . $email_sqlsafe . "',
 					
                     '$adult',
                     '$parent',
                     '$child',
-        '" . $_POST['phone'] . "'
+        '" . $phone_sqlsafe . "'
         )";
 //echo $create_new_user_query;
-include "../include/dbconnopen.php";
 mysqli_query($cnnBickerdike, $create_new_user_query);
 $user_id = mysqli_insert_id($cnnBickerdike);
 include "../include/dbconnclose.php";

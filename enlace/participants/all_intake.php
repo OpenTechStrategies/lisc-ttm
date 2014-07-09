@@ -12,6 +12,9 @@ include "../header.php";
 //get participant info
 include "../classes/participant.php";
 
+include "../include/dbconnopen.php";
+$id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['id']);
+$person_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['person']);
 /* if the assessment is not new, then Get['id'] exists, and this query returns the entered responses. */
 $get_assessment_info = "SELECT * FROM Assessments 
             LEFT JOIN Participants_Caring_Adults ON Caring_Id=Caring_Adults_ID
@@ -19,9 +22,8 @@ $get_assessment_info = "SELECT * FROM Assessments
             LEFT JOIN Participants_Interpersonal_Violence ON Violence_Id=Interpersonal_Violence_ID
             LEFT JOIN Participants_Baseline_Assessments ON Baseline_Id=Baseline_Assessment_ID
             LEFT JOIN Programs ON Participants_Future_Expectations.Program=Programs.Program_ID
-            WHERE Assessment_ID = '" . $_GET['id'] . "'";
+            WHERE Assessment_ID = '" . $id_sqlsafe . "'";
 //  echo $get_assessment_info;
-include "../include/dbconnopen.php";
 $get_assessment = mysqli_query($cnnEnlace, $get_assessment_info);
 $assessment_info = mysqli_fetch_array($get_assessment);
 $caring_id = $assessment_info['Caring_ID'];
@@ -36,7 +38,7 @@ $person->load_with_participant_id($assessment_info[1]);
 /* if it IS a new assessment, then we get the person from the get[person]: */
 if (!isset($_GET['id'])) {
     $person = new Participant();
-    $person->load_with_participant_id($_GET['person']);
+    $person->load_with_participant_id($person_sqlsafe);
 }
 
 /* create a dropdown of the programs/sessions that the person is involved in. */

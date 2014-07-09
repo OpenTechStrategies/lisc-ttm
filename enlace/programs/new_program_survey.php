@@ -7,6 +7,8 @@ include "../header.php";
 include "../classes/program.php";
 $survey_program=new Program();
 $survey_program->load_with_program_id($_GET['prog']);
+include "../include/dbconnopen.php";
+$prog_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['prog']);
 ?>
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -47,7 +49,7 @@ $survey_program->load_with_program_id($_GET['prog']);
     <span class="helptext">Please choose the session for which this survey was filled out:</span>
     <select id="surveyed_session"><option value="">-----</option>
                                                     <?//get sessions
-                                                    $related_sessions="SELECT * FROM Session_Names WHERE Program_ID='".$_GET['prog']."'";
+                                                    $related_sessions="SELECT * FROM Session_Names WHERE Program_ID='".$prog_sqlsafe."'";
                                                     include "../include/dbconnopen.php";
                                                     $sessions=mysqli_query($cnnEnlace, $related_sessions);
                                                     while ($sess=mysqli_fetch_row($sessions)){
@@ -178,7 +180,7 @@ $survey_program->load_with_program_id($_GET['prog']);
                                $.post(
                                 '../ajax/save_progsurv.php',
                                 {
-                                    program: '<?echo $_GET['prog']?>',
+                                    program: '<?echo $prog_sqlsafe?>',
                                     1: document.getElementById('progsurv_1').value,
                                     2: document.getElementById('progsurv_2').value,
                                     3: document.getElementById('progsurv_3').value,

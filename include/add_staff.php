@@ -253,11 +253,11 @@ Add a new user to the system.
 			<option>-----</option>
   		  <?
                   /*List of users at this site.*/
-                  
- 		   $staff_list_query = "SELECT * FROM Users LEFT JOIN Users_Privileges ON 
- 		       (Users_Privileges.User_ID=Users.User_ID) WHERE Users_Privileges.Privilege_ID='" . $_COOKIE['sites'][0] . "'";
-  		  //echo $staff_list_query;
  		   include "../include/dbconnopen.php";
+                   $site_cookie_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['sites'][0]);
+ 		   $staff_list_query = "SELECT * FROM Users LEFT JOIN Users_Privileges ON 
+ 		       (Users_Privileges.User_ID=Users.User_ID) WHERE Users_Privileges.Privilege_ID='" . $site_cookie_sqlsafe . "'";
+  		  //echo $staff_list_query;
  		   $staff_list = mysqli_query($cnnLISC, $staff_list_query);
  		   print_r($staff_list);
  		   while ($staff=mysqli_fetch_array($staff_list)){

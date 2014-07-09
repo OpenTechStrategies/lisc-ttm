@@ -6,7 +6,8 @@ if(isset($_GET['id']))
 
 include ("../include/dbconnopen.php");
 $id=$_GET['id'];
-$query = "SELECT Note_File_Name, Note_File_Type, Note_File_Size, Note_File_Content FROM Campaigns_Events WHERE Campaign_Event_ID = '$id'";
+$id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $id);
+$query = "SELECT Note_File_Name, Note_File_Type, Note_File_Size, Note_File_Content FROM Campaigns_Events WHERE Campaign_Event_ID = '$id_sqlsafe'";
 
 $result = mysqli_query($cnnEnlace, $query) or die('Error, query failed');
 list($name, $type, $size, $content)= mysqli_fetch_array($result);

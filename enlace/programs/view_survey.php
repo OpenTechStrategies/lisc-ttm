@@ -6,10 +6,11 @@ include "../../header.php";
 include "../header.php";
 include "../classes/program.php";
 
-$get_survey_info="SELECT * FROM Program_Surveys INNER JOIN Programs ON Programs.Program_ID=Program_Surveys.Program_ID
-    WHERE Program_Survey_ID='".$_GET['surv']."'";
-//echo $get_survey_info;
 include "../include/dbconnopen.php";
+$surv_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['surv']);
+$get_survey_info="SELECT * FROM Program_Surveys INNER JOIN Programs ON Programs.Program_ID=Program_Surveys.Program_ID
+    WHERE Program_Survey_ID='".$surv_sqlsafe."'";
+//echo $get_survey_info;
 $survey_info=mysqli_query($cnnEnlace, $get_survey_info);
 $this_survey=mysqli_fetch_row($survey_info);
     include "../include/dbconnclose.php";
