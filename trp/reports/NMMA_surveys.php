@@ -73,11 +73,11 @@ include "report_menu.php";
             $date_reformat = explode('-', $_POST['end_date']);
             $end_date = $date_reformat[2] . '-' . $date_reformat[0] . '-' . $date_reformat[1];
 
-            $call_for_arrays = "CALL Survey__Cultural_Identity('" . $question . "', '" . $start_date . "', '" . $end_date . "', 'pre')";
+            $call_for_arrays_sqlsafe = "CALL Survey__Cultural_Identity('" . $question . "', '" . mysqli_real_escape_string($start_date) . "', '" . mysqli_real_escape_string($end_date) . "', 'pre')";
 
             //echo $call_for_arrays;
             include "../include/dbconnopen.php";
-            $questions = mysqli_query($cnnTRP, $call_for_arrays);
+            $questions = mysqli_query($cnnTRP, $call_for_arrays_sqlsafe);
             ?><td class="all_projects" style="text-align:left;"><?php
             $num_options = mysqli_num_rows($questions);
             $avg_numer = 0;
@@ -138,11 +138,11 @@ include "report_menu.php";
                 $date_reformat = explode('-', $_POST['end_date']);
                 $end_date = $date_reformat[2] . '-' . $date_reformat[0] . '-' . $date_reformat[1];
 
-                $call_for_arrays = "CALL Survey__Cultural_Identity('" . $question . "', '" . $start_date . "', '" . $end_date . "', 'post')";
+                $call_for_arrays_sqlsafe = "CALL Survey__Cultural_Identity('" . $question . "', '" . mysqli_real_escape_string($start_date) . "', '" . mysqli_real_escape_string($end_date) . "', 'post')";
 
                 //echo $call_for_arrays;
                 include "../include/dbconnopen.php";
-                $questions = mysqli_query($cnnTRP, $call_for_arrays);
+                $questions = mysqli_query($cnnTRP, $call_for_arrays_sqlsafe);
                 ?><?php
                 $num_options = mysqli_num_rows($questions);
                 $avg_numer = 0;

@@ -4,12 +4,12 @@ include "../header.php";
 include "../include/datepicker_simple.php";
 /* the identity variable determines which of the NMMA surveys shows up: */
 if ($_GET['type'] == 'identity') {
-    $query = "SELECT * FROM NMMA_Identity_Survey WHERE NMMA_Identity_Survey_ID='" . $_GET['id'] . "'";
+    $query_sqlsafe = "SELECT * FROM NMMA_Identity_Survey WHERE NMMA_Identity_Survey_ID='" . mysqli_real_escape_string($_GET['id']) . "'";
 } elseif ($_GET['type'] == 'traditions') {
-    $query = "SELECT * FROM NMMA_Traditions_Survey WHERE NMMA_Traditions_Survey_ID='" . $_GET['id'] . "'";
+    $query_sqlsafe = "SELECT * FROM NMMA_Traditions_Survey WHERE NMMA_Traditions_Survey_ID='" . mysqli_real_escape_string($_GET['id']) . "'";
 }
 include "../include/dbconnopen.php";
-$get_info = mysqli_query($cnnTRP, $query);
+$get_info = mysqli_query($cnnTRP, $query_sqlsafe);
 $info = mysqli_fetch_array($get_info);
 //print_r($info);
 include "../include/dbconnclose.php";
@@ -24,9 +24,9 @@ include "../include/dbconnclose.php";
 <div class="content_block" id="nmma_survey">
     <h3>NMMA Artist-in-Residency Survey - <?php
         /* shows the person who took this survey: */
-        $get_name = "SELECT First_Name, Last_Name FROM Participants WHERE Participant_ID='" . $_GET['participant'] . "'";
+        $get_name_sqlsafe = "SELECT First_Name, Last_Name FROM Participants WHERE Participant_ID='" . mysqli_real_escape_string($_GET['participant']) . "'";
         include "../include/dbconnopen.php";
-        $name = mysqli_query($cnnTRP, $get_name);
+        $name = mysqli_query($cnnTRP, $get_name_sqlsafe);
         $n = mysqli_fetch_row($name);
         echo $n[0] . " " . $n[1];
         include "../include/dbconnclose.php";
