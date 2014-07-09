@@ -168,7 +168,7 @@ if (!isset($_POST['posted'])) {
                     }
 
                     //finally, put them together in the Events_Participants table
-                    $add_attendee = "INSERT INTO Events_Participants (Event_ID, PArticipant_ID) VALUES ($event_id, $person_id)";
+                    $add_attendee = "INSERT INTO Events_Participants (Event_ID, Participant_ID) VALUES ($event_id, $person_id)";
                     mysqli_query($cnnTRP, $add_attendee);
 
                     include "../include/dbconnclose.php";

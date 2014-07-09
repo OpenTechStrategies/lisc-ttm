@@ -384,7 +384,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             <?php
             $infile = "export_container/deid_impact_" . date('m_d_Y') . ".csv";
             $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Assessment ID", "PArticipant ID", "Pre or Post", "Date Logged");
+            $title_array = array("Assessment ID", "Participant ID", "Pre or Post", "Date Logged");
             $get_questions = "SELECT Question FROM Baseline_Assessment_Questions WHERE In_Table!='Participants_Baseline_Assessments' ORDER BY In_Table";
             include "../include/dbconnopen.php";
             $all_questions = mysqli_query($cnnEnlace, $get_questions);
