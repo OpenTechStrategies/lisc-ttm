@@ -16,44 +16,44 @@ $sale_date = $reformat[2] . "-" . $reformat[0] . "-" . $reformat[1];
 $reformat = explode('/', $_POST['possession_date']);
 $possession_date = $reformat[2] . "-" . $reformat[0] . "-" . $reformat[1];
 
-$save_rehab_steps="INSERT INTO Property_Rehab_Progress (Property_ID, Interest_Date, Interest_Reason,
+include "../include/dbconnopen.php";
+$save_rehab_steps_sqlsafe="INSERT INTO Property_Rehab_Progress (Property_ID, Interest_Date, Interest_Reason,
     Acquisition_Date, Acquisition_Cost, Construction_Date, Construction_Cost, Occupancy_Date, For_Sale_Date,
     Num_Contacts, Sold_Date, Sale_Price, Purchaser, Days_on_Market, Subsidy_Amount, Possession_Date) VALUES 
-    ('". $_POST['property_id'] . "',
-    '". $interest_date . "',
-    '". $_POST['interest_reason'] . "',
-    '". $acquisition_date . "',
-    '". $_POST['acquisition_cost'] . "',
-    '". $construction_date . "',
-    '". $_POST['construction_cost'] . "',
-    '". $occupancy_date . "',
-    '". $listed_date . "',
-    '". $_POST['contacts_num'] . "',
-    '". $sale_date . "',
-    '". $_POST['sale_price'] . "',
-    '". $_POST['purchaser'] . "',
-    '". $_POST['sale_days'] . "',
-    '". $_POST['subsidy_amount'] . "',
-    '". $possession_date . "')
+    ('" . mysqli_real_escape_string($cnnSWOP, $_POST['property_id']) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $interest_date) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $_POST['interest_reason']) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $acquisition_date) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $_POST['acquisition_cost']) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $construction_date) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $_POST['construction_cost']) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $occupancy_date) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $listed_date) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $_POST['contacts_num']) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $sale_date) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $_POST['sale_price']) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $_POST['purchaser']) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $_POST['sale_days']) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $_POST['subsidy_amount']) . "',
+    '" . mysqli_real_escape_string($cnnSWOP, $possession_date) . "')
     ON DUPLICATE KEY UPDATE 
-    Interest_Date='". $interest_date . "',
-    Interest_Reason='". $_POST['interest_reason'] . "',
-    Acquisition_Date='". $acquisition_date . "',
-    Acquisition_Cost='". $_POST['acquisition_cost'] . "',
-    Construction_Date='". $construction_date . "',
-    Construction_Cost='". $_POST['construction_cost'] . "',
-    Occupancy_Date='". $occupancy_date . "',
-    For_Sale_Date='". $listed_date . "',
-    Num_Contacts='". $_POST['contacts_num'] . "',
-    Sold_Date='". $sale_date . "',
-    Sale_Price='". $_POST['sale_price'] . "',
-    Purchaser='". $_POST['purchaser'] . "',
-    Days_on_Market='". $_POST['sale_days'] . "',
-    Subsidy_Amount='". $_POST['subsidy_amount'] . "',
-    Possession_Date='". $possession_date . "'";
+    Interest_Date='" . mysqli_real_escape_string($cnnSWOP, $interest_date) . "',
+    Interest_Reason='" . mysqli_real_escape_string($cnnSWOP, $_POST['interest_reason']) . "',
+    Acquisition_Date='" . mysqli_real_escape_string($cnnSWOP, $acquisition_date) . "',
+    Acquisition_Cost='" . mysqli_real_escape_string($cnnSWOP, $_POST['acquisition_cost']) . "',
+    Construction_Date='" . mysqli_real_escape_string($cnnSWOP, $construction_date) . "',
+    Construction_Cost='" . mysqli_real_escape_string($cnnSWOP, $_POST['construction_cost']) . "',
+    Occupancy_Date='" . mysqli_real_escape_string($cnnSWOP, $occupancy_date) . "',
+    For_Sale_Date='" . mysqli_real_escape_string($cnnSWOP, $listed_date) . "',
+    Num_Contacts='" . mysqli_real_escape_string($cnnSWOP, $_POST['contacts_num']) . "',
+    Sold_Date='" . mysqli_real_escape_string($cnnSWOP, $sale_date) . "',
+    Sale_Price='" . mysqli_real_escape_string($cnnSWOP, $_POST['sale_price']) . "',
+    Purchaser='" . mysqli_real_escape_string($cnnSWOP, $_POST['purchaser']) . "',
+    Days_on_Market='" . mysqli_real_escape_string($cnnSWOP, $_POST['sale_days']) . "',
+    Subsidy_Amount='" . mysqli_real_escape_string($cnnSWOP, $_POST['subsidy_amount']) . "',
+    Possession_Date='" . mysqli_real_escape_string($cnnSWOP, $possession_date ). "'";
 echo $save_rehab_steps;
-include "../include/dbconnopen.php";
-mysqli_query($cnnSWOP, $save_rehab_steps);
+mysqli_query($cnnSWOP, $save_rehab_steps_sqlsafe);
 include "../include/dbconnclose.php";
 
 

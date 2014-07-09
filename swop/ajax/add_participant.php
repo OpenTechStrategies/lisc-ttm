@@ -1,51 +1,51 @@
 <?php
 if ($_POST['action'] == 'add_to_pool') {
     /* add an existing person to the housing pool */
-    $is_in_pool = "SELECT * FROM Participants_Pool WHERE Participant_ID=" . $_POST['person'];
-    //echo $is_in_pool;
     include "../include/dbconnopen.php";
-    $in_pool = mysqli_query($cnnSWOP, $is_in_pool);
+    $is_in_pool_sqlsafe = "SELECT * FROM Participants_Pool WHERE Participant_ID=" . mysqli_real_escape_string($cnnSWOP, $_POST['person']);
+    //echo $is_in_pool;
+    $in_pool = mysqli_query($cnnSWOP, $is_in_pool_sqlsafe);
     include "../include/dbconnclose.php";
     $pool = mysqli_num_rows($in_pool);
     if ($pool > 0) {
         /* in this case, they're already in the housing pool.  their member type may have changed. */
-        $new_pool = "UPDATE Participants_Pool SET Active=1 WHERE Participant_ID='" . $_POST['person'] . "'";
-        $new_pool = "INSERT INTO Pool_Status_Changes (Active, Participant_ID, Activity_Type, Member_Type) VALUES (1, '" . $_POST['person'] . "', 4, '" . $_POST['member_type'] . "')";
+        include "../include/dbconnopen.php";
+        $new_pool_sqlsafe = "UPDATE Participants_Pool SET Active=1 WHERE Participant_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['person']) . "'";
+        $new_pool_sqlsafe = "INSERT INTO Pool_Status_Changes (Active, Participant_ID, Activity_Type, Member_Type) VALUES (1, '" . mysqli_real_escape_string($cnnSWOP, $_POST['person']) . "', 4, '" . mysqli_real_escape_string($cnnSWOP, $_POST['member_type']) . "')";
         //echo $new_pool;
         date_default_timezone_set('America/Chicago');
         $expected_date_make = mktime(0, 0, 0, date('m'), date('d') + 30, date('Y'));
         $show_expected_date = date('Y-m-d', $expected_date_make);
         /* add the "added to the pool" to the activity history */
-        $add_first_benchmark = "INSERT INTO Pool_Progress (Participant_ID, Benchmark_Completed, Date_Completed, Activity_Type, Expected_Date) VALUES 
-            ('" . $_POST['person'] . "', (SELECT Pool_Benchmark_Id FROM Pool_Benchmarks WHERE 
-                    Pipeline_Type=(SELECT Pipeline FROM Pool_Member_Types WHERE Type_ID='" . $_POST['member_type'] . "') AND Step_Number=1), '0000-00-00',
-                    1, '" . $show_expected_date . "')";
-        echo $add_first_benchmark;
-        include "../include/dbconnopen.php";
-        mysqli_query($cnnSWOP, $new_pool);
+        $add_first_benchmark_sqlsafe = "INSERT INTO Pool_Progress (Participant_ID, Benchmark_Completed, Date_Completed, Activity_Type, Expected_Date) VALUES 
+            ('" . mysqli_real_escape_string($cnnSWOP, $_POST['person']) . "', (SELECT Pool_Benchmark_Id FROM Pool_Benchmarks WHERE 
+                    Pipeline_Type=(SELECT Pipeline FROM Pool_Member_Types WHERE Type_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['member_type']) . "') AND Step_Number=1), '0000-00-00',
+                    1, '" . mysqli_real_escape_string($cnnSWOP, $show_expected_date) . "')";
+        echo $add_first_benchmark_sqlsafe;
+        mysqli_query($cnnSWOP, $new_pool_sqlsafe);
         $id = mysqli_insert_id($cnnSWOP);
-        mysqli_query($cnnSWOP, $add_first_benchmark);
+        mysqli_query($cnnSWOP, $add_first_benchmark_sqlsafe);
         include "../include/dbconnclose.php";
     } else {
         /* in this case, the person hasn't been in the pool:  */
-        $new_pool = "INSERT INTO Participants_Pool (Participant_ID)
-            VALUES ('" . $_POST['person'] . "')";
-        $new_pool_status = "INSERT INTO Pool_Status_Changes (Active, Participant_ID, Activity_Type, Member_Type) VALUES (1, '" . $_POST['person'] . "', 4, '" . $_POST['member_type'] . "')";
+        include "../include/dbconnopen.php";
+        $new_pool_sqlsafe = "INSERT INTO Participants_Pool (Participant_ID)
+            VALUES ('" . mysqli_real_escape_string($cnnSWOP, $_POST['person']) . "')";
+        $new_pool_status_sqlsafe = "INSERT INTO Pool_Status_Changes (Active, Participant_ID, Activity_Type, Member_Type) VALUES (1, '" . mysqli_real_escape_string($cnnSWOP, $_POST['person']) . "', 4, '" . mysqli_real_escape_string($cnnSWOP, $_POST['member_type']) . "')";
         //echo $new_pool;
         date_default_timezone_set('America/Chicago');
         $expected_date_make = mktime(0, 0, 0, date('m'), date('d') + 30, date('Y'));
-        $show_expected_date = date('Y-m-d', $expected_date_make);
+        $show_expected_date_sqlsafe = date('Y-m-d', $expected_date_make);
         /* show "added to pool" in the activity history: */
-        $add_first_benchmark = "INSERT INTO Pool_Progress (Participant_ID, Benchmark_Completed, Activity_Type, Expected_Date) VALUES 
-            ('" . $_POST['person'] . "', (SELECT Pool_Benchmark_Id FROM Pool_Benchmarks WHERE 
-                    Pipeline_Type=(SELECT Pipeline FROM Pool_Member_Types WHERE Type_ID='" . $_POST['member_type'] . "') AND Step_Number=1), '0000-00-00',
-                    1, '" . $show_expected_date . "')";
-        echo $add_first_benchmark;
-        include "../include/dbconnopen.php";
-        mysqli_query($cnnSWOP, $new_pool);
-        mysqli_query($cnnSWOP, $new_pool_status);
+        $add_first_benchmark_sqlsafe = "INSERT INTO Pool_Progress (Participant_ID, Benchmark_Completed, Activity_Type, Expected_Date) VALUES 
+            ('" . mysqli_real_escape_string($cnnSWOP, $_POST['person']) . "', (SELECT Pool_Benchmark_Id FROM Pool_Benchmarks WHERE 
+                    Pipeline_Type=(SELECT Pipeline FROM Pool_Member_Types WHERE Type_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['member_type']) . "') AND Step_Number=1), '0000-00-00',
+                    1, '" . mysqli_real_escape_string($cnnSWOP, $show_expected_date) . "')";
+        echo $add_first_benchmark_sqlsafe;
+        mysqli_query($cnnSWOP, $new_pool_sqlsafe);
+        mysqli_query($cnnSWOP, $new_pool_status_sqlsafe);
         $id = mysqli_insert_id($cnnSWOP);
-        mysqli_query($cnnSWOP, $add_first_benchmark);
+        mysqli_query($cnnSWOP, $add_first_benchmark_sqlsafe);
         include "../include/dbconnclose.php";
         setcookie("new_pool", '', time() - 7200, '/');
         /* this cookie is meant to show text on the profile that says something about "new to the pool? add finances, etc" */
@@ -53,58 +53,59 @@ if ($_POST['action'] == 'add_to_pool') {
     }
 } elseif ($_POST['action'] == 'deactivate') {
     /* deactivate a person from the pool. */
-    $action_query = "INSERT INTO Pool_Status_Changes (Active, Participant_ID, Activity_Type) VALUES (0, '" . $_POST['participant'] . "', '" . $_POST['type'] . "')";
     include "../include/dbconnopen.php";
-    mysqli_query($cnnSWOP, $action_query);
+    $action_query_sqlsafe = "INSERT INTO Pool_Status_Changes (Active, Participant_ID, Activity_Type) VALUES (0, '" . mysqli_real_escape_string($cnnSWOP, $_POST['participant']) . "', '" . mysqli_real_escape_string($cnnSWOP, $_POST['type']) . "')";
+    mysqli_query($cnnSWOP, $action_query_sqlsafe);
     include "../include/dbconnclose.php";
 } elseif ($_POST['action'] == 'link_event') {
     /* add to a new event: */
-    $new_event = "INSERT INTO Participants_Events (Participant_ID, Event_ID, Role_Type)
-        VALUES ('" . $_POST['participant'] . "', '" . $_POST['event'] . "', '" . $_POST['role'] . "')";
-    echo $new_event;
     include "../include/dbconnopen.php";
-    mysqli_query($cnnSWOP, $new_event);
+    $new_event_sqlsafe = "INSERT INTO Participants_Events (Participant_ID, Event_ID, Role_Type)
+        VALUES ('" . mysqli_real_escape_string($cnnSWOP, $_POST['participant']) . "', '" . mysqli_real_escape_string($cnnSWOP, $_POST['event']) . "', '" . mysqli_real_escape_string($cnnSWOP, $_POST['role']) . "')";
+    echo $new_event_sqlsafe;
+    mysqli_query($cnnSWOP, $new_event_sqlsafe);
     include "../include/dbconnclose.php";
 } elseif ($_POST['action'] == 'new_person_link_event') {
     /* add a new person to the database from the event page.  adds them to the database, 
      * links them to the event, might even give them a primary institution if that was entered. */
-    $create_person = "INSERT INTO Participants (Name_First, Name_Last, Phone_Day, Phone_Evening, Email) VALUES ('" . $_POST['first'] . "', '" . $_POST['last'] . "', '" . $_POST['home_phone'] . "', '" . $_POST['cell_phone'] . "', '" . $_POST['email'] . "')";
+    include "../include/dbconnopen.php";
+    $create_person_sqlsafe = "INSERT INTO Participants (Name_First, Name_Last, Phone_Day, Phone_Evening, Email) VALUES ('" . mysqli_real_escape_string($cnnSWOP, $_POST['first']) . "', '" . mysqli_real_escape_string($cnnSWOP, $_POST['last']) . "', '" . mysqli_real_escape_string($cnnSWOP, $_POST['home_phone']) . "', '" . mysqli_real_escape_string($cnnSWOP, $_POST['cell_phone']) . "', '" . mysqli_real_escape_string($cnnSWOP, $_POST['email']) . "')";
 
     echo $create_person . "<br>";
-    include "../include/dbconnopen.php";
-    mysqli_query($cnnSWOP, $create_person);
+    mysqli_query($cnnSWOP, $create_person_sqlsafe);
     $id = mysqli_insert_id($cnnSWOP);
-    $new_event = "INSERT INTO Participants_Events (Participant_ID, Event_ID, Role_Type)
-        VALUES ('" . $id . "', '" . $_POST['event'] . "', '" . $_POST['role'] . "')";
+    $new_event_sqlsafe = "INSERT INTO Participants_Events (Participant_ID, Event_ID, Role_Type)
+        VALUES ('" . $id . "', '" . mysqli_real_escape_string($cnnSWOP, $_POST['event']) . "', '" . mysqli_real_escape_string($cnnSWOP, $_POST['role']) . "')";
     echo $new_event . "<br>";
-    mysqli_query($cnnSWOP, $new_event);
-    $primary_inst = "INSERT INTO Institutions_Participants (Participant_ID, Institution_ID, Is_Primary) VALUES ($id, '" . $_POST['inst'] . "', 1)";
-    echo $primary_inst . "<br>";
-    mysqli_query($cnnSWOP, $primary_inst);
+    mysqli_query($cnnSWOP, $new_event_sqlsafe);
+    $primary_inst_sqlsafe = "INSERT INTO Institutions_Participants (Participant_ID, Institution_ID, Is_Primary) VALUES ($id, '" . mysqli_real_escape_string($cnnSWOP, $_POST['inst']) . "', 1)";
+    echo $primary_inst_sqlsafe . "<br>";
+    mysqli_query($cnnSWOP, $primary_inst_sqlsafe);
     include "../include/dbconnclose.php";
 } elseif ($_POST['action'] == 'link_event_leader') {
     /* Adds event role for a participant.  (obsolete?) */
-    $new_event = "INSERT INTO Participants_Events (Participant_ID, Event_ID, Role_Type)
-        VALUES ('" . $_POST['participant'] . "','" . $_POST['event'] . "', 1)";
-    echo $new_event;
     include "../include/dbconnopen.php";
-    mysqli_query($cnnSWOP, $new_event);
+    $new_event_sqlsafe = "INSERT INTO Participants_Events (Participant_ID, Event_ID, Role_Type)
+        VALUES ('" . mysqli_real_escape_string($cnnSWOP, $_POST['participant']) . "','" . mysqli_real_escape_string($cnnSWOP, $_POST['event']) . "', 1)";
+    echo $new_event_sqlsafe;
+    mysqli_query($cnnSWOP, $new_event_sqlsafe);
     include "../include/dbconnclose.php";
 } elseif ($_POST['action'] == 'update_role') {
     /* adds or edits role for a person at an event */
-    $update_role = "UPDATE Participants_Events SET Role_Type='" . $_POST['role'] . "' WHERE Participants_Events_ID='" . $_POST['link'] . "'";
     include "../include/dbconnopen.php";
-    mysqli_query($cnnSWOP, $update_role);
+    $update_role_sqlsafe = "UPDATE Participants_Events SET Role_Type='" . mysqli_real_escape_string($cnnSWOP, $_POST['role']) . "' WHERE Participants_Events_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['link']) . "'";
+    mysqli_query($cnnSWOP, $update_role_sqlsafe);
     include "../include/dbconnclose.php";
 } elseif ($_POST['action'] == 'update_exceptional') {
     /* adds or edits "exceptional" for a person at an event (additional measure outside of role taken) */
-    $update_role = "UPDATE Participants_Events SET Exceptional='" . $_POST['exceptional'] . "' WHERE Participants_Events_ID='" . $_POST['link'] . "'";
     include "../include/dbconnopen.php";
-    mysqli_query($cnnSWOP, $update_role);
+    $update_role_sqlsafe = "UPDATE Participants_Events SET Exceptional='" . mysqli_real_escape_string($cnnSWOP, $_POST['exceptional']) . "' WHERE Participants_Events_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['link']) . "'";
+    mysqli_query($cnnSWOP, $update_role_sqlsafe);
     include "../include/dbconnclose.php";
 } else {
     /* the original: make a new person in the database! */
-    $create_new_participant_query = "INSERT INTO Participants (
+    include "../include/dbconnopen.php";
+    $create_new_participant_query_sqlsafe = "INSERT INTO Participants (
                                     Name_First,
                                     Name_Last,
                                     Phone_Day,
@@ -115,17 +116,17 @@ if ($_POST['action'] == 'add_to_pool') {
                                     Primary_Organizer,
                                     Activity_Type
                                 ) VALUES (
-                                    '" . $_POST['first_name'] . "',
-                                    '" . $_POST['last_name'] . "',
-                                    '" . $_POST['day_phone'] . "',
-                                    '" . $_POST['email'] . "',
-                                    '" . $_POST['gender'] . "',
-                                    '" . $_POST['dob'] . "',
-                                    '" . $_POST['first_date'] . "',
-                                    '" . $_POST['primary_organizer'] . "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['first_name']) . "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['last_name'] . "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['day_phone']) . "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['email']) . "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['gender']) . "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['dob']) . "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['first_date']) . "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['primary_organizer']) . "',
 									'7')";
     /* this is obsolete.  the Participants_Addresses table doesn't even exist anymore, I don't think. */
-    $add_property = "INSERT INTO Participants_Addresses (
+    $add_property_sqlsafe = "INSERT INTO Participants_Addresses (
         Participant_ID,
         Address_Num,
         Address_Dir,
@@ -134,26 +135,25 @@ if ($_POST['action'] == 'add_to_pool') {
         Address_City,
         Address_State,
         Address_Zip) VALUES (
-            '" . $_POST['id'] . "',
-            '" . $_POST['address_num'] . "',
-            '" . $_POST['address_dir'] . "',
-            '" . $_POST['address_name'] . "',
-            '" . $_POST['address_type'] . "',
-            '" . $_POST['city'] . "',
-            '" . $_POST['state'] . "',
-            '" . $_POST['zip'] . "')";
+            '" . mysqli_real_escape_string($cnnSWOP, $_POST['id']) . "',
+            '" . mysqli_real_escape_string($cnnSWOP, $_POST['address_num']) . "',
+            '" . mysqli_real_escape_string($cnnSWOP, $_POST['address_dir']) . "',
+            '" . mysqli_real_escape_string($cnnSWOP, $_POST['address_name']) . "',
+            '" . mysqli_real_escape_string($cnnSWOP, $_POST['address_type']) . "',
+            '" . mysqli_real_escape_string($cnnSWOP, $_POST['city']) . "',
+            '" . mysqli_real_escape_string($cnnSWOP, $_POST['state']) . "',
+            '" . mysqli_real_escape_string($cnnSWOP, $_POST['zip']) . "')";
 
 //echo $create_new_participant_query;
-    include "../include/dbconnopen.php";
-    mysqli_query($cnnSWOP, $create_new_participant_query);
+    mysqli_query($cnnSWOP, $create_new_participant_query_sqlsafe);
 //mysqli_query($cnnSWOP, $add_property);
     $id = mysqli_insert_id($cnnSWOP);
-    $add_pool_status = "INSERT INTO Pool_Status_Changes (Active, Participant_ID, Activity_Type, Member_Type) VALUES ('" . $_POST['pool'] . "', '" . $id . "', 4, '" . $_POST['pool_type'] . "')";
-    mysqli_query($cnnSWOP, $add_pool_status);
+    $add_pool_status_sqlsafe = "INSERT INTO Pool_Status_Changes (Active, Participant_ID, Activity_Type, Member_Type) VALUES ('" . $mysqli_real_escape_string($cnnSWOP, $_POST['pool']) . "', '" . $id . "', 4, '" . mysqli_real_escape_string($cnnSWOP, $_POST['pool_type']) . "')";
+    mysqli_query($cnnSWOP, $add_pool_status_sqlsafe);
     if ($_POST['primary_inst'] != '') {
-        $link_to_inst = "INSERT INTO Institutions_Participants (Institution_ID, Participant_ID, Is_Primary, Activity_Type) VALUES ('" . $_POST['primary_inst'] . "', $id, 1, 6)";
+        $link_to_inst_sqlsafe = "INSERT INTO Institutions_Participants (Institution_ID, Participant_ID, Is_Primary, Activity_Type) VALUES ('" . mysqli_real_escape_string($cnnSWOP, $_POST['primary_inst']) . "', $id, 1, 6)";
         //echo $link_to_inst;
-        mysqli_query($cnnSWOP, $link_to_inst);
+        mysqli_query($cnnSWOP, $link_to_inst_sqlsafe);
     }
 
     include "../include/dbconnclose.php";
@@ -227,9 +227,9 @@ if ($_POST['action'] == 'add_to_pool') {
                 <td><select id="disposition_search">
                         <option value="">---------</option>
                         <?php
-                        $get_disps = "SELECT * FROM Property_Dispositions";
+                        $get_disps_sqlsafe = "SELECT * FROM Property_Dispositions";
                         include "../include/dbconnopen.php";
-                        $disps = mysqli_query($cnnSWOP, $get_disps);
+                        $disps = mysqli_query($cnnSWOP, $get_disps_sqlsafe);
                         while ($disp = mysqli_fetch_row($disps)) {
                             ?>
                             <option value="<?php echo $disp[0] ?>"><?php echo $disp[1]; ?></option>
