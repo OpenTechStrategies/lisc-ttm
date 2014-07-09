@@ -43,9 +43,9 @@ if ($_GET['new'] == 1) {
         <?php
         /* this was a list of all properties, but I've hidden it now.  There are too many on the live site
          * to make such a list practical. */
-        $get_properties = "SELECT * FROM Properties";
+        $get_properties_sqlsafe = "SELECT * FROM Properties";
         include "../include/dbconnopen.php";
-        $properties = mysqli_query($cnnSWOP, $get_properties);
+        $properties = mysqli_query($cnnSWOP, $get_properties_sqlsafe);
         while ($property = mysqli_fetch_array($properties)) {
             ?>
             <!--<a href="javascript:;" onclick="
@@ -86,9 +86,9 @@ if ($_GET['new'] == 1) {
                 <td><select id="disposition_search">
                         <option value="">---------</option>
                         <?php
-                        $get_disps = "SELECT * FROM Property_Dispositions";
+                        $get_disps_sqlsafe = "SELECT * FROM Property_Dispositions";
                         include "../include/dbconnopen.php";
-                        $disps = mysqli_query($cnnSWOP, $get_disps);
+                        $disps = mysqli_query($cnnSWOP, $get_disps_sqlsafe);
                         while ($disp = mysqli_fetch_row($disps)) {
                             ?>
                             <option value="<?php echo $disp[0] ?>"><?php echo $disp[1]; ?></option>

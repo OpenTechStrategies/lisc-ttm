@@ -2,9 +2,9 @@
 /* holds all information about an event (participants, subcampaign, location) */
 	include "../../header.php";
 	include "../header.php";
-	$get_event_info = "SELECT * FROM Campaigns_Events INNER JOIN Campaigns ON Campaigns_Events.Campaign_ID=Campaigns.Campaign_ID WHERE Campaign_Event_ID='".$_GET['event']."'";
 	include "../include/dbconnopen.php";
-	$event_info = mysqli_query($cnnSWOP, $get_event_info);
+	$get_event_info_sqlsafe = "SELECT * FROM Campaigns_Events INNER JOIN Campaigns ON Campaigns_Events.Campaign_ID=Campaigns.Campaign_ID WHERE Campaign_Event_ID='" . mysqli_real_escape_string($cnnSWOP, $_GET['event']) . "'";
+	$event_info = mysqli_query($cnnSWOP, $get_event_info_sqlsafe);
 	$event = mysqli_fetch_array($event_info);
 	include "../include/dbconnclose.php";
 ?>
@@ -33,11 +33,11 @@
 			<tr><td><strong>Subcampaign: </strong></td><td><span class="event_show"><?echo $event['Subcampaign'];?></span>
 					<select id="event_new_subcampaign" class="event_edit">
     <option value="0">-------</option>
-    <?
-    $get_subcampaigns="SELECT DISTINCT Subcampaign FROM Campaigns_Events WHERE Subcampaign!='0' AND Subcampaign IS NOT NULL 
-        AND Campaign_ID='".$_COOKIE['campaign']."' ORDER BY Subcampaign";
+    <?php
+    $get_subcampaigns_sqlsafe="SELECT DISTINCT Subcampaign FROM Campaigns_Events WHERE Subcampaign!='0' AND Subcampaign IS NOT NULL 
+        AND Campaign_ID='" . mysqli_real_escape_string($cnnSWOP, $_COOKIE['campaign']) . "' ORDER BY Subcampaign";
     include "../include/dbconnopen.php";
-    $subcampaigns=mysqli_query($cnnSWOP, $get_subcampaigns);
+    $subcampaigns=mysqli_query($cnnSWOP, $get_subcampaigns_sqlsafe);
     while ($subcam=mysqli_fetch_row($subcampaigns)){
         ?>
     <option><?echo $subcam[0];?></option>
@@ -51,9 +51,9 @@
 						<select id="event_new_location" class="event_edit">
     <option value="0">-------</option>
     <?
-    $get_subcampaigns="SELECT DISTINCT Location FROM Campaigns_Events WHERE Location!='0' AND Location IS NOT NULL  ORDER BY Location";
+    $get_subcampaigns_sqlsafe="SELECT DISTINCT Location FROM Campaigns_Events WHERE Location!='0' AND Location IS NOT NULL  ORDER BY Location";
     include "../include/dbconnopen.php";
-    $subcampaigns=mysqli_query($cnnSWOP, $get_subcampaigns);
+    $subcampaigns=mysqli_query($cnnSWOP, $get_subcampaigns_sqlsafe);
     while ($subcam=mysqli_fetch_row($subcampaigns)){
         ?>
     <option><?echo $subcam[0];?></option>
@@ -90,15 +90,15 @@
 		<h4>Attendance</h4>
 		<table class="inner_table" style="border-bottom: 2px solid #696969;font-size:.8em;">
 			<tr style="border-bottom:2px solid #696969;"><th>ID</th><th>Name</th><th>Role</th><th>Primary Institution</th><th>Home Phone</th><th>Cell Phone</th><th>Email address</th><th>Address</th><th></th></tr>
-			<?
+			<?php
                         /* get existing attendees: */
-				$get_attendance = "SELECT * FROM Participants_Events INNER JOIN Participants ON Participants_Events.Participant_ID=Participants.Participant_ID WHERE Event_ID='" . $event['Campaign_Event_ID'] . "'";
+				$get_attendance_sqlsafe = "SELECT * FROM Participants_Events INNER JOIN Participants ON Participants_Events.Participant_ID=Participants.Participant_ID WHERE Event_ID='" . $event['Campaign_Event_ID'] . "'";
 				include "../include/dbconnopen.php";
-				$attendance = mysqli_query($cnnSWOP, $get_attendance);
+				$attendance = mysqli_query($cnnSWOP, $get_attendance_sqlsafe);
 				while ($attendee = mysqli_fetch_array($attendance)) {
 				//find current home address
-				$find_institution = "SELECT * FROM Institutions INNER JOIN Institutions_Participants ON Institutions.Institution_ID=Institutions_Participants.Institution_ID WHERE Institutions_Participants.Participant_ID='".$attendee['Participant_ID']."' AND Institutions_Participants.Is_Primary=1";
-				$institution = mysqli_query($cnnSWOP, $find_institution);
+				$find_institution_sqlsafe = "SELECT * FROM Institutions INNER JOIN Institutions_Participants ON Institutions.Institution_ID=Institutions_Participants.Institution_ID WHERE Institutions_Participants.Participant_ID='".$attendee['Participant_ID']."' AND Institutions_Participants.Is_Primary=1";
+				$institution = mysqli_query($cnnSWOP, $find_institution_sqlsafe);
 				$inst = mysqli_fetch_array($institution);
 			?>
 			<tr style="border-left:2px solid #696969;border-right:2px solid #696969;">
@@ -148,9 +148,9 @@
 					<select class="edit <?echo $attendee['Participant_ID'];?>" id="edit_inst_<?echo $attendee['Participant_ID'];?>">
 						<option value="">-----</option>
                             <?
-                                $get_all_insts="SELECT * FROM Institutions ORDER BY Institution_Name;";
+                                $get_all_insts_sqlsafe="SELECT * FROM Institutions ORDER BY Institution_Name;";
                                 //include "../include/dbconnopen.php";
-                                $all_insts=mysqli_query($cnnSWOP, $get_all_insts);
+                                $all_insts=mysqli_query($cnnSWOP, $get_all_insts_sqlsafe);
                                 $count_insts=mysqli_num_rows($all_insts);
                                 while ($this_inst=mysqli_fetch_row($all_insts)){
                             ?>
@@ -175,12 +175,12 @@
                                     <!-- Address is complicated, of course, because it involves linking to a property (and possibly
                                     creating a property and THEN linking to it). -->
                                     <!-- Address goes here... -->
-                               <?     $address_info="SELECT Address_Street_Num, Address_Street_Direction, Address_Street_Name, Address_Street_Type 
+                               <?     $address_info_sqlsafe="SELECT Address_Street_Num, Address_Street_Direction, Address_Street_Name, Address_Street_Type 
                                         FROM Participants_Properties INNER JOIN Properties ON Participants_Properties.Property_ID=
                                         Properties.Property_ID WHERE Primary_Residence=1 AND Participant_ID='" . $attendee['Participant_ID'] . "' 
                                             AND (End_Primary IS NULL OR End_Primary='0000-00-00 00:00:00')";
-                             //  echo $address_info;
-                                $address=mysqli_query($cnnSWOP, $address_info);
+                             //  echo $address_info_sqlsafe;
+                                $address=mysqli_query($cnnSWOP, $address_info_sqlsafe);
                                 $address_info_temp=mysqli_fetch_array($address);
                                 echo $address_info_temp['Address_Street_Num'] . " " .$address_info_temp['Address_Street_Direction'] . " ".
                                         $address_info_temp['Address_Street_Name']  . " ".$address_info_temp['Address_Street_Type'];
@@ -346,9 +346,9 @@
 				<td colspan="3"><select id="inst_quick_search_<?echo $event['Participant_ID'];?>">
     <option value="">-----</option>
     <?
-			$get_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
+			$get_institutions_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name";
 			include "../include/dbconnopen.php";
-			$institutions = mysqli_query($cnnSWOP, $get_institutions);
+			$institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
 			while ($institution = mysqli_fetch_array($institutions)) {?>
     <option value="<?echo $institution['Institution_ID'];?>"><?echo $institution['Institution_Name'];?></option>
 			<?}
@@ -410,8 +410,8 @@
                                                                     <option value="">-----</option><?
                                         //get event roles
                                         include "../include/dbconnopen.php";
-                                        $select_roles="SELECT * FROM Participants_Roles";
-                                        $roles=mysqli_query($cnnSWOP, $select_roles);
+                                        $select_roles_sqlsafe="SELECT * FROM Participants_Roles";
+                                        $roles=mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                                         while ($role=mysqli_fetch_row($roles)){
                                             ?>
                                         <option value="<?echo $role[0];?>"><?echo $role[1];?></option>
@@ -425,9 +425,9 @@
 								<select id="inst_new">
 									<option value="">-----</option>
   							  <?
-										$get_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
+										$get_institutions_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name";
 										include "../include/dbconnopen.php";
-										$institutions = mysqli_query($cnnSWOP, $get_institutions);
+										$institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
 										while ($institution = mysqli_fetch_array($institutions)) {?>
 									<option value="<?echo $institution['Institution_ID'];?>"><?echo $institution['Institution_Name'];?></option>
 									<? }

@@ -1,64 +1,63 @@
 <?php
 //print_r($_POST);
-
-if ($_POST['include_address']==1){ $address=" Participants.Address_Street_Num as Participant_Num, Participants.Address_Street_Direction as Participant_Direction,"
+include "../include/dbconnopen.php";
+if ($_POST['include_address']==1){ $address_sqlsafe=" Participants.Address_Street_Num as Participant_Num, Participants.Address_Street_Direction as Participant_Direction,"
         . " Participants.Address_Street_Name as Participant_Street_Name, Participants.Address_Street_Type as Participant_Street_Type, "; }
-if ($_POST['include_day_phone']==1){ $day_phone=" Participants.Phone_Day as Participant_Day, ";}
-if ($_POST['include_evening']==1){ $evening_phone=" Participants.Phone_Evening as Participant_Evening, ";}
-if ($_POST['include_inst']==1){$inst_join = " LEFT JOIN Institutions_Participants ON Leaders.Participant_ID=Institutions_Participants.Participant_ID AND Is_Primary=1 "
+if ($_POST['include_day_phone']==1){ $day_phone_sqlsafe=" Participants.Phone_Day as Participant_Day, ";}
+if ($_POST['include_evening']==1){ $evening_phone_sqlsafe=" Participants.Phone_Evening as Participant_Evening, ";}
+if ($_POST['include_inst']==1){$inst_join_sqlsafe = " LEFT JOIN Institutions_Participants ON Leaders.Participant_ID=Institutions_Participants.Participant_ID AND Is_Primary=1 "
         . " LEFT JOIN Institutions ON Institutions_Participants.Institution_ID=Institutions.Institution_ID ";
-    $inst = " Institutions.Institution_Name, ";}
-if ($_POST['include_organizer']==1){ $organizer_join = " LEFT JOIN Participants as Organizer_Info ON Participants.Primary_Organizer=Organizer_Info.Participant_ID ";
-    $organizer= " Organizer_Info.Name_First as organizer_first, Organizer_Info.Name_Last as organizer_last, ";}
-if ($_POST['include_leader']==1){ $leader = "Leaders.Leader_Type, "; }
-if ($_POST['include_name']==1){ $name = " Participants.Name_First as participant_first, Participants.Name_Last as participant_last, "; }
+    $inst_sqlsafe = " Institutions.Institution_Name, ";}
+if ($_POST['include_organizer']==1){ $organizer_join_sqlsafe = " LEFT JOIN Participants as Organizer_Info ON Participants.Primary_Organizer=Organizer_Info.Participant_ID ";
+    $organizer_sqlsafe= " Organizer_Info.Name_First as organizer_first, Organizer_Info.Name_Last as organizer_last, ";}
+if ($_POST['include_leader']==1){ $leader_sqlsafe = "Leaders.Leader_Type, "; }
+if ($_POST['include_name']==1){ $name_sqlsafe = " Participants.Name_First as participant_first, Participants.Name_Last as participant_last, "; }
 
 if ($_POST['action']=='num_events'){   
-    $initial_query="SELECT COUNT(Event_ID) as event_count, Leaders.Participant_ID, ". $name . $address . $day_phone . $evening_phone. 
-            $inst. $organizer. $leader ." NULL FROM (SELECT * FROM Participants_Leaders WHERE Leader_Type!=4 AND Leader_Type!=0 GROUP BY Participant_ID) Leaders
+    $initial_query="SELECT COUNT(Event_ID) as event_count, Leaders.Participant_ID, ". $name_sqlsafe . $address_sqlsafe . $day_phone_sqlsafe . $evening_phone_sqlsafe . 
+            $inst_sqlsafe . $organizer_sqlsafe . $leader_sqlsafe ." NULL FROM (SELECT * FROM Participants_Leaders WHERE Leader_Type!=4 AND Leader_Type!=0 GROUP BY Participant_ID) Leaders
 INNER JOIN (SELECT * FROM Participants_Events WHERE Event_ID!=0 AND Event_ID IS NOT NULL) Events
 ON Leaders.Participant_ID=Events.Participant_ID 
 LEFT JOIN Participants ON Leaders.Participant_ID=Participants.Participant_ID 
-".$inst_join . $organizer_join ."
+". $inst_join_sqlsafe . $organizer_join_sqlsafe ."
 GROUP BY Leaders.Participant_ID;";
     
     }
 elseif($_POST['action']=='events_dates'){
     
-    $initial_query="SELECT COUNT(Event_ID)as event_count, Leaders.Participant_ID, ". $name . $address . $day_phone . $evening_phone. 
-            $inst. $organizer. $leader ." NULL FROM (SELECT * FROM Participants_Leaders WHERE Leader_Type!=4 GROUP BY Participant_ID) Leaders
+    $initial_query_sqlsafe="SELECT COUNT(Event_ID)as event_count, Leaders.Participant_ID, ". $name_sqlsafe . $address_sqlsafe . $day_phone_sqlsafe . $evening_phone_sqlsafe . 
+            $inst_sqlsafe . $organizer_sqlsafe . $leader_sqlsafe . " NULL FROM (SELECT * FROM Participants_Leaders WHERE Leader_Type!=4 GROUP BY Participant_ID) Leaders
 INNER JOIN (SELECT * FROM Participants_Events WHERE Event_ID!=0 AND Event_ID IS NOT NULL) Events
 ON Leaders.Participant_ID=Events.Participant_ID 
 LEFT JOIN Participants ON Leaders.Participant_ID=Participants.Participant_ID 
-INNER JOIN (SELECT * FROM Campaigns_Events WHERE Event_Date>='".$_POST['start_date']."' AND Event_Date<='".$_POST['end_date']."') Dates ON Campaign_Event_ID=Event_ID
-    ".$inst_join . $organizer_join ."
+INNER JOIN (SELECT * FROM Campaigns_Events WHERE Event_Date>='" . mysqli_real_escape_string($cnnSWOP, $_POST['start_date']) . "' AND Event_Date<='".mysqli_real_escape_string($cnnSWOP, $_POST['end_date'])."') Dates ON Campaign_Event_ID=Event_ID
+    " . $inst_join_sqlsafe . $organizer_join_sqlsafe ."
 GROUP BY Leaders.Participant_ID;";
     }
 elseif($_POST['action']=='type'){
-    $initial_query="SELECT Leaders.Participant_ID, Latest_Date.Leader_Type, ". $name . $address . $day_phone . $evening_phone. 
-            $inst. $organizer. $leader ." NULL FROM `lisc-swop.chapinhall.org`.Participants_Leaders AS Leaders
+    $initial_query_sqlsafe="SELECT Leaders.Participant_ID, Latest_Date.Leader_Type, ". $name_sqlsafe . $address_sqlsafe . $day_phone_sqlsafe . $evening_phone_sqlsafe . 
+            $inst_sqlsafe . $organizer_sqlsafe . $leader_sqlsafe ." NULL FROM `lisc-swop.chapinhall.org`.Participants_Leaders AS Leaders
 inner join (SELECT Participants_Leader_ID, max(Date_Logged), Leader_Type  FROM Participants_Leaders
         GROUP BY Participant_ID) Latest_Date
 ON Leaders.Participants_Leader_ID=Latest_Date.Participants_Leader_ID 
 LEFT JOIN Participants ON Leaders.Participant_ID=Participants.Participant_ID 
-".$inst_join . $organizer_join ."WHERE Leaders.Leader_Type='".$_POST['leader_type']."'";
+". $inst_join_sqlsafe . $organizer_join_sqlsafe ."WHERE Leaders.Leader_Type='" . mysqli_real_escape_string($cnnSWOP, $_POST['leader_type']) . "'";
 }
 elseif($_POST['action']=='institution'){
-    $initial_query="SELECT Leaders.Participant_ID, Latest_Date.Leader_Type, Institutions_Participants.Institution_ID, Institution_Name, ". $name
-            . $address . $day_phone . $evening_phone. 
-          $organizer. $leader ." NULL  FROM `lisc-swop.chapinhall.org`.Participants_Leaders as Leaders
+    $initial_query_sqlsafe="SELECT Leaders.Participant_ID, Latest_Date.Leader_Type, Institutions_Participants.Institution_ID, Institution_Name, ". $name_sqlsafe
+            . $address_sqlsafe . $day_phone_sqlsafe . $evening_phone_sqlsafe . 
+          $organizer_sqlsafe . $leader_sqlsafe ." NULL  FROM `lisc-swop.chapinhall.org`.Participants_Leaders as Leaders
 inner join (SELECT Participants_Leader_ID, max(Date_Logged), Leader_Type  FROM Participants_Leaders WHERE Leader_Type!=0 AND Leader_Type!=4
         GROUP BY Participant_ID) Latest_Date ON Leaders.Participants_Leader_ID=Latest_Date.Participants_Leader_ID
 LEFT JOIN Participants ON Leaders.Participant_ID=Participants.Participant_ID 
 INNER JOIN Institutions_Participants ON Institutions_Participants.Participant_ID=Leaders.Participant_ID
 LEFT JOIN Institutions ON Institutions_Participants.Institution_ID=Institutions.Institution_ID
-". $organizer_join ."
-WHERE Institutions_Participants.Institution_ID='".$_POST['institution']."';";
+". $organizer_join_sqlsafe ."
+WHERE Institutions_Participants.Institution_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['institution']) . "';";
 }
 
 //echo $initial_query;
-    include "../include/dbconnopen.php";
-    $event_num=mysqli_query($cnnSWOP, $initial_query);
+    $event_num=mysqli_query($cnnSWOP, $initial_query_sqlsafe);
     
     /* create file for export of results: */
 date_default_timezone_set('America/Chicago');

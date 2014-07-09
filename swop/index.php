@@ -73,7 +73,7 @@ if ($_GET['action'] == 'logout') {
             WHERE (Date_Completed='0000-00-00 00:00:00' OR Date_Completed IS NULL) AND 
                 Expected_Date<'".date('Y-m-d')."' AND laststatus.Active=1
                     ORDER BY Expected_Date";
-        $get_alert_people="SELECT Name_First, Name_Last, Benchmark_Name, MONTH(Pool_Progress.Expected_Date), DAY(Pool_Progress.Expected_Date),
+        $get_alert_people_sqlsafe="SELECT Name_First, Name_Last, Benchmark_Name, MONTH(Pool_Progress.Expected_Date), DAY(Pool_Progress.Expected_Date),
 YEAR(Pool_Progress.Expected_Date), Pool_Status_Changes.Active, laststatus.lastdate FROM Pool_Progress 
 INNER JOIN Participants ON Pool_Progress.Participant_Id=Participants.Participant_ID 
 INNER JOIN Pool_Benchmarks ON Benchmark_Completed=Pool_Benchmark_ID 
@@ -86,7 +86,7 @@ AND Participants.Participant_ID NOT IN (SELECT Participant_ID FROM Pool_Outcomes
 ORDER BY Pool_Progress.Expected_Date";
         //echo $get_alert_people;
         include "include/dbconnopen.php";
-        $alert_people=mysqli_query($cnnSWOP, $get_alert_people);
+        $alert_people=mysqli_query($cnnSWOP, $get_alert_people_sqlsafe);
         while ($alert=mysqli_fetch_row($alert_people)){
             ?>
         <tr><td><?php echo $alert[0] ." ". $alert[1];?></td><td><?php echo $alert[2];?></td>

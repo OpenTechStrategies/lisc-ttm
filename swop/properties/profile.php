@@ -91,17 +91,17 @@ if ($_GET['history'] == 1) {
     } ?></span>
 
                     <?php
-                    $get_acq_cost = "SELECT Property_Progress_ID, Addtl_Info_1 FROM Property_Progress WHERE Marker=1 AND Property_ID=$prop->property_id ORDER BY Date_Added DESC";
+                    $get_acq_cost_sqlsafe = "SELECT Property_Progress_ID, Addtl_Info_1 FROM Property_Progress WHERE Marker=1 AND Property_ID=$prop->property_id ORDER BY Date_Added DESC";
                     include "../include/dbconnopen.php";
-                    $acq_cost = mysqli_query($cnnSWOP, $get_acq_cost);
+                    $acq_cost = mysqli_query($cnnSWOP, $get_acq_cost_sqlsafe);
                     $accost = mysqli_fetch_row($acq_cost);
                     ?>
                     <tr><td><strong>Acquisition Cost:</strong></td><td><span class="display_prop"><?php echo $accost[1]; ?></span>
                             <input type="text" id="edit_acq_cost" class="edit_property" value="<?php echo $accost[1]; ?>"></td></tr>
 <?php
-$get_const_cost = "SELECT Property_Progress_ID, Addtl_Info_1 FROM Property_Progress WHERE Marker=2 AND Property_ID=$prop->property_id ORDER BY Date_Added DESC";
+$get_const_cost_sqlsafe = "SELECT Property_Progress_ID, Addtl_Info_1 FROM Property_Progress WHERE Marker=2 AND Property_ID=$prop->property_id ORDER BY Date_Added DESC";
 include "../include/dbconnopen.php";
-$const_cost = mysqli_query($cnnSWOP, $get_const_cost);
+$const_cost = mysqli_query($cnnSWOP, $get_const_cost_sqlsafe);
 $concost = mysqli_fetch_row($const_cost);
 include "../include/dbconnclose.php";
 ?>
@@ -111,9 +111,9 @@ include "../include/dbconnclose.php";
                             <select id="edit_disposition" class="edit_property">
                                 <option value="">---------</option>
                                         <?php
-                                        $get_disps = "SELECT * FROM Property_Dispositions";
+                                        $get_disps_sqlsafe = "SELECT * FROM Property_Dispositions";
                                         include "../include/dbconnopen.php";
-                                        $disps = mysqli_query($cnnSWOP, $get_disps);
+                                        $disps = mysqli_query($cnnSWOP, $get_disps_sqlsafe);
                                         while ($disp = mysqli_fetch_row($disps)) {
                                             ?>
                                     <option value="<?php echo $disp[0] ?>" 
@@ -201,11 +201,11 @@ if ($prop->home_size == 1) {
                         <td>
 <?php
 include "../include/dbconnopen.php";
-$query = "SELECT File_ID, File_Name 
+$query_sqlsafe = "SELECT File_ID, File_Name 
                                 FROM Property_Files
                                 WHERE Property_ID=$prop->property_id
                                 ORDER BY File_Name;";
-$result = mysqli_query($cnnSWOP, $query);
+$result = mysqli_query($cnnSWOP, $query_sqlsafe);
 if (mysqli_num_rows($result) == 0) {
     echo "No notes have been uploaded <br>";
 } else {
@@ -342,9 +342,9 @@ include "../include/dbconnclose.php";
                             <strong>Institution:</strong> <select id="inst_owner" onchange="$('#owner_characteristics').show()">
                                 <option value="">-----</option>
                             <?php
-                            $get_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
+                            $get_institutions_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name";
                             include "../include/dbconnopen.php";
-                            $institutions = mysqli_query($cnnSWOP, $get_institutions);
+                            $institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
                             while ($institution = mysqli_fetch_array($institutions)) {
                                 ?>
                                     <option value="<?php echo $institution['Institution_ID']; ?>"><?php echo $institution['Institution_Name']; ?></option>
@@ -504,10 +504,10 @@ include "../include/dbconnclose.php";
                                 <option value="">----------</option>
                                    <?php
                                    //get marker names, but of course, some of them aren't applicable...
-                                   $select_names = "SELECT * FROM Property_Marker_Names WHERE Property_Marker_Name_ID<8
+                                   $select_names_sqlsafe = "SELECT * FROM Property_Marker_Names WHERE Property_Marker_Name_ID<8
                                                                     OR Property_Marker_Name_ID=12";
                                    include "../include/dbconnopen.php";
-                                   $names = mysqli_query($cnnSWOP, $select_names);
+                                   $names = mysqli_query($cnnSWOP, $select_names_sqlsafe);
                                    while ($name = mysqli_fetch_row($names)) {
                                        ?>
                                     <option value="<?php echo $name[0] ?>"><?php echo $name[1]; ?></option>
@@ -566,11 +566,11 @@ include "../include/dbconnclose.php";
                         <th></th>
                     </tr>
 <?php
-$get_linked_props = "SELECT * FROM Participants_Properties INNER JOIN Participants ON 
+$get_linked_props_sqlsafe = "SELECT * FROM Participants_Properties INNER JOIN Participants ON 
                             Participants_Properties.Participant_ID=Participants.Participant_ID WHERE Property_ID='" . $prop->property_id . "'";
 // echo $get_linked_props;
 include "../include/dbconnopen.php";
-$linked_props = mysqli_query($cnnSWOP, $get_linked_props);
+$linked_props = mysqli_query($cnnSWOP, $get_linked_props_sqlsafe);
 while ($linked = mysqli_fetch_array($linked_props)) {
     ?>
                         <tr>
@@ -670,9 +670,9 @@ while ($linked = mysqli_fetch_array($linked_props)) {
                             <td><select id="prop_inst_search" />
                         <option value="">-----</option>
                     <?php
-                    $get_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
+                    $get_institutions_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name";
                     include "../include/dbconnopen.php";
-                    $institutions = mysqli_query($cnnSWOP, $get_institutions);
+                    $institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
                     while ($institution = mysqli_fetch_array($institutions)) {
                         ?>
                             <option value="<?php echo $institution['Institution_ID']; ?>"><?php echo $institution['Institution_Name']; ?></option>
@@ -731,7 +731,7 @@ while ($linked = mysqli_fetch_array($linked_props)) {
 									ORDER BY Date_Added DESC";
 
                                 /* retrieve general info about property plus all progress steps: */
-                                $get_events = "SELECT Date_Added, Marker, Property_Marker_Name, Addtl_Info_1, 
+                                $get_events_sqlsafe = "SELECT Date_Added, Marker, Property_Marker_Name, Addtl_Info_1, 
                                                 Addtl_Info_2, Addtl_Info_3, Addtl_Info_4, 
                                                 Property_Progress_ID, Notes FROM Property_Progress  INNER JOIN Property_Marker_Names
                                                 ON Marker=Property_Marker_Name_ID WHERE Property_ID='" . $prop->property_id . "'
@@ -740,7 +740,7 @@ while ($linked = mysqli_fetch_array($linked_props)) {
                                                 WHERE Property_ID='" . $prop->property_id . "' ORDER BY Date_Added DESC";
                                 // echo $get_events;
                                 include "../include/dbconnopen.php";
-                                $events = mysqli_query($cnnSWOP, $get_events);
+                                $events = mysqli_query($cnnSWOP, $get_events_sqlsafe);
                                 $event_counter = 0;
                                 while ($event = mysqli_fetch_array($events)) {
                                     $event_counter++;
@@ -843,8 +843,8 @@ while ($linked = mysqli_fetch_array($linked_props)) {
                                            /* owner was recorded */
                                            ?><td>&nbsp;&nbsp;&nbsp;<em>Name: </em><?php
                                            /* if the owner was an investing institution, then show the name here: */
-                                           $get_inst_name = "SELECT Institution_Name FROM Institutions WHERE Institution_ID='" . $event['Addtl_Info_1'] . "'";
-                                           $inst = mysqli_query($cnnSWOP, $get_inst_name);
+                                           $get_inst_name_sqlsafe = "SELECT Institution_Name FROM Institutions WHERE Institution_ID='" . $event['Addtl_Info_1'] . "'";
+                                           $inst = mysqli_query($cnnSWOP, $get_inst_name_sqlsafe);
                                            $inst_name = mysqli_fetch_row($inst);
                                            echo $inst_name[0];
                                            ?><br/>
@@ -857,9 +857,9 @@ while ($linked = mysqli_fetch_array($linked_props)) {
                         } elseif ($event['Marker'] == 13) {
                             /* disposition changed. */
                             ?><td>&nbsp;&nbsp;&nbsp;<em>Disposition: </em><?php
-                            $get_disp = "SELECT Disposition_Name FROM
+                            $get_disp_sqlsafe = "SELECT Disposition_Name FROM
                                                             Property_Dispositions WHERE Disposition_ID='" . $event['Addtl_Info_1'] . "'";
-                            $name_disp = mysqli_query($cnnSWOP, $get_disp);
+                            $name_disp = mysqli_query($cnnSWOP, $get_disp_sqlsafe);
                             $dispos = mysqli_fetch_row($name_disp);
                             echo $dispos[0];
                             ?><br/></td><?php
