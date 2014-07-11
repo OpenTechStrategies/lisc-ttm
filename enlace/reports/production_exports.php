@@ -1080,12 +1080,18 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             while ($q = mysqli_fetch_row($all_questions)) {
                 $title_array[] = "Pre: " . $q[0];
             }
+            echo $get_questions . "<br>"; //testing output
+            print_r($title_array); // testing_output
+            echo "<br>"; //testing output
+            echo "<br>"; //testing output
             $get_questions = "SELECT Question FROM Baseline_Assessment_Questions WHERE In_Table!='Participants_Baseline_Assessments' ORDER BY In_Table";
             include "../include/dbconnopen.php";
             $all_questions = mysqli_query($cnnEnlace, $get_questions);
             while ($q = mysqli_fetch_row($all_questions)) {
                 $title_array[] = "Post: " . $q[0];
             }
+            echo $get_questions . "<br>"; // testing output
+            print_r($title_array); // testing_output
 
             $non_admin_string = ";";
             //if not an administrator
