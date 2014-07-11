@@ -3,8 +3,8 @@
  * didn't implement ETO in time to fully integrate them into this system.
  *  */
 	$date_formatted=explode('/', $_POST['date']);
-	$date = $date_formatted[2]."-".$date_formatted[0]."-".$date_formatted[1];
-$save_survey_answers = "INSERT INTO Gads_Hill_Parent_Survey (
+    $date_sqlsafe = mysqli_real_escape_string($date_formatted[2]) . "-" . mysqli_real_escape_string($date_formatted[0]) . "-" . mysqli_real_escape_string($date_formatted[1]);
+$save_survey_answers_sqlsafe = "INSERT INTO Gads_Hill_Parent_Survey (
     Child_ID,
     Child_Grade,
     Date_Surveyed,
@@ -23,26 +23,26 @@ $save_survey_answers = "INSERT INTO Gads_Hill_Parent_Survey (
     Second_Part_4)
     VALUES (
     
-    '" . $_POST['child'] . "',
-                   '" . $_POST['grade'] . "',
-                   '" . $date . "',
+    '" . mysqli_real_escape_string($_POST['child']) . "',
+                   '" . mysqli_real_escape_string($_POST['grade']) . "',
+                   '" . $date_sqlsafe . "',
                        
-                   '" . $_POST['first_1'] . "',
-                   '" . $_POST['first_2'] . "',
-                   '" . $_POST['first_3'] . "',
-                   '" . $_POST['first_4'] . "',
-                    '" . $_POST['first_5'] . "',
-                    '" . $_POST['first_6'] . "',
-                    '" . $_POST['first_7'] . "',
-                    '" . $_POST['first_8'] . "',
-                    '" . $_POST['first_9'] . "',
+                   '" . mysqli_real_escape_string($_POST['first_1']) . "',
+                   '" . mysqli_real_escape_string($_POST['first_2']) . "',
+                   '" . mysqli_real_escape_string($_POST['first_3']) . "',
+                   '" . mysqli_real_escape_string($_POST['first_4']) . "',
+                    '" . mysqli_real_escape_string($_POST['first_5']) . "',
+                    '" . mysqli_real_escape_string($_POST['first_6']) . "',
+                    '" . mysqli_real_escape_string($_POST['first_7']) . "',
+                    '" . mysqli_real_escape_string($_POST['first_8']) . "',
+                    '" . mysqli_real_escape_string($_POST['first_9']) . "',
                        
-                   '" . $_POST['second_1'] . "',
-                   '" . $_POST['second_2'] . "',
-                   '" . $_POST['second_3'] . "',
-                   '" . $_POST['second_4'] . "')";
-echo $save_survey_answers;
+                   '" . mysqli_real_escape_string($_POST['second_1']) . "',
+                   '" . mysqli_real_escape_string($_POST['second_2']) . "',
+                   '" . mysqli_real_escape_string($_POST['second_3']) . "',
+                   '" . mysqli_real_escape_string($_POST['second_4']) . "')";
+echo $save_survey_answers_sqlsafe;
 include "../include/dbconnopen.php";
-mysqli_query($cnnTRP, $save_survey_answers);
+mysqli_query($cnnTRP, $save_survey_answers_sqlsafe);
 include "../include/dbconnclose.php";
 ?>

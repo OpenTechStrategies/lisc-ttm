@@ -2,26 +2,26 @@
 /* add or remove people from an event. */
 
 if ($_POST['action']=='add'){
-    $make_event="INSERT INTO Events_Participants (
+    $make_event_sqlsafe="INSERT INTO Events_Participants (
                         Event_ID,
                         Participant_ID) VALUES(
-                        '" . $_POST['event'] ."',
-                        '" . $_POST['person'] ."'
+                        '" . mysqli_real_escape_string($_POST['event']) ."',
+                        '" . mysqli_real_escape_string($_POST['person']) ."'
                         )";
-    //echo $make_event;
+    //echo $make_event_sqlsafe;
     include "../include/dbconnopen.php";
-    mysqli_query($cnnTRP, $make_event);
+    mysqli_query($cnnTRP, $make_event_sqlsafe);
     $id=mysqli_insert_id($cnnTRP);
     include "../include/dbconnclose.php";
 }
 
 elseif($_POST['action']=='remove'){
-    $make_event="DELETE FROM Events_Participants WHERE
-                    Events_Participants_ID='" . $_POST['id'] ."'
+    $make_event_sqlsafe="DELETE FROM Events_Participants WHERE
+                    Events_Participants_ID='" . mysqli_real_escape_string($_POST['id']) ."'
                     ";
-    //echo $make_event;
+    //echo $make_event_sqlsafe;
     include "../include/dbconnopen.php";
-    mysqli_query($cnnTRP, $make_event);
+    mysqli_query($cnnTRP, $make_event_sqlsafe);
     $id=mysqli_insert_id($cnnTRP);
     include "../include/dbconnclose.php";
 }

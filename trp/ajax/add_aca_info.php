@@ -1,7 +1,7 @@
 <?php
 /* save academic information about a person.  pulls from programs on the participant profile.  Academic information is 
  * collected for programs 2, 3, and 5. */
-$add_aca_info = "INSERT INTO Academic_Info (
+$add_aca_info_sqlsafe = "INSERT INTO Academic_Info (
 		Participant_ID,
 		Program_ID,
 		School_Year,
@@ -15,21 +15,21 @@ $add_aca_info = "INSERT INTO Academic_Info (
 		Lang_Grade,
                 School
 	) VALUES (
-		'" . $_POST['participant'] . "',
-		'" . $_POST['program'] . "',
-		'" . $_POST['year'] . "',
-		'" . $_POST['quarter'] . "',
-		'" . $_POST['gpa'] . "',
-                '" . $_POST['isat_math'] . "',
-		'" . $_POST['isat_lang'] . "',
-		'" . $_POST['isat'] . "',
-		'" . $_POST['grade'] . "',
-		'" . $_POST['math'] . "',
-		'" . $_POST['lang'] . "',
-                    '" . $_POST['school'] . "'
+		'" . mysqli_real_escape_string($_POST['participant']) . "',
+		'" . mysqli_real_escape_string($_POST['program']) . "',
+		'" . mysqli_real_escape_string($_POST['year']) . "',
+		'" . mysqli_real_escape_string($_POST['quarter']) . "',
+		'" . mysqli_real_escape_string($_POST['gpa']) . "',
+        '" . mysqli_real_escape_string($_POST['isat_math']) . "',
+		'" . mysqli_real_escape_string($_POST['isat_lang']) . "',
+		'" . mysqli_real_escape_string($_POST['isat']) . "',
+		'" . mysqli_real_escape_string($_POST['grade']) . "',
+		'" . mysqli_real_escape_string($_POST['math']) . "',
+		'" . mysqli_real_escape_string($_POST['lang']) . "',
+        '" . mysqli_real_escape_string($_POST['school']) . "'
 	)";
-echo $add_aca_info;
+echo $add_aca_info_sqlsafe;
 include "../include/dbconnopen.php";
-mysqli_query($cnnTRP, $add_aca_info);
+mysqli_query($cnnTRP, $add_aca_info_sqlsafe);
 include "../include/dbconnclose.php";
 ?>

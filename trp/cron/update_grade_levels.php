@@ -21,12 +21,12 @@ if ($today['year'] == $first_line) {
         $today = getdate();
         //if today is July 1, then run the query
         if (($today['mon'] == 1) && ($today['mday'] == 2)) {
-            $update_grade_level = "UPDATE Academic_Info
+            $update_grade_level_sqlsafe = "UPDATE Academic_Info
                                     SET Grade_Level = (Grade_Level - 1)
                                     WHERE Grade_Level > 0 AND
                                         Grade_Level IS NOT NULL";
             include "../include/dbconnopen.php";
-            if (mysqli_query($cnnTRP, $update_grade_level)) {
+            if (mysqli_query($cnnTRP, $update_grade_level_sqlsafe)) {
                 echo "Success: Updated all grade levels.";
                 
                 //update log file

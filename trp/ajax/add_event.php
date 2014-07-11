@@ -2,19 +2,19 @@
 /* Create a new event, either linked to a campaign or not. */
 
 $date_formatted = explode('/', $_POST['date']);
-$save_date = $date_formatted[2]."-".$date_formatted[0]."-".$date_formatted[1];
-$make_event="INSERT INTO Events (
+$save_date_sqlsafe = mysqli_real_escape_string($date_formatted[2]) . "-" . mysqli_real_escape_string($date_formatted[0]) . "-" . mysqli_real_escape_string($date_formatted[1]);
+$make_event_sqlsafe="INSERT INTO Events (
                     Event_Name,
                     Event_Goal,
                     Event_Date,
                     Active) VALUES(
-                    '" . $_POST['name'] ."',
-                    '" . $_POST['goal'] ."',
-                    '" . $save_date ."',
+                    '" . mysqli_real_escape_string($_POST['name']) ."',
+                    '" . mysqli_real_escape_string($_POST['goal']) ."',
+                    '" . $save_date_sqlsafe ."',
                         1
                     )";
 include "../include/dbconnopen.php";
-mysqli_query($cnnTRP, $make_event);
+mysqli_query($cnnTRP, $make_event_sqlsafe);
 $id=mysqli_insert_id($cnnTRP);
 include "../include/dbconnclose.php";
 ?>
