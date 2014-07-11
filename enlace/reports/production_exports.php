@@ -1074,11 +1074,19 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             $title_array = array("Participant ID", "First Name", "Last Name", "Session ID (of program)", "Session Name", "Program Name",
                 "Home Language", "Ethnicity",
                 "Race");
-            $get_questions = "SELECT Question FROM Baseline_Assessment_Questions ORDER BY In_Table";
+            $legend_array_baseline=array("(id)", "(name)", "(name)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", 
+                "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", 
+                "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race");
+            $get_questions = "SELECT Baseline_Assessment_Question_ID, Question FROM Baseline_Assessment_Questions ORDER BY In_Table";
             include "../include/dbconnopen.php";
             $all_questions = mysqli_query($cnnEnlace, $get_questions);
             while ($q = mysqli_fetch_row($all_questions)) {
-                $title_array[] = "Pre: " . $q[0];
+                $title_array[] = "Pre: " . $q[1];
+                $get_response_text_sqlsafe="SELECT Response_Select, Response_Text FROM Assessment_Responses WHERE Question_ID=$q[0]";
+                $response_text=mysqli_query($cnnEnlace, $get_response_text_sqlsafe);
+                while ($response_text=mysqli_fetch_row($response_text)){
+                    $legend_array_baseline[]=$response_text[0] . "=" . $response_text[1];
+                }
             }
             $get_questions = "SELECT Question FROM Baseline_Assessment_Questions WHERE In_Table!='Participants_Baseline_Assessments' ORDER BY In_Table";
             include "../include/dbconnopen.php";
@@ -1096,12 +1104,22 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             }
 
             fputcsv($fp, $title_array);
+            $legend_array_baseline=array("(id)", "(name)", "(name)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", 
+                "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", 
+                "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race",
+                "0=N/A; 1=Strongly disagree; 2=Disagree; 3=Agree; 4=Strongly agree",
+                "0=N/A; 1=Strongly disagree; 2=Disagree; 3=Agree; 4=Strongly agree",
+                "0=N/A; 1=Strongly disagree; 2=Disagree; 3=Agree; 4=Strongly agree",
+                "0=N/A; 1=Strongly disagree; 2=Disagree; 3=Agree; 4=Strongly agree",
+                "0=N/A; 1=Strongly disagree; 2=Disagree; 3=Agree; 4=Strongly agree",
+                "0=N/A; 1=Mostly A's; 2=Mostly B's; 3=Mostly C's; 4=Mostly D's; 5=Mostly F's"
+                );
             $get_events = "SELECT  Pre_Assessments.Participant_ID, First_Name, Last_Name, Pre_Caring.Program, Session_Name, Name,
                             Home_Language, Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_E, BYS_T, 
                             JVQ_1, JVQ_12, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, US_Born,
 
-                            Pre_Caring.Check_In, Pre_Caring.Compliment, Pre_Caring.Crisis_Help, 
-                            Pre_Caring.KnowImportance, Pre_Caring.Know_You, Pre_Caring.Pay_Attention, Pre_Caring.Personal_Advice, Pre_Caring.Upset_Discussion,
+                            Pre_Caring.Check_In, Pre_Caring.Know_You, Pre_Caring.Compliment, Pre_Caring.Crisis_Help, Pre_Caring.Pay_Attention, 
+                            Pre_Caring.KnowImportance, Pre_Caring.Personal_Advice, Pre_Caring.Upset_Discussion,
 
                             Pre_Future.Friends, Pre_Future.Finish_HS, Pre_Future.Stay_Safe,  Pre_Future.Alive_Well, Pre_Future.Happy_Life, 
                             Pre_Future.Manage_Work, Pre_Future.Proud_Parents, Pre_Future.Solve_Problems, Pre_Future.Interesting_Life, 
