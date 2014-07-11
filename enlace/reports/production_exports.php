@@ -1080,18 +1080,12 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             while ($q = mysqli_fetch_row($all_questions)) {
                 $title_array[] = "Pre: " . $q[0];
             }
-            echo $get_questions . "<br>"; //testing output
-            print_r($title_array); // testing_output
-            echo "<br>"; //testing output
-            echo "<br>"; //testing output
             $get_questions = "SELECT Question FROM Baseline_Assessment_Questions WHERE In_Table!='Participants_Baseline_Assessments' ORDER BY In_Table";
             include "../include/dbconnopen.php";
             $all_questions = mysqli_query($cnnEnlace, $get_questions);
             while ($q = mysqli_fetch_row($all_questions)) {
                 $title_array[] = "Post: " . $q[0];
             }
-            echo $get_questions . "<br>"; // testing output
-            print_r($title_array); // testing_output
 
             $non_admin_string = ";";
             //if not an administrator
@@ -1109,26 +1103,25 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                             Pre_Caring.Check_In, Pre_Caring.Compliment, Pre_Caring.Crisis_Help, 
                             Pre_Caring.KnowImportance, Pre_Caring.Know_You, Pre_Caring.Pay_Attention, Pre_Caring.Personal_Advice, Pre_Caring.Upset_Discussion,
 
-                            Pre_Future.Alive_Well, Pre_Future.Finish_HS, Pre_Future.Friends, Pre_Future.Happy_Life, 
-                            Pre_Future.Interesting_Life, Pre_Future.Manage_Work, Pre_Future.Proud_Parents, Pre_Future.Solve_Problems, 
-                            Pre_Future.Stay_Safe,
+                            Pre_Future.Friends, Pre_Future.Finish_HS, Pre_Future.Stay_Safe,  Pre_Future.Alive_Well, Pre_Future.Happy_Life, 
+                            Pre_Future.Manage_Work, Pre_Future.Proud_Parents, Pre_Future.Solve_Problems, Pre_Future.Interesting_Life, 
+                            
 
-                            Pre_Violence.Anger_Mgmt, Pre_Violence.Coping, Pre_Violence.Cowardice, Pre_Violence.Handle_Others, 
-                            Pre_Violence.Negotiation, Pre_Violence.Parent_Approval, Pre_Violence.Parent_Disapproval,
-                            Pre_Violence.Self_Awareness, Pre_Violence.Self_Care, Pre_Violence.Self_Defense, 
-                            Pre_Violence.Teasing_Prevention, 
+                            Pre_Violence.Coping, Pre_Violence.Cowardice, Pre_Violence.Self_Care, Pre_Violence.Anger_Mgmt, Pre_Violence.Negotiation, 
+                            Pre_Violence.Self_Defense, Pre_Violence.Handle_Others, Pre_Violence.Self_Awareness,
+                            Pre_Violence.Parent_Approval, Pre_Violence.Parent_Disapproval, Pre_Violence.Teasing_Prevention, 
 
-                            Post_Caring.Check_In, Post_Caring.Compliment, Post_Caring.Crisis_Help, 
-                            Post_Caring.KnowImportance, Post_Caring.Know_You, Post_Caring.Pay_Attention, Post_Caring.Personal_Advice, Post_Caring.Upset_Discussion,
 
-                            Post_Future.Alive_Well, Post_Future.Finish_HS, Post_Future.Friends, Post_Future.Happy_Life, 
-                            Post_Future.Interesting_Life, Post_Future.Manage_Work, Post_Future.Proud_Parents, Post_Future.Solve_Problems, 
-                            Post_Future.Stay_Safe,
+                            Post_Caring.Check_In, Post_Caring.Know_You, Post_Caring.Compliment, Post_Caring.Crisis_Help, Post_Caring.Pay_Attention, 
+                            Post_Caring.KnowImportance, Post_Caring.Personal_Advice, Post_Caring.Upset_Discussion,
 
-                            Post_Violence.Anger_Mgmt, Post_Violence.Coping, Post_Violence.Cowardice, Post_Violence.Handle_Others, 
-                            Post_Violence.Negotiation, Post_Violence.Parent_Approval, Post_Violence.Parent_Disapproval,
-                            Post_Violence.Self_Awareness, Post_Violence.Self_Care, Post_Violence.Self_Defense, 
-                            Post_Violence.Teasing_Prevention
+                            Post_Future.Friends, Post_Future.Finish_HS, Post_Future.Stay_Safe, Post_Future.Alive_Well, Post_Future.Happy_Life, 
+                            Post_Future.Manage_Work, Post_Future.Proud_Parents, Post_Future.Solve_Problems, Post_Future.Interesting_Life, 
+                            
+
+                            Post_Violence.Coping, Post_Violence.Cowardice, Post_Violence.Self_Care, Post_Violence.Anger_Mgmt, Post_Violence.Negotiation, 
+                            Post_Violence.Self_Defense, Post_Violence.Handle_Others, Post_Violence.Self_Awareness, 
+                            Post_Violence.Parent_Approval, Post_Violence.Parent_Disapproval, Post_Violence.Teasing_Prevention
 
                             FROM Assessments AS Pre_Assessments
                             LEFT JOIN Assessments as Post_Assessments ON 
