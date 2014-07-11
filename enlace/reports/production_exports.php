@@ -1082,7 +1082,8 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             $all_questions = mysqli_query($cnnEnlace, $get_questions);
             while ($q = mysqli_fetch_row($all_questions)) {
                 $title_array[] = "Pre: " . $q[1];
-                $get_response_text_sqlsafe="SELECT Response_Select, Response_Text FROM Assessment_Responses WHERE Question_ID=$q[0]";
+                $get_response_text_sqlsafe="SELECT Response_Select, Response_Text FROM Assessment_Responses WHERE Question_ID='$q[0]'";
+                echo $get_response_text_sqlsafe; //testing output
                 $response_text=mysqli_query($cnnEnlace, $get_response_text_sqlsafe);
                 while ($response_text=mysqli_fetch_row($response_text)){
                     print_r($response_text); //testing output
