@@ -1097,11 +1097,11 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
 
             fputcsv($fp, $title_array);
             $get_events = "SELECT  Pre_Assessments.Participant_ID, First_Name, Last_Name, Pre_Caring.Program, Session_Name, Name,
-                            Home_Language, Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_T, BYS_E, 
-                            JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_T, JVQ_E, JVQ_12, US_Born,
+                            Home_Language, Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_E, BYS_T, 
+                            JVQ_1, JVQ_12, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, US_Born,
 
-                            Pre_Caring.Check_In, Pre_Caring.Compliment, Pre_Caring.Crisis_Help, Pre_Caring.Know_You, 
-                            Pre_Caring.KnowImportance, Pre_Caring.Pay_Attention, Pre_Caring.Personal_Advice, Pre_Caring.Upset_Discussion,
+                            Pre_Caring.Check_In, Pre_Caring.Compliment, Pre_Caring.Crisis_Help, 
+                            Pre_Caring.KnowImportance, Pre_Caring.Know_You, Pre_Caring.Pay_Attention, Pre_Caring.Personal_Advice, Pre_Caring.Upset_Discussion,
 
                             Pre_Future.Alive_Well, Pre_Future.Finish_HS, Pre_Future.Friends, Pre_Future.Happy_Life, 
                             Pre_Future.Interesting_Life, Pre_Future.Manage_Work, Pre_Future.Proud_Parents, Pre_Future.Solve_Problems, 
@@ -1112,8 +1112,8 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                             Pre_Violence.Self_Awareness, Pre_Violence.Self_Care, Pre_Violence.Self_Defense, 
                             Pre_Violence.Teasing_Prevention, 
 
-                            Post_Caring.Check_In, Post_Caring.Compliment, Post_Caring.Crisis_Help, Post_Caring.Know_You, 
-                            Post_Caring.KnowImportance, Post_Caring.Pay_Attention, Post_Caring.Personal_Advice, Post_Caring.Upset_Discussion,
+                            Post_Caring.Check_In, Post_Caring.Compliment, Post_Caring.Crisis_Help, 
+                            Post_Caring.KnowImportance, Post_Caring.Know_You, Post_Caring.Pay_Attention, Post_Caring.Personal_Advice, Post_Caring.Upset_Discussion,
 
                             Post_Future.Alive_Well, Post_Future.Finish_HS, Post_Future.Friends, Post_Future.Happy_Life, 
                             Post_Future.Interesting_Life, Post_Future.Manage_Work, Post_Future.Proud_Parents, Post_Future.Solve_Problems, 
