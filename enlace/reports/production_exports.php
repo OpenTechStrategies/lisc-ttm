@@ -1104,16 +1104,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             }
 
             fputcsv($fp, $title_array);
-            $legend_array_baseline=array("(id)", "(name)", "(name)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", 
-                "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", 
-                "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race",
-                "0=N/A; 1=Strongly disagree; 2=Disagree; 3=Agree; 4=Strongly agree",
-                "0=N/A; 1=Strongly disagree; 2=Disagree; 3=Agree; 4=Strongly agree",
-                "0=N/A; 1=Strongly disagree; 2=Disagree; 3=Agree; 4=Strongly agree",
-                "0=N/A; 1=Strongly disagree; 2=Disagree; 3=Agree; 4=Strongly agree",
-                "0=N/A; 1=Strongly disagree; 2=Disagree; 3=Agree; 4=Strongly agree",
-                "0=N/A; 1=Mostly A's; 2=Mostly B's; 3=Mostly C's; 4=Mostly D's; 5=Mostly F's"
-                );
+            fputcsv($fp, $legend_array_baseline);
             $get_events = "SELECT  Pre_Assessments.Participant_ID, First_Name, Last_Name, Pre_Caring.Program, Session_Name, Name,
                             Home_Language, Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_E, BYS_T, 
                             JVQ_1, JVQ_12, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, US_Born,
