@@ -1085,7 +1085,10 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 $get_response_text_sqlsafe="SELECT Response_Select, Response_Text FROM Assessment_Responses WHERE Question_ID=$q[0]";
                 $response_text=mysqli_query($cnnEnlace, $get_response_text_sqlsafe);
                 while ($response_text=mysqli_fetch_row($response_text)){
-                    $legend_array_baseline[]=$response_text[0] . "=" . $response_text[1];
+                    print_r($response_text); //testing output
+                    $legend_cell=$response_text[0] . "=" . $response_text[1];
+                    echo "<br>" . $legend_cell; //testing output
+                    $legend_array_baseline[]=$legend_cell;
                 }
             }
             $get_questions = "SELECT Question FROM Baseline_Assessment_Questions WHERE In_Table!='Participants_Baseline_Assessments' ORDER BY In_Table";
