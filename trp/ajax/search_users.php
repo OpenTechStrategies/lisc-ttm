@@ -3,10 +3,11 @@
  * First determine if the user is an admin. Usually this will be a program ID number,
  * but sometimes it will be 'a' (all) or 'n' (none).
  */
-$get_program_access_sqlsafe = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = " . mysqli_real_escape_string($_COOKIE['user']) . "";
-//echo $get_program_access_sqlsafe;
+include "../include/dbconnopen.php";
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+$get_program_access_sqlsafe = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
+    WHERE User_Email = " . mysqli_real_escape_string($cnnLISC, $_COOKIE['user']) . "";
+//echo $get_program_access_sqlsafe;
 $program_access = mysqli_query($cnnLISC, $get_program_access_sqlsafe);
 $prog_access = mysqli_fetch_row($program_access);
 $access = $prog_access[0];
@@ -18,38 +19,37 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
 if ($_POST['first'] == '') {
     $first_sqlsafe = '';
 } else {
-    $first_sqlsafe = ' AND First_Name LIKE "%' . mysqli_real_escape_string($_POST['first']) . '%"';
+    $first_sqlsafe = ' AND First_Name LIKE "%' . mysqli_real_escape_string($cnnTRP, $_POST['first']) . '%"';
 }
 if ($_POST['last'] == '') {
     $last_sqlsafe = '';
 } else {
-    $last_sqlsafe = " AND Last_Name LIKE '%" . mysqli_real_escape_string($_POST['last']) . "%'";
+    $last_sqlsafe = " AND Last_Name LIKE '%" . mysqli_real_escape_string($cnnTRP, $_POST['last']) . "%'";
 }
 if ($_POST['dob'] == '') {
     $dob_sqlsafe = '';
 } else {
-    $dob_sqlsafe = " AND DOB='" . mysqli_real_escape_string($_POST['dob']) . "'";
+    $dob_sqlsafe = " AND DOB='" . mysqli_real_escape_string($cnnTRP, $_POST['dob']) . "'";
 }
 if ($_POST['gender'] == '') {
     $gender_sqlsafe = '';
 } else {
-    $gender_sqlsafe = " AND Gender='" . mysqli_real_escape_string($_POST['gender']) . "'";
+    $gender_sqlsafe = " AND Gender='" . mysqli_real_escape_string($cnnTRP, $_POST['gender']) . "'";
 }
 if ($_POST['cps_id'] == '') {
     $cps_sqlsafe = '';
 } else {
-    $cps_sqlsafe = " AND CPS_ID='" . mysqli_real_escape_string($_POST['cps_id']) . "'";
+    $cps_sqlsafe = " AND CPS_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['cps_id']) . "'";
 }
 if ($_POST['program'] == '') {
     $program_sqlsafe = '';
 } else {
     $program_join_sqlsafe=" INNER JOIN Participants_Programs ON Participants.Participant_ID=Participants_Programs.Participant_ID ";
-    $program_sqlsafe = " AND Program_ID='" . mysqli_real_escape_string($_POST['program']) . "'";
+    $program_sqlsafe = " AND Program_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['program']) . "'";
 }
 $uncertain_search_query_sqlsafe = "SELECT * FROM Participants" . $program_join_sqlsafe . " WHERE Participants.Participant_ID!='' " . $first_sqlsafe . $last_sqlsafe . $dob_sqlsafe . $gender_sqlsafe . $cps_sqlsafe . $program_sqlsafe . " ORDER BY Last_Name";
 //echo $uncertain_search_query_sqlsafe;
 
-include "../include/dbconnopen.php";
 $results = mysqli_query($cnnTRP, $uncertain_search_query_sqlsafe);
 
 if ($_POST['family_search'] == '1') {

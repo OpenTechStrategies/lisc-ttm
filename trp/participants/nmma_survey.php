@@ -2,8 +2,8 @@
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker_simple.php";
-$participant_query_sqlsafe = "SELECT * FROM Participants WHERE Participant_ID='" . mysqli_real_escape_string($_GET['participant']) . "'";
 include "../include/dbconnopen.php";
+$participant_query_sqlsafe = "SELECT * FROM Participants WHERE Participant_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['participant']) . "'";
 $get_participant = mysqli_query($cnnTRP, $participant_query_sqlsafe);
 $parti = mysqli_fetch_array($get_participant);
 include "../include/dbconnclose.php";

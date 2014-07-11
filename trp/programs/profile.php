@@ -1,8 +1,8 @@
 <?php
 include "../../header.php";
 include "../header.php";
-$get_program_info_sqlsafe = "SELECT * FROM Programs WHERE Program_ID='" . mysqli_real_escape_string($_GET['id']) . "'";
 include "../include/dbconnopen.php";
+$get_program_info_sqlsafe = "SELECT * FROM Programs WHERE Program_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
 include "../include/datepicker_simple.php";
 $program_info = mysqli_query($cnnTRP, $get_program_info_sqlsafe);
 $program = mysqli_fetch_array($program_info);
@@ -102,7 +102,7 @@ $program = mysqli_fetch_array($program_info);
 
 
                     <?php
-                    $get_uploads_sqlsafe = "SELECT Upload_Id, File_Name FROM Programs_Uploads WHERE Program_ID='" . mysqli_real_escape_string($_GET['id']) . "'";
+                    $get_uploads_sqlsafe = "SELECT Upload_Id, File_Name FROM Programs_Uploads WHERE Program_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
                     $result = mysqli_query($cnnTRP, $get_uploads_sqlsafe);
                     if (mysqli_num_rows($result) == 0) {
                         echo "No notes have been uploaded <br>";
@@ -156,14 +156,12 @@ $program = mysqli_fetch_array($program_info);
                                         WHERE Gold_Score_Totals.Year=3
                                         AND (Social_Emotional!='' OR Physical!='' OR Language!='' OR Cognitive!='' OR Literacy!='' OR Mathematics!='' OR Science_Tech!=''
                                         OR Social_Studies!='' OR Creative_Arts!='' OR English!='');";
-    include "../include/dbconnopen.php";
     $averages_yr_1 = mysqli_query($cnnTRP, $averages_1_sqlsafe);
     $averages1 = mysqli_fetch_row($averages_yr_1);
     $averages_yr_2 = mysqli_query($cnnTRP, $averages_2_sqlsafe);
     $averages2 = mysqli_fetch_row($averages_yr_2);
     $averages_yr_3 = mysqli_query($cnnTRP, $averages_3_sqlsafe);
     $averages3 = mysqli_fetch_row($averages_yr_3);
-    include "../include/dbconnclose.php";
     ?>
                     <table id="gold_scores_table">
                         <tr>
@@ -529,7 +527,6 @@ $program = mysqli_fetch_array($program_info);
                         //show all existing classroom info
                         $get_class_avgs_sqlsafe="SELECT * FROM Class_Avg_Gold_Scores LEFT JOIN Gold_Score_Sections ON Question_ID=Gold_Question_ID";
                        // echo $get_class_avgs;
-                        include "../include/dbconnopen.php";
                         $class_avgs=mysqli_query($cnnTRP, $get_class_avgs_sqlsafe);
                         while ($class_avg=mysqli_fetch_array($class_avgs)){
                             ?>
@@ -545,7 +542,6 @@ $program = mysqli_fetch_array($program_info);
                         </tr>
                                 <?php
                         }
-                        include "../include/dbconnclose.php";
                         ?>
                         <tr><td><input type="text" id="new_class_num"></td>
                         <td><select id="new_class_year">
@@ -560,14 +556,12 @@ $program = mysqli_fetch_array($program_info);
                                                 <td><select id="new_class_question">
                                             <?php 
                                             $section_query_sqlsafe="SELECT * FROM Gold_Score_Sections";
-                                            include "../include/dbconnopen.php";
                                             $sections=mysqli_query($cnnTRP, $section_query_sqlsafe);
                                             while ($sec=  mysqli_fetch_array($sections)){
                                                 ?>
                                                         <option value="<?php echo $sec[0];?>"><?php echo $sec[1];?></option>
                                                     <?php
                                             }
-                                            include "../include/dbconnclose.php";
                                             ?>
                                             </select>
                                         </td>
@@ -597,8 +591,7 @@ $program = mysqli_fetch_array($program_info);
                     <table class="inner_table">
     <?php
     //get dates
-    $date_query_sqlsafe = "SELECT Date_ID, Date FROM Program_Dates WHERE Program_Id='" . mysqli_real_escape_string($_GET['id']) . "'";
-    include "../include/dbconnopen.php";
+    $date_query_sqlsafe = "SELECT Date_ID, Date FROM Program_Dates WHERE Program_Id='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
     $program_dates = mysqli_query($cnnTRP, $date_query_sqlsafe);
     while ($date = mysqli_fetch_row($program_dates)) {
         $format_date = explode('-', $date[1]);
@@ -619,8 +612,9 @@ $program = mysqli_fetch_array($program_info);
         ?>
                                         <!-- people need to be enrolled in the program before they can attend a session.  Don't see the person you want to 
                                         add?  Make sure they're enrolled at the top left. -->
-                                        Add attendee: <?php $get_members_sqlsafe = "SELECT Participants_Programs.Participant_Id, First_Name, Last_Name FROM Participants_Programs
-                                    INNER JOIN Participants ON Participants.Participant_Id=Participants_Programs.Participant_Id WHERE Program_ID='" . mysqli_real_escape_string($_GET['id']) . "'";
+                                        Add attendee: <?php
+                                           $get_members_sqlsafe = "SELECT Participants_Programs.Participant_Id, First_Name, Last_Name FROM Participants_Programs
+                                    INNER JOIN Participants ON Participants.Participant_Id=Participants_Programs.Participant_Id WHERE Program_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
                                 //echo $get_members_sqlsafe; 
         ?><select id="new_attendee_<?php echo $date[0] ?>" class="no_view"  onchange="
                                             var attendee = this.value;
@@ -759,7 +753,7 @@ $program = mysqli_fetch_array($program_info);
                     <?php
                     $get_scores_sqlsafe = "SELECT AVG(Explore_Score_Pre) AS pre, AVG(Explore_Score_Mid) AS mid, AVG(Explore_Score_Post) AS post,
                                     AVG(Explore_Score_Fall) AS fall, AVG(Reading_ISAT) as reading, AVG(Math_ISAT) as math, School, School_Year FROM Explore_Scores
-                                    WHERE Program_ID='" . mysqli_real_escape_string($_GET['id']) . "' GROUP BY School, School_Year";
+                                    WHERE Program_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "' GROUP BY School, School_Year";
                     // echo $get_scores_sqlsafe;
                     $scores = mysqli_query($cnnTRP, $get_scores_sqlsafe);
                     ?>
@@ -889,7 +883,7 @@ $program = mysqli_fetch_array($program_info);
 
 
                         <?php
-                        $get_uploads_sqlsafe = "SELECT Upload_Id, File_Name FROM Programs_Uploads WHERE Program_ID='" . mysqli_real_escape_string($_GET['id']) . "'";
+                        $get_uploads_sqlsafe = "SELECT Upload_Id, File_Name FROM Programs_Uploads WHERE Program_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
                         $result = mysqli_query($cnnTRP, $get_uploads_sqlsafe);
                         if (mysqli_num_rows($result) == 0) {
                             echo "No notes have been uploaded <br>";
@@ -927,8 +921,7 @@ $program = mysqli_fetch_array($program_info);
                         <?php
                         $get_notes_sqlsafe = "SELECT MONTH(Date_Entered), DAY(Date_Entered), YEAR(Date_Entered), Author, Note_Text, School_Name FROM Blog_Notes
         INNER JOIN Schools ON School=School_ID
-        WHERE Program_Id='" . mysqli_real_escape_string($_GET['id']) . "'  ORDER BY School_Name";
-                        include "../include/dbconnopen.php";
+        WHERE Program_Id='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'  ORDER BY School_Name";
                         $notes = mysqli_query($cnnTRP, $get_notes_sqlsafe);
                         while ($note = mysqli_fetch_row($notes)) {
                             ?>
@@ -939,7 +932,6 @@ $program = mysqli_fetch_array($program_info);
                             </tr>
         <?php
     }
-    // include "../include/dbconnclose.php";
     ?>
                         <!--Add new note-->
                         <tr><td colspan="2">New note:<br>
@@ -950,7 +942,6 @@ $program = mysqli_fetch_array($program_info);
                                     <option value="">-----</option>
                                     <?php
                                     $select_schools_sqlsafe = "SELECT * FROM Schools ORDER BY School_Name";
-                                    include "../include/dbconnopen.php";
                                     $schools = mysqli_query($cnnTRP, $select_schools_sqlsafe);
                                     while ($school = mysqli_fetch_row($schools)) {
                                         ?>
@@ -1079,7 +1070,6 @@ else if ($program['Program_ID'] == 4) {
             <tr><th>Month</th><th>Year</th><th>Enrollment</th></tr>
     <?php
     $enrollment_query_sqlsafe = "SELECT Month, Year, Value, Elev8_ID FROM Elev8_Data WHERE Element=1";
-    include "../include/dbconnopen.php";
     $enrollment = mysqli_query($cnnTRP, $enrollment_query_sqlsafe);
     while ($enroll = mysqli_fetch_row($enrollment)) {
         ?>
@@ -1102,7 +1092,6 @@ else if ($program['Program_ID'] == 4) {
                 </tr>
         <?php
     }
-    include "../include/dbconnclose.php";
     ?>
             <tr>
                 <td><select id="month_elev8_select">
@@ -1151,7 +1140,6 @@ else if ($program['Program_ID'] == 4) {
             <tr><th>Month</th><th>Year</th><th>Enrollment</th></tr>
                                                             <?php
                                                             $enrollment_query_sqlsafe = "SELECT Month, Year, Value, Elev8_ID FROM Elev8_Data WHERE Element=2";
-                                                            include "../include/dbconnopen.php";
                                                             $enrollment = mysqli_query($cnnTRP, $enrollment_query_sqlsafe);
                                                             while ($enroll = mysqli_fetch_row($enrollment)) {
                                                                 ?>
@@ -1172,7 +1160,6 @@ else if ($program['Program_ID'] == 4) {
                                                                 "></td></tr>
         <?php
     }
-    include "../include/dbconnclose.php";
     ?>
             <tr>
                 <td><select id="month_elev8_select_2">
@@ -1222,7 +1209,6 @@ else if ($program['Program_ID'] == 4) {
             <tr><th>Month</th><th>Year</th><th>Enrollment</th></tr>
                                                             <?php
                                                             $enrollment_query_sqlsafe = "SELECT Month, Year, Value, Elev8_ID FROM Elev8_Data WHERE Element=3";
-                                                            include "../include/dbconnopen.php";
                                                             $enrollment = mysqli_query($cnnTRP, $enrollment_query_sqlsafe);
                                                             while ($enroll = mysqli_fetch_row($enrollment)) {
                                                                 ?>
@@ -1243,7 +1229,6 @@ else if ($program['Program_ID'] == 4) {
                                                                 "></td></tr>
         <?php
     }
-    include "../include/dbconnclose.php";
     ?>
             <tr>
                 <td><select id="month_elev8_select_3">
@@ -1292,7 +1277,6 @@ else if ($program['Program_ID'] == 4) {
             <tr><th>Month</th><th>Year</th><th>Enrollment</th></tr>
                                                             <?php
                                                             $enrollment_query_sqlsafe = "SELECT Month, Year, Value, Elev8_ID FROM Elev8_Data WHERE Element=4";
-                                                            include "../include/dbconnopen.php";
                                                             $enrollment = mysqli_query($cnnTRP, $enrollment_query_sqlsafe);
                                                             while ($enroll = mysqli_fetch_row($enrollment)) {
                                                                 ?>
@@ -1313,7 +1297,6 @@ else if ($program['Program_ID'] == 4) {
                                                                 "></td></tr>
         <?php
     }
-    include "../include/dbconnclose.php";
     ?>
             <tr>
                 <td><select id="month_elev8_select_4">
@@ -1363,7 +1346,6 @@ else if ($program['Program_ID'] == 4) {
             <tr><th>Month</th><th>Year</th><th>Enrollment</th></tr>
                                                             <?php
                                                             $enrollment_query_sqlsafe = "SELECT Month, Year, Value, Elev8_ID FROM Elev8_Data WHERE Element=5";
-                                                            include "../include/dbconnopen.php";
                                                             $enrollment = mysqli_query($cnnTRP, $enrollment_query_sqlsafe);
                                                             while ($enroll = mysqli_fetch_row($enrollment)) {
                                                                 ?>
@@ -1384,7 +1366,6 @@ else if ($program['Program_ID'] == 4) {
                                                                 "></td></tr>
         <?php
     }
-    include "../include/dbconnclose.php";
     ?>
             <tr>
                 <td><select id="month_elev8_select_5">
@@ -1433,7 +1414,6 @@ else if ($program['Program_ID'] == 4) {
             <tr><th>Month</th><th>Year</th><th>Enrollment</th></tr>
                                                             <?php
                                                             $enrollment_query_sqlsafe = "SELECT Month, Year, Value, Elev8_ID FROM Elev8_Data WHERE Element=6";
-                                                            include "../include/dbconnopen.php";
                                                             $enrollment = mysqli_query($cnnTRP, $enrollment_query_sqlsafe);
                                                             while ($enroll = mysqli_fetch_row($enrollment)) {
                                                                 ?>
@@ -1454,7 +1434,6 @@ else if ($program['Program_ID'] == 4) {
                                                                 "></td></tr>
         <?php
     }
-    include "../include/dbconnclose.php";
     ?>
             <tr>
                 <td><select id="month_elev8_select_6">
@@ -1504,7 +1483,6 @@ else if ($program['Program_ID'] == 4) {
             <tr><th>Month</th><th>Year</th><th>Enrollment</th></tr>
                                                             <?php
                                                             $enrollment_query_sqlsafe = "SELECT Month, Year, Value, Elev8_ID FROM Elev8_Data WHERE Element=7";
-                                                            include "../include/dbconnopen.php";
                                                             $enrollment = mysqli_query($cnnTRP, $enrollment_query_sqlsafe);
                                                             while ($enroll = mysqli_fetch_row($enrollment)) {
                                                                 ?>
@@ -1525,7 +1503,6 @@ else if ($program['Program_ID'] == 4) {
                                                                 "></td></tr>
         <?php
     }
-    include "../include/dbconnclose.php";
     ?>
             <tr>
                 <td><select id="month_elev8_select_7">
@@ -1576,7 +1553,6 @@ else if ($program['Program_ID'] == 4) {
             <tr><th>Month</th><th>Year</th><th>Total Visits</th></tr>
                                                             <?php
                                                             $enrollment_query_sqlsafe = "SELECT Month, Year, Value, Elev8_ID FROM Elev8_Data WHERE Element=8";
-                                                            include "../include/dbconnopen.php";
                                                             $enrollment = mysqli_query($cnnTRP, $enrollment_query_sqlsafe);
                                                             while ($enroll = mysqli_fetch_row($enrollment)) {
                                                                 ?>
@@ -1597,7 +1573,6 @@ else if ($program['Program_ID'] == 4) {
                                                                 "></td></tr>
         <?php
     }
-    include "../include/dbconnclose.php";
     ?>
             <tr>
                 <td><select id="month_elev8_select_8">
@@ -1716,7 +1691,7 @@ else if ($program['Program_ID'] == 5) {
                     <table class="inner_table">
                                     <?php
                                     //get dates
-                                    $date_query_sqlsafe = "SELECT Date_ID, Date FROM Program_Dates WHERE Program_Id='" . mysqli_real_escape_string($_GET['id']) . "'";
+                                    $date_query_sqlsafe = "SELECT Date_ID, Date FROM Program_Dates WHERE Program_Id='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
                                     $program_dates = mysqli_query($cnnTRP, $date_query_sqlsafe);
                                     while ($date = mysqli_fetch_row($program_dates)) {
                                         $format_date = explode('-', $date[1]);
@@ -1736,7 +1711,7 @@ else if ($program['Program_ID'] == 5) {
 
                                         <!--- again, for someone to be an attendee s/he must already be enrolled in the program. -->
                                         <span class="helptext">Add attendee: </span><?php $get_members_sqlsafe = "SELECT Participants_Programs.Participant_Id, First_Name, Last_Name FROM Participants_Programs
-                                    INNER JOIN Participants ON Participants.Participant_Id=Participants_Programs.Participant_Id WHERE Program_ID='" . mysqli_real_escape_string($_GET['id']) . "'";
+                                    INNER JOIN Participants ON Participants.Participant_Id=Participants_Programs.Participant_Id WHERE Program_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
                                 //echo $get_members_sqlsafe;
                                         ?><select id="new_attendee_<?php echo $date[0] ?>" class="no_view" onchange="
                                             var attendee = this.value;
@@ -1823,7 +1798,6 @@ else if ($program['Program_ID'] == 5) {
 
                                         <!--<h4>Cultural Traditions Surveys</h4><?php
                                     $get_surveys_sqlsafe = "SELECT* FROM NMMA_Traditions_Survey";
-                                    include "../include/dbconnopen.php";
                                     $surveys = mysqli_query($cnnTRP, $get_surveys_sqlsafe);
                                         ?><table class="inner_table">
                                             <tr><th>Pre or Post</th><th>Date Completed</th><th>Participant?<br>(do we want to show this?)</th></tr>
@@ -1833,7 +1807,7 @@ else if ($program['Program_ID'] == 5) {
                                                 <tr><td><?php echo $survey['Pre_Post']; ?></td><td><?php echo $survey['Date']; ?></td><td></td></tr>
                                             <?php
                                         }
-                                        ?></table><?php include "../include/dbconnclose.php"; ?>
+                                        ?></table>
                                         <br/><br/>
                                         <h4>Cultural Identity Surveys</h4>
                                         <?php
@@ -1841,14 +1815,12 @@ else if ($program['Program_ID'] == 5) {
                                     AVG(Q8), AVG(Q9), AVG(Q10), AVG(Q11)
                                     FROM `lisc-trp.chapinhall.org`.NMMA_Identity_Survey
                                     WHERE Pre_Post='pre';";
-                                        include "../include/dbconnopen.php";
                                         $pre_surveys = mysqli_query($cnnTRP, $get_pre_surveys_sqlsafe);
                                         $pre = mysqli_fetch_row($pre_surveys);
                                         $get_post_surveys_sqlsafe = "SELECT AVG(Q1), AVG(Q2), AVG(Q3), AVG(Q4), AVG(Q5), AVG(Q6), AVG(Q7),
                                     AVG(Q8), AVG(Q9), AVG(Q10), AVG(Q11)
                                     FROM `lisc-trp.chapinhall.org`.NMMA_Identity_Survey
                                     WHERE Pre_Post='post';";
-                                        include "../include/dbconnopen.php";
                                         $post_surveys = mysqli_query($cnnTRP, $get_post_surveys_sqlsafe);
                                         $post = mysqli_fetch_row($post_surveys);
                                         ?>-->
@@ -2000,12 +1972,10 @@ else if ($program['Program_ID'] == 5) {
                     <script>
                         var programParticipants = [
                         <?php
-                        include '../include/dbconnopen.php';
                         $program_participants = mysqli_query($cnnTRP, "SELECT * FROM Participants_Programs
                                                                 INNER JOIN Participants ON Participants_Programs.Participant_ID = Participants.Participant_ID
                                                                 WHERE Program_ID = '" . $program['Program_ID'] . "'
                                                                 ORDER BY Participants.Last_Name");
-                        include '../include/dbconnclose.php';
 
                         $count = 0;
                         while ($program_participant = mysqli_fetch_assoc($program_participants)) {
@@ -2024,10 +1994,8 @@ else if ($program['Program_ID'] == 5) {
                     <?php
                     $all_program_sessions_sqlsafe = "SELECT * FROM Program_Sessions
                                             WHERE
-                                                Program_ID = " . mysqli_real_escape_string($_GET['id']) . ";";
-                    include "../include/dbconnopen.php";
+                                                Program_ID = " . mysqli_real_escape_string($cnnTRP, $_GET['id']) . ";";
                     $all_program_sessions = mysqli_query($cnnTRP, $all_program_sessions_sqlsafe);
-                    include "../include/dbconnclose.php";
                     
                     while($program_session = mysqli_fetch_assoc($all_program_sessions)) {
                         ?>
@@ -2137,9 +2105,7 @@ else if ($program['Program_ID'] == 5) {
                                                     LEFT JOIN Participants ON Participants.Participant_ID = Participants_Program_Sessions.Participant_ID
                                                     WHERE
                                                         Participants_Program_Sessions.Session_ID = " . $program_session['Session_ID'] . ";";
-                            include "../include/dbconnopen.php";
                             $all_session_participants = mysqli_query($cnnTRP, $all_session_participants_sqlsafe);
-                            include "../include/dbconnclose.php";
 
                             while($session_participant = mysqli_fetch_assoc($all_session_participants)) {
                                 ?>
@@ -2187,7 +2153,7 @@ else if ($program['Program_ID'] == 5) {
                                     </div>
                                     <br/><br/>
 <?php
-//include "../include/dbconnclose.php";
+include "../include/dbconnclose.php";
 include "../../footer.php";
 ?>
 	

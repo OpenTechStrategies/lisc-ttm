@@ -19,23 +19,23 @@ if (($_FILES["file"]["size"] < 1000000)
     include ("../include/dbconnopen.php");
     /* if the event or person is set, then this file can be associated with the correct ID: */
     if (isset($_POST['event_id']) || isset($_POST['person_id'])) {
-        $fileName_sqlsafe = mysqli_real_escape_string($_FILES['file']['name']);
+        $fileName_sqlsafe = mysqli_real_escape_string($cnnTRP, $_FILES['file']['name']);
         $tmpName = $_FILES['file']['tmp_name'];
-        $fileSize_sqlsafe = mysqli_real_escape_string($_FILES['file']['size']);
-        $fileType_sqlsafe = mysqli_real_escape_string($_FILES['file']['type']);
+        $fileSize_sqlsafe = mysqli_real_escape_string($cnnTRP, $_FILES['file']['size']);
+        $fileType_sqlsafe = mysqli_real_escape_string($cnnTRP, $_FILES['file']['type']);
 
         $file_open_temp = fopen($tmpName, 'r');
         $file_content = fread($file_open_temp, filesize($tmpName));
-        $file_content_sqlsafe = mysqli_real_escape_string($cnnTRP, $file_content);
+        $file_content_sqlsafe = mysqli_real_escape_string($cnnTRP, $cnnTRP, $file_content);
         fclose($file_open_temp);
 
         if (isset($_POST['person_id'])){
         $query_sqlsafe = "INSERT INTO Programs_Uploads (File_Name, File_Size, File_Type, File_Content, Program_ID, Participant_ID, Year) VALUES 
-        ('$fileName_sqlsafe', '$fileSize_sqlsafe', '$fileType_sqlsafe', '$file_content_sqlsafe', '" . mysqli_real_escape_string($_POST['event_id']) . "', '" . mysqli_real_escape_string($_POST['person_id']) . "', '" . mysqli_real_escape_string($_POST['year']) . "')";
+        ('$fileName_sqlsafe', '$fileSize_sqlsafe', '$fileType_sqlsafe', '$file_content_sqlsafe', '" . mysqli_real_escape_string($cnnTRP, $_POST['event_id']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['person_id']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['year']) . "')";
         }
         else{
             $query_sqlsafe = "INSERT INTO Programs_Uploads (File_Name, File_Size, File_Type, File_Content, Program_ID, Year) VALUES 
-        ('$fileName_sqlsafe', '$fileSize_sqlsafe', '$fileType_sqlsafe', '$file_content_sqlsafe', '" . mysqli_real_escape_string($_POST['event_id']) . "',  '" . mysqli_real_escape_string($_POST['year']) . "')";
+        ('$fileName_sqlsafe', '$fileSize_sqlsafe', '$fileType_sqlsafe', '$file_content_sqlsafe', '" . mysqli_real_escape_string($cnnTRP, $_POST['event_id']) . "',  '" . mysqli_real_escape_string($cnnTRP, $_POST['year']) . "')";
         }
        // echo $query_sqlsafe;
         mysqli_query($cnnTRP, $query_sqlsafe) or die('Error, query failed'); 

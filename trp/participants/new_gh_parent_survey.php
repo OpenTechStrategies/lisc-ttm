@@ -3,7 +3,7 @@
 	include "../header.php";
 	include "../include/dbconnopen.php";
         include "../include/datepicker_simple.php";
-	$get_parent_info_sqlsafe = "SELECT * FROM Participants WHERE Participant_ID='" . mysqli_real_escape_string($_GET['origin']) . "'";
+	$get_parent_info_sqlsafe = "SELECT * FROM Participants WHERE Participant_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['origin']) . "'";
 	$parent_info = mysqli_query($cnnTRP, $get_parent_info_sqlsafe);
 	$parent = mysqli_fetch_array($parent_info);
         

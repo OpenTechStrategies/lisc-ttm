@@ -1,14 +1,14 @@
 <?php
 /*check for duplicate person (warn before creating two people with the same name or CPS ID)*/
+include "../include/dbconnopen.php";
 if ($_POST['cps_id']!=''){
 $get_duplicate_campaigns_sqlsafe = "SELECT COUNT(Participant_ID) FROM Participants
-WHERE (First_Name='" . mysqli_real_escape_string($_POST['name']) . "' AND Last_Name='". mysqli_real_escape_string($_POST['surname']) ."') OR CPS_ID='" . mysqli_real_escape_string($_POST['cps_id']) . "'";}
+WHERE (First_Name='" . mysqli_real_escape_string($cnnTRP, $_POST['name']) . "' AND Last_Name='". mysqli_real_escape_string($cnnTRP, $_POST['surname']) ."') OR CPS_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['cps_id']) . "'";}
 else{
     $get_duplicate_campaigns_sqlsafe = "SELECT COUNT(Participant_ID) FROM Participants
-WHERE (First_Name='" . mysqli_real_escape_string($_POST['name']) . "' AND Last_Name='" . mysqli_real_escape_string($_POST['surname']) . "')";
+WHERE (First_Name='" . mysqli_real_escape_string($cnnTRP, $_POST['name']) . "' AND Last_Name='" . mysqli_real_escape_string($cnnTRP, $_POST['surname']) . "')";
 }
 //echo $get_duplicate_campaigns_sqlsafe;
-include "../include/dbconnopen.php";
 $is_duplicate = mysqli_query($cnnTRP, $get_duplicate_campaigns_sqlsafe);
 $duplicate = mysqli_fetch_row($is_duplicate);
 if ($duplicate[0]>0){

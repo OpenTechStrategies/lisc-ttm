@@ -3,7 +3,7 @@
 	include "../header.php";
 	include "../include/dbconnopen.php";
         include "../include/datepicker_simple.php";
-	$get_parent_info_sqlsafe = "SELECT * FROM Participants WHERE Participant_ID='" . mysqli_real_escape_string($_GET['origin']) . "'";
+	$get_parent_info_sqlsafe = "SELECT * FROM Participants WHERE Participant_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['origin']) . "'";
 	$parent_info = mysqli_query($cnnTRP, $get_parent_info_sqlsafe);
 	$parent = mysqli_fetch_array($parent_info);
         
@@ -21,8 +21,7 @@
 <div id="gads_hill_parent_survey">
 <table class="pm_survey">
     
-    <?$get_survey_sqlsafe="SELECT * FROM Gads_Hill_Parent_Survey WHERE Gads_Hill_Parent_Survey_ID='" . mysqli_real_escape_string($_GET['id']) . "'";
-    include "../include/dbconnopen.php";
+    <?$get_survey_sqlsafe="SELECT * FROM Gads_Hill_Parent_Survey WHERE Gads_Hill_Parent_Survey_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
     $survey=mysqli_query($cnnTRP, $get_survey_sqlsafe);
     $info=mysqli_fetch_array($survey);
     include "../include/dbconnclose.php";?>

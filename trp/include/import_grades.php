@@ -125,10 +125,10 @@ if (!isset($_POST['posted'])) {
                         //print_r($exploded_line);
                         //split up names
                         $names=explode(' ',$exploded_line[1]);
-                        $name_first_sqlsafe=mysqli_real_escape_string($names[0]);
-                        $surname_sqlsafe=mysqli_real_escape_string($names[1]);
-                        $get_program_name_sqlsafe = "SELECT * FROM Participants WHERE First_Name='$name_first_sqlsafe' AND Last_Name='$surname_sqlsafe'";
                         include "../include/dbconnopen.php";
+                        $name_first_sqlsafe=mysqli_real_escape_string($cnnTRP, $names[0]);
+                        $surname_sqlsafe=mysqli_real_escape_string($cnnTRP, $names[1]);
+                        $get_program_name_sqlsafe = "SELECT * FROM Participants WHERE First_Name='$name_first_sqlsafe' AND Last_Name='$surname_sqlsafe'";
                         $program_name=mysqli_query($cnnTRP, $get_program_name_sqlsafe);
                         //test whether the program already exists or not
                         if (mysqli_num_rows($program_name)>0){
@@ -173,56 +173,53 @@ if (!isset($_POST['posted'])) {
                         $qtr_4_mshs=mysqli_query($cnnTRP, $mshs_qtr_4_sqlsafe);
                         $mshs_qtr_4_count=mysqli_num_rows($qtr_4_mshs);
                         
-                        include "../include/dbconnclose.php";
-                        
                         //save the GPA and grade
                         if ($aca_qtr_1_count>0){
-                        $first_gpa_sqlsafe="UPDATE Academic_Info SET GPA=" . mysqli_real_escape_string($exploded_line[4]) . " WHERE
+                        $first_gpa_sqlsafe="UPDATE Academic_Info SET GPA=" . mysqli_real_escape_string($cnnTRP, $exploded_line[4]) . " WHERE
                             Participant_ID=$program_id AND Quarter=1";
-                        }else{$first_gpa_sqlsafe="INSERT INTO Academic_Info (Participant_ID, Quarter, GPA) VALUES ($program_id, 1, " . mysqli_real_escape_string($exploded_line[4]) . ")";}
+                        }else{$first_gpa_sqlsafe="INSERT INTO Academic_Info (Participant_ID, Quarter, GPA) VALUES ($program_id, 1, " . mysqli_real_escape_string($cnnTRP, $exploded_line[4]) . ")";}
                         if ($aca_qtr_2_count>0){
-                        $second_gpa_sqlsafe="UPDATE Academic_Info SET GPA=" . mysqli_real_escape_string($exploded_line[8]) . " WHERE
+                        $second_gpa_sqlsafe="UPDATE Academic_Info SET GPA=" . mysqli_real_escape_string($cnnTRP, $exploded_line[8]) . " WHERE
                             Participant_ID=$program_id AND Quarter=2";
-                        }else{$second_gpa_sqlsafe="INSERT INTO Academic_Info (Participant_ID, Quarter, GPA) VALUES ($program_id, 2, " . mysqli_real_escape_string($exploded_line[8]) . ")";}
+                        }else{$second_gpa_sqlsafe="INSERT INTO Academic_Info (Participant_ID, Quarter, GPA) VALUES ($program_id, 2, " . mysqli_real_escape_string($cnnTRP, $exploded_line[8]) . ")";}
                         if ($aca_qtr_3_count>0){
-                        $third_gpa_sqlsafe="UPDATE Academic_Info SET GPA=" . mysqli_real_escape_string($exploded_line[13]) . " WHERE
+                        $third_gpa_sqlsafe="UPDATE Academic_Info SET GPA=" . mysqli_real_escape_string($cnnTRP, $exploded_line[13]) . " WHERE
                             Participant_ID=$program_id AND Quarter=3";
-                        }else{$third_gpa_sqlsafe="INSERT INTO Academic_Info (Participant_ID, Quarter, GPA) VALUES ($program_id, 3, " . mysqli_real_escape_string($exploded_line[13]) . ")";}
+                        }else{$third_gpa_sqlsafe="INSERT INTO Academic_Info (Participant_ID, Quarter, GPA) VALUES ($program_id, 3, " . mysqli_real_escape_string($cnnTRP, $exploded_line[13]) . ")";}
                         if ($aca_qtr_4_count>0){
-                        $fourth_gpa_sqlsafe="UPDATE Academic_Info SET GPA=" . mysqli_real_escape_string($exploded_line[18]) . " WHERE
+                        $fourth_gpa_sqlsafe="UPDATE Academic_Info SET GPA=" . mysqli_real_escape_string($cnnTRP, $exploded_line[18]) . " WHERE
                             Participant_ID=$program_id AND Quarter=4";
-                        }else{$fourth_gpa_sqlsafe="INSERT INTO Academic_Info (Participant_ID, Quarter, GPA) VALUES ($program_id, 4, " . mysqli_real_escape_string($exploded_line[18]) . ")";}
+                        }else{$fourth_gpa_sqlsafe="INSERT INTO Academic_Info (Participant_ID, Quarter, GPA) VALUES ($program_id, 4, " . mysqli_real_escape_string($cnnTRP, $exploded_line[18]) . ")";}
                         
                         
                         //save tardies and absences
                         if ($mshs_qtr_1_count>0){
                             $first_attends_sqlsafe="UPDATE MS_to_HS_Over_Time SET
-                            School_Tardies=" . mysqli_real_escape_string($exploded_line[5]) . ", School_Absences_Excused=" . mysqli_real_escape_string($exploded_line[7]) . ", School_Absences_Unexcused=" . mysqli_real_escape_string($exploded_line[6]) . ", 
+                            School_Tardies=" . mysqli_real_escape_string($cnnTRP, $exploded_line[5]) . ", School_Absences_Excused=" . mysqli_real_escape_string($cnnTRP, $exploded_line[7]) . ", School_Absences_Unexcused=" . mysqli_real_escape_string($cnnTRP, $exploded_line[6]) . ", 
                             WHERE Quarter=1 AND Participant_ID=$program_id";
                         }else{$first_attends_sqlsafe="INSERT INTO MS_to_HS_Over_Time (Participant_ID, School_Tardies, School_Absences_Excused, School_Absences_Unexcused,
-                            Quarter) VALUES ('$program_id', " . mysqli_real_escape_string($exploded_line[5]) . ", " . mysqli_real_escape_string($exploded_line[7]) . ", " . mysqli_real_escape_string($exploded_line[6]) . ", 1)";}
+                            Quarter) VALUES ('$program_id', " . mysqli_real_escape_string($cnnTRP, $exploded_line[5]) . ", " . mysqli_real_escape_string($cnnTRP, $exploded_line[7]) . ", " . mysqli_real_escape_string($cnnTRP, $exploded_line[6]) . ", 1)";}
                         if ($mshs_qtr_2_count>0){
                             $second_attends_sqlsafe="UPDATE MS_to_HS_Over_Time SET
-                            School_Tardies=" . mysqli_real_escape_string($exploded_line[10]) . ", School_Absences_Excused=" . mysqli_real_escape_string($exploded_line[12]) . ", School_Absences_Unexcused=" . mysqli_real_escape_string($exploded_line[11]) . ", 
+                            School_Tardies=" . mysqli_real_escape_string($cnnTRP, $exploded_line[10]) . ", School_Absences_Excused=" . mysqli_real_escape_string($cnnTRP, $exploded_line[12]) . ", School_Absences_Unexcused=" . mysqli_real_escape_string($cnnTRP, $exploded_line[11]) . ", 
                             WHERE Quarter=2 AND Participant_ID=$program_id";
                         }else{$second_attends_sqlsafe="INSERT INTO MS_to_HS_Over_Time (Participant_ID, School_Tardies, School_Absences_Excused, School_Absences_Unexcused,
-                            Quarter) VALUES ('$program_id', " . mysqli_real_escape_string($exploded_line[10]) . ", " . mysqli_real_escape_string($exploded_line[12]) . ", " . mysqli_real_escape_string($exploded_line[11]) . ", 2)";}
+                            Quarter) VALUES ('$program_id', " . mysqli_real_escape_string($cnnTRP, $exploded_line[10]) . ", " . mysqli_real_escape_string($cnnTRP, $exploded_line[12]) . ", " . mysqli_real_escape_string($cnnTRP, $exploded_line[11]) . ", 2)";}
                             
                         if ($mshs_qtr_3_count>0){
                             $third_attends_sqlsafe="UPDATE MS_to_HS_Over_Time SET
-                            School_Tardies=" . mysqli_real_escape_string($exploded_line[15]) . ", School_Absences_Excused=" . mysqli_real_escape_string($exploded_line[17]) . ", School_Absences_Unexcused=" . mysqli_real_escape_string($exploded_line[16]) . ", 
+                            School_Tardies=" . mysqli_real_escape_string($cnnTRP, $exploded_line[15]) . ", School_Absences_Excused=" . mysqli_real_escape_string($cnnTRP, $exploded_line[17]) . ", School_Absences_Unexcused=" . mysqli_real_escape_string($cnnTRP, $exploded_line[16]) . ", 
                             WHERE Quarter=3 AND Participant_ID=$program_id";
                         }else{$third_attends_sqlsafe="INSERT INTO MS_to_HS_Over_Time (Participant_ID, School_Tardies, School_Absences_Excused, School_Absences_Unexcused,
-                            Quarter) VALUES ('$program_id', " . mysqli_real_escape_string($exploded_line[15]) . ", " . mysqli_real_escape_string($exploded_line[17]) . ", " . mysqli_real_escape_string($exploded_line[16]) . ", 3)";}
+                            Quarter) VALUES ('$program_id', " . mysqli_real_escape_string($cnnTRP, $exploded_line[15]) . ", " . mysqli_real_escape_string($cnnTRP, $exploded_line[17]) . ", " . mysqli_real_escape_string($cnnTRP, $exploded_line[16]) . ", 3)";}
                         if ($mshs_qtr_4_count>0){
                             $fourth_attends_sqlsafe="UPDATE MS_to_HS_Over_Time SET
-                            School_Tardies=" . mysqli_real_escape_string($exploded_line[20]) . ", School_Absences_Excused=" . mysqli_real_escape_string($exploded_line[22]) . ", School_Absences_Unexcused=" . mysqli_real_escape_string($exploded_line[21]) . ", 
+                            School_Tardies=" . mysqli_real_escape_string($cnnTRP, $exploded_line[20]) . ", School_Absences_Excused=" . mysqli_real_escape_string($cnnTRP, $exploded_line[22]) . ", School_Absences_Unexcused=" . mysqli_real_escape_string($cnnTRP, $exploded_line[21]) . ", 
                             WHERE Quarter=4 AND Participant_ID=$program_id";
                         }else{$fourth_attends_sqlsafe="INSERT INTO MS_to_HS_Over_Time (Participant_ID, School_Tardies, School_Absences_Excused, School_Absences_Unexcused,
-                            Quarter) VALUES ('$program_id', " . mysqli_real_escape_string($exploded_line[20]) . ", " . mysqli_real_escape_string($exploded_line[22]) . ", " . mysqli_real_escape_string($exploded_line[21]) . ", 4)";}
+                            Quarter) VALUES ('$program_id', " . mysqli_real_escape_string($cnnTRP, $exploded_line[20]) . ", " . mysqli_real_escape_string($cnnTRP, $exploded_line[22]) . ", " . mysqli_real_escape_string($cnnTRP, $exploded_line[21]) . ", 4)";}
                         
                         
-                        include "../include/dbconnopen.php";
                         //do the actual importing:
                        
                         if ($exploded_line[4]!=null){
@@ -298,7 +295,7 @@ if (!isset($_POST['posted'])) {
 //
 //            //open DB
 //            include 'dbconnopen.php';
-//            $import_query_sqlsafe= "Call Import__Activity_Status_Report('" . mysqli_real_escape_string($val) . "')";
+//            $import_query_sqlsafe= "Call Import__Activity_Status_Report('" . mysqli_real_escape_string($cnnTRP, $val) . "')";
 //           // echo $import_query;
 //            $imported_record = mysqli_query($cnnTRP, $import_query_sqlsafe);
 //
