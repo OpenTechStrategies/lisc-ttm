@@ -1083,14 +1083,12 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             while ($q = mysqli_fetch_row($all_questions)) {
                 $title_array[] = "Pre: " . $q[1];
                 $get_response_text_sqlsafe="SELECT Response_Select, Response_Text FROM Assessment_Responses WHERE Question_ID='$q[0]'";
-                echo $get_response_text_sqlsafe; //testing output
                 $response_text=mysqli_query($cnnEnlace, $get_response_text_sqlsafe);
+                $legend_cell="";
                 while ($response_text=mysqli_fetch_row($response_text)){
-                    print_r($response_text); //testing output
-                    $legend_cell=$response_text[0] . "=" . $response_text[1];
-                    echo "<br>" . $legend_cell; //testing output
-                    $legend_array_baseline[]=$legend_cell;
+                    $legend_cell.=$response_text[0] . "=" . $response_text[1] . "; ";
                 }
+                $legend_array_baseline[]=$legend_cell;
             }
             $get_questions = "SELECT Question FROM Baseline_Assessment_Questions WHERE In_Table!='Participants_Baseline_Assessments' ORDER BY In_Table";
             include "../include/dbconnopen.php";
