@@ -1084,12 +1084,9 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 $title_array[] = "Pre: " . $q[1];
                 $get_response_text_sqlsafe="SELECT Response_Select, Response_Text FROM Assessment_Responses WHERE Question_ID='$q[0]'";
                 $response_text=mysqli_query($cnnEnlace, $get_response_text_sqlsafe);
-                print_r($response_text); //testing output
                 $legend_cell="";
                 while ($response=mysqli_fetch_row($response_text)){
-                    print_r($response);
                     $legend_cell.= $response[0] . "=" . $response[1] . "; ";
-                    echo $legend_cell . "<br>"; //testing output
                 }
                 $legend_array_baseline[]=$legend_cell;
             }
@@ -1098,6 +1095,13 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             $all_questions = mysqli_query($cnnEnlace, $get_questions);
             while ($q = mysqli_fetch_row($all_questions)) {
                 $title_array[] = "Post: " . $q[0];
+                $get_response_text_post_sqlsafe="SELECT Response_Select, Response_Text FROM Assessment_Responses WHERE Question_ID='$q[0]'";
+                $response_text_post=mysqli_query($cnnEnlace, $get_response_text_post_sqlsafe);
+                $legend_cell_post="";
+                while ($response_post=mysqli_fetch_row($response_text_post)){
+                    $legend_cell_post.= $response_post[0] . "=" . $response_post[1] . "; ";
+                }
+                $legend_array_baseline[]=$legend_cell_post;
             }
 
             $non_admin_string = ";";
