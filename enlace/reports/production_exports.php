@@ -1129,7 +1129,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             fputcsv($fp_deid, $legend_array_baseline_deid);
             $get_events = "SELECT  Pre_Assessments.Participant_ID, First_Name, Last_Name, Pre_Caring.Program, Session_Name, Name,
                             Home_Language, Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_E, BYS_T, 
-                            JVQ_1, JVQ_12, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, US_Born,
+                            JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, JVQ_12, US_Born,
 
                             Pre_Caring.Check_In, Pre_Caring.Know_You, Pre_Caring.Compliment, Pre_Caring.Crisis_Help, Pre_Caring.Pay_Attention, 
                             Pre_Caring.KnowImportance, Pre_Caring.Personal_Advice, Pre_Caring.Upset_Discussion,
