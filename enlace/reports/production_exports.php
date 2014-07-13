@@ -1073,7 +1073,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             $infile_deid = "export_container/deid_all_surveys_" . date('m_d_Y') . ".csv";
             $fp = fopen($infile, "w") or die('can\'t open file');
             $fp_deid = fopen($infile_deid, "w") or die('can\'t open file');
-            $title_array_deid = array("Participant ID", "Session ID (of program)", "Home Language", "Ethnicity",
+            $title_array_deid = array("Participant ID", "Session ID (of program)", "Session Name", "Program Name", "Home Language", "Ethnicity",
                 "Race");
             $title_array = array("Participant ID", "First Name", "Last Name", "Session ID (of program)", "Session Name", "Program Name",
                 "Home Language", "Ethnicity",
