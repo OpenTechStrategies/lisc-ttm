@@ -1090,11 +1090,11 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 }
                 $legend_array_baseline[]=$legend_cell;
             }
-            $get_questions = "SELECT Question FROM Baseline_Assessment_Questions WHERE In_Table!='Participants_Baseline_Assessments' ORDER BY In_Table";
+            $get_questions = "SELECT Baseline_Assessment_Question_ID, Question FROM Baseline_Assessment_Questions WHERE In_Table!='Participants_Baseline_Assessments' ORDER BY In_Table";
             include "../include/dbconnopen.php";
             $all_questions = mysqli_query($cnnEnlace, $get_questions);
             while ($q = mysqli_fetch_row($all_questions)) {
-                $title_array[] = "Post: " . $q[0];
+                $title_array[] = "Post: " . $q[1];
                 $get_response_text_post_sqlsafe="SELECT Response_Select, Response_Text FROM Assessment_Responses WHERE Question_ID='$q[0]'";
                 $response_text_post=mysqli_query($cnnEnlace, $get_response_text_post_sqlsafe);
                 $legend_cell_post="";
