@@ -1086,8 +1086,9 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 $response_text=mysqli_query($cnnEnlace, $get_response_text_sqlsafe);
                 print_r($response_text); //testing output
                 $legend_cell="";
-                while ($response_text=mysqli_fetch_row($response_text)){
-                    $legend_cell.= $response_text[0] . "=" . $response_text[1] . "; ";
+                while ($response=mysqli_fetch_row($response_text)){
+                    print_r($response);
+                    $legend_cell.= $response[0] . "=" . $response[1] . "; ";
                     echo $legend_cell . "<br>"; //testing output
                 }
                 $legend_array_baseline[]=$legend_cell;
