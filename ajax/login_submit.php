@@ -47,7 +47,7 @@ if ($is_user>0){
                $access_level = mysqli_query($cnnLISC, $get_level_of_access);
                $level = mysqli_fetch_row($access_level);
                if ($level[0] !=1){
-                   /* all non-admin users have the view_restricted cookie, which stops them from seeing admin-only
+                   /*all non-admin users have the view_restricted cookie, which stops them from seeing admin-only
                     * options (e.g. Alter Privileges, delete buttons)
                     */
                    setcookie('view_restricted', $level[0], time()+10800, '/');
