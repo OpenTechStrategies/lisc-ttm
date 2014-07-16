@@ -227,15 +227,32 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
         <td class="all_projects">
             <?php
             $infile = "export_container/intake_" . date('m_d_Y') . ".csv";
+            $infile_deid = "export_container/intake_deid_" . date('m_d_Y') . ".csv";
             $fp = fopen($infile, "w") or die('can\'t open file');
+            $fp_deid = fopen($infile_deid, "w") or die('can\'t open file');
             $title_array = array("Assessment ID", "Participant ID", "First_Name", "Last_Name", "Pre or Post", "Date Logged");
-            $get_questions = "SELECT Question FROM Baseline_Assessment_Questions ORDER BY In_Table";
+            $title_array_deid = array("Assessment ID", "Participant ID", "Pre or Post", "Date Logged");
+            $legend_array_baseline=array("(id)", "(id)", "(name)", "(name)", "(pre or post)", "(date)" );
+            $legend_array_baseline_deid=array("(id)", "(id)", "(pre or post)", "(date)");
+            $get_questions = "SELECT Baseline_Assessment_Question_ID, Question FROM Baseline_Assessment_Questions ORDER BY In_Table";
             include "../include/dbconnopen.php";
             $all_questions = mysqli_query($cnnEnlace, $get_questions);
             while ($q = mysqli_fetch_row($all_questions)) {
-                $title_array[] = $q[0];
+                $title_array[] = $q[1];
+                $title_array_deid[] = $q[1];
+                $get_response_text_sqlsafe="SELECT Response_Select, Response_Text FROM Assessment_Responses WHERE Question_ID='$q[0]'";
+                $response_text=mysqli_query($cnnEnlace, $get_response_text_sqlsafe);
+                $legend_cell="";
+                while ($response=mysqli_fetch_row($response_text)){
+                    $legend_cell.= $response[0] . "=" . $response[1] . "; ";
+                }
+                $legend_array_baseline[]=$legend_cell;
+                $legend_array_baseline_deid[]=$legend_cell;
             }
             fputcsv($fp, $title_array);
+            fputcsv($fp_deid, $title_array_deid);
+            fputcsv($fp, $legend_array_baseline);
+            fputcsv($fp_deid, $legend_array_baseline_deid);
 
             $non_admin_string = "";
             $non_admin_string1 = "";
@@ -248,13 +265,13 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             }
 
             $get_events = "SELECT Assessment_ID, Assessments.Participant_ID, First_Name, Last_Name, Assessments.Pre_Post, Assessments.Date_Logged, 
-                            BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_T, BYS_E, 
-                            JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_T, JVQ_E, JVQ_12, US_Born,
-                            Check_In, Compliment, Crisis_Help, Know_You, KnowImportance, Pay_Attention, Personal_Advice, Upset_Discussion,
+                            BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_E, BYS_T, 
+                            JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, JVQ_12, US_Born,
+                            Check_In, Know_You, Compliment, Crisis_Help, Pay_Attention, KnowImportance,  Personal_Advice, Upset_Discussion,
 
-                            Alive_Well, Finish_HS, Friends, Happy_Life, Interesting_Life, Manage_Work, Proud_Parents, Solve_Problems, Stay_Safe,
-                            Anger_Mgmt, Coping, Cowardice, Handle_Others, Negotiation, Parent_Approval, Parent_Disapproval,
-                            Self_Awareness, Self_Care, Self_Defense, Teasing_Prevention
+                            Friends, Finish_HS, Stay_Safe, Alive_Well, Happy_Life, Manage_Work, Proud_Parents, Solve_Problems, Interesting_Life, 
+                            Coping, Cowardice, Self_Care, Anger_Mgmt, Negotiation, Self_Defense, Handle_Others, 
+                            Self_Awareness, Parent_Approval, Parent_Disapproval, Teasing_Prevention
 
                             FROM Assessments
                             LEFT JOIN Participants_Baseline_Assessments ON Baseline_Assessment_ID = Baseline_ID
@@ -270,61 +287,17 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             $event_info = mysqli_query($cnnEnlace, $get_events);
             while ($event = mysqli_fetch_row($event_info)) {
                 fputcsv($fp, $event);
+                unset($event[2], $event[3]); //remove name for deidentified array
+                fputcsv($fp_deid, $event);
             }
             include "../include/dbconnclose.php";
             fclose($fp);
+            fclose($fp_deid);
             ?>
             <a href="<?php echo $infile ?>">Download.</a>
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/intake_deid_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Assessment ID", "Participant_ID", "Pre or Post", "Date Logged");
-            $get_questions = "SELECT Question FROM Baseline_Assessment_Questions ORDER BY In_Table";
-            include "../include/dbconnopen.php";
-            $all_questions = mysqli_query($cnnEnlace, $get_questions);
-            while ($q = mysqli_fetch_row($all_questions)) {
-                $title_array[] = $q[0];
-            }
-
-            $non_admin_string = "";
-            $non_admin_string1 = "";
-            //if not an administrator
-            if ($access != 'a') {
-                $non_admin_string = " LEFT JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID
-                                    INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_Names.Session_ID
-                                    INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID";
-                $non_admin_string1 = " AND Programs.Program_ID = " . $access . ";";
-            }
-
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Assessment_ID, Assessments.Participant_ID, Assessments.Pre_Post, Assessments.Date_Logged, 
-                            BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_T, BYS_E, 
-                            JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_T, JVQ_E, JVQ_12, US_Born,
-                            Check_In, Compliment, Crisis_Help, Know_You, KnowImportance, Pay_Attention, Personal_Advice,   Upset_Discussion,
-                            Alive_Well, Finish_HS, Friends, Happy_Life, Interesting_Life, Manage_Work, Proud_Parents, Solve_Problems, Stay_Safe,
-                            Anger_Mgmt, Coping, Cowardice, Handle_Others, Negotiation, Parent_Approval, Parent_Disapproval,
-                            Self_Awareness, Self_Care, Self_Defense, Teasing_Prevention
-
-                            FROM Assessments
-                            LEFT JOIN Participants_Baseline_Assessments ON Baseline_Assessment_ID = Baseline_ID
-                            LEFT JOIN Participants_Caring_Adults ON Caring_ID = Caring_Adults_ID
-                            LEFT JOIN Participants_Future_Expectations ON Future_Id = Future_Expectations_ID
-                            LEFT JOIN Participants_Interpersonal_Violence ON Violence_ID = Interpersonal_Violence_ID
-                            LEFT JOIN Participants ON Assessments.Participant_Id = Participants.Participant_ID"
-                            . $non_admin_string
-                            . " WHERE Assessments.Pre_Post = 1"
-                            . $non_admin_string1;
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+           <a href="<?php echo $infile_deid ?>">Download.</a>
         </td>
     </tr>
 
@@ -335,16 +308,33 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
         <td class="all_projects">
             <?php
             $infile = "export_container/impact_" . date('m_d_Y') . ".csv";
+            $infile_deid = "export_container/impact_deid_" . date('m_d_Y') . ".csv";
             $fp = fopen($infile, "w") or die('can\'t open file');
+            $fp_deid = fopen($infile_deid, "w") or die('can\'t open file');
             $title_array = array("Assessment ID", "Participant ID", "First Name", "Last Name", "Pre or Post", "Date Logged");
-            $get_questions = "SELECT Question FROM Baseline_Assessment_Questions WHERE In_Table!='Participants_Baseline_Assessments' ORDER BY In_Table";
+            $legend_array=array('(id)', '(id)', '(name)', '(name)', '(pre or post)', '(date)');
+            $get_questions = "SELECT Baseline_Assessment_Question_ID, Question FROM Baseline_Assessment_Questions WHERE In_Table!='Participants_Baseline_Assessments' ORDER BY In_Table";
             include "../include/dbconnopen.php";
             $all_questions = mysqli_query($cnnEnlace, $get_questions);
             while ($q = mysqli_fetch_row($all_questions)) {
-                $title_array[] = $q[0];
+                $title_array[] = $q[1];
+                $title_array_deid[] = $q[1];
+                $get_response_text_sqlsafe="SELECT Response_Select, Response_Text FROM Assessment_Responses WHERE Question_ID='$q[0]'";
+                $response_text=mysqli_query($cnnEnlace, $get_response_text_sqlsafe);
+                $legend_cell="";
+                while ($response=mysqli_fetch_row($response_text)){
+                    $legend_cell.= $response[0] . "=" . $response[1] . "; ";
+                }
+                $legend_array[]=$legend_cell;
             }
             fputcsv($fp, $title_array);
-
+            fputcsv($fp, $legend_array);
+            unset($title_array[2], $title_array[3]); //remove name titles
+            unset($legend_array[2], $legend_array[3]);
+            fputcsv($fp_deid, $title_array);
+            fputcsv($fp_deid, $legend_array);
+            
+            
             $non_admin_string = "";
             $non_admin_string1 = "";
             //if not an administrator
@@ -356,10 +346,11 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             }
 
             $get_events = "SELECT Assessment_ID, Assessments.Participant_ID, Participants.First_Name, Participants.Last_Name, Assessments.Pre_Post, Assessments.Date_Logged, 
-                            Check_In, Compliment, Crisis_Help, Know_You, KnowImportance, Pay_Attention, Personal_Advice, Upset_Discussion,
-                            Alive_Well, Finish_HS, Friends, Happy_Life, Interesting_Life, Manage_Work, Proud_Parents, Solve_Problems, Stay_Safe,
-                            Anger_Mgmt, Coping, Cowardice, Handle_Others, Negotiation, Parent_Approval, Parent_Disapproval,
-                            Self_Awareness, Self_Care, Self_Defense, Teasing_Prevention
+                            Check_In, Know_You, Compliment, Crisis_Help, Pay_Attention, KnowImportance, Personal_Advice, Upset_Discussion,
+                            Friends, Finish_HS, Stay_Safe, Alive_Well, Happy_Life, Manage_Work, Proud_Parents, Solve_Problems, Interesting_Life, 
+                            Coping, Cowardice, Self_Care, Anger_Mgmt, Negotiation, Self_Defense, 
+                            Handle_Others, Self_Awareness, Parent_Approval, Parent_Disapproval,
+                            Teasing_Prevention
 
                             FROM Assessments
                             LEFT JOIN Participants_Caring_Adults ON Caring_ID = Caring_Adults_ID
@@ -374,59 +365,18 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             $event_info = mysqli_query($cnnEnlace, $get_events);
             while ($event = mysqli_fetch_row($event_info)) {
                 fputcsv($fp, $event);
+                unset($event[2], $event[3]);
+                fputcsv($fp_deid, $event);
             }
             include "../include/dbconnclose.php";
             fclose($fp);
+            fclose($fp_deid);
             ?>
             <a href="<?php echo $infile ?>">Download.</a>
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/deid_impact_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Assessment ID", "Participant ID", "Pre or Post", "Date Logged");
-            $get_questions = "SELECT Question FROM Baseline_Assessment_Questions WHERE In_Table!='Participants_Baseline_Assessments' ORDER BY In_Table";
-            include "../include/dbconnopen.php";
-            $all_questions = mysqli_query($cnnEnlace, $get_questions);
-            while ($q = mysqli_fetch_row($all_questions)) {
-                $title_array[] = $q[0];
-            }
-            fputcsv($fp, $title_array);
-
-            $non_admin_string = "";
-            $non_admin_string1 = "";
-            //if not an administrator
-            if ($access != 'a') {
-                $non_admin_string = " LEFT JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID
-                                    INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_Names.Session_ID
-                                    INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID";
-                $non_admin_string1 = " AND Programs.Program_ID = " . $access . ";";
-            }
-
-            $get_events = "SELECT Assessment_ID, Assessments.Participant_ID, Assessments.Pre_Post, Assessments.Date_Logged, 
-                            Check_In, Compliment, Crisis_Help, Know_You, KnowImportance, Pay_Attention, Personal_Advice,   Upset_Discussion,
-                            Alive_Well, Finish_HS, Friends, Happy_Life, Interesting_Life, Manage_Work, Proud_Parents, Solve_Problems, Stay_Safe,
-                            Anger_Mgmt, Coping, Cowardice, Handle_Others, Negotiation, Parent_Approval, Parent_Disapproval,
-                            Self_Awareness, Self_Care, Self_Defense, Teasing_Prevention
-       
-                            FROM Assessments
-                            LEFT JOIN Participants_Caring_Adults ON Caring_ID = Caring_Adults_ID
-                            LEFT JOIN Participants_Future_Expectations ON Future_Id = Future_Expectations_ID
-                            LEFT JOIN Participants_Interpersonal_Violence ON Violence_ID = Interpersonal_Violence_ID
-                            LEFT JOIN Participants ON Assessments.Participant_Id = Participants.Participant_ID"
-                            . $non_admin_string
-                            . " WHERE Assessments.Pre_Post = 2"
-                            . $non_admin_string1;
-                                        
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            
+            <a href="<?php echo $infile_deid; ?>">Download.</a>
         </td>
     </tr>
 
