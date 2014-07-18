@@ -47,5 +47,5 @@ function generalized_download($download_name){
     }
 }
 generalized_download($_POST['download_name']);
-//generalized_download('aldermans_records');
+generalized_download('aldermans_records');
 ?>
