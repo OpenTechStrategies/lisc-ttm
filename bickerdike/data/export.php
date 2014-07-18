@@ -44,6 +44,10 @@ fclose($fp);
 <?php
 $title_array = array("ID", "Environmental_Improvement_Money", "Date");
 $title_array_postable=serialize($title_array);
+include "../../include/generalized_download_script.php";
+generalized_download('../bickerdike/include/dbconnopen.php', 'cnnBickerdike', 
+        'SELECT * FROM Aldermanic_Records', 'downloads_aldermans_records.csv',
+        $title_array);
 ?>
 
 <a href="javascript:;" onclick="
