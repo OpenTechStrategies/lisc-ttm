@@ -21,7 +21,6 @@ function generalized_download($dbconn_file, $database_conn, $query, $filename,
 
         // fetch the data
         include $dbconn_file;
-        echo "included file: " . $dbconn_file . "<br>"; //testing output
         //get correct connection variable:
         if ($database_conn='cnnLISC'){$database_conn=$cnnLISC;}
         elseif($database_conn='cnnBickerdike'){$database_conn=$cnnBickerdike;}
@@ -32,12 +31,10 @@ function generalized_download($dbconn_file, $database_conn, $query, $filename,
         
         $query_sqlsafe=mysqli_real_escape_string($database_conn, 
                 $query);
-        echo $query_sqlsafe; //testing output
         $rows = mysqli_query($database_conn, $query_sqlsafe);
         
         // loop over the rows, outputting them
         while ($row = mysqli_fetch_row($rows)) {
-            print_r($row); //testing output
             fputcsv($output, $row);}
         
 
