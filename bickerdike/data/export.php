@@ -639,11 +639,6 @@ fputcsv($fp, $title_array);
 $get_money="SELECT parent_table.*, child_table.User_ID as child_id, child_table.First_Name as child_first, child_table.Last_Name as child_last,
     child_table.DOB as child_dob, child_table.Gender as child_gender,
     child_table.Age as child_age, child_table.Race as child_race,
-    Participant_Survey_Responses.* FROM Users as parent_table, Users as child_table, 
-    Participant_Survey_Responses WHERE parent_table.User_ID = Participant_Survey_Responses.User_ID AND child_table.User_ID=Participant_Survey_Responses.Child_ID;";
-$get_money="SELECT parent_table.*, child_table.User_ID as child_id, child_table.First_Name as child_first, child_table.Last_Name as child_last,
-    child_table.DOB as child_dob, child_table.Gender as child_gender,
-    child_table.Age as child_age, child_table.Race as child_race,
     Participant_Survey_Responses.*, Programs.Program_ID, Programs.Program_Name, 
     Org_Partners.Partner_Name
     FROM Users as parent_table, Users as child_table, 
@@ -718,11 +713,6 @@ $title_array = array("User ID", "Gender", "Age",
     "Child's Age",  "Child Race", );
 
 fputcsv($fp, $title_array);
-$get_money="SELECT parent_table.*, child_table.User_ID as child_id, child_table.First_Name as child_first, child_table.Last_Name as child_last,
-    child_table.DOB as child_dob, child_table.Gender as child_gender,
-    child_table.Age as child_age, child_table.Race as child_race,
-    Participant_Survey_Responses.* FROM Users as parent_table, Users as child_table, 
-    Participant_Survey_Responses WHERE parent_table.User_ID = Participant_Survey_Responses.User_ID AND child_table.User_ID=Participant_Survey_Responses.Child_ID;";
 $get_money="SELECT parent_table.*, child_table.User_ID as child_id, child_table.First_Name as child_first, child_table.Last_Name as child_last,
     child_table.DOB as child_dob, child_table.Gender as child_gender,
     child_table.Age as child_age, child_table.Race as child_race,
