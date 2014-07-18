@@ -22,10 +22,8 @@ function generalized_download($download_name){
 
         // fetch the data
         $conn_file='../'.$download_list_array[$download_name]['db'].'/include/dbconnopen.php';
-        echo $conn_file; //testing output
         include $conn_file;
         $db_name= 'cnn' .ucfirst($download_list_array[$download_name]['db']);
-        echo $db_name; //testing output
         $database_conn=$$db_name;
         $query_sqlsafe=$download_list_array[$download_name]['query'];
         echo $query_sqlsafe;
@@ -49,6 +47,6 @@ function generalized_download($download_name){
         //done something nefarious.
     }
 }
-//generalized_download($_POST['download_name']);
-generalized_download('aldermans_records');
+generalized_download($_POST['download_name']);
+//generalized_download('aldermans_records');
 ?>

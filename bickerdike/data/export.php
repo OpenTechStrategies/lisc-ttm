@@ -47,45 +47,14 @@ $title_array_postable=serialize($title_array);
 
 ?>
 
-<a href="javascript:;" onclick="
-            $.post(
-                    '../../include/generalized_download_script.php',
-            {
-                conn_file: '../bickerdike/include/dbconnopen.php',
-                conn_var: 'cnnBickerdike',
-                query: 'SELECT * FROM Aldermanic_Records',
-                filename: 'downloads/aldermans_records.csv',
-                title_array: '<?php echo $title_array_postable; ?>'
-            },
-            function (response){
-                document.write(response); //testing output
-            }
-                    );">Download the CSV file of Aldermanic records.</a></td>
-        <td><a href="javascript:;" onclick="
-            $.post(
-                    '../../include/generalized_download_script.php',
-          {
-              //  conn_file: '../bickerdike/include/dbconnopen.php',
-              //  conn_var: 'cnnBickerdike',
-              //  query: 'SELECT * FROM Aldermanic_Records',
-              //  filename: 'downloads/aldermans_records.csv',
-              //  title_array: <?php //echo $title_array_postable; ?>
-            },
-                    function (response){
-                        document.write(response); //testing output
-                    }
-                    )
-           ">Download (already de-identified).</a><br>
+</td>
+        <td><br>
             <a href="javascript:;" onclick="
             $.post(
                     '../../include/generalized_download_script.php',
-         /* {
-                conn_file: '../bickerdike/include/dbconnopen.php',
-                conn_var: 'cnnBickerdike',
-                query: 'SELECT * FROM Aldermanic_Records',
-                filename: 'downloads/aldermans_records.csv',
-                title_array: <?php //echo $title_array_postable; ?>
-            },*/
+            {
+                download_name: 'aldermans_records'
+            },
                     function (response){
                         document.write(response); //testing output
                     }
