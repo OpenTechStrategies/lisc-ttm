@@ -110,11 +110,6 @@ when the mouse hovers over it.-->
                         $program_query = "SELECT * FROM Programs "
                                         . "WHERE Program_Created_Date BETWEEN '" . (2011 + $year_add) . "-09-01' AND '" . (2012 + $year_add) . "-08-31' "
                                         . "ORDER BY Program_Name";
-                        /* echo "SELECT * FROM Programs "
-                                        . "WHERE Program_Created_Date BETWEEN '" . (2011 + $year_add) . "-09-01' AND '" . (2012 + $year_add) . "-08-31' "
-                                        . "ORDER BY Program_Name";
-                         * 
-                         */
                         include "../include/dbconnopen.php";
                         $programs = mysqli_query($cnnBickerdike, $program_query);
                         
