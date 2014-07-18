@@ -46,6 +46,7 @@ function generalized_download($dbconn_file, $database_conn, $query, $filename,
     }
 }
 include "dbconnopen.php";
+print_r($_POST);
 $conn_file=mysqli_real_escape_string($_POST['conn_file']);
 $conn_var=mysqli_real_escape_string($_POST['conn_var']);
 $query=mysqli_real_escape_string($_POST['query']);
