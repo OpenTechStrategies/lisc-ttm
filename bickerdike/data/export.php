@@ -55,7 +55,10 @@ $title_array_postable=serialize($title_array);
                 query: 'SELECT * FROM Aldermanic_Records',
                 filename: 'downloads/aldermans_records.csv',
                 title_array: <?php echo $title_array_postable; ?>
-            }
+            },
+                    function (response){
+                        document.write(response); //testing output
+                    }
                     )
    ">Download the CSV file of Aldermanic records.</a></td>
         <td><a href="downloads/aldermans_records.csv">Download (already de-identified).</a></td></tr>
