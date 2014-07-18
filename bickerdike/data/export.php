@@ -51,8 +51,8 @@ $title_array_postable=serialize($title_array);
             $.post(
                     '../../include/generalized_download_script.php',
             {
-                conn_file: '../bickerdike/include/dbconnopen.php',
-            /*    conn_var: 'cnnBickerdike',
+            /*    conn_file: '../bickerdike/include/dbconnopen.php',
+                conn_var: 'cnnBickerdike',
                 query: 'SELECT * FROM Aldermanic_Records',
                 filename: 'downloads/aldermans_records.csv',
                 title_array: <?php echo $title_array_postable; ?>*/

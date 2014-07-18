@@ -45,7 +45,7 @@ function generalized_download($dbconn_file, $database_conn, $query, $filename,
         exit;
     }
 }
-/*include "dbconnopen.php";
+include "dbconnopen.php";
 print_r($_POST);
 $conn_file=mysqli_real_escape_string($_POST['conn_file']);
 $conn_var=mysqli_real_escape_string($_POST['conn_var']);
@@ -53,5 +53,5 @@ $query=mysqli_real_escape_string($_POST['query']);
 $filename=mysqli_real_escape_string($_POST['filename']);
 $title_array=unserialize($_POST['title_array']);
 generalized_download($conn_file, $conn_var, $query, 
-       $filename, $title_array);*/
+       $filename, $title_array);
 ?>
