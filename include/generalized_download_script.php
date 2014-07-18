@@ -26,7 +26,6 @@ function generalized_download($download_name){
         $db_name= 'cnn' .ucfirst($download_list_array[$download_name]['db']);
         $database_conn=$$db_name;
         $query_sqlsafe=$download_list_array[$download_name]['query'];
-        echo $query_sqlsafe;
         $rows = mysqli_query($database_conn, $query_sqlsafe);
         
         // loop over the rows, outputting them
@@ -47,6 +46,6 @@ function generalized_download($download_name){
         //done something nefarious.
     }
 }
-generalized_download($_POST['download_name']);
-//generalized_download('aldermans_records');
+//generalized_download($_POST['download_name']);
+generalized_download('aldermans_records');
 ?>
