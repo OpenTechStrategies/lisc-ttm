@@ -33,10 +33,10 @@ function generalized_download($dbconn_file, $database_conn, $query, $filename,
         $query_sqlsafe=mysqli_real_escape_string($database_conn, 
                 $query);
         echo $query_sqlsafe; //testing output
-        $rows = mysql_query($database_conn, $query_sqlsafe);
+        $rows = mysqli_query($database_conn, $query_sqlsafe);
         
         // loop over the rows, outputting them
-        while ($row = mysql_fetch_row($rows)) {
+        while ($row = mysqli_fetch_row($rows)) {
             print_r($row); //testing output
             fputcsv($output, $row);}
         
