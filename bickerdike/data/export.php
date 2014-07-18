@@ -46,7 +46,7 @@ $title_array = array("ID", "Environmental_Improvement_Money", "Date");
 $title_array_postable=serialize($title_array);
 ?>
 
-<a href="javascript;" onclick="
+<a href="javascript:;" onclick="
             $.post(
                     '../../include/generalized_download_script.php',
             {
