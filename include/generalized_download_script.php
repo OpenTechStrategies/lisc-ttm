@@ -22,6 +22,14 @@ function generalized_download($dbconn_file, $database_conn, $query, $filename,
         // fetch the data
         include $dbconn_file;
         echo "included file: " . $dbconn_file , "<br>"; //testing output
+        //get correct connection variable:
+        if ($database_conn='cnnLISC'){$database_conn=$cnnLISC;}
+        elseif($database_conn='cnnBickerdike'){$database_conn=$cnnBickerdike;}
+        elseif($database_conn='cnnEnlace'){$database_conn=$cnnEnlace;}
+        elseif($database_conn='cnnLSNA'){$database_conn=$cnnLSNA;}
+        elseif($database_conn='cnnSWOP'){$database_conn=$cnnSWOP;}
+        elseif($database_conn='cnnTRP'){$database_conn=$cnnTRP;}
+        
         $query_sqlsafe=mysqli_real_escape_string($database_conn, 
                 $query);
         echo $query_sqlsafe; //testing output
@@ -42,6 +50,6 @@ function generalized_download($dbconn_file, $database_conn, $query, $filename,
     }
 }
 
-generalized_download('dbconnopen.php', $cnnLISC, "SELECT * FROM Privileges", 
+generalized_download('dbconnopen.php', 'cnnLISC', "SELECT * FROM Privileges", 
         "privilege_list_7-18-14.csv", array("Privilege_ID", "Privilege_Name"));
 ?>
