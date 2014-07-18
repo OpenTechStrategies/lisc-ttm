@@ -44,10 +44,7 @@ fclose($fp);
 <?php
 $title_array = array("ID", "Environmental_Improvement_Money", "Date");
 $title_array_postable=serialize($title_array);
-include "../../include/generalized_download_script.php";
-generalized_download('../bickerdike/include/dbconnopen.php', 'cnnBickerdike', 
-        'SELECT * FROM Aldermanic_Records', 'downloads_aldermans_records.csv',
-        $title_array);
+
 ?>
 
 <a href="javascript:;" onclick="
@@ -60,21 +57,20 @@ generalized_download('../bickerdike/include/dbconnopen.php', 'cnnBickerdike',
                 filename: 'downloads/aldermans_records.csv',
                 title_array: <?php echo $title_array_postable; ?>*/
             },
-                    function (response){
-                        document.write(response); //testing output
-                    }
-                    )
-   ">Download the CSV file of Aldermanic records.</a></td>
+            function (response){
+                document.write(response); //testing output
+            }
+                    );">Download the CSV file of Aldermanic records.</a></td>
         <td><a href="javascript:;" onclick="
             $.post(
-                    '/include/generalized_download_script.php',
-            {
+                    '../../include/generalized_download_script.php',
+         /* {
                 conn_file: '../bickerdike/include/dbconnopen.php',
-            /*    conn_var: 'cnnBickerdike',
+                conn_var: 'cnnBickerdike',
                 query: 'SELECT * FROM Aldermanic_Records',
                 filename: 'downloads/aldermans_records.csv',
-                title_array: <?php echo $title_array_postable; ?>*/
-            },
+                title_array: <?php //echo $title_array_postable; ?>
+            },*/
                     function (response){
                         document.write(response); //testing output
                     }
