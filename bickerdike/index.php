@@ -37,9 +37,9 @@ include "../bickerdike/header.php";
         				<td class="all_projects"><select id="zip">
                 				<option value="">-----</option>
                 				<?
-                				$get_zips = "SELECT Zipcode FROM Users WHERE Zipcode !=0 GROUP BY Zipcode";
+                				$get_zips_sqlsafe = "SELECT Zipcode FROM Users WHERE Zipcode !=0 GROUP BY Zipcode";
                 				include "include/dbconnopen.php";
-                				$zips = mysqli_query($cnnBickerdike, $get_zips);
+                				$zips = mysqli_query($cnnBickerdike, $get_zips_sqlsafe);
                 				while ($zip = mysqli_fetch_row($zips)){
                     				?>
                 				<option value="<?echo $zip[0];?>"><?echo $zip[0];?></option>
@@ -119,9 +119,9 @@ include "../bickerdike/header.php";
        				 <td class="all_projects"><select id="org">
          				       <option value="">-----</option>
 				                <?
-				                $program_query = "SELECT * FROM Org_Partners";
+				                $program_query_sqlsafe = "SELECT * FROM Org_Partners";
 				include "include/dbconnopen.php";
-				$programs = mysqli_query($cnnBickerdike, $program_query);
+				$programs = mysqli_query($cnnBickerdike, $program_query_sqlsafe);
 				while ($program = mysqli_fetch_array($programs)){
     				?>
         				<option value="<?echo $program['Partner_ID'];?>"><?
@@ -135,9 +135,9 @@ include "../bickerdike/header.php";
         				<td class="all_projects"><select id="program_type">
                				 <option value="">-----</option>
              				   <?
-              				  $program_query = "SELECT * FROM Program_Types";
+              				  $program_query_sqlsafe = "SELECT * FROM Program_Types";
 								include "include/dbconnopen.php";
-				$programs = mysqli_query($cnnBickerdike, $program_query);
+				$programs = mysqli_query($cnnBickerdike, $program_query_sqlsafe);
 				while ($program = mysqli_fetch_array($programs)){
     				?>
         				<option value="<?echo $program['Program_Type_ID'];?>"><?echo $program['Program_Type_Name'];?></option>

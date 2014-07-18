@@ -149,9 +149,9 @@ $user->load_with_user_id($_GET['user']);
                             <td class="all_projects"><select id="zip">
                                     <option value="">-----</option>
                                     <?php
-                                    $get_zips = "SELECT Zipcode FROM Users WHERE Zipcode !=0 GROUP BY Zipcode";
+                                    $get_zips_sqlsafe = "SELECT Zipcode FROM Users WHERE Zipcode !=0 GROUP BY Zipcode";
                                     include "../include/dbconnopen.php";
-                                    $zips = mysqli_query($cnnBickerdike, $get_zips);
+                                    $zips = mysqli_query($cnnBickerdike, $get_zips_sqlsafe);
                                     while ($zip = mysqli_fetch_row($zips)) {
                                         ?>
                                         <option value="<?php echo $zip[0]; ?>"><?php echo $zip[0]; ?></option>

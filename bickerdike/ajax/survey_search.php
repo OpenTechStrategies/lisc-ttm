@@ -51,17 +51,17 @@ $infile="../data/downloads/search_surveys_" . date('M-d-Y') . ".csv";
 //echo $infile;
 $fp=fopen($infile, "w") or die('can\'t open file');
 /*get column names for the relevant table: */
-$get_col_names="SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='lisc-bickerdike.chapinhall.org' AND `TABLE_NAME`='Participant_Survey_Responses'";
+$get_col_names_sqlsafe="SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='lisc-bickerdike.chapinhall.org' AND `TABLE_NAME`='Participant_Survey_Responses'";
 /*production:*/
-  $get_col_names="SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='liscttm-bickerdike.chapinhall.org' AND `TABLE_NAME`='Participant_Survey_Responses'";
+  $get_col_names_sqlsafe="SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='liscttm-bickerdike.chapinhall.org' AND `TABLE_NAME`='Participant_Survey_Responses'";
 
-//echo $get_col_names;
-$cols=mysqli_query($cnnBickerdike, $get_col_names);
+//echo $get_col_names_sqlsafe;
+$cols=mysqli_query($cnnBickerdike, $get_col_names_sqlsafe);
 /*use column names as the headings for the results file: */
 $columns=array("First Name", "Last Name");
 for ($i=0; $i<$_POST['time']; $i++){
    // echo $i . "<br>";
-$cols=mysqli_query($cnnBickerdike, $get_col_names);
+$cols=mysqli_query($cnnBickerdike, $get_col_names_sqlsafe);
 while ($col=mysqli_fetch_row($cols)){
     $columns[]=$col[0];
 }

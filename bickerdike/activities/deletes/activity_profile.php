@@ -19,8 +19,8 @@ $_GET['activity'];
         <?php
         include "../include/dbconnopen.php";
         $activity_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_GET['activity']);
-        $get_activity_info = "SELECT * FROM User_Established_Activities WHERE User_Established_Activities_ID='" . $activity_id_sqlsafe . "'";
-        $activity_info = mysqli_query($cnnBickerdike, $get_activity_info);
+        $get_activity_info_sqlsafe = "SELECT * FROM User_Established_Activities WHERE User_Established_Activities_ID='" . $activity_id_sqlsafe . "'";
+        $activity_info = mysqli_query($cnnBickerdike, $get_activity_info_sqlsafe);
         $count = 0;
         include "../include/datepicker.php";
         while ($info = mysqli_fetch_array($activity_info)) {
@@ -64,8 +64,8 @@ $_GET['activity'];
             <p></p>
             <tr><td><b>Attendees:</b><br></td></tr><tr>
                 <?php
-                $get_users = "SELECT * FROM Users LEFT JOIN (Activities_Users)ON (Activities_Users.User_ID=Users.User_ID) WHERE Activities_Users.User_Established_Activity_ID='" . $activity_id_sqlsafe . "'";
-                $users = mysqli_query($cnnBickerdike, $get_users);
+                $get_users_sqlsafe = "SELECT * FROM Users LEFT JOIN (Activities_Users)ON (Activities_Users.User_ID=Users.User_ID) WHERE Activities_Users.User_Established_Activity_ID='" . $activity_id_sqlsafe . "'";
+                $users = mysqli_query($cnnBickerdike, $get_users_sqlsafe);
                 while ($name = mysqli_fetch_array($users)) {
                     ?>
                     <td><a href="../users/user_profile.php?id=<?php echo $name['User_ID']; ?>">
@@ -106,9 +106,9 @@ $_GET['activity'];
             <td><select id="zip">
                     <option value="">-----</option>
                     <?php
-                    $get_zips = "SELECT Zipcode FROM Users WHERE Zipcode !=0 GROUP BY Zipcode";
+                    $get_zips_sqlsafe = "SELECT Zipcode FROM Users WHERE Zipcode !=0 GROUP BY Zipcode";
                     include "../include/dbconnopen.php";
-                    $zips = mysqli_query($cnnBickerdike, $get_zips);
+                    $zips = mysqli_query($cnnBickerdike, $get_zips_sqlsafe);
                     while ($zip = mysqli_fetch_row($zips)) {
                         ?>
                         <option value="<?php echo $zip[0]; ?>"><?php echo $zip[0]; ?></option>

@@ -32,9 +32,9 @@ information, but for children in the database, not adults.
             <th>Number of people measured</th>
         </tr>
         <?php
-        $count_measurements = "SELECT User_ID, count(User_ID) as userCount FROM User_Health_Data GROUP BY User_ID ORDER BY 2 DESC LIMIT 1";
+        $count_measurements_sqlsafe = "SELECT User_ID, count(User_ID) as userCount FROM User_Health_Data GROUP BY User_ID ORDER BY 2 DESC LIMIT 1";
         include "../include/dbconnopen.php";
-        $measurements = mysqli_query($cnnBickerdike, $count_measurements);
+        $measurements = mysqli_query($cnnBickerdike, $count_measurements_sqlsafe);
         while ($count_bmis = mysqli_fetch_array($measurements)) {
             $count = $count_bmis['userCount'];
         }
@@ -45,12 +45,12 @@ information, but for children in the database, not adults.
                 <td class="all_projects">BMI Measurement #<?php echo $i; ?></td>
                 <td class="all_projects">
                     <?php
-                    $get_average_bmi = "SELECT AVG(BMI) FROM User_Health_Data INNER JOIN Users
+                    $get_average_bmi_sqlsafe = "SELECT AVG(BMI) FROM User_Health_Data INNER JOIN Users
                     ON User_Health_Data.User_ID=Users.User_ID
                     WHERE User_Count='" . $i . "'
                     AND Users.Child=1;";
                     include "../include/dbconnopen.php";
-                    $average_bmi = mysqli_query($cnnBickerdike, $get_average_bmi);
+                    $average_bmi = mysqli_query($cnnBickerdike, $get_average_bmi_sqlsafe);
                     while ($bmi = mysqli_fetch_array($average_bmi)) {
                         echo $bmi['AVG(BMI)'];
                     }
@@ -59,12 +59,12 @@ information, but for children in the database, not adults.
                 </td>
                 <td class="all_projects">
                     <?php
-                    $get_user_count = "SELECT User_Count FROM User_Health_Data INNER JOIN Users
+                    $get_user_count_sqlsafe = "SELECT User_Count FROM User_Health_Data INNER JOIN Users
                     ON User_Health_Data.User_ID=Users.User_ID
                     WHERE User_Count='" . $i . "'
                     AND Users.Child=1;";
                     include "../include/dbconnopen.php";
-                    $measurements = mysqli_query($cnnBickerdike, $get_user_count);
+                    $measurements = mysqli_query($cnnBickerdike, $get_user_count_sqlsafe);
                     $num_users_measured = mysqli_num_rows($measurements);
                     include "../include/dbconnclose.php";
                     echo $num_users_measured;
@@ -93,11 +93,11 @@ information, but for children in the database, not adults.
     $title_array = array("ID", "User ID", "BMI", "Date", "First Name",
         "Last Name", "Adult", "Parent", "Child");
     fputcsv($fp, $title_array);
-    $get_money = "SELECT * FROM User_Health_Data 
+    $get_money_sqlsafe = "SELECT * FROM User_Health_Data 
 INNER JOIN Users
 ON User_Health_Data.User_ID=Users.User_ID;";
     include "../include/dbconnopen.php";
-    $money_info = mysqli_query($cnnBickerdike, $get_money);
+    $money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
     while ($money = mysqli_fetch_array($money_info)) {
         $enter_array = array($money['User_Health_Data_ID'], $money['User_ID'], $money['BMI'], $money['Date'], $money['First_Name'],
             $money['Last_Name'], $money['Adult'], $money['Parent'], $money['Child']);

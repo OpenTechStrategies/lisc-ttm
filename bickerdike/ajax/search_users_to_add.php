@@ -15,28 +15,28 @@ $gender_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['gender']);
 $race_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['race']);
 $type_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['type']);
 
-if ($_POST['first']==''){$first='';}else{$first=' AND First_Name LIKE "%' . $first_sqlsafe . '%"';};
-if ($_POST['last']==''){$last='';}else{$last=" AND Last_Name LIKE '%" . $last_sqlsafe . "%'";}
-if ($_POST['zip']==''){$zip='';}else{$zip=" AND Zipcode='" .$zip_sqlsafe . "'";}
-if ($_POST['age']==''){$age='';}else{$age=" AND Age='" . $age_sqlsafe . "'";}
-if ($_POST['gender']==''){$gender='';}else{$gender=" AND Gender='" . $gender_sqlsafe . "'";}
-if($_POST['race']==''){$race='';}else{$race=" AND Race='" . $race_sqlsafe . "'";}
-if($_POST['type']==''){$type='';}else{
+if ($_POST['first']==''){$first_sqlsafe='';}else{$first_sqlsafe=' AND First_Name LIKE "%' . $first_sqlsafe . '%"';};
+if ($_POST['last']==''){$last_sqlsafe='';}else{$last_sqlsafe=" AND Last_Name LIKE '%" . $last_sqlsafe . "%'";}
+if ($_POST['zip']==''){$zip_sqlsafe='';}else{$zip_sqlsafe=" AND Zipcode='" .$zip_sqlsafe . "'";}
+if ($_POST['age']==''){$age_sqlsafe='';}else{$age_sqlsafe=" AND Age='" . $age_sqlsafe . "'";}
+if ($_POST['gender']==''){$gender_sqlsafe='';}else{$gender_sqlsafe=" AND Gender='" . $gender_sqlsafe . "'";}
+if($_POST['race']==''){$race_sqlsafe='';}else{$race_sqlsafe=" AND Race='" . $race_sqlsafe . "'";}
+if($_POST['type']==''){$type_sqlsafe='';}else{
     if ($_POST['type']==1){
-        $type=" AND Adult='1'";
+        $type_sqlsafe=" AND Adult='1'";
     }
     elseif ($_POST['type']==2){
-        $type=" AND Parent='1'";
+        $type_sqlsafe=" AND Parent='1'";
     }
     elseif ($_POST['type']==3){
-        $type=" AND Child='1'";
+        $type_sqlsafe=" AND Child='1'";
     }
 }
 
-$uncertain_search_query = "SELECT * FROM Users WHERE User_ID!='' " . $first . $last .  $zip .  $age .  $gender . $race . $type;
-//echo $uncertain_search_query;
+$uncertain_search_query_sqlsafe = "SELECT * FROM Users WHERE User_ID!='' " . $first_sqlsafe . $last_sqlsafe .  $zip_sqlsafe .  $age_sqlsafe .  $gender_sqlsafe . $race_sqlsafe . $type_sqlsafe;
+//echo $uncertain_search_query_sqlsafe;
 
-$results =mysqli_query($cnnBickerdike, $uncertain_search_query);
+$results =mysqli_query($cnnBickerdike, $uncertain_search_query_sqlsafe);
 ?>
 <!--Results come in a dropdown format.-->
 

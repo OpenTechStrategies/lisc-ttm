@@ -41,9 +41,9 @@ include "../header.php";
                 <option value="">-----</option>
                 <?
                 //only allows data enterers to choose zipcodes from those already entered (odd)
-                $get_zips = "SELECT Zipcode FROM Users WHERE Zipcode !=0 GROUP BY Zipcode";
+                $get_zips_sqlsafe = "SELECT Zipcode FROM Users WHERE Zipcode !=0 GROUP BY Zipcode";
                 include "../include/dbconnopen.php";
-                $zips = mysqli_query($cnnBickerdike, $get_zips);
+                $zips = mysqli_query($cnnBickerdike, $get_zips_sqlsafe);
                 while ($zip = mysqli_fetch_row($zips)){
                     ?>
                 <option value="<?echo $zip[0];?>"><?echo $zip[0];?></option>
@@ -203,8 +203,8 @@ or deleting them outright.  The merging is still not available on the live site.
     </tr>
     <?
     //include "../include/dbconnopen.php";
-    //$get_all_users_query = "SELECT * FROM Users ORDER BY Last_Name";
-    //$all_users = mysqli_query($cnnBickerdike, $get_all_users_query);
+    //$get_all_users_query_sqlsafe = "SELECT * FROM Users ORDER BY Last_Name";
+    //$all_users = mysqli_query($cnnBickerdike, $get_all_users_query_sqlsafe);
     //$count=0;
     //while ($user=mysqli_fetch_array($all_users)){
     

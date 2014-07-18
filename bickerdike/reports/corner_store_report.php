@@ -27,9 +27,9 @@ represented by pie charts below.
 <h3>Corner Store Report</h3><hr/><br/>
 <div id="corner_store_stats">
 <?
-$num_stores = "SELECT * FROM Corner_Store_Assessment";
+$num_stores_sqlsafe = "SELECT * FROM Corner_Store_Assessment";
 include "../include/dbconnopen.php";
-$stores = mysqli_query($cnnBickerdike, $num_stores);
+$stores = mysqli_query($cnnBickerdike, $num_stores_sqlsafe);
 $num_evaled = mysqli_num_rows($stores);
 include "../include/dbconnclose.php";
 ?>
@@ -46,9 +46,9 @@ include "../include/dbconnclose.php";
         <td>At least 2 fresh vegetable and 2 fresh fruit options</td>
         <td>
             <?
-$num_stores = "SELECT * FROM Corner_Store_Assessment WHERE 2_plus_fresh_veg_options='1'";
+$num_stores_sqlsafe = "SELECT * FROM Corner_Store_Assessment WHERE 2_plus_fresh_veg_options='1'";
 include "../include/dbconnopen.php";
-$stores = mysqli_query($cnnBickerdike, $num_stores);
+$stores = mysqli_query($cnnBickerdike, $num_stores_sqlsafe);
 $num_produce = mysqli_num_rows($stores);
 include "../include/dbconnclose.php";
 echo $num_produce
@@ -63,9 +63,9 @@ echo $num_produce
         <td>Offering low-fat milk</td>
                 <td>
             <?
-$num_stores = "SELECT * FROM Corner_Store_Assessment WHERE Lowfat_Milk_Available='1'";
+$num_stores_sqlsafe = "SELECT * FROM Corner_Store_Assessment WHERE Lowfat_Milk_Available='1'";
 include "../include/dbconnopen.php";
-$stores = mysqli_query($cnnBickerdike, $num_stores);
+$stores = mysqli_query($cnnBickerdike, $num_stores_sqlsafe);
 $num_milk = mysqli_num_rows($stores);
 include "../include/dbconnclose.php";
 echo $num_milk
@@ -80,9 +80,9 @@ echo $num_milk
         <td>Display health promotion signage (excluding advertisements)</td>
                 <td>
             <?
-$num_stores = "SELECT * FROM Corner_Store_Assessment WHERE Health_Promotion_Signage='1'";
+$num_stores_sqlsafe = "SELECT * FROM Corner_Store_Assessment WHERE Health_Promotion_Signage='1'";
 include "../include/dbconnopen.php";
-$stores = mysqli_query($cnnBickerdike, $num_stores);
+$stores = mysqli_query($cnnBickerdike, $num_stores_sqlsafe);
 $num_signage = mysqli_num_rows($stores);
 include "../include/dbconnclose.php";
 echo $num_signage
@@ -97,9 +97,9 @@ echo $num_signage
         <td>Healthy items stocked in the front of the store or in high traffic areas</td>
                 <td>
             <?
-$num_stores = "SELECT * FROM Corner_Store_Assessment WHERE Healthy_Items_In_Front='1'";
+$num_stores_sqlsafe = "SELECT * FROM Corner_Store_Assessment WHERE Healthy_Items_In_Front='1'";
 include "../include/dbconnopen.php";
-$stores = mysqli_query($cnnBickerdike, $num_stores);
+$stores = mysqli_query($cnnBickerdike, $num_stores_sqlsafe);
 $num_stocked = mysqli_num_rows($stores);
 include "../include/dbconnclose.php";
 echo $num_stocked

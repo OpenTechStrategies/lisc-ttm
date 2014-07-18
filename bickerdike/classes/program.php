@@ -32,9 +32,9 @@ class Program
         //set program_id
         $this->program_id = $program_id_sqlsafe;
 
-        
-        //echo "Call Program__Load_With_ID('" . $this->program_id . "')";
-        $program_info = mysqli_query($cnnBickerdike, "SELECT * FROM Programs WHERE Program_ID='" . $this->program_id . "'");
+        $query_sqlsafe = "SELECT * FROM Programs WHERE Program_ID='" . $this->program_id . "'"
+        //echo $query_sqlsafe;
+        $program_info = mysqli_query($cnnBickerdike, $query_sqlsafe);
         
         //set public variables
         $program_info_temp = mysqli_fetch_array($program_info);
@@ -58,11 +58,11 @@ class Program
      */
     public function get_dates(){
         include "../include/dbconnopen.php";
-        $program_dates_query = "SELECT * FROM Program_Dates LEFT JOIN (Programs)
+        $program_dates_query_sqlsafe = "SELECT * FROM Program_Dates LEFT JOIN (Programs)
                                 ON (Programs.Program_ID=Program_Dates.Program_ID) WHERE Program_Dates.Program_ID='" . $this->program_id . "'
                                     ORDER BY Program_Date";
         //echo $program_dates_query;
-        $dates = mysqli_query($cnnBickerdike, $program_dates_query);
+        $dates = mysqli_query($cnnBickerdike, $program_dates_query_sqlsafe);
         include "../include/dbconnclose.php";
         
         return $dates;
@@ -74,11 +74,11 @@ class Program
      */
     public function get_users(){
         include "../include/dbconnopen.php";
-        $program_users_query = "SELECT * FROM Users LEFT JOIN (Programs_Users, Programs)
+        $program_users_query_sqlsafe = "SELECT * FROM Users LEFT JOIN (Programs_Users, Programs)
                                 ON (Programs.Program_ID=Programs_Users.Program_ID AND Users.User_ID=Programs_Users.User_ID)
                                 WHERE Programs_Users.Program_ID='" . $this->program_id . "'";
         //echo $program_users_query;
-        $users = mysqli_query($cnnBickerdike, $program_users_query);
+        $users = mysqli_query($cnnBickerdike, $program_users_query_sqlsafe);
         include "../include/dbconnclose.php";
         
         return $users;

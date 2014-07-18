@@ -62,21 +62,21 @@ It simply reports on the survey responses.
     </tr>
     <?
     //count the number of surveys entered for each step
-    $count_pres ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='parent' AND Pre_Post_Late='1'";
+    $count_pres_sqlsafe ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='parent' AND Pre_Post_Late='1'";
     include "../include/dbconnopen.php";
-    $pres = mysqli_query($cnnBickerdike, $count_pres);
+    $pres = mysqli_query($cnnBickerdike, $count_pres_sqlsafe);
     $num_pres = mysqli_num_rows($pres);
     include "../include/dbconnclose.php";
     
-    $count_posts ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='parent' AND Pre_Post_Late='2'";
+    $count_posts_sqlsafe ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='parent' AND Pre_Post_Late='2'";
     include "../include/dbconnopen.php";
-    $posts = mysqli_query($cnnBickerdike, $count_posts);
+    $posts = mysqli_query($cnnBickerdike, $count_posts_sqlsafe);
     $num_posts = mysqli_num_rows($posts);
     include "../include/dbconnclose.php";
     
-    $count_laters ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='parent' AND Pre_Post_Late='3'";
+    $count_laters_sqlsafe ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='parent' AND Pre_Post_Late='3'";
     include "../include/dbconnopen.php";
-    $laters = mysqli_query($cnnBickerdike, $count_laters);
+    $laters = mysqli_query($cnnBickerdike, $count_laters_sqlsafe);
     $num_laters = mysqli_num_rows($laters);
     include "../include/dbconnclose.php";
     

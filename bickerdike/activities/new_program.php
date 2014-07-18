@@ -32,9 +32,9 @@ if ($_GET['origin'] != ''){
         <td>Program Organization:</td><td><select id="org">
                 <option value="">-----</option>
                 <?
-                $orgs = "SELECT * FROM Org_Partners";
+                $orgs_sqlsafe = "SELECT * FROM Org_Partners";
                 include "../include/dbconnopen.php";
-                $organisation = mysqli_query($cnnBickerdike, $orgs);
+                $organisation = mysqli_query($cnnBickerdike, $orgs_sqlsafe);
                 while ($org = mysqli_fetch_array($organisation)){
                     ?>
                 <option value="<?echo $org['Partner_ID'];?>"><?echo $org['Partner_Name'];?></option>
@@ -55,9 +55,9 @@ if ($_GET['origin'] != ''){
         <td>Program Type:</td><td><select id="type">
                 <option value="">-----</option>
                 <?
-                $orgs = "SELECT * FROM Program_Types";
+                $orgs_sqlsafe = "SELECT * FROM Program_Types";
                 include "../include/dbconnopen.php";
-                $organisation = mysqli_query($cnnBickerdike, $orgs);
+                $organisation = mysqli_query($cnnBickerdike, $orgs_sqlsafe);
                 while ($org = mysqli_fetch_array($organisation)){
                     ?>
                 <option value="<?echo $org['Program_Type_ID'];?>"><?echo $org['Program_Type_Name'];?></option>

@@ -6,10 +6,10 @@
 include ($_SERVER['DOCUMENT_ROOT']."/include/block_group_finder.php");
 include "../include/dbconnopen.php";
 $user_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['user_id']);        
-$get_existing_address="SELECT Address_Number, Address_Street_Direction, Address_Street_Name, Address_Street_Type, Block_Group
+$get_existing_address_sqlsafe="SELECT Address_Number, Address_Street_Direction, Address_Street_Name, Address_Street_Type, Block_Group
             FROM Users
            WHERE User_ID='" . $user_id_sqlsafe . "'";
-        $existing_address=mysqli_query($cnnBickerdike, $get_existing_address);
+        $existing_address=mysqli_query($cnnBickerdike, $get_existing_address_sqlsafe);
         $address_now=mysqli_fetch_row($existing_address);
         include "../include/dbconnclose.php";
         if ($address_now[0]!=$_POST['address_number'] || $address_now[1]!=$_POST['address_direction'] || $address_now[2]!=$_POST['address_street'] ||
@@ -28,6 +28,7 @@ $get_existing_address="SELECT Address_Number, Address_Street_Direction, Address_
         /*
          * Now update the user with new posted information.
          */
+include "../include/dbconnopen.php";
 $first_name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['first_name']);
 $last_name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['last_name']);
 $zip_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['zip']);
@@ -42,7 +43,7 @@ $email_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['email']);
 $note_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_post['note']);
 $phone_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['phone']);
         
-$edit_user_query = "UPDATE Users SET 
+$edit_user_query_sqlsafe = "UPDATE Users SET 
                             First_Name='" . $first_name_sqlsafe . "',
                             Last_Name='" . $last_name_sqlsafe . "',
                             Zipcode='" . $zipcode_sqlsafe . "',
@@ -58,9 +59,8 @@ $edit_user_query = "UPDATE Users SET
                             Notes='" . $note_sqlsafe . "',
                             Phone='" . $phone_sqlsafe . "'
                             WHERE User_ID='" . $user_id_sqlsafe . "'";
-//echo $edit_user_query;
-include "../include/dbconnopen.php";
-mysqli_query($cnnBickerdike, $edit_user_query);
+//echo $edit_user_query_sqlsafe;
+mysqli_query($cnnBickerdike, $edit_user_query_sqlsafe);
 include "../include/dbconnclose.php";
 
 
