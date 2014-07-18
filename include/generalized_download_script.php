@@ -7,13 +7,12 @@
 // http://code.stephenmorley.org/php/creating-downloadable-csv-files/
 
 function generalized_download($download_name){
-    $download_list_array=array('aldermans_records'=>array('db'=>'Bickerdike', 'query'=> 'SELECT * FROM Aldermanic_Records'));
-    print_r($download_list_array);//testing output
+    $download_list_array=array('aldermans_records'=>array('db'=>'bickerdike', 'query'=> 'SELECT * FROM Aldermanic_Records'));
     if (array_key_exists($download_name, $download_list_array)){
     if (isset($_COOKIE['user'])){
         // output headers so that the file is downloaded rather than displayed
         header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename='.$download_name);
+        header('Content-Disposition: attachment; filename='.$download_name . '.csv');
 
         // create a file pointer connected to the output stream
         $output = fopen('php://output', 'w');
@@ -22,10 +21,14 @@ function generalized_download($download_name){
         //fputcsv($output, $column_headers);
 
         // fetch the data
-        include '../'.$download_list_array[$download_name]['db'].'/include/dbconnopen.php';
-        $db_name= 'cnn' .$download_list_array[$download_name]['db'];
+        $conn_file='../'.$download_list_array[$download_name]['db'].'/include/dbconnopen.php';
+        echo $conn_file; //testing output
+        include $conn_file;
+        $db_name= 'cnn' .ucfirst($download_list_array[$download_name]['db']);
+        echo $db_name; //testing output
         $database_conn=$$db_name;
         $query_sqlsafe=$download_list_array[$download_name]['query'];
+        echo $query_sqlsafe;
         $rows = mysqli_query($database_conn, $query_sqlsafe);
         
         // loop over the rows, outputting them
@@ -46,8 +49,6 @@ function generalized_download($download_name){
         //done something nefarious.
     }
 }
-include "dbconnopen.php";
-print_r($_POST);
 //generalized_download($_POST['download_name']);
 generalized_download('aldermans_records');
 ?>
