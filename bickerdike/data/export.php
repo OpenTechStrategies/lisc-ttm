@@ -56,7 +56,6 @@ $title_array_postable=serialize($title_array);
                 download_name: 'aldermans_records'
             },
                     function (response){
-                        document.write(response); //testing output
                     }
                     )
    ">Download (already de-identified).</a></td></tr>
