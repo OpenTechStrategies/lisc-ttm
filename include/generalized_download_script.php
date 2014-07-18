@@ -45,7 +45,12 @@ function generalized_download($dbconn_file, $database_conn, $query, $filename,
         exit;
     }
 }
-
-generalized_download('dbconnopen.php', 'cnnLISC', "SELECT * FROM Privileges;", 
-        "privilege_list_7-18-14.csv", array("Privilege_ID", "Privilege_Name"));
+include "dbconnopen.php";
+$conn_file=mysqli_real_escape_string($_POST['conn_file']);
+$conn_var=mysqli_real_escape_string($_POST['conn_var']);
+$query=mysqli_real_escape_string($_POST['query']);
+$filename=mysqli_real_escape_string($_POST['filename']);
+$title_array=$_POST['title_array'];
+generalized_download($conn_file, $conn_var, $query, 
+       $filename, $title_array);
 ?>

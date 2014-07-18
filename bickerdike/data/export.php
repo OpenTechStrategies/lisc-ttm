@@ -41,21 +41,23 @@ fclose($fp);
     <!--All aldermanic records.  Nothing to deidentify.-->
     
     <tr><td>
-<?$infile="downloads/aldermans_records.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
+<?php
 $title_array = array("ID", "Environmental_Improvement_Money", "Date");
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Aldermanic_Records";
-include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
-while ($money = mysqli_fetch_row($money_info)){
-    fputcsv ($fp, $money);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
+$title_array_postable=serialize($title_array);
 ?>
 
-<a href="downloads/aldermans_records.csv">Download the CSV file of Aldermanic records.</a></td>
+<a href="javascript;" onclick="
+            $.post(
+                    '../../include/generalized_download_script.php',
+            {
+                conn_file: '../bickerdike/include/dbconnopen.php',
+                conn_var: 'cnnBickerdike',
+                query: 'SELECT * FROM Aldermanic_Records',
+                filename: 'downloads/aldermans_records.csv',
+                title_array: <?php echo $title_array_postable; ?>
+            }
+                    )
+   ">Download the CSV file of Aldermanic records.</a></td>
         <td><a href="downloads/aldermans_records.csv">Download (already de-identified).</a></td></tr>
     
     
