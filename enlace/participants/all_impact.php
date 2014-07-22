@@ -293,11 +293,11 @@ Show tables of survey questions and response options.  The chosen response is se
                 <option value="4" <?php echo($assessment_info['Self_Awareness'] == 4 ? 'selected=="selected"' : null); ?>>Agree a lot</option>
             </select></td></tr>
     <tr><td>If things are bothering me or getting on my nerves, I do things to relax.</td><td><select id="self_care">
-                <option value="0" <?php echo($assessment_infopost_self_care == 0 ? 'selected=="selected"' : null); ?>>N/A</option>
-                <option value="1" <?php echo($assessment_infopost_self_care == 1 ? 'selected=="selected"' : null); ?>>Disagree a lot</option>
-                <option value="2" <?php echo($assessment_infopost_self_care == 2 ? 'selected=="selected"' : null); ?>>Disagree a little</option>
-                <option value="3" <?php echo($assessment_infopost_self_care == 3 ? 'selected=="selected"' : null); ?>>Agree a little</option>
-                <option value="4" <?php echo($assessment_infopost_self_care == 4 ? 'selected=="selected"' : null); ?>>Agree a lot</option>
+                <option value="0" <?php echo($assessment_info['Self_Care'] == 0 ? 'selected=="selected"' : null); ?>>N/A</option>
+                <option value="1" <?php echo($assessment_info['Self_Care'] == 1 ? 'selected=="selected"' : null); ?>>Disagree a lot</option>
+                <option value="2" <?php echo($assessment_info['Self_Care'] == 2 ? 'selected=="selected"' : null); ?>>Disagree a little</option>
+                <option value="3" <?php echo($assessment_info['Self_Care'] == 3 ? 'selected=="selected"' : null); ?>>Agree a little</option>
+                <option value="4" <?php echo($assessment_info['Self_Care'] == 4 ? 'selected=="selected"' : null); ?>>Agree a lot</option>
             </select></td></tr>
     <tr><td colspan="2"></td></tr>
 </table>
