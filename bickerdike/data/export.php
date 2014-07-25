@@ -46,27 +46,20 @@ $title_array = array("ID", "Environmental_Improvement_Money", "Date");
 $title_array_postable=serialize($title_array);
 
 ?>
-            <a href="../../include/generalized_download_script.php?download_name=aldermans_records">Download</a>
+            <a href="/include/generalized_download_script.php?download_name=aldermans_records">
+                Download the CSV file of Aldermanic Records.</a>
 </td>
         <td><br>
-            <a href="javascript:;" onclick="
-            $.post(
-                    '../../include/generalized_download_script.php',
-            {
-                download_name: 'aldermans_records'
-            },
-                    function (response){
-                    }
-                    )
-   ">Download (already de-identified).</a></td></tr>
+            <a href="/include/generalized_download_script.php?download_name=aldermans_records">
+                Download</a></td></tr>
     
     
         <!--All bike trail records.  Nothing to deidentify.-->
     
 <tr><td>
 
-<a href="../include/generalized_download_script.php?download_name=bike_trail_records">Download the CSV file of bike trail records.</a><br></td>
-    <td><a href="downloads/bike_records.csv">Download.</a></td></tr>
+<a href="/include/generalized_download_script.php?download_name=bike_trail_records">Download the CSV file of bike trail records.</a><br></td>
+    <td><a href="/include/generalized_download_script.php?download_name=bike_trail_records">Download.</a></td></tr>
     
     
         <!--All community wellness baseline records.  Nothing to deidentify.-->
@@ -74,14 +67,14 @@ $title_array_postable=serialize($title_array);
 
 <tr><td>
         <a href="/include/generalized_download_script.php?download_name=cws_baseline">Download the CSV file of Community Wellness Survey baselines.</a><br></td>
-    <td><a href="downloads/community_wellness_baseline.csv">Download.</a></td></tr>
+    <td><a href="/include/generalized_download_script.php?download_name=cws_baseline">Download.</a></td></tr>
 
     
     
         <!--All bike trail records.  Store IDs only in the de-id'd version.-->
     
 <tr><td>
-        <a href="../../include/generalized_download_script.php?download_name=corner_stores">Download the CSV file of Corner Store Assessments.</a><br></td>
+        <a href="/include/generalized_download_script.php?download_name=corner_stores">Download the CSV file of Corner Store Assessments.</a><br></td>
     <td>
 <a href="include/generalized_download_script.php?download_name=corner_stores_deid">Download (no store names).</a></td></tr>
     
@@ -90,42 +83,16 @@ $title_array_postable=serialize($title_array);
     
 
 <tr><td>
-<?$infile="downloads/store_sales.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("ID", "Store", "Date", "Sales Data");
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Funded_Organization_Records_Stores";
-include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
-while ($money = mysqli_fetch_row($money_info)){
-    fputcsv ($fp, $money);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>
-<a href="downloads/store_sales.csv">Download the CSV file of store sales records.</a><br></td>
-    <td><a href="downloads/store_sales.csv">Download.</a></td></tr>
+<a href="/include/generalized_download_script.php?download_name=store_sales">Download the CSV file of store sales records.</a><br></td>
+    <td><a href="/include/generalized_download_script.php?download_name=store_sales">Download.</a></td></tr>
     
     
         <!--All partner organizations.  Nothing to deidentify.-->
     
 
 <tr><td>
-<?$infile="downloads/partner_orgs.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("ID", "Partner Name");
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Org_Partners";
-include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
-while ($money = mysqli_fetch_row($money_info)){
-    fputcsv ($fp, $money);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>
-<a href="downloads/partner_orgs.csv">Download the CSV file of organizational partners.</a><br></td>
-    <td><a href="downloads/partner_orgs.csv">Download.</a></td></tr>
+<a href="/include/generalized_download_script.php?download_name=partner_orgs">Download the CSV file of organizational partners.</a><br></td>
+    <td><a href="/include/generalized_download_script.php?download_name=partner_orgs">Download.</a></td></tr>
     
     
         <!--All surveys (attitude, behavior, knowledge about obesity).
