@@ -102,53 +102,8 @@ $title_array_postable=serialize($title_array);
     
 
 <tr><td>
-<?$infile="downloads/simple_surveys.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("User ID", "First Name", "Last Name", "Gender", "Age", "Address Number", "Street Direction", "Street Name", "Street Type", 
-	    "Zipcode", "Race/Ethnicity", "Question 2 -- (1) Very important to (4) Not at all important", "3", "4a",
-	     "4b", "5a","5b", "Question 6", "7", "8",
-	     "9a -- (1) Strongly Agree to (4) Strongly Disagree", "9b -- (1) Strongly Agree to (4) Strongly Disagree",
-	    "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes", "13 -- (0) No to (1) Yes",
-	     "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
-	    "Program Name", "Program Organization", "Participant Type", "Child ID");
-
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
-    LEFT JOIN (Programs, Users, Org_Partners)
-    ON (Participant_Survey_Responses.User_ID=Users.User_ID
-    AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
-    AND Programs.Program_Organization=Org_Partners.Partner_ID);";
-
-include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
-	while ($money = mysqli_fetch_array($money_info)){
-	    if ($money['Race']=='b') {
-	            $race="African-American";
-	    } else if ($money['Race']=='l') {
-	            $race="Latino";
-	    } else if ($money['Race']=='a') {
-	            $race="Asian";
-	    } else if ($money['Race']=='w') {
-	            $race="White";
-	    } else if ($money['Race']=='o') {
-	            $race="Other";
-	    } else{
-	        $race='';
-	    }
-	    $enter_array = array($money['User_ID'], $money['First_Name'], $money['Last_Name'], $money['Gender'], $money['Age'],
-	        $money['Address_Number'], $money['Address_Street_Direction'], $money['Address_Street_Name'], $money['Address_Street_Type'],
-	        $money['Zipcode'], $race,
-	        $money['Question_2'],  $money['Question_3'], $money['Question_4_A'], $money['Question_4_B'], $money['Question_5_A'],
-	         $money['Question_5_B'],  $money['Question_6'], $money['Question_7'], $money['Question_8'], $money['Question_9_A'],
-	         $money['Question_9_B'], $money['Question_11'], $money['Question_12'], $money['Question_13'], $money['Question_14'],
-	         $money['Date_Survey_Administered'], $money['Pre_Post_Late'], $money['Program_ID'],  $money['Program_Name'], $money['Partner_Name'],
-	        $money['Participant_Type'], $money['Child_ID']);
-	    fputcsv ($fp, $enter_array);
-	}
-	include "../include/dbconnclose.php";
-	fclose($fp);
-	?>
-	<a href="downloads/simple_surveys.csv">Download the CSV file of participant surveys (all).</a><span class="helptext">
+        <a href="/include/generalized_download_script.php?download_name=all_surveys_bickerdike">
+            Download the CSV file of participant surveys (all).</a><span class="helptext">
 	    Does not include linked children.  If no program is selected, the survey will not show up in this export.
         </span></td>
             
@@ -159,53 +114,7 @@ include "../include/dbconnopen.php";
     
 
     <td>
-        
-        <?$infile="downloads/deid_simple_surveys.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("User ID", "Gender", "Age", 
-	    "Zipcode", "Race/Ethnicity", "Question 2 -- (1) Very important to (4) Not at all important", "3", "4a",
-	     "4b", "5a","5b", "Question 6", "7", "8",
-	     "9a -- (1) Strongly Agree to (4) Strongly Disagree", "9b -- (1) Strongly Agree to (4) Strongly Disagree",
-	    "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes", "13 -- (0) No to (1) Yes",
-	     "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
-	    "Program Name", "Program Organization", "Participant Type", "Child ID");
-
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
-    LEFT JOIN (Programs, Users, Org_Partners)
-    ON (Participant_Survey_Responses.User_ID=Users.User_ID
-    AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
-    AND Programs.Program_Organization=Org_Partners.Partner_ID);";
-
-include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
-	while ($money = mysqli_fetch_array($money_info)){
-	    if ($money['Race']=='b') {
-	            $race="African-American";
-	    } else if ($money['Race']=='l') {
-	            $race="Latino";
-	    } else if ($money['Race']=='a') {
-	            $race="Asian";
-	    } else if ($money['Race']=='w') {
-	            $race="White";
-	    } else if ($money['Race']=='o') {
-	            $race="Other";
-	    } else{
-	        $race='';
-	    }
-	    $enter_array = array($money['User_ID'], $money['Gender'], $money['Age'],
-	        $money['Zipcode'], $race,
-	        $money['Question_2'],  $money['Question_3'], $money['Question_4_A'], $money['Question_4_B'], $money['Question_5_A'],
-	         $money['Question_5_B'],  $money['Question_6'], $money['Question_7'], $money['Question_8'], $money['Question_9_A'],
-	         $money['Question_9_B'], $money['Question_11'], $money['Question_12'], $money['Question_13'], $money['Question_14'],
-	         $money['Date_Survey_Administered'], $money['Pre_Post_Late'], $money['Program_ID'],  $money['Program_Name'], $money['Partner_Name'],
-	        $money['Participant_Type'], $money['Child_ID']);
-	    fputcsv ($fp, $enter_array);
-	}
-	include "../include/dbconnclose.php";
-	fclose($fp);
-	?>
-	<a href="downloads/deid_simple_surveys.csv">Download (all).</a>
+	<a href="/include/generalized_download_script.php?download_name=all_surveys_bickerdike_deid">Download (all).</a>
         
     </td></tr>
     
@@ -217,100 +126,11 @@ include "../include/dbconnopen.php";
     
 
         <tr><td>
-     <?   $infile="downloads/simple_surveys_adults.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("User ID", "First Name", "Last Name", "Gender", "Age", "Address Number", "Street Direction", "Street Name", "Street Type", 
-	    "Zipcode", "Race/Ethnicity", "Question 2 -- (1) Very important to (4) Not at all important", "3", "4a",
-	     "4b", "5a","5b", "Question 6", "7", "8",
-	     "9a -- (1) Strongly Agree to (4) Strongly Disagree", "9b -- (1) Strongly Agree to (4) Strongly Disagree",
-	    "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes", "13 -- (0) No to (1) Yes",
-	     "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
-	    "Program Name", "Program Organization", "Participant Type", "Child ID");
-
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
-    LEFT JOIN (Programs, Users, Org_Partners)
-    ON (Participant_Survey_Responses.User_ID=Users.User_ID
-    AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
-    AND Programs.Program_Organization=Org_Partners.Partner_ID) WHERE Participant_Type='adult';";
-
-include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
-	while ($money = mysqli_fetch_array($money_info)){
-	    if ($money['Race']=='b') {
-	            $race="African-American";
-	    } else if ($money['Race']=='l') {
-	            $race="Latino";
-	    } else if ($money['Race']=='a') {
-	            $race="Asian";
-	    } else if ($money['Race']=='w') {
-	            $race="White";
-	    } else if ($money['Race']=='o') {
-	            $race="Other";
-	    } else{
-	        $race='';
-	    }
-	    $enter_array = array($money['User_ID'], $money['First_Name'], $money['Last_Name'], $money['Gender'], $money['Age'],
-	        $money['Address_Number'], $money['Address_Street_Direction'], $money['Address_Street_Name'], $money['Address_Street_Type'],
-	        $money['Zipcode'], $race,
-	        $money['Question_2'],  $money['Question_3'], $money['Question_4_A'], $money['Question_4_B'], $money['Question_5_A'],
-	         $money['Question_5_B'],  $money['Question_6'], $money['Question_7'], $money['Question_8'], $money['Question_9_A'],
-	         $money['Question_9_B'], $money['Question_11'], $money['Question_12'], $money['Question_13'], $money['Question_14'],
-	         $money['Date_Survey_Administered'], $money['Pre_Post_Late'], $money['Program_ID'],  $money['Program_Name'], $money['Partner_Name'],
-	        $money['Participant_Type'], $money['Child_ID']);
-	    fputcsv ($fp, $enter_array);
-	}
-	include "../include/dbconnclose.php";
-	fclose($fp);
-	?>
-	<a href="downloads/simple_surveys_adults.csv">Download the CSV file of participant surveys (adults only).</a><br><p></p></td>
+     
+	<a href="/include/generalized_download_script.php?download_name=adult_surveys_bickerdike">Download the CSV file of participant surveys (adults only).</a><br><p></p></td>
             <td>
-                <?   $infile="downloads/deid_simple_surveys_adults.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("User ID", "Gender", "Age", 
-	    "Zipcode", "Race/Ethnicity", "Question 2 -- (1) Very important to (4) Not at all important", "3", "4a",
-	     "4b", "5a","5b", "Question 6", "7", "8",
-	     "9a -- (1) Strongly Agree to (4) Strongly Disagree", "9b -- (1) Strongly Agree to (4) Strongly Disagree",
-	    "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes", "13 -- (0) No to (1) Yes",
-	     "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
-	    "Program Name", "Program Organization", "Participant Type", "Child ID");
-
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
-    LEFT JOIN (Programs, Users, Org_Partners)
-    ON (Participant_Survey_Responses.User_ID=Users.User_ID
-    AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
-    AND Programs.Program_Organization=Org_Partners.Partner_ID) WHERE Participant_Type='adult';";
-
-include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
-	while ($money = mysqli_fetch_array($money_info)){
-	    if ($money['Race']=='b') {
-	            $race="African-American";
-	    } else if ($money['Race']=='l') {
-	            $race="Latino";
-	    } else if ($money['Race']=='a') {
-	            $race="Asian";
-	    } else if ($money['Race']=='w') {
-	            $race="White";
-	    } else if ($money['Race']=='o') {
-	            $race="Other";
-	    } else{
-	        $race='';
-	    }
-	    $enter_array = array($money['User_ID'],  $money['Gender'], $money['Age'],
-	        $money['Zipcode'], $race,
-	        $money['Question_2'],  $money['Question_3'], $money['Question_4_A'], $money['Question_4_B'], $money['Question_5_A'],
-	         $money['Question_5_B'],  $money['Question_6'], $money['Question_7'], $money['Question_8'], $money['Question_9_A'],
-	         $money['Question_9_B'], $money['Question_11'], $money['Question_12'], $money['Question_13'], $money['Question_14'],
-	         $money['Date_Survey_Administered'], $money['Pre_Post_Late'], $money['Program_ID'],  $money['Program_Name'], $money['Partner_Name'],
-	        $money['Participant_Type'], $money['Child_ID']);
-	    fputcsv ($fp, $enter_array);
-	}
-	include "../include/dbconnclose.php";
-	fclose($fp);
-	?>
-	<a href="downloads/deid_simple_surveys_adults.csv">Download (adults).</a>
+          
+	<a href="/include/generalized_download_script.php?download_name=adult_surveys_bickerdike_deid">Download (adults).</a>
                 
             </td></tr>
             
@@ -325,101 +145,10 @@ include "../include/dbconnopen.php";
     
 
        <tr><td> 
-         <?   $infile="downloads/simple_surveys_parents.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("User ID", "First Name", "Last Name", "Gender", "Age", "Address Number", "Street Direction", "Street Name", "Street Type", 
-	    "Zipcode", "Race/Ethnicity", "Question 2 -- (1) Very important to (4) Not at all important", "3", "4a",
-	     "4b", "5a","5b", "Question 6", "7", "8",
-	     "9a -- (1) Strongly Agree to (4) Strongly Disagree", "9b -- (1) Strongly Agree to (4) Strongly Disagree",
-	    "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes", "13 -- (0) No to (1) Yes",
-	     "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
-	    "Program Name", "Program Organization", "Participant Type", "Child ID");
-
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
-    LEFT JOIN (Programs, Users, Org_Partners)
-    ON (Participant_Survey_Responses.User_ID=Users.User_ID
-    AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
-    AND Programs.Program_Organization=Org_Partners.Partner_ID) WHERE Participant_Type='parent';";
-
-include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
-	while ($money = mysqli_fetch_array($money_info)){
-	    if ($money['Race']=='b') {
-	            $race="African-American";
-	    } else if ($money['Race']=='l') {
-	            $race="Latino";
-	    } else if ($money['Race']=='a') {
-	            $race="Asian";
-	    } else if ($money['Race']=='w') {
-	            $race="White";
-	    } else if ($money['Race']=='o') {
-	            $race="Other";
-	    } else{
-	        $race='';
-	    }
-	    $enter_array = array($money['User_ID'], $money['First_Name'], $money['Last_Name'], $money['Gender'], $money['Age'],
-	        $money['Address_Number'], $money['Address_Street_Direction'], $money['Address_Street_Name'], $money['Address_Street_Type'],
-	        $money['Zipcode'], $race,
-	        $money['Question_2'],  $money['Question_3'], $money['Question_4_A'], $money['Question_4_B'], $money['Question_5_A'],
-	         $money['Question_5_B'],  $money['Question_6'], $money['Question_7'], $money['Question_8'], $money['Question_9_A'],
-	         $money['Question_9_B'], $money['Question_11'], $money['Question_12'], $money['Question_13'], $money['Question_14'],
-	         $money['Date_Survey_Administered'], $money['Pre_Post_Late'], $money['Program_ID'],  $money['Program_Name'], $money['Partner_Name'],
-	        $money['Participant_Type'], $money['Child_ID']);
-	    fputcsv ($fp, $enter_array);
-	}
-	include "../include/dbconnclose.php";
-	fclose($fp);
-	?>
-	<a href="downloads/simple_surveys_parents.csv">Download the CSV file of participant surveys (parents only).</a><br><p></p></td>
+	<a href="/include/generalized_download_script.php?download_name=parent_surveys_bickerdike">Download the CSV file of participant surveys (parents only).</a><br><p></p></td>
            <td>
-               
-                <?   $infile="downloads/deid_simple_surveys_parents.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("User ID",  "Gender", "Age", 
-	    "Zipcode", "Race/Ethnicity", "Question 2 -- (1) Very important to (4) Not at all important", "3", "4a",
-	     "4b", "5a","5b", "Question 6", "7", "8",
-	     "9a -- (1) Strongly Agree to (4) Strongly Disagree", "9b -- (1) Strongly Agree to (4) Strongly Disagree",
-	    "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes", "13 -- (0) No to (1) Yes",
-	     "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
-	    "Program Name", "Program Organization", "Participant Type", "Child ID");
-
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
-    LEFT JOIN (Programs, Users, Org_Partners)
-    ON (Participant_Survey_Responses.User_ID=Users.User_ID
-    AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
-    AND Programs.Program_Organization=Org_Partners.Partner_ID) WHERE Participant_Type='parent';";
-
-include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
-	while ($money = mysqli_fetch_array($money_info)){
-	    if ($money['Race']=='b') {
-	            $race="African-American";
-	    } else if ($money['Race']=='l') {
-	            $race="Latino";
-	    } else if ($money['Race']=='a') {
-	            $race="Asian";
-	    } else if ($money['Race']=='w') {
-	            $race="White";
-	    } else if ($money['Race']=='o') {
-	            $race="Other";
-	    } else{
-	        $race='';
-	    }
-	    $enter_array = array($money['User_ID'],$money['Gender'], $money['Age'],
-	        $money['Zipcode'], $race,
-	        $money['Question_2'],  $money['Question_3'], $money['Question_4_A'], $money['Question_4_B'], $money['Question_5_A'],
-	         $money['Question_5_B'],  $money['Question_6'], $money['Question_7'], $money['Question_8'], $money['Question_9_A'],
-	         $money['Question_9_B'], $money['Question_11'], $money['Question_12'], $money['Question_13'], $money['Question_14'],
-	         $money['Date_Survey_Administered'], $money['Pre_Post_Late'], $money['Program_ID'],  $money['Program_Name'], $money['Partner_Name'],
-	        $money['Participant_Type'], $money['Child_ID']);
-	    fputcsv ($fp, $enter_array);
-	}
-	include "../include/dbconnclose.php";
-	fclose($fp);
-	?>
-	<a href="downloads/deid_simple_surveys_parents.csv">Download (parents).</a>
+            
+	<a href="/include/generalized_download_script.php?download_name=parent_surveys_bickerdike_deid">Download (parents).</a>
                
            </td></tr>
           
@@ -431,101 +160,10 @@ include "../include/dbconnopen.php";
     
   
         <tr><td>
-         <?   $infile="downloads/simple_surveys_youth.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("User ID", "First Name", "Last Name", "Gender", "Age", "Address Number", "Street Direction", "Street Name", "Street Type", 
-	    "Zipcode", "Race/Ethnicity", "Question 2 -- (1) Very important to (4) Not at all important", "3", "4a",
-	     "4b", "5a","5b", "Question 6", "7", "8",
-	     "9a -- (1) Strongly Agree to (4) Strongly Disagree", "9b -- (1) Strongly Agree to (4) Strongly Disagree",
-	    "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes", "13 -- (0) No to (1) Yes",
-	     "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
-	    "Program Name", "Program Organization", "Participant Type", "Child ID");
-
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
-    LEFT JOIN (Programs, Users, Org_Partners)
-    ON (Participant_Survey_Responses.User_ID=Users.User_ID
-    AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
-    AND Programs.Program_Organization=Org_Partners.Partner_ID) WHERE Participant_Type='youth';";
-
-include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
-	while ($money = mysqli_fetch_array($money_info)){
-	    if ($money['Race']=='b') {
-	            $race="African-American";
-	    } else if ($money['Race']=='l') {
-	            $race="Latino";
-	    } else if ($money['Race']=='a') {
-	            $race="Asian";
-	    } else if ($money['Race']=='w') {
-	            $race="White";
-	    } else if ($money['Race']=='o') {
-	            $race="Other";
-	    } else{
-	        $race='';
-	    }
-	    $enter_array = array($money['User_ID'], $money['First_Name'], $money['Last_Name'], $money['Gender'], $money['Age'],
-	        $money['Address_Number'], $money['Address_Street_Direction'], $money['Address_Street_Name'], $money['Address_Street_Type'],
-	        $money['Zipcode'], $race,
-	        $money['Question_2'],  $money['Question_3'], $money['Question_4_A'], $money['Question_4_B'], $money['Question_5_A'],
-	         $money['Question_5_B'],  $money['Question_6'], $money['Question_7'], $money['Question_8'], $money['Question_9_A'],
-	         $money['Question_9_B'], $money['Question_11'], $money['Question_12'], $money['Question_13'], $money['Question_14'],
-	         $money['Date_Survey_Administered'], $money['Pre_Post_Late'], $money['Program_ID'],  $money['Program_Name'], $money['Partner_Name'],
-	        $money['Participant_Type'], $money['Child_ID']);
-	    fputcsv ($fp, $enter_array);
-	}
-	include "../include/dbconnclose.php";
-	fclose($fp);
-	?>
-	<a href="downloads/simple_surveys_youth.csv">Download (youth).</a><br><p></p></td>
+        <a href="/include/generalized_download_script.php?download_name=youth_surveys_bickerdike">Download (youth).</a><br><p></p></td>
             <td>
-                
-                 <?   $infile="downloads/deid_simple_surveys_youth.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("User ID", "Gender", "Age", 
-	    "Zipcode", "Race/Ethnicity", "Question 2 -- (1) Very important to (4) Not at all important", "3", "4a",
-	     "4b", "5a","5b", "Question 6", "7", "8",
-	     "9a -- (1) Strongly Agree to (4) Strongly Disagree", "9b -- (1) Strongly Agree to (4) Strongly Disagree",
-	    "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes", "13 -- (0) No to (1) Yes",
-	     "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
-	    "Program Name", "Program Organization", "Participant Type", "Child ID");
-
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
-    LEFT JOIN (Programs, Users, Org_Partners)
-    ON (Participant_Survey_Responses.User_ID=Users.User_ID
-    AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
-    AND Programs.Program_Organization=Org_Partners.Partner_ID) WHERE Participant_Type='youth';";
-
-include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
-	while ($money = mysqli_fetch_array($money_info)){
-	    if ($money['Race']=='b') {
-	            $race="African-American";
-	    } else if ($money['Race']=='l') {
-	            $race="Latino";
-	    } else if ($money['Race']=='a') {
-	            $race="Asian";
-	    } else if ($money['Race']=='w') {
-	            $race="White";
-	    } else if ($money['Race']=='o') {
-	            $race="Other";
-	    } else{
-	        $race='';
-	    }
-	    $enter_array = array($money['User_ID'], $money['Gender'], $money['Age'],
-	        $money['Zipcode'], $race,
-	        $money['Question_2'],  $money['Question_3'], $money['Question_4_A'], $money['Question_4_B'], $money['Question_5_A'],
-	         $money['Question_5_B'],  $money['Question_6'], $money['Question_7'], $money['Question_8'], $money['Question_9_A'],
-	         $money['Question_9_B'], $money['Question_11'], $money['Question_12'], $money['Question_13'], $money['Question_14'],
-	         $money['Date_Survey_Administered'], $money['Pre_Post_Late'], $money['Program_ID'],  $money['Program_Name'], $money['Partner_Name'],
-	        $money['Participant_Type'], $money['Child_ID']);
-	    fputcsv ($fp, $enter_array);
-	}
-	include "../include/dbconnclose.php";
-	fclose($fp);
-	?>
-	<a href="downloads/deid_simple_surveys_youth.csv">Download (youth).</a>
+        
+	<a href="/include/generalized_download_script.php?download_name=youth_surveys_bickerdike_deid">Download (youth).</a>
                 
             </td></tr>
            
