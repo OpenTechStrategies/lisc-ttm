@@ -7,7 +7,14 @@
 // http://code.stephenmorley.org/php/creating-downloadable-csv-files/
 
 function generalized_download($download_name){
-    $download_list_array=array('aldermans_records'=>array('db'=>'bickerdike', 'query'=> 'SELECT * FROM Aldermanic_Records'));
+    $download_list_array=array(
+        'aldermans_records'=>array('db'=>'bickerdike', 'query'=> 'SELECT * FROM Aldermanic_Records'),
+        'bike_trail_records'=>array('db'=>'bickerdike', 'query'=>'SELECT * FROM Bike_Trails'),
+        'cws_baseline'=>array('db'=>'bickerdike', 'query'=>'SELECT * FROM Community_Wellness_Survey_Aggregates'),
+        'corner_stores'=>array('db'=>'bickerdike', 'query'=>'SELECT * FROM Corner_Store_Assessment INNER JOIN Corner_Stores ON Corner_Store_Assessment.Corner_Store_ID= Corner_Stores.Corner_Store_ID'),
+        'corner_stores_deid'=>array('db'=>'bickerdike', 'query'=>'SELECT * FROM Corner_Store_Assessment')
+        
+        );
     if (array_key_exists($download_name, $download_list_array)){
     if (isset($_COOKIE['user'])){
         // output headers so that the file is downloaded rather than displayed

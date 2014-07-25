@@ -46,7 +46,7 @@ $title_array = array("ID", "Environmental_Improvement_Money", "Date");
 $title_array_postable=serialize($title_array);
 
 ?>
-
+            <a href="../../include/generalized_download_script.php?download_name=aldermans_records">Download</a>
 </td>
         <td><br>
             <a href="javascript:;" onclick="
@@ -64,20 +64,8 @@ $title_array_postable=serialize($title_array);
         <!--All bike trail records.  Nothing to deidentify.-->
     
 <tr><td>
-<?$infile="downloads/bike_records.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("ID", "Miles of Bike Lanes", "Date");
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Bike_Trails";
-include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
-while ($money = mysqli_fetch_row($money_info)){
-    fputcsv ($fp, $money);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>
-<a href="downloads/bike_records.csv">Download the CSV file of bike trail records.</a><br></td>
+
+<a href="../include/generalized_download_script.php?download_name=bike_trail_records">Download the CSV file of bike trail records.</a><br></td>
     <td><a href="downloads/bike_records.csv">Download.</a></td></tr>
     
     
@@ -85,22 +73,7 @@ fclose($fp);
     
 
 <tr><td>
-<?$infile="downloads/community_wellness_baseline.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("ID", "CWS Baseline Question 15", "Question 20", "Question 21", "Question 24",
-     "Question 29", "Question 31", "Question 30",  "Question 32", "Question 69", "Question 72", 
-     "Question 91", "Question 41a", "Question 41b", "Question 44", "Date");
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Community_Wellness_Survey_Aggregates";
-include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
-while ($money = mysqli_fetch_row($money_info)){
-    fputcsv ($fp, $money);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>
-<a href="downloads/community_wellness_baseline.csv">Download the CSV file of Community Wellness Survey baselines.</a><br></td>
+        <a href="/include/generalized_download_script.php?download_name=cws_baseline">Download the CSV file of Community Wellness Survey baselines.</a><br></td>
     <td><a href="downloads/community_wellness_baseline.csv">Download.</a></td></tr>
 
     
@@ -108,36 +81,9 @@ fclose($fp);
         <!--All bike trail records.  Store IDs only in the de-id'd version.-->
     
 <tr><td>
-<?$infile="downloads/corner_stores.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("ID", "Store ID", "2 Vegetable Options?", "Lowfat Milk?",
-     "Health Signage?", "Healthy Items in the Front?", "Date", "Store ID", "Name", "Address");
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Corner_Store_Assessment INNER JOIN Corner_Stores ON Corner_Store_Assessment.Corner_Store_ID= Corner_Stores.Corner_Store_ID";
-include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
-while ($money = mysqli_fetch_row($money_info)){
-    fputcsv ($fp, $money);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>
-<a href="downloads/corner_stores.csv">Download the CSV file of Corner Store Assessments.</a><br></td>
-    <td><?$infile="downloads/deid_corner_stores.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("ID", "Store ID", "2 Vegetable Options?", "Lowfat Milk?",
-     "Health Signage?", "Healthy Items in the Front?", "Date", "Store ID", "Name", "Address");
-fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Corner_Store_Assessment";
-include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
-while ($money = mysqli_fetch_row($money_info)){
-    fputcsv ($fp, $money);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>
-<a href="downloads/deid_corner_stores.csv">Download (no store names).</a></td></tr>
+        <a href="../../include/generalized_download_script.php?download_name=corner_stores">Download the CSV file of Corner Store Assessments.</a><br></td>
+    <td>
+<a href="include/generalized_download_script.php?download_name=corner_stores_deid">Download (no store names).</a></td></tr>
     
     
         <!--All healthy food sales records.-->
