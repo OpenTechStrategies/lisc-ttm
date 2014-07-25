@@ -280,7 +280,267 @@ function generalized_download($download_name){
                 "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", 
                 "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
                 "Program Name", "Program Organization", "Participant Type", 
-                "Child ID"))
+                "Child ID")),
+        
+        'parent_children_surveys_bickerdike'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT parent_table.User_ID, parent_table.Gender, parent_table.Age, 
+                parent_table.Address_Number,
+                parent_table.Address_Street_Direction, parent_table.Address_Street_Name, 
+                parent_table.Address_Street_Type,
+                parent_table.Zipcode, parent_table.Race, Question_2, Question_3, 
+                Question_4_A, Question_4_B,
+                Question_5_A, Question_5_B, Question_6, Question_7, Question_8, 
+                Question_9_A, Question_9_B, 
+                Question_11, Question_12, Question_13, Question_14, 
+                Date_Survey_Administered, Pre_Post_Late, 
+                Programs.Program_ID, Programs.Program_Name, 
+                Org_Partners.Partner_Name,
+                Participant_Type, child_table.User_ID as child_id, 
+                child_table.First_Name as child_first, child_table.Last_Name as child_last,
+                child_table.DOB as child_dob, child_table.Gender as child_gender,
+                child_table.Age as child_age, child_table.Race as child_race,
+                parent_table.First_Name, parent_table.Last_Name
+                FROM Users as parent_table, Users as child_table, 
+                Participant_Survey_Responses, Programs, Org_Partners     
+                WHERE parent_table.User_ID = Participant_Survey_Responses.User_ID 
+                AND child_table.User_ID=Participant_Survey_Responses.Child_ID
+                AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
+                AND Programs.Program_Organization=Org_Partners.Partner_ID;',
+            'titles'=>array("User ID", "Gender", "Age", "Address Number", 
+                "Street Direction", "Street Name", "Street Type", 
+                "Zipcode", "Race/Ethnicity", "Question 2 -- (1) "
+                . "Very important to (4) Not at all important", "3", "4a",
+                "4b", "5a","5b", "Question 6", "7", "8",
+                "9a -- (1) Strongly Agree to (4) Strongly Disagree", 
+                "9b -- (1) Strongly Agree to (4) Strongly Disagree",
+                "Question 11 -- (0) No to (1) Yes", "12 -- (0) No"
+                . " to (1) Yes", "13 -- (0) No to (1) Yes",
+                "10 (1) Not at all Satisfied to (4) Very satisfied", "Date",
+                "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
+                "Program Name", "Program Organization", "Participant Type", 
+                "Child ID",  "Child First Name", "Child Last Name",  "Child DOB",
+                "Child Gender", "Child's Age", "Child Race", "Parent First Name",
+                "Parent Last Name")),
+        
+        'parent_children_surveys_bickerdike_deid'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT parent_table.User_ID, parent_table.Gender, parent_table.Age, 
+                parent_table.Zipcode, parent_table.Race, Question_2, Question_3, 
+                Question_4_A, Question_4_B,
+                Question_5_A, Question_5_B, Question_6, Question_7, Question_8, 
+                Question_9_A, Question_9_B, 
+                Question_11, Question_12, Question_13, Question_14, 
+                Date_Survey_Administered, Pre_Post_Late, 
+                Programs.Program_ID, Programs.Program_Name, 
+                Org_Partners.Partner_Name,
+                Participant_Type, child_table.User_ID as child_id, 
+                child_table.Gender as child_gender,
+                child_table.Age as child_age, child_table.Race as child_race
+                FROM Users as parent_table, Users as child_table, 
+                Participant_Survey_Responses, Programs, Org_Partners     
+                WHERE parent_table.User_ID = Participant_Survey_Responses.User_ID 
+                AND child_table.User_ID=Participant_Survey_Responses.Child_ID
+                AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
+                AND Programs.Program_Organization=Org_Partners.Partner_ID;',
+            'titles'=>array("User ID", "Gender", "Age", 
+                "Zipcode", "Race/Ethnicity", "Question 2 -- (1) "
+                . "Very important to (4) Not at all important", "3", "4a",
+                "4b", "5a","5b", "Question 6", "7", "8",
+                "9a -- (1) Strongly Agree to (4) Strongly Disagree", 
+                "9b -- (1) Strongly Agree to (4) Strongly Disagree",
+                "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes", 
+                "13 -- (0) No to (1) Yes",
+                "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", 
+                "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
+                "Program Name", "Program Organization", "Participant Type", 
+                "Child ID",   "Child Gender",
+                "Child's Age",  "Child Race" )),
+        
+        'program_dates_bickerdike'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT * FROM Program_Dates INNER JOIN Programs ON '
+            . 'Program_Dates.Program_ID=Programs.Program_ID',
+            'titles'=>array("ID", "Program ID", "Program Name", "Date")),
+        
+        'program_attendance_bickerdike'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT * FROM Program_Dates_Users LEFT JOIN (Program_Dates, Programs, Users)
+                ON (Program_Dates_Users.Program_Date_ID=Program_Dates.Program_Date_ID
+                AND Programs.Program_ID=Program_Dates.Program_ID
+                AND Program_Dates_Users.User_ID=Users.User_ID)',
+            'titles'=>array("ID", "Program Date ID", "User ID", "Program ID", 
+                "Program Date", "Program Name", 
+                "Participant First Name" , "Participant Last Name", "Gender", 
+                "Age", "Address Number", "Street Direction", "Street Name", 
+                "Street Type", "Participant Type")),
+        
+        'program_attendance_bickerdike_deid'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT * FROM Program_Dates_Users LEFT JOIN (Program_Dates, Programs, Users)
+                ON (Program_Dates_Users.Program_Date_ID=Program_Dates.Program_Date_ID
+                AND Programs.Program_ID=Program_Dates.Program_ID
+                AND Program_Dates_Users.User_ID=Users.User_ID)',
+            'titles'=>array("ID", "Program Date ID", "User ID", "Program ID", 
+                "Program Date", "Program Name", "Gender", "Age", 
+                "Participant Type")),
+        
+        'programs_bickerdike'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT * FROM Programs', 
+            'titles'=>array("ID", "Program Name", "Organization", "Type", 
+                "Program Created Date", "Notes")),
+        
+        'program_participants_bickerdike'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT Programs.Program_ID, Users.User_ID, Program_Name, Gender, Age,
+            Address_Number, Address_Street_Direction, Address_Street_Name, 
+            Address_Street_Type FROM Programs_Users INNER JOIN (Programs, Users)
+            ON (Programs_Users.Program_ID=Programs.Program_ID
+            AND Programs_Users.User_ID=Users.User_ID)', 
+            'titles'=>array("Program ID", "User ID", "Program Name", "Gender", "Age",
+                "Address Number", "Street Direction", "Street Name", "Street Type")),
+        
+        'program_participants_bickerdike_deid'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT Programs.Program_ID, Users.User_ID, Program_Name, Gender, 
+                Age FROM Programs_Users INNER JOIN (Programs, Users)
+                ON (Programs_Users.Program_ID=Programs.Program_ID
+                AND Programs_Users.User_ID=Users.User_ID)', 
+            'titles'=> array("Program ID", "User ID", "Program Name", "Gender", 
+                "Age")),
+        
+        'health_data_bickerdike'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT Users.User_ID, First_Name, Last_Name, Height_Feet, Height_Inches, Weight, 
+                BMI, Date, Gender, Age, Address_Number,
+                Address_Street_Direction, Address_Street_Name, Address_Street_Type
+                FROM User_Health_Data INNER JOIN Users ON 
+                Users.User_ID=User_Health_Data.User_ID',
+            'titles'=>array("User ID", "First Name", "Last Name", "Height in Feet", 
+                "Remaining Height in Inches", "Weight", "BMI", "Date", 
+                "Gender", "Age", "Address")),
+        
+        'health_data_bickerdike_deid'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT Users.User_ID, Height_Feet, Height_Inches, Weight, 
+                BMI, Date, Gender, Age
+                FROM User_Health_Data INNER JOIN Users ON 
+                Users.User_ID=User_Health_Data.User_ID',
+            'titles'=>array("User ID", "Height in Feet", "Remaining Height in Inches",
+                "Weight", "BMI", "Date", "Gender", "Age")),
+        
+        'all_participants_bickerdike'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT * FROM Users',
+            'titles'=>array("User ID", "First Name", "Last Name", "Zipcode", 
+                "Date of Birth", "Gender", "Age", "Race", "Adult?",
+                "Parent?", "Youth?", "Email", "Notes", "Street Number", 
+                "Address Street Name", "Street Direction", "Street Type", 
+                "Phone Number", "Block Group")),
+        
+        'all_participants_bickerdike_deid'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT User_ID, Zipcode, Gender, Age, Race, Adult, '
+            . 'Parent, Child, Block_Group FROM Users',
+            'titles'=>array("User ID", "Zipcode", "Gender", "Age", "Race", "Adult?",
+                "Parent?", "Youth?", "Block Group")),
+        
+        'walkability_bickerdike'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT * FROM Walkability_Assessment',
+            'titles'=>array("ID", "Date", "Do Cars Stop?", "Intersection Assessed",
+                "Speed Limit Obeyed?", "Gaps in Sidewalk?", "Crosswalk Painted?")),
+        
+        'addresses_bickerdike'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT User_ID, Address_Number, Address_Street_Direction, 
+                Address_Street_Name, Address_Street_Type, Zipcode, Gender, Age
+                FROM Users',
+            'titles'=>array("User ID", "Address Number", "Street Direction", 
+                "Street Name", "Street Type", "Zipcode", "Gender", "Age")),
+        
+        'addresses_bickerdike_deid'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT User_ID, Block_Group, Zipcode, Gender, Age
+                FROM Users',
+            'titles'=>array("User ID", "Block Group", "Zipcode", "Gender", "Age")),
+        
+        'grouped_surveys_bickerdike'=>array('db'=>'bickerdike', 'query'=>
+            '"SELECT First_Name, Last_Name, Pre_Responses.*,
+                Mid_Responses.*,
+                Post_Responses.*
+                FROM Participant_Survey_Responses AS Pre_Responses
+                LEFT JOIN Participant_Survey_Responses AS Mid_Responses
+                    ON Pre_Responses.User_ID=Mid_Responses.User_ID
+                LEFT JOIN Participant_Survey_Responses AS Post_Responses
+                    ON Pre_Responses.User_ID=Post_Responses.User_ID
+                LEFT JOIN Users ON Pre_Responses.User_ID=Users.User_ID
+                    WHERE Pre_Responses.Participant_Survey_ID!=
+                        Mid_Responses.Participant_Survey_ID
+                    AND Pre_Responses.Pre_Post_Late=1
+                    AND Mid_Responses.Pre_Post_Late=2
+                    AND Post_Responses.Pre_Post_Late=3',
+            'titles'=>array("First Name", "Last Name", "Pre Survey ID Number", 
+                "User ID", "Question 2 -- (1) Very important to (4) "
+                . "Not at all important", "3", "4a",
+                "4b", "5a","5b", "Question 6", "7", "8",
+                "9a -- (1) Strongly Agree to (4) Strongly Disagree", 
+                "9b -- (1) Strongly Agree to (4) Strongly Disagree",
+                "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes", 
+                "13 -- (0) No to (1) Yes",
+                "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", 
+                "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
+                "Participant Type", "Child ID",
+                "Post Survey ID Number", "User ID", "Question 2 -- (1) "
+                . "Very important to (4) Not at all important", "3", "4a",
+                "4b", "5a","5b", "Question 6", "7", "8",
+                "9a -- (1) Strongly Agree to (4) Strongly Disagree", 
+                "9b -- (1) Strongly Agree to (4) Strongly Disagree",
+                "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes", 
+                "13 -- (0) No to (1) Yes",
+                "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", 
+                "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
+                "Participant Type", "Child ID",
+                "Followup Survey ID Number", "User ID", "Question 2 -- (1)"
+                . " Very important to (4) Not at all important", "3", "4a",
+                "4b", "5a","5b", "Question 6", "7", "8",
+                "9a -- (1) Strongly Agree to (4) Strongly Disagree", "9b -- "
+                . "(1) Strongly Agree to (4) Strongly Disagree",
+                "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes",
+                "13 -- (0) No to (1) Yes",
+                "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", 
+                "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
+                "Participant Type", "Child ID")),
+        
+        'grouped_surveys_bickerdike_deid'=>array('db'=>'bickerdike', 'query'=>
+            'SELECT Pre_Responses.*,
+                Mid_Responses.*,
+                Post_Responses.*
+                FROM Participant_Survey_Responses AS Pre_Responses
+                LEFT JOIN Participant_Survey_Responses AS Mid_Responses
+                ON Pre_Responses.User_ID=Mid_Responses.User_ID
+                LEFT JOIN Participant_Survey_Responses AS Post_Responses
+                ON Pre_Responses.User_ID=Post_Responses.User_ID
+                WHERE Pre_Responses.Participant_Survey_ID!=Mid_Responses.Participant_Survey_ID
+                AND Pre_Responses.Pre_Post_Late=1
+                AND Mid_Responses.Pre_Post_Late=2
+                AND Post_Responses.Pre_Post_Late=3',
+            'titles'=>array("Pre Survey ID Number", "User ID", "Question 2 -- (1)"
+                . " Very important to (4) Not at all important", "3", "4a",
+                "4b", "5a","5b", "Question 6", "7", "8",
+                "9a -- (1) Strongly Agree to (4) Strongly Disagree", 
+                "9b -- (1) Strongly Agree to (4) Strongly Disagree",
+                "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes",
+                "13 -- (0) No to (1) Yes",
+                "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", 
+                "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
+                "Participant Type", "Child ID",
+                "Post Survey ID Number", "User ID", "Question 2 -- (1) "
+                . "Very important to (4) Not at all important", "3", "4a",
+                "4b", "5a","5b", "Question 6", "7", "8",
+                "9a -- (1) Strongly Agree to (4) Strongly Disagree", 
+                "9b -- (1) Strongly Agree to (4) Strongly Disagree",
+                "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes", 
+                "13 -- (0) No to (1) Yes",
+                "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", 
+                "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
+                "Participant Type", "Child ID",
+                "Followup Survey ID Number", "User ID", "Question 2 -- (1) "
+                . "Very important to (4) Not at all important", "3", "4a",
+                "4b", "5a","5b", "Question 6", "7", "8",
+                "9a -- (1) Strongly Agree to (4) Strongly Disagree", 
+                "9b -- (1) Strongly Agree to (4) Strongly Disagree",
+                "Question 11 -- (0) No to (1) Yes", "12 -- (0) No to (1) Yes",
+                "13 -- (0) No to (1) Yes",
+                "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", 
+                "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
+                "Participant Type", "Child ID"))
         
         );
     if (array_key_exists($download_name, $download_list_array)){
