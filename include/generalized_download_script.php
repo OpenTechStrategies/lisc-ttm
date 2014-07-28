@@ -34,7 +34,7 @@ function generalized_download($download_name){
         'corner_stores_deid'=>array('db'=>'bickerdike', 'query'=>
             'SELECT * FROM Corner_Store_Assessment',
             'titles'=>array("ID", "Store ID", "2 Vegetable Options?", "Lowfat Milk?",
-            "Health Signage?", "Healthy Items in the Front?", "Date", "Store ID")),
+            "Health Signage?", "Healthy Items in the Front?", "Date")),
         
         'store_sales'=>array('db'=>'bickerdike', 'query'=>
             'SELECT * FROM Funded_Organization_Records_Stores',
@@ -361,7 +361,12 @@ function generalized_download($download_name){
             'titles'=>array("ID", "Program ID", "Program Name", "Date")),
         
         'program_attendance_bickerdike'=>array('db'=>'bickerdike', 'query'=>
-            'SELECT * FROM Program_Dates_Users LEFT JOIN (Program_Dates, Programs, Users)
+            'SELECT Program_Dates_Users_ID, Program_Dates.Program_ID, 
+                Users.User_ID, Programs.Program_ID, Program_Date, Program_Name,
+                First_Name, Last_Name, Gender, Age, Address_Number, 
+                Address_Street_Direction,
+                Address_Street_Name, Address_Street_Type, Adult, Parent, Child
+                FROM Program_Dates_Users LEFT JOIN (Program_Dates, Programs, Users)
                 ON (Program_Dates_Users.Program_Date_ID=Program_Dates.Program_Date_ID
                 AND Programs.Program_ID=Program_Dates.Program_ID
                 AND Program_Dates_Users.User_ID=Users.User_ID)',
@@ -369,10 +374,12 @@ function generalized_download($download_name){
                 "Program Date", "Program Name", 
                 "Participant First Name" , "Participant Last Name", "Gender", 
                 "Age", "Address Number", "Street Direction", "Street Name", 
-                "Street Type", "Participant Type")),
+                "Street Type", "Is Adult? 1=Yes, 0=No", "Is Parent? 1=Yes, 0=No", 
+                "Is Child? 1=Yes, 0=No")),
         
         'program_attendance_bickerdike_deid'=>array('db'=>'bickerdike', 'query'=>
-            'SELECT Program_Date_ID, Users.User_ID, Programs.Program_ID,
+            'SELECT Program_Dates_Users_ID, Program_Dates.Program_Date_ID, 
+                Users.User_ID, Programs.Program_ID,
                 Program_Date, Program_Name, Gender, Age, Adult, Parent, Child
                 FROM Program_Dates_Users LEFT JOIN (Program_Dates, Programs, Users)
                 ON (Program_Dates_Users.Program_Date_ID=Program_Dates.Program_Date_ID
