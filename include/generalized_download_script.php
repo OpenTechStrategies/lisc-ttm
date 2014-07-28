@@ -548,9 +548,15 @@ function generalized_download($download_name){
     if (isset($_COOKIE['user'])){
         //add a couple lines here to check the privileges, so we know whether
         //this person is authorized to view given exports
+        
+        /* ALERT: This query depends on the user cookie having single quotes already
+         * saved inside it.  This was a bug which has already been fixed on master.
+         * In this branch, it hasn't been fixed (apparently?), and this query 
+         * will need to be fixed when we merge. 
+         */
         $get_privileges_sqlsafe="SELECT Privilege_ID FROM Users_Privileges"
                 . " LEFT JOIN Users ON Users_Privileges.User_ID=Users.User_ID WHERE "
-                . "User_Email='" . $_COOKIE['user'] . "'";
+                . "User_Email=" . $_COOKIE['user'] . "";
         echo $get_privileges_sqlsafe; //testing output
         include "dbconnopen.php";
         $privilege_set=mysqli_query($cnnLISC, $get_privileges_sqlsafe);
