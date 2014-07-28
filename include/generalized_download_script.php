@@ -548,8 +548,9 @@ function generalized_download($download_name){
     if (isset($_COOKIE['user'])){
         //add a couple lines here to check the privileges, so we know whether
         //this person is authorized to view given exports
-        $get_privileges_sqlsafe="SELECT Privilege_ID FROM Users_Privileges WHERE"
-                . "User_ID='" . $_COOKIE['user'] . "'";
+        $get_privileges_sqlsafe="SELECT Privilege_ID FROM Users_Privileges"
+                . " LEFT JOIN Users ON Users_Privileges.User_ID=Users.User_ID WHERE "
+                . "User_Email='" . $_COOKIE['user'] . "'";
         echo $get_privileges_sqlsafe; //testing output
         include "dbconnopen.php";
         $privilege_set=mysqli_query($cnnLISC, $get_privileges_sqlsafe);
@@ -588,6 +589,10 @@ function generalized_download($download_name){
         
 
         exit;
+        }
+        else{
+            echo "You do not have permission to download this file.";
+            exit;
         }
     }
     else{
