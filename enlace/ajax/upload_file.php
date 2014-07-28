@@ -38,10 +38,10 @@ if (($_FILES["file"]["size"] < 1000000)
         /*not sure what this is about, but I suspect it prevents errors with slashes and other
          * special characters.
          */
-        if (!get_magic_quotes_gpc()) {
-            $fileName = mysqli_real_escape_string($cnnEnlace, $fileName);
+        
+        $fileName = mysqli_real_escape_string($cnnEnlace, $fileName);
           //  echo 'escaped';
-        }
+        
         //echo $fileName . "<br>";
 //echo "INSERT INTO Uploaded_Files (Observation_ID, File_Name, File_Size, File_Type, File_Content ) VALUES (" . $_COOKIE['session_id'] . ", '$fileName', '$fileSize', '$fileType', 'content')";
         

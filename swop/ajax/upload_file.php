@@ -32,10 +32,10 @@ if (($_FILES["file"]["size"] < 1000000)
         fclose($file_open_temp);
 
         /* escape special characters: */
-        if (!get_magic_quotes_gpc()) {
-            $fileName = mysqli_real_escape_string($cnnSWOP, $fileName);
+        
+        $fileName = mysqli_real_escape_string($cnnSWOP, $fileName);
             
-        }
+        
         
         $query = "INSERT INTO Property_Files (Property_ID, File_Name, File_Size, File_Type, File_Content) VALUES 
             ('".$_POST['event_id']."', '$fileName', '$fileSize', '$fileType', '$file_content')";
