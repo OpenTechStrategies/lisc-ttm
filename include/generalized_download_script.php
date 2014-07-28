@@ -103,7 +103,7 @@ function generalized_download($download_name){
                 "Child ID")),
         
         'adult_surveys_bickerdike'=>array('db'=>'bickerdike', 'query'=>
-            'SELECT Users.User_ID, First_Name, Last_Name, Gender, Age, 
+            "SELECT Users.User_ID, First_Name, Last_Name, Gender, Age, 
                 Address_Number, Address_Street_Direction, 
                 Address_Street_Name, Address_Street_Type, Zipcode, Race, 
                 Question_2, Question_3, 
@@ -117,7 +117,7 @@ function generalized_download($download_name){
                 ON (Participant_Survey_Responses.User_ID=Users.User_ID
                 AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
                 AND Programs.Program_Organization=Org_Partners.Partner_ID)
-                 WHERE Participant_Type=`adult`',
+                 WHERE Participant_Type='adult'",
             'titles'=>array("User ID", "First Name", "Last Name", "Gender", 
                 "Age", "Address Number", "Street Direction", "Street Name", 
                 "Street Type", "Zipcode", "Race/Ethnicity -- (b) African American, "
@@ -134,7 +134,7 @@ function generalized_download($download_name){
                 "Child ID")),
         
         'adult_surveys_bickerdike_deid'=>array('db'=>'bickerdike', 'query'=>
-            'SELECT Users.User_ID, Gender, Age, 
+            "SELECT Users.User_ID, Gender, Age, 
                 Zipcode, Race, 
                 Question_2, Question_3, 
                 Question_4_A, Question_4_B, Question_5_A, Question_5_B, 
@@ -147,7 +147,7 @@ function generalized_download($download_name){
                 ON (Participant_Survey_Responses.User_ID=Users.User_ID
                 AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
                 AND Programs.Program_Organization=Org_Partners.Partner_ID)
-                 WHERE Participant_Type=`adult`',
+                 WHERE Participant_Type='adult'",
             'titles'=>array("User ID", "Gender", 
                 "Age", "Zipcode", "Race/Ethnicity -- (b) African American, "
                 . "(l) Latino, (a) Asian, (w) White, (o) Other", "Question 2 -- "
@@ -163,7 +163,7 @@ function generalized_download($download_name){
                 "Child ID")),
         
         'parent_surveys_bickerdike'=>array('db'=>'bickerdike', 'query'=>
-            'SELECT Users.User_ID, First_Name, Last_Name, Gender, Age, 
+            "SELECT Users.User_ID, First_Name, Last_Name, Gender, Age, 
                 Address_Number, Address_Street_Direction, 
                 Address_Street_Name, Address_Street_Type, Zipcode, Race, 
                 Question_2, Question_3, 
@@ -177,7 +177,7 @@ function generalized_download($download_name){
                 ON (Participant_Survey_Responses.User_ID=Users.User_ID
                 AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
                 AND Programs.Program_Organization=Org_Partners.Partner_ID)
-                 WHERE Participant_Type=`parent`',
+                 WHERE Participant_Type='parent'",
             'titles'=>array("User ID", "First Name", "Last Name", "Gender", 
                 "Age", "Address Number", "Street Direction", "Street Name", 
                 "Street Type", "Zipcode", "Race/Ethnicity -- (b) African American, "
@@ -194,7 +194,7 @@ function generalized_download($download_name){
                 "Child ID")),
         
         'parent_surveys_bickerdike_deid'=>array('db'=>'bickerdike', 'query'=>
-            'SELECT Users.User_ID,  Gender, Age, 
+            "SELECT Users.User_ID,  Gender, Age, 
                 Zipcode, Race, 
                 Question_2, Question_3, 
                 Question_4_A, Question_4_B, Question_5_A, Question_5_B, 
@@ -207,7 +207,7 @@ function generalized_download($download_name){
                 ON (Participant_Survey_Responses.User_ID=Users.User_ID
                 AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
                 AND Programs.Program_Organization=Org_Partners.Partner_ID)
-                 WHERE Participant_Type=`parent`',
+                 WHERE Participant_Type='parent'",
             'titles'=>array("User ID", "Gender", 
                 "Age", "Zipcode", "Race/Ethnicity -- (b) African American, "
                 . "(l) Latino, (a) Asian, (w) White, (o) Other", "Question 2 -- "
@@ -223,7 +223,7 @@ function generalized_download($download_name){
                 "Child ID")),
         
         'youth_surveys_bickerdike'=>array('db'=>'bickerdike', 'query'=>
-            'SELECT Users.User_ID, First_Name, Last_Name, Gender, Age, 
+            "SELECT Users.User_ID, First_Name, Last_Name, Gender, Age, 
                 Address_Number, Address_Street_Direction, 
                 Address_Street_Name, Address_Street_Type, Zipcode, Race, 
                 Question_2, Question_3, 
@@ -237,7 +237,7 @@ function generalized_download($download_name){
                 ON (Participant_Survey_Responses.User_ID=Users.User_ID
                 AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
                 AND Programs.Program_Organization=Org_Partners.Partner_ID)
-                 WHERE Participant_Type=`youth`',
+                 WHERE Participant_Type='youth'",
             'titles'=>array("User ID", "First Name", "Last Name", "Gender", 
                 "Age", "Address Number", "Street Direction", "Street Name", 
                 "Street Type", "Zipcode", "Race/Ethnicity -- (b) African American, "
@@ -254,7 +254,7 @@ function generalized_download($download_name){
                 "Child ID")),
         
         'youth_surveys_bickerdike_deid'=>array('db'=>'bickerdike', 'query'=>
-            'SELECT Users.User_ID, Gender, Age, 
+            "SELECT Users.User_ID, Gender, Age, 
                 Zipcode, Race, 
                 Question_2, Question_3, 
                 Question_4_A, Question_4_B, Question_5_A, Question_5_B, 
@@ -267,7 +267,7 @@ function generalized_download($download_name){
                 ON (Participant_Survey_Responses.User_ID=Users.User_ID
                 AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
                 AND Programs.Program_Organization=Org_Partners.Partner_ID)
-                 WHERE Participant_Type=`youth`',
+                 WHERE Participant_Type='youth'",
             'titles'=>array("User ID",  "Gender", 
                 "Age", "Zipcode", "Race/Ethnicity -- (b) African American, "
                 . "(l) Latino, (a) Asian, (w) White, (o) Other", "Question 2 -- "
@@ -372,13 +372,16 @@ function generalized_download($download_name){
                 "Street Type", "Participant Type")),
         
         'program_attendance_bickerdike_deid'=>array('db'=>'bickerdike', 'query'=>
-            'SELECT * FROM Program_Dates_Users LEFT JOIN (Program_Dates, Programs, Users)
+            'SELECT Program_Date_ID, Users.User_ID, Programs.Program_ID,
+                Program_Date, Program_Name, Gender, Age, Adult, Parent, Child
+                FROM Program_Dates_Users LEFT JOIN (Program_Dates, Programs, Users)
                 ON (Program_Dates_Users.Program_Date_ID=Program_Dates.Program_Date_ID
                 AND Programs.Program_ID=Program_Dates.Program_ID
                 AND Program_Dates_Users.User_ID=Users.User_ID)',
             'titles'=>array("ID", "Program Date ID", "User ID", "Program ID", 
                 "Program Date", "Program Name", "Gender", "Age", 
-                "Participant Type")),
+                "Is Adult? 1=Yes, 0=No", "Is Parent? 1=Yes, 0=No", 
+                "Is Child? 1=Yes, 0=No")),
         
         'programs_bickerdike'=>array('db'=>'bickerdike', 'query'=>
             'SELECT * FROM Programs', 
@@ -452,7 +455,7 @@ function generalized_download($download_name){
             'titles'=>array("User ID", "Block Group", "Zipcode", "Gender", "Age")),
         
         'grouped_surveys_bickerdike'=>array('db'=>'bickerdike', 'query'=>
-            '"SELECT First_Name, Last_Name, Pre_Responses.*,
+            'SELECT First_Name, Last_Name, Pre_Responses.*,
                 Mid_Responses.*,
                 Post_Responses.*
                 FROM Participant_Survey_Responses AS Pre_Responses

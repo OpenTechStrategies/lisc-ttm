@@ -76,7 +76,7 @@ $title_array_postable=serialize($title_array);
 <tr><td>
         <a href="/include/generalized_download_script.php?download_name=corner_stores">Download the CSV file of Corner Store Assessments.</a><br></td>
     <td>
-<a href="include/generalized_download_script.php?download_name=corner_stores_deid">Download (no store names).</a></td></tr>
+<a href="/include/generalized_download_script.php?download_name=corner_stores_deid">Download (no store names).</a></td></tr>
     
     
         <!--All healthy food sales records.-->
@@ -225,10 +225,10 @@ $title_array_postable=serialize($title_array);
     
 
 <tr><td>
-        <a href="/include/generalized_download_script.php?download_name=participants_bickerdike">
+        <a href="/include/generalized_download_script.php?download_name=program_participants_bickerdike">
             Download the CSV file of all program participants.</a><br></td>
     <td>
-<a href="/include/generalized_download_script.php?download_name=participants_bickerdike_deid">Download.</a></td></tr>
+<a href="/include/generalized_download_script.php?download_name=program_participants_bickerdike_deid">Download.</a></td></tr>
     
     
         <!--All health data over time for the people in the DB.
@@ -283,7 +283,7 @@ $title_array_postable=serialize($title_array);
         
     </td>
     <td>
-<a href="/include/generalized_download_script.php?download_name=grouped_surveys_bickerdike"> Download surveys, deidentified, grouped by participant.</a>
+<a href="/include/generalized_download_script.php?download_name=grouped_surveys_bickerdike_deid"> Download surveys, deidentified, grouped by participant.</a>
     </td>
 </tr>
 
