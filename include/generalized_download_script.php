@@ -543,8 +543,26 @@ function generalized_download($download_name){
                 "Participant Type", "Child ID"))
         
         );
+    $db_array=array(2=>'LSNA', 3=>'bickerdike', 4=>'TRP', 5=>'SWOP', 6=>'enlace');
     if (array_key_exists($download_name, $download_list_array)){
     if (isset($_COOKIE['user'])){
+        //add a couple lines here to check the privileges, so we know whether
+        //this person is authorized to view given exports
+        $get_privileges_sqlsafe="SELECT Privilege_ID FROM Users_Privileges WHERE"
+                . "User_ID='" . $_COOKIE['user'] . "'";
+        echo $get_privileges_sqlsafe; //testing output
+        include "dbconnopen.php";
+        $privilege_set=mysqli_query($cnnLISC, $get_privileges_sqlsafe);
+        $accesses=array();
+        while ($privilege=mysqli_fetch_row($privilege_set)){
+            $accesses[]=$privilege[0];
+        }
+        print_r($accesses); //testing output
+        $get_db_id=array_search($download_list_array[$download_name]['db'], $db_array);
+        $has_permission=array_search($get_db_id, $accesses);
+        //if their permissions include the db for this download 
+        if ($has_permission){       
+        
         // output headers so that the file is downloaded rather than displayed
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename='.$download_name . '.csv');
@@ -556,7 +574,8 @@ function generalized_download($download_name){
         fputcsv($output, $download_list_array[$download_name]['titles']);
 
         // fetch the data
-        $conn_file='../'.$download_list_array[$download_name]['db'].'/include/dbconnopen.php';
+        $conn_file='../' . $download_list_array[$download_name]['db']
+                . '/include/dbconnopen.php';
         include $conn_file;
         $db_name= 'cnn' . ucfirst($download_list_array[$download_name]['db']);
         $database_conn=$$db_name;
@@ -569,6 +588,7 @@ function generalized_download($download_name){
         
 
         exit;
+        }
     }
     else{
         include "error.html";
