@@ -557,14 +557,12 @@ function generalized_download($download_name){
         $get_privileges_sqlsafe="SELECT Privilege_ID FROM Users_Privileges"
                 . " LEFT JOIN Users ON Users_Privileges.User_ID=Users.User_ID WHERE "
                 . "User_Email=" . $_COOKIE['user'] . "";
-        echo $get_privileges_sqlsafe; //testing output
         include "dbconnopen.php";
         $privilege_set=mysqli_query($cnnLISC, $get_privileges_sqlsafe);
         $accesses=array();
         while ($privilege=mysqli_fetch_row($privilege_set)){
             $accesses[]=$privilege[0];
         }
-        print_r($accesses); //testing output
         $get_db_id=array_search($download_list_array[$download_name]['db'], $db_array);
         $has_permission=array_search($get_db_id, $accesses);
         //if their permissions include the db for this download 
