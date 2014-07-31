@@ -97,5 +97,25 @@ Possible resources:
 
 2. http://www.jasny.net/articles/how-i-php-x-sendfile/
 
---------------------------------------------
+How to Handle Inclusion of Common Code
+--------------------------------------
 
+See `enlace/include/dosage_percentage.php` and the files that include
+it for an example of how to handle shared code.  The main thing is to
+remember to include redeclaration-protection wrappers, either a
+wrapper around the entire file like this
+
+        if(!defined("TTM_INCLUDE_DOSAGE_PERCENTAGE_PHP"))
+        {
+        define("TTM_INCLUDE_DOSAGE_PERCENTAGE_PHP", TRUE);
+        ...
+        }
+
+or around the individual functions/variables in the file:
+
+        if(!function_exists("calculate_dosage")) 
+        {
+        function calculate_dosage...
+        }
+
+The former way is usually better.
