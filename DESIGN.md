@@ -1,5 +1,8 @@
-"Test The Model" (TTM): Neighborhood Organizations Gathering Data in Chicago
-============================================================================
+Design Notes for LISC TTM software project.
+===========================================
+
+These notes are somewhat randomly accumulated right now.  As the file
+grows, we can organize it more.
 
 Login Pages and Processes
 -------------------------
