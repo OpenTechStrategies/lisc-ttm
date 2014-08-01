@@ -36,7 +36,7 @@ GROUP BY Leaders.Participant_ID;";
     }
 elseif($_POST['action']=='type'){
     $initial_query="SELECT Leaders.Participant_ID, Latest_Date.Leader_Type, ". $name . $address . $day_phone . $evening_phone. 
-            $inst. $organizer. $leader ." NULL FROM `lisc-swop.chapinhall.org`.Participants_Leaders AS Leaders
+            $inst. $organizer. $leader ." NULL FROM Participants_Leaders AS Leaders
 inner join (SELECT Participants_Leader_ID, max(Date_Logged), Leader_Type  FROM Participants_Leaders
         GROUP BY Participant_ID) Latest_Date
 ON Leaders.Participants_Leader_ID=Latest_Date.Participants_Leader_ID 
@@ -46,7 +46,7 @@ LEFT JOIN Participants ON Leaders.Participant_ID=Participants.Participant_ID
 elseif($_POST['action']=='institution'){
     $initial_query="SELECT Leaders.Participant_ID, Latest_Date.Leader_Type, Institutions_Participants.Institution_ID, Institution_Name, ". $name
             . $address . $day_phone . $evening_phone. 
-          $organizer. $leader ." NULL  FROM `lisc-swop.chapinhall.org`.Participants_Leaders as Leaders
+          $organizer. $leader ." NULL  FROM Participants_Leaders as Leaders
 inner join (SELECT Participants_Leader_ID, max(Date_Logged), Leader_Type  FROM Participants_Leaders WHERE Leader_Type!=0 AND Leader_Type!=4
         GROUP BY Participant_ID) Latest_Date ON Leaders.Participants_Leader_ID=Latest_Date.Participants_Leader_ID
 LEFT JOIN Participants ON Leaders.Participant_ID=Participants.Participant_ID 

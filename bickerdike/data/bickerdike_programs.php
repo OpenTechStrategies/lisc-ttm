@@ -21,7 +21,7 @@ aldermanic funds for environmental improvements, and healthy item sales data.
         <!--Counts the institutions that have been entered in the database:-->
 <div id="bickerdike_stats"><ul>
     <li>Number of participating organizations: <strong><?
-        $count_partners = "SELECT * FROM `lisc-bickerdike.chapinhall.org`.Org_Partners;";
+        $count_partners = "SELECT * FROM Org_Partners;";
         include "../include/dbconnopen.php";
         $partners = mysqli_query($cnnBickerdike, $count_partners);
         $count = mysqli_num_rows($partners);
@@ -53,7 +53,7 @@ aldermanic funds for environmental improvements, and healthy item sales data.
         <th>Date</th>
     </tr>
     <? date_default_timezone_set('America/Chicago');
-    $get_trail_info = "SELECT * FROM `lisc-bickerdike.chapinhall.org`.Bike_Trails";
+    $get_trail_info = "SELECT * FROM Bike_Trails";
     include "../include/dbconnopen.php";
     $trails = mysqli_query($cnnBickerdike, $get_trail_info);
         while ($trail = mysqli_fetch_array($trails)){
@@ -101,7 +101,7 @@ aldermanic funds for environmental improvements, and healthy item sales data.
         <th>Fiscal Year</th>
     </tr>
     <? date_default_timezone_set('America/Chicago');
-    $get_trail_info = "SELECT * FROM `lisc-bickerdike.chapinhall.org`.Aldermanic_Records";
+    $get_trail_info = "SELECT * FROM Aldermanic_Records";
     include "../include/dbconnopen.php";
     $trails = mysqli_query($cnnBickerdike, $get_trail_info);
         while ($trail = mysqli_fetch_array($trails)){

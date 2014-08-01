@@ -1,7 +1,6 @@
 <?php
 /* searching institutions: */
 
-//$inst_search_query = "SELECT * FROM `lisc-lsna`.Institutions WHERE Institution_Name LIKE '%" . $_POST['name'] . "%' AND Institution_Type='" . $_POST['type'] . "' ORDER BY Institution_Name";
 if ($_POST['name'] == '') {
     $name = '';
 } else {

@@ -1839,14 +1839,14 @@ else if ($program['Program_ID'] == 5) {
                                         <?php
                                         $get_pre_surveys = "SELECT AVG(Q1), AVG(Q2), AVG(Q3), AVG(Q4), AVG(Q5), AVG(Q6), AVG(Q7),
                                     AVG(Q8), AVG(Q9), AVG(Q10), AVG(Q11)
-                                    FROM `lisc-trp.chapinhall.org`.NMMA_Identity_Survey
+                                    FROM NMMA_Identity_Survey
                                     WHERE Pre_Post='pre';";
                                         include "../include/dbconnopen.php";
                                         $pre_surveys = mysqli_query($cnnTRP, $get_pre_surveys);
                                         $pre = mysqli_fetch_row($pre_surveys);
                                         $get_post_surveys = "SELECT AVG(Q1), AVG(Q2), AVG(Q3), AVG(Q4), AVG(Q5), AVG(Q6), AVG(Q7),
                                     AVG(Q8), AVG(Q9), AVG(Q10), AVG(Q11)
-                                    FROM `lisc-trp.chapinhall.org`.NMMA_Identity_Survey
+                                    FROM NMMA_Identity_Survey
                                     WHERE Pre_Post='post';";
                                         include "../include/dbconnopen.php";
                                         $post_surveys = mysqli_query($cnnTRP, $get_post_surveys);
