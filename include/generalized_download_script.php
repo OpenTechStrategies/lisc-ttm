@@ -550,7 +550,65 @@ function generalized_download($download_name){
                 "13 -- (0) No to (1) Yes",
                 "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", 
                 "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
-                "Participant Type", "Child ID"))
+                "Participant Type", "Child ID")),
+        
+        'institutions_lsna'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Institution_ID, Institution_Name, Street_Num, Street_Direction,
+                Street_Name, Street_Type, Institution_Type_Name FROM Institutions 
+                INNER JOIN Institution_Types ON 
+                Institutions.Institution_Type=Institution_Types.Institution_Type_ID',
+            'titles'=>array("Institution ID", "Institution Name", "Street Number", 
+                "Street Direction", "Street Name", 
+                "Street Type", "Institution Type")),
+            
+        'institutions_lsna_deid'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Institution_ID, Institution_Name,
+                Institution_Type_Name FROM Institutions INNER JOIN 
+                Institution_Types ON Institutions.Institution_Type=
+                Institution_Types.Institution_Type_ID',
+            'titles'=>array("Institution ID", "Institution Name", 
+                "Institution Type")),
+        
+        'pm_attendance_lsna'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Parent_Mentor_ID, Num_Days_Attended, Month, Year, 
+                Max_Days_Possible, Institution_Name
+                FROM PM_Actual_Attendance INNER JOIN PM_Possible_Attendance 
+                ON PM_Actual_Attendance.Possible_Attendance_ID=
+                PM_Possible_Attendance.PM_Possible_Attendance_ID
+                LEFT JOIN Institutions_Participants ON 
+                PM_Actual_Attendance.Parent_Mentor_ID=
+                Institutions_Participants.Participant_ID
+                LEFT JOIN Institutions ON Institutions_Participants.Institution_ID=
+                Institutions.Institution_ID WHERE Is_PM=1',
+            'titles'=>array("Parent Mentor ID", "Number of Days Attended", 
+                "Month", "Year", "Maximum Days Possible", "Institution Name")),
+        
+        'pm_children_lsna'=>array('db'=>'LSNA', 'query'=>
+            'SELECT  child_table.Participant_ID, Quarter, Reading_Grade, Math_Grade,
+                Num_Suspensions, Num_Office_Referrals, Days_Absent, 
+                child_table.Name_First, child_table.Name_Last, child_table.Age,
+                child_table.Gender, child_table.Date_of_Birth,
+                child_table.Grade_Level, parent_table.Name_First as parent_name, 
+                parent_table.Name_Last as parent_surname,
+                spouse_table.Name_First as spouse_name, spouse_table.Name_Last 
+                as spouse_surname, PM_Children_Info.* 
+                FROM Parent_Mentor_Children 
+                LEFT JOIN Participants as child_table ON 
+                Parent_Mentor_Children.Child_ID=child_table.Participant_ID
+                LEFT JOIN PM_Children_Info ON 
+                Parent_Mentor_Children.Child_ID=PM_Children_Info.Child_ID 
+                LEFT JOIN Participants as parent_table ON 
+                Parent_Mentor_Children.Parent_ID=parent_table.Participant_ID
+                LEFT JOIN Participants as spouse_table ON 
+                Parent_Mentor_Children.Spouse_ID=spouse_table.Participant_ID',
+            'titles'=>array("Child ID", "Quarter", "Reading Grade", "Math Grade",
+                "Number of Suspensions", "Number of Office Referrals", 
+                "Days Absent", "Child First Name", "Child Last Name", 
+                "Child Age", "Child Gender", "Child Date of Birth", 
+                "Child Grade Level", "Parent First Name", "Parent Last Name", 
+                "Spouse First Name", "Spouse Last Name")),
+        
+        
         
         );
     $db_array=array(2=>'LSNA', 3=>'bickerdike', 4=>'TRP', 5=>'SWOP', 6=>'enlace');
@@ -560,7 +618,8 @@ function generalized_download($download_name){
         //this person is authorized to view given exports
         
         /* ALERT: This query depends on the user cookie having single quotes already
-         * saved inside it.  This was a bug which has already been fixed on master.
+         * saved inside it.  This was a bug which has already been fixed on master,
+         * I believe.
          * In this branch, it hasn't been fixed (apparently?), and this query 
          * will need to be fixed when we merge. 
          */

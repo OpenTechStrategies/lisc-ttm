@@ -17,109 +17,30 @@ joined) gets put into a file, which can be downloaded.
 
 <table class="all_projects">
 <tr><th width="50%"></th><th>De-identified (if applicable)</th></tr>
-<tr><td class="all_projects">
-<?php $infile="export_data/institutions.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Institution ID", "Institution Name", "Street Number", "Street Direction", "Street Name", 
-        "Street Type", "Institution Type");
-fputcsv($fp, $title_array);
-$get_insts = "SELECT * FROM Institutions INNER JOIN Institution_Types ON 
-Institutions.Institution_Type=Institution_Types.Institution_Type_ID;";
-include "../include/dbconnopen.php";
-$inst_info = mysqli_query($cnnLSNA, $get_insts);
-while ($inst = mysqli_fetch_array($inst_info)){
-    $inst_array=array($inst['Institution_ID'], $inst['Institution_Name'], $inst['Street_Num'], $inst['Street_Direction'],
-        $inst['Street_Name'], $inst['Street_Type'], $inst['Institution_Type_Name']);
-    fputcsv ($fp, $inst_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?><br/>
+<tr><td class="all_projects"><br/>
 <strong>All Institutions</strong><br/>
-<a href="<?echo $infile?>">Download the CSV file of all institutions.</a><br/><br/></td>
-<td class="all_projects">
-<?php $infile="export_data/deid_institutions.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Institution ID", "Institution Name", "Institution Type");/*"Block Group", */
-fputcsv($fp, $title_array);
-$get_insts = "SELECT Institution_ID, Institution_Name,
-    Institution_Type_Name FROM Institutions INNER JOIN Institution_Types ON 
-    Institutions.Institution_Type=Institution_Types.Institution_Type_ID;";  /* Block_Group,*/
-//echo $get_insts;
-include "../include/dbconnopen.php";
-$inst_info = mysqli_query($cnnLSNA, $get_insts);
-while ($inst = mysqli_fetch_row($inst_info)){
-   // $this_address=$inst[2]." " . $inst[3] . " " . $inst[4] ." ". $inst[5] ;
-   // $block_group=do_it_all($this_address, $map);
-    $all_array=array($inst[0], $inst[1], /*$block_group,*/ $inst[6]);
-    fputcsv ($fp, $inst);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?><br/>
+<a href="/include/generalized_download_script.php?download_name=institutions_lsna">
+    Download the CSV file of all institutions.</a><br/><br/></td>
+<td class="all_projects"><br/>
 <strong>De-identified Institutions</strong><br/>
-<a href="<?echo $infile?>">Download the CSV file of all institutions.</a><br/><br/>
+<a href="/include/generalized_download_script.php?download_name=institutions_lsna_deid">
+    Download the CSV file of all institutions.</a><br/><br/>
 </td></tr>
 
 
 
 <tr><td class="all_projects"><br/>
-<strong>All Parent Mentor Attendance</strong> 
-
-<?php $infile="export_data/pm_attendance.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Parent Mentor ID", "Number of Days Attended", "Month", "Year", "Maximum Days Possible", 
-        "Institution Name");
-fputcsv($fp, $title_array);
-$get_insts = "SELECT Parent_Mentor_ID, Num_Days_Attended, Month, Year, Max_Days_Possible, Institution_Name
-FROM PM_Actual_Attendance INNER JOIN PM_Possible_Attendance 
-ON PM_Actual_Attendance.Possible_Attendance_ID=PM_Possible_Attendance.PM_Possible_Attendance_ID
-LEFT JOIN Institutions_Participants ON PM_Actual_Attendance.Parent_Mentor_ID=
-Institutions_Participants.Participant_ID
-LEFT JOIN Institutions ON Institutions_Participants.Institution_ID=Institutions.Institution_ID
-WHERE Is_PM=1;";
-//echo $get_insts;
-include "../include/dbconnopen.php";
-$inst_info = mysqli_query($cnnLSNA, $get_insts);
-while ($inst = mysqli_fetch_row($inst_info)){
-    fputcsv ($fp, $inst);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?><br/>
-<a href="<?echo $infile?>">Download the CSV file of all parent mentor attendance.</a><span class="helptext">  Does not currently include personal
+<strong>All Parent Mentor Attendance</strong> <br/>
+<a href="/include/generalized_download_script.php?download_name=pm_attendance_lsna">
+    Download the CSV file of all parent mentor attendance.</a> 
+   <span class="helptext">  Does not currently include personal
     information on individual parent mentors.</span><br/><br/>
     </td><td class="all_projects">---------</td></tr>
 <tr><td class="all_projects"><br/>
-<strong>All Parent Mentor Children Information</strong> 
-
-<?php $infile="export_data/pm_children.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Child ID", "Quarter", "Reading Grade", "Math Grade", "Number of Suspensions", 
-        "Number of Office Referrals", "Days Absent", "Child First Name", "Child Last Name", "Child Age", "Child Gender", "Child Date of Birth",
-    "Child Grade Level", "Parent First Name", "Parent Last Name", "Spouse First Name", "Spouse Last Name");
-fputcsv($fp, $title_array);
-$get_kids = "SELECT  child_table.*, parent_table.Participant_ID as parent_id, parent_table.Name_First as parent_name, parent_table.Name_Last as parent_surname,
-    spouse_table.Name_First as spouse_name, spouse_table.Name_Last as spouse_surname, PM_Children_Info.* 
-FROM Parent_Mentor_Children 
-LEFT JOIN Participants as child_table ON Parent_Mentor_Children.Child_ID=child_table.Participant_ID
-LEFT JOIN PM_Children_Info ON Parent_Mentor_Children.Child_ID=PM_Children_Info.Child_ID 
-LEFT JOIN Participants as parent_table ON Parent_Mentor_Children.Parent_ID=parent_table.Participant_ID
-LEFT JOIN Participants as spouse_table ON Parent_Mentor_Children.Spouse_ID=spouse_table.Participant_ID;";
-//echo $get_kids;
-include "../include/dbconnopen.php";
-$child_info = mysqli_query($cnnLSNA, $get_kids);
-while ($child = mysqli_fetch_array($child_info)){
-    $child_array=array($child['Child_ID'], $child['Quarter'], $child['Reading_Grade'], $child['Math_Grade'],
-        $child['Num_Suspensions'], $child['Num_Office_Referrals'], $child['Days_Absent'], $child['Name_First'], $child['Name_Last'],
-        $child['Age'], $child['Gender'], $child['Date_of_Birth'], $child['Grade_Level'], $child['parent_name'], $child['parent_surname'],
-        $child['spouse_name'], $child['spouse_surname']);
-    fputcsv ($fp, $child_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?><br/>
-<a href="<?echo $infile?>">Download the CSV file of all parent mentor children.</a><br/><span class="helptext">  Includes grades and disciplinary records.</span><br>
+<strong>All Parent Mentor Children Information</strong> <br/>
+<a href="/include/generalized_download_script.php?download_name=pm_children_lsna">
+    Download the CSV file of all parent mentor children.</a><br/>
+    <span class="helptext">  Includes grades and disciplinary records.</span><br>
 <br>
     </td><td class="all_projects"><br/>
 <strong>De-identified Parent Mentor Children Information</strong><br/>
