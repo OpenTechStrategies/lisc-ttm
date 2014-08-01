@@ -732,7 +732,6 @@ foreach ($question_array as $question) {
             $time_title = 'Follow-up Surveys';
         }
 
-        ${$question . $type . $i} = $script_str;
         $assignment_arr = array();
         ?>
 

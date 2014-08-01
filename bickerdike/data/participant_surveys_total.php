@@ -467,7 +467,6 @@ foreach($question_array as $question){
                     $time_title='Follow-up Surveys';
                 }
                 
-                ${$question.$type.$i}=$script_str;
             $assignment_arr=array();?>
 
 <!--Now, the string(s) created by the if/elses above are used to build a chart.

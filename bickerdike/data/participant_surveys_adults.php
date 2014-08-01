@@ -493,7 +493,6 @@ foreach($question_array as $question){
                 if ($i==3){
                     $time_title='Follow-up Surveys';
                 }
-                ${$question.$type.$i}=$script_str;
                // echo $script_str. "<br>";
             $assignment_arr=array();?>
 
