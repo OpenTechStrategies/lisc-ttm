@@ -934,8 +934,9 @@ function generalized_download($download_name){
                 "Last Name", "Address Street Name", "Address Street Number", 
                 "Address Street Direction", "Address Street Type", "City", "State", 
                 "Zipcode", "Daytime Phone", "Evening Phone", "Education Level",
-                "Email", "Age", "Gender", "Date of Birth", "Grade Level", 
-                "Is Parent Mentor?", "Is a child?", "Notes")),
+                "Email", "Age", "Gender", "Date of Birth", 
+                "Consent 2013-14?", "Consent 2014-15?", "Consent 2015-16?",
+                "Grade Level", "Is Parent Mentor?", "Is a child?", "Notes")),
         
         'lsna_participants_deid'=>array('db'=>'LSNA', 'query'=>
             'SELECT Participant_ID, Education_Level, Age, Gender, Grade_Level, 
