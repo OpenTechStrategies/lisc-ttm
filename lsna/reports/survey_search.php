@@ -51,7 +51,7 @@ $infile="export_data/search_surveys_" . date('M-d-Y') . ".csv";
 //echo $infile;
 $fp=fopen($infile, "w") or die('can\'t open file');
 /*get column names for the relevant table: */
-$get_col_names="SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='lisc-lsna' AND `TABLE_NAME`='$table'";
+$get_col_names="SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='ttm-lsna' AND `TABLE_NAME`='$table'";
 /*production:
  * $get_col_names="SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='liscttm-lsna.chapinhall.org' AND `TABLE_NAME`='$table'";
  */
