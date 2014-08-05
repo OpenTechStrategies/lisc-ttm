@@ -1085,10 +1085,7 @@ function generalized_download($download_name){
         while ($privilege=mysqli_fetch_row($privilege_set)){
             $accesses[]=$privilege[0];
         }
-        echo "User privileges: ";//testing output
-        print_r($accesses);//testing output
         $get_db_id=array_search($download_list_array[$download_name]['db'], $db_array);
-        echo "This is the DB ID: " . $get_db_id; //testing output
         $has_permission=in_array($get_db_id, $accesses);
         //if their permissions include the db for this download 
         if ($has_permission){       
@@ -1109,7 +1106,9 @@ function generalized_download($download_name){
         include $conn_file;
         $db_name= 'cnn' . ucfirst($download_list_array[$download_name]['db']);
         $database_conn=$$db_name;
+        echo $db_name; //testing output
         $query_sqlsafe=$download_list_array[$download_name]['query'];
+        echo $query_sqlsafe; //testing output
         $rows = mysqli_query($database_conn, $query_sqlsafe);
         
         // loop over the rows, outputting them
