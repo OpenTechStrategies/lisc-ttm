@@ -608,7 +608,460 @@ function generalized_download($download_name){
                 "Child Grade Level", "Parent First Name", "Parent Last Name", 
                 "Spouse First Name", "Spouse Last Name")),
         
+        'pm_children_lsna_deid'=>array('db'=>'LSNA', 'query'=>
+            'SELECT  child_table.Participant_ID,  child_table.Ward, 
+                child_table.Age, child_table.Gender, child_table.Grade_Level,
+                parent_table.Participant_ID as parent_id, PM_Children_Info.* 
+                FROM Parent_Mentor_Children LEFT JOIN Participants as child_table 
+                ON Parent_Mentor_Children.Child_ID=child_table.Participant_ID
+                LEFT JOIN PM_Children_Info ON Parent_Mentor_Children.Child_ID=
+                PM_Children_Info.Child_ID 
+                LEFT JOIN Participants as parent_table ON 
+                Parent_Mentor_Children.Parent_ID=parent_table.Participant_ID;',
+            'titles'=>array("Child ID", "Ward", "Age", 
+                "Gender", "Grade Level", "Parent ID", "Link ID", 
+                "Child ID (repeat)", "Quarter", "Reading Grade", "Math Grade", 
+                "Number of Suspensions", "Number of Office Referrals", 
+                "Days Absent", "School Year")),
         
+        'lsna_teacher_pre_surveys'=>array('db'=>'LSNA', 'query'=>
+            'SELECT PM_Teacher_Survey.*, Participants.Name_First, 
+                Participants.Name_Last, Institutions.Institution_Name 
+                FROM PM_Teacher_Survey INNER JOIN Participants 
+                ON PM_Teacher_Survey.Parent_Mentor_ID=Participants.Participant_ID
+                LEFT JOIN Institutions ON Institutions.Institution_ID=
+                PM_Teacher_Survey.School_Name',
+            'titles'=>array("Teacher Survey ID", "School ID", "Teacher Name", 
+                "Grade", "Classroom Language", "Years in PM Program", "Languages", 
+                "Years as a Teacher", "Years at School", "Number of Students", 
+                "Number of English Language Learners" , "Number of IEP Students",
+                "Number of students below grade level", "PM Activities Training",
+                "Teacher Activities Training", "grade papers",
+                "tutor students one on one",
+                "lead part of the class in an activity",
+                "take children to the washroom etc",
+                "help with discipline/disruptions",
+                "check homework", "work with small groups of students",
+                "lead the whole class in an activity",
+                "help organize the classroom", "other", "Task Text",
+                'A. Have another teacher or paraprofessional working with you '
+                . 'in your classroom?', 
+                'B.Have a parent volunteer or parent mentor in your classroom '
+                . 'working with students?',
+                'C.Talk with at least one school parent face-to-face?',
+                'D.Have a conversation with a school parent about something '
+                . 'besides their child\'s progress or behavior?', 
+                'E.Have time for YOU to work with at least one of your struggling '
+                . 'students one-on-one for 10 minutes or more?',
+                'F.Have another adult (volunteer or staff) to work with at least'
+                . ' one of your struggling students one-on-one for 10 minutes or more?',
+                'G.Have time for YOU to work with 4 or more of your struggling '
+                . 'students one-on-one for 10 minutes or more?', 
+                'H.Have another adult (volunteer or staff) to work with 4 or more '
+                . 'of your struggling students one-on-one for 10 minutes or more?',
+                'I.Learn something new about the community in which your school '
+                . 'is located?',
+                'J.Ask a school parent for advice?', 'K.How many school parents '
+                . 'did you greet by name?',
+                'L.How many school parents do you have phone numbers or emails '
+                . 'for besides a school directory?',
+                "Parent Mentor ID", "Date Survey Entered",
+                "Parent Mentor First Name", "Parent Mentor Last Name", "School Name")),
+        
+        'lsna_pre_teacher_surveys_deid'=>array('db'=>'LSNA', 'query'=>
+            'SELECT PM_Teacher_Survey.*, Institutions.Institution_Name 
+                FROM PM_Teacher_Survey INNER JOIN Participants 
+                ON PM_Teacher_Survey.Parent_Mentor_ID=Participants.Participant_ID
+                LEFT JOIN Institutions ON Institutions.Institution_ID=
+                PM_Teacher_Survey.School_Name',
+            'titles'=>array("Teacher Survey ID", "School ID", "Teacher ID", 
+                "Grade", "Classroom Language", "Years in PM Program", "Languages", 
+                "Years as a Teacher", "Years at School", "Number of Students", 
+                "Number of English Language Learners" , "Number of IEP Students",
+                "Number of students below grade level", "PM Activities Training", 
+                "Teacher Activities Training", "grade papers",
+                "tutor students one on one", "lead part of the class in an activity",
+                "take children to the washroom etc", "help with discipline/disruptions",
+                "check homework", "work with small groups of students",
+                "lead the whole class in an activity", "help organize the classroom",
+                "other", "Task Text",
+                'A. Have another teacher or paraprofessional working with you '
+                . 'in your classroom?', 
+                'B.Have a parent volunteer or parent mentor in your classroom '
+                . 'working with students?',
+                'C.Talk with at least one school parent face-to-face?',
+                'D.Have a conversation with a school parent about something '
+                . 'besides their child\'s progress or behavior?', 
+                'E.Have time for YOU to work with at least one of your struggling'
+                . ' students one-on-one for 10 minutes or more?',
+                'F.Have another adult (volunteer or staff) to work with at least'
+                . ' one of your struggling students one-on-one for 10 minutes or more?',
+                'G.Have time for YOU to work with 4 or more of your struggling '
+                . 'students one-on-one for 10 minutes or more?', 
+                'H.Have another adult (volunteer or staff) to work with 4 or more'
+                . ' of your struggling students one-on-one for 10 minutes or more?',
+                'I.Learn something new about the community in which your school '
+                . 'is located?',
+                'J.Ask a school parent for advice?', 'K.How many school parents '
+                . 'did you greet by name?',
+                'L.How many school parents do you have phone numbers or emails '
+                . 'for besides a school directory?',
+                "Parent Mentor ID", "Date Survey Entered",  "School Name")),
+        
+        'lsna_post_teacher_surveys'=>array('db'=>'LSNA', 'query'=>
+            'SELECT PM_Teacher_Survey_Post.*, Participants.Name_First, 
+                Participants.Name_Last, Institutions.Institution_Name 
+                FROM PM_Teacher_Survey_Post INNER JOIN Participants 
+                ON PM_Teacher_Survey_Post.Parent_Mentor_ID=Participants.Participant_ID
+                LEFT JOIN Institutions ON Institutions.Institution_ID=
+                PM_Teacher_Survey_Post.School_Name',
+            'titles'=>array("Teacher Survey ID", "School ID", "Teacher Name", 
+                "Grade", "Classroom Language", "Attendance", "grade papers",
+                "tutor students one on one", "lead part of the class in an activity",
+                "take children to the washroom etc", "help with discipline/disruptions",
+                "check homework", "work with small groups of students",
+                "lead the whole class in an activity", "help organize the classroom",
+                "other", "Task Text", "Majority Task",
+                "Having the support of a Parent Mentor helps me achieve or "
+                . "maintain good classroom management.",
+                " Having the support of a Parent Mentor helps me improve homework"
+                . " completion and helps me maintain a high expectatin for homework in my classroom.",
+                "Having the support of a Parent Mentor helps me improve students"
+                . " in reading and/or math.",
+                "Having a Parent Mentor strengthens my understanding of or "
+                . "connection to the community.",
+                "Having a Parent Mentor strengthens student social-emotional "
+                . "development.",
+                "The Parent Mentor Program helps our school create a welcoming "
+                . "and communicative environment for all parents.",
+                "The Parent Mentor Program helps our school build parent-teacher"
+                . " trust.",
+                "The Parent Mentor Program helps teachers and parents to think "
+                . "of each other as partners in educating.",
+                "PM Activities Training", "Teacher Activities Training", 
+                "Comments",
+                'A. Have another teacher or paraprofessional working with you '
+                . 'in your classroom?', 
+                'B.Have a parent volunteer or parent mentor in your classroom '
+                . 'working with students?',
+                'C.Talk with at least one school parent face-to-face?',
+                'D.Have a conversation with a school parent about something '
+                . 'besides their child\'s progress or behavior?', 
+                'E.Have time for YOU to work with at least one of your struggling'
+                . ' students one-on-one for 10 minutes or more?',
+                'F.Have another adult (volunteer or staff) to work with at least'
+                . ' one of your struggling students one-on-one for 10 minutes '
+                . 'or more?',
+                'G.Have time for YOU to work with 4 or more of your struggling '
+                . 'students one-on-one for 10 minutes or more?', 
+                'H.Have another adult (volunteer or staff) to work with 4 or '
+                . 'more of your struggling students one-on-one for 10 minutes or more?',
+                'I.Learn something new about the community in which your school '
+                . 'is located?',
+                'J.Ask a school parent for advice?', 'K.How many school parents'
+                . ' did you greet by name?',
+                'L.How many school parents do you have phone numbers or emails '
+                . 'for besides a school directory?',
+                "Parent Mentor ID", "Date Survey Entered", "Explanation for 8", 
+                "Explanation for 9", "Explanation for 10",
+                "Explanation for 11", "Explanation for 12", "Explanation for 13", 
+                "Explanation for 14", "Explanation for 15",
+                "Parent Mentor First Name", "Parent Mentor Last Name", "School Name")),
+        
+         'lsna_post_teacher_surveys_deid'=>array('db'=>'LSNA', 'query'=>
+             'SELECT PM_Teacher_Survey_Post.*, Institutions.Institution_Name 
+                FROM PM_Teacher_Survey_Post INNER JOIN Participants 
+                ON PM_Teacher_Survey_Post.Parent_Mentor_ID=Participants.Participant_ID
+                LEFT JOIN Institutions ON Institutions.Institution_ID=
+                PM_Teacher_Survey_Post.School_Name',
+             'titles'=>array("Teacher Survey ID", "School ID", "Teacher ID", 
+                 "Grade", "Classroom Language", "Attendance", "grade papers",
+                    "tutor students one on one", "lead part of the class in an activity",
+                    "take children to the washroom etc", "help with discipline/disruptions",
+                    "check homework", "work with small groups of students",
+                    "lead the whole class in an activity", "help organize the classroom",
+                    "other", "Task Text", "Majority Task",
+                    "Having the support of a Parent Mentor helps me achieve or "
+                 . "maintain good classroom management.",
+                    " Having the support of a Parent Mentor helps me improve "
+                 . "homework completion and helps me maintain a high expectation"
+                 . " for homework in my classroom.",
+                    "Having the support of a Parent Mentor helps me improve "
+                 . "students in reading and/or math.",
+                    "Having a Parent Mentor strengthens my understanding of or "
+                 . "connection to the community.",
+                    "Having a Parent Mentor strengthens student social-emotional"
+                 . " development.",
+                    "The Parent Mentor Program helps our school create a "
+                 . "welcoming and communicative environment for all parents.",
+                    "The Parent Mentor Program helps our school build "
+                 . "parent-teacher trust.",
+                    "The Parent Mentor Program helps teachers and parents to "
+                 . "think of each other as partners in educating.",
+                    "PM Activities Training", "Teacher Activities Training", 
+                    "Comments",
+                    'A. Have another teacher or paraprofessional working with you'
+                 . ' in your classroom?', 
+                    'B.Have a parent volunteer or parent mentor in your classroom'
+                 . ' working with students?',
+                    'C.Talk with at least one school parent face-to-face?',
+                    'D.Have a conversation with a school parent about something '
+                 . 'besides their child\'s progress or behavior?', 
+                    'E.Have time for YOU to work with at least one of your '
+                 . 'struggling students one-on-one for 10 minutes or more?',
+                    'F.Have another adult (volunteer or staff) to work with at '
+                 . 'least one of your struggling students one-on-one for 10 minutes or more?',
+                    'G.Have time for YOU to work with 4 or more of your struggling'
+                 . ' students one-on-one for 10 minutes or more?', 
+                    'H.Have another adult (volunteer or staff) to work with 4 or '
+                 . 'more of your struggling students one-on-one for 10 minutes or more?',
+                    'I.Learn something new about the community in which your '
+                 . 'school is located?',
+                    'J.Ask a school parent for advice?', 'K.How many school parents'
+                 . ' did you greet by name?',
+                    'L.How many school parents do you have phone numbers or emails'
+                 . ' for besides a school directory?',
+                    "Parent Mentor ID", "Date Survey Entered", "Explanation for 8", 
+                    "Explanation for 9", "Explanation for 10",
+                    "Explanation for 11", "Explanation for 12", "Explanation for 13",
+                    "Explanation for 14", "Explanation for 15", "School Name")),
+        
+        'lsna_parent_mentor_surveys'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Parent_Mentor_Survey.*, Participants.Name_First, 
+                Participants.Name_Last, Institutions.Institution_Name 
+                FROM Parent_Mentor_Survey INNER JOIN Participants 
+                ON Parent_Mentor_Survey.Participant_ID=Participants.Participant_ID
+                LEFT JOIN Institutions ON Institutions.Institution_ID=
+                Parent_Mentor_Survey.School',
+            'titles'=>array("Survey ID", "Participant ID", "Date", "School ID", 
+                "Grade", "Room Number", "First Year Parent Mentor", "Number of Children",
+                "Marital Status", "Place of Birth", "Years in IL", 
+                "Classes Currently Enrolled In", "Currently Working", 
+                "Current Job", "Monthly Income", "On Food Stamps",
+                "Rent or Own", "Rent Payment", 'A.Ask your child about school?',
+                'B.Talk with your child’s teacher?', 
+                'C.Talk with the school principal?',
+                'D. Talk with other parents from the school?', 
+                'E.Spend time inside the school building?', 
+                'F.Spend time inside a classroom?',
+                'G.Help your child with schoolwork at home?', 
+                'H.Read with your child at home?', 
+                'I.How many other parents from the school did you greet by name?',
+                'J.How many teachers in the school did you greet by name?', 
+                'K.How many school parents do you have phone numbers or emails for?',
+                'L.How many teachers do you have phone numbers or emails for?', 
+                'M.Attend parent committee meetings?', 'N.Help lead a school committee?',
+                'O.Help plan school events activities or initiatives?', 
+                'P.Attend a meeting or get involved in a community activity outside of the school?',
+                'Q.Share information about the school or the community with '
+                . 'other parents in the neighborhood?', 
+                'R.Attend a class for yourself?', 'Pre or Post?',
+                'Q. I will be able to achieve most of the goals that I have '
+                . 'set for myself.', 'R. When facing difficult task I am certain '
+                . 'that I will accomplish them.',
+                'S. In general I think that I can obtain outcomes that are important '
+                . 'to me.', 'T. I believe I can succeed at most any endeavor to which I set my mind.',
+                'U. I will be able to successfully overcome many challenges.', 
+                'V. I am confident that I can perform effectively on many different tasks.',
+                'W. Compared to other people I can do most tasks very well.', 
+                'X. Even when things are tough I can perform quite well.', 
+                "PM First Name", "PM Last Name", "School Name")),
+        
+        'lsna_parent_mentor_surveys_deid'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Parent_Mentor_Survey.*, Institutions.Institution_Name 
+                FROM Parent_Mentor_Survey INNER JOIN Participants 
+                ON Parent_Mentor_Survey.Participant_ID=Participants.Participant_ID
+                LEFT JOIN Institutions ON Institutions.Institution_ID=
+                Parent_Mentor_Survey.School',
+            'titles'=>array("Survey ID", "PM ID", "Date", "School ID", "Grade", 
+                "Room Number", "First Year Parent Mentor", "Number of Children",
+                "Marital Status", "Place of Birth", "Years in IL", 
+                "Classes Currently Enrolled In", "Currently Working", 
+                "Current Job", "Monthly Income", "On Food Stamps",
+                "Rent or Own", "Rent Payment", 'A.Ask your child about school?', 
+                'B.Talk with your child’s teacher?', 'C.Talk with the school principal?',
+                'D. Talk with other parents from the school?', 
+                'E.Spend time inside the school building?', 
+                'F.Spend time inside a classroom?',
+                'G.Help your child with schoolwork at home?', 
+                'H.Read with your child at home?', 
+                'I.How many other parents from the school did you greet by name?',
+                'J.How many teachers in the school did you greet by name?', 
+                'K.How many school parents do you have phone numbers or emails for?',
+                'L.How many teachers do you have phone numbers or emails for?',
+                'M.Attend parent committee meetings?', 'N.Help lead a school committee?',
+                'O.Help plan school events activities or initiatives?', 
+                'P.Attend a meeting or get involved in a community activity outside of the school?',
+                'Q.Share information about the school or the community with other '
+                . 'parents in the neighborhood?', 'R.Attend a class for yourself?',
+                'Q. I will be able to achieve most of the goals that I have set '
+                . 'for myself.', 'R. When facing difficult task I am certain that '
+                . 'I will accomplish them.',
+                'S. In general I think that I can obtain outcomes that are '
+                . 'important to me.', 'T. I believe I can succeed at most any '
+                . 'endeavor to which I set my mind.',
+                'U. I will be able to successfully overcome many challenges.', 
+                'V. I am confident that I can perform effectively on many different tasks.',
+                'W. Compared to other people I can do most tasks very well.', 
+                'X. Even when things are tough I can perform quite well.', 
+                "School Name")),
+        
+        'lsna_parent_mentor_years'=>array('db'=>'LSNA', 'query'=>
+            'SELECT PM_Year_ID, PM_Years.Participant, PM_Years.School,
+                Name_First, Name_Last, Institution_Name, Year FROM PM_Years 
+                INNER JOIN Participants ON Participant=Participant_ID
+                INNER JOIN Institutions ON School=Institution_ID ORDER BY Name_Last',
+            'titles'=>array("ID", "Participant ID", "School ID", 
+                "Parent Mentor First Name", "Parent Mentor Last Name", 
+                "School Name", "School Year")),
+        
+        'lsna_parent_mentor_years_deid'=>array('db'=>'LSNA', 'query'=>
+            'SELECT PM_Year_ID, PM_Years.Participant, PM_Years.School,
+               Institution_Name, Year FROM PM_Years 
+               INNER JOIN Participants ON Participant=Participant_ID
+               INNER JOIN Institutions ON School=Institution_ID ORDER BY Name_Last',
+            'titles'=>array("ID", "Participant ID", "School ID", "School Name", 
+                "School Year")),
+        
+        'lsna_participants'=>array('db'=>'LSNA', 'query'=>
+            'SELECT * FROM Participants', 
+            'titles'=>array("Participant_ID", "First Name", "Middle Name", 
+                "Last Name", "Address Street Name", "Address Street Number", 
+                "Address Street Direction", "Address Street Type", "City", "State", 
+                "Zipcode", "Daytime Phone", "Evening Phone", "Education Level",
+                "Email", "Age", "Gender", "Date of Birth", "Grade Level", 
+                "Is Parent Mentor?", "Is a child?", "Notes")),
+        
+        'lsna_participants_deid'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Participant_ID, Education_Level, Age, Gender, Grade_Level, 
+                Is_PM, Is_Child FROM Participants',
+            'titles'=>array("Participant_ID", "Education Level", "Age", "Gender", 
+                "Grade Level", "Is Parent Mentor?", "Child=1; Youth=2; Adult=3 (or blank)")),
+        
+        'lsna_all_programs_campaigns'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Subcategories.Subcategory_ID, Subcategory_Name, 
+                Campaign_or_Program, Category_Name FROM Subcategories INNER JOIN
+                (Category_Subcategory_Links, Categories) ON (Subcategories.Subcategory_ID
+                =Category_Subcategory_Links.Subcategory_ID AND 
+                Category_Subcategory_Links.Category_ID=Categories.Category_ID)',
+            'titles'=>array("Subcategory_ID", "Subcategory_Name", 
+                "Campaign_or_Program", "Category_Name")),
+        
+        'lsna_young_satisfaction_surveys'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Satisfaction_Surveys.*, Name_First, Name_Last, Age, Gender, 
+                Subcategory_Name FROM Satisfaction_Surveys INNER JOIN 
+                (Subcategories, Participants)ON (Satisfaction_Surveys.Program_ID=
+                Subcategories.Subcategory_ID AND Satisfaction_Surveys.Participant_ID=
+                Participants.Participant_ID) WHERE Version=3',
+            'titles'=>array("Survey ID", "Participant ID", "Program ID", 
+                "Question 1", "Question 2", "Question 3", "Question 4", 
+                "Question 5", "Question 6", "Question 7", "Question 8", 
+                "Question 9", "Question 10", "Question 11", "Ignore this column",
+                "Date", "Version", "First Name", "Last Name", "Age", "Gender", 
+                "Program Name")),
+        
+        'lsna_young_satisfaction_surveys_deid'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Satisfaction_Surveys.*, Age, Gender, Subcategory_Name FROM 
+                Satisfaction_Surveys INNER JOIN (Subcategories, Participants)
+                ON (Satisfaction_Surveys.Program_ID=Subcategories.Subcategory_ID
+                AND Satisfaction_Surveys.Participant_ID=Participants.Participant_ID)
+                WHERE Version=3',
+            'titles'=>array("Survey ID", "Participant ID", "Program ID", 
+                "Question 1", "Question 2", "Question 3", "Question 4", 
+                "Question 5", "Question 6", "Question 7", "Question 8", 
+                "Question 9", "Question 10", "Question 11", "Ignore this column",
+                "Date", "Version", "Age", "Gender", "Program Name")),
+        
+        'lsna_older_satisfaction_surveys'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Satisfaction_Surveys.*, Name_First, Name_Last, Age, Gender, 
+                Subcategory_Name FROM Satisfaction_Surveys INNER JOIN 
+                (Subcategories, Participants) ON (Satisfaction_Surveys.Program_ID=
+                Subcategories.Subcategory_ID AND Satisfaction_Surveys.Participant_ID
+                =Participants.Participant_ID) WHERE Version=4',
+            'titles'=>array("Survey ID", "Participant ID", "Program ID", 
+                "Question 1", "Question 2", "Question 3", "Question 4", 
+                "Question 5", "Question 6", "Question 7", "Question 8", 
+                "Question 9", "Question 10", "Question 11", "Question 12", "Date",
+                "Version", "First Name", "Last Name", "Age", "Gender", "Program Name")),
+        
+        'lsna_older_satisfaction_surveys_deid'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Satisfaction_Surveys.*, Age, Gender, Subcategory_Name FROM 
+                Satisfaction_Surveys INNER JOIN (Subcategories, Participants)
+                ON (Satisfaction_Surveys.Program_ID=Subcategories.Subcategory_ID
+                AND Satisfaction_Surveys.Participant_ID=Participants.Participant_ID)
+                WHERE Version=4',
+            'titles'=>array("Survey ID", "Participant ID", "Program ID", 
+                "Question 1", "Question 2", "Question 3", "Question 4", "Question 5",
+                "Question 6", "Question 7", "Question 8", "Question 9", "Question 10",
+                "Question 11", "Question 12", "Date", "Version", "Age", "Gender",
+                "Program Name")),
+        
+        'lsna_campaign_attendance'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Subcategory_Attendance.Participant_ID, Type_of_Participation,
+                Date, Activity_Name, Activity_Type, Subcategory_Name, 
+                Campaign_or_Program, Name_First, Name_Last FROM Subcategory_Attendance
+                INNER JOIN (Subcategory_Dates, Subcategories, Participants) ON 
+                (Subcategory_Attendance.Subcategory_Date=
+                Subcategory_Dates.Wright_College_Program_Date_ID
+                AND Subcategory_Dates.Subcategory_ID=Subcategories.Subcategory_ID
+                AND Subcategory_Attendance.Participant_ID=
+                Participants.Participant_ID)',
+            'titles'=>array("Participant ID", "Type of Participation", "Date", 
+                "Activity Name", "Activity Type", "Program/Campaign Name", 
+                "Campaign or Program",  "First Name", "Last Name")),
+        
+        'lsna_campaign_attendance_deid'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Subcategory_Attendance.Participant_ID, Type_of_Participation,
+                Date, Activity_Name, Activity_Type,
+                Subcategory_Name, Campaign_or_Program  FROM Subcategory_Attendance
+                INNER JOIN (Subcategory_Dates, Subcategories, Participants) ON 
+                (Subcategory_Attendance.Subcategory_Date=Subcategory_Dates.Wright_College_Program_Date_ID
+                AND Subcategory_Dates.Subcategory_ID=Subcategories.Subcategory_ID
+                AND Subcategory_Attendance.Participant_ID=Participants.Participant_ID)',
+            'titles'=>array("Participant ID", "Type of Participation", "Date", 
+                "Activity Name", "Activity Type", "Program/Campaign Name", 
+                "Campaign or Program")),
+        
+        'lsna_campaign_events'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Date, Activity_Name, Activity_Type,
+                Subcategory_Name FROM Subcategory_Dates INNER JOIN (Subcategories)
+                ON Subcategory_Dates.Subcategory_ID=Subcategories.Subcategory_ID
+                WHERE Campaign_or_Program="Campaign"',
+            'titles'=>array("Date", "Event Name", "Event Type", "Campaign Name")),
+        
+        'lsna_school_records'=>array('db'=>'LSNA', 'query'=>
+            'SELECT PM_Children_Info.*, Name_First, Name_Last, Gender, Age, 
+                Grade_Level FROM PM_Children_Info INNER JOIN Participants ON 
+                Participants.Participant_ID=PM_Children_Info.Child_ID',
+            'titles'=>array("Information ID", "Child ID", "Quarter", "Reading Grade",
+                "Math Grade", "Number of Suspensions", "Number of Office Referrals",
+                "Days Absent", "School Year", "First Name", "Last Name", "Gender",
+                "Age", "Grade Level")),
+        
+        'lsna_school_records_deid'=>array('db'=>'LSNA', 'query'=>
+            'SELECT PM_Children_Info.*, Gender, Age, 
+                Grade_Level FROM PM_Children_Info INNER JOIN Participants
+                ON Participants.Participant_ID=PM_Children_Info.Child_ID',
+            'titles'=>array("Information ID", "Child ID", "Quarter", 
+                "Reading Grade", "Math Grade", "Number of Suspensions", 
+                "Number of Office Referrals", "Days Absent", "School Year",
+                "Gender", "Age", "Grade Level")),
+        
+        'lsna_event_attendance'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Issue_Attendance_ID, Name_First, Name_Last, Phone_Day, 
+                Phone_Evening, Month, Year, Issue_Area FROM Issue_Attendance 
+                LEFT JOIN Issue_Areas ON Issue_Attendance.Issue_ID=Issue_Areas.Issue_ID
+                LEFT JOIN Participants ON Issue_Attendance.Participant_ID=
+                Participants.Participant_ID',
+            'titles'=>array("Information ID", "Person Name", "", "Person Contact",
+                "", "Month", "Year", "Issue Area Event Type")),
+        
+        'lsna_event_attendance_deid'=>array('db'=>'LSNA', 'query'=>
+            'SELECT Issue_Attendance_ID, Participant_ID, Month, Year, Issue_Area
+                FROM Issue_Attendance LEFT JOIN Issue_Areas ON 
+                Issue_Attendance.Issue_ID=Issue_Areas.Issue_ID',
+            'titles'=>array("Information ID", "Person ID", "Month", "Year", 
+                "Issue Area Event Type"))
         
         );
     $db_array=array(2=>'LSNA', 3=>'bickerdike', 4=>'TRP', 5=>'SWOP', 6=>'enlace');
