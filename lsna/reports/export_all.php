@@ -136,7 +136,7 @@ joined) gets put into a file, which can be downloaded.
 <tr><td class="all_projects"><br/><strong>All Issue Event Attendance</strong><br/>
 <a href="/include/generalized_download_script.php?download_name=lsna_event_attendance">
     Download the CSV file of all specific issue event attendees.</a><br><br/></td>
-<td class="all_projects"><br/><strong>De-identified School Records</strong><br/>
+<td class="all_projects"><br/><strong>De-identified Issue Event Attendance</strong><br/>
 <a href="/include/generalized_download_script.php?download_name=lsna_event_attendance_deid">
     Download the CSV file of all specific issue event attendees (deidentified).</a><br><br/></td></tr>
 

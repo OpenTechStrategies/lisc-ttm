@@ -591,7 +591,7 @@ function generalized_download($download_name){
                 child_table.Grade_Level, parent_table.Name_First as parent_name, 
                 parent_table.Name_Last as parent_surname,
                 spouse_table.Name_First as spouse_name, spouse_table.Name_Last 
-                as spouse_surname, PM_Children_Info.* 
+                as spouse_surname
                 FROM Parent_Mentor_Children 
                 LEFT JOIN Participants as child_table ON 
                 Parent_Mentor_Children.Child_ID=child_table.Participant_ID
@@ -668,7 +668,7 @@ function generalized_download($download_name){
                 "Parent Mentor ID", "Date Survey Entered",
                 "Parent Mentor First Name", "Parent Mentor Last Name", "School Name")),
         
-        'lsna_pre_teacher_surveys_deid'=>array('db'=>'LSNA', 'query'=>
+        'lsna_teacher_pre_surveys_deid'=>array('db'=>'LSNA', 'query'=>
             'SELECT PM_Teacher_Survey.*, Institutions.Institution_Name 
                 FROM PM_Teacher_Survey INNER JOIN Participants 
                 ON PM_Teacher_Survey.Parent_Mentor_ID=Participants.Participant_ID
@@ -708,7 +708,7 @@ function generalized_download($download_name){
                 . 'for besides a school directory?',
                 "Parent Mentor ID", "Date Survey Entered",  "School Name")),
         
-        'lsna_post_teacher_surveys'=>array('db'=>'LSNA', 'query'=>
+        'lsna_teacher_post_surveys'=>array('db'=>'LSNA', 'query'=>
             'SELECT PM_Teacher_Survey_Post.*, Participants.Name_First, 
                 Participants.Name_Last, Institutions.Institution_Name 
                 FROM PM_Teacher_Survey_Post INNER JOIN Participants 
@@ -768,7 +768,7 @@ function generalized_download($download_name){
                 "Explanation for 14", "Explanation for 15",
                 "Parent Mentor First Name", "Parent Mentor Last Name", "School Name")),
         
-         'lsna_post_teacher_surveys_deid'=>array('db'=>'LSNA', 'query'=>
+         'lsna_teacher_post_surveys_deid'=>array('db'=>'LSNA', 'query'=>
              'SELECT PM_Teacher_Survey_Post.*, Institutions.Institution_Name 
                 FROM PM_Teacher_Survey_Post INNER JOIN Participants 
                 ON PM_Teacher_Survey_Post.Parent_Mentor_ID=Participants.Participant_ID
@@ -924,7 +924,12 @@ function generalized_download($download_name){
                 "School Year")),
         
         'lsna_participants'=>array('db'=>'LSNA', 'query'=>
-            'SELECT * FROM Participants', 
+            'SELECT Participant_ID, Name_First, Name_Middle, Name_Last, '
+            . 'Address_Street_Name, Address_Street_Num, Address_Street_Direction, '
+            . 'Address_Street_Type, Address_City, Address_State, Address_Zip, '
+            . 'Phone_Day, Phone_Evening, Education_Level, Email, Age, Gender, '
+            . 'Date_of_Birth, Consent_2013_14, Consent_2014_15, Consent_2015_16, '
+            . 'Grade_Level, Is_PM, Is_Child, Notes FROM Participants', 
             'titles'=>array("Participant_ID", "First Name", "Middle Name", 
                 "Last Name", "Address Street Name", "Address Street Number", 
                 "Address Street Direction", "Address Street Type", "City", "State", 
