@@ -1085,6 +1085,8 @@ function generalized_download($download_name){
         while ($privilege=mysqli_fetch_row($privilege_set)){
             $accesses[]=$privilege[0];
         }
+        echo "User privileges: ";//testing output
+        print_r($accesses);//testing output
         $get_db_id=array_search($download_list_array[$download_name]['db'], $db_array);
         echo "This is the DB ID: " . $get_db_id; //testing output
         $has_permission=array_search($get_db_id, $accesses);
