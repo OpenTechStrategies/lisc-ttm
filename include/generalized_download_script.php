@@ -1101,16 +1101,17 @@ function generalized_download($download_name){
         fputcsv($output, $download_list_array[$download_name]['titles']);
 
         // fetch the data
-        $conn_file='../' . $download_list_array[$download_name]['db']
+        $conn_file='../' . strtolower($download_list_array[$download_name]['db'])
                 . '/include/dbconnopen.php';
         include $conn_file;
+        echo $conn_file; //testing output
         $db_name= 'cnn' . ucfirst($download_list_array[$download_name]['db']);
         $database_conn=$$db_name;
         echo $db_name; //testing output
         $query_sqlsafe=$download_list_array[$download_name]['query'];
         echo $query_sqlsafe; //testing output
         $rows = mysqli_query($database_conn, $query_sqlsafe);
-        
+        print_r($rows);//testing output
         // loop over the rows, outputting them
         while ($row = mysqli_fetch_row($rows)) {
             fputcsv($output, $row);}
