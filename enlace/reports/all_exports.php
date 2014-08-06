@@ -32,27 +32,8 @@ Export files for all tables.  This is going to change once Taryn determines what
             All events, with their corresponding campaign.
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/events_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Event_Name", "Event_Date", "Address_Num", "Address_Dir", "Address_Street", "Address_Suffix", "Event Type",
-                "File_Name of upload", "Campaign_Name");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Event_Name, Event_Date, Address_Num, Address_Dir, Address_Street,
-                            Address_Suffix, Event_Types.Type, Note_File_Name, Campaign_Name
-                            FROM Campaigns_Events
-                            INNER JOIN Campaigns ON Campaigns.Campaign_ID = Campaigns_Events.Campaign_ID
-                            INNER JOIN Event_Types ON Campaigns_Events.Type = Event_Type_ID;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
-        </td>
+            <a href="/include/generalized_download_script.php?download_name=enlace_events">
+                Download.</a></td>
         <td class="all_projects">---</td>
     </tr>
 
@@ -62,25 +43,8 @@ Export files for all tables.  This is going to change once Taryn determines what
             All campaigns that are associated with an institution.
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/campaign_institution_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Campaign_Name", "Institution Name");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Campaign_Name, Institution_Name
-                            FROM Campaigns_Institutions
-                            INNER JOIN Campaigns ON Campaigns_Institutions.Campaign_ID = Campaigns.Campaign_ID
-                            INNER JOIN Institutions ON Institution_ID = Inst_ID;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
-        </td>
+            <a href="/include/generalized_download_script.php?download_name=enlace_inst_campaigns">
+                Download.</a></td>
         <td class="all_projects">---</td>
     </tr>
 
@@ -90,22 +54,8 @@ Export files for all tables.  This is going to change once Taryn determines what
             All campaigns.
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/campaigns_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Campaign_Name");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Campaign_Name FROM Campaigns";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
-        </td>
+            <a href="/include/generalized_download_script.php?download_name=enlace_campaigns">
+               Download.</a></td>
         <td class="all_projects">--</td>
     </tr>
 
@@ -115,26 +65,8 @@ Export files for all tables.  This is going to change once Taryn determines what
             All institutions.
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/institutions_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Institution Name", "Institution Type", "Address_Num", "Address_Direction", "Address_Street", "Address_Street_Type",
-                "Phone", "Email");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Institution_Name, Type, Address_Num, Address_Dir, Address_Street, Address_Street_Type,
-                            Phone, Email
-                            FROM Institutions INNER JOIN Institution_Types
-                            ON Institution_Type = Inst_Type_ID;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
-        </td>
+            <a href="/include/generalized_download_script.php?download_name=enlace_institutions">
+                Download.</a></td>
         <td class="all_projects">
             <?php
             $infile = "export_container/institutions_" . date('m_d_Y') . ".csv";

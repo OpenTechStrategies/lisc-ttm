@@ -1067,7 +1067,486 @@ function generalized_download($download_name){
                 FROM Issue_Attendance LEFT JOIN Issue_Areas ON 
                 Issue_Attendance.Issue_ID=Issue_Areas.Issue_ID',
             'titles'=>array("Information ID", "Person ID", "Month", "Year", 
-                "Issue Area Event Type"))
+                "Issue Area Event Type")),
+        
+        'enlace_events'=>array('db'=>'enlace', 'query'=>
+            'SELECT Event_Name, Event_Date, Address_Num, Address_Dir, Address_Street,
+                Address_Suffix, Event_Types.Type, Note_File_Name, Campaign_Name
+                FROM Campaigns_Events LEFT JOIN Campaigns ON Campaigns.Campaign_ID
+                = Campaigns_Events.Campaign_ID
+                LEFT JOIN Event_Types ON Campaigns_Events.Type = Event_Type_ID',
+            'titles'=>array("Event_Name", "Event_Date", "Address_Num", 
+                "Address_Dir", "Address_Street", "Address_Suffix", "Event Type",
+                "File_Name of upload", "Campaign_Name")),
+        
+        'enlace_inst_campaigns'=>array('db'=>'enlace', 'query'=>
+            'SELECT Campaign_Name, Institution_Name FROM Campaigns_Institutions
+                INNER JOIN Campaigns ON Campaigns_Institutions.Campaign_ID = 
+                Campaigns.Campaign_ID
+                INNER JOIN Institutions ON Institution_ID = Inst_ID',
+            'titles'=>array("Campaign_Name", "Institution Name")),
+        
+        /*'enlace_campaigns'=>array('db'=>'enlace', 'query'=>
+            'SELECT Campaign_Name FROM Campaigns',
+            'titles'=>array("Campaign_Name")),*/ //what about access bit??
+        
+        'enlace_institutions'=>array('db'=>'enlace', 'query'=>
+            'SELECT Institution_Name, Type, Address_Num, Address_Dir, 
+                Address_Street, Address_Street_Type, Phone, Email
+                FROM Institutions INNER JOIN Institution_Types
+                ON Institution_Type = Inst_Type_ID',
+            'titles'=>array("Institution Name", "Institution Type", 
+                "Address_Num", "Address_Direction", "Address_Street", 
+                "Address_Street_Type", "Phone", "Email")),
+        
+        'enlace_participants'=>array('db'=>'enlace', 'query'=>
+            ''),
+        
+        'swop_campaigns_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT * FROM Campaigns',
+            'titles'=>array("Campaign Id", "Campaign Name")),
+        
+        'swop_events'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Campaigns_Events.*, Campaigns.Campaign_Name FROM 
+                Campaigns_Events INNER JOIN Campaigns ON 
+                Campaigns_Events.Campaign_ID=Campaigns.Campaign_ID',
+            'titles'=>array("Event Id", "Event Name", "Event Date", "Campaign ID",
+                "Subcampaign", "Location", "Campaign Name")),
+        
+        'swop_campaigns_institutions'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Campaigns_Institutions.*, Campaign_Name, Institution_Name
+                FROM Campaigns_Institutions
+                INNER JOIN Campaigns ON Campaigns_Institutions.Campaign_Id = 
+                Campaigns.Campaign_ID
+                INNER JOIN Institutions ON Campaigns_Institutions.Institution_Id
+                = Institutions.Institution_ID',
+            'titles'=>array("Campaign/Institution Id", "Institution ID", 
+                "Campaign ID", "Campaign Name", "Institution Name")),
+        
+        'swop_households'=>array('db'=>'SWOP', 'query'=>
+            'SELECT * FROM Households',
+            'titles'=>array("Household Id", "Household Name")),
+        
+        'swop_households_people'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Household_Name, Name_First, Name_Last FROM Households 
+                INNER JOIN Households_Participants 
+                ON New_Household_ID=Household_ID
+                INNER JOIN Participants ON
+                Households_Participants.Participant_ID=Participants.Participant_ID',
+            'titles'=>array("Household Name", "First Name", "Last Name")),
+        
+        'swop_households_people_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT * FROM Households_Participants',
+            'titles'=>array("Link Id", "Household ID", "Participant ID", 
+                "Head of Household (1=Y, 2=No)")),
+        
+        'swop_institutions_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Institution_ID, Institution_Name, Block_Group, Type_Name,
+                Contact_Person, Date_Added FROM Institutions
+                LEFT JOIN Institution_Types ON Institution_Type = Type_ID',
+            'titles'=>array("Institution Id", "Institution Name", "Block Group", 
+                "Institution Type", "Contact Person (Database ID)", "Date Added")),
+        
+        'swop_institutions'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Institutions.*, (Institution_Types.Type_Name) AS Institution_Type_Name, Name_First, Name_Last
+                FROM Institutions
+                LEFT JOIN Participants ON Contact_Person = Participant_ID
+                LEFT JOIN Institution_Types ON Institution_Types.Type_ID = 
+                Institutions.Institution_Type',
+            'titles'=>array("Institution Id", "Institution Name", "Street Number",
+                "Street Direction", "Street Name", "Street Type", "Block Group",
+                "Institution Type", "Phone", "Contact Person (Database ID)", 
+                "Date Added", "Institution Type Name", "Contact Person (First Name)",
+                "Contact Person (Last Name)")),
+        
+        'swop_institutions_people_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT * FROM Institutions_Participants',
+            'titles'=>array("Link ID", "Institution ID", "Participant ID", 
+                "Is Primary? (1=Yes, 0=No)", "Individual Connection (Participant ID)",
+                "Connection Reason", "Date Added", "Activity Type")),
+        
+        'swop_institutions_people'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Institutions_Participants_ID, Institutions.Institution_ID, 
+                Institutions.Institution_Name, person.Participant_ID, 
+                person.Name_First, person.Name_Last, Is_Primary, 
+                connection.Participant_ID, connection.Name_First, 
+                connection.Name_Last, Connection_Reason
+                FROM Institutions_Participants
+                INNER JOIN Institutions ON Institutions.Institution_ID=
+                Institutions_Participants.Institution_ID
+                INNER JOIN Participants AS person ON person.Participant_ID=
+                Institutions_Participants.Participant_ID
+                LEFT JOIN Participants AS connection ON connection.Participant_ID=
+                Individual_Connection',
+            'titles'=>array("Link ID", "Institution ID", "Institution Name",
+                "Connected Participant ID", "Connected Person First Name", 
+                "Connected Person Last Name", "Is Primary? (1=Yes, 0=No)", 
+                "Individual Connection (Participant ID)",
+                "Individual Connection First Name", "Individual Connection Last Name",
+                "Connection Reason")),
+        
+        'swop_leadership_development_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Leadership_Development_ID, Participant_ID, Date, 
+                Leadership_Detail_Name FROM Leadership_Development
+                INNER JOIN Leadership_Development_Details
+                ON Detail_ID= Leadership_Development_Detail_ID',
+            'titles'=>array("Leadership Development ID", "Participant ID", 
+                "Date", "Leadership Detail Achieved")),
+        
+        'swop_leadership_development'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Leadership_Development_ID, Leadership_Development.Participant_ID,
+                Name_First, Name_Last, Date, Leadership_Detail_Name
+                FROM Leadership_Development
+                INNER JOIN Leadership_Development_Details
+                ON Detail_ID= Leadership_Development_Detail_ID
+                INNER JOIN Participants ON Leadership_Development.Participant_ID=
+                Participants.Participant_ID',
+            'titles'=>array("Leadership Development ID", "Participant ID", 
+                "First Name", "Last Name", "Date", "Leadership Detail Achieved")),
+        
+        'swop_participants_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Participants.Participant_ID, Education_Level, Gender, 
+                Lang_Eng, Lang_Span, Lang_Other, Ward, Other_Lang_Specify, 
+                Primary_Organizer, First_Interaction_Date, ITIN, Date_Added, 
+                Properties.Property_ID, Properties.Block_Group   
+                FROM Participants LEFT JOIN Participants_Properties ON 
+                (Participants.Participant_ID=
+                Participants_Properties.Participant_ID AND Primary_Residence=1)
+                LEFT JOIN Properties ON Properties.Property_Id=
+                Participants_Properties.Property_ID
+                GROUP BY Participants.Participant_ID ORDER BY Name_Last',
+            'titles'=>array("Participant ID", "Education_Level", " Gender", 
+                "Speaks English? (1=Yes 0=No)", "Speaks Spanish? (1=Yes 0=No)",
+                "Speaks Other? (1=Yes 0=No)", "Ward", "Other_Lang_Specify",
+                "Primary_Organizer ID", " First_Interaction_Date", "ITIN Yes/No",
+                "Date_Added", "Property ID", "Block Group")),
+        
+        'swop_participants'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Participants.Participant_ID, Participants.Name_First, 
+                Participants.Name_Last, Participants.Phone_Day, 
+                Participants.Phone_Evening, Participants.Education_Level, 
+                Participants.Email, Participants.Gender, Participants.Date_of_Birth,
+                Participants.Lang_Eng, Participants.Lang_Span, Participants.Lang_Other, 
+                Participants.Ward, Participants.Other_Lang_Specify, 
+                Participants.Notes, Participants.Primary_Organizer, 
+                Participants.First_Interaction_Date, Participants.ITIN, 
+                Participants.Date_Added, organizer.Name_First, organizer.Name_Last, 
+                Properties.Property_ID, Properties.Address_Street_Num, 
+                Properties.Address_Street_Direction, Properties.Address_Street_Name, 
+                Properties.Address_Street_Type
+                FROM Participants
+                LEFT JOIN Participants AS organizer ON Participants.Primary_Organizer=organizer.Participant_ID
+                LEFT JOIN Participants_Properties ON (Participants.Participant_ID=
+                Participants_Properties.Participant_ID AND Primary_Residence=1)
+                LEFT JOIN Properties ON Properties.Property_Id=Participants_Properties.Property_ID
+                GROUP BY Participants.Participant_ID ORDER BY Participants.Name_Last',
+            'titles'=>array("Participant ID", "First Name", "Last Name", 
+                "Phone - Home", "Phone - Cell", "Education Level", "Email", "Gender",
+                "Date of Birth", "Speaks English? (1=Yes 0=No)",
+                "Speaks Spanish? (1=Yes 0=No)", "Speaks Other? (1=Yes 0=No)", "Ward",
+                "Other Language Spoken", "Notes", "Primary Organizer ID", 
+                "First Interaction Date", "ITIN yes/no", "Date Added", 
+                "Primary Organizer First Name", "Primary Organizer Last Name", 
+                "Property ID", "Street Number", "Street Direction", "Street Name",
+                "Street Type")),
+        
+        'swop_pool_status_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Pool_Status_Changes.Pool_Status_Change_ID,
+                Reports__Active.Value AS Active,
+                Pool_Status_Changes.Participant_ID,
+                Pool_Status_Changes.Date_Changed,
+                Reports__Activity_Type.Value AS Activity_Type,
+                Pool_Member_Types.Type_Name AS Member_Type,
+                Pool_Status_Changes.Expected_Date
+                FROM Pool_Status_Changes
+                LEFT JOIN Participants ON Pool_Status_Changes.Participant_ID = 
+                Participants.Participant_ID
+                LEFT JOIN Reports__Activity_Type ON Pool_Status_Changes.Activity_Type
+                = Reports__Activity_Type.ID
+                LEFT JOIN Pool_Member_Types ON Pool_Status_Changes.Member_Type
+                = Pool_Member_Types.Type_ID
+                LEFT JOIN Reports__Active ON Pool_Status_Changes.Active
+                = Reports__Active.ID',
+            'titles'=>array("Pool Status Change ID", "Active", "Participant ID", 
+                "Date Changed", "Activity Type", "Member Type", "Expected Date")),
+        
+        'swop_pool_status'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Pool_Status_Changes.Pool_Status_Change_ID,
+                Reports__Active.Value AS Active,
+                Pool_Status_Changes.Participant_ID,
+                Participants.Name_First,
+                Participants.Name_Last,
+                Pool_Status_Changes.Date_Changed,
+                Reports__Activity_Type.Value AS Activity_Type,
+                Pool_Member_Types.Type_Name AS Member_Type,
+                Pool_Status_Changes.Expected_Date
+                FROM Pool_Status_Changes
+                LEFT JOIN Participants ON Pool_Status_Changes.Participant_ID = 
+                Participants.Participant_ID
+                LEFT JOIN Reports__Activity_Type ON Pool_Status_Changes.Activity_Type
+                = Reports__Activity_Type.ID
+                LEFT JOIN Pool_Member_Types ON Pool_Status_Changes.Member_Type =
+                Pool_Member_Types.Type_ID
+                LEFT JOIN Reports__Active ON Pool_Status_Changes.Active = Reports__Active.ID',
+            'titles'=>array("Pool Status Change ID", "Active", "Participant ID",
+                "First Name", "Last Name", "Date Changed", "Activity Type", 
+                "Member Type", "Expected Date")),
+        
+        'swop_pool_movement_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Pool_Progress.Pool_Progress_ID,
+                Pool_Progress.Participant_ID,
+                Pool_Benchmarks.Benchmark_Name,
+                Pool_Benchmarks.Benchmark_Info,
+                Pool_Progress.Date_Completed,
+                Reports__Activity_Type.Value AS Activity_Type,
+                Pool_Progress.Expected_Date,
+                Pool_Progress.More_Info
+                FROM Pool_Progress
+                LEFT JOIN Participants ON Pool_Progress.Participant_ID =
+                Participants.Participant_ID
+                LEFT JOIN Participants AS Participants_More_Info ON Pool_Progress.More_Info
+                = Participants_More_Info.Participant_ID
+                LEFT JOIN Reports__Activity_Type ON Pool_Progress.Activity_Type
+                = Reports__Activity_Type.ID
+                LEFT JOIN Pool_Benchmarks ON Pool_Progress.Benchmark_Completed
+                = Pool_Benchmarks.Pool_Benchmark_ID',
+            'titles'=>array("Pool Progress ID", "Participant ID", "Benchmark Name",
+                "Benchmark Info", "Date Completed", "Activity Type", "Expected Date",
+                "More Info")),
+        
+        'swop_pool_movement'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Pool_Progress.Pool_Progress_ID,
+                Pool_Progress.Participant_ID,
+                Participants.Name_First,
+                Participants.Name_Last,
+                Pool_Benchmarks.Benchmark_Name,
+                Pool_Benchmarks.Benchmark_Info,
+                Pool_Progress.Date_Completed,
+                Reports__Activity_Type.Value AS Activity_Type,
+                Pool_Progress.Expected_Date,
+                CONCAT(Participants_More_Info.Name_First, " ", Participants_More_Info.Name_Last) AS More_Info
+                FROM Pool_Progress
+                LEFT JOIN Participants ON Pool_Progress.Participant_ID 
+                = Participants.Participant_ID
+                LEFT JOIN Participants AS Participants_More_Info ON Pool_Progress.More_Info 
+                = Participants_More_Info.Participant_ID
+                LEFT JOIN Reports__Activity_Type ON Pool_Progress.Activity_Type 
+                = Reports__Activity_Type.ID
+                LEFT JOIN Pool_Benchmarks ON Pool_Progress.Benchmark_Completed 
+                = Pool_Benchmarks.Pool_Benchmark_ID',
+            'titles'=>array("Pool Progress ID", "Participant ID", "First Name", 
+                "Last Name", "Benchmark Name", "Benchmark Info", "Date Completed",
+                "Activity Type", "Expected Date", "More Info")),
+        
+        'swop_event_attendance_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT * FROM Participants_Events',
+            'titles'=>array("Link ID", "Event ID", "Participant ID",
+                "Role Type (1=Attendee; 2=Speaker; 3=Chairperson; 4=Prep work; 5=Staff)",
+                "Exceptional")),
+        
+        'swop_event_attendance'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Participants_Events.*, Name_First, Name_Last
+                FROM Participants_Events
+                INNER JOIN Participants ON Participants_Events.Participant_ID =
+                Participants.Participant_ID',
+            'titles'=>array("Link ID", "Event ID", "Participant ID", "Role Type (1=Attendee; 2=Speaker; 3=Chairperson; 4=Prep work; 5=Staff)",
+                            "Attendee First Name", "Attendee Last Name")),
+        
+        'swop_leader_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT * FROM Participants_Leaders',
+            'titles'=>array("Link ID", "Participant ID", "Leader Type", 
+                "Date Logged", "Activity Type")),
+        
+        'swop_leader'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Participants_Leaders.*, Name_First, Name_Last FROM '
+            . 'Participants_Leaders INNER JOIN Participants ON '
+            . 'Participants_Leaders.Participant_Id=Participants.Participant_ID',
+            'titles'=>array("Link ID", "Participant ID", "Leader Type", 
+                "Date Logged", "Activity Type", "First Name", "Last Name")),
+        
+        'swop_pool_members_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Participant_Pool_ID, Participants_Pool.Participant_ID, Date_Logged, Type_Name, 
+                Properties.Block_Group
+                FROM Participants_Pool LEFT JOIN Pool_Member_Types ON Type=Type_ID
+                LEFT JOIN Participants_Properties ON (Participants_Pool.Participant_ID=
+                Participants_Properties.Participant_ID AND Primary_Residence=1)
+                LEFT JOIN Properties ON Properties.Property_Id=Participants_Properties.Property_ID
+                GROUP BY Participants_Pool.Participant_ID',
+            'titles'=>array("Pool ID", "Participant ID", "Date Logged", 
+                "Pool Member Type", "Block Group")),
+        
+        'swop_pool_members'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Participant_Pool_ID, Participants_Pool.Participant_ID, 
+                Name_First, Name_Last, Date_Logged, Type_Name
+                FROM Participants_Pool INNER JOIN Pool_Member_Types
+                ON Type=Type_ID
+                INNER JOIN Participants ON Participants_Pool.Participant_Id=
+                Participants.Participant_ID',
+            'titles'=>array("Pool ID", "Participant ID", "Date Logged", 
+                "Pool Member Type", "Date Logged", "Type Name")),
+        
+        'swop_people_properties_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Participants_Properties.*,  Properties.Block_Group FROM 
+                Participants_Properties LEFT JOIN Properties ON 
+                Properties.Property_Id=Participants_Properties.Property_ID',
+            'titles'=>array("Link ID", "Participant ID", "Property ID", 
+                "Date Linked", "Unit Number", "Rent or Own", "Start Date",
+                "End Date", "Primary Residence", "Start as Primary", "End as Primary",
+                "Reason Ended", "Block Group")),
+        
+        'swop_people_properties'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Participants_Properties.*, Name_First, Name_Last, 
+                Properties.Address_Street_Num, Properties.Address_Street_Direction,
+                Properties.Address_Street_Name, Properties.Address_Street_Type 
+                FROM Participants_Properties 
+                INNER JOIN Participants on Participants_Properties.Participant_Id=
+                Participants.PARTICIPANT_ID
+                INNER JOIN Properties on Properties.Property_Id=
+                Participants_Properties.Property_ID',
+            'titles'=>array("Link ID", "Participant ID", "Property ID", 
+                "Date Linked", "Unit Number", "Rent or Own", "Start Date",
+                "End Date", "Primary Residence", "Start as Primary", 
+                "End as Primary", "Reason Ended", "First Name", "Last Name",
+                "Address Number", "Address Direction", "Address Street", 
+                "Address Street Type")),
+        
+        'swop_pool_employment_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT * FROM Pool_Employers',
+            'titles'=>array("Link ID", "Participant ID", "Employer Name", 
+                "Work Time", "Date Logged")),
+        
+        'swop_pool_employment'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Name_First, Name_Last, Pool_Employers.* FROM Pool_Employers
+                INNER JOIN Participants ON Participants.Participant_ID = 
+                Pool_Employers.Participant_ID',
+            'titles'=>array("First Name", "Last Name", "Link ID (Pool Employer ID)",
+                "Participant ID", "Employer Name", "Work Time", "Date Logged")),
+        
+        'swop_pool_finances_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT * FROM Pool_Finances',
+            'titles'=>array("Finance ID", "Participant ID", "Credit Score", 
+                "Income", "Current Housing (add meaning here)",
+                "Household Location (1=In TTM Area; 2=Outside TTM but in SWOP; "
+                . "3=Outside TTM and SWOP; 4=N/A)", "Housing Cost", "Employment",
+                "Assets", "Date Logged")),
+        
+        'swop_pool_finances'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Pool_Finances.*, Name_First, Name_Last FROM Pool_Finances
+                INNER JOIN Participants ON Participants.Participant_ID=
+                Pool_Finances.Participant_ID',
+            'titles'=>array("Finance ID", "Participant ID", "Credit Score", "Income",
+                "Current Housing (add meaning here)",
+                "Household Location (1=In TTM Area; 2=Outside TTM but in SWOP; "
+                . "3=Outside TTM and SWOP; 4=N/A)", "Housing Cost", "Employment",
+                "Assets", "Date Logged", "First Name", "Last Name")),
+        
+        'swop_pool_outcomes_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Participant_ID, Outcome_Name, Date_Exited,  Outcome_Location_Name
+                FROM Pool_Outcomes INNER JOIN Outcomes_for_Pool
+                ON Pool_Outcomes.Outcome_ID=Outcomes_for_Pool.Outcome_ID
+                INNER JOIN Outcome_Locations 
+                ON Outcome_Location=Outcome_Location_ID',
+            'titles'=>array("Participant ID", "Outcome Name", "Date Exited", 
+                "Outcome Location")),
+        
+        'swop_pool_outcomes'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Pool_Outcomes.Participant_ID, Name_First, Name_Last, 
+                Outcome_Name, Date_Exited, Outcome_Location_Name
+                FROM Pool_Outcomes 
+                INNER JOIN Outcomes_for_Pool ON Pool_Outcomes.Outcome_ID=
+                Outcomes_for_Pool.Outcome_ID
+                INNER JOIN Outcome_Locations ON Outcome_Location=Outcome_Location_ID
+                INNER JOIN Participants ON Participants.Participant_Id=
+                Pool_Outcomes.Participant_ID',
+            'titles'=>array("Participant ID", "First Name", "Last Name", 
+                "Outcome Name", "Date Exited", "Outcome Location")),
+        
+        'swop_pool_progress_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Participant_ID, Date_Completed, Activity_Type,
+                Benchmark_Name FROM Pool_Progress INNER JOIN Pool_Benchmarks ON 
+                Benchmark_Completed=Pool_Benchmark_ID',
+            'titles'=>array("Participant ID", "Date Completed", "Activity Type",
+                "Benchmark Name")),
+        
+        'swop_pool_progress'=>array('db'=>'SWOP', 'query'=>
+            'SELECT MONTH(Pool_Progress.Date_Completed), DAY(Pool_Progress.Date_Completed),
+                YEAR(Pool_Progress.Date_Completed),
+                Participants.Name_First, Participants.Name_Last, 
+                Pool_Benchmarks.Benchmark_Name,
+                organizer.Name_First, organizer.Name_Last
+                FROM Pool_Progress INNER JOIN Participants ON Pool_Progress.Participant_ID=
+                Participants.Participant_ID
+                INNER JOIN Pool_Benchmarks ON Pool_Benchmark_ID=Benchmark_Completed
+                INNER JOIN Participants AS organizer ON Participants.Primary_Organizer=
+                organizer.Participant_ID',
+            'titles'=>array("Month", "Day", "Year", "First Name", "Last Name", 
+                "Benchmark Completed", "Organizer First Name", "Organizer Last Name")),
+        
+        'swop_pool_activity_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT * FROM Pool_Status_Changes',
+            'titles'=>array("Change ID", "1=Active; 0=Inactive", "Participant ID",
+                "Date Changed", "Activity Type", "Member Type", "Expected Date")),
+        
+        'swop_pool_activity'=>array('db'=>'SWOP', 'query'=>
+            'SELECT * FROM Pool_Status_Changes INNER JOIN Participants ON '
+            . 'Participants.Participant_Id = Pool_Status_Changes.Participant_ID',
+            'titles'=>array("Change ID", "1=Active; 0=Inactive", "Participant ID",
+                "Date Changed", "Activity Type",
+                "Member_Type", "Expected_Date", "Participant_ID", "Name_First",
+                "Name_Middle", "Name_Last",
+                "Address_Street_Name", "Address_Street_Num", "Address_Street_Direction",
+                "Address_Street_Type",
+                "Phone_Day", "Phone_Evening", "Education_Level", "Email", "Gender",
+                "Date_of_Birth",
+                "Lang_Eng", "Lang_Span", "Lang_Other", "Ward", "Other_Lang_Specify",
+                "Notes", "Primary_Organizer",
+                "First_Interaction_Date", "ITIN", "Date_Added", "Activity_Type")),
+        
+        'swop_properties_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Property_ID, Disposition, Disposition_Name, Construction_Type,
+                Home_Size, Date_Entered, Property_Type, Block_Group FROM 
+                Properties LEFT JOIN Property_Dispositions ON Disposition=Disposition_ID',
+            'titles'=>array("Property ID", "Disposition ID", "Disposition Name",
+                "Construction Type (4=Brick/Masonry; 5=Frame)",
+                "Home Size (1=Single-family; 2=2/3 flat; 3=Multi-unit)", 
+                "Date Entered", "Property Type (1=Residential; 2=Commercial; 3=Mixed-use)",
+                "Block Group")),
+        
+        'swop_properties'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Property_ID, Address_Street_Num,  Address_Street_Direction,
+                Address_Street_Name, Address_Street_Type, PIN, Construction_Type,
+                Home_Size, Date_Entered, Property_Type, Disposition_Name
+                FROM Properties LEFT JOIN Property_Dispositions ON Disposition=
+                Disposition_ID',
+            'titles'=>array("Property ID", "Street Number", "Street Direction", 
+                "Street Name", "Street Type", "PIN",
+                "Construction Type (4=Brick/Masonry; 5=Frame)",
+                "Home Size (1=Single-family; 2=2/3 flat; 3=Multi-unit)", 
+                "Date Entered", "Property Type  (1=Residential; 2=Commercial; 3=Mixed-use)",
+                "Disposition Name")),
+        
+        'swop_property_progress_deid'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Property_Progress.*, Property_Marker_Name, Block_Group
+                FROM Property_Progress
+                LEFT JOIN Property_Marker_Names ON Marker=Property_Marker_Name_ID
+                LEFT JOIN Properties ON Property_Progress.Property_Id=
+                Properties.Property_ID',
+            'titles'=>array("Progress ID", "Date Added", "Marker ID", "Additional 1",
+                "Additional 2", "Additional 3", "Additional 4", "Property ID", 
+                "Notes", "Property Marker Name", "Block Group")),
+        
+        'swop_property_progress'=>array('db'=>'SWOP', 'query'=>
+            'SELECT Property_Progress.*, Property_Marker_Name, 
+                Properties.Address_Street_Num, Properties.Address_Street_Direction,
+                Properties.Address_Street_Name, Properties.Address_Street_Type
+                FROM Property_Progress  LEFT JOIN Property_Marker_Names ON
+                Marker=Property_Marker_Name_ID
+                INNER JOIN Properties ON Property_Progress.Property_ID=
+                Properties.Property_ID',
+            'titles'=>array("Progress ID", "Date Added", "Marker ID", "Additional 1",
+                "Additional 2", "Additional 3", "Additional 4", "Property ID", 
+                "Notes", "Property Marker Name", "Street Number", "Street Direction", 
+                "Street Name", "Street Type"))
         
         );
     $db_array=array(2=>'LSNA', 3=>'bickerdike', 4=>'TRP', 5=>'SWOP', 6=>'enlace');
