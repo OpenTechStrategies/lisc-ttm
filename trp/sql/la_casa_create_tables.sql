@@ -1,0 +1,111 @@
+/* This SQL file will DROP, CREATE, and LOAD sample data into the tables
+*  we need for the new La Casa section of the TRP database.
+*
+*  Both of these tables reference the "Participants" table, and all 
+*  La Casa students and residents will be entered into that table as 
+*  their primary key.
+*  
+*  The "La_Casa_Residents" table holds all the information having to do with 
+*  students' residence at La Casa.  We expect any imported information from HDS 
+*  that does not belong in the "Participants" table to have a home in the 
+*  "La_Casa_Residents" table.  
+*
+*  The "La_Casa_Students" table holds more specialized information about the
+*  residents, but in their capacity as college students.  This will grow more
+*  complicated as time goes on, but for now we have indications that we will
+*  eventually be linking to a schools table that includes colleges and high
+*  schools.
+*/
+
+DROP TABLE IF EXISTS `La_Casa_Residents`;
+
+CREATE TABLE `La_Casa_Residents`
+(
+PRIMARY KEY `Resident_ID` int(11) NOT NULL AUTO_INCREMENT,
+CONSTRAINT FOREIGN KEY `Participant_ID` int(11) REFERENCES Participants
+    (`Participant_ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+`Group` varchar(45),
+`Handbook` int(11),
+`Status` varchar(45),
+`Floor` int(45),
+`Pod` int(11),
+`Room_Number` varchar(45),
+`Key_Card` varchar(45),
+`App_Received` date,
+`App_Completed` date,
+`Roommate` int(11), -- should be a foreign key to the participants table
+`Rmmate_Move_In` date,
+`LC_Username` varchar(45),
+`LC_Password` varchar(45),
+`LC_Print_Code` varchar(45),
+`HS_ID` int(11),  -- or the high school name, depending on whether we create a table of high schools
+`ACT` int(11),
+`HS_GPA_raw` varchar(45),
+`HS_GPA_weight` varchar(45),
+`Mother_Education` varchar(45),
+`Father_Education` varchar(45),
+`First_Gen` int(11),
+`24_older` int(11),
+`Master_plus` int(11),
+`Married` int(11),
+`Military` int(11),
+`Has_Children` int(11),
+`Homeless` int(11),
+`Self_Sustaining` int(11),
+`Tax_Exemptions` int(11),
+`Household_size` int(11),
+`Household_Income` varchar(45),
+`Parent1_AGI` varchar(45), -- should be int?
+`Parent2_AGI` varchar(45),
+`Student_AGI` varchar(45),
+`AMI` varchar(45), -- percentage
+`App_Source` varchar(45), -- should we have a list of ways apps are submitted?
+                          -- events, walkins...and reference that here?
+`Notes` varchar(250), -- will probably need more space
+`Packing_Email` date,
+`Orientation_Email` date,
+`Roommate_Email` date,
+`Move_In` date,
+`Move_In_Registration` int(11),
+`Move_In_Address` varchar(45), -- I think we can calculate this from room number.  to confirm.
+`Move_In_Note` varchar(250), -- make longer?
+`Orientation` datetime, -- includes both date and time of orientation, combining
+                        -- their two columns
+`EC1_First_Name` varchar(45),
+`EC1_Last_Name` varchar(45),
+`EC1_Phone` varchar(45), -- or int?
+`EC1_Relationship` varchar(45), -- or list to reference via int?
+`EC2_First_Name` varchar(45),
+`EC2_Last_Name` varchar(45),
+`EC2_Phone` varchar(45), -- or int?
+`EC2_Relationship` varchar(45), -- or list to reference via int?
+`Scholarship` int(11)
+) ENGINE=InnoDB DEFAULT CHARSET;
+
+
+
+DROP TABLE IF EXISTS `La_Casa_Students`;
+
+CREATE TABLE `La_Casa_Students`
+(
+PRIMARY KEY `Student_ID` int(11) NOT NULL AUTO_INCREMENT,
+CONSTRAINT FOREIGN KEY `Participant_ID` int(11) REFERENCES Participants
+    (`Participant_ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+`College_ID` int(11),
+`HS_ID` int(11),
+`Major` varchar(45),
+`HS_Grad_Date` date,
+`Col_Grad_Date` date,
+`HS_GPA` varchar(5),
+`Col_Cum_GPA` varchar(5),
+`Term_GPA` varchar(5),
+`Academic_Advisor` varchar(100),
+`Advisor_Phone` varchar(45),
+`Credits_Completed` varchar(45),
+`Credits Needed` varchar(45)
+) ENGINE=InnoDB DEFAULT CHARSET;
+
