@@ -24,7 +24,7 @@ query variable variable.  For example:
 
         $user = $_POST['user'];
         $user_sqlsafe = mysqli_real_escape_string($cnnFoo, $user);
-        $query_sqlsafe = "SELECT blah blah '" . $user_sqlsafe . "' blah blah;";
+        $query_sqlsafe = "SELECT blah blah '" . $user_sqlsafe . "' blah blah";
         mysqli_query($cnnFoo, $query_sqlsafe);
 
 There is one exception to this:
