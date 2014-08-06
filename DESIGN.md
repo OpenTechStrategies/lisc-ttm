@@ -4,6 +4,42 @@ Design Notes for LISC TTM software project.
 These notes are somewhat randomly accumulated right now.  As the file
 grows, we can organize it more.
 
+Always Sanitize User Input When Constructing SQL Queries
+--------------------------------------------------------
+
+Any input passed to mysqli\_query() must be SQL-safe, to avoid SQL
+injection attacks.  This means that input coming in from users must be
+run through mysqli\_real\_escape\_string().  To help us keep track of
+which input has been thus sanitized, we use the suffix "\_sqlsafe" on
+variables whose values are known to be already safe.  Naturally, such
+variables can be combined with or interpolated into other safe values
+and the result will itself be safe; such chains of combinations should
+retain "\_sqlsafe" suffixes all the way down, cascading to the
+variable that actually gets passed into mysqli\_query().
+
+In other words, the "\_sqlsafe" suffix is introduced on variables that
+are the lvalue (assignee) of calls to mysqli\_real\_escape\_string(),
+and is preserved through any intermediate variables all the way to the
+query variable variable.  For example:
+
+        $user = $_POST['user'];
+        $user_sqlsafe = mysqli_real_escape_string($cnnFoo, $user);
+        $query_sqlsafe = "SELECT blah blah '" . $user_sqlsafe . "' blah blah;";
+        mysqli_query($cnnFoo, $query_sqlsafe);
+
+There is one exception to this:
+
+Some SQL queries are constructed from class members, such as
+$this->user\_id (where $this is a User instance) or $this->program\_id
+(where $this is a Program instance).  Those class members are made
+SQL-safe at the time of the instance's initialization, but it would be
+awkward to include the "\_sqlsafe" suffix on the member's name.  So
+for commonly used classes, the class documentation should indicate
+which members are SQL-safe, and then they can be treated as such
+wherever they are used even though they don't have the "\_sqlsafe"
+suffix.  See `bickerdike/classes/user.php` (`$this->user_id`) and
+`bickerdike/classes/program.php` (`$this->program_id`) for examples.
+
 Login Pages and Processes
 -------------------------
 
