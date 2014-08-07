@@ -8,7 +8,6 @@ if (isset($_POST['current_pw'])){
 }
 $username = $_POST['username']; 
 $user_query = "SELECT User_ID, User_Password FROM  Users WHERE User_Email = '$username'";
-$stored_hash="*";
 $user = mysqli_query($cnnLISC, $user_query);
 $user_row = mysqli_fetch_row($user);
 $is_user = mysqli_num_rows($user);
