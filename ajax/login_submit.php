@@ -34,12 +34,7 @@ $user_id=$user_row[0];
 $password_in_db=$user_row[1];
 $hash_match = $hasher->CheckPassword($password_received, $password_in_db);
 
-// Temporary shim: Because some passwords in the database are still
-// stored in the old non-hashed form, we try both ways.  Once all the
-// passwords in the DB are converted to hashed, the shim will go away.
-$plain_match = ($password_in_db == $password_received);
-
-if ($hash_match || $plain_match) {
+if ($hash_match) {
     //record this login in the Log
     $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username . "', ' - Logged In'))";
     

@@ -13,20 +13,12 @@ $user_row = mysqli_fetch_row($user);
 $is_user = mysqli_num_rows($user);
 $user_id = $user_row[0];
 $found_pw = $user_row[1];
-
-/* For now, as per issue #2, we tolerate legacy passwords stored in
- * non-hashed form in the database (although of course the new
- * password we store will be in hashed form).  This shim could go
- * away once all the passwords are hashed, but that's a manual step
- * that we will do later.
- */
-$cur_pw_non_hashed_match = ($current_pw == $found_pw);
 $cur_pw_hashed_match=$hasher->CheckPassword($current_pw, $found_pw);
 
 /*
  * Test to make sure that the username and password match:
  */
-if ($is_user > 0 && ($cur_pw_non_hashed_match || $cur_pw_hashed_match))
+if ($is_user > 0 && $cur_pw_hashed_match)
 {
        /*if they match, then reset the password to the new password:
         */
