@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `La_Casa_Residents`;
 CREATE TABLE `La_Casa_Residents`
 (
 PRIMARY KEY `Resident_ID` int(11) NOT NULL AUTO_INCREMENT,
-FOREIGN KEY (`Participant_ID_Residents`) REFERENCES Participants
+FOREIGN KEY (`Participant_ID_Residents`) REFERENCES `Participants`
     (`Participant_ID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
@@ -135,9 +135,10 @@ CONSTRAINT FOREIGN KEY `Participant_ID` int(11) REFERENCES Participants
 
 -- LOCK TABLES `Participants` WRITE; -- do I need to lock the table to add cols?
 
+/* ALTER TABLE `Participants` ADD
+   `Email_2` varchar(60); */
+
 ALTER TABLE `Participants` ADD
-`Email_2` varchar(60); -- testing this with adding only one column, in case my
-                       -- syntax is  wrong with the second column.
--- , `Mobile_Phone` varchar(45);
+`Mobile_Phone` varchar(45);
 
 -- UNLOCK TABLES;
