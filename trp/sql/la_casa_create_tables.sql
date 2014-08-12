@@ -130,6 +130,7 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `Federal_Unsub_Loan` int(11),
 `Self_Help` int(11),
 `Savings` int(11),
+`La_Casa_Scholarship` int(11),
 `Family_Help` int(11),
 `College_ID` int(11),
 `HS_ID` int(11),
