@@ -376,7 +376,7 @@ if ($parti['Gender'] == 'm') {
 <?php
 include "../include/dbconnopen.php";
 $determine_if_la_casa_sqlsafe="SELECT COUNT(*) FROM La_Casa_Students WHERE"
-        . "Participant_ID_Students='" . 
+        . " Participant_ID_Students='" . 
         mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
 $determine_la_casa=mysqli_query($cnnTRP, $determine_if_la_casa_sqlsafe);
 $lc_yes_no=mysqli_fetch_row($determine_la_casa);
