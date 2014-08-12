@@ -373,7 +373,15 @@ if ($parti['Gender'] == 'm') {
         </table>
     </td>
 </tr>
-<?php //if is in the students or residents table: ?>
+<?php
+include "../include/dbconnopen.php";
+$determine_if_la_casa_sqlsafe="SELECT COUNT(*) FROM La_Casa_Students WHERE"
+        . "Participant_ID_Students='" . 
+        mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+$determine_la_casa=mysqli_query($cnnTRP, $determine_if_la_casa_sqlsafe);
+$lc_yes_no=mysqli_fetch_row($determine_la_casa);
+if ($lc_yes_no[0]>0){
+?>
 <tr>
 <td colspan="3"><h4>La Casa Information</h4>
     <table class="inner_table">
@@ -420,7 +428,7 @@ if ($parti['Gender'] == 'm') {
         $financial_data=mysqli_query($cnnTRP, $find_financial_data_sqlsafe);
         while ($findat=mysqli_fetch_row($financial_data)){
             ?>
-        <tr><td></td>
+        <tr><td>(coming soon)</td>
             <td><?php echo number_format($findat[0]); ?></td>
             <td><?php echo number_format($findat[1]); ?></td>
             <td><?php echo number_format($findat[2]); ?></td>
@@ -434,6 +442,11 @@ if ($parti['Gender'] == 'm') {
     </table>
 </td>
 </tr>
+
+<?php //end La Casa section
+}
+?>
+
 <tr>
     <td colspan="3"><!--Program Participation: separate sections for each program, since the info being tracked is so different...
         Allow them to add people to programs here, too:
