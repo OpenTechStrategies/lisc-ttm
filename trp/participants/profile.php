@@ -373,6 +373,38 @@ if ($parti['Gender'] == 'm') {
         </table>
     </td>
 </tr>
+<?php //if is in the students or residents table: ?>
+<tr>
+<td colspan="3"><h4>La Casa Information</h4>
+    <table>
+        <caption>College Data</caption>
+        <tr><th>Grade Level</th><th>Major</th><th>Community College</th>
+            <th>Four Year College</th><th>Fall Semester Credits</th>
+            <th>Spring Semester Credits</th>
+        </tr>
+        <?php
+        include "../include/dbconnopen.php";
+        $find_college_data_sqlsafe="SELECT College_Grade_Level, Major, Comm_College,"
+                . " Four_yr_College, Credits_Fall, Credits_Spring FROM "
+                . "La_Casa_Students WHERE Participant_ID_Students='" . 
+                mysqli_real_escape_string($parti['Participant_ID']) . "'";
+        
+        $college_data=mysqli_query($cnnTRP, $find_college_data_sqlsafe);
+        while ($coldat=mysqli_fetch_row($college_data)){
+            ?>
+        <tr><td><?php echo $coldat[0]; ?></td>
+            <td><?php echo $coldat[1]; ?></td>
+            <td><?php echo $coldat[2]; ?></td>
+            <td><?php echo $coldat[3]; ?></td>
+            <td><?php echo $coldat[4]; ?></td>
+            <td><?php echo $coldat[5]; ?></td>
+        </tr>
+                <?php
+        }
+        ?>
+    </table>
+</td>
+</tr>
 <tr>
     <td colspan="3"><!--Program Participation: separate sections for each program, since the info being tracked is so different...
         Allow them to add people to programs here, too:
