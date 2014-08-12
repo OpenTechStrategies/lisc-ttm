@@ -414,7 +414,7 @@ if ($parti['Gender'] == 'm') {
         include "../include/dbconnopen.php";
         $find_financial_data_sqlsafe="SELECT Tuition, Fees, Other_Costs, "
                 . "La_Casa_Rent FROM "
-                . "La_Casa_Students WHERE Participant_ID_Residents='" . 
+                . "La_Casa_Students WHERE Participant_ID_Students='" . 
                 mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
         
         $financial_data=mysqli_query($cnnTRP, $find_financial_data_sqlsafe);
