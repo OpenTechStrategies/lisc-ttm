@@ -23,8 +23,10 @@ DROP TABLE IF EXISTS `La_Casa_Residents`;
 
 CREATE TABLE `La_Casa_Residents`
 (
-PRIMARY KEY `Resident_ID` int(11) NOT NULL AUTO_INCREMENT,
-INDEX (`Participant_ID_Residents`)
+`Resident_ID` int(11) NOT NULL AUTO_INCREMENT,
+PRIMARY KEY `Resident_ID`,
+`Participant_ID_Residents` int(11),
+INDEX `par_ind_res` (`Participant_ID_Residents`),
 FOREIGN KEY (`Participant_ID_Residents`) REFERENCES `Participants`
     (`Participant_ID`)
     ON DELETE CASCADE
@@ -93,8 +95,11 @@ DROP TABLE IF EXISTS `La_Casa_Students`;
 
 CREATE TABLE `La_Casa_Students`
 (
-PRIMARY KEY `Student_ID` int(11) NOT NULL AUTO_INCREMENT,
-CONSTRAINT FOREIGN KEY `Participant_ID` int(11) REFERENCES Participants
+`Student_ID` int(11) NOT NULL AUTO_INCREMENT,
+PRIMARY KEY `Student_ID`,
+`Participant_ID_Students` int(11),
+INDEX `par_ind_stu` (`Participant_ID_Students`),
+FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
     (`Participant_ID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
