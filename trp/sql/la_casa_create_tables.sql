@@ -106,8 +106,8 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `College_Grade_Level` int(11), -- will change over time.  Store elsewhere?
 `Major` varchar(45),
 `Minor` varchar(45),
-`Comm_College` int(11),
-`Four_yr_College` int(11),
+`Comm_College` varchar(45),
+`Four_yr_College` varchar(45),
 `Selectivity` varchar(45),
 `Expected_Match` int(11),
 `Actual_Match` int(11),

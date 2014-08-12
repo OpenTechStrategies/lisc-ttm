@@ -388,8 +388,10 @@ if ($parti['Gender'] == 'm') {
                 . " Four_yr_College, Credits_Fall, Credits_Spring FROM "
                 . "La_Casa_Students WHERE Participant_ID_Students='" . 
                 mysqli_real_escape_string($parti['Participant_ID']) . "'";
+        echo $find_college_data_sqlsafe; //testing output
         
         $college_data=mysqli_query($cnnTRP, $find_college_data_sqlsafe);
+        print_r($college_data); //testing output
         while ($coldat=mysqli_fetch_row($college_data)){
             ?>
         <tr><td><?php echo $coldat[0]; ?></td>
