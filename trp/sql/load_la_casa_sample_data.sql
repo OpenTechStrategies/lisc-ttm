@@ -17,17 +17,17 @@ VALUES
 '(312) 888-9909', 'juanalopez@gmail.com', 'F', '1995-8-17', 'Hispanic', '',
 '(312) 776-8976'
 ),
-('Ricardo', 'Mendoza', '1818', 'S', '', 'IL', 'Chicago', '60608',
+('Ricardo', 'Mendoza', 'Paulina', '1818', 'S', '', 'IL', 'Chicago', '60608',
 '(773) 884-2314', 'ricardoooo@yahoo.com', 'M', '1996-6-7', 'Black', '',
 '(773) 162-2231'
 ),
-('Maxwell', 'Smith', '1818', 'S', '', 'IL', 'Chicago', '60608',
+('Maxwell', 'Smith', 'Paulina', '1818', 'S', '', 'IL', 'Chicago', '60608',
 '', 'maxsmith@hotmail.com', 'M', '1995-9-8', 'White', '',
 '(847) 876-5543'
 );
 
-INSERT INTO La_Casa_Residents
-(Participant_ID_Residents, Group, Handbook, Status, Floor, Pod, Room_Number,
+/*INSERT INTO La_Casa_Residents
+(Participant_ID_Residents, Handbook, Status, Floor, Pod, Room_Number,
 Key_Card, App_Received, App_Completed, Roommate, Rmmate_Move_In, LC_Username,
 LC_Password, LC_Print_Code, HS_ID, ACT, HS_GPA_raw, HS_GPA_weight, 
 Mother_Education, Father_Education, First_Gen, 24_older, Master_plus,
@@ -38,7 +38,7 @@ Move_In, Move_In_Registration, Move_In_Address, Move_In_Note, Orientation,
 EC1_First_Name, EC1_Last_Name, EC1_Phone, EC1_Relationship, EC2_First_Name,
 EC2_Last_Name,  EC2_Phone, EC2_Relationship, Scholarship)
 VALUES
-('', '', '', 'Complete', '', '', '', '', '2014-4-3', '2014-4-3', '', '', 
+('',  '', 'Complete', '', '', '', '', '2014-4-3', '2014-4-3', '', '', 
 'jlopez', 'LCRC2014', '', '', '', '', '', '', '', '', '0', '0', '0', '0', '0', 
 '0', '0', '4', '3', '25070', '0', '0', '.4', 'Open House 7/19/2014', 'Complete.',
 '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
@@ -73,4 +73,4 @@ VALUES
 ('', 'Freshman', 'Poetry', 'English', 'None', 'Columbia College',
 '', '', '', '', '', '', '', '', '2013-14', '', '40000', '1500', '2800', '6255',
 '53745', '5730', '4720', '31000', '3500', '', '3500', '', '1350', '', '', ''
-);
+);*/
