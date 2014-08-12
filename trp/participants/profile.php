@@ -387,7 +387,7 @@ if ($parti['Gender'] == 'm') {
         $find_college_data_sqlsafe="SELECT College_Grade_Level, Major, Comm_College,"
                 . " Four_yr_College, Credits_Fall, Credits_Spring FROM "
                 . "La_Casa_Students WHERE Participant_ID_Students='" . 
-                mysqli_real_escape_string($parti['Participant_ID']) . "'";
+                mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
         echo $find_college_data_sqlsafe; //testing output
         
         $college_data=mysqli_query($cnnTRP, $find_college_data_sqlsafe);
