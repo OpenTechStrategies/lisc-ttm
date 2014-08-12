@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS `La_Casa_Residents`;
 CREATE TABLE `La_Casa_Residents`
 (
 PRIMARY KEY `Resident_ID` int(11) NOT NULL AUTO_INCREMENT,
+INDEX (`Participant_ID_Residents`)
 FOREIGN KEY (`Participant_ID_Residents`) REFERENCES `Participants`
     (`Participant_ID`)
     ON DELETE CASCADE
