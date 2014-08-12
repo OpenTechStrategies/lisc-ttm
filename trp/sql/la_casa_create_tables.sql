@@ -95,17 +95,46 @@ CONSTRAINT FOREIGN KEY `Participant_ID` int(11) REFERENCES Participants
     (`Participant_ID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
+`College_Grade_Level` int(11), -- will change over time.  Store elsewhere?
+`Major` varchar(45),
+`Minor` varchar(45),
+`Comm_College` int(11),
+`Four_yr_College` int(11),
+`Selectivity` varchar(45),
+`Expected_Match` int(11),
+`Actual_Match` int(11),
+`Credits_Fall` int(11).
+`Credits_Spring` int(11),
+`Spring_GPA` varchar(45),
+`Summer_GPA` varchar(45),
+`Fall_GPA` varchar(45),
+`School_Year` int(11),
+`Goal_Ed` varchar(45),
+`Tuition` int(11),
+`Fees` int(11),
+`Other_Costs` int(11), --food, transportation, books
+`La_Casa_Rent` int(11),
+`College_Stated_Cost` int(11),
+`Pell_Grant` int(11),
+`MAP_Grant` int(11),
+`Scholarships` int(11),
+`Federal_Sub_Loan` int(11),
+`Federal_Unsub_Loan` int(11),
+`Self_Help` int(11),
+`Savings` int(11),
+`Family_Help` int(11),
 `College_ID` int(11),
 `HS_ID` int(11),
-`Major` varchar(45),
 `HS_Grad_Date` date,
-`Col_Grad_Date` date,
 `HS_GPA` varchar(5),
-`Col_Cum_GPA` varchar(5),
-`Term_GPA` varchar(5),
 `Academic_Advisor` varchar(100),
 `Advisor_Phone` varchar(45),
-`Credits_Completed` varchar(45),
-`Credits Needed` varchar(45)
 ) ENGINE=InnoDB DEFAULT CHARSET;
 
+-- LOCK TABLES `Participants` WRITE; -- do I need to lock the table to add cols?
+
+ALTER TABLE `Participants` ADD
+`Email_2` varchar(60),
+`Mobile_Phone` varchar(45);
+
+-- UNLOCK TABLES;
