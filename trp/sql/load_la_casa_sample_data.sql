@@ -1,4 +1,6 @@
-/* Data from La Casa will be entered into the Participants table, the new
+/* The load_la_casa_sample_participants.sql file must be run before this file.
+ * 
+ * Data from La Casa will be entered into the Participants table, the new
  * La_Casa_Residents table, and the new La_Casa_Students table.
  *
  * This is sample data for three people to be entered into those three tables.
@@ -7,24 +9,7 @@
  * ID generated from the insertion into the Participants table.
 */
 
-/*INSERT INTO Participants 
-(First_Name, Last_Name, Address_Street_Name, Address_Street_Num,
-Address_Street_Direction, Address_Street_Type, Address_State, Address_City,
-Address_Zipcode, Phone, Email, Gender, DOB, Race, Email_2, Mobile_Phone
-)
-VALUES
-('Juana', 'Lopez', 'Paulina', '1818', 'S', '', 'IL', 'Chicago', '60608', 
-'(312) 888-9909', 'juanalopez@gmail.com', 'F', '1995-8-17', 'Hispanic', '',
-'(312) 776-8976'
-),
-('Ricardo', 'Mendoza', 'Paulina', '1818', 'S', '', 'IL', 'Chicago', '60608',
-'(773) 884-2314', 'ricardoooo@yahoo.com', 'M', '1996-6-7', 'Black', '',
-'(773) 162-2231'
-),
-('Maxwell', 'Smith', 'Paulina', '1818', 'S', '', 'IL', 'Chicago', '60608',
-'', 'maxsmith@hotmail.com', 'M', '1995-9-8', 'White', '',
-'(847) 876-5543'
-);*/
+
 
 INSERT INTO La_Casa_Residents
 (Participant_ID_Residents, Handbook, Status, Floor, Pod, Room_Number,
