@@ -13,9 +13,8 @@ $site_sqlsafe=mysqli_real_escape_string($cnnLISC, $_POST['site']);
 $privilege_sqlsafe=mysqli_real_escape_string($cnnLISC, $_POST['privilege']);
 $program_sqlsafe=  mysqli_real_escape_string($cnnLISC, $_POST['program']);
 
-$edit_privilege_level = "UPDATE Users_Privileges SET Site_Privilege_ID='" . $privilege_sqlsafe . "', Program_Access='".$program_sqlsafe."' WHERE
+$edit_privilege_level_sqlsafe = "UPDATE Users_Privileges SET Site_Privilege_ID='" . $privilege_sqlsafe . "', Program_Access='" . $program_sqlsafe . "' WHERE
     User_ID='" . $user_sqlsafe . "' AND Privilege_Id='" . $site_sqlsafe . "'";
-echo $edit_privilege_level;
-mysqli_query($cnnLISC, $edit_privilege_level);
+mysqli_query($cnnLISC, $edit_privilege_level_sqlsafe);
 include "../include/dbconnclose.php";
 ?>
