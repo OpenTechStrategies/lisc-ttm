@@ -120,7 +120,7 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `Goal_Ed` varchar(45),
 `Tuition` int(11),
 `Fees` int(11),
-`Other_Costs` int(11), --food, transportation, books
+`Other_Costs` int(11), -- food, transportation, books
 `La_Casa_Rent` int(11),
 `College_Stated_Cost` int(11),
 `Pell_Grant` int(11),
@@ -136,7 +136,7 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `HS_Grad_Date` date,
 `HS_GPA` varchar(5),
 `Academic_Advisor` varchar(100),
-`Advisor_Phone` varchar(45),
+`Advisor_Phone` varchar(45)
 ) ENGINE=InnoDB;
 
 -- LOCK TABLES `Participants` WRITE; -- do I need to lock the table to add cols?
