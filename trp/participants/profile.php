@@ -373,6 +373,80 @@ if ($parti['Gender'] == 'm') {
         </table>
     </td>
 </tr>
+<?php
+include "../include/dbconnopen.php";
+$determine_if_la_casa_sqlsafe="SELECT COUNT(*) FROM La_Casa_Students WHERE"
+        . " Participant_ID_Students='" . 
+        mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+$determine_la_casa=mysqli_query($cnnTRP, $determine_if_la_casa_sqlsafe);
+$lc_yes_no=mysqli_fetch_row($determine_la_casa);
+if ($lc_yes_no[0]>0){
+?>
+<tr>
+<td colspan="3"><h4>La Casa Information</h4>
+    <table class="inner_table">
+        <caption>College Data</caption>
+        <tr><th>Grade Level</th><th>Major</th><th>Community College</th>
+            <th>Four Year College</th><th>Fall Semester Credits</th>
+            <th>Spring Semester Credits</th>
+        </tr>
+        <?php
+        include "../include/dbconnopen.php";
+        $find_college_data_sqlsafe="SELECT College_Grade_Level, Major, Comm_College,"
+                . " Four_yr_College, Credits_Fall, Credits_Spring FROM "
+                . "La_Casa_Students WHERE Participant_ID_Students='" . 
+                mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+        
+        $college_data=mysqli_query($cnnTRP, $find_college_data_sqlsafe);
+        while ($coldat=mysqli_fetch_row($college_data)){
+            ?>
+        <tr><td><?php echo $coldat[0]; ?></td>
+            <td><?php echo $coldat[1]; ?></td>
+            <td><?php echo $coldat[2]; ?></td>
+            <td><?php echo $coldat[3]; ?></td>
+            <td><?php echo $coldat[4]; ?></td>
+            <td><?php echo $coldat[5]; ?></td>
+        </tr>
+                <?php
+        }
+        ?>
+    </table>
+    
+    <p></p>
+    
+    <table class="inner_table">
+        <caption>Financial Information</caption>
+        <tr><th>Household AGI</th><th>Tuition</th><th>Fees</th>
+            <th>Other</th><th>La Casa Rent</th><th>Calculated Costs</th></tr>
+        <?php
+        include "../include/dbconnopen.php";
+        $find_financial_data_sqlsafe="SELECT Tuition, Fees, Other_Costs, "
+                . "La_Casa_Rent FROM "
+                . "La_Casa_Students WHERE Participant_ID_Students='" . 
+                mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+        
+        $financial_data=mysqli_query($cnnTRP, $find_financial_data_sqlsafe);
+        while ($findat=mysqli_fetch_row($financial_data)){
+            ?>
+        <tr><td>(coming soon)</td>
+            <td><?php echo number_format($findat[0]); ?></td>
+            <td><?php echo number_format($findat[1]); ?></td>
+            <td><?php echo number_format($findat[2]); ?></td>
+            <td><?php echo number_format($findat[3]); ?></td>
+            <td><?php $costs=$findat[0]+$findat[1]+$findat[2]+$findat[3];
+            echo number_format($costs);?></td>
+        </tr>
+                <?php
+        }
+        ?>
+    </table>
+</td>
+</tr>
+
+<?php //end La Casa section
+}
+?>
+
 <tr>
     <td colspan="3"><!--Program Participation: separate sections for each program, since the info being tracked is so different...
         Allow them to add people to programs here, too:
