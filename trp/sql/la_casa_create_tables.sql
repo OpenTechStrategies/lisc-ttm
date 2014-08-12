@@ -87,7 +87,7 @@ FOREIGN KEY (`Participant_ID_Residents`) REFERENCES `Participants`
 `EC2_Phone` varchar(45), -- or int?
 `EC2_Relationship` varchar(45), -- or list to reference via int?
 `Scholarship` int(11)
-) ENGINE=InnoDB DEFAULT CHARSET;
+) ENGINE=InnoDB;
 
 
 
@@ -111,7 +111,7 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `Selectivity` varchar(45),
 `Expected_Match` int(11),
 `Actual_Match` int(11),
-`Credits_Fall` int(11).
+`Credits_Fall` int(11),
 `Credits_Spring` int(11),
 `Spring_GPA` varchar(45),
 `Summer_GPA` varchar(45),
@@ -137,14 +137,14 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `HS_GPA` varchar(5),
 `Academic_Advisor` varchar(100),
 `Advisor_Phone` varchar(45),
-) ENGINE=InnoDB DEFAULT CHARSET;
+) ENGINE=InnoDB;
 
 -- LOCK TABLES `Participants` WRITE; -- do I need to lock the table to add cols?
 
 /* ALTER TABLE `Participants` ADD
    `Email_2` varchar(60); */
 
-ALTER TABLE `Participants` ADD
-`Mobile_Phone` varchar(45);
+/*ALTER TABLE `Participants` ADD
+`Mobile_Phone` varchar(45);*/
 
 -- UNLOCK TABLES;
