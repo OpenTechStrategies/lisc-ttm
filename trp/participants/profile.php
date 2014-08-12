@@ -376,7 +376,7 @@ if ($parti['Gender'] == 'm') {
 <?php //if is in the students or residents table: ?>
 <tr>
 <td colspan="3"><h4>La Casa Information</h4>
-    <table>
+    <table class="inner_table">
         <caption>College Data</caption>
         <tr><th>Grade Level</th><th>Major</th><th>Community College</th>
             <th>Four Year College</th><th>Fall Semester Credits</th>
@@ -388,10 +388,8 @@ if ($parti['Gender'] == 'm') {
                 . " Four_yr_College, Credits_Fall, Credits_Spring FROM "
                 . "La_Casa_Students WHERE Participant_ID_Students='" . 
                 mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
-        echo $find_college_data_sqlsafe; //testing output
         
         $college_data=mysqli_query($cnnTRP, $find_college_data_sqlsafe);
-        print_r($college_data); //testing output
         while ($coldat=mysqli_fetch_row($college_data)){
             ?>
         <tr><td><?php echo $coldat[0]; ?></td>
@@ -400,6 +398,35 @@ if ($parti['Gender'] == 'm') {
             <td><?php echo $coldat[3]; ?></td>
             <td><?php echo $coldat[4]; ?></td>
             <td><?php echo $coldat[5]; ?></td>
+        </tr>
+                <?php
+        }
+        ?>
+    </table>
+    
+    <p></p>
+    
+    <table class="inner_table">
+        <caption>Financial Information</caption>
+        <tr><th>Household AGI</th><th>Tuition</th><th>Fees</th>
+            <th>Other</th><th>La Casa Rent</th><th>Calculated Costs</th></tr>
+        <?php
+        include "../include/dbconnopen.php";
+        $find_financial_data_sqlsafe="SELECT Tuition, Fees, Other_Costs, "
+                . "La_Casa_Rent FROM "
+                . "La_Casa_Students WHERE Participant_ID_Residents='" . 
+                mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+        
+        $financial_data=mysqli_query($cnnTRP, $find_financial_data_sqlsafe);
+        while ($findat=mysqli_fetch_row($financial_data)){
+            ?>
+        <tr><td></td>
+            <td><?php echo number_format($findat[0]); ?></td>
+            <td><?php echo number_format($findat[1]); ?></td>
+            <td><?php echo number_format($findat[2]); ?></td>
+            <td><?php echo number_format($findat[3]); ?></td>
+            <td><?php $costs=$findat[0]+$findat[1]+$findat[2]+$findat[3];
+            echo number_format($costs);?></td>
         </tr>
                 <?php
         }
