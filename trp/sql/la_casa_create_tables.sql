@@ -140,12 +140,11 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `Advisor_Phone` varchar(45)
 ) ENGINE=InnoDB;
 
--- LOCK TABLES `Participants` WRITE; -- do I need to lock the table to add cols?
 
-/* ALTER TABLE `Participants` ADD
-   `Email_2` varchar(60); */
 
-/*ALTER TABLE `Participants` ADD
-`Mobile_Phone` varchar(45);*/
+ ALTER TABLE `Participants` ADD
+   `Email_2` varchar(60); 
 
--- UNLOCK TABLES;
+ALTER TABLE `Participants` ADD
+`Mobile_Phone` varchar(45);
+
