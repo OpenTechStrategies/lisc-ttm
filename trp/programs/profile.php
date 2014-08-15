@@ -20,11 +20,8 @@ $program = mysqli_fetch_array($program_info);
 <div id="program_profile" class="content_block">
 
     <h3>Program Profile - <?php echo $program['Program_Name']; ?></h3><hr/><br/>
-    <?php
-    //Chicago Commons Early Childhood Program
-    if ($program['Program_ID'] == 1) {
-        ?>
-        <table width="100%" border="1">
+    
+    <table width="100%" border="1">
             <tr>
                 <td width="40%">
                     <h4>Program Enrollment</h4>
@@ -95,6 +92,12 @@ $program = mysqli_fetch_array($program_info);
 
                     <br/>
                     <br/>
+    
+    <?php
+    //Chicago Commons Early Childhood Program
+    if ($program['Program_ID'] == 1) {
+        ?>
+        
                     <!-- program notes.  documents uploaded by program users (not participants, but system users) -->
                     <h4>Upload Notes</h4>
                     <span class="helptext">Uploaded information will be saved in the system as a supporting document for this program.
@@ -672,12 +675,21 @@ $program = mysqli_fetch_array($program_info);
 
                 </td>
             </tr>
-        </table>
+        
 
         <?php
     }
+    else if ($program['Program_ID'] == 6){
+    ?>
+        <tr><td>Test.  This is where aggregated data would go.</td></tr>
+    <?php
+}
+?>
+<!-- end table that holds all elements for La Casa and Early Childhood. -->
+</table>
+    <?php
     //Middle School to High School
-    else if ($program['Program_ID'] == 2) {
+    if ($program['Program_ID'] == 2) {
         ?>
         <table>
             <tr>
@@ -1918,7 +1930,11 @@ else if ($program['Program_ID'] == 5) {
                                         </table>
     <?php
 }
+
+//if La Casa, do not show Sessions block.
+if ($program['Program_ID'] != 6){
 ?>
+        
         <div style="border: #ccc solid thin;">
             <br />
             <table>
@@ -2183,6 +2199,10 @@ else if ($program['Program_ID'] == 5) {
                 </tr>
             </table>
         </div>
+<?php
+//end of sessions block, visible for all but La Casa
+}
+?>
                     
                                     </div>
                                     <br/><br/>

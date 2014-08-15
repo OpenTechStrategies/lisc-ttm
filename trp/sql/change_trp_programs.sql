@@ -7,7 +7,7 @@
 
 USE ttm-trp;
 
-INSERT INTO Programs (Program_Name) VALUES ('La Casa');
+INSERT INTO Programs (Program_ID, Program_Name) VALUES ('6', 'La Casa');
 
 /*Connect sample participants to the La Casa program.  Again, we will 
 want to change the way we do this later but I need to finish it for now.*/
