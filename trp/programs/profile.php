@@ -29,7 +29,8 @@ $program = mysqli_fetch_array($program_info);
                     <div class="add_participant">
                         <a href="javascript:;" onclick="
                                 $('#search_to_add_participant').slideToggle();
-                           " style="font-size:.8em;" class="no_view" >Add a new participant...</a>
+                           " style="font-size:.8em;" class="no_view" >Add a 
+                            person who is already in the database to this program...</a>
                         <div id="search_to_add_participant">
 
                             <!--- search area.  Search here for people to add to this program.
@@ -75,6 +76,282 @@ $program = mysqli_fetch_array($program_info);
                             </table>
                             <!-- choose person and add to program here. -->
                             <div id="search_results"></div>
+                        </div>
+                        <a href="javascript:;" onclick="
+                                $('#create_and_add_participant').slideToggle();
+                           " style="font-size:.8em;" class="no_view" >Add an 
+                            entirely new person to this program...</a>
+                        <div id="create_and_add_participant">
+                            <table class="search_table">
+                                <tr>
+                                    <td><strong>First Name:</strong></td>
+                                    <td><input type="text" id="name_add" style="width:100px;"/></td>
+                                    <td><strong>Last Name:</strong></td>
+                                    <td><input type="text" id="surname_add" style="width:100px;" /></td>
+                                    <td><strong>DOB:</strong></td>
+                                    <td><input type="text" id="dob_add" style="width:70px;" /></td>
+                                    <td><strong>Gender:</strong></td>
+                                    <td><select id="gender_add">
+                                            <option value="">---------</option>
+                                            <option value="m">Male</option>
+                                            <option value="f">Female</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email 1</strong></td>
+                                    <td><input type="text" id="email1_add"></td>
+                                    <td><strong>Mailing Address</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Mailing City</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Mailing State</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Zipcode</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Home Phone</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Email 2</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Mobile Phone </strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8"><strong>For La Casa Residents</strong></td>
+                                </tr>    
+                                <tr>
+                                    <td><strong>Group</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Handbook</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Status</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Floor</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Pod</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Room Number</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Key Card Number</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Application Received</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Application Completed</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Roommate</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Roommate Move In Date</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>LCRC Username</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>LCRC Password</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>LCRC Print Code</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>High School</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>ACT Score</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>HS GPA (Unweighted)</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>HS GPA (weighted)</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Highest level of education completed by Mother</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Highest level of education completed by Father</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>First Generation College Student</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>24 or older?</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Master or above?</strong></td>
+                                    <td><input type=text" id=""></td>
+                                    <td><strong>Married?</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Military?</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Has children?</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Homeless?</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Self Sustaining (if student income >=$12,510</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tax Exemptions</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Household size (per La Casa application)</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Parent 1 AGI</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Parent 2 AGI</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Student AGI</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Actual AMI</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Application Source</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Notes</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email: Pack This!</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Email: Move-in and Orientation</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Email: Roommate</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Move-In</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Move-In Registration</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Move-In Address</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Move-In Note</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Orientation Date</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Orientation Time</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Emergency Contact (First Name)</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Emergency Contact (Last Name)</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Emergency Contact Phone</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Emergency Contact Relationship</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Emergency Contact 2 (First Name)</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Emergency Contact 2 (Last Name)</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Emergency Contact 2 Phone</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Emergency Contact 2 Relationship</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>La Casa Scholarship (Annual Award)</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>College Grade Level</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Major</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Minor</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Community College</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Four Year College</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Selectivity (of Current College)</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Student's Expected Match Level</strong></td>
+                                    <td><input type=text" id=""></td>
+                                    <td><strong>Student's Actual Match Level</strong></td>
+                                    <td><input type=text" id=""></td>
+                                    <td><strong>Credits Accrued (by Fall)</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong> Credits Accrued (by Spring)</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Spring GPA</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Summer GPA</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Fall GPA</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>School Year</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Highest Level of Education - Goal</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Tuition</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Mandatory Fees (do not include loan fees)</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Food, Transportation, and Books</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>La Casa Rent</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Cost of Attendance according to college</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Pell Grant</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>MAP Grant</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>University Scholarships</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Federal Subsidized Loan</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Federal Unsubsidized Loan</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Work-Study or other Self-Help
+                                        (enter $3,500 for all)</strong></td>
+                                    <td><input type="text" id=""></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Savings</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong>Family Assistance/Sponsor/Other</strong></td>
+                                    <td><input type="text" id=""></td>
+                                    <td><strong></strong></td>
+                                    <td><strong></strong></td>
+                                    <td><strong></strong></td>
+                                    <td><strong></strong></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="8" style="text-align:center;"><input type="button" value="Search" onclick="
+                                            $.post(
+                                                    '',
+                                                    {
+                                                        first: document.getElementById('name_search').value,
+                                                        last: document.getElementById('surname_search').value,
+                                                        dob: document.getElementById('dob_search').value,
+                                                        gender: document.getElementById('gender_search').value,
+                                                        program: <?php echo $program['Program_ID']; ?>,
+                                                        program_add: 1
+                                                    },
+                                            function(response) {
+                                                //document.write(response);
+                                                document.getElementById('add_person_results').innerHTML = response;
+                                            }
+                                            )"/></td>
+                                </tr>
+                            </table>
+                            <div id="add_person_results"></div>
                         </div>
                     </div>
                     <ul style="list-style-type:none;">
