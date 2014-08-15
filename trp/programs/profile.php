@@ -352,14 +352,14 @@ $program = mysqli_fetch_array($program_info);
                                             gender_add: document.getElementById('gender_add').value,
                                             race_add: document.getElementById('race_add').value,
                                             program: <?php echo $program['Program_ID']; ?>,
-                                            email1: document.getElementById('email1').value,
+                                            email1: document.getElementById('email1_add').value,
                                             city_add: document.getElementById('city_add').value,
                                             state_add: document.getElementById('state_add').value,
                                             zip_add: document.getElementById('zip_add').value,
                                             phone_add: document.getElementById('phone_add').value,
                                             email2_add: document.getElementById('email2_add').value,
-                                            mobile: document.getElementById('mobile_add').value,
-                                            group_add: document.getElementById('group_add').value,
+                                            mobile: document.getElementById('mobile_add').value
+                                            /*group_add: document.getElementById('group_add').value,
                                             handbook_add: document.getElementById('hndbk_add').value,
                                             status_add: document.getElementById('status_add').value,
                                             floor_add: document.getElementById('floor_add').value,
@@ -438,7 +438,7 @@ $program = mysqli_fetch_array($program_info);
                                             unsubload_add: document.getElementById('unsubloan_add').value,
                                             selfhelp_add: document.getElementById('selfhelp_add').value,
                                             savings_add: document.getElementById('savings_add').value,
-                                            moneyhelp_add: document.getElementById('moneyhelp_add').value
+                                            moneyhelp_add: document.getElementById('moneyhelp_add').value*/
 
                                         },
                                     function(response) {

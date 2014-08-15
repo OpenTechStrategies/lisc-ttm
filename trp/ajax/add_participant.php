@@ -33,6 +33,7 @@ if ($_POST['action']=='add_to_program'){
                '" . mysqli_real_escape_string($cnnTRP, $_POST['gender_add']) . "',
                '" . mysqli_real_escape_string($cnnTRP, $_POST['dob_add']) . "',
                '" . mysqli_real_escape_string($cnnTRP, $_POST['race_add']) . "')";
+    echo $create_new_participant_lc; //testing output
     mysqli_query($cnnTRP, $create_new_participant_lc);
     $new_id=mysqli_insert_id($cnnTRP); //returns the new participant ID
     
