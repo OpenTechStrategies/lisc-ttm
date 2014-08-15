@@ -14,6 +14,7 @@ $program = mysqli_fetch_array($program_info);
         $('#programs_selector').addClass('selected');
         $('#search_to_add_participant').hide();
         $('.attendee_list').hide();
+        $('#create_and_add_participant').hide();
     });
 </script>
 
@@ -77,12 +78,12 @@ $program = mysqli_fetch_array($program_info);
                             <!-- choose person and add to program here. -->
                             <div id="search_results"></div>
                         </div>
-                        <a href="javascript:;" onclick="
+                        <br><a href="javascript:;" onclick="
                                 $('#create_and_add_participant').slideToggle();
                            " style="font-size:.8em;" class="no_view" >Add an 
                             entirely new person to this program...</a>
                         <div id="create_and_add_participant">
-                            <table class="search_table">
+                            <table class="trp_add_table">
                                 <tr>
                                     <td><strong>First Name:</strong></td>
                                     <td><input type="text" id="name_add" style="width:100px;"/></td>
@@ -99,233 +100,240 @@ $program = mysqli_fetch_array($program_info);
                                     </td>
                                 </tr>
                                 <tr>
+                                     <td><strong>Race:</strong></td>
+                                    <td><input type="text" id="race_add" style="width:100px;"/></td>
+                                    <td colspan="6"></td>
+                                </tr>
+                                <tr>
                                     <td><strong>Email 1</strong></td>
                                     <td><input type="text" id="email1_add"></td>
                                     <td><strong>Mailing Address</strong></td>
                                     <td><input type="text" id=""></td>
                                     <td><strong>Mailing City</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="city_add"></td>
                                     <td><strong>Mailing State</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="state_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Zipcode</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="zip_add"></td>
                                     <td><strong>Home Phone</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="phone_add"></td>
                                     <td><strong>Email 2</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="email2_add"></td>
                                     <td><strong>Mobile Phone </strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="mobile_add"></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"><strong>For La Casa Residents</strong></td>
                                 </tr>    
                                 <tr>
                                     <td><strong>Group</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="group_add"></td>
                                     <td><strong>Handbook</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="hndbk_add"></td>
                                     <td><strong>Status</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="status_add"></td>
                                     <td><strong>Floor</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="floor_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Pod</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="pod_add"></td>
                                     <td><strong>Room Number</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="rm_add"></td>
                                     <td><strong>Key Card Number</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="keynum_add"></td>
                                     <td><strong>Application Received</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="apprec_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Application Completed</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="appcom_add"></td>
                                     <td><strong>Roommate</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="rmmate_add"></td>
                                     <td><strong>Roommate Move In Date</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="rmmate_date_add"></td>
                                     <td><strong>LCRC Username</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="username_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>LCRC Password</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="pword_add"></td>
                                     <td><strong>LCRC Print Code</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="print_add"></td>
                                     <td><strong>High School</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="hs_add"></td>
                                     <td><strong>ACT Score</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="act_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>HS GPA (Unweighted)</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="gpaun_add"></td>
                                     <td><strong>HS GPA (weighted)</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="gpaweight_add"></td>
                                     <td><strong>Highest level of education completed by Mother</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="mother_ed_add"></td>
                                     <td><strong>Highest level of education completed by Father</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="father_ed_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>First Generation College Student</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="firstgen_add"></td>
                                     <td><strong>24 or older?</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="age_add"></td>
                                     <td><strong>Master or above?</strong></td>
-                                    <td><input type=text" id=""></td>
+                                    <td><input type=text" id="masters_add"></td>
                                     <td><strong>Married?</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="married_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Military?</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="military_add"></td>
                                     <td><strong>Has children?</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="children_add"></td>
                                     <td><strong>Homeless?</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="homeless_add"></td>
                                     <td><strong>Self Sustaining (if student income >=$12,510</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="selfsust_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Tax Exemptions</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="taxex_add"></td>
                                     <td><strong>Household size (per La Casa application)</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="household_add"></td>
                                     <td><strong>Parent 1 AGI</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="par1agi_add"></td>
                                     <td><strong>Parent 2 AGI</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="par2agi_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Student AGI</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="stntagi_add"></td>
                                     <td><strong>Actual AMI</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="ami_add"></td>
                                     <td><strong>Application Source</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="appsource_add"></td>
                                     <td><strong>Notes</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="notes_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Email: Pack This!</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="pack_email_add"></td>
                                     <td><strong>Email: Move-in and Orientation</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="orient_email_add"></td>
                                     <td><strong>Email: Roommate</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="rmmate_email_add"></td>
                                     <td><strong>Move-In</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="move_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Move-In Registration</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="registration_add"></td>
                                     <td><strong>Move-In Address</strong></td>
+                                    <!-- What is this? -->
                                     <td><input type="text" id=""></td>
                                     <td><strong>Move-In Note</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="move_note_add"></td>
                                     <td><strong>Orientation Date</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="orient_date_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Orientation Time</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="orient_time_add"></td>
                                     <td><strong>Emergency Contact (First Name)</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="ec1first_add"></td>
                                     <td><strong>Emergency Contact (Last Name)</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="ec1last_add"></td>
                                     <td><strong>Emergency Contact Phone</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="ec1phone_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Emergency Contact Relationship</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="ec1rel_add"></td>
                                     <td><strong>Emergency Contact 2 (First Name)</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="ec2first_add"></td>
                                     <td><strong>Emergency Contact 2 (Last Name)</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="ec2last_add"></td>
                                     <td><strong>Emergency Contact 2 Phone</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="ec2phone_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Emergency Contact 2 Relationship</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="ec2rel_add"></td>
                                     <td><strong>La Casa Scholarship (Annual Award)</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="lcschol_add"></td>
                                     <td><strong>College Grade Level</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="grade_add"></td>
                                     <td><strong>Major</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="major_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Minor</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="minor_add"></td>
                                     <td><strong>Community College</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="commcol_add"></td>
                                     <td><strong>Four Year College</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="fourcol_add"></td>
                                     <td><strong>Selectivity (of Current College)</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="selectivity_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Student's Expected Match Level</strong></td>
-                                    <td><input type=text" id=""></td>
+                                    <td><input type=text" id="matchexp_add"></td>
                                     <td><strong>Student's Actual Match Level</strong></td>
-                                    <td><input type=text" id=""></td>
+                                    <td><input type=text" id="matchact_add"></td>
                                     <td><strong>Credits Accrued (by Fall)</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="fall_credits_add"></td>
                                     <td><strong> Credits Accrued (by Spring)</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="spring_credits_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Spring GPA</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="spring_gpa_add"></td>
                                     <td><strong>Summer GPA</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="summer_gpa_add"></td>
                                     <td><strong>Fall GPA</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="fall_gpa_add"></td>
                                     <td><strong>School Year</strong></td>
+                                    <td><input type="text" id="schoolyr_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Highest Level of Education - Goal</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="goaled_add"></td>
                                     <td><strong>Tuition</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="tuition_add"></td>
                                     <td><strong>Mandatory Fees (do not include loan fees)</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="fees_add"></td>
                                     <td><strong>Food, Transportation, and Books</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="othercost_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>La Casa Rent</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="rent_add"></td>
                                     <td><strong>Cost of Attendance according to college</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="colcost_add"></td>
                                     <td><strong>Pell Grant</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="pell_add"></td>
                                     <td><strong>MAP Grant</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="map_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>University Scholarships</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="uschol_add"></td>
                                     <td><strong>Federal Subsidized Loan</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="subloan_add"></td>
                                     <td><strong>Federal Unsubsidized Loan</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="unsubloan_add"></td>
                                     <td><strong>Work-Study or other Self-Help
                                         (enter $3,500 for all)</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="selfhelp_add"></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Savings</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="savings_add"></td>
                                     <td><strong>Family Assistance/Sponsor/Other</strong></td>
-                                    <td><input type="text" id=""></td>
+                                    <td><input type="text" id="moneyhelp_add"></td>
                                     <td><strong></strong></td>
                                     <td><strong></strong></td>
                                     <td><strong></strong></td>
@@ -333,22 +341,111 @@ $program = mysqli_fetch_array($program_info);
                                 </tr>
                                 
                                 <tr>
-                                    <td colspan="8" style="text-align:center;"><input type="button" value="Search" onclick="
-                                            $.post(
-                                                    '',
-                                                    {
-                                                        first: document.getElementById('name_search').value,
-                                                        last: document.getElementById('surname_search').value,
-                                                        dob: document.getElementById('dob_search').value,
-                                                        gender: document.getElementById('gender_search').value,
-                                                        program: <?php echo $program['Program_ID']; ?>,
-                                                        program_add: 1
-                                                    },
-                                            function(response) {
-                                                //document.write(response);
-                                                document.getElementById('add_person_results').innerHTML = response;
-                                            }
-                                            )"/></td>
+                                    <td colspan="8" style="text-align:center;"><input type="button" value="Add" onclick="
+                                    $.post(
+                                        '../ajax/add_participant.php',
+                                        {
+                                            action: 'add_to_program',
+                                            first_add: document.getElementById('name_add').value,
+                                            last_add: document.getElementById('surname_add').value,
+                                            dob_add: document.getElementById('dob_add').value,
+                                            gender_add: document.getElementById('gender_add').value,
+                                            race_add: document.getElementById('race_add').value,
+                                            program: <?php echo $program['Program_ID']; ?>,
+                                            email1: document.getElementById('email1').value,
+                                            city_add: document.getElementById('city_add').value,
+                                            state_add: document.getElementById('state_add').value,
+                                            zip_add: document.getElementById('zip_add').value,
+                                            phone_add: document.getElementById('phone_add').value,
+                                            email2_add: document.getElementById('email2_add').value,
+                                            mobile: document.getElementById('mobile_add').value,
+                                            group_add: document.getElementById('group_add').value,
+                                            handbook_add: document.getElementById('hndbk_add').value,
+                                            status_add: document.getElementById('status_add').value,
+                                            floor_add: document.getElementById('floor_add').value,
+                                            pod_add: document.getElementById('pod_add').value,
+                                            rmnum_add: document.getElementById('rmnum_add').value,
+                                            keynum_add: document.getElementById('keynum_add').value,
+                                            apprec_add: document.getElementById('apprec_add').value,
+                                            appcom_add: document.getElementById('appcom_add').value,
+                                            rmmate_add: document.getElementById('rmmate_add').value,
+                                            rmmate_date_add: document.getElementById('rmmate_date_add').value,
+                                            username_add: document.getElementById('username_add').value,
+                                            pword_add: document.getElementById('pword_add').value,
+                                            print_add: document.getElementById('print_add').value,
+                                            hs_add: document.getElementById('hs_add').value,
+                                            act_add: document.getElementById('act_add').value,
+                                            gpaun_add: document.getElementById('gpaun_add').value,
+                                            gpaweight_add: document.getElementById('gpaweight_add').value,
+                                            mother_ed_add: document.getElementById('mother_ed_add').value,
+                                            father_ed_add: document.getElementById('father_ed_add').value,
+                                            firstgen_add: document.getElementById('firstgen_add').value,
+                                            age_add: document.getElementById('age_add').value,
+                                            masters_add: document.getElementById('masters_add').value,
+                                            married_add: document.getElementById('married_add').value,
+                                            military_add: document.getElementById('military_add').value,
+                                            children_add: document.getElementById('children_add').value,
+                                            homeless_add: document.getElementById('homeless_add').value,
+                                            selfsust_add: document.getElementById('selfsust_add').value,
+                                            taxex_add: document.getElementById('taxex_add').value,
+                                            household_add: document.getElementById('household_add').value,
+                                            par1agi_add: document.getElementById('par1agi_add').value,
+                                            par2agi_add: document.getElementById('par2agi_add').value,
+                                            stdtagi_add: document.getElementById('stntagi_add').value,
+                                            ami_add: document.getElementById('ami_add').value,
+                                            appsource_add: document.getElementById('appsource_add').value,
+                                            notes_add: document.getElementById('notes_add').value,
+                                            pack_email_add: document.getElementById('pack_email_add').value,
+                                            orient_email_add: document.getElementById('orient_email_add').value,
+                                            rmmate_email_add: document.getElementById('rmmate_email_add').value,
+                                            move_add: document.getElementById('move_add').value,
+                                            registration_add: document.getElementById('registration_add').value,
+                                            move_note_add: document.getElementById('move_note_add').value,
+                                            orient_date_add: document.getElementById('orient_date_add').value,
+                                            orient_time_add: document.getElementById('orient_time_add').value,
+                                            ec1first_add: document.getElementById('ec1first_add').value,
+                                            ec1last_add: document.getElementById('ec1last_add').value,
+                                            ec1phone_add: document.getElementById('ec1phone_add').value,
+                                            ec1rel_add: document.getElementById('ec1rel_add').value,
+                                            ec2first_add: document.getElementById('ec2first_add').value,
+                                            ec2last_add: document.getElementById('ec2last_add').value,
+                                            ec2phone_add: document.getElementById('ec2phone_add').value,
+                                            ec2rel_add: document.getElementById('ec2rel_add').value,
+                                            lcschol_add: document.getElementById('lcschol_add').value,
+                                            grade_add: document.getElementById('grade_add').value,
+                                            major_add: document.getElementById('major_add').value,
+                                            minor_add: document.getElementById('minor_add').value,
+                                            commcol_add: document.getElementById('commcol_add').value,
+                                            fourcol_add: document.getElementById('fourcol_add').value,
+                                            selectivity_add: document.getElementById('selectivity_add').value,
+                                            matchexp_add: document.getElementById('matchexp_add').value,
+                                            matchact_add: document.getElementById('matchact_add').value,
+                                            fall_credits_add: document.getElementById('fall_credits_add').value,
+                                            spring_credits_add: document.getElementById('spring_credits_add').value,
+                                            spring_gpa_add: document.getElementById('spring_gpa_add').value,
+                                            fall_gpa_add: document.getElementById('fall_gpa_add').value,
+                                            schoolyr_add: document.getElementById('schoolyr_add').value,
+                                            goaled_add: document.getElementById('goaled_add').value,
+                                            tuition_add: document.getElementById('tuition_add').value,
+                                            fees_add: document.getElementById('fees_add').value,
+                                            othercosts_add: document.getElementById('othercosts_add').value,
+                                            rent_add: document.getElementById('lcrent_add').value,
+                                            colcost_add: document.getElementById('costcol_add').value,
+                                            pell_add: document.getElementById('pell_add').value,
+                                            map_add: document.getElementById('map_add').value,
+                                            uschol_add: document.getElementById('uschol_add').value,
+                                            subloan_add: document.getElementById('subloan_add').value,
+                                            unsubload_add: document.getElementById('unsubloan_add').value,
+                                            selfhelp_add: document.getElementById('selfhelp_add').value,
+                                            savings_add: document.getElementById('savings_add').value,
+                                            moneyhelp_add: document.getElementById('moneyhelp_add').value
+
+                                        },
+                                    function(response) {
+                                        //document.write(response);
+                                        document.getElementById('add_person_results').innerHTML = response;
+                                    }
+                                    )"/></td>
                                 </tr>
                             </table>
                             <div id="add_person_results"></div>
