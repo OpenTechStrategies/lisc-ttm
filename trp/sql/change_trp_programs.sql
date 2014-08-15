@@ -9,3 +9,8 @@ USE ttm-trp;
 
 INSERT INTO Programs (Program_Name) VALUES ('La Casa');
 
+/*Connect sample participants to the La Casa program.  Again, we will 
+want to change the way we do this later but I need to finish it for now.*/
+
+INSERT INTO Participants_Programs (Participant_ID, Program_ID) 
+    VALUES ('69', '6'), ('70', '6'), ('71', '6');
