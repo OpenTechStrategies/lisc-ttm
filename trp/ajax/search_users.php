@@ -111,7 +111,7 @@ if ($_POST['family_search'] == '1') {
                 $.post(
                         '../ajax/add_participant_to_program.php',
                         {
-                            program_id: <?php echo $_POST['program']; ?>,
+                            program_id: <?php echo $_POST['program_id']; ?>,
                             participant: <?php echo $user['Participant_ID']; ?>
                         },
                 function(response) {

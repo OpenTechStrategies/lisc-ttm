@@ -25,13 +25,13 @@ $program = mysqli_fetch_array($program_info);
     <table width="100%" border="1">
             <tr>
                 <td width="40%">
-                    <h4>Program Enrollment</h4>
+                    <h4>Add Participants to Program</h4>
                     <!-- list of people in this program, with links to their profiles. -->
                     <div class="add_participant">
                         <a href="javascript:;" onclick="
                                 $('#search_to_add_participant').slideToggle();
-                           " style="font-size:.8em;" class="no_view" >Add a 
-                            person who is already in the database to this program...</a>
+                           " style="font-size:.8em;" class="no_view" >Add 
+                            an existing participant to this program...</a>
                         <div id="search_to_add_participant">
 
                             <!--- search area.  Search here for people to add to this program.
@@ -65,7 +65,7 @@ $program = mysqli_fetch_array($program_info);
                                                         last: document.getElementById('surname_search').value,
                                                         dob: document.getElementById('dob_search').value,
                                                         gender: document.getElementById('gender_search').value,
-                                                        program: <?php echo $program['Program_ID']; ?>,
+                                                        program_id: <?php echo $program['Program_ID']; ?>,
                                                         program_add: 1
                                                     },
                                             function(response) {
@@ -80,8 +80,8 @@ $program = mysqli_fetch_array($program_info);
                         </div>
                         <br><a href="javascript:;" onclick="
                                 $('#create_and_add_participant').slideToggle();
-                           " style="font-size:.8em;" class="no_view" >Add an 
-                            entirely new person to this program...</a>
+                           " style="font-size:.8em;" class="no_view" >Create a new 
+                            participant and add him/her to this program...</a>
                         <div id="create_and_add_participant">
                             <table class="trp_add_table">
                                 <tr>
@@ -358,13 +358,13 @@ $program = mysqli_fetch_array($program_info);
                                             zip_add: document.getElementById('zip_add').value,
                                             phone_add: document.getElementById('phone_add').value,
                                             email2_add: document.getElementById('email2_add').value,
-                                            mobile: document.getElementById('mobile_add').value
-                                            /*group_add: document.getElementById('group_add').value,
+                                            mobile: document.getElementById('mobile_add').value,
+                                            group_add: document.getElementById('group_add').value,
                                             handbook_add: document.getElementById('hndbk_add').value,
                                             status_add: document.getElementById('status_add').value,
                                             floor_add: document.getElementById('floor_add').value,
                                             pod_add: document.getElementById('pod_add').value,
-                                            rmnum_add: document.getElementById('rmnum_add').value,
+                                            rmnum_add: document.getElementById('rm_add').value, 
                                             keynum_add: document.getElementById('keynum_add').value,
                                             apprec_add: document.getElementById('apprec_add').value,
                                             appcom_add: document.getElementById('appcom_add').value,
@@ -423,14 +423,15 @@ $program = mysqli_fetch_array($program_info);
                                             fall_credits_add: document.getElementById('fall_credits_add').value,
                                             spring_credits_add: document.getElementById('spring_credits_add').value,
                                             spring_gpa_add: document.getElementById('spring_gpa_add').value,
+                                            summer_gpa_add: document.getElementById('summer_gpa_add').value,
                                             fall_gpa_add: document.getElementById('fall_gpa_add').value,
                                             schoolyr_add: document.getElementById('schoolyr_add').value,
                                             goaled_add: document.getElementById('goaled_add').value,
                                             tuition_add: document.getElementById('tuition_add').value,
                                             fees_add: document.getElementById('fees_add').value,
-                                            othercosts_add: document.getElementById('othercosts_add').value,
-                                            rent_add: document.getElementById('lcrent_add').value,
-                                            colcost_add: document.getElementById('costcol_add').value,
+                                            othercosts_add: document.getElementById('othercost_add').value,
+                                            rent_add: document.getElementById('rent_add').value,
+                                            colcost_add: document.getElementById('colcost_add').value,
                                             pell_add: document.getElementById('pell_add').value,
                                             map_add: document.getElementById('map_add').value,
                                             uschol_add: document.getElementById('uschol_add').value,
@@ -438,7 +439,7 @@ $program = mysqli_fetch_array($program_info);
                                             unsubload_add: document.getElementById('unsubloan_add').value,
                                             selfhelp_add: document.getElementById('selfhelp_add').value,
                                             savings_add: document.getElementById('savings_add').value,
-                                            moneyhelp_add: document.getElementById('moneyhelp_add').value*/
+                                            moneyhelp_add: document.getElementById('moneyhelp_add').value
 
                                         },
                                     function(response) {
@@ -451,6 +452,8 @@ $program = mysqli_fetch_array($program_info);
                             <div id="add_person_results"></div>
                         </div>
                     </div>
+                    <hr>
+                    <h4>Current Program Enrollment</h4>
                     <ul style="list-style-type:none;">
                         <?php
                         $get_participants = "SELECT * FROM Participants_Programs INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID WHERE Program_ID='" . $program['Program_ID'] . "' ORDER BY Participants.Last_Name";

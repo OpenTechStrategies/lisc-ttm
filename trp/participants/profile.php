@@ -2066,8 +2066,12 @@ if ($parti['Gender'] == 'm') {
                 </tr>
                 <?php
                 include "../include/dbconnopen.php";
-                $find_college_data_sqlsafe="SELECT College_Grade_Level, Major, Comm_College,"
-                        . " Four_yr_College, Credits_Fall, Credits_Spring FROM "
+                $find_college_data_sqlsafe="SELECT College_Grade_Level, Major, "
+                        . "Minor, Comm_College, "
+                        . " Four_yr_College, Selectivity, Expected_Match, "
+                        . "Actual_Match, Credits_Fall, Credits_Spring, "
+                        . "Spring_GPA, Summer_GPA, Fall_GPA, School_Year, "
+                        . "Goal_Ed FROM "
                         . "La_Casa_Students WHERE Participant_ID_Students='" . 
                         mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
 
@@ -2090,25 +2094,124 @@ if ($parti['Gender'] == 'm') {
 
             <table class="inner_table">
                 <caption>Financial Information</caption>
-                <tr><th>Household AGI</th><th>Tuition</th><th>Fees</th>
-                    <th>Other</th><th>La Casa Rent</th><th>Calculated Costs</th></tr>
+                <tr><th>Tax Exemptions</th>
+                    <th>Household Size (La Casa)</th>
+                    <th>Household Size (TRP) (calculated)</th>
+                    <th>Parent 1 AGI</th>
+                    <th>Parent 2 AGI</th>
+                    <th>Student AGI</th>
+                    <th>AMI</th>
+                    <th>Household AGI (calculated)</th>
+                </tr>
                 <?php
                 include "../include/dbconnopen.php";
+                $find_residential_financial_sqlsafe = "SELECT Tax_Exemptions, "
+                    . "Household_size, Parent1_AGI, Parent2_AGI, Student_AGI, "
+                    . "AMI FROM La_Casa_Residents WHERE "
+                    . "Participant_ID_Residents = '"
+                    . $parti['Participant_ID'] . "'";
+                
+                $financial_residential_data = mysqli_query($cnnTRP, $find_residential_financial_sqlsafe);
+                
+                while ($finres = mysqli_fetch_row($financial_residential_data)){
+                    ?>
+                <tr>
+                    <td><?php echo number_format($finres[0]); ?></td>
+                    <td><?php echo number_format($finres[1]); ?></td>
+                    <td><?php if ($finres[0]>$finres[1]){
+                        echo number_format($finres[0]);
+                    }
+                    else{
+                        echo number_format($finres[1]);
+                    }
+                    ?></td>
+                    <td><?php echo number_format($finres[2]); ?></td>
+                    <td><?php echo number_format($finres[3]); ?></td>
+                    <td><?php echo number_format($finres[4]); ?></td>
+                    <td><?php echo number_format($finres[5]); ?></td>
+                    <td><?php $household_agi=$finres[2] + $finres[3] + $finres[4]; 
+                    echo number_format($household_agi); ?></td>
+                </tr>
+                <?php
+                }
+                
+                ?>
+                <tr><th>Tuition</th><th>Mandatory Fees</th>
+                    <th>Food, Transportation, and Books</th><th>La Casa Official Rent</th>
+                    <th>TRP Calculated Costs</th>
+                    <th>College Reported Costs</th>
+                    <th>Total Tuition and Mandatory Fees (calculated)</th>
+                </tr>
+                <?php
+                
                 $find_financial_data_sqlsafe="SELECT Tuition, Fees, Other_Costs, "
-                        . "La_Casa_Rent FROM "
+                        . "La_Casa_Rent, College_Stated_Cost, Pell_Grant, "
+                        . "MAP_Grant, Scholarships, Federal_Sub_Loan, "
+                        . "Federal_Unsub_Loan, Self_Help, Savings, Family_Help,"
+                        . "La_Casa_Scholarship "
+                        . " FROM "
                         . "La_Casa_Students WHERE Participant_ID_Students='" . 
-                        mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+                        $parti['Participant_ID'] . "'";
 
                 $financial_data=mysqli_query($cnnTRP, $find_financial_data_sqlsafe);
                 while ($findat=mysqli_fetch_row($financial_data)){
                     ?>
-                <tr><td>(coming soon)</td>
+                <tr>
                     <td><?php echo number_format($findat[0]); ?></td>
                     <td><?php echo number_format($findat[1]); ?></td>
                     <td><?php echo number_format($findat[2]); ?></td>
                     <td><?php echo number_format($findat[3]); ?></td>
                     <td><?php $costs=$findat[0]+$findat[1]+$findat[2]+$findat[3];
-                    echo number_format($costs);?></td>
+                    echo number_format($costs); ?></td>
+                    <td><?php echo number_format($findat[4]); ?></td>
+                    <td><?php $fees=$findat[0] + $findat[1]; 
+                    echo number_format($fees); ?></td>
+                </tr>
+                
+                <tr>
+                    <th>Pell Grant</th>
+                    <th>MAP Grant</th>
+                    <th>University Scholarships</th>
+                    <th>Federal Direct Subsidized Loan</th>
+                    <th>Federal Direct Unsubsidized Loan</th>
+                    <th>Total Financial Aid Received (calculated)</th>
+                    <th>Non-School Assistance Needed</th>
+                </tr>
+                
+                <tr>
+                    <td><?php echo number_format($findat[5]); ?></td>
+                    <td><?php echo number_format($findat[6]); ?></td>
+                    <td><?php echo number_format($findat[7]); ?></td>
+                    <td><?php echo number_format($findat[8]); ?></td>
+                    <td><?php echo number_format($findat[9]); ?></td>
+                    <td><?php $aid_received=$findat[5] + $findat[6] + $findat[7]
+                            + $findat[8] + $findat[9];
+                    echo number_format($aid_received); ?></td>
+                    <td><?php $assistance_needed = $costs - $aid_received;
+                    echo number_format($assistance_needed); ?></td>
+                </tr>
+                
+                <tr>
+                    <th>Work-Study or Other Self-Help</th>
+                    <th>Savings</th>
+                    <th>Family Assistance</th>
+                    <th>Total Self-Help</th>
+                    <th>Total Need</th>
+                    <th>La Casa Scholarship</th>
+                    <th>Final Calculated Monthly Rent: </th>
+                </tr>
+                
+                <tr>
+                    <td><?php echo number_format($findat[10]); ?></td>
+                    <td><?php echo number_format($findat[11]); ?></td>
+                    <td><?php echo number_format($findat[12]); ?></td>
+                    <td><?php $self_help=$findat[10] + $findat[11] + $findat[12];
+                    echo number_format($self_help); ?></td>
+                    <td><?php $total_need= $assistance_needed - $self_help;
+                    echo number_format($total_need); ?></td>
+                    <td><?php echo number_format($findat[13]); ?></td>
+                    <td><?php $calc_rent = $findat[3] - $findat[13];
+                    echo number_format($calc_rent); ?></td>
                 </tr>
                         <?php
                 }
