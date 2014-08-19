@@ -2177,12 +2177,6 @@ if ($parti['Gender'] == 'm') {
                     <th>Federal Direct Unsubsidized Loan</th>
                     <th>Total Financial Aid Received (calculated)</th>
                     <th>Non-School Assistance Needed</th>
-                    <th>Work-Study or Other Self-Help</th>
-                    <th>Savings</th>
-                    <th>Family Assistance</th>
-                    <th>Total Self-Help</th>
-                    <th>Total Need</th>
-                    <th>La Casa Scholarship</th>
                 </tr>
                 
                 <tr>
@@ -2196,6 +2190,19 @@ if ($parti['Gender'] == 'm') {
                     echo number_format($aid_received); ?></td>
                     <td><?php $assistance_needed = $costs - $aid_received;
                     echo number_format($assistance_needed); ?></td>
+                </tr>
+                
+                <tr>
+                    <th>Work-Study or Other Self-Help</th>
+                    <th>Savings</th>
+                    <th>Family Assistance</th>
+                    <th>Total Self-Help</th>
+                    <th>Total Need</th>
+                    <th>La Casa Scholarship</th>
+                    <th>Final Calculated Monthly Rent: </th>
+                </tr>
+                
+                <tr>
                     <td><?php echo number_format($findat[10]); ?></td>
                     <td><?php echo number_format($findat[11]); ?></td>
                     <td><?php echo number_format($findat[12]); ?></td>
@@ -2204,9 +2211,6 @@ if ($parti['Gender'] == 'm') {
                     <td><?php $total_need= $assistance_needed - $self_help;
                     echo number_format($total_need); ?></td>
                     <td><?php echo number_format($findat[13]); ?></td>
-                </tr>
-                
-                <tr><th>Final Calculated Monthly Rent: </th>
                     <td><?php $calc_rent = $findat[3] - $findat[13];
                     echo number_format($calc_rent); ?></td>
                 </tr>
