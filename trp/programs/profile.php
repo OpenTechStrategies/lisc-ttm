@@ -452,8 +452,8 @@ $program = mysqli_fetch_array($program_info);
                             <div id="add_person_results"></div>
                         </div>
                     </div>
-                    <hr
-                    <h4>Current Program Enrollment</h4>>
+                    <hr>
+                    <h4>Current Program Enrollment</h4>
                     <ul style="list-style-type:none;">
                         <?php
                         $get_participants = "SELECT * FROM Participants_Programs INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID WHERE Program_ID='" . $program['Program_ID'] . "' ORDER BY Participants.Last_Name";
