@@ -2140,7 +2140,6 @@ if ($parti['Gender'] == 'm') {
                     <th>Food, Transportation, and Books</th><th>La Casa Official Rent</th>
                     <th>TRP Calculated Costs</th>
                     <th>College Reported Costs</th>
-                    <th>Total Academic Year Costs</th>
                     <th>Total Tuition and Mandatory Fees (calculated)</th>
                 </tr>
                 <?php
@@ -2162,9 +2161,9 @@ if ($parti['Gender'] == 'm') {
                     <td><?php echo number_format($findat[1]); ?></td>
                     <td><?php echo number_format($findat[2]); ?></td>
                     <td><?php echo number_format($findat[3]); ?></td>
-                    <td><?php echo number_format($findat[4]); ?></td>
                     <td><?php $costs=$findat[0]+$findat[1]+$findat[2]+$findat[3];
                     echo number_format($costs); ?></td>
+                    <td><?php echo number_format($findat[4]); ?></td>
                     <td><?php $fees=$findat[0] + $findat[1]; 
                     echo number_format($fees); ?></td>
                 </tr>
