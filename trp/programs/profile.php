@@ -345,8 +345,8 @@ $program = mysqli_fetch_array($program_info);
                                     $.post(
                                         '../ajax/add_participant.php',
                                         {
-                                        /*    action: 'add_to_program',
-                                            first_add: document.getElementById('name_add').value,
+                                            action: 'add_to_program',
+                                        /*    first_add: document.getElementById('name_add').value,
                                             last_add: document.getElementById('surname_add').value,
                                             dob_add: document.getElementById('dob_add').value,
                                             gender_add: document.getElementById('gender_add').value,
