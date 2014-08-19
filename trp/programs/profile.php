@@ -439,7 +439,7 @@ $program = mysqli_fetch_array($program_info);
                                             unsubload_add: document.getElementById('unsubloan_add').value,
                                             selfhelp_add: document.getElementById('selfhelp_add').value,
                                             savings_add: document.getElementById('savings_add').value,
-                                            moneyhelp_add: document.getElementById('moneyhelp_add').value*/
+                                            moneyhelp_add: document.getElementById('moneyhelp_add').value
 
                                         },
                                     function(response) {
