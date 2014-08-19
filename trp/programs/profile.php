@@ -65,7 +65,7 @@ $program = mysqli_fetch_array($program_info);
                                                         last: document.getElementById('surname_search').value,
                                                         dob: document.getElementById('dob_search').value,
                                                         gender: document.getElementById('gender_search').value,
-                                                        program: <?php echo $program['Program_ID']; ?>,
+                                                        program_id: <?php echo $program['Program_ID']; ?>,
                                                         program_add: 1
                                                     },
                                             function(response) {
