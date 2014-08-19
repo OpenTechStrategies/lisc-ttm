@@ -365,7 +365,7 @@ $program = mysqli_fetch_array($program_info);
                                             floor_add: document.getElementById('floor_add').value,
                                             pod_add: document.getElementById('pod_add').value,
                                             rmnum_add: document.getElementById('rmnum_add').value,
-                                            keynum_add: document.getElementById('keynum_add').value,
+                                        /*    keynum_add: document.getElementById('keynum_add').value,
                                             apprec_add: document.getElementById('apprec_add').value,
                                             appcom_add: document.getElementById('appcom_add').value,
                                             rmmate_add: document.getElementById('rmmate_add').value,
@@ -439,7 +439,7 @@ $program = mysqli_fetch_array($program_info);
                                             unsubload_add: document.getElementById('unsubloan_add').value,
                                             selfhelp_add: document.getElementById('selfhelp_add').value,
                                             savings_add: document.getElementById('savings_add').value,
-                                            moneyhelp_add: document.getElementById('moneyhelp_add').value
+                                            moneyhelp_add: document.getElementById('moneyhelp_add').value*/
 
                                         },
                                     function(response) {
