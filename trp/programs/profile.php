@@ -25,13 +25,13 @@ $program = mysqli_fetch_array($program_info);
     <table width="100%" border="1">
             <tr>
                 <td width="40%">
-                    <h4>Program Enrollment</h4>
+                    <h4>Add Participants to Program</h4>
                     <!-- list of people in this program, with links to their profiles. -->
                     <div class="add_participant">
                         <a href="javascript:;" onclick="
                                 $('#search_to_add_participant').slideToggle();
-                           " style="font-size:.8em;" class="no_view" >Add a 
-                            person who is already in the database to this program...</a>
+                           " style="font-size:.8em;" class="no_view" >Add 
+                            an existing participant to this program...</a>
                         <div id="search_to_add_participant">
 
                             <!--- search area.  Search here for people to add to this program.
@@ -80,8 +80,8 @@ $program = mysqli_fetch_array($program_info);
                         </div>
                         <br><a href="javascript:;" onclick="
                                 $('#create_and_add_participant').slideToggle();
-                           " style="font-size:.8em;" class="no_view" >Add an 
-                            entirely new person to this program...</a>
+                           " style="font-size:.8em;" class="no_view" >Create a new 
+                            participant and add him/her to this program...</a>
                         <div id="create_and_add_participant">
                             <table class="trp_add_table">
                                 <tr>
@@ -452,6 +452,8 @@ $program = mysqli_fetch_array($program_info);
                             <div id="add_person_results"></div>
                         </div>
                     </div>
+                    <hr
+                    <h4>Current Program Enrollment</h4>>
                     <ul style="list-style-type:none;">
                         <?php
                         $get_participants = "SELECT * FROM Participants_Programs INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID WHERE Program_ID='" . $program['Program_ID'] . "' ORDER BY Participants.Last_Name";
