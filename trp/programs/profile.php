@@ -358,7 +358,7 @@ $program = mysqli_fetch_array($program_info);
                                             zip_add: document.getElementById('zip_add').value,
                                             phone_add: document.getElementById('phone_add').value,
                                             email2_add: document.getElementById('email2_add').value,
-                                            mobile: document.getElementById('mobile_add').value
+                                            mobile: document.getElementById('mobile_add').value,
                                             group_add: document.getElementById('group_add').value,
                                             handbook_add: document.getElementById('hndbk_add').value,
                                             status_add: document.getElementById('status_add').value,
