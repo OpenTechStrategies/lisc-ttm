@@ -359,7 +359,7 @@ $program = mysqli_fetch_array($program_info);
                                             phone_add: document.getElementById('phone_add').value,
                                             email2_add: document.getElementById('email2_add').value,
                                             mobile: document.getElementById('mobile_add').value
-                                            /*group_add: document.getElementById('group_add').value,
+                                            group_add: document.getElementById('group_add').value,
                                             handbook_add: document.getElementById('hndbk_add').value,
                                             status_add: document.getElementById('status_add').value,
                                             floor_add: document.getElementById('floor_add').value,
@@ -423,6 +423,7 @@ $program = mysqli_fetch_array($program_info);
                                             fall_credits_add: document.getElementById('fall_credits_add').value,
                                             spring_credits_add: document.getElementById('spring_credits_add').value,
                                             spring_gpa_add: document.getElementById('spring_gpa_add').value,
+                                            summer_gpa_add: document.getElementById('summer_gpa_add').value,
                                             fall_gpa_add: document.getElementById('fall_gpa_add').value,
                                             schoolyr_add: document.getElementById('schoolyr_add').value,
                                             goaled_add: document.getElementById('goaled_add').value,
