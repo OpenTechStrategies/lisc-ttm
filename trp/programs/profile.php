@@ -378,8 +378,8 @@ $program = mysqli_fetch_array($program_info);
                                             gpaun_add: document.getElementById('gpaun_add').value,
                                             gpaweight_add: document.getElementById('gpaweight_add').value,
                                             mother_ed_add: document.getElementById('mother_ed_add').value,
-                                            father_ed_add: document.getElementById('father_ed_add').value,
-                                            firstgen_add: document.getElementById('firstgen_add').value,
+                                            father_ed_add: document.getElementById('father_ed_add').value
+                                            /*firstgen_add: document.getElementById('firstgen_add').value,
                                             age_add: document.getElementById('age_add').value,
                                             masters_add: document.getElementById('masters_add').value,
                                             married_add: document.getElementById('married_add').value,
@@ -439,7 +439,7 @@ $program = mysqli_fetch_array($program_info);
                                             unsubload_add: document.getElementById('unsubloan_add').value,
                                             selfhelp_add: document.getElementById('selfhelp_add').value,
                                             savings_add: document.getElementById('savings_add').value,
-                                            moneyhelp_add: document.getElementById('moneyhelp_add').value
+                                            moneyhelp_add: document.getElementById('moneyhelp_add').value*/
 
                                         },
                                     function(response) {
