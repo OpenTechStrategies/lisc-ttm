@@ -33,7 +33,6 @@ if ($_POST['action']=='add_to_program'){
                '" . mysqli_real_escape_string($cnnTRP, $_POST['gender_add']) . "',
                '" . mysqli_real_escape_string($cnnTRP, $_POST['dob_add']) . "',
                '" . mysqli_real_escape_string($cnnTRP, $_POST['race_add']) . "')";
-    echo $create_new_participant_lc; //testing output
     mysqli_query($cnnTRP, $create_new_participant_lc);
     $new_id=mysqli_insert_id($cnnTRP); //returns the new participant ID
     
@@ -154,7 +153,6 @@ if ($_POST['action']=='add_to_program'){
             '" . mysqli_real_escape_string($cnnTRP, $_POST['ec2rel_add']) . "',
             '" . mysqli_real_escape_string($cnnTRP, $_POST['lcschol_add']) . "')";
     
-    echo $insert_as_resident;
     mysqli_query($cnnTRP, $insert_as_resident);
     
     $insert_as_student="INSERT INTO La_Casa_Students (
@@ -224,7 +222,6 @@ if ($_POST['action']=='add_to_program'){
             '" . mysqli_real_escape_string($cnnTRP, $_POST['selfhelp_add']) . "',
             '" . mysqli_real_escape_string($cnnTRP, $_POST['savings_add']) . "',
             '" . mysqli_real_escape_string($cnnTRP, $_POST['moneyhelp_add']) . "')";
-    echo $insert_as_student;
     mysqli_query($cnnTRP, $insert_as_student);
 }
 else{
