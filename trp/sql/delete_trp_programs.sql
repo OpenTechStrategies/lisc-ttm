@@ -45,6 +45,11 @@ DELETE FROM Explore_Scores WHERE Program_ID=3 OR Program_ID=4 OR Program_ID=5;
 -- with a defunct program?  User suggests that no information has been
 -- entered associated with these programs.
 
+DELETE FROM MS_to_HS_Over_Time WHERE Program_ID=3 OR Program_ID=4 OR Program_ID=5;
+-- Do we really want to delete this information just because it is associated
+-- with a defunct program?  User suggests that no information has been
+-- entered associated with these programs.
+
 DELETE FROM Programs WHERE Program_ID>2 AND Program_ID<6;
 
 
