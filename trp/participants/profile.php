@@ -1462,7 +1462,7 @@ if ($parti['Gender'] == 'm') {
                 </div>
         <?php
         //Middle School to High School teacher exchange
-    } else if (($program['Program_ID'] == 2 || $program['Program_ID'] == 4) && ($access == 'a' || $access == 2 || $access == 4)) {
+    } else if (($program['Program_ID'] == 2 ) && ($access == 'a' || $access == 2 )) {
         $get_transition_info = "SELECT * FROM Explore_Scores WHERE Participant_ID=" . $parti['Participant_ID'] .
                 " AND Program_ID='" . $program['Program_ID'] . "'";
         include "../include/dbconnopen.php";
