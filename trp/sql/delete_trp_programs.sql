@@ -13,6 +13,9 @@
 USE ttm-trp;
 
 DELETE FROM Academic_Info WHERE Program_ID=3 OR Program_ID=4 OR Program_ID=5;
+-- Do we really want to delete this information just because it is associated
+-- with a defunct program?  User suggests that no information has been
+-- entered associated with these programs.
 
 DELETE FROM Participants_Programs WHERE Program_ID=3 OR Program_ID=4 OR 
     Program_ID=5;
@@ -23,14 +26,24 @@ DELETE Participants_Program_Sessions FROM Participants_Program_Sessions
     WHERE Program_Sessions.Program_ID=3 OR Program_Sessions.Program_ID=4 
     OR Program_Sessions.Program_ID=5;
 
-DELETE FROM Program_Attendance WHERE Program_ID=3 OR Program_ID=4 OR
-    Program_ID=5;
+DELETE Program_Attendance FROM Program_Attendance INNER JOIN Program_Dates 
+    ON Program_Attendance.Date_ID=Program_Dates.Date_ID
+    WHERE Program_Dates.Program_ID=3 OR Program_Dates.Program_ID=4 
+    OR Program_Dates.Program_ID=5;
 
 DELETE FROM Program_Dates WHERE Program_ID=3 OR Program_ID=4 OR Program_ID=5;
 
 DELETE FROM Program_Sessions WHERE Program_ID=3 OR Program_ID=4 OR Program_ID=5;
 
 DELETE FROM Programs_Uploads WHERE Program_ID=3 OR Program_ID=4 OR Program_ID=5;
+-- Do we really want to delete this information just because it is associated
+-- with a defunct program?  User suggests that no information has been
+-- entered associated with these programs.
+
+DELETE FROM Explore_Scores WHERE Program_ID=3 OR Program_ID=4 OR Program_ID=5;
+-- Do we really want to delete this information just because it is associated
+-- with a defunct program?  User suggests that no information has been
+-- entered associated with these programs.
 
 DELETE FROM Programs WHERE Program_ID>2 AND Program_ID<6;
 
