@@ -69,6 +69,7 @@ if ($_POST['add_to_parent'] == 1) {
             " " . $_POST['city'] . " " . $_POST['state'] . " " . $_POST['zip'];
     $block_group = do_it_all($this_address, $map);*/
 
+    include "../include/dbconnopen.php";
     $create_new_participant_query = "INSERT INTO Participants (
                         Name_First,
                         Name_Last,
@@ -91,7 +92,7 @@ if ($_POST['add_to_parent'] == 1) {
                         Ward,
                         Is_Child
         ) VALUES (
-                        '" . $_POST['first_name'] . "',
+                        '" . mysqli_real_escape_string($_POST['first_name']) . "',
                         '" . $_POST['last_name'] . "',
                         '" . $_POST['address_name'] . "',
                         '" . $_POST['address_num'] . "',
@@ -111,7 +112,7 @@ if ($_POST['add_to_parent'] == 1) {
                         '" . $_POST['grade_level'] . "',
                         '". $_POST['ward'] ."',
                         '" . $_POST['child'] . "')";
-    include "../include/dbconnopen.php";
+    echo $create_new_participant_query; //testing output
     mysqli_query($cnnLSNA, $create_new_participant_query);
     $id = mysqli_insert_id($cnnLSNA);
     include "../include/dbconnclose.php";
