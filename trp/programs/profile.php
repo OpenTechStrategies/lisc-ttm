@@ -24,7 +24,7 @@ $program = mysqli_fetch_array($program_info);
     
     <table width="100%" border="1">
             <tr>
-                <td width="40%">
+                <td class="trp_add_table" width="40%">
                     <h4>Add Participants to Program</h4>
                     <!-- list of people in this program, with links to their profiles. -->
                     <div class="add_participant">
@@ -40,16 +40,16 @@ $program = mysqli_fetch_array($program_info);
                             -->
                             <table class="search_table">
                                 <tr>
-                                    <td><strong>First Name:</strong></td>
-                                    <td><input type="text" id="name_search" style="width:100px;"/></td>
-                                    <td><strong>Last Name:</strong></td>
-                                    <td><input type="text" id="surname_search" style="width:100px;" /></td>
+                                    <td class="trp_add_table"><strong>First Name:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="name_search" style="width:100px;"/></td>
+                                    <td class="trp_add_table"><strong>Last Name:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="surname_search" style="width:100px;" /></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>DOB:</strong></td>
-                                    <td><input type="text" id="dob_search" style="width:70px;" /></td>
-                                    <td><strong>Gender:</strong></td>
-                                    <td><select id="gender_search">
+                                    <td class="trp_add_table"><strong>DOB:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="dob_search" style="width:70px;" /></td>
+                                    <td class="trp_add_table"><strong>Gender:</strong></td>
+                                    <td class="trp_add_table"><select id="gender_search">
                                             <option value="">---------</option>
                                             <option value="m">Male</option>
                                             <option value="f">Female</option>
@@ -57,7 +57,7 @@ $program = mysqli_fetch_array($program_info);
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" style="text-align:center;"><input type="button" value="Search" onclick="
+                                    <td class="trp_add_table" colspan="4" style="text-align:center;"><input type="button" value="Search" onclick="
                                             $.post(
                                                     '../ajax/search_users.php',
                                                     {
@@ -85,14 +85,14 @@ $program = mysqli_fetch_array($program_info);
                         <div id="create_and_add_participant">
                             <table class="trp_add_table">
                                 <tr>
-                                    <td><strong>First Name:</strong></td>
-                                    <td><input type="text" id="name_add" style="width:100px;"/></td>
-                                    <td><strong>Last Name:</strong></td>
-                                    <td><input type="text" id="surname_add" style="width:100px;" /></td>
-                                    <td><strong>DOB:</strong></td>
-                                    <td><input type="text" id="dob_add" style="width:70px;" /></td>
-                                    <td><strong>Gender:</strong></td>
-                                    <td><select id="gender_add">
+                                    <td class="trp_add_table"><strong>First Name:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="name_add" style="width:100px;"/></td>
+                                    <td class="trp_add_table"><strong>Last Name:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="surname_add" style="width:100px;" /></td>
+                                    <td class="trp_add_table"><strong>DOB:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="dob_add" style="width:70px;" /></td>
+                                    <td class="trp_add_table"><strong>Gender:</strong></td>
+                                    <td class="trp_add_table"><select id="gender_add">
                                             <option value="">---------</option>
                                             <option value="m">Male</option>
                                             <option value="f">Female</option>
@@ -100,248 +100,248 @@ $program = mysqli_fetch_array($program_info);
                                     </td>
                                 </tr>
                                 <tr>
-                                     <td><strong>Race:</strong></td>
-                                    <td><input type="text" id="race_add" style="width:100px;"/></td>
-                                    <td colspan="6"></td>
+                                     <td class="trp_add_table"><strong>Race:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="race_add" style="width:100px;"/></td>
+                                    <td class="trp_add_table" colspan="6"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Email 1</strong></td>
-                                    <td><input type="text" id="email1_add"></td>
-                                    <td><strong>Mailing Address</strong></td>
-                                    <td><input type="text" id=""></td>
-                                    <td><strong>Mailing City</strong></td>
-                                    <td><input type="text" id="city_add"></td>
-                                    <td><strong>Mailing State</strong></td>
-                                    <td><input type="text" id="state_add"></td>
+                                    <td class="trp_add_table"><strong>Email 1</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="email1_add"></td>
+                                    <td class="trp_add_table"><strong>Mailing Address</strong></td>
+                                    <td class="trp_add_table"><input type="text" id=""></td>
+                                    <td class="trp_add_table"><strong>Mailing City</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="city_add"></td>
+                                    <td class="trp_add_table"><strong>Mailing State</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="state_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Zipcode</strong></td>
-                                    <td><input type="text" id="zip_add"></td>
-                                    <td><strong>Home Phone</strong></td>
-                                    <td><input type="text" id="phone_add"></td>
-                                    <td><strong>Email 2</strong></td>
-                                    <td><input type="text" id="email2_add"></td>
-                                    <td><strong>Mobile Phone </strong></td>
-                                    <td><input type="text" id="mobile_add"></td>
+                                    <td class="trp_add_table"><strong>Zipcode</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="zip_add"></td>
+                                    <td class="trp_add_table"><strong>Home Phone</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="phone_add"></td>
+                                    <td class="trp_add_table"><strong>Email 2</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="email2_add"></td>
+                                    <td class="trp_add_table"><strong>Mobile Phone </strong></td>
+                                    <td class="trp_add_table"><input type="text" id="mobile_add"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="8"><strong>For La Casa Residents</strong></td>
+                                    <td class="trp_add_table" colspan="8"><strong>For La Casa Residents</strong></td>
                                 </tr>    
                                 <tr>
-                                    <td><strong>Group</strong></td>
-                                    <td><input type="text" id="group_add"></td>
-                                    <td><strong>Handbook</strong></td>
-                                    <td><input type="text" id="hndbk_add"></td>
-                                    <td><strong>Status</strong></td>
-                                    <td><input type="text" id="status_add"></td>
-                                    <td><strong>Floor</strong></td>
-                                    <td><input type="text" id="floor_add"></td>
+                                    <td class="trp_add_table"><strong>Group</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="group_add"></td>
+                                    <td class="trp_add_table"><strong>Handbook</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="hndbk_add"></td>
+                                    <td class="trp_add_table"><strong>Status</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="status_add"></td>
+                                    <td class="trp_add_table"><strong>Floor</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="floor_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Pod</strong></td>
-                                    <td><input type="text" id="pod_add"></td>
-                                    <td><strong>Room Number</strong></td>
-                                    <td><input type="text" id="rm_add"></td>
-                                    <td><strong>Key Card Number</strong></td>
-                                    <td><input type="text" id="keynum_add"></td>
-                                    <td><strong>Application Received</strong></td>
-                                    <td><input type="text" id="apprec_add"></td>
+                                    <td class="trp_add_table"><strong>Pod</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="pod_add"></td>
+                                    <td class="trp_add_table"><strong>Room Number</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="rm_add"></td>
+                                    <td class="trp_add_table"><strong>Key Card Number</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="keynum_add"></td>
+                                    <td class="trp_add_table"><strong>Application Received</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="apprec_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Application Completed</strong></td>
-                                    <td><input type="text" id="appcom_add"></td>
-                                    <td><strong>Roommate</strong></td>
-                                    <td><input type="text" id="rmmate_add"></td>
-                                    <td><strong>Roommate Move In Date</strong></td>
-                                    <td><input type="text" id="rmmate_date_add"></td>
-                                    <td><strong>LCRC Username</strong></td>
-                                    <td><input type="text" id="username_add"></td>
+                                    <td class="trp_add_table"><strong>Application Completed</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="appcom_add"></td>
+                                    <td class="trp_add_table"><strong>Roommate</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="rmmate_add"></td>
+                                    <td class="trp_add_table"><strong>Roommate Move In Date</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="rmmate_date_add"></td>
+                                    <td class="trp_add_table"><strong>LCRC Username</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="username_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>LCRC Password</strong></td>
-                                    <td><input type="text" id="pword_add"></td>
-                                    <td><strong>LCRC Print Code</strong></td>
-                                    <td><input type="text" id="print_add"></td>
-                                    <td><strong>High School</strong></td>
-                                    <td><input type="text" id="hs_add"></td>
-                                    <td><strong>ACT Score</strong></td>
-                                    <td><input type="text" id="act_add"></td>
+                                    <td class="trp_add_table"><strong>LCRC Password</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="pword_add"></td>
+                                    <td class="trp_add_table"><strong>LCRC Print Code</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="print_add"></td>
+                                    <td class="trp_add_table"><strong>High School</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="hs_add"></td>
+                                    <td class="trp_add_table"><strong>ACT Score</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="act_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>HS GPA (Unweighted)</strong></td>
-                                    <td><input type="text" id="gpaun_add"></td>
-                                    <td><strong>HS GPA (weighted)</strong></td>
-                                    <td><input type="text" id="gpaweight_add"></td>
-                                    <td><strong>Highest level of education completed by Mother</strong></td>
-                                    <td><input type="text" id="mother_ed_add"></td>
-                                    <td><strong>Highest level of education completed by Father</strong></td>
-                                    <td><input type="text" id="father_ed_add"></td>
+                                    <td class="trp_add_table"><strong>HS GPA (Unweighted)</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="gpaun_add"></td>
+                                    <td class="trp_add_table"><strong>HS GPA (weighted)</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="gpaweight_add"></td>
+                                    <td class="trp_add_table"><strong>Highest level of education completed by Mother</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="mother_ed_add"></td>
+                                    <td class="trp_add_table"><strong>Highest level of education completed by Father</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="father_ed_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>First Generation College Student</strong></td>
-                                    <td><input type="text" id="firstgen_add"></td>
-                                    <td><strong>24 or older?</strong></td>
-                                    <td><input type="text" id="age_add"></td>
-                                    <td><strong>Master or above?</strong></td>
-                                    <td><input type=text" id="masters_add"></td>
-                                    <td><strong>Married?</strong></td>
-                                    <td><input type="text" id="married_add"></td>
+                                    <td class="trp_add_table"><strong>First Generation College Student</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="firstgen_add"></td>
+                                    <td class="trp_add_table"><strong>24 or older?</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="age_add"></td>
+                                    <td class="trp_add_table"><strong>Master or above?</strong></td>
+                                    <td class="trp_add_table"><input type=text" id="masters_add"></td>
+                                    <td class="trp_add_table"><strong>Married?</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="married_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Military?</strong></td>
-                                    <td><input type="text" id="military_add"></td>
-                                    <td><strong>Has children?</strong></td>
-                                    <td><input type="text" id="children_add"></td>
-                                    <td><strong>Homeless?</strong></td>
-                                    <td><input type="text" id="homeless_add"></td>
-                                    <td><strong>Self Sustaining (if student income >=$12,510</strong></td>
-                                    <td><input type="text" id="selfsust_add"></td>
+                                    <td class="trp_add_table"><strong>Military?</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="military_add"></td>
+                                    <td class="trp_add_table"><strong>Has children?</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="children_add"></td>
+                                    <td class="trp_add_table"><strong>Homeless?</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="homeless_add"></td>
+                                    <td class="trp_add_table"><strong>Self Sustaining (if student income >=$12,510</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="selfsust_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Tax Exemptions</strong></td>
-                                    <td><input type="text" id="taxex_add"></td>
-                                    <td><strong>Household size (per La Casa application)</strong></td>
-                                    <td><input type="text" id="household_add"></td>
-                                    <td><strong>Parent 1 AGI</strong></td>
-                                    <td><input type="text" id="par1agi_add"></td>
-                                    <td><strong>Parent 2 AGI</strong></td>
-                                    <td><input type="text" id="par2agi_add"></td>
+                                    <td class="trp_add_table"><strong>Tax Exemptions</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="taxex_add"></td>
+                                    <td class="trp_add_table"><strong>Household size (per La Casa application)</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="household_add"></td>
+                                    <td class="trp_add_table"><strong>Parent 1 AGI</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="par1agi_add"></td>
+                                    <td class="trp_add_table"><strong>Parent 2 AGI</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="par2agi_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Student AGI</strong></td>
-                                    <td><input type="text" id="stntagi_add"></td>
-                                    <td><strong>Actual AMI</strong></td>
-                                    <td><input type="text" id="ami_add"></td>
-                                    <td><strong>Application Source</strong></td>
-                                    <td><input type="text" id="appsource_add"></td>
-                                    <td><strong>Notes</strong></td>
-                                    <td><input type="text" id="notes_add"></td>
+                                    <td class="trp_add_table"><strong>Student AGI</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="stntagi_add"></td>
+                                    <td class="trp_add_table"><strong>Actual AMI</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="ami_add"></td>
+                                    <td class="trp_add_table"><strong>Application Source</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="appsource_add"></td>
+                                    <td class="trp_add_table"><strong>Notes</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="notes_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Email: Pack This!</strong></td>
-                                    <td><input type="text" id="pack_email_add"></td>
-                                    <td><strong>Email: Move-in and Orientation</strong></td>
-                                    <td><input type="text" id="orient_email_add"></td>
-                                    <td><strong>Email: Roommate</strong></td>
-                                    <td><input type="text" id="rmmate_email_add"></td>
-                                    <td><strong>Move-In</strong></td>
-                                    <td><input type="text" id="move_add"></td>
+                                    <td class="trp_add_table"><strong>Email: Pack This!</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="pack_email_add"></td>
+                                    <td class="trp_add_table"><strong>Email: Move-in and Orientation</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="orient_email_add"></td>
+                                    <td class="trp_add_table"><strong>Email: Roommate</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="rmmate_email_add"></td>
+                                    <td class="trp_add_table"><strong>Move-In</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="move_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Move-In Registration</strong></td>
-                                    <td><input type="text" id="registration_add"></td>
-                                    <td><strong>Move-In Address</strong></td>
+                                    <td class="trp_add_table"><strong>Move-In Registration</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="registration_add"></td>
+                                    <td class="trp_add_table"><strong>Move-In Address</strong></td>
                                     <!-- What is this? -->
-                                    <td><input type="text" id=""></td>
-                                    <td><strong>Move-In Note</strong></td>
-                                    <td><input type="text" id="move_note_add"></td>
-                                    <td><strong>Orientation Date</strong></td>
-                                    <td><input type="text" id="orient_date_add"></td>
+                                    <td class="trp_add_table"><input type="text" id=""></td>
+                                    <td class="trp_add_table"><strong>Move-In Note</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="move_note_add"></td>
+                                    <td class="trp_add_table"><strong>Orientation Date</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="orient_date_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Orientation Time</strong></td>
-                                    <td><input type="text" id="orient_time_add"></td>
-                                    <td><strong>Emergency Contact (First Name)</strong></td>
-                                    <td><input type="text" id="ec1first_add"></td>
-                                    <td><strong>Emergency Contact (Last Name)</strong></td>
-                                    <td><input type="text" id="ec1last_add"></td>
-                                    <td><strong>Emergency Contact Phone</strong></td>
-                                    <td><input type="text" id="ec1phone_add"></td>
+                                    <td class="trp_add_table"><strong>Orientation Time</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="orient_time_add"></td>
+                                    <td class="trp_add_table"><strong>Emergency Contact (First Name)</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="ec1first_add"></td>
+                                    <td class="trp_add_table"><strong>Emergency Contact (Last Name)</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="ec1last_add"></td>
+                                    <td class="trp_add_table"><strong>Emergency Contact Phone</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="ec1phone_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Emergency Contact Relationship</strong></td>
-                                    <td><input type="text" id="ec1rel_add"></td>
-                                    <td><strong>Emergency Contact 2 (First Name)</strong></td>
-                                    <td><input type="text" id="ec2first_add"></td>
-                                    <td><strong>Emergency Contact 2 (Last Name)</strong></td>
-                                    <td><input type="text" id="ec2last_add"></td>
-                                    <td><strong>Emergency Contact 2 Phone</strong></td>
-                                    <td><input type="text" id="ec2phone_add"></td>
+                                    <td class="trp_add_table"><strong>Emergency Contact Relationship</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="ec1rel_add"></td>
+                                    <td class="trp_add_table"><strong>Emergency Contact 2 (First Name)</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="ec2first_add"></td>
+                                    <td class="trp_add_table"><strong>Emergency Contact 2 (Last Name)</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="ec2last_add"></td>
+                                    <td class="trp_add_table"><strong>Emergency Contact 2 Phone</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="ec2phone_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Emergency Contact 2 Relationship</strong></td>
-                                    <td><input type="text" id="ec2rel_add"></td>
-                                    <td><strong>La Casa Scholarship (Annual Award)</strong></td>
-                                    <td><input type="text" id="lcschol_add"></td>
-                                    <td><strong>College Grade Level</strong></td>
-                                    <td><input type="text" id="grade_add"></td>
-                                    <td><strong>Major</strong></td>
-                                    <td><input type="text" id="major_add"></td>
+                                    <td class="trp_add_table"><strong>Emergency Contact 2 Relationship</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="ec2rel_add"></td>
+                                    <td class="trp_add_table"><strong>La Casa Scholarship (Annual Award)</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="lcschol_add"></td>
+                                    <td class="trp_add_table"><strong>College Grade Level</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="grade_add"></td>
+                                    <td class="trp_add_table"><strong>Major</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="major_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Minor</strong></td>
-                                    <td><input type="text" id="minor_add"></td>
-                                    <td><strong>Community College</strong></td>
-                                    <td><input type="text" id="commcol_add"></td>
-                                    <td><strong>Four Year College</strong></td>
-                                    <td><input type="text" id="fourcol_add"></td>
-                                    <td><strong>Selectivity (of Current College)</strong></td>
-                                    <td><input type="text" id="selectivity_add"></td>
+                                    <td class="trp_add_table"><strong>Minor</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="minor_add"></td>
+                                    <td class="trp_add_table"><strong>Community College</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="commcol_add"></td>
+                                    <td class="trp_add_table"><strong>Four Year College</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="fourcol_add"></td>
+                                    <td class="trp_add_table"><strong>Selectivity (of Current College)</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="selectivity_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Student's Expected Match Level</strong></td>
-                                    <td><input type=text" id="matchexp_add"></td>
-                                    <td><strong>Student's Actual Match Level</strong></td>
-                                    <td><input type=text" id="matchact_add"></td>
-                                    <td><strong>Credits Accrued (by Fall)</strong></td>
-                                    <td><input type="text" id="fall_credits_add"></td>
-                                    <td><strong> Credits Accrued (by Spring)</strong></td>
-                                    <td><input type="text" id="spring_credits_add"></td>
+                                    <td class="trp_add_table"><strong>Student's Expected Match Level</strong></td>
+                                    <td class="trp_add_table"><input type=text" id="matchexp_add"></td>
+                                    <td class="trp_add_table"><strong>Student's Actual Match Level</strong></td>
+                                    <td class="trp_add_table"><input type=text" id="matchact_add"></td>
+                                    <td class="trp_add_table"><strong>Credits Accrued (by Fall)</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="fall_credits_add"></td>
+                                    <td class="trp_add_table"><strong> Credits Accrued (by Spring)</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="spring_credits_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Spring GPA</strong></td>
-                                    <td><input type="text" id="spring_gpa_add"></td>
-                                    <td><strong>Summer GPA</strong></td>
-                                    <td><input type="text" id="summer_gpa_add"></td>
-                                    <td><strong>Fall GPA</strong></td>
-                                    <td><input type="text" id="fall_gpa_add"></td>
-                                    <td><strong>School Year</strong></td>
-                                    <td><input type="text" id="schoolyr_add"></td>
+                                    <td class="trp_add_table"><strong>Spring GPA</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="spring_gpa_add"></td>
+                                    <td class="trp_add_table"><strong>Summer GPA</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="summer_gpa_add"></td>
+                                    <td class="trp_add_table"><strong>Fall GPA</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="fall_gpa_add"></td>
+                                    <td class="trp_add_table"><strong>School Year</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="schoolyr_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Highest Level of Education - Goal</strong></td>
-                                    <td><input type="text" id="goaled_add"></td>
-                                    <td><strong>Tuition</strong></td>
-                                    <td><input type="text" id="tuition_add"></td>
-                                    <td><strong>Mandatory Fees (do not include loan fees)</strong></td>
-                                    <td><input type="text" id="fees_add"></td>
-                                    <td><strong>Food, Transportation, and Books</strong></td>
-                                    <td><input type="text" id="othercost_add"></td>
+                                    <td class="trp_add_table"><strong>Highest Level of Education - Goal</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="goaled_add"></td>
+                                    <td class="trp_add_table"><strong>Tuition</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="tuition_add"></td>
+                                    <td class="trp_add_table"><strong>Mandatory Fees (do not include loan fees)</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="fees_add"></td>
+                                    <td class="trp_add_table"><strong>Food, Transportation, and Books</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="othercost_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>La Casa Rent</strong></td>
-                                    <td><input type="text" id="rent_add"></td>
-                                    <td><strong>Cost of Attendance according to college</strong></td>
-                                    <td><input type="text" id="colcost_add"></td>
-                                    <td><strong>Pell Grant</strong></td>
-                                    <td><input type="text" id="pell_add"></td>
-                                    <td><strong>MAP Grant</strong></td>
-                                    <td><input type="text" id="map_add"></td>
+                                    <td class="trp_add_table"><strong>La Casa Rent</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="rent_add"></td>
+                                    <td class="trp_add_table"><strong>Cost of Attendance according to college</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="colcost_add"></td>
+                                    <td class="trp_add_table"><strong>Pell Grant</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="pell_add"></td>
+                                    <td class="trp_add_table"><strong>MAP Grant</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="map_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>University Scholarships</strong></td>
-                                    <td><input type="text" id="uschol_add"></td>
-                                    <td><strong>Federal Subsidized Loan</strong></td>
-                                    <td><input type="text" id="subloan_add"></td>
-                                    <td><strong>Federal Unsubsidized Loan</strong></td>
-                                    <td><input type="text" id="unsubloan_add"></td>
-                                    <td><strong>Work-Study or other Self-Help
+                                    <td class="trp_add_table"><strong>University Scholarships</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="uschol_add"></td>
+                                    <td class="trp_add_table"><strong>Federal Subsidized Loan</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="subloan_add"></td>
+                                    <td class="trp_add_table"><strong>Federal Unsubsidized Loan</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="unsubloan_add"></td>
+                                    <td class="trp_add_table"><strong>Work-Study or other Self-Help
                                         (enter $3,500 for all)</strong></td>
-                                    <td><input type="text" id="selfhelp_add"></td>
+                                    <td class="trp_add_table"><input type="text" id="selfhelp_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Savings</strong></td>
-                                    <td><input type="text" id="savings_add"></td>
-                                    <td><strong>Family Assistance/Sponsor/Other</strong></td>
-                                    <td><input type="text" id="moneyhelp_add"></td>
-                                    <td><strong></strong></td>
-                                    <td><strong></strong></td>
-                                    <td><strong></strong></td>
-                                    <td><strong></strong></td>
+                                    <td class="trp_add_table"><strong>Savings</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="savings_add"></td>
+                                    <td class="trp_add_table"><strong>Family Assistance/Sponsor/Other</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="moneyhelp_add"></td>
+                                    <td class="trp_add_table"><strong></strong></td>
+                                    <td class="trp_add_table"><strong></strong></td>
+                                    <td class="trp_add_table"><strong></strong></td>
+                                    <td class="trp_add_table"><strong></strong></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td colspan="8" style="text-align:center;"><input type="button" value="Add" onclick="
+                                    <td class="trp_add_table" colspan="8" style="text-align:center;"><input type="button" value="Add" onclick="
                                     $.post(
                                         '../ajax/add_participant.php',
                                         {
@@ -506,7 +506,7 @@ $program = mysqli_fetch_array($program_info);
                     </form>
 
                 </td>
-                <td>
+                <td class="trp_add_table">
 
                     <!-- aggregate GOLD scores for program participants: -->
                     <h4>GOLD Scores</h4>
@@ -550,16 +550,16 @@ $program = mysqli_fetch_array($program_info);
                             <th></th><th>Year 1 Avg. Score</th><th>Year 2 Avg. Score</th><th>Year 3 Avg. Score</th>
                         </tr>
                         <tr>
-                            <td class="gold_category">Social-Emotional</td>
-                            <td class="gold_category"><?php echo number_format($averages1[0], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages2[0], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages3[0], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category">Social-Emotional</td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages1[0], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages2[0], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages3[0], 1); ?></td>
                         </tr>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
                         </tr>
 
                         <!-- these commented areas are for the scores for individual questions.
@@ -568,339 +568,339 @@ $program = mysqli_fetch_array($program_info);
                         -->
 
     <!--<tr>
-            <td><strong>1a.</strong> Manages feelings</td>
-            <td></td>
+            <td class="trp_add_table"><strong>1a.</strong> Manages feelings</td>
+            <td class="trp_add_table"></td>
     </tr>
     <tr>
-            <td><strong>1b.</strong> Follows limits and expectations</td>
-            <td></td>
+            <td class="trp_add_table"><strong>1b.</strong> Follows limits and expectations</td>
+            <td class="trp_add_table"></td>
     </tr>
     <tr>
-            <td><strong>1c.</strong> Takes care of own needs appropriately</td>
-            <td></td>
+            <td class="trp_add_table"><strong>1c.</strong> Takes care of own needs appropriately</td>
+            <td class="trp_add_table"></td>
     </tr>
     <tr>
-            <td><strong>2a.</strong> Forms relationships with adults</td>
-            <td></td>
+            <td class="trp_add_table"><strong>2a.</strong> Forms relationships with adults</td>
+            <td class="trp_add_table"></td>
     </tr>
     <tr>
-            <td><strong>2b.</strong> Responds to emotional cues</td>
-            <td></td>
+            <td class="trp_add_table"><strong>2b.</strong> Responds to emotional cues</td>
+            <td class="trp_add_table"></td>
     </tr>
     <tr>
-            <td><strong>2c.</strong> Interacts with peers</td>
-            <td></td>
+            <td class="trp_add_table"><strong>2c.</strong> Interacts with peers</td>
+            <td class="trp_add_table"></td>
     </tr>
     <tr>
-            <td><strong>2d.</strong> Makes friends</td>
-            <td></td>
+            <td class="trp_add_table"><strong>2d.</strong> Makes friends</td>
+            <td class="trp_add_table"></td>
     </tr>
     <tr>
-            <td><strong>3a.</strong> Balances needs and rights of self and others</td>
-            <td></td>
+            <td class="trp_add_table"><strong>3a.</strong> Balances needs and rights of self and others</td>
+            <td class="trp_add_table"></td>
     </tr>
     <tr>
-            <td><strong>3b.</strong> Solves social problems</td>
-            <td></td>
+            <td class="trp_add_table"><strong>3b.</strong> Solves social problems</td>
+            <td class="trp_add_table"></td>
     </tr>-->
                         <tr>
-                            <td class="gold_category">Physical</td>
-                            <td class="gold_category"><?php echo number_format($averages1[1], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages2[1], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages3[1], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category">Physical</td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages1[1], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages2[1], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages3[1], 1); ?></td>
                         </tr>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
                         </tr>
                         <!--<tr>
-                                <td><strong>4.</strong> Demonstrates traveling skills</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>4.</strong> Demonstrates traveling skills</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>5.</strong> Demonstrates balancing skills</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>5.</strong> Demonstrates balancing skills</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>6.</strong> Demonstrates gross motor manipulative skills</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>6.</strong> Demonstrates gross motor manipulative skills</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>7a.</strong> Uses fingers and hands</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>7a.</strong> Uses fingers and hands</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>7b.</strong> Uses writing and drawing tools</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>7b.</strong> Uses writing and drawing tools</td>
+                                <td class="trp_add_table"></td>
                         </tr>-->
                         <tr>
-                            <td class="gold_category">Language</td>
-                            <td class="gold_category"><?php echo number_format($averages1[2], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages2[2], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages3[2], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category">Language</td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages1[2], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages2[2], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages3[2], 1); ?></td>
                         </tr>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
                         </tr>
                         <!--<tr>
-                                <td><strong>8a.</strong> Comprehends language</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>8a.</strong> Comprehends language</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>8b.</strong> Follows directions</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>8b.</strong> Follows directions</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>9a.</strong> Uses an expanding expressive vocabulary</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>9a.</strong> Uses an expanding expressive vocabulary</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>9b.</strong> Speaks clearly</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>9b.</strong> Speaks clearly</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>9c.</strong> Uses conventional grammar</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>9c.</strong> Uses conventional grammar</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>9d.</strong> Tells about another time or place</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>9d.</strong> Tells about another time or place</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>10a.</strong> Engages in conversations</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>10a.</strong> Engages in conversations</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>10b.</strong> Uses social rules of language</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>10b.</strong> Uses social rules of language</td>
+                                <td class="trp_add_table"></td>
                         </tr>-->
                         <tr>
-                            <td class="gold_category">Cognitive</td>
-                            <td class="gold_category"><?php echo number_format($averages1[3], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages2[3], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages3[3], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category">Cognitive</td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages1[3], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages2[3], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages3[3], 1); ?></td>
                         </tr>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
                         </tr>
                         <!--<tr>
-                                <td><strong>11a.</strong> Attends and engages</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>11a.</strong> Attends and engages</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>11b.</strong> Persists</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>11b.</strong> Persists</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>11c.</strong> Solves problems</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>11c.</strong> Solves problems</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>11d.</strong> Shows curiosity and motivation</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>11d.</strong> Shows curiosity and motivation</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>11e.</strong> Shows flexibility and inventiveness in thinking</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>11e.</strong> Shows flexibility and inventiveness in thinking</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>12a.</strong> Recognizes and recalls</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>12a.</strong> Recognizes and recalls</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>12b.</strong> Makes connections</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>12b.</strong> Makes connections</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>13.</strong> Classifies</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>13.</strong> Classifies</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>14a.</strong> Thinks symbolically</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>14a.</strong> Thinks symbolically</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>14b.</strong> Engages in sociodramatic play</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>14b.</strong> Engages in sociodramatic play</td>
+                                <td class="trp_add_table"></td>
                         </tr>-->
                         <tr>
-                            <td class="gold_category">Literacy</td>
-                            <td class="gold_category"><?php echo number_format($averages1[4], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages2[4], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages3[4], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category">Literacy</td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages1[4], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages2[4], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages3[4], 1); ?></td>
                         </tr>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
                         </tr>
                         <!--<tr>
-                                <td><strong>15a.</strong> Notices and discriminates rhyme</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>15a.</strong> Notices and discriminates rhyme</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>15b.</strong> Notices and discriminates alliteration</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>15b.</strong> Notices and discriminates alliteration</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>15c.</strong> Notices and discriminates smaller and smaller units of sound</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>15c.</strong> Notices and discriminates smaller and smaller units of sound</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>16a.</strong> Identifies and names letters</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>16a.</strong> Identifies and names letters</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>16b.</strong> Uses letter-sound knowledge</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>16b.</strong> Uses letter-sound knowledge</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>17a.</strong> Uses and appreciates books</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>17a.</strong> Uses and appreciates books</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>17b.</strong> Uses print concepts</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>17b.</strong> Uses print concepts</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>18a.</strong> Interacts during read-alouds and book conversations</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>18a.</strong> Interacts during read-alouds and book conversations</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>18b.</strong> Uses emergent reading skills</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>18b.</strong> Uses emergent reading skills</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>18c.</strong> Retells stories</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>18c.</strong> Retells stories</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>19a.</strong> Writes name</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>19a.</strong> Writes name</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>19b.</strong> Writes to convey meaning</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>19b.</strong> Writes to convey meaning</td>
+                                <td class="trp_add_table"></td>
                         </tr>-->
                         <tr>
-                            <td class="gold_category">Mathematics</td>
-                            <td class="gold_category"><?php echo number_format($averages1[5], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages2[5], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages3[5], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category">Mathematics</td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages1[5], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages2[5], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages3[5], 1); ?></td>
                         </tr>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
                         </tr>
                         <!--<tr>
-                                <td><strong>20a.</strong> Counts</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>20a.</strong> Counts</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>20b.</strong> Quantifies</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>20b.</strong> Quantifies</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>20c.</strong> Connects numerals with their quantities</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>20c.</strong> Connects numerals with their quantities</td>
+                                <td class="trp_add_table"></td>
                         </tr><tr>
-                                <td><strong>21a.</strong> Understands spatial relationships</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>21a.</strong> Understands spatial relationships</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>21b.</strong> Understands shapes</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>21b.</strong> Understands shapes</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>22.</strong> Compares and measures</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>22.</strong> Compares and measures</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>23.</strong> Demonstrates knowledge of patterns</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>23.</strong> Demonstrates knowledge of patterns</td>
+                                <td class="trp_add_table"></td>
                         </tr>-->
                         <tr>
-                            <td class="gold_category">Science and Technology</td>
-                            <td class="gold_category"><?php echo number_format($averages1[6], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages2[6], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages3[6], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category">Science and Technology</td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages1[6], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages2[6], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages3[6], 1); ?></td>
                         </tr>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
                         </tr>
                         <!--<tr>
-                                <td><strong>24.</strong> Uses scientific inquiry skills</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>24.</strong> Uses scientific inquiry skills</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>25.</strong> Demonstrates knowledge of the physical properties of objects and materials</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>25.</strong> Demonstrates knowledge of the physical properties of objects and materials</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>26.</strong> Demonstrates knowledge of the physical properties of objects and materials</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>26.</strong> Demonstrates knowledge of the physical properties of objects and materials</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>27.</strong> Demonstrates knowledge of the Earth's environment</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>27.</strong> Demonstrates knowledge of the Earth's environment</td>
+                                <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                                <td><strong>28.</strong> Uses tools and other technology to perform tasks</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>28.</strong> Uses tools and other technology to perform tasks</td>
+                                <td class="trp_add_table"></td>
                         </tr>-->
                         <tr>
-                            <td class="gold_category">Social Studies</td>
-                            <td class="gold_category"><?php echo number_format($averages1[7], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages2[7], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages3[7], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category">Social Studies</td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages1[7], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages2[7], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages3[7], 1); ?></td>
                         </tr>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
                         </tr>
                         <!--<tr>
-                                <td><strong>29.</strong> Demonstrates knowledge about self</td>
-                                <td></td>
+                                <td class="trp_add_table"><strong>29.</strong> Demonstrates knowledge about self</td>
+                                <td class="trp_add_table"></td>
                         </tr>-->
                         <tr>
-                            <td class="gold_category">Creative Arts Expression</td>
-                            <td class="gold_category"><?php echo number_format($averages1[8], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages2[8], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages3[8], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category">Creative Arts Expression</td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages1[8], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages2[8], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages3[8], 1); ?></td>
                         </tr>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
                         </tr>
                         <tr>
-                            <td class="gold_category">English Language Development</td>
-                            <td class="gold_category"><?php echo number_format($averages1[9], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages2[9], 1); ?></td>
-                            <td class="gold_category"><?php echo number_format($averages3[9], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category">English Language Development</td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages1[9], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages2[9], 1); ?></td>
+                            <td class="trp_add_table" class="gold_category"><?php echo number_format($averages3[9], 1); ?></td>
                         </tr>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
+                            <td class="trp_add_table"></td>
                         </tr>
                     </table>
                     <table>
@@ -913,22 +913,22 @@ $program = mysqli_fetch_array($program_info);
                         $class_avgs=mysqli_query($cnnTRP, $get_class_avgs);
                         while ($class_avg=mysqli_fetch_array($class_avgs)){
                             ?>
-                        <tr><td><?php echo $class_avg['Classroom_ID'];?></td><td><?php if($class_avg['Test_Year']==1){ echo 'First Year';}
+                        <tr><td class="trp_add_table"><?php echo $class_avg['Classroom_ID'];?></td><td class="trp_add_table"><?php if($class_avg['Test_Year']==1){ echo 'First Year';}
                         elseif($class_avg['Test_Year']==2){ echo 'Second Year';}
                         elseif($class_avg['Test_Year']==3){ echo 'Third Year';}
                         if($class_avg['Test_Time']==1){ echo ' Pre Test';}
                         if($class_avg['Test_Time']==2){ echo ' Mid Test';}
                         if($class_avg['Test_Time']==3){ echo ' Post Test';}
                             ?></td>
-                            <td><?php echo $class_avg['Gold_Section_Name'];?></td>
-                            <td> <?php echo $class_avg['Class_Avg']; ?> </td>
+                            <td class="trp_add_table"><?php echo $class_avg['Gold_Section_Name'];?></td>
+                            <td class="trp_add_table"> <?php echo $class_avg['Class_Avg']; ?> </td>
                         </tr>
                                 <?php
                         }
                         include "../include/dbconnclose.php";
                         ?>
-                        <tr><td><input type="text" id="new_class_num"></td>
-                        <td><select id="new_class_year">
+                        <tr><td class="trp_add_table"><input type="text" id="new_class_num"></td>
+                        <td class="trp_add_table"><select id="new_class_year">
                                             <option value="1">First Year</option>
                                             <option value="2">Second Year</option>
                                             <option value="3">Third Year</option>
@@ -937,7 +937,7 @@ $program = mysqli_fetch_array($program_info);
                                             <option value="2">Mid Test</option>
                                             <option value="3">Post Test</option>
                                         </select></td>
-                                                <td><select id="new_class_question">
+                                                <td class="trp_add_table"><select id="new_class_question">
                                             <?php 
                                             $section_query="SELECT * FROM Gold_Score_Sections";
                                             include "../include/dbconnopen.php";
@@ -951,8 +951,8 @@ $program = mysqli_fetch_array($program_info);
                                             ?>
                                             </select>
                                         </td>
-                        <td><input type="text" id="new_class_avg"></td>
-                        <td><input type="button" value="Save" onclick="
+                        <td class="trp_add_table"><input type="text" id="new_class_avg"></td>
+                        <td class="trp_add_table"><input type="button" value="Save" onclick="
                                    $.post(
                                        '../ajax/edit_gold_avgs.php',
                                    {
@@ -971,7 +971,7 @@ $program = mysqli_fetch_array($program_info);
                     </table>
                 </td>
             </tr>
-            <tr> <td>  <!--Finally, Early Childhood Attendance-->
+            <tr> <td class="trp_add_table">  <!--Finally, Early Childhood Attendance-->
                     <h4>Early Childhood Attendance</h4>
 
                     <table class="inner_table">
@@ -984,7 +984,7 @@ $program = mysqli_fetch_array($program_info);
         $format_date = explode('-', $date[1]);
         $date_formatted = $format_date[1] . '/' . $format_date[2] . '/' . $format_date[0];
         ?>
-                            <tr><td><?php echo $date_formatted; ?></td><td><a class="helptext" href="javascript:;" onclick="$('#today_attendees_<?php echo $date[0] ?>').toggle();">Show/hide attendees</a>
+                            <tr><td class="trp_add_table"><?php echo $date_formatted; ?></td><td class="trp_add_table"><a class="helptext" href="javascript:;" onclick="$('#today_attendees_<?php echo $date[0] ?>').toggle();">Show/hide attendees</a>
                                     <div id="today_attendees_<?php echo $date[0] ?>" class="attendee_list"> <?php
                     ////get attendees
                     $attendance_query = "SELECT First_Name, Last_Name FROM Program_Attendance 
@@ -1032,8 +1032,8 @@ $program = mysqli_fetch_array($program_info);
                         }
                         ?> <tr>
                             <!-- add a new program date: -->
-                            <td>Add Date: <input type="text" id="new_early_childhood_date" class="hasDatepickers no_view"></td>
-                            <td><input type="button" value="Save Date" class="no_view" onclick="
+                            <td class="trp_add_table">Add Date: <input type="text" id="new_early_childhood_date" class="hasDatepickers no_view"></td>
+                            <td class="trp_add_table"><input type="button" value="Save Date" class="no_view" onclick="
                                     $.post(
                                             '../ajax/new_date.php',
                                             {
@@ -1058,7 +1058,7 @@ $program = mysqli_fetch_array($program_info);
     }
     else if ($program['Program_ID'] == 6){
     ?>
-        <tr><td>Test.  This is where aggregated data would go.</td></tr>
+        <tr><td class="trp_add_table">Test.  This is where aggregated data would go.</td></tr>
     <?php
 }
 ?>
@@ -1070,7 +1070,7 @@ $program = mysqli_fetch_array($program_info);
         ?>
         <table>
             <tr>
-                <td width="35%">
+                <td class="trp_add_table" width="35%">
                     <br/><br/>
                     <!-- as in early childhood, these are people enrolled in the MS to HS transition.
                     Not sure whether all these students will be entered in the system.
@@ -1097,16 +1097,16 @@ $program = mysqli_fetch_array($program_info);
                         <div id="search_to_add_participant">
                             <table class="search_table">
                                 <tr>
-                                    <td><strong>First Name:</strong></td>
-                                    <td><input type="text" id="name_search" style="width:100px;"/></td>
-                                    <td><strong>Last Name:</strong></td>
-                                    <td><input type="text" id="surname_search" style="width:100px;" /></td>
+                                    <td class="trp_add_table"><strong>First Name:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="name_search" style="width:100px;"/></td>
+                                    <td class="trp_add_table"><strong>Last Name:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="surname_search" style="width:100px;" /></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>DOB:</strong></td>
-                                    <td><input type="text" id="dob_search" style="width:70px;" /></td>
-                                    <td><strong>Gender:</strong></td>
-                                    <td><select id="gender_search">
+                                    <td class="trp_add_table"><strong>DOB:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="dob_search" style="width:70px;" /></td>
+                                    <td class="trp_add_table"><strong>Gender:</strong></td>
+                                    <td class="trp_add_table"><select id="gender_search">
                                             <option value="">---------</option>
                                             <option value="m">Male</option>
                                             <option value="f">Female</option>
@@ -1114,7 +1114,7 @@ $program = mysqli_fetch_array($program_info);
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" style="text-align:center;"><input type="button" value="Search" onclick="
+                                    <td class="trp_add_table" colspan="4" style="text-align:center;"><input type="button" value="Search" onclick="
                                             $.post(
                                                     '../ajax/search_users.php',
                                                     {
@@ -1141,7 +1141,7 @@ $program = mysqli_fetch_array($program_info);
 
 
                 </td>
-                <td colspan="2">
+                <td class="trp_add_table" colspan="2">
 
                     <!-- shows GPA and test scores: -->
                     <h4>Academic Records</h4>
@@ -1153,16 +1153,16 @@ $program = mysqli_fetch_array($program_info);
                     $scores = mysqli_query($cnnTRP, $get_scores);
                     ?>
                     <table  class="gpa_isat_table">
-                        <tr style="text-align:center;"><td></td><td colspan="4"><strong>Explore Scores</strong></td><td colspan="2"><strong>ISAT Scores</strong></td></tr>
+                        <tr style="text-align:center;"><td class="trp_add_table"></td><td class="trp_add_table" colspan="4"><strong>Explore Scores</strong></td><td class="trp_add_table" colspan="2"><strong>ISAT Scores</strong></td></tr>
                         <tr class="divider">
-                            <td width="15%"><strong>Year</strong></td>
-                            <td><strong>Pre-program average</strong></td>
-                            <td><strong>Mid-program average</strong></td>
-                            <td><strong>Post-program average</strong></td>
-                            <td><strong>9th grade average</strong></td>
-                            <td><strong>Reading</strong></td>
-                            <td><strong>Math</strong></td>
-                            <td><strong>Quarter</strong></td><td><strong>Average GPA</strong></td>
+                            <td class="trp_add_table" width="15%"><strong>Year</strong></td>
+                            <td class="trp_add_table"><strong>Pre-program average</strong></td>
+                            <td class="trp_add_table"><strong>Mid-program average</strong></td>
+                            <td class="trp_add_table"><strong>Post-program average</strong></td>
+                            <td class="trp_add_table"><strong>9th grade average</strong></td>
+                            <td class="trp_add_table"><strong>Reading</strong></td>
+                            <td class="trp_add_table"><strong>Math</strong></td>
+                            <td class="trp_add_table"><strong>Quarter</strong></td><td class="trp_add_table"><strong>Average GPA</strong></td>
                         </tr>
                         <?php
                         $current_school = 0;
@@ -1178,15 +1178,15 @@ $program = mysqli_fetch_array($program_info);
                             }
                             ?>
                             <tr>
-                                <td><?php $years = str_split($score['School_Year'], 2);
+                                <td class="trp_add_table"><?php $years = str_split($score['School_Year'], 2);
                             echo '20' . $years[0] . '-20' . $years[1];
                             ?></td>
-                                <td><?php echo number_format($score['pre'], 2); ?></td>
-                                <td><?php echo number_format($score['mid'], 2); ?></td>
-                                <td><?php echo number_format($score['post'], 2); ?></td>
-                                <td><?php echo number_format($score['fall'], 2); ?></td>
-                                <td><?php echo number_format($score['reading'], 2); ?></td>
-                                <td><?php echo number_format($score['math'], 2); ?></td>
+                                <td class="trp_add_table"><?php echo number_format($score['pre'], 2); ?></td>
+                                <td class="trp_add_table"><?php echo number_format($score['mid'], 2); ?></td>
+                                <td class="trp_add_table"><?php echo number_format($score['post'], 2); ?></td>
+                                <td class="trp_add_table"><?php echo number_format($score['fall'], 2); ?></td>
+                                <td class="trp_add_table"><?php echo number_format($score['reading'], 2); ?></td>
+                                <td class="trp_add_table"><?php echo number_format($score['math'], 2); ?></td>
 
                                 <?php
                                 $format_school_year = str_split($score['School_Year'], 2);
@@ -1198,7 +1198,7 @@ $program = mysqli_fetch_array($program_info);
                                 $academic_program = mysqli_query($cnnTRP, $get_academic_info_by_program);
 
                                 $current_school = 0;
-                                ?><td><?php
+                                ?><td class="trp_add_table"><?php
                                     while ($acade = mysqli_fetch_array($academic_program)) {
                                         echo $acade['Quarter'];
                                         ?><br>
@@ -1208,11 +1208,11 @@ $program = mysqli_fetch_array($program_info);
         ?>
                                 <!-- quarters will stay with the year, which is why this while has to be nested.
                                 --> 
-                                <td><?php
+                                <td class="trp_add_table"><?php
                                     while ($acade = mysqli_fetch_array($academic_program)) {
                                         echo number_format($acade['AVG(GPA)'], 2);
                                         ?>
-                                        <!--<td><?php
+                                        <!--<td class="trp_add_table"><?php
                                         $count_people_with_academic = "SELECT COUNT(*) FROM Academic_Info WHERE Program_ID='" . $program['Program_ID']
                                                 . "' AND Quarter=" . $acade['Quarter'];
                                         $count_people = mysqli_query($cnnTRP, $count_people_with_academic);
@@ -1230,8 +1230,8 @@ $program = mysqli_fetch_array($program_info);
 
                 </td>
             </tr>
-            <tr><td></td>
-                <td style="padding:15px;">
+            <tr><td class="trp_add_table"></td>
+                <td class="trp_add_table" style="padding:15px;">
 
                     <!-- show discipline records for this program by school and year. -->
                     <h4>Discipline Records</h4>
@@ -1244,7 +1244,7 @@ $program = mysqli_fetch_array($program_info);
                     // echo $get_academic_info_by_program;
                     $academic_program = mysqli_query($cnnTRP, $get_academic_info_by_program);
                     ?><table class="gpa_isat_table">
-                        <tr class="divider"><td><strong>Quarter/Year</strong></td><td><strong>Average Tardies</strong></td><td><strong>Average Excused Absences</strong></td><td><strong>Average Unexcused Absences</strong></td></tr>
+                        <tr class="divider"><td class="trp_add_table"><strong>Quarter/Year</strong></td><td class="trp_add_table"><strong>Average Tardies</strong></td><td class="trp_add_table"><strong>Average Excused Absences</strong></td><td class="trp_add_table"><strong>Average Unexcused Absences</strong></td></tr>
 
                         <?php
                         $current_school = 0;
@@ -1259,17 +1259,17 @@ $program = mysqli_fetch_array($program_info);
                                 <?php
                             }
                             ?>
-                            <tr><td><?php echo $acade['Quarter'] . '/' . $acade['School_Year']; ?></td>
-                                <td><?php echo number_format($acade['tardies'], 2); ?></td>
-                                <td><?php echo number_format($acade['excused'], 2); ?></td>
-                                <td><?php echo number_format($acade['skipped'], 2); ?></td>
+                            <tr><td class="trp_add_table"><?php echo $acade['Quarter'] . '/' . $acade['School_Year']; ?></td>
+                                <td class="trp_add_table"><?php echo number_format($acade['tardies'], 2); ?></td>
+                                <td class="trp_add_table"><?php echo number_format($acade['excused'], 2); ?></td>
+                                <td class="trp_add_table"><?php echo number_format($acade['skipped'], 2); ?></td>
                             </tr>
         <?php
     }
     ?></table><br/><br/>
                 </td>
             </tr>
-            <tr><td colspan="3">
+            <tr><td class="trp_add_table" colspan="3">
 
                     <!-- upload space for program notes: -->
                     <h4>Upload Notes</h4>
@@ -1321,21 +1321,21 @@ $program = mysqli_fetch_array($program_info);
                         $notes = mysqli_query($cnnTRP, $get_notes);
                         while ($note = mysqli_fetch_row($notes)) {
                             ?>
-                            <tr><td><?php echo $note[0] . '/' . $note[1] . '/' . $note[2]; ?></td>
-                                <td><?php echo $note[3]; ?></td>
-                                <td><?php echo $note[5]; ?></td>
-                                <td><?php echo $note[4]; ?></td>
+                            <tr><td class="trp_add_table"><?php echo $note[0] . '/' . $note[1] . '/' . $note[2]; ?></td>
+                                <td class="trp_add_table"><?php echo $note[3]; ?></td>
+                                <td class="trp_add_table"><?php echo $note[5]; ?></td>
+                                <td class="trp_add_table"><?php echo $note[4]; ?></td>
                             </tr>
         <?php
     }
     // include "../include/dbconnclose.php";
     ?>
                         <!--Add new note-->
-                        <tr><td colspan="2">New note:<br>
+                        <tr><td class="trp_add_table" colspan="2">New note:<br>
                                 <span class="helptext">Note will save automatically once you click away from the text entry box.  <br>
                                     You must choose a school before entering the note for the school to save correctly.</span>
                             </td>
-                            <td><select id="school_new_note">
+                            <td class="trp_add_table"><select id="school_new_note">
                                     <option value="">-----</option>
                                     <?php
                                     $select_schools = "SELECT * FROM Schools ORDER BY School_Name";
@@ -1348,7 +1348,7 @@ $program = mysqli_fetch_array($program_info);
                                 }
                                 ?>
                                 </select></td>
-                            <td><textarea onblur="
+                            <td class="trp_add_table"><textarea onblur="
                                     var school = document.getElementById('school_new_note').value;
                                     //alert(school);
                                     if (school === '') {
@@ -1379,7 +1379,7 @@ else if ($program['Program_ID'] == 3) {
     ?><h3>Note: this program is in progress, waiting for the Gads Hill ETO implementation.</h3><br><hr><br>
         <table width="100%">
             <tr>
-                <td>
+                <td class="trp_add_table">
                     <!-- list of people enrolled in this program: -->
                     <h4>Program Enrollment</h4>
                     <div class="add_participant">
@@ -1389,16 +1389,16 @@ else if ($program['Program_ID'] == 3) {
                         <div id="search_to_add_participant">
                             <table class="search_table">
                                 <tr>
-                                    <td><strong>First Name:</strong></td>
-                                    <td><input type="text" id="name_search" style="width:100px;"/></td>
-                                    <td><strong>Last Name:</strong></td>
-                                    <td><input type="text" id="surname_search" style="width:100px;" /></td>
+                                    <td class="trp_add_table"><strong>First Name:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="name_search" style="width:100px;"/></td>
+                                    <td class="trp_add_table"><strong>Last Name:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="surname_search" style="width:100px;" /></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>DOB:</strong></td>
-                                    <td><input type="text" id="dob_search" style="width:70px;" /></td>
-                                    <td><strong>Gender:</strong></td>
-                                    <td><select id="gender_search">
+                                    <td class="trp_add_table"><strong>DOB:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="dob_search" style="width:70px;" /></td>
+                                    <td class="trp_add_table"><strong>Gender:</strong></td>
+                                    <td class="trp_add_table"><select id="gender_search">
                                             <option value="">---------</option>
                                             <option value="m">Male</option>
                                             <option value="f">Female</option>
@@ -1406,7 +1406,7 @@ else if ($program['Program_ID'] == 3) {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" style="text-align:center;"><input type="button" value="Search" onclick="
+                                    <td class="trp_add_table" colspan="4" style="text-align:center;"><input type="button" value="Search" onclick="
                                             $.post(
                                                     '../ajax/search_users.php',
                                                     {
@@ -1445,7 +1445,7 @@ else if ($program['Program_ID'] == 3) {
                     <br/><br/>
 
                 </td>
-                <td>
+                <td class="trp_add_table">
                     <h4>Academic Records</h4>
                     <br/><br/>
                     <h4>Parent Surveys</h4>
@@ -1472,9 +1472,9 @@ else if ($program['Program_ID'] == 4) {
     $enrollment = mysqli_query($cnnTRP, $enrollment_query);
     while ($enroll = mysqli_fetch_row($enrollment)) {
         ?>
-                <tr><td><?php echo $enroll[0]; ?></td><td><?php echo $enroll[1]; ?></td>
-                    <td><?php echo $enroll[2]; ?></td>
-                    <td><input type="button" value="Delete"
+                <tr><td class="trp_add_table"><?php echo $enroll[0]; ?></td><td class="trp_add_table"><?php echo $enroll[1]; ?></td>
+                    <td class="trp_add_table"><?php echo $enroll[2]; ?></td>
+                    <td class="trp_add_table"><input type="button" value="Delete"
                                onclick="
                                        $.post(
                                                '../ajax/elev8_save.php',
@@ -1494,7 +1494,7 @@ else if ($program['Program_ID'] == 4) {
     include "../include/dbconnclose.php";
     ?>
             <tr>
-                <td><select id="month_elev8_select">
+                <td class="trp_add_table"><select id="month_elev8_select">
                         <option value="">-----</option>
                         <option value="1">January</option>
                         <option value="2">February</option>
@@ -1509,7 +1509,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="11">November</option>
                         <option value="12">December</option>
                     </select></td>
-                <td><select id="year_elev8_select">
+                <td class="trp_add_table"><select id="year_elev8_select">
                         <option value="">-----</option>
                         <option value="12">2012</option>
                         <option value="13">2013</option>
@@ -1517,7 +1517,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="15">2015</option>
                         <option value="16">2016</option>
                     </select></td>
-                <td><input type="text" id="enrollment_elev8_new" style="width:100px;">
+                <td class="trp_add_table"><input type="text" id="enrollment_elev8_new" style="width:100px;">
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -1544,8 +1544,8 @@ else if ($program['Program_ID'] == 4) {
                                                             $enrollment = mysqli_query($cnnTRP, $enrollment_query);
                                                             while ($enroll = mysqli_fetch_row($enrollment)) {
                                                                 ?>
-                <tr><td><?php echo $enroll[0]; ?></td><td><?php echo $enroll[1]; ?></td>
-                    <td><?php echo $enroll[2]; ?></td><td><input type="button" value="Delete"
+                <tr><td class="trp_add_table"><?php echo $enroll[0]; ?></td><td class="trp_add_table"><?php echo $enroll[1]; ?></td>
+                    <td class="trp_add_table"><?php echo $enroll[2]; ?></td><td class="trp_add_table"><input type="button" value="Delete"
                                                                 onclick="
                                                                         $.post(
                                                                                 '../ajax/elev8_save.php',
@@ -1564,7 +1564,7 @@ else if ($program['Program_ID'] == 4) {
     include "../include/dbconnclose.php";
     ?>
             <tr>
-                <td><select id="month_elev8_select_2">
+                <td class="trp_add_table"><select id="month_elev8_select_2">
                         <option value="">-----</option>
                         <option value="1">January</option>
                         <option value="2">February</option>
@@ -1579,7 +1579,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="11">November</option>
                         <option value="12">December</option>
                     </select></td>
-                <td><select id="year_elev8_select_2">
+                <td class="trp_add_table"><select id="year_elev8_select_2">
                         <option value="">-----</option>
                         <option value="12">2012</option>
                         <option value="13">2013</option>
@@ -1587,7 +1587,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="15">2015</option>
                         <option value="16">2016</option>
                     </select></td>
-                <td><input type="text" id="enrollment_elev8_new_2" style="width:100px;">
+                <td class="trp_add_table"><input type="text" id="enrollment_elev8_new_2" style="width:100px;">
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -1615,8 +1615,8 @@ else if ($program['Program_ID'] == 4) {
                                                             $enrollment = mysqli_query($cnnTRP, $enrollment_query);
                                                             while ($enroll = mysqli_fetch_row($enrollment)) {
                                                                 ?>
-                <tr><td><?php echo $enroll[0]; ?></td><td><?php echo $enroll[1]; ?></td>
-                    <td><?php echo $enroll[2]; ?></td><td><input type="button" value="Delete"
+                <tr><td class="trp_add_table"><?php echo $enroll[0]; ?></td><td class="trp_add_table"><?php echo $enroll[1]; ?></td>
+                    <td class="trp_add_table"><?php echo $enroll[2]; ?></td><td class="trp_add_table"><input type="button" value="Delete"
                                                                 onclick="
                                                                         $.post(
                                                                                 '../ajax/elev8_save.php',
@@ -1635,7 +1635,7 @@ else if ($program['Program_ID'] == 4) {
     include "../include/dbconnclose.php";
     ?>
             <tr>
-                <td><select id="month_elev8_select_3">
+                <td class="trp_add_table"><select id="month_elev8_select_3">
                         <option value="">-----</option>
                         <option value="1">January</option>
                         <option value="2">February</option>
@@ -1650,7 +1650,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="11">November</option>
                         <option value="12">December</option>
                     </select></td>
-                <td><select id="year_elev8_select_3">
+                <td class="trp_add_table"><select id="year_elev8_select_3">
                         <option value="">-----</option>
                         <option value="12">2012</option>
                         <option value="13">2013</option>
@@ -1658,7 +1658,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="15">2015</option>
                         <option value="16">2016</option>
                     </select></td>
-                <td><input type="text" id="enrollment_elev8_new_3" style="width:100px;">
+                <td class="trp_add_table"><input type="text" id="enrollment_elev8_new_3" style="width:100px;">
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -1685,8 +1685,8 @@ else if ($program['Program_ID'] == 4) {
                                                             $enrollment = mysqli_query($cnnTRP, $enrollment_query);
                                                             while ($enroll = mysqli_fetch_row($enrollment)) {
                                                                 ?>
-                <tr><td><?php echo $enroll[0]; ?></td><td><?php echo $enroll[1]; ?></td>
-                    <td><?php echo $enroll[2]; ?></td><td><input type="button" value="Delete"
+                <tr><td class="trp_add_table"><?php echo $enroll[0]; ?></td><td class="trp_add_table"><?php echo $enroll[1]; ?></td>
+                    <td class="trp_add_table"><?php echo $enroll[2]; ?></td><td class="trp_add_table"><input type="button" value="Delete"
                                                                 onclick="
                                                                         $.post(
                                                                                 '../ajax/elev8_save.php',
@@ -1705,7 +1705,7 @@ else if ($program['Program_ID'] == 4) {
     include "../include/dbconnclose.php";
     ?>
             <tr>
-                <td><select id="month_elev8_select_4">
+                <td class="trp_add_table"><select id="month_elev8_select_4">
                         <option value="">-----</option>
                         <option value="1">January</option>
                         <option value="2">February</option>
@@ -1720,7 +1720,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="11">November</option>
                         <option value="12">December</option>
                     </select></td>
-                <td><select id="year_elev8_select_4">
+                <td class="trp_add_table"><select id="year_elev8_select_4">
                         <option value="">-----</option>
                         <option value="12">2012</option>
                         <option value="13">2013</option>
@@ -1728,7 +1728,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="15">2015</option>
                         <option value="16">2016</option>
                     </select></td>
-                <td><input type="text" id="enrollment_elev8_new_4" style="width:100px;">
+                <td class="trp_add_table"><input type="text" id="enrollment_elev8_new_4" style="width:100px;">
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -1756,8 +1756,8 @@ else if ($program['Program_ID'] == 4) {
                                                             $enrollment = mysqli_query($cnnTRP, $enrollment_query);
                                                             while ($enroll = mysqli_fetch_row($enrollment)) {
                                                                 ?>
-                <tr><td><?php echo $enroll[0]; ?></td><td><?php echo $enroll[1]; ?></td>
-                    <td><?php echo $enroll[2]; ?></td><td><input type="button" value="Delete"
+                <tr><td class="trp_add_table"><?php echo $enroll[0]; ?></td><td class="trp_add_table"><?php echo $enroll[1]; ?></td>
+                    <td class="trp_add_table"><?php echo $enroll[2]; ?></td><td class="trp_add_table"><input type="button" value="Delete"
                                                                 onclick="
                                                                         $.post(
                                                                                 '../ajax/elev8_save.php',
@@ -1776,7 +1776,7 @@ else if ($program['Program_ID'] == 4) {
     include "../include/dbconnclose.php";
     ?>
             <tr>
-                <td><select id="month_elev8_select_5">
+                <td class="trp_add_table"><select id="month_elev8_select_5">
                         <option value="">-----</option>
                         <option value="1">January</option>
                         <option value="2">February</option>
@@ -1791,7 +1791,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="11">November</option>
                         <option value="12">December</option>
                     </select></td>
-                <td><select id="year_elev8_select_5">
+                <td class="trp_add_table"><select id="year_elev8_select_5">
                         <option value="">-----</option>
                         <option value="12">2012</option>
                         <option value="13">2013</option>
@@ -1799,7 +1799,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="15">2015</option>
                         <option value="16">2016</option>
                     </select></td>
-                <td><input type="text" id="enrollment_elev8_new_5" style="width:100px;">
+                <td class="trp_add_table"><input type="text" id="enrollment_elev8_new_5" style="width:100px;">
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -1826,8 +1826,8 @@ else if ($program['Program_ID'] == 4) {
                                                             $enrollment = mysqli_query($cnnTRP, $enrollment_query);
                                                             while ($enroll = mysqli_fetch_row($enrollment)) {
                                                                 ?>
-                <tr><td><?php echo $enroll[0]; ?></td><td><?php echo $enroll[1]; ?></td>
-                    <td><?php echo $enroll[2]; ?></td><td><input type="button" value="Delete"
+                <tr><td class="trp_add_table"><?php echo $enroll[0]; ?></td><td class="trp_add_table"><?php echo $enroll[1]; ?></td>
+                    <td class="trp_add_table"><?php echo $enroll[2]; ?></td><td class="trp_add_table"><input type="button" value="Delete"
                                                                 onclick="
                                                                         $.post(
                                                                                 '../ajax/elev8_save.php',
@@ -1846,7 +1846,7 @@ else if ($program['Program_ID'] == 4) {
     include "../include/dbconnclose.php";
     ?>
             <tr>
-                <td><select id="month_elev8_select_6">
+                <td class="trp_add_table"><select id="month_elev8_select_6">
                         <option value="">-----</option>
                         <option value="1">January</option>
                         <option value="2">February</option>
@@ -1861,7 +1861,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="11">November</option>
                         <option value="12">December</option>
                     </select></td>
-                <td><select id="year_elev8_select_6">
+                <td class="trp_add_table"><select id="year_elev8_select_6">
                         <option value="">-----</option>
                         <option value="12">2012</option>
                         <option value="13">2013</option>
@@ -1869,7 +1869,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="15">2015</option>
                         <option value="16">2016</option>
                     </select></td>
-                <td><input type="text" id="enrollment_elev8_new_6" style="width:100px;">
+                <td class="trp_add_table"><input type="text" id="enrollment_elev8_new_6" style="width:100px;">
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -1897,8 +1897,8 @@ else if ($program['Program_ID'] == 4) {
                                                             $enrollment = mysqli_query($cnnTRP, $enrollment_query);
                                                             while ($enroll = mysqli_fetch_row($enrollment)) {
                                                                 ?>
-                <tr><td><?php echo $enroll[0]; ?></td><td><?php echo $enroll[1]; ?></td>
-                    <td><?php echo $enroll[2]; ?></td><td><input type="button" value="Delete"
+                <tr><td class="trp_add_table"><?php echo $enroll[0]; ?></td><td class="trp_add_table"><?php echo $enroll[1]; ?></td>
+                    <td class="trp_add_table"><?php echo $enroll[2]; ?></td><td class="trp_add_table"><input type="button" value="Delete"
                                                                 onclick="
                                                                         $.post(
                                                                                 '../ajax/elev8_save.php',
@@ -1917,7 +1917,7 @@ else if ($program['Program_ID'] == 4) {
     include "../include/dbconnclose.php";
     ?>
             <tr>
-                <td><select id="month_elev8_select_7">
+                <td class="trp_add_table"><select id="month_elev8_select_7">
                         <option value="">-----</option>
                         <option value="1">January</option>
                         <option value="2">February</option>
@@ -1932,7 +1932,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="11">November</option>
                         <option value="12">December</option>
                     </select></td>
-                <td><select id="year_elev8_select_7">
+                <td class="trp_add_table"><select id="year_elev8_select_7">
                         <option value="">-----</option>
                         <option value="12">2012</option>
                         <option value="13">2013</option>
@@ -1940,7 +1940,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="15">2015</option>
                         <option value="16">2016</option>
                     </select></td>
-                <td><input type="text" id="enrollment_elev8_new_7" style="width:100px;">
+                <td class="trp_add_table"><input type="text" id="enrollment_elev8_new_7" style="width:100px;">
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -1969,8 +1969,8 @@ else if ($program['Program_ID'] == 4) {
                                                             $enrollment = mysqli_query($cnnTRP, $enrollment_query);
                                                             while ($enroll = mysqli_fetch_row($enrollment)) {
                                                                 ?>
-                <tr><td><?php echo $enroll[0]; ?></td><td><?php echo $enroll[1]; ?></td>
-                    <td><?php echo $enroll[2]; ?></td><td><input type="button" value="Delete"
+                <tr><td class="trp_add_table"><?php echo $enroll[0]; ?></td><td class="trp_add_table"><?php echo $enroll[1]; ?></td>
+                    <td class="trp_add_table"><?php echo $enroll[2]; ?></td><td class="trp_add_table"><input type="button" value="Delete"
                                                                 onclick="
                                                                         $.post(
                                                                                 '../ajax/elev8_save.php',
@@ -1989,7 +1989,7 @@ else if ($program['Program_ID'] == 4) {
     include "../include/dbconnclose.php";
     ?>
             <tr>
-                <td><select id="month_elev8_select_8">
+                <td class="trp_add_table"><select id="month_elev8_select_8">
                         <option value="">-----</option>
                         <option value="1">January</option>
                         <option value="2">February</option>
@@ -2004,7 +2004,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="11">November</option>
                         <option value="12">December</option>
                     </select></td>
-                <td><select id="year_elev8_select_8">
+                <td class="trp_add_table"><select id="year_elev8_select_8">
                         <option value="">-----</option>
                         <option value="12">2012</option>
                         <option value="13">2013</option>
@@ -2012,7 +2012,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="15">2015</option>
                         <option value="16">2016</option>
                     </select></td>
-                <td><input type="text" id="enrollment_elev8_new_8" style="width:100px;">
+                <td class="trp_add_table"><input type="text" id="enrollment_elev8_new_8" style="width:100px;">
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -2037,7 +2037,7 @@ else if ($program['Program_ID'] == 5) {
     ?>
         <table width="100%">
             <tr>
-                <td width="35%">
+                <td class="trp_add_table" width="35%">
                     <!-- list of people in this program.  Search for another person here.  Note that the new
                     participant must already be entered in the system. -->
                     <h4>Program Enrollment</h4>
@@ -2048,16 +2048,16 @@ else if ($program['Program_ID'] == 5) {
                         <div id="search_to_add_participant">
                             <table class="search_table">
                                 <tr>
-                                    <td><strong>First Name:</strong></td>
-                                    <td><input type="text" id="name_search" style="width:100px;"/></td>
-                                    <td><strong>Last Name:</strong></td>
-                                    <td><input type="text" id="surname_search" style="width:100px;" /></td>
+                                    <td class="trp_add_table"><strong>First Name:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="name_search" style="width:100px;"/></td>
+                                    <td class="trp_add_table"><strong>Last Name:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="surname_search" style="width:100px;" /></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>DOB:</strong></td>
-                                    <td><input type="text" id="dob_search" style="width:70px;" /></td>
-                                    <td><strong>Gender:</strong></td>
-                                    <td><select id="gender_search">
+                                    <td class="trp_add_table"><strong>DOB:</strong></td>
+                                    <td class="trp_add_table"><input type="text" id="dob_search" style="width:70px;" /></td>
+                                    <td class="trp_add_table"><strong>Gender:</strong></td>
+                                    <td class="trp_add_table"><select id="gender_search">
                                             <option value="">---------</option>
                                             <option value="m">Male</option>
                                             <option value="f">Female</option>
@@ -2065,7 +2065,7 @@ else if ($program['Program_ID'] == 5) {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" style="text-align:center;"><input type="button" value="Search" onclick="
+                                    <td class="trp_add_table" colspan="4" style="text-align:center;"><input type="button" value="Search" onclick="
                                             $.post(
                                                     '../ajax/search_users.php',
                                                     {
@@ -2111,7 +2111,7 @@ else if ($program['Program_ID'] == 5) {
                                         $format_date = explode('-', $date[1]);
                                         $date_formatted = $format_date[1] . '/' . $format_date[2] . '/' . $format_date[0];
                                         ?>
-                            <tr><td><?php echo $date_formatted; ?></td><td><a class="helptext" href="javascript:;" onclick="$('#today_attendees_<?php echo $date[0] ?>').toggle();">Show/hide attendees</a>
+                            <tr><td class="trp_add_table"><?php echo $date_formatted; ?></td><td class="trp_add_table"><a class="helptext" href="javascript:;" onclick="$('#today_attendees_<?php echo $date[0] ?>').toggle();">Show/hide attendees</a>
                                     <div id="today_attendees_<?php echo $date[0] ?>" class="attendee_list"> <?php
                                 //get attendees
                                 $attendance_query = "SELECT First_Name, Last_Name FROM Program_Attendance INNER JOIN Participants
@@ -2156,8 +2156,8 @@ else if ($program['Program_ID'] == 5) {
                                     <?php
                                 }
                                 ?> <tr>
-                            <td>Add Date: <input type="text" id="new_early_childhood_date" class="hasDatepickers no_view"></td>
-                            <td><input type="button" value="Save Date" class="no_view" onclick="
+                            <td class="trp_add_table">Add Date: <input type="text" id="new_early_childhood_date" class="hasDatepickers no_view"></td>
+                            <td class="trp_add_table"><input type="button" value="Save Date" class="no_view" onclick="
                                     $.post(
                                             '../ajax/new_date.php',
                                             {
@@ -2174,7 +2174,7 @@ else if ($program['Program_ID'] == 5) {
                         </tr>
                     </table>
                 </td>
-                <td>
+                <td class="trp_add_table">
 
                     <!-- test scores for people in this program. -->	
                     <h4>GPA and ISAT Scores</h4>
@@ -2184,18 +2184,18 @@ else if ($program['Program_ID'] == 5) {
     // echo $get_academic_info_by_program;
     $academic_program = mysqli_query($cnnTRP, $get_academic_info_by_program);
     ?><table class="gpa_isat_table">
-                        <tr class="divider"><td><strong>Quarter/Year</strong></td><td><strong>Average GPA/<strong></td><td><strong>Average ISAT Math</strong></td>
-                            <td><strong>Average ISAT Reading</strong></td><td><strong>Average ISAT Total</strong></td><!--<th>Number of Participants Counted</th>--></tr>
+                        <tr class="divider"><td class="trp_add_table"><strong>Quarter/Year</strong></td><td class="trp_add_table"><strong>Average GPA/<strong></td><td class="trp_add_table"><strong>Average ISAT Math</strong></td>
+                            <td class="trp_add_table"><strong>Average ISAT Reading</strong></td><td class="trp_add_table"><strong>Average ISAT Total</strong></td><!--<th>Number of Participants Counted</th>--></tr>
 
                                             <?php
                                             while ($acade = mysqli_fetch_array($academic_program)) {
                                                 ?>
-                                            <tr><td><?php echo $acade['Quarter'] . '/' . $acade['School_Year']; ?></td>
-                                                <td><?php echo number_format($acade['AVG(GPA)'], 2); ?></td>
-                                                <td><?php echo number_format($acade['AVG(ISAT_Math)']); ?></td>
-                                                <td><?php echo number_format($acade['AVG(ISAT_Reading)']); ?></td>
-                                                <td></td>
-                                                <!--<td><?php
+                                            <tr><td class="trp_add_table"><?php echo $acade['Quarter'] . '/' . $acade['School_Year']; ?></td>
+                                                <td class="trp_add_table"><?php echo number_format($acade['AVG(GPA)'], 2); ?></td>
+                                                <td class="trp_add_table"><?php echo number_format($acade['AVG(ISAT_Math)']); ?></td>
+                                                <td class="trp_add_table"><?php echo number_format($acade['AVG(ISAT_Reading)']); ?></td>
+                                                <td class="trp_add_table"></td>
+                                                <!--<td class="trp_add_table"><?php
                                     $count_people_with_academic = "SELECT COUNT(*) FROM Academic_Info WHERE Program_ID='" . $program['Program_ID']
                                             . "' AND Quarter=" . $acade['Quarter'];
                                     $count_people = mysqli_query($cnnTRP, $count_people_with_academic);
@@ -2219,7 +2219,7 @@ else if ($program['Program_ID'] == 5) {
                                         <?php
                                         while ($survey = mysqli_fetch_array($surveys)) {
                                             ?>
-                                                <tr><td><?php echo $survey['Pre_Post']; ?></td><td><?php echo $survey['Date']; ?></td><td></td></tr>
+                                                <tr><td class="trp_add_table"><?php echo $survey['Pre_Post']; ?></td><td class="trp_add_table"><?php echo $survey['Date']; ?></td><td class="trp_add_table"></td></tr>
                                             <?php
                                         }
                                         ?></table><?php include "../include/dbconnclose.php"; ?>
@@ -2246,7 +2246,7 @@ else if ($program['Program_ID'] == 5) {
                                         <h4>Surveys</h4>
                                         <table id="nmma_survey_summary">
                                             <tr><th></th><th width="15%">Pre-Program Average</th><th width="15%">Post-Program Average</th></tr>
-                                            <tr class="divider"><td colspan="3"><strong>Cultural Identity Survey</strong></td></tr>
+                                            <tr class="divider"><td class="trp_add_table" colspan="3"><strong>Cultural Identity Survey</strong></td></tr>
                                             <?php
                                             $id_questions = array("Do you think you can explain what culture is?",
                                                 "How much do you know about your home culture?",
@@ -2263,20 +2263,20 @@ else if ($program['Program_ID'] == 5) {
                                                 $question_number = $q + 1;
                                                 ?>
                                                 <tr>
-                                                    <td class="q">
+                                                    <td class="trp_add_table" class="q">
                                                         <strong><?php echo $question_number; ?>: </strong> <?php echo $id_questions[$q]; ?>
                                                     </td>
-                                                    <td>
+                                                    <td class="trp_add_table">
                                                 <?php echo number_format($pre[$q], 1); ?>
                                                     </td>
-                                                    <td>
+                                                    <td class="trp_add_table">
                                                 <?php echo number_format($post[$q], 1); ?>
                                                     </td>
                                                 </tr>	
                                                 <?php
                                             }
                                             ?>
-                                                    <!--<tr class="divider"><td colspan="3"><strong>Cultural Traditions Survey</strong><br/> <span style="color:#990000;font-weight:bold;">Need to determine how to show this in the aggregate (responses are text-based).</span></td></tr>
+                                                    <!--<tr class="divider"><td class="trp_add_table" colspan="3"><strong>Cultural Traditions Survey</strong><br/> <span style="color:#990000;font-weight:bold;">Need to determine how to show this in the aggregate (responses are text-based).</span></td></tr>
     <?php
     $traditions_questions = array("What makes up a person's culture?",
         "What is your cultural traditions?",
@@ -2290,11 +2290,11 @@ else if ($program['Program_ID'] == 5) {
         $question_number = $q + 1;
         ?>
                                                 <tr>
-                                                        <td class="q"><strong><?php echo $question_number; ?>: </strong> <?php echo $traditions_questions[$q]; ?></td>
-                                                        <td>
+                                                        <td class="trp_add_table" class="q"><strong><?php echo $question_number; ?>: </strong> <?php echo $traditions_questions[$q]; ?></td>
+                                                        <td class="trp_add_table">
                                                                 
                                                         </td>
-                                                        <td>
+                                                        <td class="trp_add_table">
                                                                 
                                                         </td>
                                                 </tr>
@@ -2316,23 +2316,23 @@ if ($program['Program_ID'] != 6){
             <br />
             <table>
                 <tr>
-                    <td style="width: 400px;">
+                    <td class="trp_add_table" style="width: 400px;">
                     <!-- Sessions -->
                     <h4>Add New Session</h4>
                     <table class="inner_table" style="width: 250px;">
                         <tr>
-                            <td>
+                            <td class="trp_add_table">
                                 <strong>Name:</strong>
                             </td>
-                            <td>
+                            <td class="trp_add_table">
                                 <input name="new_session_name" id="new_session_name" />
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td class="trp_add_table">
                                 <strong>Start Date:</strong>
                             </td>
-                            <td>
+                            <td class="trp_add_table">
                                 <input name="new_session_start_date" id="new_session_start_date" />
                                 <script>
                                     $(function() {
@@ -2344,10 +2344,10 @@ if ($program['Program_ID'] != 6){
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td class="trp_add_table">
                                 <strong>End Date:</strong>
                             </td>
-                            <td>
+                            <td class="trp_add_table">
                                 <input name="new_session_end_date" id="new_session_end_date" />
                                 <script>
                                     $(function() {
@@ -2359,7 +2359,7 @@ if ($program['Program_ID'] != 6){
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="text-align: center;">
+                            <td class="trp_add_table" colspan="2" style="text-align: center;">
                                 <input type="button" onclick="
                                     //first check whether a session with this name already exists:
                                     $.post(
@@ -2387,7 +2387,7 @@ if ($program['Program_ID'] != 6){
                         </tr>
                     </table>
         </td>
-        <td>
+        <td class="trp_add_table">
                     
                     <h4>Sessions</h4>
                     <script>
@@ -2426,17 +2426,17 @@ if ($program['Program_ID'] != 6){
                         ?>
                         <table class="inner_table" style="width: 80%;">
                             <tr>
-                                <td style="font-size: 13px;">
+                                <td class="trp_add_table" style="font-size: 13px;">
                                     <?php echo $program_session['Session_Name']; ?>
                                 </td>
-                                <td style="font-size: 13px;">
+                                <td class="trp_add_table" style="font-size: 13px;">
                                     (<?php echo $program_session['Start_Date']; ?> -
                                     <?php echo $program_session['End_Date']; ?>)
                                 </td>
-                                <td>
+                                <td class="trp_add_table">
                                     <a href="javascript:;" onclick="$('#program_session_edit_<?php echo $program_session['Session_ID']; ?>').toggle();" style="font-size: 13px;">Edit Session</a>
                                 </td>
-                                <td>
+                                <td class="trp_add_table">
                                     <a href="javascript:;" onclick="$('#add_session_participant_<?php echo $program_session['Session_ID']; ?>').toggle();" style="font-size: 13px;">Add Participant</a>
                                     <div id="add_session_participant_<?php echo $program_session['Session_ID']; ?>" style="display: none;">
                                         <input type="text"
@@ -2484,10 +2484,10 @@ if ($program['Program_ID'] != 6){
                                 </td>
                             </tr>
                             <tr id="program_session_edit_<?php echo $program_session['Session_ID']; ?>" style="display: none;">
-                                <td style="font-size: 13px;">
+                                <td class="trp_add_table" style="font-size: 13px;">
                                     <input name="session_name_<?php echo $program_session['Session_ID']; ?>" id="session_name_<?php echo $program_session['Session_ID']; ?>" value="<?php echo $program_session['Session_Name']; ?>" />
                                 </td>
-                                <td style="font-size: 13px;">
+                                <td class="trp_add_table" style="font-size: 13px;">
                                     (<input name="session_start_date_<?php echo $program_session['Session_ID']; ?>" id="session_start_date_<?php echo $program_session['Session_ID']; ?>" value="<?php echo $program_session['Start_Date']; ?>" /> -
                                     <input name="session_end_date_<?php echo $program_session['Session_ID']; ?>" id="session_end_date_<?php echo $program_session['Session_ID']; ?>" value="<?php echo $program_session['End_Date']; ?>" />)
                                     <script>
@@ -2501,7 +2501,7 @@ if ($program['Program_ID'] != 6){
                                     });
                                 </script>
                                 </td>
-                                <td>
+                                <td class="trp_add_table">
                                     <input type="button" onclick="
                                             $.post(
                                                     '../ajax/save_session.php',
@@ -2537,10 +2537,10 @@ if ($program['Program_ID'] != 6){
                             while($session_participant = mysqli_fetch_assoc($all_session_participants)) {
                                 ?>
                                 <tr id="session_participant_<?php echo $program_session['Session_ID']; ?>_<?php echo $session_participant['Participant_ID']; ?>">
-                                    <td style="font-size: 13px;" colspan="2">
+                                    <td class="trp_add_table" style="font-size: 13px;" colspan="2">
                                         <a href="../participants/profile.php?id=<?php echo $session_participant['Participant_ID']; ?>"><?php echo $session_participant['Last_Name']; ?>, <?php echo $session_participant['First_Name']; ?></a>
                                     </td>
-                                    <td style="font-size: 13px;">
+                                    <td class="trp_add_table" style="font-size: 13px;">
                                         <a href="javascript:;" onclick="
                                             if (confirm('Are you sure you want to remove this participant from this session?')) {
                                                 $.post(
@@ -2561,7 +2561,7 @@ if ($program['Program_ID'] != 6){
                                                     });
                                                     }" style="color: #f00;" title="Remove Participant">X</a>
                                     </td>
-                                    <td>
+                                    <td class="trp_add_table">
                                         
                                     </td>
                                 </tr>
