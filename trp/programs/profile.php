@@ -1,8 +1,8 @@
 <?php
 include "../../header.php";
 include "../header.php";
-$get_program_info_sqlsafe = "SELECT * FROM Programs WHERE Program_ID='" . mysqli_real_escape_string($_GET['id']) . "'";
 include "../include/dbconnopen.php";
+$get_program_info_sqlsafe = "SELECT * FROM Programs WHERE Program_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
 include "../include/datepicker_simple.php";
 $program_info = mysqli_query($cnnTRP, $get_program_info_sqlsafe);
 $program = mysqli_fetch_array($program_info);
