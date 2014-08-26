@@ -3,10 +3,11 @@
 //
 // *First determine the program that the logged-in user has access to.  Usually this will be a program ID number,
 // *but sometimes it will be 'a' (all) or 'n' (none).
-$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = " . stripslashes($_COOKIE['user']) . "";
-//echo $get_program_access;
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+$user_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_COOKIE['user']);
+$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
+    WHERE User_Email = " .$user_sqlsafe . "";
+//echo $get_program_access;
 $program_access = mysqli_query($cnnLISC, $get_program_access);
 $prog_access = mysqli_fetch_row($program_access);
 $access = $prog_access[0];
@@ -159,17 +160,14 @@ if (isset($_POST['submit_btn_assessments'])) {
                                     GROUP BY $pre_post " . $question[0] . "";
                 }
                 /* if program selected, pull only assessments from people in that program: */ else {
-                    $get_results = "SELECT COUNT(*) as count, " . $question[0] . ", $pre_post Response_Text FROM " . $table . "
-                            INNER JOIN Assessment_Responses ON Response_Select=" . $question[0] . " 
-                                WHERE Program=" . $_POST['program_select'] . " AND Question_ID='" . $question[0] . "'
-                                    GROUP BY $pre_post " . $question[0] . "";
-                    /* in order to allow for possibly more than one program chosen, let's loop through program_select POST, since
+                /* in order to allow for possibly more than one program chosen, let's loop through program_select POST, since
                      * if it's checkboxes it'll come in an array: */
                     $program_string = "(Program=";
                     $counter = 0;
                     foreach ($_POST['program_select'] as $program) {
+                        $program_sqlsafe=mysqli_real_escape_string($cnnEnlace, $program);
                         $counter++;
-                        $program_string.= " " . $program . " ";
+                        $program_string.= " " . $program_sqlsafe . " ";
                         if ($counter < count($_POST['program_select'])) {
                             $program_string.= "OR Program=";
                         } else {
@@ -226,6 +224,7 @@ if (isset($_POST['submit_btn_assessments'])) {
                             //need to find the denominator based on pre/post and program (and whether those are applicable)
                             //so far so reasonably good, but it doesn't really work for the pre/post/null denominators.  need to differentiate those earlier.
                             //if ($_POST['program_select']==0){
+                            $program_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['program_select']);
                             if (!isset($_POST['program_select'])) {
                                 if ($table != 'Participants_Baseline_Assessments') {
                                     $get_denom = "SELECT COUNT(*) FROM $table WHERE Pre_Post=" . $result[2];
@@ -234,10 +233,10 @@ if (isset($_POST['submit_btn_assessments'])) {
                                 }
                             } else {
                                 if ($table != 'Participants_Baseline_Assessments') {
-                                    $get_denom = "SELECT COUNT(*) FROM $table WHERE Program=" . $_POST['program_select'] . " AND Pre_Post=" . $result[2];
+                                    $get_denom = "SELECT COUNT(*) FROM $table WHERE Program=" . $program_select_sqlsafe . " AND Pre_Post=" . $result[2];
                                     $get_denom = "SELECT COUNT(*) FROM $table WHERE " . $program_string . " AND Pre_Post=" . $result[2];
                                 } else {
-                                    $get_denom = "SELECT COUNT(*) FROM $table WHERE Program=" . $_POST['program_select'] . "";
+                                    $get_denom = "SELECT COUNT(*) FROM $table WHERE Program=" . $program_select_sqlsafe . "";
                                     $get_denom = "SELECT COUNT(*) FROM $table WHERE " . $program_string . "";
                                 }
                             }
@@ -260,9 +259,9 @@ if (isset($_POST['submit_btn_assessments'])) {
         //end all questions case
     }
     /* if a question is selected: */ else {
-
-        $get_table = "SELECT In_Table FROM Baseline_Assessment_Questions WHERE Baseline_Assessment_Question_ID='" . $_POST['question_select'] . "'";
         include "../include/dbconnopen.php";
+        $question_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['question_select']);
+        $get_table = "SELECT In_Table FROM Baseline_Assessment_Questions WHERE Baseline_Assessment_Question_ID='" . $question_select_sqlsafe . "'";
         $table_name = mysqli_query($cnnEnlace, $get_table);
         $this_table = mysqli_fetch_row($table_name);
         $table = $this_table[0];
@@ -279,10 +278,10 @@ if (isset($_POST['submit_btn_assessments'])) {
         //if no program selected, then certainly don't try to pull from the database based on the program:
         //if ($_POST['program_select']==0){
         if (!isset($_POST['program_select'])) {
-            $get_results = "SELECT COUNT(*) as count, " . $_POST['question_select'] . ", $pre_post Response_Text FROM " . $table . "
-        INNER JOIN Assessment_Responses ON Response_Select=" . $_POST['question_select'] . " 
-            WHERE Question_ID='" . $_POST['question_select'] . "'
-                GROUP BY $pre_post " . $_POST['question_select'] . "";
+            $get_results = "SELECT COUNT(*) as count, " . $question_select_sqlsafe . ", $pre_post Response_Text FROM " . $table . "
+        INNER JOIN Assessment_Responses ON Response_Select=" . $question_select_sqlsafe . " 
+            WHERE Question_ID='" . $question_select_sqlsafe . "'
+                GROUP BY $pre_post " . $question_select_sqlsafe . "";
             $get_denom = "SELECT COUNT(*) FROM " . $table . " $pre_post_denom";
             //echo $get_denom;
             $denom_ct = mysqli_query($cnnEnlace, $get_denom);
@@ -308,10 +307,10 @@ if (isset($_POST['submit_btn_assessments'])) {
             }
         }
         /* if a program is selected: */ else {
-            $get_results = "SELECT COUNT(*) as count, " . $_POST['question_select'] . ", $pre_post Response_Text FROM " . $table . "
-        INNER JOIN Assessment_Responses ON Response_Select=" . $_POST['question_select'] . " 
-            WHERE Program=" . $_POST['program_select'] . " AND Question_ID='" . $_POST['question_select'] . "'
-                GROUP BY $pre_post " . $_POST['question_select'] . "";
+            $get_results = "SELECT COUNT(*) as count, " . $question_select_sqlsafe . ", $pre_post Response_Text FROM " . $table . "
+        INNER JOIN Assessment_Responses ON Response_Select=" . $question_select_sqlsafe . " 
+            WHERE Program=" . $program_select_sqlsafe . " AND Question_ID='" . $question_select_sqlsafe . "'
+                GROUP BY $pre_post " . $question_select_sqlsafe . "";
             $program_string = "(Program=";
             $counter = 0;
             foreach ($_POST['program_select'] as $program) {
@@ -323,13 +322,13 @@ if (isset($_POST['submit_btn_assessments'])) {
                     $program_string.=")";
                 }
             }
-            $get_results = "SELECT COUNT(*) as count, " . $_POST['question_select'] . ", $pre_post Response_Text FROM " . $table . "
-        INNER JOIN Assessment_Responses ON Response_Select=" . $_POST['question_select'] . " 
-            WHERE " . $program_string . " AND Question_ID='" . $_POST['question_select'] . "'
-                GROUP BY $pre_post " . $_POST['question_select'] . "";
+            $get_results = "SELECT COUNT(*) as count, " . $question_select_sqlsafe . ", $pre_post Response_Text FROM " . $table . "
+        INNER JOIN Assessment_Responses ON Response_Select=" . $question_select_sqlsafe . " 
+            WHERE " . $program_string . " AND Question_ID='" . $question_select_sqlsafe . "'
+                GROUP BY $pre_post " . $question_select_sqlsafe . "";
 
             /* get the denominator for these results (in order to show the percentage) */
-            $get_denom = "SELECT COUNT(*) FROM $table WHERE Program=" . $_POST['program_select'] . " $pre_post_denom ";
+            $get_denom = "SELECT COUNT(*) FROM $table WHERE Program=" . $program_select_sqlsafe . " $pre_post_denom ";
             $get_denom = "SELECT COUNT(*) FROM $table WHERE " . $program_string . " $pre_post_denom ";
 
             $denom_ct = mysqli_query($cnnEnlace, $get_denom);
@@ -337,7 +336,7 @@ if (isset($_POST['submit_btn_assessments'])) {
                 $this_denom = mysqli_fetch_row($denom_ct);
                 $denom = $this_denom[0];
             } else {
-                $get_denom = "SELECT COUNT(*), Pre_Post FROM $table WHERE Program=" . $_POST['program_select'] . " $pre_post_denom ";
+                $get_denom = "SELECT COUNT(*), Pre_Post FROM $table WHERE Program=" . $program_select_sqlsafe . " $pre_post_denom ";
                 $get_denom = "SELECT COUNT(*), Pre_Post FROM $table WHERE " . $program_string . " $pre_post_denom ";
                 $denom_ct = mysqli_query($cnnEnlace, $get_denom);
                 while ($this_denom = mysqli_fetch_row($denom_ct)) {
@@ -354,7 +353,7 @@ if (isset($_POST['submit_btn_assessments'])) {
         ?><p></p>
         <table class="all_projects">
             <caption><?php
-                $get_question = "SELECT Question FROM Baseline_Assessment_Questions WHERE Baseline_Assessment_Question_ID='" . $_POST['question_select'] . "'";
+                $get_question = "SELECT Question FROM Baseline_Assessment_Questions WHERE Baseline_Assessment_Question_ID='" . $question_select_sqlsafe . "'";
                 $this_question = mysqli_query($cnnEnlace, $get_question);
                 $quest = mysqli_fetch_row($this_question);
                 echo $quest[0];

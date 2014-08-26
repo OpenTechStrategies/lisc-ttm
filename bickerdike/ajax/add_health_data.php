@@ -9,10 +9,12 @@
  * or have the BMI calculated.  This determines whether the BMI has been entered (!='')
  * or needs to be calculated, then calculates it if necessary.
  */
+include "../include/dbconnopen.php";
 if ($_POST['bmi']==''){
-$bmi = round((($_POST['weight'])/(($_POST['height'])*($_POST['height'])))*703, 1);}
+$bmi_sqlsafe = round((int($_POST['weight'])/(int($_POST['height'])*int($_POST['height'])))*703, 1);}
 else{
     $bmi = $_POST['bmi'];
+    $bmi_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['bmi']);
 }
 
 /*
@@ -22,7 +24,7 @@ else{
 
 $height_feet = (int) ($_POST['height']/12);
 //echo $height_feet;
-$height_inches = ($_POST['height'])%12;
+$height_inches = (int)(($_POST['height'])%12);
 //echo $height_inches;
 
 /*
@@ -30,10 +32,11 @@ $height_inches = ($_POST['height'])%12;
  * Add new health data to the database.
  */
  
-
+$user_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['user']);
+$date_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['date']);
+$weight_sqlsafe=int($_POST['weight']);
 $user_count = "SELECT * FROM User_Health_Data WHERE User_ID='" . $_POST['user'] ."'";
 echo $user_count;
-include "../include/dbconnopen.php";
 $num_times_user_measured = mysqli_query($cnnBickerdike, $user_count);
 $count = mysqli_num_rows($num_times_user_measured);
 include "../include/dbconnclose.php";
@@ -52,12 +55,12 @@ $add_health = "INSERT INTO User_Health_Data (
                 BMI,
                 Date,
                 User_Count) VALUES (
-                '" . $_POST['user'] ."',
+                '" . $user_sqlsafe ."',
                 '" . $height_feet ."',
                 '" . $height_inches ."',
-                '" . $_POST['weight'] ."',
+                '" . $weight_sqlsafe ."',
                 '" . $bmi ."',
-                '" . $_POST['date'] ."',
+                '" . $date_sqlsafe ."',
                     $added_count
                 )";
 

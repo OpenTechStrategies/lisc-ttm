@@ -1,11 +1,11 @@
 <?php
 /* search campaigns, though really just on name.  Not much to see here. */
-if ($_POST['name']==''){$name='';}else{$name='  AND Campaign_Name LIKE "%' . $_POST['name'] .'%"';};
+if ($_POST['name']==''){$name_sqlsafe='';}else{$name_sqlsafe='  AND Campaign_Name LIKE "%' . mysqli_real_escape_string($cnnSWOP, $_POST['name']) .'%"';};
 
-$search_campaigns="SELECT * FROM Campaigns WHERE Campaign_ID!=''" . $name;
+$search_campaigns_sqlsafe="SELECT * FROM Campaigns WHERE Campaign_ID!=''" . $name_sqlsafe;
 
 include "../include/dbconnopen.php";
-$results = mysqli_query($cnnSWOP, $search_campaigns);
+$results = mysqli_query($cnnSWOP, $search_campaigns_sqlsafe);
 
 ?>
 <br/><h4>Search Results</h4>

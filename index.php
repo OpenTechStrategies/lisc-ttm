@@ -65,6 +65,7 @@ if ($_GET['action'] == 'logout') {
             $n = 0;
             while ($n < count($_COOKIE['sites'])) {
                 include "include/dbconnopen.php";
+                $privilege_id_sqlsafe=  mysqli_real_escape_string($cnnLISC, $_COOKIE['sites'][$n]);
                 $get_privilege_name = "SELECT * FROM Privileges WHERE Privilege_Id='" . $_COOKIE['sites'][$n] . "'";
                 //echo $get_privilege_name;
                 $privilege_name = mysqli_query($cnnLISC, $get_privilege_name);

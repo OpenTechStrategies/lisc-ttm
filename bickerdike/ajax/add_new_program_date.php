@@ -4,14 +4,16 @@
  */
 
 include "../include/datepicker.php";
+include "../include/dbconnopen.php";
+$program_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['program_id']);
+$date_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['date']);
 $add_date_to_program = "INSERT INTO Program_Dates (
                             Program_ID,
                             Program_Date) VALUES (
-                            '". $_POST['program_id']."',
-                            '". $_POST['date']."'
+                            '". $program_id_sqlsafe."',
+                            '". $date_sqlsafe."'
                             )";
 echo $add_date_to_program;
-include "../include/dbconnopen.php";
 mysqli_query($cnnBickerdike, $add_date_to_program);
 include "../include/dbconnclose.php";
 ?>

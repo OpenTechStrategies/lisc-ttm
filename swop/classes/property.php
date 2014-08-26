@@ -15,10 +15,12 @@ class Property
     
      public function load_with_id($property_id)
     {
-        $this->property_id = $property_id;
-        $prop_query = "SELECT * FROM Properties LEFT JOIN Property_Dispositions ON Properties.Disposition=Property_Dispositions.Disposition_ID
-            WHERE Property_ID='$property_id'";
+        
         include "../include/dbconnopen.php";
+        $property_id_sqlsafe=mysqli_real_escape_string($cnnSWOP, $property_id);
+        $this->property_id = $property_id_sqlsafe;
+        $prop_query = "SELECT * FROM Properties LEFT JOIN Property_Dispositions ON Properties.Disposition=Property_Dispositions.Disposition_ID
+            WHERE Property_ID='$property_id_sqlsafe'";
         $property_info = mysqli_query($cnnSWOP, $prop_query);
         
         //set public variables

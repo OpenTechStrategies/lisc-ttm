@@ -26,11 +26,12 @@ class User
      */
     public function load_with_user_id($user_id)
     {
-        //set user_id
-        $this->user_id = $user_id;
-
         //open DB
         include "../include/dbconnopen.php";
+        $user_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $user_id);
+        //set user_id
+        $this->user_id = $user_id_sqlsafe;
+
         //echo "Call User__Load_With_ID('" . $this->user_id . "')";
         $user_info = mysqli_query($cnnBickerdike, "Call User__Load_With_ID('" . $this->user_id . "')");
         

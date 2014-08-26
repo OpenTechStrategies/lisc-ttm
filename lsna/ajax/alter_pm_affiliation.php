@@ -2,11 +2,14 @@
 /* PM_Years is the new way to track where and when people are active parent mentors
  *  saves the year and school for new (and old) parent mentors.
  */
-$reset_affiliation="UPDATE PM_Years SET School='".$_POST['school']."',
-    Year='".$_POST['year']."'
-        WHERE PM_Year_ID='".$_POST['id']."'";
-echo $reset_affiliation;
 include "../include/dbconnopen.php";
+$school_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['school']);
+$year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['year']);
+$id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['id']);
+$reset_affiliation="UPDATE PM_Years SET School='".$school_sqlsafe."',
+    Year='".$year_sqlsafe."'
+        WHERE PM_Year_ID='".$id_sqlsafe."'";
+echo $reset_affiliation;
 mysqli_query($cnnLSNA, $reset_affiliation);
 include "../include/dbconnclose.php";
 

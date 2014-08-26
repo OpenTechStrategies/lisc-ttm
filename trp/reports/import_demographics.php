@@ -130,9 +130,9 @@ if (!isset($_POST['posted'])) {
 //                        $names=explode(' ',$exploded_line[1]);
 //                        $name_first=$names[0];
 //                        $surname=$names[1];
-                        $get_program_name = "SELECT * FROM Participants WHERE First_Name='$exploded_line[2]' AND Last_Name='$exploded_line[1]'";
+                        $get_program_name_sqlsafe = "SELECT * FROM Participants WHERE First_Name='" . mysqli_real_escape_string($exploded_line[2]) "' AND Last_Name='" . mysqli_real_escape_string($exploded_line[1]) . "'";
                         include "../include/dbconnopen.php";
-                        $program_name=mysqli_query($cnnTRP, $get_program_name);
+                        $program_name=mysqli_query($cnnTRP, $get_program_name_sqlsafe);
                         //test whether the program already exists or not
                         if (mysqli_num_rows($program_name)>0){
                             $program=mysqli_fetch_row($program_name);
@@ -141,12 +141,17 @@ if (!isset($_POST['posted'])) {
                         }
                         else{
                             //if it doesn't exist yet, then insert it
-                            $add_program="INSERT INTO Participants (First_Name, Last_Name, Eval_ID, Race, Gender, DOB, Neighborhood, 
-                            Address_Zipcode)
-                             VALUES ('$exploded_line[2]', '$exploded_line[1]', '$exploded_line[3]', '$exploded_line[4]', '$exploded_line[5]', 
-                            '$exploded_line[6]', '$exploded_line[9]', '$exploded_line[10]')";
-                            echo $add_program . "<br>";
-                            mysqli_query($cnnTRP, $add_program);
+                            $add_program_sqlsafe="INSERT INTO Participants (First_Name, Last_Name, Eval_ID, Race, Gender, DOB, Neighborhood, 
+                            Address_Zipcode) VALUES ('" . mysqli_real_escape_string($exploded_line[2]) . "', "
+                                                        . mysqli_real_escape_string($exploded_line[1]) . "', "
+                                                        . mysqli_real_escape_string($exploded_line[3]) . "', "
+                                                        . mysqli_real_escape_string($exploded_line[4]) . "', "
+                                                        . mysqli_real_escape_string($exploded_line[5]) . "', "
+                                                        . mysqli_real_escape_string($exploded_line[6]) . "', "
+                                                        . mysqli_real_escape_string($exploded_line[9]) . "', "
+                                                        . mysqli_real_escape_string($exploded_line[10]) . "')";
+                            echo $add_program_sqlsafe . "<br>";
+                            mysqli_query($cnnTRP, $add_program_sqlsafe);
                             $program_id=  mysqli_insert_id($cnnTRP);
 //                            
                         }

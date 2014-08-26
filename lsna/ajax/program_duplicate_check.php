@@ -1,5 +1,10 @@
 <?php
 /*check for duplicate program/campaign names: */
+include "../include/dbconnopen.php";
+$subcategory_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['subcategory']);
+$first_name_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['first_name']);
+$last_name_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['last_name']);
+$name_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['name']);
 
 /* prevent or warn about events/sessions scheduled on the same date for the same program/campaign: */
 if (isset($_POST['date'])){
@@ -7,7 +12,7 @@ if (isset($_POST['date'])){
     $reformat_date=explode('-', $_POST['date']);
     $new_date_format=$reformat_date[2] . '-' . $reformat_date[0] . '-' . $reformat_date[1];
     $get_duplicate_dates = "SELECT COUNT(Wright_College_Program_Date_ID) FROM Subcategory_Dates 
-        WHERE Subcategory_ID='".$_POST['subcategory']."' AND Date='".$new_date_format."'";
+        WHERE Subcategory_ID='".$subcategory_sqlsafe."' AND Date='".$new_date_format."'";
     //echo $get_duplicate_dates;
     include "../include/dbconnopen.php";
 $is_duplicate = mysqli_query($cnnLSNA, $get_duplicate_dates);
@@ -20,7 +25,7 @@ include "../include/dbconnclose.php";
 /* warn about a person with the same name already in the DB: */
 elseif(isset($_POST['person'])){
     $get_duplicate_dates = "SELECT * FROM Participants 
-        WHERE Name_First='".$_POST['first_name']."' AND Name_Last='".$_POST['last_name']."'";
+        WHERE Name_First='".$first_name_sqlsafe."' AND Name_Last='".$last_name_sqlsafe."'";
     include "../include/dbconnopen.php";
 $is_duplicate = mysqli_query($cnnLSNA, $get_duplicate_dates);
 $duplicate = mysqli_fetch_row($is_duplicate);
@@ -33,7 +38,7 @@ include "../include/dbconnclose.php";
 /*check program/campaign name before creating a new program/campaign: */
 else{
 $get_duplicate_programs = "SELECT COUNT(Subcategory_Name) FROM Subcategories
-    WHERE Subcategory_Name='" . $_POST['name'] . "'";
+    WHERE Subcategory_Name='" . $name_sqlsafe . "'";
 //echo $get_duplicate_programs;
 include "../include/dbconnopen.php";
 $is_duplicate = mysqli_query($cnnLSNA, $get_duplicate_programs);

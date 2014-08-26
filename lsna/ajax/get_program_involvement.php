@@ -1,7 +1,8 @@
 <div id="program_involvement_by_program">
     <?//echo $_POST['program_id'];
-    $get_sub_info = "SELECT * FROM Subcategories WHERE Subcategory_ID='" . $_POST['program_id'] . "'";
     include "../include/dbconnopen.php";
+    $program_id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['program_id']);
+    $get_sub_info = "SELECT * FROM Subcategories WHERE Subcategory_ID='" . $program_id_sqlsafe . "'";
     $sub_info = mysqli_query($cnnLSNA, $get_sub_info);
     $sub = mysqli_fetch_row($sub_info);
     
@@ -27,7 +28,7 @@
                 $counter_num=0;
                 $count_participants="SELECT COUNT(*) 
                     FROM Participants_Subcategories 
-                    WHERE Subcategory_ID='" . $_POST['program_id'] . "';";
+                    WHERE Subcategory_ID='" . $program_id_sqlsafe . "';";
                 include "../include/dbconnopen.php";
                 $ct_participants=mysqli_query($cnnLSNA, $count_participants);
                 $count_partis = mysqli_fetch_row($ct_participants);
@@ -42,7 +43,7 @@
                 $count_adults="SELECT COUNT(*) FROM Participants_Subcategories INNER JOIN Participants
                     ON Participants.Participant_Id=Participants_Subcategories.Participant_ID
                     WHERE (Is_Child IS NULL OR Is_Child=0 OR Is_Child=3)
-                    AND Participants_Subcategories.Subcategory_ID='" . $_POST['program_id'] . "';";
+                    AND Participants_Subcategories.Subcategory_ID='" . $program_id_sqlsafe . "';";
                 include "../include/dbconnopen.php";
                 $ct_adults=mysqli_query($cnnLSNA, $count_adults);
                 $count_partis = mysqli_fetch_row($ct_adults);
@@ -58,7 +59,7 @@
                     FROM Participants_Subcategories INNER JOIN Participants
                     ON Participants.Participant_Id=Participants_Subcategories.Participant_ID
                     WHERE (Is_PM IS NOT NULL AND Is_PM=1)
-                    AND Participants_Subcategories.Subcategory_ID='" . $_POST['program_id'] . "';";
+                    AND Participants_Subcategories.Subcategory_ID='" . $program_id_sqlsafe . "';";
                 //echo $count_pms;
                 include "../include/dbconnopen.php";
                 $ct_pms=mysqli_query($cnnLSNA, $count_pms);
@@ -75,7 +76,7 @@
                     FROM Participants_Subcategories INNER JOIN Participants
                     ON Participants.Participant_Id=Participants_Subcategories.Participant_ID
                     WHERE (Is_Child IS NOT NULL AND Is_Child=2)
-                    AND Participants_Subcategories.Subcategory_ID='" . $_POST['program_id'] . "';";
+                    AND Participants_Subcategories.Subcategory_ID='" . $program_id_sqlsafe . "';";
                 include "../include/dbconnopen.php";
                 $ct_youth=mysqli_query($cnnLSNA, $count_youth);
                 $count_partis = mysqli_fetch_row($ct_youth);
@@ -91,7 +92,7 @@
                 $count_youth="SELECT COUNT(*) FROM 
                     Participants_Subcategories INNER JOIN Parent_Mentor_Children 
                     ON Parent_Mentor_Children.Child_Id=Participants_Subcategories.Participant_ID 
-                    WHERE Participants_Subcategories.Subcategory_Id='" . $_POST['program_id'] . "'";
+                    WHERE Participants_Subcategories.Subcategory_Id='" . $program_id_sqlsafe . "'";
                 include "../include/dbconnopen.php";
                 $ct_youth=mysqli_query($cnnLSNA, $count_youth);
                 $count_partis = mysqli_fetch_row($ct_youth);

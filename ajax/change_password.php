@@ -7,7 +7,11 @@ if (isset($_POST['current_pw'])){
     $current_pw = $_POST['current_pw'];
 }
 $username = $_POST['username']; 
-$user_query = "SELECT User_ID, User_Password FROM  Users WHERE User_Email = '$username'";
+$username_sqlsafe=mysqli_real_escape_string($cnnLISC, $username);
+$current_pw_sqlsafe=mysqli_real_escape_string($cnnLISC, $current_pw);
+$new_pw_sqlsafe=mysqli_real_escape_string($cnnLISC, $_POST['new_pw']);
+$user_query = "SELECT User_ID, User_Password FROM  Users WHERE User_Email = '$username_sqlsafe'";
+//echo $user_query;
 $user = mysqli_query($cnnLISC, $user_query);
 $user_row = mysqli_fetch_row($user);
 $is_user = mysqli_num_rows($user);

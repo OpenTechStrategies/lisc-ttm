@@ -5,44 +5,53 @@
 
 /* No point in going through with the query if there's only one person it can be: */
 if ($_POST['id'] != '') {
-    $uncertain_search_query = "SELECT * FROM Users WHERE User_ID='" . $_POST['id'] . "'";
-
     include "../include/dbconnopen.php";
+    $id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['id']);
+    $uncertain_search_query = "SELECT * FROM Users WHERE User_ID='" . $id_sqlsafe . "'";
+
     $results = mysqli_query($cnnBickerdike, $uncertain_search_query);
 }
 /* if the ID isn't specified:
  * If any of the fields is blank, then it isn't included in the search query.  If it is filled in, then
  * the search includes it (zipcode is equal to the selected zip).
  */ else {
+    include "../include/dbconnopen.php";
+    $first_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['first']);
+    $last_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['last']);
+    $zip_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['zip']);
+    $age_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['age']);
+    $gender_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['gender']);
+    $race_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['race']);
+    $type_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['type']);
     if ($_POST['first'] == '') {
         $first = '';
     } else {
-        $first = ' AND First_Name LIKE "%' . $_POST['first'] . '%"';
+        $first = ' AND First_Name LIKE "%' . $first_sqlsafe . '%"';
     };
     if ($_POST['last'] == '') {
         $last = '';
     } else {
-        $last = " AND Last_Name LIKE '%" . $_POST['last'] . "%'";
+        $last = " AND Last_Name LIKE '%" . $last_sqlsafe . "%'";
     }
     if ($_POST['zip'] == '') {
         $zip = '';
     } else {
-        $zip = " AND Zipcode='" . $_POST['zip'] . "'";
+        $zip = " AND Zipcode='" . $zip_sqlsafe . "'";
     }
     if ($_POST['age'] == '') {
         $age = '';
     } else {
-        $age = " AND Age='" . $_POST['age'] . "'";
+        $age = " AND Age='" . $age_sqlsafe . "'";
     }
     if ($_POST['gender'] == '') {
         $gender = '';
     } else {
-        $gender = " AND Gender='" . $_POST['gender'] . "'";
+        $gender = " AND Gender='" . $gender_sqlsafe . "'";
     }
     if ($_POST['race'] == '') {
         $race = '';
     } else {
-        $race = " AND Race='" . $_POST['race'] . "'";
+        $race = " AND Race='" . $race_sqlsafe . "'";
     }
     if ($_POST['type'] == '') {
         $type = '';

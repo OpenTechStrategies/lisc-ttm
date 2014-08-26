@@ -2,6 +2,9 @@
 $type=$_POST['type'];
 $start=$_POST['start'];
 $end=$_POST['end'];
+$type_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $type);
+$start_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $start);
+$end_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $end);
 ?>
 <!--
 Gets surveys within the date range specified and according to type specified (either parent, adult, or youth).
@@ -14,23 +17,23 @@ Returns a table of average responses for each question.
     </tr>
     <?
     //count the number of surveys entered for each step
-    $count_pres ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='" . $type . "' AND Pre_Post_Late='1'
-    AND Date_Survey_Administered >= '$start'
-    AND Date_Survey_Administered <= '$end'";
+    $count_pres ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='" . $type_sqlsafe . "' AND Pre_Post_Late='1'
+    AND Date_Survey_Administered >= '$start_sqlsafe'
+    AND Date_Survey_Administered <= '$end_sqlsafe'";
     include "../include/dbconnopen.php";
     $pres = mysqli_query($cnnBickerdike, $count_pres);
     $num_pres = mysqli_num_rows($pres);
     include "../include/dbconnclose.php";
     
-    $count_posts ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='" . $type . "' AND Pre_Post_Late='2' AND Date_Survey_Administered >= '$start'
-    AND Date_Survey_Administered <= '$end'";
+    $count_posts ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='" . $type_sqlsafe . "' AND Pre_Post_Late='2' AND Date_Survey_Administered >= '$start_sqlsafe'
+    AND Date_Survey_Administered <= '$end_sqlsafe'";
     include "../include/dbconnopen.php";
     $posts = mysqli_query($cnnBickerdike, $count_posts);
     $num_posts = mysqli_num_rows($posts);
     include "../include/dbconnclose.php";
     
-    $count_laters ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='" . $type . "' AND Pre_Post_Late='3' AND Date_Survey_Administered >= '$start'
-    AND Date_Survey_Administered <= '$end'";
+    $count_laters ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='" . $type_sqlsafe . "' AND Pre_Post_Late='3' AND Date_Survey_Administered >= '$start_sqlsafe'
+    AND Date_Survey_Administered <= '$end_sqlsafe'";
     include "../include/dbconnopen.php";
     $laters = mysqli_query($cnnBickerdike, $count_laters);
     $num_laters = mysqli_num_rows($laters);
@@ -48,7 +51,7 @@ Returns a table of average responses for each question.
     
     //call the routine for pre, post, and later
     include "../include/dbconnopen.php";
-    if ($get_pre_averages = mysqli_query($cnnBickerdike, "CALL get_aggregate_survey_results_with_dates('" . $type . "', 1, '" . $start ."', '" . $end . "')")){
+    if ($get_pre_averages = mysqli_query($cnnBickerdike, "CALL get_aggregate_survey_results_with_dates('" . $type_sqlsafe . "', 1, '" . $start_sqlsafe ."', '" . $end_sqlsafe . "')")){
     $pre = array();
     while ($pre_averages = mysqli_fetch_array($get_pre_averages)){
         $pre[0] = $pre_averages['AVG(Question_2)'];
@@ -73,7 +76,7 @@ Returns a table of average responses for each question.
     include "../include/dbconnclose.php";
     }
     include "../include/dbconnopen.php";
-    if($get_post_averages = mysqli_query($cnnBickerdike, "CALL get_aggregate_survey_results_with_dates('" . $type . "', 2" . $start ."', '" . $end . "')")){
+    if($get_post_averages = mysqli_query($cnnBickerdike, "CALL get_aggregate_survey_results_with_dates('" . $type_sqlsafe . "', 2" . $start_sqlsafe ."', '" . $end_sqlsafe . "')")){
     $post = array();
     while ($post_averages = mysqli_fetch_array($get_post_averages)){
         $post[0] = $post_averages['AVG(Question_2)'];
@@ -97,7 +100,7 @@ Returns a table of average responses for each question.
     }
     }
     include "../include/dbconnopen.php";
-    if ($get_later_averages = mysqli_query($cnnBickerdike, "CALL get_aggregate_survey_results_with_dates('" . $type . "', 3" . $start ."', '" . $end . "')")){
+    if ($get_later_averages = mysqli_query($cnnBickerdike, "CALL get_aggregate_survey_results_with_dates('" . $type_sqlsafe . "', 3" . $start_sqlsafe ."', '" . $end_sqlsafe . "')")){
     $later = array();
     while ($later_averages = mysqli_fetch_array($get_later_averages)){
         $later[0] = $later_averages['AVG(Question_2)'];

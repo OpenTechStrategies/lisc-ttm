@@ -18,10 +18,11 @@ class Campaign
     
      public function load_with_id($campaign_id)
     {
-        $this->campaign_id = $campaign_id;
-        $camp_query = "SELECT * FROM Campaigns WHERE Campaign_ID='$campaign_id'";
         include "../include/dbconnopen.php";
-        $campaign_info = mysqli_query($cnnSWOP, $camp_query);
+        $campaign_id_sqlsafe=mysqli_real_escape_string($cnnSWOP, $campaign_id);
+        $this->campaign_id = $campaign_id_sqlsafe;
+        $camp_query_sqlsafe = "SELECT * FROM Campaigns WHERE Campaign_ID='$campaign_id_sqlsafe'";
+        $campaign_info = mysqli_query($cnnSWOP, $camp_query_sqlsafe);
         
         //set public variables
         $campaign_info_temp = mysqli_fetch_array($campaign_info);

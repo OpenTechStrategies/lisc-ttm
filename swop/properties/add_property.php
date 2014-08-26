@@ -41,9 +41,9 @@ address. -->
 		<td><strong>Disposition</strong></td>
                 <td><select id="disposition_new">
 						<option value="">---------</option>
-                                                <?php $get_disps = "SELECT * FROM Property_Dispositions";
+                                                <?php $get_disps_sqlsafe = "SELECT * FROM Property_Dispositions";
                                                 include "../include/dbconnopen.php";
-                                                $disps=mysqli_query($cnnSWOP, $get_disps);
+                                                $disps=mysqli_query($cnnSWOP, $get_disps_sqlsafe);
                                                 while ($disp=mysqli_fetch_row($disps)){
                                                 ?>
                                                 <option value="<?echo $disp[0]?>"><?echo $disp[1];?></option>

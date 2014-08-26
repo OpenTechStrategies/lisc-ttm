@@ -29,10 +29,10 @@
         <?
         
         /* show alphabetical list of campaigns.  Each links to its profile. */
-$get_campaigns="SELECT * FROM Campaigns ORDER BY Campaign_Name";
+$get_campaigns_sqlsafe="SELECT * FROM Campaigns ORDER BY Campaign_Name";
 
 include "../include/dbconnopen.php";
-$campaigns = mysqli_query($cnnSWOP, $get_campaigns);
+$campaigns = mysqli_query($cnnSWOP, $get_campaigns_sqlsafe);
 
 while ($campaign=mysqli_fetch_array($campaigns)){
     ?>

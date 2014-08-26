@@ -5,8 +5,9 @@
     if (isset($_POST['satisfaction_program']) || isset($_POST['start_date'])) {
         /* if a program or dates were chosen: */
         ?><h4>Satisfaction Surveys: <?php
-            $get_program_name = "SELECT Subcategory_Name FROM Subcategories WHERE Subcategory_ID=" . $_POST['satisfaction_program'];
             include "../include/dbconnopen.php";
+            $satisfaction_program_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['satisfaction_program']);
+            $get_program_name = "SELECT Subcategory_Name FROM Subcategories WHERE Subcategory_ID=" . $satisfaction_program_sqlsafe;
             if ($program_name = mysqli_query($cnnLSNA, $get_program_name)) {
                 $name = mysqli_fetch_row($program_name);
                 $this_program = $name[0];
@@ -124,9 +125,11 @@
                     /* empty string which will be filled with values: */
                     $script_str = '';
                     /* reformat start and end dates: */
-                    $date_reformat = explode('-', $_POST['start_date']);
+                    $start_date_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['start_date']);
+                    $end_date_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['end_date']);
+                    $date_reformat = explode('-', $start_date_sqlsafe);
                     $start_date = $date_reformat[2] . '-' . $date_reformat[0] . '-' . $date_reformat[1];
-                    $date_reformat = explode('-', $_POST['end_date']);
+                    $date_reformat = explode('-', $end_date_sqlsafe);
                     $end_date = $date_reformat[2] . '-' . $date_reformat[0] . '-' . $date_reformat[1];
                     if (isset($_POST['satisfaction_program']) && $_POST['satisfaction_program'] != '') {
                         /* if a program is set: */

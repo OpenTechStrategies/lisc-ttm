@@ -133,7 +133,8 @@ Or, <a href="javascript:;" onclick="
 <?
 	//retrieve survey responses if editing an existing survey
 	if (isset($_GET['survey'])) {
-		$get_responses = "SELECT * FROM Parent_Mentor_Survey WHERE Parent_Mentor_Survey_ID='" . $_GET['survey'] . "'";
+                $survey_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_GET['survey']);
+		$get_responses = "SELECT * FROM Parent_Mentor_Survey WHERE Parent_Mentor_Survey_ID='" . $survey_sqlsafe . "'";
 		include "../include/dbconnopen.php";
 		$responses = mysqli_query($cnnLSNA, $get_responses);
 		$response = mysqli_fetch_array($responses);

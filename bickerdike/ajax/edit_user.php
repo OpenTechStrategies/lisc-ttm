@@ -4,10 +4,11 @@
  */
 
 include ($_SERVER['DOCUMENT_ROOT']."/include/block_group_finder.php");
+include "../include/dbconnopen.php";
+$user_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['user_id']);        
 $get_existing_address="SELECT Address_Number, Address_Street_Direction, Address_Street_Name, Address_Street_Type, Block_Group
             FROM Users
-           WHERE User_ID='" . $_POST['user_id'] . "'";
-        include "../include/dbconnopen.php";
+           WHERE User_ID='" . $user_id_sqlsafe . "'";
         $existing_address=mysqli_query($cnnBickerdike, $get_existing_address);
         $address_now=mysqli_fetch_row($existing_address);
         include "../include/dbconnclose.php";
@@ -27,23 +28,36 @@ $get_existing_address="SELECT Address_Number, Address_Street_Direction, Address_
         /*
          * Now update the user with new posted information.
          */
+$first_name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['first_name']);
+$last_name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['last_name']);
+$zip_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['zip']);
+$gender_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['gender']);
+$age_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['age']);
+$race_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['race']);
+$address_street_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['address_street']);
+$address_number_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['address_number']);
+$address_direction_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['address_direction']);
+$address_street_type_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['address_street_type']);
+$email_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['email']);
+$note_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_post['note']);
+$phone_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['phone']);
         
 $edit_user_query = "UPDATE Users SET 
-                            First_Name='" . $_POST['first_name'] . "',
-                            Last_Name='" . $_POST['last_name'] . "',
-                            Zipcode='" . $_POST['zipcode'] . "',
-							Gender='" . $_POST['gender'] . "',
-							Age='" . $_POST['age'] . "',
-							Race='" . $_POST['race'] . "',
-							Address_Street_Name='" . $_POST['address_street'] . "',
-							Address_Number='" . $_POST['address_number'] . "',
-							Address_Street_Direction='" . $_POST['address_direction'] . "',
-							Address_Street_Type='" . $_POST['address_street_type'] . "',
+                            First_Name='" . $first_name_sqlsafe . "',
+                            Last_Name='" . $last_name_sqlsafe . "',
+                            Zipcode='" . $zipcode_sqlsafe . "',
+							Gender='" . $gender_sqlsafe . "',
+							Age='" . $age_sqlsafe . "',
+							Race='" . $race_sqlsafe . "',
+							Address_Street_Name='" . $address_street_sqlsafe . "',
+							Address_Number='" . $address_number_sqlsafe . "',
+							Address_Street_Direction='" . $address_direction_sqlsafe . "',
+							Address_Street_Type='" . $address_street_type_sqlsafe . "',
                                                             Block_Group='$block_group',
-							email_address='" . $_POST['email'] . "',
-                            Notes='" . $_POST['note'] . "',
-                            Phone='" . $_POST['phone'] . "'
-                            WHERE User_ID='" . $_POST['user_id'] . "'";
+							email_address='" . $email_sqlsafe . "',
+                            Notes='" . $note_sqlsafe . "',
+                            Phone='" . $phone_sqlsafe . "'
+                            WHERE User_ID='" . $user_id_sqlsafe . "'";
 //echo $edit_user_query;
 include "../include/dbconnopen.php";
 mysqli_query($cnnBickerdike, $edit_user_query);

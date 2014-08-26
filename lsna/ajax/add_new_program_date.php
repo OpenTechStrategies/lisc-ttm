@@ -1,13 +1,20 @@
 <?php
 if ($_POST['action'] == 'save_note') {
     /* add notes to the program/campaign date: */
+    include "../include/dbconnopen.php";
+    $note_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['note']);
+    $event_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['event']);
     $update_query = "UPDATE Subcategory_Dates SET Meeting_Note='" . $_POST['note'] . "' WHERE Wright_College_Program_Date_ID='" . $_POST['event'] . "'";
     echo $update_query;
-    include "../include/dbconnopen.php";
     mysqli_query($cnnLSNA, $update_query);
     include "../include/dbconnclose.php";
 } else {
     /* save a new date (program session or campaign event) */
+    include "../include/dbconnopen.php";
+    $program_id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['program_id']);
+    $name_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['name']);
+    $type_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['type']);
+    $note_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['note']);
     $date_reformat = explode('-', $_POST['date']);
     $save_date = $date_reformat[2] . '-' . $date_reformat[0] . '-' . $date_reformat[1];
     $add_date_to_program = "INSERT INTO Subcategory_Dates (
@@ -16,14 +23,13 @@ if ($_POST['action'] == 'save_note') {
                             Activity_Name,
                             Activity_Type, 
                             Meeting_Note) VALUES (
-                            '" . $_POST['program_id'] . "',
+                            '" . $program_id_sqlsafe . "',
                             '" . $save_date . "',
-                            '" . $_POST['name'] . "',
-                            '" . $_POST['type'] . "',
-                            '" . $_POST['note'] . "'
+                            '" . $name_sqlsafe . "',
+                            '" . $type_sqlsafe . "',
+                            '" . $note_sqlsafe . "'
                             )";
 //echo $add_date_to_program;
-    include "../include/dbconnopen.php";
     mysqli_query($cnnLSNA, $add_date_to_program);
     include "../include/dbconnclose.php";
 }

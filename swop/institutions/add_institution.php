@@ -36,9 +36,9 @@
 				<td><select id="prop_inst_search" />
                                         <option value="">-----</option>
     <?
-			$get_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
+			$get_institutions_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name";
 			include "../include/dbconnopen.php";
-			$institutions = mysqli_query($cnnSWOP, $get_institutions);
+			$institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
 			while ($institution = mysqli_fetch_array($institutions)) {?>
     <option value="<?echo $institution['Institution_ID'];?>"><?echo $institution['Institution_Name'];?></option>
 			<?}
@@ -75,9 +75,9 @@
 		<td><select id="type_new">
                         <option value="">-----</option>
                         <?//get types
-                        $select_types="SELECT * FROM Institution_Types";
+                        $select_types_sqlsafe="SELECT * FROM Institution_Types";
                         include "../include/dbconnopen.php";
-                        $types=mysqli_query($cnnSWOP, $select_types);
+                        $types=mysqli_query($cnnSWOP, $select_types_sqlsafe);
                         while ($type=mysqli_fetch_row($types)){
                             ?>
                         <option value="<?echo $type[0]?>"><?echo $type[1];?></option>

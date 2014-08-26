@@ -5,7 +5,8 @@
  * system user is warned about the duplication.  They still have the option to 
  * create a duplicate program if they really want to.
  */
-$get_duplicate_programs = "SELECT COUNT(Program_ID) FROM Programs WHERE Program_Name='" . $_POST['name'] . "'";
+$name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['name']);
+$get_duplicate_programs = "SELECT COUNT(Program_ID) FROM Programs WHERE Program_Name='" . $name_sqlsafe . "'";
 //echo $get_duplicate_programs;
 include "../include/dbconnopen.php";
 $is_duplicate = mysqli_query($cnnBickerdike, $get_duplicate_programs);

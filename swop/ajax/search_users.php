@@ -5,62 +5,62 @@
  * require joins. */
 
 //print_r($_POST);
+include "../include/dbconnopen.php";
 if ($_POST['first'] == '') {
-    $first = '';
+    $first_sqlsafe = '';
 } else {
-    $first = ' AND Name_First LIKE "%' . $_POST['first'] . '%"';
+    $first_sqlsafe = ' AND Name_First LIKE "%' . mysqli_real_escape_string($cnnSWOP, $_POST['first']) . '%"';
 }
 if ($_POST['last'] == '') {
-    $last = '';
+    $last_sqlsafe = '';
 } else {
-    $last = " AND Name_Last LIKE '%" . $_POST['last'] . "%'";
+    $last_sqlsafe = " AND Name_Last LIKE '%" . mysqli_real_escape_string($cnnSWOP, $_POST['last']) . "%'";
 }
 if ($_POST['dob'] == '') {
-    $dob = '';
+    $dob_sqlsafe = '';
 } else {
-    $dob = " AND DOB='" . $_POST['dob'] . "'";
+    $dob_sqlsafe = " AND DOB='" . mysqli_real_escape_string($cnnSWOP, $_POST['dob']) . "'";
 }
 if ($_POST['gender'] == '') {
-    $gender = '';
+    $gender_sqlsafe = '';
 } else {
-    $gender = " AND Gender='" . $_POST['gender'] . "'";
+    $gender_sqlsafe = " AND Gender='" . mysqli_real_escape_string($cnnSWOP, $_POST['gender']) . "'";
 }
 if ($_POST['inst'] == '') {
-    $inst = '';
-    $inst_join = '';
+    $inst_sqlsafe = '';
+    $inst_join_sqlsafe = '';
 } else {
-    $inst = " AND Institutions_Participants.Institution_ID='" . $_POST['inst'] . "' AND Is_Primary=1 ";
-    $inst_join = " INNER JOIN Institutions_Participants ON Participants.Participant_ID=Institutions_Participants.Participant_ID 
+    $inst_sqlsafe = " AND Institutions_Participants.Institution_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['inst']) . "' AND Is_Primary=1 ";
+    $inst_join_sqlsafe = " INNER JOIN Institutions_Participants ON Participants.Participant_ID=Institutions_Participants.Participant_ID 
     INNER JOIN Institutions ON Institutions_Participants.Institution_ID=Institutions.Institution_ID ";
 }
 if ($_POST['organizer'] != '') {
-    $organizer = " AND Participants.Primary_Organizer='" . $_POST['organizer'] . "' ";
+    $organizer_sqlsafe = " AND Participants.Primary_Organizer='" . mysqli_real_escape_string($cnnSWOP, $_POST['organizer']). "' ";
 } else {
-    $organizer = "";
+    $organizer_sqlsafe = "";
 }
 if ($_POST['active_pool'] == '') {
-    $pool = "";
-    $pool_join = "";
+    $pool_sqlsafe = "";
+    $pool_join_sqlsafe = "";
 } elseif ($_POST['active_pool'] == 1) {
-    $pool = " AND Pool_Status_Changes.Active=1 ";
-    $pool_join = " INNER JOIN Pool_Status_Changes ON Participants.Participant_ID=Pool_Status_Changes.Participant_ID 
+    $pool_sqlsafe = " AND Pool_Status_Changes.Active=1 ";
+    $pool_join_sqlsafe = " INNER JOIN Pool_Status_Changes ON Participants.Participant_ID=Pool_Status_Changes.Participant_ID 
     INNER JOIN (SELECT Active, Participant_ID, max(Date_Changed) as lastdate FROM Pool_Status_Changes
         GROUP BY Participant_ID) laststatus
         ON Pool_Status_Changes.Date_Changed=laststatus.lastdate ";
 } elseif ($_POST['active_pool'] == 2) {
-    $pool = " AND Pool_Status_Changes.Active=0 ";
-    $pool_join = " INNER JOIN Pool_Status_Changes ON Participants.Participant_ID=Pool_Status_Changes.Participant_ID 
+    $pool_sqlsafe = " AND Pool_Status_Changes.Active=0 ";
+    $pool_join_sqlsafe = " INNER JOIN Pool_Status_Changes ON Participants.Participant_ID=Pool_Status_Changes.Participant_ID 
     INNER JOIN (SELECT Active, Participant_ID, max(Date_Changed) as lastdate FROM Pool_Status_Changes
         GROUP BY Participant_ID) laststatus
         ON Pool_Status_Changes.Date_Changed=laststatus.lastdate ";
 }
 
-$uncertain_search_query = "SELECT * FROM Participants " . $inst_join . $pool_join . " WHERE Participants.Participant_ID!='' " . $first . $last . $dob . $gender .
-        $inst . $organizer . $pool . " ORDER BY Name_Last";
+$uncertain_search_query_sqlsafe = "SELECT * FROM Participants " . $inst_join_sqlsafe . $pool_join_sqlsafe . " WHERE Participants.Participant_ID!='' " . $first_sqlsafe . $last_sqlsafe . $dob_sqlsafe . $gender .
+        $inst_sqlsafe . $organizer_sqlsafe . $pool_sqlsafe . " ORDER BY Name_Last";
 //echo $uncertain_search_query;
 
-include "../include/dbconnopen.php";
-$results = mysqli_query($cnnSWOP, $uncertain_search_query);
+$results = mysqli_query($cnnSWOP, $uncertain_search_query_sqlsafe);
 
 if ($_POST['dropdown'] == 1) {
     /* show results in a dropdown. */

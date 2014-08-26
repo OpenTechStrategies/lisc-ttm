@@ -38,12 +38,12 @@ include "../include/datepicker_simple.php";
     include "../classes/participant.php";
     $participant = new Participant();
     $participant->load_with_participant_id($_COOKIE['participant']);
-    $participant_query = "SELECT * FROM Participants INNER JOIN Pool_Status_Changes
-            ON Participants.Participant_ID=Pool_Status_Changes.Participant_ID
-            WHERE Participants.Participant_ID='" . $_COOKIE['participant'] . "'";
-    //echo $participant_query;
     include "../include/dbconnopen.php";
-    $get_participant = mysqli_query($cnnSWOP, $participant_query);
+    $participant_query_sqlsafe = "SELECT * FROM Participants INNER JOIN Pool_Status_Changes
+            ON Participants.Participant_ID=Pool_Status_Changes.Participant_ID
+            WHERE Participants.Participant_ID='" . mysqli_real_escape_string($cnnSWOP, $_COOKIE['participant']) . "'";
+    //echo $participant_query;
+    $get_participant = mysqli_query($cnnSWOP, $participant_query_sqlsafe);
     $parti = mysqli_fetch_array($get_participant);
     ?>
 
@@ -163,9 +163,9 @@ include "../include/datepicker_simple.php";
                 <select class="basic_info_pool_edit" id="type_pool_edit"/>
         <option value="">-------</option>
         <?php
-        $get_types = "SELECT * FROM Pool_Member_Types;";
+        $get_types_sqlsafe = "SELECT * FROM Pool_Member_Types;";
         include "../include/dbconnopen.php";
-        $all_types = mysqli_query($cnnSWOP, $get_types);
+        $all_types = mysqli_query($cnnSWOP, $get_types_sqlsafe);
         while ($type = mysqli_fetch_row($all_types)) {
             ?><option value="<?php echo $type[0]; ?>" <?php echo($type[0] == $participant->get_type_id() ? 'selected="selected"' : null); ?>><?php echo $type[1]; ?></option>
             <?php
@@ -203,9 +203,9 @@ include "../include/datepicker_simple.php";
                             <td colspan="3"><select id="inst_quick_search">
                                     <option value="">-----</option>
                                     <?php
-                                    $get_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
+                                    $get_institutions_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name";
                                     include "../include/dbconnopen.php";
-                                    $institutions = mysqli_query($cnnSWOP, $get_institutions);
+                                    $institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
                                     while ($institution = mysqli_fetch_array($institutions)) {
                                         ?>
                                         <option value="<?php echo $institution['Institution_ID']; ?>"><?php echo $institution['Institution_Name']; ?></option>
@@ -334,11 +334,11 @@ include "../include/datepicker_simple.php";
             <th></th>
         </tr>
         <?php
-        $get_inst_conns = "SELECT * FROM Institutions_Participants INNER JOIN Institutions
-        ON Institutions_Participants.Institution_ID=Institutions.Institution_ID
-        WHERE Institutions_Participants.Participant_ID='" . $_COOKIE['participant'] . "'";
         include "../include/dbconnopen.php";
-        $inst_conns = mysqli_query($cnnSWOP, $get_inst_conns);
+        $get_inst_conns_sqlsafe = "SELECT * FROM Institutions_Participants INNER JOIN Institutions
+        ON Institutions_Participants.Institution_ID=Institutions.Institution_ID
+        WHERE Institutions_Participants.Participant_ID='" . mysqli_real_escape_string($cnnSWOP, $_COOKIE['participant']) . "'";
+        $inst_conns = mysqli_query($cnnSWOP, $get_inst_conns_sqlsafe);
         while ($inst = mysqli_fetch_array($inst_conns)) {
             ?>
             <tr>
@@ -352,8 +352,8 @@ include "../include/datepicker_simple.php";
                             })"><?php echo $inst['Institution_Name']; ?></a></td>
                 <td class="blank"><?php
                     if ($inst['Individual_Connection'] != '') {
-                        $get_name = "SELECT Name_First, Name_Last FROM Participants WHERE Participant_ID=" . $inst['Individual_Connection'];
-                        $name = mysqli_query($cnnSWOP, $get_name);
+                        $get_name_sqlsafe = "SELECT Name_First, Name_Last FROM Participants WHERE Participant_ID=" . $inst['Individual_Connection'];
+                        $name = mysqli_query($cnnSWOP, $get_name_sqlsafe);
                         $leader = mysqli_fetch_row($name);
                         echo $leader[0] . " " . $leader[1];
                     }
@@ -390,9 +390,9 @@ include "../include/datepicker_simple.php";
         <tr><td class="blank"><select id="institution">
                     <option value="">-----</option>
                     <?php
-                    $get_all_insts = "SELECT * FROM Institutions ORDER BY Institution_Name;";
+                    $get_all_insts_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name;";
                     include "../include/dbconnopen.php";
-                    $all_insts = mysqli_query($cnnSWOP, $get_all_insts);
+                    $all_insts = mysqli_query($cnnSWOP, $get_all_insts_sqlsafe);
                     $count_insts = mysqli_num_rows($all_insts);
                     while ($inst = mysqli_fetch_row($all_insts)) {
                         ?><option value="<?php echo $inst[0]; ?>"><?php echo $inst[0] . ": " . $inst[1]; ?></option>
@@ -405,13 +405,13 @@ include "../include/datepicker_simple.php";
                 <select id="connection">
                     <option value="">--Primary Organizers--</option>
                     <?php
-                    $get_primarys = "SELECT 
+                    $get_primarys_sqlsafe = "SELECT 
                                 Organizer_Info.Participant_ID, Organizer_Info.Name_First, Organizer_Info.Name_Last
                                 FROM Participants INNER JOIN 
                                 Participants AS Organizer_Info ON Participants.Primary_Organizer = Organizer_Info.Participant_ID
                                 GROUP BY Organizer_Info.Participant_ID ORDER BY Organizer_Info.Name_Last;";
                     include "../include/dbconnopen.php";
-                    $primarys = mysqli_query($cnnSWOP, $get_primarys);
+                    $primarys = mysqli_query($cnnSWOP, $get_primarys_sqlsafe);
                     while ($primary = mysqli_fetch_array($primarys)) {
                         ?>
                         <option value="<?php echo $primary['Participant_ID']; ?>"><?php echo $primary['Participant_ID'] . ": " . $primary['Name_First'] . " " . $primary['Name_Last']; ?></option>
@@ -463,9 +463,9 @@ include "../include/datepicker_simple.php";
     <table class="inner_table" style="font-size:.9em;">
         <tr style="font-size:.9em;"><th>Date</th><th>Event</th><th>Associated Campaign</th></tr>
         <?php
-        $get_events = "SELECT * FROM Participants_Events INNER JOIN Campaigns_Events ON Participants_Events.Event_ID=Campaigns_Events.Campaign_Event_ID WHERE Participants_Events.Participant_ID='" . $parti['Participant_ID'] . "' ORDER BY Campaigns_Events.Event_Date DESC";
+        $get_events_sqlsafe = "SELECT * FROM Participants_Events INNER JOIN Campaigns_Events ON Participants_Events.Event_ID=Campaigns_Events.Campaign_Event_ID WHERE Participants_Events.Participant_ID='" . $parti['Participant_ID'] . "' ORDER BY Campaigns_Events.Event_Date DESC";
         include "../include/dbconnopen.php";
-        $events = mysqli_query($cnnSWOP, $get_events);
+        $events = mysqli_query($cnnSWOP, $get_events_sqlsafe);
         $count_events = 0;
         while ($event = mysqli_fetch_array($events)) {
             $count_events++;
@@ -484,8 +484,8 @@ include "../include/datepicker_simple.php";
                 </td>
                 <td>
                     <?php
-                    $get_campaign = "SELECT * FROM Campaigns WHERE Campaign_ID='" . $event['Campaign_ID'] . "'";
-                    $campaign = mysqli_query($cnnSWOP, $get_campaign);
+                    $get_campaign_sqlsafe = "SELECT * FROM Campaigns WHERE Campaign_ID='" . $event['Campaign_ID'] . "'";
+                    $campaign = mysqli_query($cnnSWOP, $get_campaign_sqlsafe);
                     $cmpgn = mysqli_fetch_array($campaign);
                     echo $cmpgn['Campaign_Name'];
                     ?>
@@ -502,8 +502,8 @@ include "../include/datepicker_simple.php";
     <select id="event_add">
         <option value="">----Event Name----</option>
         <?php
-        $get_all_events = "SELECT * FROM Campaigns_Events ORDER BY Event_Date DESC";
-        $all_events = mysqli_query($cnnSWOP, $get_all_events);
+        $get_all_events_sqlsafe = "SELECT * FROM Campaigns_Events ORDER BY Event_Date DESC";
+        $all_events = mysqli_query($cnnSWOP, $get_all_events_sqlsafe);
         while ($event = mysqli_fetch_array($all_events)) {
             ?>
             <option value="<?php echo $event['Campaign_Event_ID']; ?>"><?php
@@ -518,9 +518,9 @@ include "../include/datepicker_simple.php";
         <option value="">----Role---</option>
         <?php
         //get roles
-        $select_roles = "SELECT * FROM Participants_Roles";
+        $select_roles_sqlsafe = "SELECT * FROM Participants_Roles";
         include "../include/dbconnopen.php";
-        $roles = mysqli_query($cnnSWOP, $select_roles);
+        $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
         while ($role = mysqli_fetch_row($roles)) {
             ?>
             <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -550,10 +550,10 @@ include "../include/datepicker_simple.php";
     <h4>Household</h4>
     <!-- Link to household (or households, but almost certainly just one) that this person belongs to: -->
     <?php
-    $find_household = "SELECT * FROM Households_Participants INNER JOIN Households ON Household_ID=New_Household_ID
+    $find_household_sqlsafe = "SELECT * FROM Households_Participants INNER JOIN Households ON Household_ID=New_Household_ID
     WHERE Participant_ID='" . $parti['Participant_ID'] . "'";
     include "../include/dbconnopen.php";
-    $this_household = mysqli_query($cnnSWOP, $find_household);
+    $this_household = mysqli_query($cnnSWOP, $find_household_sqlsafe);
     while ($house = mysqli_fetch_array($this_household)) {
         ?><a href='family_profile.php?household=<?php echo $house['New_Household_ID'] ?>'><?php echo $house['Household_Name']; ?></a><?php
         if ($house['Head_of_Household'] == '1') {
@@ -570,17 +570,17 @@ include "../include/datepicker_simple.php";
         Add this person to an existing household: <select id="all_households"><option value="">-----</option>
             <!-- Either choose an existing household... -->
             <?php
-            $get_households = "SELECT * FROM Households;";
+            $get_households_sqlsafe = "SELECT * FROM Households;";
             include "../include/dbconnopen.php";
-            $all_households = mysqli_query($cnnSWOP, $get_households);
+            $all_households = mysqli_query($cnnSWOP, $get_households_sqlsafe);
             while ($household = mysqli_fetch_row($all_households)) {
-                $get_primary_address = "SELECT Address_Street_Num, Address_Street_Direction, Address_Street_Name, Address_Street_Type
+                $get_primary_address_sqlsafe = "SELECT Address_Street_Num, Address_Street_Direction, Address_Street_Name, Address_Street_Type
             FROM Households INNER JOIN Households_Participants ON New_Household_ID= Household_ID 
             INNER JOIN Participants_Properties ON
             Participants_Properties.Participant_ID= Households_Participants.Participant_ID
             INNER JOIN Properties ON Properties.Property_ID=Participants_Properties.Property_ID
             WHERE Head_of_Household=1 AND Primary_Residence=1 AND Household_ID=" . $household[0];
-                $primary_address = mysqli_query($cnnSWOP, $get_primary_address);
+                $primary_address = mysqli_query($cnnSWOP, $get_primary_address_sqlsafe);
                 $address = mysqli_fetch_row($primary_address);
                 ?><option value="<?php echo $household[0] ?>"><?php
                     echo $household[0] . ": " . $household[1] . '--' . $address[0] . " " . $address[1] . " " .
@@ -650,11 +650,11 @@ include "../include/datepicker_simple.php";
                 <th></th>
             </tr>
             <?php
-            $get_linked_props = "SELECT * FROM Participants_Properties INNER JOIN Properties ON 
+            $get_linked_props_sqlsafe = "SELECT * FROM Participants_Properties INNER JOIN Properties ON 
             Participants_Properties.Property_ID=Properties.Property_ID WHERE Participant_ID='" . $parti['Participant_ID'] . "'";
             // echo $get_linked_props;
             include "../include/dbconnopen.php";
-            $linked_props = mysqli_query($cnnSWOP, $get_linked_props);
+            $linked_props = mysqli_query($cnnSWOP, $get_linked_props_sqlsafe);
             while ($linked = mysqli_fetch_array($linked_props)) {
                 ?>
                 <!-- If this property is the person's primary residence (i.e. current address) then
@@ -802,13 +802,13 @@ include "../include/datepicker_simple.php";
                 <th>Employment</th>
             </tr>
             <?php
-            $get_fin_info = "SELECT * FROM Pool_Finances INNER JOIN Current_Housing 
+            include "../include/dbconnopen.php";
+            $get_fin_info_sqlsafe = "SELECT * FROM Pool_Finances INNER JOIN Current_Housing 
             ON Pool_Finances.Current_Housing=Current_Housing.Current_Housing_ID 
             INNER JOIN Pool_Employers ON Pool_Finances.Participant_ID=Pool_Employers.Participant_ID
-            WHERE Pool_Finances.Participant_ID='" . $_COOKIE['participant'] . "' GROUP BY Pool_Finance_ID";
+            WHERE Pool_Finances.Participant_ID='" . mysqli_real_escape_string($cnnSWOP, $_COOKIE['participant']) . "' GROUP BY Pool_Finance_ID";
             //  echo $get_fin_info;
-            include "../include/dbconnopen.php";
-            $fin_info = mysqli_query($cnnSWOP, $get_fin_info);
+            $fin_info = mysqli_query($cnnSWOP, $get_fin_info_sqlsafe);
             include "../include/dbconnclose.php";
             while ($fin = mysqli_fetch_array($fin_info)) {
                 ?>
@@ -915,7 +915,7 @@ include "../include/datepicker_simple.php";
 
 
             /* get info from all relevant tables: */
-            $get_events = "SELECT Pool_Status_Change_ID, Date_Changed, Active, Activity_Type, Member_Type, Pool_Status_Change_ID as Barrier
+            $get_events_sqlsafe = "SELECT Pool_Status_Change_ID, Date_Changed, Active, Activity_Type, Member_Type, Pool_Status_Change_ID as Barrier
                                                     FROM Pool_Status_Changes WHERE Participant_ID='" . $parti['Participant_ID'] . "'
                                                 UNION ALL
 												SELECT Participant_ID, Date_Added, '', Activity_Type, '', ''
@@ -935,7 +935,7 @@ include "../include/datepicker_simple.php";
                                                     ORDER BY Date_Changed DESC";
             // echo $get_events;
             include "../include/dbconnopen.php";
-            $events = mysqli_query($cnnSWOP, $get_events);
+            $events = mysqli_query($cnnSWOP, $get_events_sqlsafe);
             $count_events = 0;
             while ($event = mysqli_fetch_array($events)) {
                 $count_events++;
@@ -1016,8 +1016,8 @@ include "../include/datepicker_simple.php";
                     <td><?php
                         if ($event['Activity_Type'] == 1) {
                             /* then this is a benchmark, and needs to be marked as such (bold "Benchmark") */
-                            $get_benchmark = "SELECT * FROM Pool_Benchmarks WHERE Pool_Benchmark_ID='" . $event['Active'] . "'";
-                            $benchmark = mysqli_query($cnnSWOP, $get_benchmark);
+                            $get_benchmark_sqlsafe = "SELECT * FROM Pool_Benchmarks WHERE Pool_Benchmark_ID='" . $event['Active'] . "'";
+                            $benchmark = mysqli_query($cnnSWOP, $get_benchmark_sqlsafe);
                             $bm = mysqli_fetch_array($benchmark);
                             //display activity or benchmark
                             if ($bm['Benchmark_Type'] == 'Benchmark') {
@@ -1031,10 +1031,10 @@ include "../include/datepicker_simple.php";
                             if ($event['Active'] == 2) {
                                 /* the benchmark is a one-on-one */
                                 //include a search for the organizer with whom this person had a one-on-one
-                                $get_organizer = "SELECT Name_First, Name_Last FROM Participants WHERE Participant_ID=
+                                $get_organizer_sqlsafe = "SELECT Name_First, Name_Last FROM Participants WHERE Participant_ID=
                                                                                                 (SELECT More_Info FROM Pool_Progress WHERE Pool_Progress_ID='" . $event['Pool_Status_Change_ID'] . "')";
                                 echo "<br>";
-                                $organizer = mysqli_query($cnnSWOP, $get_organizer);
+                                $organizer = mysqli_query($cnnSWOP, $get_organizer_sqlsafe);
                                 $org = mysqli_fetch_row($organizer);
                                 echo "<strong>Organizer: </strong>" . $org[0] . " " . $org[1];
                                 ?>
@@ -1055,9 +1055,9 @@ include "../include/datepicker_simple.php";
                                             <td colspan="3"><select id="benchmark_inst_quick_search_<?php echo $event['Pool_Status_Change_ID']; ?>">
                                                     <option value="">-----</option>
                                                     <?php
-                                                    $get_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
+                                                    $get_institutions_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name";
                                                     include "../include/dbconnopen.php";
-                                                    $institutions = mysqli_query($cnnSWOP, $get_institutions);
+                                                    $institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
                                                     while ($institution = mysqli_fetch_array($institutions)) {
                                                         ?>
                                                         <option value="<?php echo $institution['Institution_ID']; ?>"><?php
@@ -1140,17 +1140,17 @@ include "../include/datepicker_simple.php";
                             // print_r($event);
                         } else if ($event['Activity_Type'] == 3) {
                             /* then this is an outcome int, and the corresponding name needs to be pulled from its table. */
-                            $get_outcome = "SELECT * FROM Outcomes_for_Pool WHERE Outcome_ID='" . $event['Active'] . "'";
+                            $get_outcome_sqlsafe = "SELECT * FROM Outcomes_for_Pool WHERE Outcome_ID='" . $event['Active'] . "'";
                             //echo $get_outcome;
-                            $outcome = mysqli_query($cnnSWOP, $get_outcome);
+                            $outcome = mysqli_query($cnnSWOP, $get_outcome_sqlsafe);
                             $oc = mysqli_fetch_array($outcome);
                             echo "<strong>Outcome: </strong>" . $oc['Outcome_Name'];
                             $activity_id = $event['Pool_Status_Change_ID'];
                             //echo "Activity ID: ". $activity_id;
                         } else if ($event['Activity_Type'] == 4) {
                             /* then this is a status change, and needs to be shown as text: */
-                            $get_type = "SELECT Type_Name FROM Pool_Member_Types WHERE Type_ID='" . $event['Member_Type'] . "'";
-                            $type = mysqli_query($cnnSWOP, $get_type);
+                            $get_type_sqlsafe = "SELECT Type_Name FROM Pool_Member_Types WHERE Type_ID='" . $event['Member_Type'] . "'";
+                            $type = mysqli_query($cnnSWOP, $get_type_sqlsafe);
                             $tp = mysqli_fetch_array($type);
                             if ($event['Active'] == 1) {
                                 echo "Entered the Housing Pool <em>(" . $tp['Type_Name'] . ")</em>";
@@ -1160,15 +1160,15 @@ include "../include/datepicker_simple.php";
                             $activity_id = $event['Pool_Status_Change_ID'];
                         } else if ($event['Activity_Type'] == 5) {
                             /* then this is member type change, and needs to be shown as text: */
-                            $get_type = "SELECT Type_Name FROM Pool_Member_Types WHERE Type_ID='" . $event['Member_Type'] . "'";
-                            $type = mysqli_query($cnnSWOP, $get_type);
+                            $get_type_sqlsafe = "SELECT Type_Name FROM Pool_Member_Types WHERE Type_ID='" . $event['Member_Type'] . "'";
+                            $type = mysqli_query($cnnSWOP, $get_type_sqlsafe);
                             $tp = mysqli_fetch_array($type);
                             echo "Changed to pool member type: <em>" . $tp['Type_Name'] . "</em>.";
                             $activity_id = $event['Pool_Status_Change_ID'];
                         } else if ($event['Activity_Type'] == 6) {
                             /* then this is an institution link, and the name should be pulled and shown: */
-                            $get_institution = "SELECT Institution_Name FROM Institutions WHERE Institution_ID='" . $event['Active'] . "'";
-                            $institution = mysqli_query($cnnSWOP, $get_institution);
+                            $get_institution_sqlsafe = "SELECT Institution_Name FROM Institutions WHERE Institution_ID='" . $event['Active'] . "'";
+                            $institution = mysqli_query($cnnSWOP, $get_institution_sqlsafe);
                             $inst = mysqli_fetch_array($institution);
                             echo "New institutional connection: " . $inst['Institution_Name'];
                             if ($event['Member_Type'] == 1) {
@@ -1233,23 +1233,23 @@ include "../include/datepicker_simple.php";
                                     <?php
                                     /* list of benchmarks differs based on what member type this person is.
                                      * It's ordered by the order in the Pool_Benchmarks table. */
-                                    $get_pipeline_type = "SELECT * FROM Pool_Member_Types WHERE Type_ID='" . $participant->get_type_id() . "'";
+                                    $get_pipeline_type_sqlsafe = "SELECT * FROM Pool_Member_Types WHERE Type_ID='" . $participant->get_type_id() . "'";
 // echo $get_pipeline_type;
                                     include "../include/dbconnopen.php";
-                                    $pipeline_type = mysqli_query($cnnSWOP, $get_pipeline_type);
+                                    $pipeline_type = mysqli_query($cnnSWOP, $get_pipeline_type_sqlsafe);
                                     $type = mysqli_fetch_array($pipeline_type);
-                                    $get_benchmark_list = "SELECT * FROM Pool_Benchmarks
+                                    $get_benchmark_list_sqlsafe = "SELECT * FROM Pool_Benchmarks
                         WHERE Pipeline_Type = '" . $type['Pipeline'] . "' AND
                             Benchmark_Type = 'Benchmark'
                         ORDER BY Step_Number";
-                                    $benchmark_list = mysqli_query($cnnSWOP, $get_benchmark_list);
+                                    $benchmark_list = mysqli_query($cnnSWOP, $get_benchmark_list_sqlsafe);
                                     while ($out = mysqli_fetch_array($benchmark_list)) {
                                         ?>
                                         <option value="<?php echo $out['Pool_Benchmark_ID'] ?>"><?php echo $out['Benchmark_Name']; ?></option>
                                         <?php
-                                        $get_date_of_this_benchmark = "SELECT * FROM Pool_Progress WHERE Benchmark_Completed=
+                                        $get_date_of_this_benchmark_sqlsafe = "SELECT * FROM Pool_Progress WHERE Benchmark_Completed=
                                     '" . $out['Pool_Benchmark_ID'] . "' AND Participant_ID='" . $participant->participant_id . "'";
-                                        $benchmark_date = mysqli_query($cnnSWOP, $get_date_of_this_benchmark);
+                                        $benchmark_date = mysqli_query($cnnSWOP, $get_date_of_this_benchmark_sqlsafe);
                                         $date = mysqli_fetch_array($benchmark_date);
                                     }
                                     include "../include/dbconnclose.php";
@@ -1300,21 +1300,21 @@ include "../include/datepicker_simple.php";
                                 <select id="new_activity">
                                     <option value="">----------</option>
                                     <?php
-                                    $get_activity_list = "SELECT * FROM Pool_Benchmarks
+                                    $get_activity_list_sqlsafe = "SELECT * FROM Pool_Benchmarks
                                                             WHERE Benchmark_Type = 'Activity'
                                                             GROUP BY Benchmark_Name
                                                             ORDER BY Step_Number";
                                     include "../include/dbconnopen.php";
-                                    $activity_list = mysqli_query($cnnSWOP, $get_activity_list);
+                                    $activity_list = mysqli_query($cnnSWOP, $get_activity_list_sqlsafe);
                                     include "../include/dbconnclose.php";
                                     while ($activity = mysqli_fetch_array($activity_list)) {
                                         ?>
                                         <option value="<?php echo $activity['Pool_Benchmark_ID'] ?>"><?php echo $activity['Benchmark_Name']; ?></option>
                                         <?php
-                                        $get_date_of_this_benchmark = "SELECT * FROM Pool_Progress WHERE Benchmark_Completed=
+                                        $get_date_of_this_benchmark_sqlsafe = "SELECT * FROM Pool_Progress WHERE Benchmark_Completed=
                                     '" . $activity['Pool_Benchmark_ID'] . "' AND Participant_ID='" . $participant->participant_id . "'";
                                         echo $get_date_of_this_benchmark;
-                                        $benchmark_date = mysqli_query($cnnSWOP, $get_date_of_this_benchmark);
+                                        $benchmark_date = mysqli_query($cnnSWOP, $get_date_of_this_benchmark_sqlsafe);
                                         $date = mysqli_fetch_array($benchmark_date);
                                     }
                                     include "../include/dbconnclose.php";
@@ -1489,9 +1489,9 @@ include "../include/datepicker_simple.php";
                                 <select id="outcome">
                                     <option value="">-----</option>
                                     <?php
-                                    $get_all_insts = "SELECT * FROM Outcomes_for_Pool;";
+                                    $get_all_insts_sqlsafe = "SELECT * FROM Outcomes_for_Pool;";
                                     include "../include/dbconnopen.php";
-                                    $all_insts = mysqli_query($cnnSWOP, $get_all_insts);
+                                    $all_insts = mysqli_query($cnnSWOP, $get_all_insts_sqlsafe);
                                     while ($inst = mysqli_fetch_row($all_insts)) {
                                         ?><option value="<?php echo $inst[0]; ?>"><?php echo $inst[1]; ?></option>
                                         <?php
@@ -1504,9 +1504,9 @@ include "../include/datepicker_simple.php";
                                 <select id="loc">
                                     <option value="">-----</option>
                                     <?php
-                                    $get_all_insts = "SELECT * FROM Outcome_Locations;";
+                                    $get_all_insts_sqlsafe = "SELECT * FROM Outcome_Locations;";
                                     include "../include/dbconnopen.php";
-                                    $all_insts = mysqli_query($cnnSWOP, $get_all_insts);
+                                    $all_insts = mysqli_query($cnnSWOP, $get_all_insts_sqlsafe);
                                     while ($inst = mysqli_fetch_row($all_insts)) {
                                         ?><option value="<?php echo $inst[0]; ?>"><?php echo $inst[1]; ?></option>
                                         <?php

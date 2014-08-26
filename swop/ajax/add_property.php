@@ -8,12 +8,13 @@
  */
 //echo 'got response';
 /* set disposition if it's not set (joins to another table, so disposition should be set to something).   */
+include "../include/dbconnopen.php";
 if ($_POST['disposition'] == '' || !isset($_POST['disposition'])) {
-    $disposition = 4;
+    $disposition_sqlsafe = 4;
 } else {
-    $disposition = $_POST['disposition'];
+    $disposition_sqlsafe = mysqli_real_escape_string($cnnSWOP, $_POST['disposition']);
 }
-$create_new_property_query = "INSERT INTO Properties (
+$create_new_property_query_sqlsafe = "INSERT INTO Properties (
                                 Address_Street_Num,
                                 Address_Street_Name,
                                 Address_Street_Direction,
@@ -24,33 +25,32 @@ $create_new_property_query = "INSERT INTO Properties (
                                 Disposition,
                                 Construction_Type,
                                 Home_Size,
-                                Property_Type) VALUES ('" . $_POST['num'] . "',
-                                        '" . $_POST['name'] . "',
-                                        '" . $_POST['dir'] . "',
-                                        '" . $_POST['type'] . "',
-                                            '" . $_POST['zipcode'] . "',
-                                                '$block_group',
-                                        '" . $_POST['pin'] . "',
-                                            '" . $disposition . "',
-                                        '" . $_POST['construction_type'] . "',
-                                        '" . $_POST['home_size'] . "',
-                                        '" . $_POST['prop_type'] . "')";
+                                Property_Type) VALUES ('" . mysqli_real_escape_string($cnnSWOP, $_POST['num']) . "',
+                                        '" . mysqli_real_escape_string($cnnSWOP, $_POST['name']) . "',
+                                        '" . mysqli_real_escape_string($cnnSWOP, $_POST['dir']) . "',
+                                        '" . mysqli_real_escape_string($cnnSWOP, $_POST['type']) . "',
+                                            '" . mysqli_real_escape_string($cnnSWOP, $_POST['zipcode']) . "',
+                                             '" . mysqli_real_escape_string($cnnSWOP, $block_group). "',
+                                        '" . mysqli_real_escape_string($cnnSWOP, $_POST['pin']) . "',
+                                            '" . $disposition_sqlsafe . "',
+                                        '" . mysqli_real_escape_string($cnnSWOP, $_POST['construction_type']) . "',
+                                        '" . mysqli_real_escape_string($cnnSWOP, $_POST['home_size']) . "',
+                                        '" . mysqli_real_escape_string($cnnSWOP, $_POST['prop_type']) . "')";
 
 //echo $create_new_property_query;
-include "../include/dbconnopen.php";
-mysqli_query($cnnSWOP, $create_new_property_query);
+mysqli_query($cnnSWOP, $create_new_property_query_sqlsafe);
 $id = mysqli_insert_id($cnnSWOP);
 if ($_POST['vacant'] == 1) {
-    $vacant_status = 'Vacant';
+    $vacant_status_sqlsafe = 'Vacant';
 } elseif ($_POST['vacant'] == 2) {
-    $vacant_status = 'Not vacant';
+    $vacant_status_sqlsafe = 'Not vacant';
 } else {
-    $vacant_status = '';
+    $vacant_status_sqlsafe = '';
 }
-$add_vacant = "INSERT INTO Property_Progress (Marker, Addtl_Info_1, Property_ID) VALUES (8, '$vacant_status', $id)";
+$add_vacant_sqlsafe = "INSERT INTO Property_Progress (Marker, Addtl_Info_1, Property_ID) VALUES (8, '$vacant_status_sqlsafe', $id)";
 //echo $add_vacant;
-if ($vacant_status != '') {
-    mysqli_query($cnnSWOP, $add_vacant);
+if ($vacant_status_sqlsafe != '') {
+    mysqli_query($cnnSWOP, $add_vacant_sqlsafe);
 }
 include "../include/dbconnclose.php";
 
@@ -58,11 +58,11 @@ if ($id != '') {
     /*  if property creation was successful: */
     if ($_POST['link_from_event'] == 1) {
         /* if this property was added when someone was linked to an event, then it is their address: */
-        $link_prop = "INSERT INTO Participants_Properties (Participant_ID, Property_ID, Primary_Residence)
-		VALUES ('" . $_POST['person'] . "', '" . $id . "', '1')";
-        // echo $link_prop;
         include "../include/dbconnopen.php";
-        mysqli_query($cnnSWOP, $link_prop);
+        $link_prop_sqlsafe = "INSERT INTO Participants_Properties (Participant_ID, Property_ID, Primary_Residence)
+		VALUES ('" . mysqli_real_escape_string($cnnSWOP, $_POST['person']) . "', '" . $id . "', '1')";
+        // echo $link_prop;
+        mysqli_query($cnnSWOP, $link_prop_sqlsafe);
         include "../include/dbconnclose.php";
     }
     ?>
@@ -80,11 +80,11 @@ if ($id != '') {
     <?php
     if ($_POST['action'] == 'link_to_new') {
         /* links property to a newly created person: */
-        $link_prop = "INSERT INTO Participants_Properties (Participant_ID, Property_ID)
-                    VALUES ('" . $_POST['person'] . "', '" . $id . "')";
-        //echo $link_prop;
         include "../include/dbconnopen.php";
-        mysqli_query($cnnSWOP, $link_prop);
+        $link_prop_sqlsafe = "INSERT INTO Participants_Properties (Participant_ID, Property_ID)
+                    VALUES ('" . mysqli_real_escape_string($cnnSWOP, $_POST['person']) . "', '" . $id . "')";
+        //echo $link_prop;
+        mysqli_query($cnnSWOP, $link_prop_sqlsafe);
         include "../include/dbconnclose.php";
         ?>
         <br>Or, <a href="javascript:;" onclick="

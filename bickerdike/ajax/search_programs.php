@@ -8,15 +8,18 @@
  * If any of the fields is blank, then it isn't included in the search query.  If it is filled in, then
  * the search includes it (organization is equal to the selected org).
  */
-if ($_POST['name']==''){$first='';}else{$first=' AND Program_Name LIKE "%' . $_POST['name'] . '%"';};
-if ($_POST['org']==''){$last='';}else{$last=" AND Program_Organization='" . $_POST['org'] . "'";}
-if ($_POST['type']==''){$zip='';}else{$zip=" AND Program_Type='" .$_POST['type'] . "'";}
+include "../include/dbconnopen.php";
+$name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['name']);
+$org_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['org']);
+$type_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['type']);
+if ($_POST['name']==''){$first='';}else{$first=' AND Program_Name LIKE "%' . $name_sqlsafe . '%"';};
+if ($_POST['org']==''){$last='';}else{$last=" AND Program_Organization='" . $org_sqlsafe . "'";}
+if ($_POST['type']==''){$zip='';}else{$zip=" AND Program_Type='" . $type_sqlsafe. "'";}
 
 
 $uncertain_search_query = "SELECT * FROM Programs WHERE Program_ID!='' " . $first . $last .  $zip . "ORDER BY Program_Name";
 //echo $uncertain_search_query;
 
-include "../include/dbconnopen.php";
 $results =mysqli_query($cnnBickerdike, $uncertain_search_query);
 ?>
 

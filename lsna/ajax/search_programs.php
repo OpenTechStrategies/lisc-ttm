@@ -4,15 +4,18 @@
  * any search terms that are filled in are included in the search:
  */
 
+include "../include/dbconnopen.php";
+$name_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['name']);
+$type_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['type']);
 if ($_POST['name'] == '') {
     $name = '';
 } else {
-    $name = ' AND Subcategories.Subcategory_Name LIKE "%' . $_POST['name'] . '%"';
+    $name = ' AND Subcategories.Subcategory_Name LIKE "%' . $name_sqlsafe . '%"';
 };
 if ($_POST['type'] == '') {
     $type = '';
 } else {
-    $type = " AND Category_Subcategory_Links.Category_ID='" . $_POST['type'] . "'";
+    $type = " AND Category_Subcategory_Links.Category_ID='" . $type_sqlsafe . "'";
 }
 
 if ($_POST['type'] != '') {
@@ -27,7 +30,6 @@ if ($_POST['type'] != '') {
 
 //echo $uncertain_search_query;
 
-include "../include/dbconnopen.php";
 $results = mysqli_query($cnnLSNA, $uncertain_search_query);
 
 if ($_POST['result'] == 'dropdown') {

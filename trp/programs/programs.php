@@ -18,12 +18,12 @@
 <div style="width:400px;margin-left:auto;margin-right:auto;">
 <?
 /* list of all programs */
-	$get_programs = "SELECT * FROM Programs ORDER BY Program_Name";
+	$get_programs_sqlsafe = "SELECT * FROM Programs ORDER BY Program_Name";
 	include "../include/dbconnopen.php";
-	$programs = mysqli_query($cnnTRP, $get_programs);
+	$programs = mysqli_query($cnnTRP, $get_programs_sqlsafe);
 	while ($program = mysqli_fetch_array($programs)) {
-	$get_participants = "SELECT * FROM Participants_Programs WHERE Program_ID='".$program['Program_ID']."'";
-	$participants = mysqli_query($cnnTRP, $get_participants);
+	$get_participants_sqlsafe = "SELECT * FROM Participants_Programs WHERE Program_ID='".$program['Program_ID']."'";
+	$participants = mysqli_query($cnnTRP, $get_participants_sqlsafe);
 	$num_participants = mysqli_num_rows($participants);
 ?>
 	<h4 onclick="

@@ -144,8 +144,9 @@ else {
                     }
                     else{
                         //find whether this program is already in the database:
-                        $get_program_name = "SELECT * FROM Subcategories WHERE Subcategory_Name='".$exploded_line[0]."'";
                         include "../include/dbconnopen.php";
+                        $exploded_line_sqlsafe=mysqli_real_escape_string($cnnLSNA, $exploded_line[0]);
+                        $get_program_name = "SELECT * FROM Subcategories WHERE Subcategory_Name='".$exploded_line_sqlsafe."'";
                         $program_name=mysqli_query($cnnLSNA, $get_program_name);
                         //test whether the program already exists or not
                         if (mysqli_num_rows($program_name)>0){
@@ -154,7 +155,7 @@ else {
                         }
                         else{
                             //if the program doesn't exist yet, then insert it
-                            $add_program="INSERT INTO Subcategories (Subcategory_Name, Campaign_or_Program) VALUES ('".$exploded_line[0]."', 'Program')";
+                            $add_program="INSERT INTO Subcategories (Subcategory_Name, Campaign_or_Program) VALUES ('".$exploded_line_sqlsafe."', 'Program')";
                             mysqli_query($cnnLSNA, $add_program);
                             $program_id=  mysqli_insert_id($cnnLSNA);
                             $add_category="INSERT INTO Category_Subcategory_Links (Category_ID, Subcategory_ID) VALUES ('2', '".$program_id."')";
@@ -212,7 +213,8 @@ else {
 
             //open DB
             include 'dbconnopen.php';
-            $import_query= "Call Import__Activity_Status_Report('" . $val . "')";
+            $val_sqlsafe=mysqli_real_escape_string($cnnLSNA, $val);
+            $import_query= "Call Import__Activity_Status_Report('" . $val_sqlsafe . "')";
             //echo $import_query . "<br>";
             $imported_record = mysqli_query($cnnLSNA, $import_query);
 

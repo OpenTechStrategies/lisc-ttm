@@ -17,8 +17,9 @@ $_GET['activity'];
     <h3>Event Profile</h3>
     <table>
         <?php
-        $get_activity_info = "SELECT * FROM User_Established_Activities WHERE User_Established_Activities_ID='" . $_GET['activity'] . "'";
         include "../include/dbconnopen.php";
+        $activity_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_GET['activity']);
+        $get_activity_info = "SELECT * FROM User_Established_Activities WHERE User_Established_Activities_ID='" . $activity_id_sqlsafe . "'";
         $activity_info = mysqli_query($cnnBickerdike, $get_activity_info);
         $count = 0;
         include "../include/datepicker.php";
@@ -63,7 +64,7 @@ $_GET['activity'];
             <p></p>
             <tr><td><b>Attendees:</b><br></td></tr><tr>
                 <?php
-                $get_users = "SELECT * FROM Users LEFT JOIN (Activities_Users)ON (Activities_Users.User_ID=Users.User_ID) WHERE Activities_Users.User_Established_Activity_ID='" . $_GET['activity'] . "'";
+                $get_users = "SELECT * FROM Users LEFT JOIN (Activities_Users)ON (Activities_Users.User_ID=Users.User_ID) WHERE Activities_Users.User_Established_Activity_ID='" . $activity_id_sqlsafe . "'";
                 $users = mysqli_query($cnnBickerdike, $get_users);
                 while ($name = mysqli_fetch_array($users)) {
                     ?>

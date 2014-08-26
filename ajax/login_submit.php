@@ -11,8 +11,11 @@ if (isset($_POST['username'])){
 // Will be set to the password exactly as found in the DB.
 // Initialized to "*" because that's PHPass's signal of invalidity.
 $password_in_db="*";
+$username_sqlsafe=mysqli_real_escape_string($cnnLISC, $username);
+$password_sqlsafe=mysqli_real_escape_string($cnnLISC, $password);
 
-$user_query = "SELECT User_ID, User_Password FROM Users WHERE User_Email = '$username'";
+
+$user_query = "SELECT User_ID, User_Password FROM Users WHERE User_Email = '$username_sqlsafe'";
 $query_result = mysqli_query($cnnLISC, $user_query);
 
 // Will be > 0 iff $username is in the database.
@@ -36,7 +39,7 @@ $hash_match = $hasher->CheckPassword($password_received, $password_in_db);
 
 if ($hash_match) {
     //record this login in the Log
-    $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username . "', ' - Logged In'))";
+    $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Logged In'))";
     
     mysqli_query($cnnLISC, $log_call);
     
@@ -45,7 +48,7 @@ if ($hash_match) {
        setcookie("user", "'$username'", time() + 10800, '/');
       
        //now find which, if any, privileges they have and set an appropriate cookie
-       $privileges_query = "CALL User__Find_Privileges('$username')";
+       $privileges_query = "CALL User__Find_Privileges('$username_sqlsafe')";
        $privileges = mysqli_query($cnnLISC, $privileges_query);
        
        $i=0;
@@ -87,7 +90,7 @@ if ($hash_match) {
        }
 }
 else {
-    $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username . "', ' - Failed login'))";
+    $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Failed login'))";
     mysqli_query($cnnLISC, $log_call);
     echo '0';
 }

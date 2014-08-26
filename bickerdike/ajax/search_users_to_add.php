@@ -6,12 +6,21 @@
  * If any of the fields is blank, then it isn't included in the search query.  If it is filled in, then
  * the search includes it (zipcode is equal to the selected zip).
  */
-if ($_POST['first']==''){$first='';}else{$first=' AND First_Name LIKE "%' . $_POST['first'] . '%"';};
-if ($_POST['last']==''){$last='';}else{$last=" AND Last_Name LIKE '%" . $_POST['last'] . "%'";}
-if ($_POST['zip']==''){$zip='';}else{$zip=" AND Zipcode='" .$_POST['zip'] . "'";}
-if ($_POST['age']==''){$age='';}else{$age=" AND Age='" . $_POST['age'] . "'";}
-if ($_POST['gender']==''){$gender='';}else{$gender=" AND Gender='" . $_POST['gender'] . "'";}
-if($_POST['race']==''){$race='';}else{$race=" AND Race='" . $_POST['race'] . "'";}
+include "../include/dbconnopen.php";
+$first_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['first']);
+$last_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['last']);
+$zip_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['zip']);
+$age_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['age']);
+$gender_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['gender']);
+$race_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['race']);
+$type_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['type']);
+
+if ($_POST['first']==''){$first='';}else{$first=' AND First_Name LIKE "%' . $first_sqlsafe . '%"';};
+if ($_POST['last']==''){$last='';}else{$last=" AND Last_Name LIKE '%" . $last_sqlsafe . "%'";}
+if ($_POST['zip']==''){$zip='';}else{$zip=" AND Zipcode='" .$zip_sqlsafe . "'";}
+if ($_POST['age']==''){$age='';}else{$age=" AND Age='" . $age_sqlsafe . "'";}
+if ($_POST['gender']==''){$gender='';}else{$gender=" AND Gender='" . $gender_sqlsafe . "'";}
+if($_POST['race']==''){$race='';}else{$race=" AND Race='" . $race_sqlsafe . "'";}
 if($_POST['type']==''){$type='';}else{
     if ($_POST['type']==1){
         $type=" AND Adult='1'";
@@ -27,7 +36,6 @@ if($_POST['type']==''){$type='';}else{
 $uncertain_search_query = "SELECT * FROM Users WHERE User_ID!='' " . $first . $last .  $zip .  $age .  $gender . $race . $type;
 //echo $uncertain_search_query;
 
-include "../include/dbconnopen.php";
 $results =mysqli_query($cnnBickerdike, $uncertain_search_query);
 ?>
 <!--Results come in a dropdown format.-->

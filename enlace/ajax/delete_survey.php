@@ -3,7 +3,8 @@
  * 
  */
 if ($_POST['action']=='personal'){
-    $get_surveys="SELECT * FROM Assessments WHERE Assessment_ID='".$_POST['assessment']."'";
+    $assessment_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['assessment']);
+    $get_surveys="SELECT * FROM Assessments WHERE Assessment_ID='".$assessment_sqlsafe."'";
     include "../include/dbconnopen.php";
     $surveys=mysqli_query($cnnEnlace, $get_surveys);
     $surv=mysqli_fetch_row($surveys);
@@ -11,7 +12,7 @@ if ($_POST['action']=='personal'){
     $delete_baseline="DELETE FROM Participants_Baseline_Assessments WHERE Baseline_Assessment_ID=$surv[2]";
     $delete_future="DELETE FROM Participants_Future_Expectations WHERE Future_Expectations_ID=$surv[4]";
     $delete_violence="DELETE FROM Participants_Interpersonal_Violence WHERE Interpersonal_Violence_ID=$surv[5]";
-    $delete_query="DELETE FROM Assessments WHERE Assessment_ID='" . $_POST['assessment'] . "'";
+    $delete_query="DELETE FROM Assessments WHERE Assessment_ID='" . $assessment_sqlsafe . "'";
     echo $delete_query;  
     mysqli_query($cnnEnlace, $delete_caring);
     mysqli_query($cnnEnlace, $delete_baseline);
@@ -22,7 +23,8 @@ if ($_POST['action']=='personal'){
 }
 /*not complicated to delete a program survey: */
 else{
-$delete_query="DELETE FROM Program_Surveys WHERE Program_Survey_ID='" . $_POST['id'] . "'";
+$id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['id']);
+$delete_query="DELETE FROM Program_Surveys WHERE Program_Survey_ID='" . $id_sqlsafe . "'";
 echo $delete_query;
 
 include "../include/dbconnopen.php";

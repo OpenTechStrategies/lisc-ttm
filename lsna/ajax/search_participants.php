@@ -1,15 +1,20 @@
 <?php
 /*search participants: */
+include "../include/dbconnopen.php";
+$first_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['first']);
+$last_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['last']);
+$gender_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['gender']);
+$grade_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['grade']);
 
 $date_reformat=explode('-', $_POST['dob']);
 $save_date=$date_reformat[2] . '-'. $date_reformat[0] . '-'. $date_reformat[1];
 
 /*if the search terms are filled in, they are included in the query: */
-if ($_POST['first']==''){$first='';}else{$first=' AND Participants.Name_First LIKE "%' . $_POST['first'] . '%"';};
-if ($_POST['last']==''){$last='';}else{$last=" AND Participants.Name_Last LIKE '%" . $_POST['last'] . "%'";}
-if ($_POST['gender']==''){$gender='';}else{$gender=" AND Participants.Gender='" . $_POST['gender'] . "'";}
+if ($_POST['first']==''){$first='';}else{$first=' AND Participants.Name_First LIKE "%' . $first_sqlsafe . '%"';};
+if ($_POST['last']==''){$last='';}else{$last=" AND Participants.Name_Last LIKE '%" . $last_sqlsafe . "%'";}
+if ($_POST['gender']==''){$gender='';}else{$gender=" AND Participants.Gender='" . $gender_sqlsafe . "'";}
 if ($_POST['dob']==''){$dob='';}else{$dob=" AND Participants.Date_of_Birth='" .$save_date . "' ";}
-if ($_POST['grade']==''){$grade='';}else{$grade=" AND Participants.Grade_Level='" . $_POST['grade'] . "'";}
+if ($_POST['grade']==''){$grade='';}else{$grade=" AND Participants.Grade_Level='" . $grade_sqlsafe . "'";}
 if ($_POST['pm']==1){$pm_join=" LEFT JOIN Participants_Subcategories ON Participants.Participant_ID=Participants_Subcategories.Participant_ID ";
 $pm=" AND Subcategory_ID=19 ";
 }
@@ -47,7 +52,6 @@ WHERE Participant_Subcategory_ID IS NULL;";*/
 
 //echo $uncertain_search_query;
 
-include "../include/dbconnopen.php";
 $results =mysqli_query($cnnLSNA, $uncertain_search_query);
 ?>
 <br/>

@@ -1,10 +1,16 @@
 <?php
 /*create a new program or campaign: 
  */
+include "../include/dbconnopen.php";
+$name_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['name']);
+$issue_area_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['issue_area']);
+$type_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['type']);
+$clc_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['clc']);
+
     $make_program="INSERT INTO Subcategories (
                 Subcategory_Name, Campaign_or_Program) VALUES(
-                '" . $_POST['name'] ."',
-                '" . $_POST['issue_area'] . "')";
+                '" . $name_sqlsafe ."',
+                '" . $issue_area_sqlsafe . "')";
     //echo $make_program;
     include "../include/dbconnopen.php";
     mysqli_query($cnnLSNA, $make_program);
@@ -15,14 +21,14 @@
      * "Issue Areas"
      */
     $link_to_category="INSERT INTO Category_Subcategory_Links (Category_ID, Subcategory_ID)
-                        VALUES ('" . $_POST['type'] . "', '" . $id ."')";
+                        VALUES ('" . $type_sqlsafe . "', '" . $id ."')";
      include "../include/dbconnopen.php";
     mysqli_query($cnnLSNA, $link_to_category);
     include "../include/dbconnclose.php";
     
     /*obsolete.  CLCs aren't used this way. */
         $link_to_clc="INSERT INTO CLC_Subcategory (CLC_ID, Subcategory_ID)
-                        VALUES ('" . $_POST['clc'] . "', '" . $id ."')";
+                        VALUES ('" . $clc_sqlsafe . "', '" . $id ."')";
        // echo $link_to_clc;
      include "../include/dbconnopen.php";
     mysqli_query($cnnLSNA, $link_to_clc);
