@@ -92,7 +92,7 @@ if ($_POST['add_to_parent'] == 1) {
                         Ward,
                         Is_Child
         ) VALUES (
-                        '" . mysqli_real_escape_string($_POST['first_name']) . "',
+                        '" . mysqli_real_escape_string($cnnLSNA, $_POST['first_name']) . "',
                         '" . $_POST['last_name'] . "',
                         '" . $_POST['address_name'] . "',
                         '" . $_POST['address_num'] . "',
