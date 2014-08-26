@@ -349,6 +349,11 @@ table.trp_add_table{
         border: 1px solid black;
 }
 
+td.trp_add_table{
+        border-collapse: collapse;
+        border: 1px solid black;
+}
+
 table.search_table td {
 	padding: 3px;
 }
