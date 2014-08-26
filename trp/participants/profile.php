@@ -2060,9 +2060,9 @@ if ($parti['Gender'] == 'm') {
             <h4>La Casa Information</h4>
             <table class="inner_table">
                 <caption>College Data</caption>
-                <tr><th>Grade Level</th><th>Major</th><th>Community College</th>
-                    <th>Four Year College</th><th>Fall Semester Credits</th>
-                    <th>Spring Semester Credits</th>
+                <tr><th>School Name</th><th>Term Type (Semester or Quarter)</th>
+                    <th>Term (Fall, Winter, Spring, Summer)</th>
+                    <th>Year</th><th>Credits Earned</th>
                 </tr>
                 <?php
                 include "../include/dbconnopen.php";

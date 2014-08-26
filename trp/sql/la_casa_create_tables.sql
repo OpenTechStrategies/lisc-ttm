@@ -148,3 +148,7 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 ALTER TABLE `Participants` ADD
 `Mobile_Phone` varchar(45);
 
+CREATE TABLE La_Casa_College_Progress
+(
+
+) ENGINE=InnoDB;
