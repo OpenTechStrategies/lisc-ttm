@@ -296,7 +296,6 @@ Add a new user to the system.
             pw: document.getElementById('pw').value
         },
         function (response){
-            document.write(response);
 			document.getElementById('updated_password').innerHTML = 'Thanks!  This user\'s password has been updated.';
         }
     )
