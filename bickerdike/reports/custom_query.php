@@ -163,9 +163,9 @@ custom query
                         <select name="zipcode" id="zipcode">
                             <option value="">-----</option>
                             <?php
-                            $get_zips = "SELECT Zipcode FROM Users WHERE Zipcode !=0 GROUP BY Zipcode";
+                            $get_zips_sqlsafe = "SELECT Zipcode FROM Users WHERE Zipcode !=0 GROUP BY Zipcode";
                             include "../include/dbconnopen.php";
-                            $zips = mysqli_query($cnnBickerdike, $get_zips);
+                            $zips = mysqli_query($cnnBickerdike, $get_zips_sqlsafe);
                             while ($zip = mysqli_fetch_row($zips)) {
                                 ?>
                                 <option value="<?php echo $zip[0]; ?>"><?php echo $zip[0]; ?></option>
@@ -192,9 +192,9 @@ custom query
             <select name="program_id" id="program_id">
                 <option value="">-----</option>
                 <?php
-                $get_programs = "SELECT * FROM Programs";
+                $get_programs_sqlsafe = "SELECT * FROM Programs";
                 include "../include/dbconnopen.php";
-                $programs = mysqli_query($cnnBickerdike, $get_programs);
+                $programs = mysqli_query($cnnBickerdike, $get_programs_sqlsafe);
                 while ($program = mysqli_fetch_array($programs)) {
                     ?>
                     <option value="<?php echo $program['Program_ID']; ?>"><?php echo $program['Program_Name']; ?></option>
@@ -393,9 +393,9 @@ custom query
             <select name="partner_id" id="partner_id">
                 <option value="">-----</option>
                 <?php
-                $get_organizations = "SELECT * FROM Org_Partners";
+                $get_organizations_sqlsafe = "SELECT * FROM Org_Partners";
                 include "../include/dbconnopen.php";
-                $organizations = mysqli_query($cnnBickerdike, $get_organizations);
+                $organizations = mysqli_query($cnnBickerdike, $get_organizations_sqlsafe);
                 while ($organization = mysqli_fetch_array($organizations)) {
                     ?>
                     <option value="<?php echo $organization['Partner_ID']; ?>"><?php echo $organization['Partner_Name']; ?></option>

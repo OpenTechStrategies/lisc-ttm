@@ -167,9 +167,9 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                         </tr>
                         <?php
                         //select the dates that have been entered for this program
-                        $get_all_dates = "SELECT * FROM Program_Dates WHERE Program_ID='" . $program['Program_ID'] . "'";
+                        $get_all_dates_sqlsafe = "SELECT * FROM Program_Dates WHERE Program_ID='" . $program['Program_ID'] . "'";
                         include "../include/dbconnopen.php";
-                        $dates = mysqli_query($cnnBickerdike, $get_all_dates);
+                        $dates = mysqli_query($cnnBickerdike, $get_all_dates_sqlsafe);
                         $i = 0;
                         while ($date = mysqli_fetch_array($dates)) {
                             ?>
@@ -184,8 +184,8 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                                 <!--Show existing attendance and add or remove attendance as necessary (with onchange)-->
                                 <td><input type="checkbox" id="program_date_<?php echo $program['Program_ID'] ?>_<?php echo $i ?>" 
                                     <?php
-                                    $did_attend = "SELECT * FROM Program_Dates_Users WHERE Program_Date_ID='" . $date['Program_Date_ID'] . "' AND User_ID='" . $user->user_id . "'";
-                                    $attended = mysqli_query($cnnBickerdike, $did_attend);
+                                    $did_attend_sqlsafe = "SELECT * FROM Program_Dates_Users WHERE Program_Date_ID='" . $date['Program_Date_ID'] . "' AND User_ID='" . $user->user_id . "'";
+                                    $attended = mysqli_query($cnnBickerdike, $did_attend_sqlsafe);
                                     if (mysqli_num_rows($attended) > 0) {
                                         echo 'checked';
                                     }
@@ -246,10 +246,10 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                     $infile = "../data/downloads/attendance_" . $user->user_id . ".csv";
 //echo $infile;
                     $fp = fopen($infile, "w") or die('can\'t open file');
-                    $query = "Call User__Download_Attendance('" . $user->user_id . "')";
+                    $query_sqlsafe = "Call User__Download_Attendance('" . $user->user_id . "')";
 //echo $query;
                     include "../include/dbconnopen.php";
-                    if ($result = mysqli_query($cnnBickerdike, $query)) {
+                    if ($result = mysqli_query($cnnBickerdike, $query_sqlsafe)) {
                         while ($row = mysqli_fetch_array($result)) {
                             $put_array = array($user->user_first_name, $user->user_last_name, $row[User_ID], $row[Program_Date], $row[Program_Name]);
                             fputcsv($fp, $put_array);
@@ -266,9 +266,9 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                     <select id="choose_from_all_programs">
                         <option value="">------</option>
                         <?php
-                        $get_all_programs = "SELECT * FROM Programs ORDER BY Program_Name";
+                        $get_all_programs_sqlsafe = "SELECT * FROM Programs ORDER BY Program_Name";
                         include "../include/dbconnopen.php";
-                        $programs = mysqli_query($cnnBickerdike, $get_all_programs);
+                        $programs = mysqli_query($cnnBickerdike, $get_all_programs_sqlsafe);
                         while ($program = mysqli_fetch_array($programs)) {
                             ?>
                             <option value="<?php echo $program['Program_ID']; ?>"><?php echo $program['Program_Name']; ?></option>

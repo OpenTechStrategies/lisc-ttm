@@ -22,10 +22,10 @@ else{
  * why), this calculates the feet and inches pieces of the entered height.
  */
 
-$height_feet = (int) ($_POST['height']/12);
-//echo $height_feet;
-$height_inches = (int)(($_POST['height'])%12);
-//echo $height_inches;
+$height_feet_sqlsafe = (int) ($_POST['height']/12);
+//echo $height_feet_sqlsafe;
+$height_inches_sqlsafe = (int)(($_POST['height'])%12);
+//echo $height_inches_sqlsafe;
 
 /*
  * 
@@ -35,19 +35,19 @@ $height_inches = (int)(($_POST['height'])%12);
 $user_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['user']);
 $date_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['date']);
 $weight_sqlsafe=int($_POST['weight']);
-$user_count = "SELECT * FROM User_Health_Data WHERE User_ID='" . $_POST['user'] ."'";
-echo $user_count;
-$num_times_user_measured = mysqli_query($cnnBickerdike, $user_count);
+$user_count_sqlsafe = "SELECT * FROM User_Health_Data WHERE User_ID='" . $user_sqlsafe ."'";
+echo $user_count_sqlsafe;
+$num_times_user_measured = mysqli_query($cnnBickerdike, $user_count_sqlsafe);
 $count = mysqli_num_rows($num_times_user_measured);
 include "../include/dbconnclose.php";
 
-$added_count = $count+1;
+$added_count_sqlsafe = $count+1;
 /*
- * $added_count seems to be keeping track of the number of times a user has been weighed/measured
+ * $added_count_sqlsafe seems to be keeping track of the number of times a user has been weighed/measured
  * and added into the system, but I have no idea why.
  */
 
-$add_health = "INSERT INTO User_Health_Data (
+$add_health_sqlsafe = "INSERT INTO User_Health_Data (
                 User_ID,
                 Height_Feet,
                 Height_Inches,
@@ -56,15 +56,15 @@ $add_health = "INSERT INTO User_Health_Data (
                 Date,
                 User_Count) VALUES (
                 '" . $user_sqlsafe ."',
-                '" . $height_feet ."',
-                '" . $height_inches ."',
+                '" . $height_feet_sqlsafe ."',
+                '" . $height_inches_sqlsafe ."',
                 '" . $weight_sqlsafe ."',
-                '" . $bmi ."',
+                '" . $bmi_sqlsafe ."',
                 '" . $date_sqlsafe ."',
-                    $added_count
+                    $added_count_sqlsafe
                 )";
 
 include "../include/dbconnopen.php";
-mysqli_query($cnnBickerdike, $add_health);
+mysqli_query($cnnBickerdike, $add_health_sqlsafe);
 include "../include/dbconnclose.php";
 ?>

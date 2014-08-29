@@ -21,9 +21,9 @@ aldermanic funds for environmental improvements, and healthy item sales data.
         <!--Counts the institutions that have been entered in the database:-->
 <div id="bickerdike_stats"><ul>
     <li>Number of participating organizations: <strong><?
-        $count_partners = "SELECT * FROM Org_Partners;";
+        $count_partners_sqlsafe = "SELECT * FROM Org_Partners;";
         include "../include/dbconnopen.php";
-        $partners = mysqli_query($cnnBickerdike, $count_partners);
+        $partners = mysqli_query($cnnBickerdike, $count_partners_sqlsafe);
         $count = mysqli_num_rows($partners);
         include "../include/dbconnclose.php";
         echo $count;
@@ -53,9 +53,9 @@ aldermanic funds for environmental improvements, and healthy item sales data.
         <th>Date</th>
     </tr>
     <? date_default_timezone_set('America/Chicago');
-    $get_trail_info = "SELECT * FROM Bike_Trails";
+    $get_trail_info_sqlsafe = "SELECT * FROM Bike_Trails";
     include "../include/dbconnopen.php";
-    $trails = mysqli_query($cnnBickerdike, $get_trail_info);
+    $trails = mysqli_query($cnnBickerdike, $get_trail_info_sqlsafe);
         while ($trail = mysqli_fetch_array($trails)){
             ?>
                 <tr>
@@ -101,9 +101,13 @@ aldermanic funds for environmental improvements, and healthy item sales data.
         <th>Fiscal Year</th>
     </tr>
     <? date_default_timezone_set('America/Chicago');
+<<<<<<< HEAD
     $get_trail_info = "SELECT * FROM Aldermanic_Records";
+=======
+    $get_trail_info_sqlsafe = "SELECT * FROM `lisc-bickerdike.chapinhall.org`.Aldermanic_Records";
+>>>>>>> Issue-19-sqlsafe
     include "../include/dbconnopen.php";
-    $trails = mysqli_query($cnnBickerdike, $get_trail_info);
+    $trails = mysqli_query($cnnBickerdike, $get_trail_info_sqlsafe);
         while ($trail = mysqli_fetch_array($trails)){
             ?>
                 <tr>
@@ -149,10 +153,10 @@ aldermanic funds for environmental improvements, and healthy item sales data.
         <th>Store</th>
         <th>Date</th>
     </tr>
-      <?  $get_trail_info = "SELECT * FROM Funded_Organization_Records_Stores INNER JOIN Corner_Stores
+      <?  $get_trail_info_sqlsafe = "SELECT * FROM Funded_Organization_Records_Stores INNER JOIN Corner_Stores
                         ON Funded_Organization_Records_Stores.Store_ID=Corner_Stores.Corner_Store_ID;";
     include "../include/dbconnopen.php";
-    $trails = mysqli_query($cnnBickerdike, $get_trail_info);
+    $trails = mysqli_query($cnnBickerdike, $get_trail_info_sqlsafe);
         while ($trail = mysqli_fetch_array($trails)){
             ?>
                 <tr>
@@ -175,9 +179,9 @@ aldermanic funds for environmental improvements, and healthy item sales data.
             <select id="store">
                 <option value="">-----</option>
             <?
-        $store_select = "SELECT * FROM Corner_Stores";
+        $store_select_sqlsafe = "SELECT * FROM Corner_Stores";
         include "../include/dbconnopen.php";
-        $stores = mysqli_query($cnnBickerdike, $store_select);
+        $stores = mysqli_query($cnnBickerdike, $store_select_sqlsafe);
         while ($store = mysqli_fetch_array($stores)){
             ?>
                 <option value="<?echo $store['Corner_Store_ID']?>"><?echo $store['Corner_Store_Name'];?></option>

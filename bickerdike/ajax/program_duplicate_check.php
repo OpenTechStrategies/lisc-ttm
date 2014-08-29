@@ -5,14 +5,14 @@
  * system user is warned about the duplication.  They still have the option to 
  * create a duplicate program if they really want to.
  */
-$name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['name']);
-$get_duplicate_programs = "SELECT COUNT(Program_ID) FROM Programs WHERE Program_Name='" . $name_sqlsafe . "'";
-//echo $get_duplicate_programs;
 include "../include/dbconnopen.php";
-$is_duplicate = mysqli_query($cnnBickerdike, $get_duplicate_programs);
+$name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['name']);
+$get_duplicate_programs_sqlsafe = "SELECT COUNT(Program_ID) FROM Programs WHERE Program_Name='" . $name_sqlsafe . "'";
+//echo $get_duplicate_programs_sqlsafe;
+$is_duplicate = mysqli_query($cnnBickerdike, $get_duplicate_programs_sqlsafe);
 $duplicate = mysqli_fetch_row($is_duplicate);
 if ($duplicate[0]>0){
-    echo 'A program named ' .  $_POST['name'] . ' is already in the database.  Are you sure you want to enter this program?';
+    echo 'A program named ' .  $name_sqlsafe . ' is already in the database.  Are you sure you want to enter this program?';
 }
 include "../include/dbconnclose.php";
 

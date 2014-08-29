@@ -10,7 +10,7 @@ $sidewalk_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['sidewalk']
 $intersection_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['intersection']);
 $crosswalks_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['crosswalks']);
 
-$walk_query = "INSERT INTO Walkability_Assessment
+$walk_query_sqlsafe = "INSERT INTO Walkability_Assessment
     (Date_Evaluated,
      Cars_Stop,
      Speed_Limit_Obeyed,
@@ -24,7 +24,7 @@ $walk_query = "INSERT INTO Walkability_Assessment
       '" . $sidewalk_sqlsafe ."',
       '" . $intersection_sqlsafe . "',
       '" . $crosswalks_sqlsafe ."')";
-echo $walk_query;
-mysqli_query($cnnBickerdike, $walk_query);
+echo $walk_query_sqlsafe;
+mysqli_query($cnnBickerdike, $walk_query_sqlsafe);
 include "../include/dbconnclose.php";
 ?>

@@ -7,19 +7,19 @@
 //
 include "../include/dbconnopen.php";
 $user_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['user_id']);
-$delete_activities_query = "DELETE FROM Activities_Users WHERE User_ID='" . $user_id_sqlsafe . "'";
-$delete_surveys_query = "DELETE FROM Participant_Survey_Responses WHERE User_ID='" . $user_id_sqlsafe . "'";
-$delete_attendance_query = "DELETE FROM Program_Dates_Users WHERE User_ID='" . $user_id_sqlsafe . "'";
-$delete_programs_query = "DELETE FROM Programs_Users WHERE User_ID='" . $user_id_sqlsafe . "'";
-$delete_health_query = "DELETE FROM User_Health_Data WHERE User_ID='" . $user_id_sqlsafe . "'";
-$delete_user_query = "DELETE FROM Users WHERE User_ID='" . $user_id_sqlsafe . "'";
-echo $delete_user_query;
-mysqli_query($cnnBickerdike, $delete_activities_query);
-mysqli_query($cnnBickerdike, $delete_surveys_query);
-mysqli_query($cnnBickerdike, $delete_attendance_query);
-mysqli_query($cnnBickerdike, $delete_programs_query);
-mysqli_query($cnnBickerdike, $delete_health_query);
-mysqli_query($cnnBickerdike, $delete_user_query);
+$delete_activities_query_sqlsafe = "DELETE FROM Activities_Users WHERE User_ID='" . $user_id_sqlsafe . "'";
+$delete_surveys_query_sqlsafe = "DELETE FROM Participant_Survey_Responses WHERE User_ID='" . $user_id_sqlsafe . "'";
+$delete_attendance_query_sqlsafe = "DELETE FROM Program_Dates_Users WHERE User_ID='" . $user_id_sqlsafe . "'";
+$delete_programs_query_sqlsafe = "DELETE FROM Programs_Users WHERE User_ID='" . $user_id_sqlsafe . "'";
+$delete_health_query_sqlsafe = "DELETE FROM User_Health_Data WHERE User_ID='" . $user_id_sqlsafe . "'";
+$delete_user_query_sqlsafe = "DELETE FROM Users WHERE User_ID='" . $user_id_sqlsafe . "'";
+echo $delete_user_query_sqlsafe;
+mysqli_query($cnnBickerdike, $delete_activities_query_sqlsafe);
+mysqli_query($cnnBickerdike, $delete_surveys_query_sqlsafe);
+mysqli_query($cnnBickerdike, $delete_attendance_query_sqlsafe);
+mysqli_query($cnnBickerdike, $delete_programs_query_sqlsafe);
+mysqli_query($cnnBickerdike, $delete_health_query_sqlsafe);
+mysqli_query($cnnBickerdike, $delete_user_query_sqlsafe);
 include "../include/dbconnclose.php";
 
 

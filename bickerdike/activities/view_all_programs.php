@@ -34,15 +34,15 @@ when the mouse hovers over it.-->
                                 <option value="">-----</option>
                                 <?php
                                 //get all the organizations that currently host programs
-                                $program_query = "SELECT * FROM Programs GROUP BY Program_Organization";
+                                $program_query_sqlsafe = "SELECT * FROM Programs GROUP BY Program_Organization";
                                 include "../include/dbconnopen.php";
-                                $programs = mysqli_query($cnnBickerdike, $program_query);
+                                $programs = mysqli_query($cnnBickerdike, $program_query_sqlsafe);
                                 while ($program = mysqli_fetch_array($programs)) {
                                     ?>
                                     <option value="<?php echo $program['Program_Organization']; ?>"><?php
-                                        $find_org = "SELECT * FROM Org_Partners WHERE Partner_ID='" . $program['Program_Organization'] . "'";
+                                        $find_org_sqlsafe = "SELECT * FROM Org_Partners WHERE Partner_ID='" . $program['Program_Organization'] . "'";
                                         include "../include/dbconnopen.php";
-                                        $org = mysqli_query($cnnBickerdike, $find_org);
+                                        $org = mysqli_query($cnnBickerdike, $find_org_sqlsafe);
                                         if ($partner = mysqli_fetch_array($org)) {
                                             echo $partner['Partner_Name'];
                                         }
@@ -58,9 +58,9 @@ when the mouse hovers over it.-->
                                 <option value="">-----</option>
                                 <?php
                                 //get list of program types for search
-                                $program_query = "SELECT * FROM Program_Types ORDER BY Program_Type_Name";
+                                $program_query_sqlsafe = "SELECT * FROM Program_Types ORDER BY Program_Type_Name";
                                 include "../include/dbconnopen.php";
-                                $programs = mysqli_query($cnnBickerdike, $program_query);
+                                $programs = mysqli_query($cnnBickerdike, $program_query_sqlsafe);
                                 while ($program = mysqli_fetch_array($programs)) {
                                     ?>
                                     <option value="<?php echo $program['Program_Type_ID']; ?>"><?php echo $program['Program_Type_Name'] ?></option>
@@ -93,9 +93,9 @@ when the mouse hovers over it.-->
                 <br />
                     <?php
                     //get number of total records
-                    $number_of_programs_query = "SELECT COUNT(*) AS Record_Count FROM Programs";
+                    $number_of_programs_query_sqlsafe = "SELECT COUNT(*) AS Record_Count FROM Programs";
                     include "../include/dbconnopen.php";
-                    $number_of_programs = mysqli_query($cnnBickerdike, $number_of_programs_query);
+                    $number_of_programs = mysqli_query($cnnBickerdike, $number_of_programs_query_sqlsafe);
                     $number_of_programs = mysqli_fetch_array($number_of_programs);
                     $number_of_programs = $number_of_programs['Record_Count'];
                     include "../include/dbconnclose.php";
@@ -107,11 +107,11 @@ when the mouse hovers over it.-->
                         
                         //alphabetical list of all programs, each of which links to its own profile page
                         //$program_query = "SELECT * FROM Programs ORDER BY Program_Name";
-                        $program_query = "SELECT * FROM Programs "
+                        $program_query_sqlsafe = "SELECT * FROM Programs "
                                         . "WHERE Program_Created_Date BETWEEN '" . (2011 + $year_add) . "-09-01' AND '" . (2012 + $year_add) . "-08-31' "
                                         . "ORDER BY Program_Name";
                         include "../include/dbconnopen.php";
-                        $programs = mysqli_query($cnnBickerdike, $program_query);
+                        $programs = mysqli_query($cnnBickerdike, $program_query_sqlsafe);
                         
                         //header
                         echo "<a href=\"javascript:;\" onclick=\"$('#category_div_" . $year_add . "').slideToggle('slow');\">Year "
@@ -138,8 +138,8 @@ when the mouse hovers over it.-->
                     <?php
                     /*
                     //alphabetical list of all programs, each of which links to its own profile page
-                    //$program_query = "SELECT * FROM Programs ORDER BY Program_Name";
-                    $program_query = "SELECT Programs.*, YEAR(Programs.Program_Created_Date) AS Program_Year, "
+                    //$program_query_sqlsafe = "SELECT * FROM Programs ORDER BY Program_Name";
+                    $program_query_sqlsafe = "SELECT Programs.*, YEAR(Programs.Program_Created_Date) AS Program_Year, "
                                     . "Program_Types.Program_Type_Name "
                                     . "FROM Programs, Program_Types "
                                     . "WHERE "
@@ -147,7 +147,7 @@ when the mouse hovers over it.-->
                                     . "ORDER BY "
                                     . "Program_Type_Name, YEAR(Program_Created_Date), Program_Name";
                     include "../include/dbconnopen.php";
-                    $programs = mysqli_query($cnnBickerdike, $program_query);
+                    $programs = mysqli_query($cnnBickerdike, $program_query_sqlsafe);
 
                     //sort by program type (category), year, alphabetical
                     $category_div = '';

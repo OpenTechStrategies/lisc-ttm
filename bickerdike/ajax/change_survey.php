@@ -22,7 +22,7 @@ $fourteen_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['14']);
 $program_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['program']);
 $survey_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['survey_id']);
 
-$edit_survey = "UPDATE Participant_Survey_Responses SET
+$edit_survey_sqlsafe = "UPDATE Participant_Survey_Responses SET
                 Question_2='" . $two_sqlsafe . "',
                 Question_3='" . $three_sqlsafe . "',
                 Question_4_A='" . $four_a_sqlsafe . "',
@@ -40,6 +40,6 @@ $edit_survey = "UPDATE Participant_Survey_Responses SET
                 Question_14='" . $fourteen_sqlsafe . "',
                 Program_ID='" . $program_sqlsafe ."'
                 WHERE Participant_Survey_ID='" . $survey_id_sqlsafe . "'";
-mysqli_query($cnnBickerdike, $edit_survey);
+mysqli_query($cnnBickerdike, $edit_survey_sqlsafe);
 include "../include/dbconnclose.php";
 ?>

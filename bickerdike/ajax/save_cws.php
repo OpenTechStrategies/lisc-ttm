@@ -5,6 +5,8 @@
  * the baseline over time in the same place that they track their own data over time.
  */
 
+include "../include/dbconnopen.php";
+
 $date_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['date']);
 $fifteen_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['fifteen']);
 $twenty_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['twenty']);
@@ -21,7 +23,7 @@ $forty_one_a_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['forty_one
 $forty_one_b_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['forty_one_b']);
 $forty_four_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['forty_four']);
 
-$cws_query = "INSERT INTO Community_Wellness_Survey_Aggregates(
+$cws_query_sqlsafe = "INSERT INTO Community_Wellness_Survey_Aggregates(
                 Date_Administered,
                 Question_15_CWS,
                 Question_20_CWS,
@@ -53,8 +55,7 @@ $cws_query = "INSERT INTO Community_Wellness_Survey_Aggregates(
                 '" . $forty_one_a_sqlsafe ."',
                 '" . $forty_one_b_sqlsafe ."',
                 '" . $forty_four_sqlsafe ."')";
-echo $cws_query;
-include "../include/dbconnopen.php";
-mysqli_query($cnnBickerdike, $cws_query);
+echo $cws_query_sqlsafe;
+mysqli_query($cnnBickerdike, $cws_query_sqlsafe);
 include "../include/dbconnclose.php";
 ?>

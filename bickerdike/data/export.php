@@ -17,9 +17,9 @@ $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("ID", "Event Name", "Event Date", "Event Created Date", "Event Type", 
         "Event Organization", "Event ID (obsolete)", "Notes");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM User_Established_Activities";
+$get_money_sqlsafe = "SELECT * FROM User_Established_Activities";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
     fputcsv ($fp, $money);
 }
@@ -45,9 +45,9 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("ID", "Environmental_Improvement_Money", "Date");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Aldermanic_Records";
+$get_money_sqlsafe = "SELECT * FROM Aldermanic_Records";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
     fputcsv ($fp, $money);
 }
@@ -66,9 +66,9 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("ID", "Miles of Bike Lanes", "Date");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Bike_Trails";
+$get_money_sqlsafe = "SELECT * FROM Bike_Trails";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
     fputcsv ($fp, $money);
 }
@@ -89,9 +89,9 @@ $title_array = array("ID", "CWS Baseline Question 15", "Question 20", "Question 
      "Question 29", "Question 31", "Question 30",  "Question 32", "Question 69", "Question 72", 
      "Question 91", "Question 41a", "Question 41b", "Question 44", "Date");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Community_Wellness_Survey_Aggregates";
+$get_money_sqlsafe = "SELECT * FROM Community_Wellness_Survey_Aggregates";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
     fputcsv ($fp, $money);
 }
@@ -111,9 +111,9 @@ $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("ID", "Store ID", "2 Vegetable Options?", "Lowfat Milk?",
      "Health Signage?", "Healthy Items in the Front?", "Date", "Store ID", "Name", "Address");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Corner_Store_Assessment INNER JOIN Corner_Stores ON Corner_Store_Assessment.Corner_Store_ID= Corner_Stores.Corner_Store_ID";
+$get_money_sqlsafe = "SELECT * FROM Corner_Store_Assessment INNER JOIN Corner_Stores ON Corner_Store_Assessment.Corner_Store_ID= Corner_Stores.Corner_Store_ID";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
     fputcsv ($fp, $money);
 }
@@ -126,9 +126,9 @@ $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("ID", "Store ID", "2 Vegetable Options?", "Lowfat Milk?",
      "Health Signage?", "Healthy Items in the Front?", "Date", "Store ID", "Name", "Address");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Corner_Store_Assessment";
+$get_money_sqlsafe = "SELECT * FROM Corner_Store_Assessment";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
     fputcsv ($fp, $money);
 }
@@ -146,9 +146,9 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("ID", "Store", "Date", "Sales Data");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Funded_Organization_Records_Stores";
+$get_money_sqlsafe = "SELECT * FROM Funded_Organization_Records_Stores";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
     fputcsv ($fp, $money);
 }
@@ -167,9 +167,9 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("ID", "Partner Name");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Org_Partners";
+$get_money_sqlsafe = "SELECT * FROM Org_Partners";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
     fputcsv ($fp, $money);
 }
@@ -198,14 +198,14 @@ $title_array = array("User ID", "First Name", "Last Name", "Gender", "Age", "Add
 	    "Program Name", "Program Organization", "Participant Type", "Child ID");
 
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
+$get_money_sqlsafe = "SELECT * FROM Participant_Survey_Responses
     LEFT JOIN (Programs, Users, Org_Partners)
     ON (Participant_Survey_Responses.User_ID=Users.User_ID
     AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
     AND Programs.Program_Organization=Org_Partners.Partner_ID);";
 
 include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
+	$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 	while ($money = mysqli_fetch_array($money_info)){
 	    if ($money['Race']=='b') {
 	            $race="African-American";
@@ -256,14 +256,14 @@ $title_array = array("User ID", "Gender", "Age",
 	    "Program Name", "Program Organization", "Participant Type", "Child ID");
 
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
+$get_money_sqlsafe = "SELECT * FROM Participant_Survey_Responses
     LEFT JOIN (Programs, Users, Org_Partners)
     ON (Participant_Survey_Responses.User_ID=Users.User_ID
     AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
     AND Programs.Program_Organization=Org_Partners.Partner_ID);";
 
 include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
+	$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 	while ($money = mysqli_fetch_array($money_info)){
 	    if ($money['Race']=='b') {
 	            $race="African-American";
@@ -313,14 +313,14 @@ $title_array = array("User ID", "First Name", "Last Name", "Gender", "Age", "Add
 	    "Program Name", "Program Organization", "Participant Type", "Child ID");
 
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
+$get_money_sqlsafe = "SELECT * FROM Participant_Survey_Responses
     LEFT JOIN (Programs, Users, Org_Partners)
     ON (Participant_Survey_Responses.User_ID=Users.User_ID
     AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
     AND Programs.Program_Organization=Org_Partners.Partner_ID) WHERE Participant_Type='adult';";
 
 include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
+	$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 	while ($money = mysqli_fetch_array($money_info)){
 	    if ($money['Race']=='b') {
 	            $race="African-American";
@@ -361,14 +361,14 @@ $title_array = array("User ID", "Gender", "Age",
 	    "Program Name", "Program Organization", "Participant Type", "Child ID");
 
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
+$get_money_sqlsafe = "SELECT * FROM Participant_Survey_Responses
     LEFT JOIN (Programs, Users, Org_Partners)
     ON (Participant_Survey_Responses.User_ID=Users.User_ID
     AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
     AND Programs.Program_Organization=Org_Partners.Partner_ID) WHERE Participant_Type='adult';";
 
 include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
+	$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 	while ($money = mysqli_fetch_array($money_info)){
 	    if ($money['Race']=='b') {
 	            $race="African-American";
@@ -421,14 +421,14 @@ $title_array = array("User ID", "First Name", "Last Name", "Gender", "Age", "Add
 	    "Program Name", "Program Organization", "Participant Type", "Child ID");
 
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
+$get_money_sqlsafe = "SELECT * FROM Participant_Survey_Responses
     LEFT JOIN (Programs, Users, Org_Partners)
     ON (Participant_Survey_Responses.User_ID=Users.User_ID
     AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
     AND Programs.Program_Organization=Org_Partners.Partner_ID) WHERE Participant_Type='parent';";
 
 include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
+	$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 	while ($money = mysqli_fetch_array($money_info)){
 	    if ($money['Race']=='b') {
 	            $race="African-American";
@@ -470,14 +470,14 @@ $title_array = array("User ID",  "Gender", "Age",
 	    "Program Name", "Program Organization", "Participant Type", "Child ID");
 
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
+$get_money_sqlsafe = "SELECT * FROM Participant_Survey_Responses
     LEFT JOIN (Programs, Users, Org_Partners)
     ON (Participant_Survey_Responses.User_ID=Users.User_ID
     AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
     AND Programs.Program_Organization=Org_Partners.Partner_ID) WHERE Participant_Type='parent';";
 
 include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
+	$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 	while ($money = mysqli_fetch_array($money_info)){
 	    if ($money['Race']=='b') {
 	            $race="African-American";
@@ -527,14 +527,14 @@ $title_array = array("User ID", "First Name", "Last Name", "Gender", "Age", "Add
 	    "Program Name", "Program Organization", "Participant Type", "Child ID");
 
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
+$get_money_sqlsafe = "SELECT * FROM Participant_Survey_Responses
     LEFT JOIN (Programs, Users, Org_Partners)
     ON (Participant_Survey_Responses.User_ID=Users.User_ID
     AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
     AND Programs.Program_Organization=Org_Partners.Partner_ID) WHERE Participant_Type='youth';";
 
 include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
+	$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 	while ($money = mysqli_fetch_array($money_info)){
 	    if ($money['Race']=='b') {
 	            $race="African-American";
@@ -576,14 +576,14 @@ $title_array = array("User ID", "Gender", "Age",
 	    "Program Name", "Program Organization", "Participant Type", "Child ID");
 
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Participant_Survey_Responses
+$get_money_sqlsafe = "SELECT * FROM Participant_Survey_Responses
     LEFT JOIN (Programs, Users, Org_Partners)
     ON (Participant_Survey_Responses.User_ID=Users.User_ID
     AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
     AND Programs.Program_Organization=Org_Partners.Partner_ID) WHERE Participant_Type='youth';";
 
 include "../include/dbconnopen.php";
-	$money_info = mysqli_query($cnnBickerdike, $get_money);
+	$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 	while ($money = mysqli_fetch_array($money_info)){
 	    if ($money['Race']=='b') {
 	            $race="African-American";
@@ -636,7 +636,7 @@ $title_array = array("User ID", "Gender", "Age", "Address Number", "Street Direc
     "Child's Age", "Child DOB", "Child Race", "Parent First Name", "Parent Last Name");
 
 fputcsv($fp, $title_array);
-$get_money="SELECT parent_table.*, child_table.User_ID as child_id, child_table.First_Name as child_first, child_table.Last_Name as child_last,
+$get_money_sqlsafe="SELECT parent_table.*, child_table.User_ID as child_id, child_table.First_Name as child_first, child_table.Last_Name as child_last,
     child_table.DOB as child_dob, child_table.Gender as child_gender,
     child_table.Age as child_age, child_table.Race as child_race,
     Participant_Survey_Responses.*, Programs.Program_ID, Programs.Program_Name, 
@@ -647,9 +647,9 @@ $get_money="SELECT parent_table.*, child_table.User_ID as child_id, child_table.
     AND child_table.User_ID=Participant_Survey_Responses.Child_ID
     AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
     AND Programs.Program_Organization=Org_Partners.Partner_ID;";
-//echo $get_money . "<br>";
+//echo $get_money_sqlsafe . "<br>";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_array($money_info)){
     
     if ($money['Race']=='b') {
@@ -713,7 +713,7 @@ $title_array = array("User ID", "Gender", "Age",
     "Child's Age",  "Child Race", );
 
 fputcsv($fp, $title_array);
-$get_money="SELECT parent_table.*, child_table.User_ID as child_id, child_table.First_Name as child_first, child_table.Last_Name as child_last,
+$get_money_sqlsafe="SELECT parent_table.*, child_table.User_ID as child_id, child_table.First_Name as child_first, child_table.Last_Name as child_last,
     child_table.DOB as child_dob, child_table.Gender as child_gender,
     child_table.Age as child_age, child_table.Race as child_race,
     Participant_Survey_Responses.*, Programs.Program_ID, Programs.Program_Name, 
@@ -724,9 +724,9 @@ $get_money="SELECT parent_table.*, child_table.User_ID as child_id, child_table.
     AND child_table.User_ID=Participant_Survey_Responses.Child_ID
     AND Participant_Survey_Responses.Program_ID=Programs.Program_ID
     AND Programs.Program_Organization=Org_Partners.Partner_ID;";
-//echo $get_money . "<br>";
+//echo $get_money_sqlsafe . "<br>";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_array($money_info)){
     
     if ($money['Race']=='b') {
@@ -783,9 +783,9 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("ID", "Program ID", "Program Name", "Date");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Program_Dates INNER JOIN Programs ON Program_Dates.Program_ID=Programs.Program_ID";
+$get_money_sqlsafe = "SELECT * FROM Program_Dates INNER JOIN Programs ON Program_Dates.Program_ID=Programs.Program_ID";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_array($money_info)){
     $enter_array=array($money['Program_Date_ID'], $money['Program_ID'], $money['Program_Name'], $money['Program_Date']);
     fputcsv ($fp, $enter_array);
@@ -809,13 +809,13 @@ $title_array = array("ID", "Program Date ID", "User ID", "Program ID", "Program 
     "Participant First Name" , "Participant Last Name", "Gender", "Age",
         "Address Number", "Street Direction", "Street Name", "Street Type", "Participant Type");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Program_Dates_Users LEFT JOIN (Program_Dates, Programs, Users)
+$get_money_sqlsafe = "SELECT * FROM Program_Dates_Users LEFT JOIN (Program_Dates, Programs, Users)
        ON (Program_Dates_Users.Program_Date_ID=Program_Dates.Program_Date_ID
        AND Programs.Program_ID=Program_Dates.Program_ID
        AND Program_Dates_Users.User_ID=Users.User_ID)";
-//echo $get_money;
+//echo $get_money_sqlsafe;
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_array($money_info)){
     if ($money['Adult']==1){
         $type='Adult';
@@ -839,13 +839,13 @@ $title_array = array("ID", "Program Date ID", "User ID", "Program ID", "Program 
      "Gender", "Age",
         "Participant Type");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Program_Dates_Users LEFT JOIN (Program_Dates, Programs, Users)
+$get_money_sqlsafe = "SELECT * FROM Program_Dates_Users LEFT JOIN (Program_Dates, Programs, Users)
        ON (Program_Dates_Users.Program_Date_ID=Program_Dates.Program_Date_ID
        AND Programs.Program_ID=Program_Dates.Program_ID
        AND Program_Dates_Users.User_ID=Users.User_ID)";
-//echo $get_money;
+//echo $get_money_sqlsafe;
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_array($money_info)){
     if ($money['Adult']==1){
         $type='Adult';
@@ -873,9 +873,9 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("ID", "Program Name", "Organization", "Type", "Program Created Date", "Notes");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Programs";
+$get_money_sqlsafe = "SELECT * FROM Programs";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
     fputcsv ($fp, $money);
 }
@@ -896,11 +896,11 @@ $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Program ID", "User ID", "Program Name", "Gender", "Age",
         "Address Number", "Street Direction", "Street Name", "Street Type");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Programs_Users INNER JOIN (Programs, Users)
+$get_money_sqlsafe = "SELECT * FROM Programs_Users INNER JOIN (Programs, Users)
     ON (Programs_Users.Program_ID=Programs.Program_ID
     AND Programs_Users.User_ID=Users.User_ID)";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_array($money_info)){
     $enter_array=array($money['Program_ID'], $money['User_ID'], $money['Program_Name'], $money['Gender'], $money['Age'],
         $money['Address_Number'], $money['Address_Street_Direction'], $money['Address_Street_Name'], $money['Address_Street_Type']);
@@ -914,11 +914,11 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Program ID", "User ID", "Program Name", "Gender", "Age");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Programs_Users INNER JOIN (Programs, Users)
+$get_money_sqlsafe = "SELECT * FROM Programs_Users INNER JOIN (Programs, Users)
     ON (Programs_Users.Program_ID=Programs.Program_ID
     AND Programs_Users.User_ID=Users.User_ID)";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_array($money_info)){
     $enter_array=array($money['Program_ID'], $money['User_ID'], $money['Program_Name'], $money['Gender'], $money['Age']);
     fputcsv ($fp, $enter_array);
@@ -938,9 +938,9 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("User ID", "Height in Feet", "Remaining Height in Inches", "Weight", "BMI", "Date", "Gender", "Age", "Address");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM User_Health_Data INNER JOIN Users ON Users.User_ID=User_Health_Data.User_ID;";
+$get_money_sqlsafe = "SELECT * FROM User_Health_Data INNER JOIN Users ON Users.User_ID=User_Health_Data.User_ID;";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_array($money_info)){
     $enter_array=array($money['User_ID'], $money['Height_Feet'], $money['Height_Inches'],
         $money['Weight'], $money['BMI'], $money['Date'], $money['Gender'], $money['Age'], $money['Address_Number'], 
@@ -956,9 +956,9 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("User ID", "Height in Feet", "Remaining Height in Inches", "Weight", "BMI", "Date", "Gender", "Age");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM User_Health_Data INNER JOIN Users ON Users.User_ID=User_Health_Data.User_ID;";
+$get_money_sqlsafe = "SELECT * FROM User_Health_Data INNER JOIN Users ON Users.User_ID=User_Health_Data.User_ID;";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_array($money_info)){
     $enter_array=array($money['User_ID'], $money['Height_Feet'], $money['Height_Inches'],
         $money['Weight'], $money['BMI'], $money['Date'], $money['Gender'], $money['Age']);
@@ -980,9 +980,9 @@ $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("User ID", "First Name", "Last Name", "Zipcode", "Date of Birth", "Gender", "Age", "Race", "Street Address", "Adult?",
         "Parent?", "Youth?", "Email", "Notes", "Street Number", "Street Direction", "Street Type", "Phone Number");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Users";
+$get_money_sqlsafe = "SELECT * FROM Users";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
     fputcsv ($fp, $money);
 }
@@ -996,10 +996,10 @@ $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("User ID", "Zipcode", "Gender", "Age", "Race", "Adult?",
         "Parent?", "Youth?", "Block Group");
 fputcsv($fp, $title_array);
-$get_money = "SELECT User_ID, Zipcode, Gender, Age, Race, Adult, Parent, Child, Block_Group FROM Users";
-//echo $get_money;
+$get_money_sqlsafe = "SELECT User_ID, Zipcode, Gender, Age, Race, Adult, Parent, Child, Block_Group FROM Users";
+//echo $get_money_sqlsafe;
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
    // $this_address=$money[8]." " . $money[9] . " " . $money[10] ." ". $money[11] ;
    //$block_group=do_it_all($this_address, $map);
@@ -1023,9 +1023,9 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("ID", "Date", "Do Cars Stop?", "Intersection Assessed", "Speed Limit Obeyed?", "Gaps in Sidewalk?", "Crosswalk Painted?");
 fputcsv($fp, $title_array);
-$get_money = "SELECT * FROM Walkability_Assessment";
+$get_money_sqlsafe = "SELECT * FROM Walkability_Assessment";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
     fputcsv ($fp, $money);
 }
@@ -1047,11 +1047,11 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("User ID", "Address Number", "Street Direction", "Street Name", "Street Type", "Zipcode", "Gender", "Age");
 fputcsv($fp, $title_array);
-$get_money = "SELECT User_ID, Address_Number, Address_Street_Direction, 
+$get_money_sqlsafe = "SELECT User_ID, Address_Number, Address_Street_Direction, 
 Address_Street_Name, Address_Street_Type, Zipcode, Gender, Age
 FROM Users;";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
     fputcsv ($fp, $money);
 }
@@ -1064,10 +1064,10 @@ fclose($fp);
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("User ID", "Block Group", "Zipcode", "Gender", "Age");
 fputcsv($fp, $title_array);
-$get_money = "SELECT User_ID, Block_Group, Zipcode, Gender, Age
+$get_money_sqlsafe = "SELECT User_ID, Block_Group, Zipcode, Gender, Age
 FROM Users;";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $get_money);
+$money_info = mysqli_query($cnnBickerdike, $get_money_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
   /*  $this_address=$money[1]." " . $money[2] . " " . $money[3] ." ". $money[4] ;
     echo $this_address;
@@ -1110,7 +1110,7 @@ $title_array = array("First Name", "Last Name", "Pre Survey ID Number", "User ID
 	     "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
 	    "Participant Type", "Child ID");
 fputcsv($fp, $title_array);
-$this_query="SELECT First_Name, Last_Name, Pre_Responses.*,
+$this_query_sqlsafe="SELECT First_Name, Last_Name, Pre_Responses.*,
 Mid_Responses.*,
 Post_Responses.*
 FROM Participant_Survey_Responses AS Pre_Responses
@@ -1124,7 +1124,7 @@ LEFT JOIN Users ON Pre_Responses.User_ID=Users.User_ID
     AND Mid_Responses.Pre_Post_Late=2
     AND Post_Responses.Pre_Post_Late=3";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $this_query);
+$money_info = mysqli_query($cnnBickerdike, $this_query_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
     fputcsv ($fp, $money);
 }
@@ -1157,7 +1157,7 @@ $title_array = array("Pre Survey ID Number", "User ID", "Question 2 -- (1) Very 
 	     "10 (1) Not at all Satisfied to (4) Very satisfied", "Date", "Survey Timing (Pre[1], Post[2], or Late[3])", "Program ID",
 	    "Participant Type", "Child ID");
 fputcsv($fp, $title_array);
-$this_query="SELECT Pre_Responses.*,
+$this_query_sqlsafe="SELECT Pre_Responses.*,
 Mid_Responses.*,
 Post_Responses.*
 FROM Participant_Survey_Responses AS Pre_Responses
@@ -1171,7 +1171,7 @@ LEFT JOIN Participant_Survey_Responses AS Post_Responses
     AND Mid_Responses.Pre_Post_Late=2
     AND Post_Responses.Pre_Post_Late=3";
 include "../include/dbconnopen.php";
-$money_info = mysqli_query($cnnBickerdike, $this_query);
+$money_info = mysqli_query($cnnBickerdike, $this_query_sqlsafe);
 while ($money = mysqli_fetch_row($money_info)){
     fputcsv ($fp, $money);
 }

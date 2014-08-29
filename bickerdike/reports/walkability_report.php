@@ -26,9 +26,9 @@ Again, the "Number" is the number of intersections assessed where the statement 
 <h3>Walkability Report</h3><hr/><br/>
 <div id="corner_store_stats">
 <?
-$count_walks = "SELECT * FROM Walkability_Assessment";
+$count_walks_sqlsafe = "SELECT * FROM Walkability_Assessment";
 include "../include/dbconnopen.php";
-$count = mysqli_query($cnnBickerdike, $count_walks);
+$count = mysqli_query($cnnBickerdike, $count_walks_sqlsafe);
 $num_walks = mysqli_num_rows($count);
 include "../include/dbconnclose.php";
 ?>
@@ -47,9 +47,9 @@ include "../include/dbconnclose.php";
         <td>Cars stop at stop signs</td>
         <td>
             <?
-$count_walks = "SELECT * FROM Walkability_Assessment WHERE Cars_Stop='1'";
+$count_walks_sqlsafe = "SELECT * FROM Walkability_Assessment WHERE Cars_Stop='1'";
 include "../include/dbconnopen.php";
-$count = mysqli_query($cnnBickerdike, $count_walks);
+$count = mysqli_query($cnnBickerdike, $count_walks_sqlsafe);
 $num_stops = mysqli_num_rows($count);
 include "../include/dbconnclose.php";
 echo $num_stops;
@@ -64,9 +64,9 @@ echo $num_stops;
         <td>Crosswalks are painted and clearly visible</td>
         <td>
             <?
-$count_walks = "SELECT * FROM Walkability_Assessment WHERE Crosswalk_Painted='1'";
+$count_walks_sqlsafe = "SELECT * FROM Walkability_Assessment WHERE Crosswalk_Painted='1'";
 include "../include/dbconnopen.php";
-$count = mysqli_query($cnnBickerdike, $count_walks);
+$count = mysqli_query($cnnBickerdike, $count_walks_sqlsafe);
 $num_crosswalks = mysqli_num_rows($count);
 include "../include/dbconnclose.php";
 echo $num_crosswalks;
@@ -81,9 +81,9 @@ echo $num_crosswalks;
         <td>Cars are perceived to be obeying posted speed limits</td>
         <td>
             <?
-$count_walks = "SELECT * FROM Walkability_Assessment WHERE Speed_Limit_Obeyed='1'";
+$count_walks_sqlsafe = "SELECT * FROM Walkability_Assessment WHERE Speed_Limit_Obeyed='1'";
 include "../include/dbconnopen.php";
-$count = mysqli_query($cnnBickerdike, $count_walks);
+$count = mysqli_query($cnnBickerdike, $count_walks_sqlsafe);
 $num_speed = mysqli_num_rows($count);
 include "../include/dbconnclose.php";
 echo $num_speed;
@@ -98,9 +98,9 @@ echo $num_speed;
         <td>Sidewalk continues all the way down the block without gaps</td>
         <td>
             <?
-$count_walks = "SELECT * FROM Walkability_Assessment WHERE No_Gaps_In_Sidewalk='1'";
+$count_walks_sqlsafe = "SELECT * FROM Walkability_Assessment WHERE No_Gaps_In_Sidewalk='1'";
 include "../include/dbconnopen.php";
-$count = mysqli_query($cnnBickerdike, $count_walks);
+$count = mysqli_query($cnnBickerdike, $count_walks_sqlsafe);
 $num_no_gaps = mysqli_num_rows($count);
 include "../include/dbconnclose.php";
 echo $num_no_gaps;

@@ -79,7 +79,7 @@ else{
             echo "<br>";
             //now, here we enter the student as a participant and save their information in the MS_to_HS_over_time table
             //check first whether they are already a participant
-                $check_existing_sqlsafe="SELECT * FROM Participants WHERE CPS_ID='" . mysql_real_escape_string($break[0]) . "'";
+                $check_existing_sqlsafe="SELECT * FROM Participants WHERE CPS_ID='" . mysqli_real_escape_string($cnnTRP, $break[0]) . "'";
              //   echo $check_existing . "<br>";
                 $exists=mysqli_query($cnnTRP, $check_existing_sqlsafe);
                 if (mysqli_num_rows($exists)>0){
@@ -88,7 +88,7 @@ else{
                     $id=$db_id[0];
                 }
                 else{
-                    $new_participant_sqlsafe = "INSERT INTO Participants (CPS_ID) VALUES (" . mysqli_real_escape_string($break[0]) . ")";
+                    $new_participant_sqlsafe = "INSERT INTO Participants (CPS_ID) VALUES (" . mysqli_real_escape_string($cnnTRP, $break[0]) . ")";
                     mysqli_query($cnnTRP, $new_participant_sqlsafe);
                     echo "New participant added! <br>";
                     $id=mysqli_insert_id($cnnTRP);
@@ -96,10 +96,10 @@ else{
             //now, save their absences and whatnot
                 $insert_info_sqlsafe="INSERT INTO MS_to_HS_Over_Time (Participant_ID, School_Tardies, School_Absences_Unexcused, 
                     In_School_Suspensions, Out_School_Suspensions) VALUES ($id, "
-                    . "'" . mysqli_real_escape_string($break[3]) . "', "
-                    . "'" . mysqli_real_escape_string($break[2]) . "', "
-                    . "'" . mysqli_real_escape_string($break[7]) . "', "
-                    . "'" . mysqli_real_escape_string($break[6]) . "')";
+                    . "'" . mysqli_real_escape_string($cnnTRP, $break[3]) . "', "
+                    . "'" . mysqli_real_escape_string($cnnTRP, $break[2]) . "', "
+                    . "'" . mysqli_real_escape_string($cnnTRP, $break[7]) . "', "
+                    . "'" . mysqli_real_escape_string($cnnTRP, $break[6]) . "')";
                // echo $insert_info . "<br>";
                 $insert_grade_sqlsafe="INSERT INTO Academic_Info (Participant_ID, Lang_Grade) VALUES ($id, '"
                               . mysqli_reql_escape_string($break[5]) . "')";

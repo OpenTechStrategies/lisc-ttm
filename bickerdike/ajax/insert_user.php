@@ -51,7 +51,7 @@ $address_street_type_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['a
 $email_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['email']);
 $phone_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['phone']);
         
-$create_new_user_query = "INSERT INTO Users (
+$create_new_user_query_sqlsafe = "INSERT INTO Users (
                            First_Name,
                     Last_Name,
                     Zipcode,
@@ -87,8 +87,8 @@ $create_new_user_query = "INSERT INTO Users (
                     '$child',
         '" . $phone_sqlsafe . "'
         )";
-//echo $create_new_user_query;
-mysqli_query($cnnBickerdike, $create_new_user_query);
+//echo $create_new_user_query_sqlsafe;
+mysqli_query($cnnBickerdike, $create_new_user_query_sqlsafe);
 $user_id = mysqli_insert_id($cnnBickerdike);
 include "../include/dbconnclose.php";
 

@@ -83,9 +83,9 @@ if ($_GET['schedule'] == 1) {
                         <td><strong>Program Organization:</strong></td>
                         <td><span class="displayed_info"><?php
                                 echo $program->organization . ": ";
-                                $find_org = "SELECT * FROM Org_Partners WHERE Partner_ID='" . $program->organization . "'";
+                                $find_org_sqlsafe = "SELECT * FROM Org_Partners WHERE Partner_ID='" . $program->organization . "'";
                                 include "../include/dbconnopen.php";
-                                $org = mysqli_query($cnnBickerdike, $find_org);
+                                $org = mysqli_query($cnnBickerdike, $find_org_sqlsafe);
                                 if ($partner = mysqli_fetch_array($org)) {
                                     echo $partner['Partner_Name'];
                                 }
@@ -95,9 +95,9 @@ if ($_GET['schedule'] == 1) {
                             <select id="edit_org" class="show_edit_space">
                                 <option value="">-----</option>
                                 <?php
-                                $program_query = "SELECT * FROM Org_Partners";
+                                $program_query_sqlsafe = "SELECT * FROM Org_Partners";
                                 include "../include/dbconnopen.php";
-                                $programs = mysqli_query($cnnBickerdike, $program_query);
+                                $programs = mysqli_query($cnnBickerdike, $program_query_sqlsafe);
                                 while ($prog = mysqli_fetch_array($programs)) {
                                     ?>
                                     <option value="<?php echo $prog['Partner_ID']; ?>" <?php echo($prog['Partner_ID'] == $partner['Partner_ID'] ? ' selected="selected"' : null) ?>><?php echo $prog['Partner_Name']; ?></option>
@@ -112,9 +112,9 @@ if ($_GET['schedule'] == 1) {
                         <td><strong>Program Type:</strong></td>
                         <td><span class="displayed_info"><?php
                                 echo $program->type . ": ";
-                                $find_org = "SELECT * FROM Program_Types WHERE Program_Type_ID='" . $program->type . "'";
+                                $find_org_sqlsafe = "SELECT * FROM Program_Types WHERE Program_Type_ID='" . $program->type . "'";
                                 include "../include/dbconnopen.php";
-                                $org = mysqli_query($cnnBickerdike, $find_org);
+                                $org = mysqli_query($cnnBickerdike, $find_org_sqlsafe);
                                 if ($partner = mysqli_fetch_array($org)) {
                                     echo $partner['Program_Type_Name'];
                                 }
@@ -123,9 +123,9 @@ if ($_GET['schedule'] == 1) {
                             <select id="edit_type" class="show_edit_space">
                                 <option value="">-----</option>
                                 <?php
-                                $program_query = "SELECT * FROM Program_Types";
+                                $program_query_sqlsafe = "SELECT * FROM Program_Types";
                                 include "../include/dbconnopen.php";
-                                $programs = mysqli_query($cnnBickerdike, $program_query);
+                                $programs = mysqli_query($cnnBickerdike, $program_query_sqlsafe);
                                 while ($type = mysqli_fetch_array($programs)) {
                                     ?>
                                     <option value="<?php echo $type['Program_Type_ID']; ?>" <?php echo ($type['Program_Type_ID'] == $program->type ? 'selected="selected"' : null) ?>><?php echo $type['Program_Type_Name']; ?></option>
@@ -138,9 +138,9 @@ if ($_GET['schedule'] == 1) {
                     <tr>
                         <td><strong>Number of Total Participants:</strong></td>
                         <td><?php
-                            $get_participant_num = "SELECT * FROM Programs_Users WHERE Program_Id='" . $program->program_id . "'";
+                            $get_participant_num_sqlsafe = "SELECT * FROM Programs_Users WHERE Program_Id='" . $program->program_id . "'";
                             include "../include/dbconnopen.php";
-                            $get_num = mysqli_query($cnnBickerdike, $get_participant_num);
+                            $get_num = mysqli_query($cnnBickerdike, $get_participant_num_sqlsafe);
                             $num = mysqli_num_rows($get_num);
                             echo $num;
                             include "../include/dbconnclose.php";
@@ -212,13 +212,13 @@ if ($_GET['schedule'] == 1) {
                                 <?php
                                 //calculates the number of days for which a person was present at a program.
 
-                                $times_attended = "SELECT * FROM Program_Dates_Users INNER JOIN
+                                $times_attended_sqlsafe = "SELECT * FROM Program_Dates_Users INNER JOIN
                                                     Program_Dates ON (Program_Dates_Users.Program_Date_ID=Program_Dates.Program_Date_ID)
                                                 WHERE Program_Dates.Program_ID='" . $program->program_id . "'
                                                 AND Program_Dates_Users.User_ID='" . $user['User_ID'] . "'";
-                                //echo $times_attended;
+                                //echo $times_attended_sqlsafe;
                                 include "../include/dbconnopen.php";
-                                $num = mysqli_query($cnnBickerdike, $times_attended);
+                                $num = mysqli_query($cnnBickerdike, $times_attended_sqlsafe);
                                 echo mysqli_num_rows($num);
                                 include "../include/dbconnclose.php";
                                 ?>&nbsp;&nbsp;
@@ -279,9 +279,9 @@ if ($_GET['schedule'] == 1) {
                         <td><select id="zip">
                                 <option value="">-----</option>
                                 <?php
-                                $get_zips = "SELECT Zipcode FROM Users WHERE Zipcode !=0 GROUP BY Zipcode";
+                                $get_zips_sqlsafe = "SELECT Zipcode FROM Users WHERE Zipcode !=0 GROUP BY Zipcode";
                                 include "../include/dbconnopen.php";
-                                $zips = mysqli_query($cnnBickerdike, $get_zips);
+                                $zips = mysqli_query($cnnBickerdike, $get_zips_sqlsafe);
                                 while ($zip = mysqli_fetch_row($zips)) {
                                     ?>
                                     <option value="<?php echo $zip[0]; ?>"><?php echo $zip[0]; ?></option>
@@ -431,11 +431,11 @@ if ($_GET['schedule'] == 1) {
 
                     <div style="padding-left:35px;" class="attendance_list attendance_<?php echo $date['Program_Date_ID']; ?>">
                         <?php
-                        $find_attendance_by_date = "SELECT * FROM Users LEFT JOIN (Program_Dates_Users)
+                        $find_attendance_by_date_sqlsafe = "SELECT * FROM Users LEFT JOIN (Program_Dates_Users)
                                 ON (Program_Dates_Users.User_ID=Users.User_ID)
                                 WHERE Program_Dates_Users.Program_Date_ID='" . $date['Program_Date_ID'] . "' ORDER BY Last_Name";
                         include "../include/dbconnopen.php";
-                        $attendees = mysqli_query($cnnBickerdike, $find_attendance_by_date);
+                        $attendees = mysqli_query($cnnBickerdike, $find_attendance_by_date_sqlsafe);
                         $count = 0;
 
                         while ($attendee = mysqli_fetch_array($attendees)) {
@@ -456,11 +456,11 @@ if ($_GET['schedule'] == 1) {
                     <select id="choose_from_current_participants_<?php echo $date['Program_Date_ID'] ?>">
                         <option value="">-----</option>
                         <?php
-                        $get_current_participants = "SELECT * FROM Users LEFT JOIN (Programs_Users)
+                        $get_current_participants_sqlsafe = "SELECT * FROM Users LEFT JOIN (Programs_Users)
                                 ON (Programs_Users.User_ID=Users.User_ID)
                                 WHERE Program_ID='" . $program->program_id . "' ORDER BY Last_Name";
                         include "../include/dbconnopen.php";
-                        $participants = mysqli_query($cnnBickerdike, $get_current_participants);
+                        $participants = mysqli_query($cnnBickerdike, $get_current_participants_sqlsafe);
                         while ($part = mysqli_fetch_array($participants)) {
                             ?>
                             <option value="<?php echo $part['User_ID'] ?>"><?php echo $part['First_Name'] . " " . $part['Last_Name']; ?></option>
@@ -519,9 +519,9 @@ if ($_GET['schedule'] == 1) {
     $fp = fopen($infile, "w") or die('can\'t open file');
     $title_array = array('Date', 'Number of Attendees', 'Attendees');
     fputcsv($fp, $title_array);
-    $query = "Call Program__Download_Attendance('" . $program->program_id . "')";
+    $query_sqlsafe = "Call Program__Download_Attendance('" . $program->program_id . "')";
     include "../include/dbconnopen.php";
-    $result = mysqli_query($cnnBickerdike, $query);
+    $result = mysqli_query($cnnBickerdike, $query_sqlsafe);
     $num = 0;
     $count = 0;
     while ($row = mysqli_fetch_array($result)) {
