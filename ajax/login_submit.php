@@ -45,7 +45,7 @@ if ($hash_match) {
     
     //set the user cookie
        // FIXME: see issue #33 re the single-quotes around $username here
-       setcookie("user", "'$username'", time() + 10800, '/');
+       setcookie("user", "$username", time() + 10800, '/');
       
        //now find which, if any, privileges they have and set an appropriate cookie
        $privileges_query = "CALL User__Find_Privileges('$username_sqlsafe')";
@@ -88,6 +88,7 @@ if ($hash_match) {
            $i=$i+1;
            
        }
+       print_r($_COOKIE); //testing output
 }
 else {
     $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Failed login'))";
