@@ -3,8 +3,8 @@
 	include "../header.php";
 	include "../include/dbconnopen.php";
         include "../include/datepicker_simple.php";
-	$get_parent_info = "SELECT * FROM Participants WHERE Participant_ID='" . $_GET['origin'] . "'";
-	$parent_info = mysqli_query($cnnTRP, $get_parent_info);
+	$get_parent_info_sqlsafe = "SELECT * FROM Participants WHERE Participant_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['origin']) . "'";
+	$parent_info = mysqli_query($cnnTRP, $get_parent_info_sqlsafe);
 	$parent = mysqli_fetch_array($parent_info);
         
         /* show responses to the Gads Hill parent survey: */
@@ -21,9 +21,8 @@
 <div id="gads_hill_parent_survey">
 <table class="pm_survey">
     
-    <?$get_survey="SELECT * FROM Gads_Hill_Parent_Survey WHERE Gads_Hill_Parent_Survey_ID='".$_GET['id']."'";
-    include "../include/dbconnopen.php";
-    $survey=mysqli_query($cnnTRP, $get_survey);
+    <?$get_survey_sqlsafe="SELECT * FROM Gads_Hill_Parent_Survey WHERE Gads_Hill_Parent_Survey_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
+    $survey=mysqli_query($cnnTRP, $get_survey_sqlsafe);
     $info=mysqli_fetch_array($survey);
     include "../include/dbconnclose.php";?>
 

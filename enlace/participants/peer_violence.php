@@ -3,11 +3,12 @@
 
 include "../../header.php";
 include "../header.php";
-$get_participant_info = "SELECT * FROM Participants WHERE Participant_ID='".$_GET['id']."'";
 include "../include/dbconnopen.php";
+$id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['id']);
+$get_participant_info = "SELECT * FROM Participants WHERE Participant_ID='".$id_sqlsafe."'";
 $participant = mysqli_query($cnnEnlace, $get_participant_info);
 $parti = mysqli_fetch_array($participant);
-$get_programs = "SELECT * FROM Participants_Programs INNER JOIN Programs ON Participants_Programs.Program_ID=Programs.Program_ID WHERE Participants_Programs.Participant_ID='".$_GET['id']."'";
+$get_programs = "SELECT * FROM Participants_Programs INNER JOIN Programs ON Participants_Programs.Program_ID=Programs.Program_ID WHERE Participants_Programs.Participant_ID='".$id_sqlsafe."'";
 $programs = mysqli_query($cnnEnlace, $get_programs);
 ?>
 <script type="text/javascript">

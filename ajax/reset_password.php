@@ -21,5 +21,4 @@ $hash=$hasher->HashPassword($new_password);
                 . '<a href="/include/contact.php" >report this bug</a>.';
             }
 
-
 ?>

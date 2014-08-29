@@ -31,10 +31,10 @@ $campaign->load_with_id($_COOKIE['campaign']);
                                 <option value="0">-------</option>
                                 <?php
                                 /* list of existing subcampaigns for this campaign: */
-                                $get_subcampaigns = "SELECT DISTINCT Subcampaign FROM Campaigns_Events WHERE Subcampaign!='0' AND Subcampaign IS NOT NULL 
-        AND Campaign_ID='" . $_COOKIE['campaign'] . "' ORDER BY Subcampaign";
                                 include "../include/dbconnopen.php";
-                                $subcampaigns = mysqli_query($cnnSWOP, $get_subcampaigns);
+                                $get_subcampaigns_sqlsafe = "SELECT DISTINCT Subcampaign FROM Campaigns_Events WHERE Subcampaign!='0' AND Subcampaign IS NOT NULL 
+        AND Campaign_ID='" . mysqli_real_escape_string($cnnSWOP, $_COOKIE['campaign']) . "' ORDER BY Subcampaign";
+                                $subcampaigns = mysqli_query($cnnSWOP, $get_subcampaigns_sqlsafe);
                                 while ($subcam = mysqli_fetch_row($subcampaigns)) {
                                     ?>
                                     <option><?php echo $subcam[0]; ?></option>
@@ -50,9 +50,9 @@ $campaign->load_with_id($_COOKIE['campaign']);
                                 <option value="0">-------</option>
                                 <?php
                                 /* same as subcampaigns. */
-                                $get_subcampaigns = "SELECT DISTINCT Location FROM Campaigns_Events WHERE Location!='0' AND Location IS NOT NULL  ORDER BY Location";
+                                $get_subcampaigns_sqlsafe = "SELECT DISTINCT Location FROM Campaigns_Events WHERE Location!='0' AND Location IS NOT NULL  ORDER BY Location";
                                 include "../include/dbconnopen.php";
-                                $subcampaigns = mysqli_query($cnnSWOP, $get_subcampaigns);
+                                $subcampaigns = mysqli_query($cnnSWOP, $get_subcampaigns_sqlsafe);
                                 while ($subcam = mysqli_fetch_row($subcampaigns)) {
                                     ?>
                                     <option><?php echo $subcam[0]; ?></option>
@@ -124,11 +124,11 @@ $campaign->load_with_id($_COOKIE['campaign']);
                 <table class="inner_table">
                     <tr><th>Institution Name</th></tr>
                     <?php
-                    $get_associated_institutions = "SELECT * FROM Campaigns_Institutions
+                    $get_associated_institutions_sqlsafe = "SELECT * FROM Campaigns_Institutions
     INNER JOIN Institutions ON Institutions.Institution_ID=Campaigns_Institutions.Institution_ID
     WHERE Campaigns_Institutions.Campaign_ID='" . $campaign->campaign_id . "'";
                     include "../include/dbconnopen.php";
-                    $institutions = mysqli_query($cnnSWOP, $get_associated_institutions);
+                    $institutions = mysqli_query($cnnSWOP, $get_associated_institutions_sqlsafe);
                     while ($institution = mysqli_fetch_array($institutions)) {
                         ?><tr><td class="all_projects"><a href="javascript:;" onclick="$.post(
                                             '../ajax/set_institution_id.php',
@@ -145,9 +145,9 @@ $campaign->load_with_id($_COOKIE['campaign']);
                 Add Institution: <select id="choose_inst">
                     <option value="">-----</option>
                     <?php
-                    $get_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
+                    $get_institutions_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name";
                     include "../include/dbconnopen.php";
-                    $institutions = mysqli_query($cnnSWOP, $get_institutions);
+                    $institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
                     while ($institution = mysqli_fetch_array($institutions)) {
                         ?>
                         <option value="<?php echo $institution['Institution_ID']; ?>"><?php echo $institution['Institution_Name']; ?></option>
@@ -180,9 +180,9 @@ $campaign->load_with_id($_COOKIE['campaign']);
                 <table class="inner_table" style="border: 2px solid #696969;">
                     <tr style="font-size:.9em;"><th> Date</th><th>Name</th><th>Subcampaign</th><th>Location</th><!--<th>Attendees</th>--></tr>
                     <?php
-                    $get_associated_events = "SELECT * FROM Campaigns_Events WHERE Campaign_ID='" . $campaign->campaign_id . "' ORDER BY Event_Date DESC";
+                    $get_associated_events_sqlsafe = "SELECT * FROM Campaigns_Events WHERE Campaign_ID='" . $campaign->campaign_id . "' ORDER BY Event_Date DESC";
                     include "../include/dbconnopen.php";
-                    $events = mysqli_query($cnnSWOP, $get_associated_events);
+                    $events = mysqli_query($cnnSWOP, $get_associated_events_sqlsafe);
                     while ($event = mysqli_fetch_array($events)) {
                         ?><tr> <td class="all_projects" width="15%">
                                             <?php

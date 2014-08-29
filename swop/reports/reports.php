@@ -73,11 +73,11 @@ include "../include/datepicker_simple.php";
             <td><strong>Ward:</strong></td><td><select id="ward">
                     <option value="0">-----</option>
                     <?php
-                    $get_wards = "SELECT DISTINCT Ward FROM Participants
+                    $get_wards_sqlsafe = "SELECT DISTINCT Ward FROM Participants
                                     WHERE Ward != ''
                                     ORDER BY CAST(Ward AS UNSIGNED)";
                     include "../include/dbconnopen.php";
-                    $wards = mysqli_query($cnnSWOP, $get_wards);
+                    $wards = mysqli_query($cnnSWOP, $get_wards_sqlsafe);
                     while ($ward = mysqli_fetch_array($wards)) {
                         ?>
                         <option value="<?php echo $ward['Ward']; ?>"><?php echo $ward['Ward']; ?></option>
@@ -91,13 +91,13 @@ include "../include/datepicker_simple.php";
         <tr><td><strong>Primary Organizer:</strong></td><td><select id="leader">
                     <option value="0">-----</option>
                     <?php
-                    $get_primarys = "SELECT 
+                    $get_primarys_sqlsafe = "SELECT 
                                 Organizer_Info.Participant_ID, Organizer_Info.Name_First, Organizer_Info.Name_Last
                                 FROM Participants INNER JOIN 
                                 Participants AS Organizer_Info ON Participants.Primary_Organizer = Organizer_Info.Participant_ID
                                 GROUP BY Organizer_Info.Participant_ID ORDER BY Organizer_Info.Name_Last;";
                     include "../include/dbconnopen.php";
-                    $primarys = mysqli_query($cnnSWOP, $get_primarys);
+                    $primarys = mysqli_query($cnnSWOP, $get_primarys_sqlsafe);
                     while ($primary = mysqli_fetch_array($primarys)) {
                         ?>
                         <option value="<?php echo $primary['Participant_ID']; ?>"><?php echo $primary['Name_First'] . " " . $primary['Name_Last']; ?></option>
@@ -110,9 +110,9 @@ include "../include/datepicker_simple.php";
             <td><strong>Pool Type:</strong></td><td><select id="member_type">
                     <option value="0">-----</option>
                     <?php
-                    $get_institutions = "SELECT * FROM Pool_Member_Types";
+                    $get_institutions_sqlsafe = "SELECT * FROM Pool_Member_Types";
                     include "../include/dbconnopen.php";
-                    $institutions = mysqli_query($cnnSWOP, $get_institutions);
+                    $institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
                     while ($institution = mysqli_fetch_array($institutions)) {
                         ?>
                         <option value="<?php echo $institution['Type_ID']; ?>"><?php echo $institution['Type_Name']; ?></option>
@@ -126,9 +126,9 @@ include "../include/datepicker_simple.php";
         <tr><td><strong>Primary Institution:</strong></td><td><select id="institution">
                     <option value="0">-----</option>
                     <?php
-                    $get_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
+                    $get_institutions_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name";
                     include "../include/dbconnopen.php";
-                    $institutions = mysqli_query($cnnSWOP, $get_institutions);
+                    $institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
                     while ($institution = mysqli_fetch_array($institutions)) {
                         ?>
                         <option value="<?php echo $institution['Institution_ID']; ?>"><?php echo $institution['Institution_Name']; ?></option>
@@ -141,9 +141,9 @@ include "../include/datepicker_simple.php";
                     <option value="0">-----</option>
                     <?php
                     /* some of these steps may show up more than once because they are repeated across the tracks. */
-                    $get_institutions = "SELECT * FROM Pool_Benchmarks ORDER BY Pipeline_Type, Step_Number;";
+                    $get_institutions_sqlsafe = "SELECT * FROM Pool_Benchmarks ORDER BY Pipeline_Type, Step_Number;";
                     include "../include/dbconnopen.php";
-                    $institutions = mysqli_query($cnnSWOP, $get_institutions);
+                    $institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
                     while ($institution = mysqli_fetch_assoc($institutions)) {
                         ?>
                         <option value="<?php echo $institution['Pool_Benchmark_ID']; ?>"><?php
@@ -167,9 +167,9 @@ include "../include/datepicker_simple.php";
                     <option value="0">-----</option>
                     <?php
                     /* some of these steps may show up more than once because they are repeated across the tracks. */
-                    $get_institutions = "SELECT * FROM Pool_Benchmarks ORDER BY Pipeline_Type, Step_Number;";
+                    $get_institutions_sqlsafe = "SELECT * FROM Pool_Benchmarks ORDER BY Pipeline_Type, Step_Number;";
                     include "../include/dbconnopen.php";
-                    $institutions = mysqli_query($cnnSWOP, $get_institutions);
+                    $institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
                     while ($institution = mysqli_fetch_assoc($institutions)) {
                         ?>
                         <option value="<?php echo $institution['Pool_Benchmark_ID']; ?>"><?php

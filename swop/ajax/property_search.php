@@ -3,16 +3,17 @@
 
 //these require us to find the most recent status (vacant, condition) and match the search term to that - that is, not 
 //"was this property ever vacant" but "was this property vacant last we looked"
+include "../include/dbconnopen.php";
 if ($_POST['vacant'] != 0) {
     if ($_POST['vacant'] == 1) {
-        $vacant = " AND Property_Progress.Marker=8 AND Addtl_Info_1='Not vacant'";
+        $vacant_sqlsafe = " AND Property_Progress.Marker=8 AND Addtl_Info_1='Not vacant'";
     } else {
-        $vacant = " AND Property_Progress.Marker=8 AND ("
+        $vacant_sqlsafe = " AND Property_Progress.Marker=8 AND ("
                 . "Addtl_Info_2='2' OR "
                 . "Addtl_Info_2='3' OR "
                 . "Addtl_Info_2='4')";
     }
-    $vacant_join = " 
+    $vacant_join_sqlsafe = " 
         INNER JOIN (
         SELECT Property_ID, Marker, MAX(Date_Added) as latest_date
         FROM Property_Progress WHERE Marker=8
@@ -20,205 +21,204 @@ if ($_POST['vacant'] != 0) {
         ON Property_Progress.Date_Added = vacant_progress.latest_date AND
             Property_Progress.Property_ID = vacant_progress.Property_ID ";
 } else {
-    $vacant = "";
-    $vacant_join = "";
+    $vacant_sqlsafe = "";
+    $vacant_join_sqlsafe = "";
 }
 if ($_POST['condition'] != 0) {
-    $condition = " AND Property_Progress.Marker=11 AND Addtl_Info_1='" . $_POST['condition'] . "' ";
-    $condition_join = " 
+    $condition_sqlsafe = " AND Property_Progress.Marker=11 AND Addtl_Info_1='" . mysqli_real_escape_string($cnnSWOP, $_POST['condition']) . "' ";
+    $condition_join_sqlsafe = " 
         INNER JOIN (
         SELECT Property_ID, Marker, MAX(Date_Added) as latest_date
         FROM Property_Progress WHERE Marker=11
         GROUP BY Property_ID) condition_progress
 ON Property_Progress.Date_Added = condition_progress.latest_date ";
 } else {
-    $condition = "";
-    $condition_join = "";
+    $condition_sqlsafe = "";
+    $condition_join_sqlsafe = "";
 }
 if ($_POST['for_sale'] != 0) {
-    $for_sale = " AND Property_Progress.Marker=4 AND Addtl_Info_1='For Sale'";
-    $sale_progress = " 
+    $for_sale_sqlsafe = " AND Property_Progress.Marker=4 AND Addtl_Info_1='For Sale'";
+    $sale_progress_sqlsafe = " 
         INNER JOIN (
         SELECT Property_ID, Marker, MAX(Date_Added) as latest_date
         FROM Property_Progress WHERE Marker=4
         GROUP BY Property_ID) sale_progress
 ON Property_Progress.Date_Added = sale_progress.latest_date ";
 } else {
-    $for_sale = "";
-    $sale_progress = "";
+    $for_sale_sqlsafe = "";
+    $sale_progress_sqlsafe = "";
 }
 
 //the following don't require such checks, either because they stay the same (type, size) or because they refer to a range of times
 //or prices, and we are interested in whether the property ever fell into these ranges
 if ($_POST['type'] != 0) {
-    $type = " AND Properties.Construction_Type='" . $_POST['type'] . "' ";
+    $type_sqlsafe = " AND Properties.Construction_Type='" . mysqli_real_escape_string($cnnSWOP, $_POST['type']) . "' ";
 } else {
-    $type = "";
+    $type_sqlsafe = "";
 }
 if ($_POST['size'] != 0) {
-    $size = " AND Properties.Home_Size='" . $_POST['size'] . "' ";
+    $size_sqlsafe = " AND Properties.Home_Size='" . mysqli_real_escape_string($cnnSWOP, $_POST['size']) . "' ";
 } else {
-    $size = "";
+    $size_sqlsafe = "";
 }
 if ($_POST['price_low'] != '') {
-    $price_range_low = " AND Property_Progress.Marker=4 AND Addtl_Info_2>='" . $_POST['price_low'] . "' ";
+    $price_range_low_sqlsafe = " AND Property_Progress.Marker=4 AND Addtl_Info_2>='" . mysqli_real_escape_string($cnnSWOP, $_POST['price_low']) . "' ";
 } else {
-    $price_range_low = "";
+    $price_range_low_sqlsafe = "";
 }
 if ($_POST['price_high'] != '') {
-    $price_range_high = " AND Property_Progress.Marker=4 AND Addtl_Info_2<='" . $_POST['price_high'] . "' ";
+    $price_range_high_sqlsafe = " AND Property_Progress.Marker=4 AND Addtl_Info_2<='" . mysqli_real_escape_string($cnnSWOP, $_POST['price_high']) . "' ";
 } else {
-    $price_range_high = "";
+    $price_range_high_sqlsafe = "";
 }
 if ($_POST['interest_start'] != 0) {
-    $interest_date_start = " AND Property_Progress.Marker=7 AND Date_Added>= '" . $_POST['interest_start'] . "' ";
+    $interest_date_start_sqlsafe = " AND Property_Progress.Marker=7 AND Date_Added>= '" . mysqli_real_escape_string($cnnSWOP, $_POST['interest_start']) . "' ";
 } else {
-    $interest_date_start = "";
+    $interest_date_start_sqlsafe = "";
 }
 if ($_POST['interest_end'] != 0) {
-    $interest_date_end = " AND Property_Progress.Marker=7 AND Date_Added<='" . $_POST['interest_end'] . "' ";
+    $interest_date_end_sqlsafe = " AND Property_Progress.Marker=7 AND Date_Added<='" . mysqli_real_escape_string($cnnSWOP, $_POST['interest_end']) . "' ";
 } else {
-    $interest_date_end = "";
+    $interest_date_end_sqlsafe = "";
 }
 if ($_POST['interest_reason'] != 0) {
-    $interest_reason = " AND Property_Progress.Marker=7 AND Addtl_Info_1='" . $_POST['interest_reason'] . "' ";
+    $interest_reason_sqlsafe = " AND Property_Progress.Marker=7 AND Addtl_Info_1='" . mysqli_real_escape_string($cnnSWOP, $_POST['interest_reason']) . "' ";
 } else {
-    $interest_reason = "";
+    $interest_reason_sqlsafe = "";
 }
 if ($_POST['acquisition_start'] != 0) {
-    $acquisition_start = " AND Property_Progress.Marker=1 AND Date_Added>= '" . $_POST['acquisition_start'] . "' ";
+    $acquisition_start_sqlsafe = " AND Property_Progress.Marker=1 AND Date_Added>= '" . mysqli_real_escape_string($cnnSWOP, $_POST['acquisition_start']) . "' ";
 } else {
-    $acquisition_start = "";
+    $acquisition_start_sqlsafe = "";
 }
 if ($_POST['acquisition_end'] != 0) {
-    $acquisition_end = " AND Property_Progress.Marker=1 AND Date_Added<='" . $_POST['acquisition_end'] . "' ";
+    $acquisition_end_sqlsafe = " AND Property_Progress.Marker=1 AND Date_Added<='" . mysqli_real_escape_string($cnnSWOP, $_POST['acquisition_end']) . "' ";
 } else {
-    $acquisition_end = "";
+    $acquisition_end_sqlsafe = "";
 }
 if ($_POST['ac_cost_low'] != 0) {
-    $ac_cost_low = " AND Property_Progress.Marker=1 AND Addtl_Info_1>=" . $_POST['ac_cost_low'] . " ";
+    $ac_cost_low_sqlsafe = " AND Property_Progress.Marker=1 AND Addtl_Info_1>=" . mysqli_real_escape_string($cnnSWOP, $_POST['ac_cost_low']) . " ";
 } else {
-    $ac_cost_low = "";
+    $ac_cost_low_sqlsafe = "";
 }
 if ($_POST['ac_cost_high'] != 0) {
-    $ac_cost_high = " AND Property_Progress.Marker=1 AND Addtl_Info_1<=" . $_POST['ac_cost_high'] . " ";
+    $ac_cost_high_sqlsafe = " AND Property_Progress.Marker=1 AND Addtl_Info_1<=" . mysqli_real_escape_string($cnnSWOP, $_POST['ac_cost_high']) . " ";
 } else {
-    $ac_cost_high = "";
+    $ac_cost_high_sqlsafe = "";
 }
 if ($_POST['construction_start'] != 0) {
-    $construction_start = " AND Property_Progress.Marker=2 AND Date_Added>= '" . $_POST['construction_start'] . "' ";
+    $construction_start_sqlsafe = " AND Property_Progress.Marker=2 AND Date_Added>= '" . mysqli_real_escape_string($cnnSWOP, $_POST['construction_start']) . "' ";
 } else {
-    $construction_start = "";
+    $construction_start_sqlsafe = "";
 }
 if ($_POST['construction_end'] != 0) {
-    $construction_end = " AND Property_Progress.Marker=2 AND Date_Added<= '" . $_POST['construction_end'] . "' ";
+    $construction_end_sqlsafe = " AND Property_Progress.Marker=2 AND Date_Added<= '" . mysqli_real_escape_string($cnnSWOP, $_POST['construction_end']) . "' ";
 } else {
-    $construction_end = "";
+    $construction_end_sqlsafe = "";
 }
 if ($_POST['con_cost_low'] != 0) {
-    $con_cost_low = " AND Property_Progress.Marker=2 AND Addtl_Info_1>=" . $_POST['con_cost_low'] . " ";
+    $con_cost_low_sqlsafe = " AND Property_Progress.Marker=2 AND Addtl_Info_1>=" . mysqli_real_escape_string($cnnSWOP, $_POST['con_cost_low']) . " ";
 } else {
-    $con_cost_low = "";
+    $con_cost_low_sqlsafe = "";
 }
 if ($_POST['con_cost_high'] != 0) {
-    $con_cost_high = " AND Property_Progress.Marker=2 AND Addtl_Info_1<=" . $_POST['con_cost_high'] . " ";
+    $con_cost_high_sqlsafe = " AND Property_Progress.Marker=2 AND Addtl_Info_1<=" . mysqli_real_escape_string($cnnSWOP, $_POST['con_cost_high']) . " ";
 } else {
-    $con_cost_high = "";
+    $con_cost_high_sqlsafe = "";
 }
 if ($_POST['certificate_start'] != 0) {
-    $cert_start = " AND Property_Progress.Marker=3 AND Date_Added>= '" . $_POST['certificate_start'] . "' ";
+    $cert_start_sqlsafe = " AND Property_Progress.Marker=3 AND Date_Added>= '" . mysqli_real_escape_string($cnnSWOP, $_POST['certificate_start']) . "' ";
 } else {
-    $cert_start = "";
+    $cert_start_sqlsafe = "";
 }
 if ($_POST['certificate_end'] != 0) {
-    $cert_end = " AND Property_Progress.Marker=3 AND Date_Added<= '" . $_POST['certificate_end'] . "' ";
+    $cert_end_sqlsafe = " AND Property_Progress.Marker=3 AND Date_Added<= '" . mysqli_real_escape_string($cnnSWOP, $_POST['certificate_end']) . "' ";
 } else {
-    $cert_end = "";
+    $cert_end_sqlsafe = "";
 }
 if ($_POST['listed_start'] != 0) {
-    $listed_start = " AND Property_Progress.Marker=4 AND Date_Added>= '" . $_POST['listed_start'] . "' ";
+    $listed_start_sqlsafe = " AND Property_Progress.Marker=4 AND Date_Added>= '" . mysqli_real_escape_string($cnnSWOP, $_POST['listed_start']) . "' ";
 } else {
-    $listed_start = "";
+    $listed_start_sqlsafe = "";
 }
 if ($_POST['listed_end'] != 0) {
-    $listed_end = " AND Property_Progress.Marker=4 AND Date_Added>= '" . $_POST['listed_end'] . "' ";
+    $listed_end_sqlsafe = " AND Property_Progress.Marker=4 AND Date_Added>= '" . mysqli_real_escape_string($cnnSWOP, $_POST['listed_end']) . "' ";
 } else {
-    $listed_end = "";
+    $listed_end_sqlsafe = "";
 }
 if ($_POST['contracts_low'] != 0) {
-    $contracts_low = " AND Property_Progress.Marker=4 AND Addtl_Info_1>=" . $_POST['contracts_low'] . " ";
+    $contracts_low_sqlsafe = " AND Property_Progress.Marker=4 AND Addtl_Info_1>=" . mysqli_real_escape_string($cnnSWOP, $_POST['contracts_low']) . " ";
 } else {
-    $contracts_low = "";
+    $contracts_low_sqlsafe = "";
 }
 if ($_POST['contracts_high'] != 0) {
-    $contracts_high = " AND Property_Progress.Marker=4 AND Addtl_Info_1<=" . $_POST['contracts_high'] . " ";
+    $contracts_high_sqlsafe = " AND Property_Progress.Marker=4 AND Addtl_Info_1<=" . mysqli_real_escape_string($cnnSWOP, $_POST['contracts_high']) . " ";
 } else {
-    $contracts_high = "";
+    $contracts_high_sqlsafe = "";
 }
 
 if ($_POST['date_sold_start'] != 0) {
-    $sold_start = " AND Property_Progress.Marker=5 AND Date_Added>= '" . $_POST['date_sold_start'] . "' ";
+    $sold_start_sqlsafe = " AND Property_Progress.Marker=5 AND Date_Added>= '" . mysqli_real_escape_string($cnnSWOP, $_POST['date_sold_start']) . "' ";
 } else {
-    $sold_start = "";
+    $sold_start_sqlsafe = "";
 }
 if ($_POST['date_sold_end'] != 0) {
-    $sold_end = " AND Property_Progress.Marker=5 AND Date_Added<='" . $_POST['date_sold_end'] . "' ";
+    $sold_end_sqlsafe = " AND Property_Progress.Marker=5 AND Date_Added<='" . mysqli_real_escape_string($cnnSWOP, $_POST['date_sold_end']) . "' ";
 } else {
-    $sold_end = "";
+    $sold_end_sqlsafe = "";
 }
 if ($_POST['sale_price_low'] != 0) {
-    $sale_price_low = " AND Property_Progress.Marker=5 AND Addtl_Info_1>=" . $_POST['sale_price_low'] . " ";
+    $sale_price_low_sqlsafe = " AND Property_Progress.Marker=5 AND Addtl_Info_1>=" . mysqli_real_escape_string($cnnSWOP, $_POST['sale_price_low']) . " ";
 } else {
-    $sale_price_low = "";
+    $sale_price_low_sqlsafe = "";
 }
 if ($_POST['sale_price_high'] != 0) {
-    $sale_price_high = " AND Property_Progress.Marker=5 AND Addtl_Info_1<=" . $_POST['sale_price_high'] . " ";
+    $sale_price_high_sqlsafe = " AND Property_Progress.Marker=5 AND Addtl_Info_1<=" . mysqli_real_escape_string($cnnSWOP, $_POST['sale_price_high']) . " ";
 } else {
-    $sale_price_high = "";
+    $sale_price_high_sqlsafe = "";
 }
 if ($_POST['low_days'] != 0) {
-    $days_low = " AND Property_Progress.Marker=5 AND Addtl_Info_3>=" . $_POST['low_days'] . " ";
+    $days_low_sqlsafe = " AND Property_Progress.Marker=5 AND Addtl_Info_3>=" . mysqli_real_escape_string($cnnSWOP, $_POST['low_days']) . " ";
 } else {
-    $days_low = "";
+    $days_low_sqlsafe = "";
 }
 if ($_POST['high_days'] != 0) {
-    $days_high = " AND Property_Progress.Marker=5 AND Addtl_Info_3<=" . $_POST['high_days'] . " ";
+    $days_high_sqlsafe = " AND Property_Progress.Marker=5 AND Addtl_Info_3<=" . mysqli_real_escape_string($cnnSWOP, $_POST['high_days']) . " ";
 } else {
-    $days_high = "";
+    $days_high_sqlsafe = "";
 }
 if ($_POST['subsidy_low'] != 0) {
-    $subsidy_low = " AND Property_Progress.Marker=5 AND Addtl_Info_4>=" . $_POST['subsidy_low'] . " ";
+    $subsidy_low_sqlsafe = " AND Property_Progress.Marker=5 AND Addtl_Info_4>=" . mysqli_real_escape_string($cnnSWOP, $_POST['subsidy_low']) . " ";
 } else {
-    $subsidy_low = "";
+    $subsidy_low_sqlsafe = "";
 }
 if ($_POST['subsidy_high'] != 0) {
-    $subsidy_high = " AND Property_Progress.Marker=5 AND Addtl_Info_4<=" . $_POST['subsidy_high'] . " ";
+    $subsidy_high_sqlsafe = " AND Property_Progress.Marker=5 AND Addtl_Info_4<=" . mysqli_real_escape_string($cnnSWOP, $_POST['subsidy_high']) . " ";
 } else {
-    $subsidy_high = "";
+    $subsidy_high_sqlsafe = "";
 }
 
 if ($_POST['possession_start'] != 0) {
-    $possession_start = " AND Property_Progress.Marker=6 AND Date_Added>= '" . $_POST['possession_start'] . "' ";
+    $possession_start_sqlsafe = " AND Property_Progress.Marker=6 AND Date_Added>= '" . mysqli_real_escape_string($cnnSWOP, $_POST['possession_start']) . "' ";
 } else {
-    $possession_start = "";
+    $possession_start_sqlsafe = "";
 }
 if ($_POST['possession_end'] != 0) {
-    $possession_end = " AND Property_Progress.Marker=6 AND Date_Added<='" . $_POST['possession_end'] . "' ";
+    $possession_end_sqlsafe = " AND Property_Progress.Marker=6 AND Date_Added<='" . mysqli_real_escape_string($cnnSWOP, $_POST['possession_end']) . "' ";
 } else {
-    $possession_end = "";
+    $possession_end_sqlsafe = "";
 }
 
 $search_properties = "SELECT * FROM Properties INNER JOIN 
-    Property_Progress ON Properties.Property_ID=Property_Progress.Property_ID " . $vacant_join . $condition_join . $sale_progress .
-        " WHERE Properties.Property_ID IS NOT NULL  " . $type . $size .
-        $interest_date_start . $interest_date_end . $interest_reason . $vacant . $for_sale . $price_range_high . $price_range_low . $condition .
-        $acquisition_start . $acquisition_end . $ac_cost_low . $ac_cost_high . $construction_start . $construction_end . $con_cost_low . $con_cost_high . $cert_start .
-        $cert_end . $listed_start . $list_end . $contracts_low . $contracts_high . $sold_start . $sold_end . $sale_price_low . $sale_price_high .
-        $subsidy_low . $subsidy_high . $possession_start . $possession_end;
+    Property_Progress ON Properties.Property_ID=Property_Progress.Property_ID " . $vacant_join_sqlsafe . $condition_join_sqlsafe . $sale_progress_sqlsafe .
+        " WHERE Properties.Property_ID IS NOT NULL  " . $type_sqlsafe . $size_sqlsafe .
+        $interest_date_start_sqlsafe . $interest_date_end_sqlsafe . $interest_reason_sqlsafe . $vacant_sqlsafe . $for_sale_sqlsafe . $price_range_high_sqlsafe . $price_range_low_sqlsafe . $condition_sqlsafe .
+        $acquisition_start_sqlsafe . $acquisition_end_sqlsafe . $ac_cost_low_sqlsafe . $ac_cost_high_sqlsafe . $construction_start_sqlsafe . $construction_end_sqlsafe . $con_cost_low_sqlsafe . $con_cost_high_sqlsafe . $cert_start_sqlsafe .
+        $cert_end_sqlsafe . $listed_start_sqlsafe . $list_end_sqlsafe . $contracts_low_sqlsafe . $contracts_high_sqlsafe . $sold_start_sqlsafe . $sold_end_sqlsafe . $sale_price_low_sqlsafe . $sale_price_high_sqlsafe .
+        $subsidy_low_sqlsafe . $subsidy_high_sqlsafe . $possession_start_sqlsafe . $possession_end_sqlsafe;
 
 //echo $search_properties;
 
-include "../include/dbconnopen.php";
 $search_results = mysqli_query($cnnSWOP, $search_properties);
 ?>
 

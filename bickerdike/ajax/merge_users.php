@@ -13,20 +13,22 @@
  */
 
 if ($_POST['action'] == 'merge') {
-    $update_activities_query = "UPDATE Activities_Users SET User_ID='" . $_POST['new_id'] . "' WHERE User_ID='" . $_POST['origin_id'] . "'";
-    $update_surveys_query = "UPDATE Participant_Survey_Responses SET User_ID='" . $_POST['new_id'] . "' WHERE User_ID='" . $_POST['origin_id'] . "'";
-    $update_attendance_query = "UPDATE Program_Dates_Users SET User_ID='" . $_POST['new_id'] . "' WHERE User_ID='" . $_POST['origin_id'] . "'";
-    $update_programs_query = "UPDATE Programs_Users SET User_ID='" . $_POST['new_id'] . "' WHERE User_ID='" . $_POST['origin_id'] . "'";
-    $update_health_query = "UPDATE User_Health_Data SET User_ID='" . $_POST['new_id'] . "' WHERE User_ID='" . $_POST['origin_id'] . "'";
-    $delete_user_query = "DELETE FROM Users WHERE User_ID='" . $_POST['origin_id'] . "'";
-    echo $delete_user_query;
     include "../include/dbconnopen.php";
-    mysqli_query($cnnBickerdike, $update_activities_query);
-    mysqli_query($cnnBickerdike, $update_surveys_query);
-    mysqli_query($cnnBickerdike, $update_attendance_query);
-    mysqli_query($cnnBickerdike, $update_programs_query);
-    mysqli_query($cnnBickerdike, $update_health_query);
-    mysqli_query($cnnBickerdike, $delete_user_query);
+    $new_id_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['new_id']);
+    $origin_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['origin_id']);
+    $update_activities_query_sqlsafe = "UPDATE Activities_Users SET User_ID='" . $new_id_sqlsafe . "' WHERE User_ID='" . $origin_id_sqlsafe . "'";
+    $update_surveys_query_sqlsafe = "UPDATE Participant_Survey_Responses SET User_ID='" . $new_id_sqlsafe . "' WHERE User_ID='" . $origin_id_sqlsafe . "'";
+    $update_attendance_query_sqlsafe = "UPDATE Program_Dates_Users SET User_ID='" . $new_id_sqlsafe . "' WHERE User_ID='" . $origin_id_sqlsafe . "'";
+    $update_programs_query_sqlsafe = "UPDATE Programs_Users SET User_ID='" . $new_id_sqlsafe . "' WHERE User_ID='" . $origin_id_sqlsafe . "'";
+    $update_health_query_sqlsafe = "UPDATE User_Health_Data SET User_ID='" . $new_id_sqlsafe . "' WHERE User_ID='" . $origin_id_sqlsafe . "'";
+    $delete_user_query_sqlsafe = "DELETE FROM Users WHERE User_ID='" . $origin_id_sqlsafe . "'";
+    echo $delete_user_query_sqlsafe;
+    mysqli_query($cnnBickerdike, $update_activities_query_sqlsafe);
+    mysqli_query($cnnBickerdike, $update_surveys_query_sqlsafe);
+    mysqli_query($cnnBickerdike, $update_attendance_query_sqlsafe);
+    mysqli_query($cnnBickerdike, $update_programs_query_sqlsafe);
+    mysqli_query($cnnBickerdike, $update_health_query_sqlsafe);
+    mysqli_query($cnnBickerdike, $delete_user_query_sqlsafe);
     include "../include/dbconnclose.php";
 }
 /*

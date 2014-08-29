@@ -33,9 +33,9 @@ include "../../bickerdike/header.php";
         <td class="all_projects"><select id="org">
                 <option value="">-----</option>
                 <?
-                $program_query = "SELECT * FROM User_Established_Activities GROUP BY Activity_Org";
+                $program_query_sqlsafe = "SELECT * FROM User_Established_Activities GROUP BY Activity_Org";
 include "../include/dbconnopen.php";
-$programs = mysqli_query($cnnBickerdike, $program_query);
+$programs = mysqli_query($cnnBickerdike, $program_query_sqlsafe);
 while ($program = mysqli_fetch_array($programs)){
     ?>
         <option value="<?echo $program['Activity_Org'];?>"><?echo $program['Activity_Org'];?></option>
@@ -48,9 +48,9 @@ include "../include/dbconnclose.php";
         <td class="all_projects"><select id="type">
                 <option value="">-----</option>
                 <?
-                $program_query = "SELECT * FROM User_Established_Activities GROUP BY Activity_Type";
+                $program_query_sqlsafe = "SELECT * FROM User_Established_Activities GROUP BY Activity_Type";
 include "../include/dbconnopen.php";
-$programs = mysqli_query($cnnBickerdike, $program_query);
+$programs = mysqli_query($cnnBickerdike, $program_query_sqlsafe);
 while ($program = mysqli_fetch_array($programs)){
     ?>
         <option value="<?echo $program['Activity_Type'];?>"><?echo $program['Activity_Type'];?></option>
@@ -87,9 +87,9 @@ include "../include/dbconnclose.php";
 <?
 
 include "../include/datepicker.php";
-$activity_query = "SELECT * FROM User_Established_Activities";
+$activity_query_sqlsafe = "SELECT * FROM User_Established_Activities";
 include "../include/dbconnopen.php";
-$activities = mysqli_query($cnnBickerdike, $activity_query);
+$activities = mysqli_query($cnnBickerdike, $activity_query_sqlsafe);
 while ($act = mysqli_fetch_array($activities)){?>
     <li><a href="activity_profile.php?activity=<?echo $act['User_Established_Activities_ID'];?>"><?echo $act['Activity_Name'];?></a> &nbsp;&nbsp;&nbsp;
     <input type="button" value="Delete" onclick="var first='<?echo $act['Activity_Name']?>';

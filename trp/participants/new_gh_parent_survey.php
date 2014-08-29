@@ -3,8 +3,8 @@
 	include "../header.php";
 	include "../include/dbconnopen.php";
         include "../include/datepicker_simple.php";
-	$get_parent_info = "SELECT * FROM Participants WHERE Participant_ID='" . $_GET['origin'] . "'";
-	$parent_info = mysqli_query($cnnTRP, $get_parent_info);
+	$get_parent_info_sqlsafe = "SELECT * FROM Participants WHERE Participant_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['origin']) . "'";
+	$parent_info = mysqli_query($cnnTRP, $get_parent_info_sqlsafe);
 	$parent = mysqli_fetch_array($parent_info);
         
         /* survey for parents of students in the New Horizons/Gads Hill tutoring program:

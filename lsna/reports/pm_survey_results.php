@@ -48,20 +48,22 @@
 
     <?php
     /* if results are sorted: */
+    include "../include/dbconnopen.php";
+    $year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['year']);
+    $school_post_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['school_post']);
     if (isset($_POST['year']) && $_POST['year'] != '') {
-        $year_post = " AND ((YEAR(Date)='" . $_POST['year'] . "' AND MONTH(Date)>6 AND MONTH(Date)<=12) OR (YEAR(Date)='" .($_POST['year']+1)."' AND MONTH(Date)<=6 ))";
+        $year_post = " AND ((YEAR(Date)='" . $year_sqlsafe . "' AND MONTH(Date)>6 AND MONTH(Date)<=12) OR (YEAR(Date)='" .($year_sqlsafe+1)."' AND MONTH(Date)<=6 ))";
     } else {
         $year_post = "";
     }
     if (isset($_POST['school_post']) && $_POST['school_post'] != '') {
-        $school_post = " AND School='" . $_POST['school_post'] . "' ";
+        $school_post = " AND School='" . $school_post_sqlsafe . "' ";
     } else {
         $school_post = "";
     }
 
     /* create arrays with only the questions from the surveys.  This is much less useful now that only 
      * a few questions are shown in this report. */
-    include "../include/dbconnopen.php";
     $get_pre_averages = "SELECT AVG(Student_Involvement_B), AVG(Student_Involvement_H),
     AVG(School_Network_I), AVG(School_Network_J), AVG(School_Involvement_M),
     AVG(School_Involvement_P), AVG(School_Involvement_Q),

@@ -22,25 +22,25 @@ if (($_FILES["file"]["size"] < 1000000)
     if (isset($_POST['event_id'])) {
         $fileName = $_FILES['file']['name'];
         $tmpName = $_FILES['file']['tmp_name'];
-        $fileSize = $_FILES['file']['size'];
-        $fileType = $_FILES['file']['type'];
+        $fileSize_sqlsafe = mysqli_real_escape_string($cnnSWOP, $_FILES['file']['size']);
+        $fileType_sqlsafe = mysqli_real_escape_string($cnnSWOP, $_FILES['file']['type']);
 
         /* read file content into a variable. */
         $file_open_temp = fopen($tmpName, 'r');
         $file_content = fread($file_open_temp, filesize($tmpName));
-        $file_content = mysqli_real_escape_string($cnnSWOP, $file_content);
+        $file_content_sqlsafe = mysqli_real_escape_string($cnnSWOP, $file_content);
         fclose($file_open_temp);
 
-        /* escape special characters: */
-        
-        $fileName = mysqli_real_escape_string($cnnSWOP, $fileName);
+        /* escape special characters: */      
+        $fileName_sqlsafe = mysqli_real_escape_string($cnnSWOP, $fileName);
+
             
         
         
-        $query = "INSERT INTO Property_Files (Property_ID, File_Name, File_Size, File_Type, File_Content) VALUES 
-            ('".$_POST['event_id']."', '$fileName', '$fileSize', '$fileType', '$file_content')";
+        $query_sqlsafe = "INSERT INTO Property_Files (Property_ID, File_Name, File_Size, File_Type, File_Content) VALUES 
+            ('".mysqli_real_escape_string($cnnSWOP, $_POST['event_id'])."', '$fileName_sqlsafe', '$fileSize_sqlsafe', '$fileType_sqlsafe', '$file_content_sqlsafe')";
         
-        mysqli_query($cnnSWOP, $query) or die('Error, query failed'); 
+        mysqli_query($cnnSWOP, $query_sqlsafe) or die('Error, query failed'); 
         include ("../include/dbconnclose.php");
 
         echo "<br>File $fileName uploaded<br>";

@@ -5,10 +5,10 @@ if(isset($_GET['id']))
 // if id is set then get the file with the id from database
 
 include ("../include/dbconnopen.php");
-$id=$_GET['id'];
-$query = "SELECT File_Name, File_Type, File_Size, File_Content FROM Programs_Uploads WHERE Upload_ID = '$id'";
-//echo $query;
-$result = mysqli_query($cnnTRP, $query) or die('Error, query failed');
+$id_sqlsafe=mysqli_real_escape_string($cnnTRP, $_GET['id']);
+$query_sqlsafe = "SELECT File_Name, File_Type, File_Size, File_Content FROM Programs_Uploads WHERE Upload_ID = '$id_sqlsafe'";
+//echo $query_sqlsafe;
+$result = mysqli_query($cnnTRP, $query_sqlsafe) or die('Error, query failed');
 list($name, $type, $size, $content)= mysqli_fetch_array($result);
 
 header("Content-length: $size");

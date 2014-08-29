@@ -3,14 +3,16 @@
  * Remove a person from a specific date of a program.  The person will still
  * be a program participant, but they will not have attended this date.
  */
-
-$remove_attendee_from_date = "DELETE FROM Program_Dates_Users WHERE
-                            Program_Date_ID='". $_POST['program_date_id']."'
-                                AND
-                            User_ID='". $_POST['user_id']."'";
-echo $remove_attendee_from_date;
 include "../include/dbconnopen.php";
-mysqli_query($cnnBickerdike, $remove_attendee_from_date);
+
+$user_id_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['user_id']);
+$program_date_id_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['program_date_id']);
+$remove_attendee_from_date_sqlsafe = "DELETE FROM Program_Dates_Users WHERE
+                            Program_Date_ID='". $program_date_id_sqlsafe."'
+                                AND
+                            User_ID='". $user_id_sqlsafe."'";
+echo $remove_attendee_from_date_sqlsafe;
+mysqli_query($cnnBickerdike, $remove_attendee_from_date_sqlsafe);
 include "../include/dbconnclose.php";
 
 ?>

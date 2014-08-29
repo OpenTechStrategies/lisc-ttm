@@ -13,20 +13,20 @@ include "../include/datepicker_simple.php";
 </script>
 
 <?php
-$participant_query = "SELECT * FROM Participants WHERE Participant_ID='" . $_GET['id'] . "'";
 include "../include/dbconnopen.php";
-$get_participant = mysqli_query($cnnTRP, $participant_query);
+$participant_query_sqlsafe = "SELECT * FROM Participants WHERE Participant_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
+$get_participant = mysqli_query($cnnTRP, $participant_query_sqlsafe);
 $parti = mysqli_fetch_array($get_participant);
 $date_formatted = explode('-', $parti['DOB']);
 $DOB = $date_formatted[1] . "/" . $date_formatted[2] . "/" . $date_formatted[0];
 
 /* program access determines whether the logged-in user can see program-specific information about this person.
  * The Gads Hill users may not be able to see results from museum surveys, for example. */
-$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id=Users_Privileges.User_ID
-            WHERE User_Email=" . stripslashes($_COOKIE['user']) . " AND Privilege_ID=4";
-// echo $get_program_access;
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
-$program_access = mysqli_query($cnnLISC, $get_program_access);
+$get_program_access_sqlsafe = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id=Users_Privileges.User_ID
+            WHERE User_Email=" . mysqli_real_escape_string($cnnLISC, $_COOKIE['user']) . " AND Privilege_ID=4";
+// echo $get_program_access_sqlsafe;
+$program_access = mysqli_query($cnnLISC, $get_program_access_sqlsafe);
 $prog_access = mysqli_fetch_row($program_access);
 $access = $prog_access[0];
 ?>
@@ -151,8 +151,8 @@ if ($parti['Gender'] == 'm') {
             <th></th>
         </tr>
         <?php
-        $event_attendance = "SELECT * FROM Events INNER JOIN Events_Participants ON Events.Event_ID=Events_Participants.Event_ID WHERE Events_Participants.Participant_ID='" . $parti['Participant_ID'] . "' ORDER BY Events.Event_Date";
-        $events = mysqli_query($cnnTRP, $event_attendance);
+        $event_attendance_sqlsafe = "SELECT * FROM Events INNER JOIN Events_Participants ON Events.Event_ID=Events_Participants.Event_ID WHERE Events_Participants.Participant_ID='" . $parti['Participant_ID'] . "' ORDER BY Events.Event_Date";
+        $events = mysqli_query($cnnTRP, $event_attendance_sqlsafe);
         while ($event = mysqli_fetch_array($events)) {
             $date_formatted = explode('-', $event['Event_Date']);
             $date = $date_formatted[1] . "/" . $date_formatted[2] . "/" . $date_formatted[0];
@@ -183,8 +183,8 @@ if ($parti['Gender'] == 'm') {
             <td><select id="add_to_event">
                     <option value="">-----------</option>
                     <?php
-                    $all_events = "SELECT * FROM Events ORDER BY Event_Date DESC";
-                    $select_events = mysqli_query($cnnTRP, $all_events);
+                    $all_events_sqlsafe = "SELECT * FROM Events ORDER BY Event_Date DESC";
+                    $select_events = mysqli_query($cnnTRP, $all_events_sqlsafe);
                     while ($select_event = mysqli_fetch_array($select_events)) {
                         $date_formatted = explode('-', $select_event['Event_Date']);
                         $date = $date_formatted[1] . "/" . $date_formatted[2] . "/" . $date_formatted[0];
@@ -223,8 +223,8 @@ if ($parti['Gender'] == 'm') {
                 <th>Relationship</th>
             </tr>
             <?php
-            $get_parents = "SELECT * FROM Participants INNER JOIN Parents_Children ON Participants.Participant_ID=Parents_Children.Parent_ID WHERE Parents_Children.Child_ID='" . $parti['Participant_ID'] . "'";
-            $parents = mysqli_query($cnnTRP, $get_parents);
+            $get_parents_sqlsafe = "SELECT * FROM Participants INNER JOIN Parents_Children ON Participants.Participant_ID=Parents_Children.Parent_ID WHERE Parents_Children.Child_ID='" . $parti['Participant_ID'] . "'";
+            $parents = mysqli_query($cnnTRP, $get_parents_sqlsafe);
             while ($parent = mysqli_fetch_array($parents)) {
                 ?>
                 <!-- show this person's parent(s) -->
@@ -234,8 +234,8 @@ if ($parti['Gender'] == 'm') {
                 </tr>
                 <?php
             }
-            $get_children = "SELECT * FROM Participants INNER JOIN Parents_Children ON Participants.Participant_ID=Parents_Children.Child_ID WHERE Parents_Children.Parent_ID='" . $parti['Participant_ID'] . "'";
-            $children = mysqli_query($cnnTRP, $get_children);
+            $get_children_sqlsafe = "SELECT * FROM Participants INNER JOIN Parents_Children ON Participants.Participant_ID=Parents_Children.Child_ID WHERE Parents_Children.Parent_ID='" . $parti['Participant_ID'] . "'";
+            $children = mysqli_query($cnnTRP, $get_children_sqlsafe);
             while ($child = mysqli_fetch_array($children)) {
                 ?>
                 <!-- show this person's child(ren) -->
@@ -292,10 +292,10 @@ if ($parti['Gender'] == 'm') {
             <tr style="font-size:.9em;"><th>School Year</th><th colspan="2">Consent Form Received</th></tr>
             <?php
             //get existing records
-            $all_consent = "SELECT * FROM Participants_Consent WHERE Participant_ID='" . $parti['Participant_ID'] . "' ORDER BY School_Year";
+            $all_consent_sqlsafe = "SELECT * FROM Participants_Consent WHERE Participant_ID='" . $parti['Participant_ID'] . "' ORDER BY School_Year";
             //echo $all_consent;
             include "../include/dbconnopen.php";
-            $consents_given = mysqli_query($cnnTRP, $all_consent);
+            $consents_given = mysqli_query($cnnTRP, $all_consent_sqlsafe);
             while ($consent = mysqli_fetch_row($consents_given)) {
                 ?>
                 <tr><td><?php $years = str_split($consent[2], 2);
@@ -307,9 +307,9 @@ if ($parti['Gender'] == 'm') {
                 } ?></td>
 
                     <td><?php
-                        $get_uploads = "SELECT Upload_Id, File_Name FROM Programs_Uploads WHERE Participant_ID='" . $parti['Participant_ID'] . "'
+                        $get_uploads_sqlsafe = "SELECT Upload_Id, File_Name FROM Programs_Uploads WHERE Participant_ID='" . $parti['Participant_ID'] . "'
                             AND Year=$consent[2]";
-                        $result = mysqli_query($cnnTRP, $get_uploads);
+                        $result = mysqli_query($cnnTRP, $get_uploads_sqlsafe);
                         if (mysqli_num_rows($result) == 0) {
                             echo "No form has been uploaded <br>";
                         } else {
@@ -384,10 +384,10 @@ if ($parti['Gender'] == 'm') {
 
 
         <?php
-        $get_programs = "SELECT * FROM Programs INNER JOIN Participants_Programs ON 
+        $get_programs_sqlsafe = "SELECT * FROM Programs INNER JOIN Participants_Programs ON 
                                             Programs.Program_ID=Participants_Programs.Program_ID WHERE 
                                             Participants_Programs.Participant_ID='" . $parti['Participant_ID'] . "' ORDER BY Programs.Program_Name";
-        $programs = mysqli_query($cnnTRP, $get_programs);
+        $programs = mysqli_query($cnnTRP, $get_programs_sqlsafe);
         if (mysqli_num_rows($programs) < 1) {
             echo "<h4>This participant is not involved in any programs.</h4>";
         }
@@ -404,12 +404,12 @@ if ($parti['Gender'] == 'm') {
                                 <span class="helptext"><a href="javascript:;" onclick="$('#toggler_attendance_1').toggle();">Show/hide dates that this person attended this program.</a></span><br>
                                 <?php
                                 //get dates for this project, then attendance for this person
-                                $get_attendance = "SELECT MONTH(Date), DAY(Date), YEAR(Date) FROM Program_Attendance INNER JOIN Program_Dates ON 
+                                $get_attendance_sqlsafe = "SELECT MONTH(Date), DAY(Date), YEAR(Date) FROM Program_Attendance INNER JOIN Program_Dates ON 
                                                 Program_Attendance.Date_ID=Program_Dates.Date_ID
                                                 WHERE Program_ID='" . $program['Program_ID'] . "' AND Participant_ID='" .
                                         $parti['Participant_ID'] . "'";
-                                // echo $get_attendance;
-                                $attendance_dates = mysqli_query($cnnTRP, $get_attendance);
+                                // echo $get_attendance_sqlsafe;
+                                $attendance_dates = mysqli_query($cnnTRP, $get_attendance_sqlsafe);
                                 ?><div id="toggler_attendance_1"><?php
                                 while ($date = mysqli_fetch_row($attendance_dates)) {
                                     echo $date[0] . '/' . $date[1] . '/' . $date[2] . "<br>";
@@ -420,17 +420,17 @@ if ($parti['Gender'] == 'm') {
                                 //add student to a classroom for GOLD averages
                                 ?>
                                 <span class="helptext">Add participant to a classroom to show classroom averages.</span><br>
-                                Classroom: <?php $get_classroom="SELECT Classroom_ID FROM Gold_Classrooms WHERE Student_ID='" . $parti['Participant_ID'] . "'";
+                                Classroom: <?php $get_classroom_sqlsafe="SELECT Classroom_ID FROM Gold_Classrooms WHERE Student_ID='" . $parti['Participant_ID'] . "'";
                                     include "../include/dbconnopen.php";
-                                $classroom=mysqli_query($cnnTRP, $get_classroom);
+                                $classroom=mysqli_query($cnnTRP, $get_classroom_sqlsafe);
                                 $class_chosen=mysqli_fetch_row($classroom);
                                 echo $class_chosen[0];
                                     include "../include/dbconnclose.php";?>
                                 <br> <span class="helptext"> Add or edit a classroom here: </span> <select id="add_new_class">
                                     <?php
                                     include "../include/dbconnopen.php";
-                                    $get_classrooms="SELECT Classroom_ID FROM Class_Avg_Gold_Scores GROUP BY Classroom_ID";
-                                    $classrooms=mysqli_query($cnnTRP, $get_classrooms);
+                                    $get_classrooms_sqlsafe="SELECT Classroom_ID FROM Class_Avg_Gold_Scores GROUP BY Classroom_ID";
+                                    $classrooms=mysqli_query($cnnTRP, $get_classrooms_sqlsafe);
                                     while ($class=mysqli_fetch_row($classrooms)){
                                         ?>
                                     <option><?php echo $class[0];?></option>
@@ -451,10 +451,10 @@ if ($parti['Gender'] == 'm') {
                                    });">
                                     <?php 
                                 //get class avgs based on classroom above
-                                $avg_query="SELECT * FROM Class_Avg_Gold_Scores WHERE Classroom_ID='$class_chosen[0]'";
+                                $avg_query_sqlsafe="SELECT * FROM Class_Avg_Gold_Scores WHERE Classroom_ID='$class_chosen[0]'";
                                // echo $avg_query;
                                 include "../include/dbconnopen.php";
-                                $avgs=mysqli_query($cnnTRP, $avg_query);
+                                $avgs=mysqli_query($cnnTRP, $avg_query_sqlsafe);
                                 while ($avg=mysqli_fetch_array($avgs)){
                                     if ($avg['Test_Year']==1){
                                         //then we're in the first year
@@ -767,44 +767,44 @@ if ($parti['Gender'] == 'm') {
                                 
                                 //get all gold score info to put in boxes below
                                 include "../include/dbconnopen.php";
-                                $get_year_1_a = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
+                                $get_year_1_a_sqlsafe = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
                                                             AND Year=1 AND Test_Time=1 ORDER BY Date_Logged DESC";
-                                $year_1_a = mysqli_query($cnnTRP, $get_year_1_a);
+                                $year_1_a = mysqli_query($cnnTRP, $get_year_1_a_sqlsafe);
                                 $year1a = mysqli_fetch_array($year_1_a);
-                                $get_year_1_b = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
+                                $get_year_1_b_sqlsafe = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
                                                             AND Year=1 AND Test_Time=2 ORDER BY Date_Logged DESC";
-                                $year_1_b = mysqli_query($cnnTRP, $get_year_1_b);
+                                $year_1_b = mysqli_query($cnnTRP, $get_year_1_b_sqlsafe);
                                 $year1b = mysqli_fetch_array($year_1_b);
-                                $get_year_1_c = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
+                                $get_year_1_c_sqlsafe = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
                                                             AND Year=1 AND Test_Time=3 ORDER BY Date_Logged DESC";
-                                $year_1_c = mysqli_query($cnnTRP, $get_year_1_c);
+                                $year_1_c = mysqli_query($cnnTRP, $get_year_1_c_sqlsafe);
                                 $year1c = mysqli_fetch_array($year_1_c);
 
-                                $get_year_2 = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
+                                $get_year_2_sqlsafe = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
                                                             AND Year=2 AND Test_Time=1 ORDER BY Date_Logged DESC";
-                                $year_2 = mysqli_query($cnnTRP, $get_year_2);
+                                $year_2 = mysqli_query($cnnTRP, $get_year_2_sqlsafe);
                                 $year2a = mysqli_fetch_array($year_2);
-                                $get_year_2 = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
+                                $get_year_2_sqlsafe = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
                                                             AND Year=2 AND Test_Time=2 ORDER BY Date_Logged DESC";
                                 //echo $get_year_2;
-                                $year_2b = mysqli_query($cnnTRP, $get_year_2);
+                                $year_2b = mysqli_query($cnnTRP, $get_year_2_sqlsafe);
                                 $year2b = mysqli_fetch_array($year_2b);
-                                $get_year_2 = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
+                                $get_year_2_sqlsafe = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
                                                             AND Year=2 AND Test_Time=3 ORDER BY Date_Logged DESC";
-                                $year_2 = mysqli_query($cnnTRP, $get_year_2);
+                                $year_2 = mysqli_query($cnnTRP, $get_year_2_sqlsafe);
                                 $year2c = mysqli_fetch_array($year_2);
 
-                                $get_year_3 = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
+                                $get_year_3_sqlsafe = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
                                                             AND Year=3 AND Test_Time=1 ORDER BY Date_Logged DESC";
-                                $year_3 = mysqli_query($cnnTRP, $get_year_3);
+                                $year_3 = mysqli_query($cnnTRP, $get_year_3_sqlsafe);
                                 $year3a = mysqli_fetch_array($year_3);
-                                $get_year_3 = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
+                                $get_year_3_sqlsafe = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
                                                             AND Year=3 AND Test_Time=2 ORDER BY Date_Logged DESC";
-                                $year_3 = mysqli_query($cnnTRP, $get_year_3);
+                                $year_3 = mysqli_query($cnnTRP, $get_year_3_sqlsafe);
                                 $year3b = mysqli_fetch_array($year_3);
-                                $get_year_3 = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
+                                $get_year_3_sqlsafe = "SELECT * FROM Gold_Score_Totals WHERE Participant='" . $parti['Participant_ID'] . "'
                                                             AND Year=3 AND Test_Time=3 ORDER BY Date_Logged DESC";
-                                $year_3 = mysqli_query($cnnTRP, $get_year_3);
+                                $year_3 = mysqli_query($cnnTRP, $get_year_3_sqlsafe);
                                 $year3c = mysqli_fetch_array($year_3);
                                 
                                 include "../include/dbconnclose.php";
@@ -1463,10 +1463,10 @@ if ($parti['Gender'] == 'm') {
         <?php
         //Middle School to High School teacher exchange
     } else if (($program['Program_ID'] == 2 || $program['Program_ID'] == 4) && ($access == 'a' || $access == 2 || $access == 4)) {
-        $get_transition_info = "SELECT * FROM Explore_Scores WHERE Participant_ID=" . $parti['Participant_ID'] .
+        $get_transition_info_sqlsafe = "SELECT * FROM Explore_Scores WHERE Participant_ID=" . $parti['Participant_ID'] .
                 " AND Program_ID='" . $program['Program_ID'] . "'";
         include "../include/dbconnopen.php";
-        $transit = mysqli_query($cnnTRP, $get_transition_info);
+        $transit = mysqli_query($cnnTRP, $get_transition_info_sqlsafe);
         $transition_info = mysqli_fetch_array($transit);
         ?>
                 <div class="program_details">
@@ -1493,14 +1493,14 @@ if ($parti['Gender'] == 'm') {
                                 <?php
                                 /* show explore scores.  note that only one explore score line will be saved for any person,
                                  * so changes below will overwrite this line, not add another line. */
-                                $show_explore = "SELECT * FROM Explore_Scores WHERE Participant_ID=" . $parti['Participant_ID'];
-                                $explore = mysqli_query($cnnTRP, $show_explore);
+                                $show_explore_sqlsafe = "SELECT * FROM Explore_Scores WHERE Participant_ID=" . $parti['Participant_ID'];
+                                $explore = mysqli_query($cnnTRP, $show_explore_sqlsafe);
                                 while ($ex = mysqli_fetch_array($explore)) {
                                     ?><tr>
                                 <td><?php
                         //get school
-                        $this_school = "SELECT School_Name FROM Schools WHERE School_ID=" . $ex['School'];
-                        $school = mysqli_query($cnnTRP, $this_school);
+                        $this_school_sqlsafe = "SELECT School_Name FROM Schools WHERE School_ID=" . $ex['School'];
+                        $school = mysqli_query($cnnTRP, $this_school_sqlsafe);
                         $show_school = mysqli_fetch_row($school);
                         echo $show_school[0];
                         ?></td>
@@ -1528,9 +1528,9 @@ if ($parti['Gender'] == 'm') {
                         ?>
                         <tr><td><select id="school_new_<?php echo $program['Program_ID']; ?>">
         <?php
-        $select_schools = "SELECT * FROM Schools ORDER BY School_Name";
+        $select_schools_sqlsafe = "SELECT * FROM Schools ORDER BY School_Name";
         include "../include/dbconnopen.php";
-        $schools = mysqli_query($cnnTRP, $select_schools);
+        $schools = mysqli_query($cnnTRP, $select_schools_sqlsafe);
         while ($school = mysqli_fetch_row($schools)) {
             ?>"
                                         <option value="<?php echo $school[0]; ?>"><?php echo $school[1]; ?></option>
@@ -1581,10 +1581,10 @@ if ($parti['Gender'] == 'm') {
                     <?php
                     if ($program['Program_ID'] == 2 ){
                     /* get the classroom information */
-                    $exchange_rooms="SELECT * FROM Teacher_Exchange_Rooms WHERE Participant_ID='".$parti['Participant_ID']."'";
+                    $exchange_rooms_sqlsafe="SELECT * FROM Teacher_Exchange_Rooms WHERE Participant_ID='".$parti['Participant_ID']."'";
                     //echo $exchange_rooms;
                     include "../include/dbconnopen.php";
-                    $rooms=mysqli_query($cnnTRP, $exchange_rooms);
+                    $rooms=mysqli_query($cnnTRP, $exchange_rooms_sqlsafe);
                     $room_info=mysqli_fetch_array($rooms);
                    // include "../include/dbconnclose.php";
                     ?>
@@ -1624,15 +1624,15 @@ if ($parti['Gender'] == 'm') {
                             <th></th>
                         </tr>
         <?php
-        $get_grades = "SELECT * FROM Academic_Info WHERE Participant_ID='" . $parti['Participant_ID'] . "'  ORDER BY School_Year,Quarter";
-        //echo $get_grades;
-        $all_grades = mysqli_query($cnnTRP, $get_grades);
+        $get_grades_sqlsafe = "SELECT * FROM Academic_Info WHERE Participant_ID='" . $parti['Participant_ID'] . "'  ORDER BY School_Year,Quarter";
+        //echo $get_grades_sqlsafe;
+        $all_grades = mysqli_query($cnnTRP, $get_grades_sqlsafe);
         while ($grades = mysqli_fetch_array($all_grades)) {
             ?>
                             <tr><td><?php
                 //get school
-                $this_school = "SELECT School_Name FROM Schools WHERE School_ID=" . $grades['School'];
-                $school = mysqli_query($cnnTRP, $this_school);
+                $this_school_sqlsafe = "SELECT School_Name FROM Schools WHERE School_ID=" . $grades['School'];
+                $school = mysqli_query($cnnTRP, $this_school_sqlsafe);
                 $show_school = mysqli_fetch_row($school);
                 echo $show_school[0];
             ?></td>
@@ -1655,9 +1655,9 @@ if ($parti['Gender'] == 'm') {
                         <!-- add new academic info: -->
                         <tr><td><select id="aca_school_new_<?php echo $program['Program_ID']; ?>">
         <?php
-        $select_schools = "SELECT * FROM Schools ORDER BY School_Name";
+        $select_schools_sqlsafe = "SELECT * FROM Schools ORDER BY School_Name";
         include "../include/dbconnopen.php";
-        $schools = mysqli_query($cnnTRP, $select_schools);
+        $schools = mysqli_query($cnnTRP, $select_schools_sqlsafe);
         while ($school = mysqli_fetch_row($schools)) {
             ?>"
                                         <option value="<?php echo $school[0]; ?>"><?php echo $school[1]; ?></option>
@@ -1722,14 +1722,14 @@ if ($parti['Gender'] == 'm') {
                             <th></th>
                         </tr>
                                     <?php
-                                    $show_discipline = "SELECT * FROM MS_to_HS_Over_Time WHERE Participant_ID=" . $parti['Participant_ID'];
+                                    $show_discipline_sqlsafe = "SELECT * FROM MS_to_HS_Over_Time WHERE Participant_ID=" . $parti['Participant_ID'];
 
-                                    $explore = mysqli_query($cnnTRP, $show_discipline);
+                                    $explore = mysqli_query($cnnTRP, $show_discipline_sqlsafe);
                                     while ($exp = mysqli_fetch_array($explore)) {
                                         ?><tr><td><?php
                                         //get school
-                                        $this_school = "SELECT School_Name FROM Schools WHERE School_ID=" . $exp['School_ID'];
-                                        $school = mysqli_query($cnnTRP, $this_school);
+                                        $this_school_sqlsafe = "SELECT School_Name FROM Schools WHERE School_ID=" . $exp['School_ID'];
+                                        $school = mysqli_query($cnnTRP, $this_school_sqlsafe);
                                         $show_school = mysqli_fetch_row($school);
                                         echo $show_school[0];
                                         ?></td>
@@ -1747,9 +1747,9 @@ if ($parti['Gender'] == 'm') {
                                     ?>
                         <tr><td><select id="dis_school_new_<?php echo $program['Program_ID']; ?>">
                                 <?php
-                                $select_schools = "SELECT * FROM Schools ORDER BY School_Name";
+                                $select_schools_sqlsafe = "SELECT * FROM Schools ORDER BY School_Name";
                                 include "../include/dbconnopen.php";
-                                $schools = mysqli_query($cnnTRP, $select_schools);
+                                $schools = mysqli_query($cnnTRP, $select_schools_sqlsafe);
                                 while ($school = mysqli_fetch_row($schools)) {
                                     ?>"
                                         <option value="<?php echo $school[0]; ?>"><?php echo $school[1]; ?></option>
@@ -1807,12 +1807,12 @@ if ($parti['Gender'] == 'm') {
                     <span class="helptext"><a href="javascript:;" onclick="$('#toggler_attendance_1').toggle();">Show/hide dates that this person attended this program.</a></span><br>
         <?php
         //get dates for this project, then attendance for this person
-        $get_attendance = "SELECT MONTH(Date), DAY(Date), YEAR(Date) FROM Program_Attendance INNER JOIN Program_Dates ON 
+        $get_attendance_sqlsafe = "SELECT MONTH(Date), DAY(Date), YEAR(Date) FROM Program_Attendance INNER JOIN Program_Dates ON 
                                                 Program_Attendance.Date_ID=Program_Dates.Date_ID
                                                 WHERE Program_ID='" . $program['Program_ID'] . "' AND Participant_ID='" .
                 $parti['Participant_ID'] . "'";
-        // echo $get_attendance;
-        $attendance_dates = mysqli_query($cnnTRP, $get_attendance);
+        // echo $get_attendance_sqlsafe;
+        $attendance_dates = mysqli_query($cnnTRP, $get_attendance_sqlsafe);
         ?><div id="toggler_attendance_1"><?php
                 while ($date = mysqli_fetch_row($attendance_dates)) {
                     echo $date[0] . '/' . $date[1] . '/' . $date[2] . "<br>";
@@ -1836,10 +1836,10 @@ if ($parti['Gender'] == 'm') {
                             <th></th>
                         </tr>
         <?php
-        $get_grades = "SELECT * FROM Academic_Info WHERE 
+        $get_grades_sqlsafe = "SELECT * FROM Academic_Info WHERE 
                                                             Participant_ID='" . $parti['Participant_ID'] . "'  ORDER BY School_Year, Quarter";
 
-        $all_grades = mysqli_query($cnnTRP, $get_grades);
+        $all_grades = mysqli_query($cnnTRP, $get_grades_sqlsafe);
         while ($grades = mysqli_fetch_array($all_grades)) {
             ?>
                             <tr>
@@ -1897,8 +1897,8 @@ if ($parti['Gender'] == 'm') {
                     <!-- as explained on the survey page, I think the survey is linked to the child's profile,
                     not the parent's.  I don't think most parents will have a profile in the system.-->
         <?php
-        $get_surveys = "SELECT Date_Surveyed, Gads_Hill_Parent_Survey_ID FROM Gads_Hill_Parent_Survey WHERE Child_ID=" . $parti['Participant_ID'];
-        $all_surveys = mysqli_query($cnnTRP, $get_surveys);
+        $get_surveys_sqlsafe = "SELECT Date_Surveyed, Gads_Hill_Parent_Survey_ID FROM Gads_Hill_Parent_Survey WHERE Child_ID=" . $parti['Participant_ID'];
+        $all_surveys = mysqli_query($cnnTRP, $get_surveys_sqlsafe);
         ?><ul><?php while ($survey = mysqli_fetch_row($all_surveys)) {
             ?>
                             <li><a href="view_parent_survey.php?id=<?php echo $survey[1]; ?>&origin=<?php echo $parti['Participant_ID']; ?>"><?php echo $survey[0] ?></a></li>
@@ -1923,12 +1923,12 @@ if ($parti['Gender'] == 'm') {
                     <span class="helptext"><a href="javascript:;" onclick="$('#toggler_attendance_1').toggle();">Show/hide dates that this person attended this program.</a></span><br>
                         <?php
                         //get dates for this project, then attendance for this person
-                        $get_attendance = "SELECT MONTH(Date), DAY(Date), YEAR(Date) FROM Program_Attendance INNER JOIN Program_Dates ON 
+                        $get_attendance_sqlsafe = "SELECT MONTH(Date), DAY(Date), YEAR(Date) FROM Program_Attendance INNER JOIN Program_Dates ON 
                                                 Program_Attendance.Date_ID=Program_Dates.Date_ID
                                                 WHERE Program_ID='" . $program['Program_ID'] . "' AND Participant_ID='" .
                                 $parti['Participant_ID'] . "'";
-                        // echo $get_attendance;
-                        $attendance_dates = mysqli_query($cnnTRP, $get_attendance);
+                        // echo $get_attendance_sqlsafe;
+                        $attendance_dates = mysqli_query($cnnTRP, $get_attendance_sqlsafe);
                         ?><div id="toggler_attendance_1"><?php
                         while ($date = mysqli_fetch_row($attendance_dates)) {
                             echo $date[0] . '/' . $date[1] . '/' . $date[2] . "<br>";
@@ -1943,8 +1943,8 @@ if ($parti['Gender'] == 'm') {
                             <td colspan="2"><strong>Traditions Surveys</strong></td>
                         </tr>
                         <?php
-                        $get_trad_surveys = "SELECT * FROM NMMA_Traditions_Survey WHERE Participant_ID='" . $parti['Participant_ID'] . "' ORDER BY Date";
-                        $trad_surveys = mysqli_query($cnnTRP, $get_trad_surveys);
+                        $get_trad_surveys_sqlsafe = "SELECT * FROM NMMA_Traditions_Survey WHERE Participant_ID='" . $parti['Participant_ID'] . "' ORDER BY Date";
+                        $trad_surveys = mysqli_query($cnnTRP, $get_trad_surveys_sqlsafe);
                         while ($trad_survey = mysqli_fetch_array($trad_surveys)) {
                             $date_formatted = explode('-', $trad_survey['Date']);
                             $survey_date = $date_formatted[1] . "/" . $date_formatted[2] . "/" . $date_formatted[0];
@@ -1961,8 +1961,8 @@ if ($parti['Gender'] == 'm') {
                             <td colspan="2"><strong>Identity Surveys</strong></td>
                         </tr>
         <?php
-        $get_id_surveys = "SELECT * FROM NMMA_Identity_Survey WHERE Participant_ID='" . $parti['Participant_ID'] . "' ORDER BY Date";
-        $id_surveys = mysqli_query($cnnTRP, $get_id_surveys);
+        $get_id_surveys_sqlsafe = "SELECT * FROM NMMA_Identity_Survey WHERE Participant_ID='" . $parti['Participant_ID'] . "' ORDER BY Date";
+        $id_surveys = mysqli_query($cnnTRP, $get_id_surveys_sqlsafe);
         while ($id_survey = mysqli_fetch_array($id_surveys)) {
             $date_formatted = explode('-', $id_survey['Date']);
             $survey_date = $date_formatted[1] . "/" . $date_formatted[2] . "/" . $date_formatted[0];
@@ -1994,8 +1994,8 @@ if ($parti['Gender'] == 'm') {
                             <th></th>
                         </tr>
         <?php
-        $get_grades = "SELECT * FROM Academic_Info WHERE Participant_ID='" . $parti['Participant_ID'] . "' AND Program_ID='5' ORDER BY School_Year,Quarter";
-        $all_grades = mysqli_query($cnnTRP, $get_grades);
+        $get_grades_sqlsafe = "SELECT * FROM Academic_Info WHERE Participant_ID='" . $parti['Participant_ID'] . "' AND Program_ID='5' ORDER BY School_Year,Quarter";
+        $all_grades = mysqli_query($cnnTRP, $get_grades_sqlsafe);
         while ($grades = mysqli_fetch_array($all_grades)) {
             ?>
                             <tr>
@@ -2230,9 +2230,9 @@ if ($parti['Gender'] == 'm') {
         <select id="all_programs" class="no_view">
             <option value="">-----</option>
 <?php
-$get_programs = "SELECT * FROM Programs";
+$get_programs_sqlsafe = "SELECT * FROM Programs";
 include "../include/dbconnopen.php";
-$programs = mysqli_query($cnnTRP, $get_programs);
+$programs = mysqli_query($cnnTRP, $get_programs_sqlsafe);
 while ($prog = mysqli_fetch_row($programs)) {
     ?>
     <option value="<?php echo $prog[0]; ?>"><?php echo $prog[1]; ?></option>

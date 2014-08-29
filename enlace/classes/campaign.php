@@ -12,9 +12,9 @@ class Campaign
     
      public function load_with_id($campaign_id)
     {
-        $this->campaign_id = $campaign_id;
-        $camp_query = "SELECT * FROM Campaigns WHERE Campaign_ID='$campaign_id'";
         include "../include/dbconnopen.php";
+        $this->campaign_id = mysqli_real_escape_string($cnnEnlace, $campaign_id);
+        $camp_query = "SELECT * FROM Campaigns WHERE Campaign_ID='$campaign_id'";
         $campaign_info = mysqli_query($cnnEnlace, $camp_query);
         
         //set public variables

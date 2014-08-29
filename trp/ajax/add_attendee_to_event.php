@@ -1,14 +1,14 @@
 <?
 /* duplicate function to add_attendee.php.  Only used in search_users.php. */
 
-	$add_attendance = "INSERT INTO Events_Participants (
+	include "../include/dbconnopen.php";
+	$add_attendance_sqlsafe = "INSERT INTO Events_Participants (
 		Event_ID,
 		Participant_ID
 	) VALUES (
-		'" . $_POST['event_id'] . "',
-		'" . $_POST['participant_id'] . "'
+		'" . mysqli_real_escape_string($cnnTRP, $_POST['event_id']) . "',
+		'" . mysqli_real_escape_string($cnnTRP, $_POST['participant_id']) . "'
 	)";
-	include "../include/dbconnopen.php";
-	mysqli_query($cnnTRP, $add_attendance);
+	mysqli_query($cnnTRP, $add_attendance_sqlsafe);
 	include "../include/dbconnclose.php";
 ?>

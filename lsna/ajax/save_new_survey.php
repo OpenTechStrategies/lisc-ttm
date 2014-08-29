@@ -4,6 +4,52 @@ $date_reformat=explode('-', $_POST['date']);
         $save_date=$date_reformat[2] . '-'. $date_reformat[0] . '-'. $date_reformat[1];
         
 /* add a new survey: */
+include "../include/dbconnopen.php";
+$pre_post_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['pre_post']);
+$participant_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['participant']);
+$school_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['school']);
+$grade_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['grade']);
+$room_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['room']);
+$first_pm_year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['first_pm_year']);
+$num_children_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['num_children']);
+$marital_status_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['marital_status']);
+$place_birth_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['place_birth']);
+$years_in_il_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['years_in_il']);
+$current_classes_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['current_classes']);
+$currently_working_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['currently_working']);
+$current_job_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['current_job']);
+$monthly_income_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['monthly_income']);
+$food_stamps_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['food_stamps']);
+$rent_own_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['rent_own']);
+$rent_payment_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['rent_payment']);
+$A_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['A']);
+$B_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['B']);
+$C_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['C']);
+$D_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['D']);
+$E_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['E']);
+$F_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['F']);
+$G_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['G']);
+$H_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['H']);
+$I_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['I']);
+$J_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['J']);
+$K_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['K']);
+$L_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['L']);
+$M_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['M']);
+$N_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['N']);
+$O_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['O']);
+$P_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['P']);
+$Q_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['Q']);
+$R_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['R']);
+$Q1_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['Q1']);
+$R1_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['R1']);
+$S_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['S']);
+$T_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['T']);
+$U_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['U']);
+$V_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['V']);
+$W_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['W']);
+$X_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['X']);
+$survey_id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['survey_id']);
+
 if ($_POST['new_survey']==1){
     /* check that this isn't a duplicate survey. */
     
@@ -55,51 +101,51 @@ $save_survey_answers = "INSERT INTO Parent_Mentor_Survey (
 	Self_Efficacy_X)
     VALUES (
     
-    '" . $_POST['pre_post'] . "',
-	'" . $_POST['participant'] . "',
+    '" . $pre_post_sqlsafe . "',
+	'" . $participant_sqlsafe . "',
                    '" . $save_date . "',
-                   '" . $_POST['school'] . "',
-                   '" . $_POST['grade'] . "',
-                   '" . $_POST['room'] . "',
-                   '" . $_POST['first_pm_year'] . "',
-                   '" . $_POST['num_children'] . "',
-                   '" . $_POST['marital_status'] . "',
-                   '" . $_POST['place_birth'] . "',
-                   '" . $_POST['years_in_il'] . "',
-                   '" . $_POST['current_classes'] . "',
-                   '" . $_POST['currently_working'] . "',
-                   '" . $_POST['current_job'] . "',
-                   '" . $_POST['monthly_income'] . "',
-                   '" . $_POST['food_stamps'] . "',
-                   '" . $_POST['rent_own'] . "',
-                   '" . $_POST['rent_payment'] . "',
+                   '" . $school_sqlsafe . "',
+                   '" . $grade_sqlsafe . "',
+                   '" . $room_sqlsafe . "',
+                   '" . $first_pm_year_sqlsafe . "',
+                   '" . $num_children_sqlsafe . "',
+                   '" . $marital_status_sqlsafe . "',
+                   '" . $place_birth_sqlsafe . "',
+                   '" . $years_in_il_sqlsafe . "',
+                   '" . $current_classes_sqlsafe . "',
+                   '" . $currently_working_sqlsafe . "',
+                   '" . $current_job_sqlsafe . "',
+                   '" . $monthly_income_sqlsafe . "',
+                   '" . $food_stamps_sqlsafe . "',
+                   '" . $rent_own_sqlsafe . "',
+                   '" . $rent_payment_sqlsafe . "',
                        
-                   '" . $_POST['A'] . "',
-                   '" . $_POST['B'] . "',
-                   '" . $_POST['C'] . "',
-                   '" . $_POST['D'] . "',
-                   '" . $_POST['E'] . "',
-                   '" . $_POST['F'] . "',
-                   '" . $_POST['G'] . "',
-                   '" . $_POST['H'] . "',
-                   '" . $_POST['I'] . "',
-                   '" . $_POST['J'] . "',
-                   '" . $_POST['K'] . "',
-                   '" . $_POST['L'] . "',
-                   '" . $_POST['M'] . "',
-                   '" . $_POST['N'] . "',
-                   '" . $_POST['O'] . "',
-                   '" . $_POST['P'] . "',
-                   '" . $_POST['Q'] . "',
-                   '" . $_POST['R'] . "',
-				   '" . $_POST['Q1'] . "',
-				   '" . $_POST['R1'] . "',
-				   '" . $_POST['S'] . "',
-				   '" . $_POST['T'] . "',
-				   '" . $_POST['U'] . "',
-				   '" . $_POST['V'] . "',
-				   '" . $_POST['W'] . "',
-				   '" . $_POST['X'] . "')";
+                   '" . $A_sqlsafe . "',
+                   '" . $B_sqlsafe . "',
+                   '" . $C_sqlsafe . "',
+                   '" . $D_sqlsafe . "',
+                   '" . $E_sqlsafe . "',
+                   '" . $F_sqlsafe . "',
+                   '" . $G_sqlsafe . "',
+                   '" . $H_sqlsafe . "',
+                   '" . $I_sqlsafe . "',
+                   '" . $J_sqlsafe . "',
+                   '" . $K_sqlsafe . "',
+                   '" . $L_sqlsafe . "',
+                   '" . $M_sqlsafe . "',
+                   '" . $N_sqlsafe . "',
+                   '" . $O_sqlsafe . "',
+                   '" . $P_sqlsafe . "',
+                   '" . $Q_sqlsafe . "',
+                   '" . $R_sqlsafe . "',
+				   '" . $Q1_sqlsafe . "',
+				   '" . $R1_sqlsafe . "',
+				   '" . $S_sqlsafe . "',
+				   '" . $T_sqlsafe . "',
+				   '" . $U_sqlsafe . "',
+				   '" . $V_sqlsafe . "',
+				   '" . $W_sqlsafe . "',
+				   '" . $X_sqlsafe . "')";
 echo $save_survey_answers;
 include "../include/dbconnopen.php";
 mysqli_query($cnnLSNA, $save_survey_answers);
@@ -108,52 +154,52 @@ include "../include/dbconnclose.php";
 /* edit survey responses: */
 else {
 	$edit_survey = "UPDATE Parent_Mentor_Survey SET 
-	Pre_Post='" . $_POST['pre_post'] . "',
-	Participant_ID='" . $_POST['participant'] . "',
+	Pre_Post='" . $pre_post_sqlsafe . "',
+	Participant_ID='" . $participant_sqlsafe . "',
     Date='" . $save_date . "',
-    School='" . $_POST['school'] . "',
-    Grade='" . $_POST['grade'] . "',
-    Room_Number='" . $_POST['room'] . "',
-    First_Year_PM='" . $_POST['first_pm_year'] . "',
-    Number_Children='" . $_POST['num_children'] . "',
-    Marital_Status='" . $_POST['marital_status'] . "',
-    Place_Birth='" . $_POST['place_birth'] . "',
-    Years_In_IL='" . $_POST['years_in_il'] . "',
-    Classes_Taking='" . $_POST['current_classes'] . "',
-    Currently_Working='" . $_POST['currently_working'] . "',
-    Current_Job='" . $_POST['current_job'] . "',
-    Monthly_Income='" . $_POST['monthly_income'] . "',
-    On_Food_Stamps='" . $_POST['food_stamps'] . "',
-    Rent_Own='" . $_POST['rent_own'] . "',
-    Rent_Payment='" . $_POST['rent_payment'] . "',
-    Student_Involvement_A='" . $_POST['A'] . "',
-    Student_Involvement_B='" . $_POST['B'] . "',
-    Student_Involvement_C='" . $_POST['C'] . "',
-    Student_Involvement_D='" . $_POST['D'] . "',
-    Student_Involvement_E='" . $_POST['E'] . "',
-    Student_Involvement_F='" . $_POST['F'] . "',
-    Student_Involvement_G='" . $_POST['G'] . "',
-    Student_Involvement_H='" . $_POST['H'] . "',
-    School_Network_I='" . $_POST['I'] . "',
-    School_Network_J='" . $_POST['J'] . "',
-    School_Network_K='" . $_POST['K'] . "',
-    School_Network_L='" . $_POST['L'] . "',
-    School_Involvement_M='" . $_POST['M'] . "',
-    School_Involvement_N='" . $_POST['N'] . "',
-    School_Involvement_O='" . $_POST['O'] . "',
-    School_Involvement_P='" . $_POST['P'] . "',
-    School_Involvement_Q='" . $_POST['Q'] . "',
-    School_Involvement_R='" . $_POST['R'] . "',
-	Self_Efficacy_Q='" . $_POST['Q1'] . "',
-    Self_Efficacy_R='" . $_POST['R1'] . "',
-	Self_Efficacy_S='" . $_POST['S'] . "',
-    Self_Efficacy_T='" . $_POST['T'] . "',
-	Self_Efficacy_U='" . $_POST['U'] . "',
-    Self_Efficacy_V='" . $_POST['V'] . "',
-	Self_Efficacy_W='" . $_POST['W'] . "',
-    Self_Efficacy_X='" . $_POST['X'] . "'
+    School='" . $school_sqlsafe . "',
+    Grade='" . $grade_sqlsafe . "',
+    Room_Number='" . $room_sqlsafe . "',
+    First_Year_PM='" . $first_pm_year_sqlsafe . "',
+    Number_Children='" . $num_children_sqlsafe . "',
+    Marital_Status='" . $marital_status_sqlsafe . "',
+    Place_Birth='" . $place_birth_sqlsafe . "',
+    Years_In_IL='" . $years_in_il_sqlsafe . "',
+    Classes_Taking='" . $current_classes_sqlsafe . "',
+    Currently_Working='" . $currently_working_sqlsafe . "',
+    Current_Job='" . $current_job_sqlsafe . "',
+    Monthly_Income='" . $monthly_income_sqlsafe . "',
+    On_Food_Stamps='" . $food_stamps_sqlsafe . "',
+    Rent_Own='" . $rent_own_sqlsafe . "',
+    Rent_Payment='" . $rent_payment_sqlsafe . "',
+    Student_Involvement_A='" . $A_sqlsafe . "',
+    Student_Involvement_B='" . $B_sqlsafe . "',
+    Student_Involvement_C='" . $C_sqlsafe . "',
+    Student_Involvement_D='" . $D_sqlsafe . "',
+    Student_Involvement_E='" . $E_sqlsafe . "',
+    Student_Involvement_F='" . $F_sqlsafe . "',
+    Student_Involvement_G='" . $G_sqlsafe . "',
+    Student_Involvement_H='" . $H_sqlsafe . "',
+    School_Network_I='" . $I_sqlsafe . "',
+    School_Network_J='" . $J_sqlsafe . "',
+    School_Network_K='" . $K_sqlsafe . "',
+    School_Network_L='" . $L_sqlsafe . "',
+    School_Involvement_M='" . $M_sqlsafe . "',
+    School_Involvement_N='" . $N_sqlsafe . "',
+    School_Involvement_O='" . $O_sqlsafe . "',
+    School_Involvement_P='" . $P_sqlsafe . "',
+    School_Involvement_Q='" . $Q_sqlsafe . "',
+    School_Involvement_R='" . $R_sqlsafe . "',
+	Self_Efficacy_Q='" . $Q1_sqlsafe . "',
+    Self_Efficacy_R='" . $R1_sqlsafe . "',
+	Self_Efficacy_S='" . $S_sqlsafe . "',
+    Self_Efficacy_T='" . $T_sqlsafe . "',
+	Self_Efficacy_U='" . $U_sqlsafe . "',
+    Self_Efficacy_V='" . $V_sqlsafe . "',
+	Self_Efficacy_W='" . $W_sqlsafe . "',
+    Self_Efficacy_X='" . $X_sqlsafe . "'
 	
-	WHERE Parent_Mentor_Survey_ID='" . $_POST['survey_id'] . "'";
+	WHERE Parent_Mentor_Survey_ID='" . $survey_id_sqlsafe . "'";
 	
 	include "../include/dbconnopen.php";
 	echo $edit_survey;

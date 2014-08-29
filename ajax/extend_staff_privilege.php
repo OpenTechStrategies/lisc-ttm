@@ -1,4 +1,5 @@
 <?php
+
 require("../include/phpass-0.3/PasswordHash.php");
 $hasher=new PasswordHash(8, false);
 
@@ -14,18 +15,19 @@ if (strlen($hash)>=20){
     //echo $lisc_query;
     mysqli_query($cnnLISC, $lisc_query);
     $user_id = mysqli_insert_id($cnnLISC);
-    include "../include/dbconnclose.php";
 
     /*
      * Give new user privileges by site.
      */
-    $privileges_query = "INSERT INTO Users_Privileges (User_ID, Privilege_ID, 
-        Site_Privilege_ID, Program_Access)
-        VALUES ('" . $user_id . "', '" . $_POST['site'] . "', '" .
-        $_POST['level'] . "', '" . $_POST['program'] . "')";
-    //echo $privileges_query;
-    include "../include/dbconnopen.php";
-    mysqli_query($cnnLISC, $privileges_query);
+
+    $site_sqlsafe=mysqli_real_escape_string($cnnLISC, $_POST['site']);
+    $level_sqlsafe=mysqli_real_escape_string($cnnLISC, $_POST['level']);
+    $program_sqlsafe=  mysqli_real_escape_string($cnnLISC, $_POST['program']);
+
+    $privileges_query_sqlsafe = "INSERT INTO Users_Privileges (User_ID, Privilege_ID, Site_Privilege_ID, Program_Access)
+        VALUES ('" . $user_id_sqlsafe . "', '" . $site_sqlsafe . "', '" . $level_sqlsafe . "', '" . $program_sqlsafe . "')";
+
+    mysqli_query($cnnLISC, $privileges_query_sqlsafe);
     include "../include/dbconnclose.php";
 }
 else
@@ -36,4 +38,4 @@ else
 
 ?>
 <span style="color:#990000; font-weight:bold;">Thank you for adding 
-    <?echo $_POST['username'];?> to the database.</span>  
+    <?echo $username_sqlsafe;?> to the database.</span>  

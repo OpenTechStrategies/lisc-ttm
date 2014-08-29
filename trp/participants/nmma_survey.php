@@ -2,9 +2,9 @@
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker_simple.php";
-$participant_query = "SELECT * FROM Participants WHERE Participant_ID='" . $_GET['participant'] . "'";
 include "../include/dbconnopen.php";
-$get_participant = mysqli_query($cnnTRP, $participant_query);
+$participant_query_sqlsafe = "SELECT * FROM Participants WHERE Participant_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['participant']) . "'";
+$get_participant = mysqli_query($cnnTRP, $participant_query_sqlsafe);
 $parti = mysqli_fetch_array($get_participant);
 include "../include/dbconnclose.php";
 if (isset($_GET['survey'])) {
@@ -30,9 +30,9 @@ if (isset($_GET['survey'])) {
                 <option value=""></option>
                 <option value="0">-----</option>
                 <?php
-                $select_schools = "SELECT * FROM Schools ORDER BY School_Name";
+                $select_schools_sqlsafe = "SELECT * FROM Schools ORDER BY School_Name";
                 include "../include/dbconnopen.php";
-                $schools = mysqli_query($cnnTRP, $select_schools);
+                $schools = mysqli_query($cnnTRP, $select_schools_sqlsafe);
                 while ($school = mysqli_fetch_row($schools)) {
                     ?>
                     <option value="<?php echo $school[0]; ?>"><?php echo $school[1]; ?></option>

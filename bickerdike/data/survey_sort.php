@@ -37,12 +37,12 @@ include "../header.php";
 				<option value="">--------</option>
                                 <?
                                 //get all programs with related surveys
-                                $get_progs="SELECT DISTINCT Participant_Survey_Responses.Program_ID, Program_Name FROM Participant_Survey_Responses LEFT JOIN
+                                $get_progs_sqlsafe="SELECT DISTINCT Participant_Survey_Responses.Program_ID, Program_Name FROM Participant_Survey_Responses LEFT JOIN
                                     Programs ON Participant_Survey_Responses.Program_ID=Programs.Program_ID
                                     ORDER BY Program_Name;";
-                                echo $get_progs;
+                                echo $get_progs_sqlsafe;
                                 include "../include/dbconnopen.php";
-                                $roles = mysqli_query($cnnBickerdike, $get_progs);
+                                $roles = mysqli_query($cnnBickerdike, $get_progs_sqlsafe);
 					while ($role = mysqli_fetch_row($roles)) {
 					?>
 						<option value="<? echo $role[0]; ?>"><?echo $role[1]; ?></option>

@@ -21,9 +21,9 @@ include "reports_menu.php";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Campaign Id", "Campaign Name");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT * FROM Campaigns";
+                        $get_peoples_sqlsafe = "SELECT * FROM Campaigns";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -43,9 +43,9 @@ include "reports_menu.php";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Event Id", "Event Name", "Event Date", "Campaign ID", "Subcampaign", "Location", "Campaign Name");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Campaigns_Events.*, Campaigns.Campaign_Name FROM Campaigns_Events INNER JOIN Campaigns ON Campaigns_Events.Campaign_ID=Campaigns.Campaign_ID";
+                        $get_peoples_sqlsafe = "SELECT Campaigns_Events.*, Campaigns.Campaign_Name FROM Campaigns_Events INNER JOIN Campaigns ON Campaigns_Events.Campaign_ID=Campaigns.Campaign_ID";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -67,13 +67,13 @@ include "reports_menu.php";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Campaign/Institution Id", "Institution ID", "Campaign ID", "Campaign Name", "Institution Name");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Campaigns_Institutions.*, Campaign_Name, Institution_Name
+                        $get_peoples_sqlsafe = "SELECT Campaigns_Institutions.*, Campaign_Name, Institution_Name
                                         FROM
                                             Campaigns_Institutions
                                         INNER JOIN Campaigns ON Campaigns_Institutions.Campaign_Id = Campaigns.Campaign_ID
                                         INNER JOIN Institutions ON Campaigns_Institutions.Institution_Id = Institutions.Institution_ID";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -93,9 +93,9 @@ include "reports_menu.php";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Household Id", "Household Name");
                         fputcsv($fp, $title_array);
-                        $get_houses = "SELECT * FROM Households";
+                        $get_houses_sqlsafe = "SELECT * FROM Households";
                         include "../include/dbconnopen.php";
-                        $house_info = mysqli_query($cnnSWOP, $get_houses);
+                        $house_info = mysqli_query($cnnSWOP, $get_houses_sqlsafe);
                         while ($house_array = mysqli_fetch_row($house_info)) {
                             fputcsv($fp, $house_array);
                         }
@@ -114,9 +114,9 @@ include "reports_menu.php";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Link Id", "Household ID", "Participant ID", "Head of Household (1=Y, 2=No)");
                         fputcsv($fp, $title_array);
-                        $get_houses = "SELECT * FROM Households_Participants";
+                        $get_houses_sqlsafe = "SELECT * FROM Households_Participants";
                         include "../include/dbconnopen.php";
-                        $house_info = mysqli_query($cnnSWOP, $get_houses);
+                        $house_info = mysqli_query($cnnSWOP, $get_houses_sqlsafe);
                         while ($house_array = mysqli_fetch_row($house_info)) {
                             fputcsv($fp, $house_array);
                         }
@@ -134,12 +134,12 @@ include "reports_menu.php";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Household Name", "First Name", "Last Name");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Household_Name, Name_First, Name_Last FROM Households INNER JOIN Households_Participants 
+                        $get_peoples_sqlsafe = "SELECT Household_Name, Name_First, Name_Last FROM Households INNER JOIN Households_Participants 
                                         ON New_Household_ID=Household_ID
                                         INNER JOIN Participants ON
                                         Households_Participants.Participant_ID=Participants.Participant_ID;";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -160,14 +160,14 @@ include "reports_menu.php";
                         $title_array = array("Institution Id", "Institution Name", "Block Group", "Institution Type",
                             "Contact Person (Database ID)", "Date Added");
                         fputcsv($fp, $title_array);
-                        $get_insts = "SELECT Institution_ID, Institution_Name, Block_Group, Type_Name,
+                        $get_insts_sqlsafe = "SELECT Institution_ID, Institution_Name, Block_Group, Type_Name,
                                     Contact_Person, Date_Added
                                     FROM
                                         Institutions
                                     LEFT JOIN Institution_Types ON Institution_Type = Type_ID";
                         //echo $get_insts;
                         include "../include/dbconnopen.php";
-                        $inst_info = mysqli_query($cnnSWOP, $get_insts);
+                        $inst_info = mysqli_query($cnnSWOP, $get_insts_sqlsafe);
                         while ($inst_array = mysqli_fetch_row($inst_info)) {
                             /* $this_address= $inst_array[2] ." ". $inst_array[3] . " " . $inst_array[4] . " " . $inst_array[5];
                               $block_group=do_it_all($this_address, $map);
@@ -189,13 +189,13 @@ include "reports_menu.php";
                         $title_array = array("Institution Id", "Institution Name", "Street Number", "Street Direction", "Street Name", "Street Type", "Block Group", "Institution Type",
                             "Phone", "Contact Person (Database ID)", "Date Added", "Institution Type Name", "Contact Person (First Name)", "Contact Person (Last Name)");
                         fputcsv($fp, $title_array);
-                        $get_insts = "SELECT Institutions.*, (Institution_Types.Type_Name) AS Institution_Type_Name, Name_First, Name_Last
+                        $get_insts_sqlsafe = "SELECT Institutions.*, (Institution_Types.Type_Name) AS Institution_Type_Name, Name_First, Name_Last
                                     FROM
                                         Institutions
                                     LEFT JOIN Participants ON Contact_Person = Participant_ID
                                     LEFT JOIN Institution_Types ON Institution_Types.Type_ID = Institutions.Institution_Type";
                         include "../include/dbconnopen.php";
-                        $inst_info = mysqli_query($cnnSWOP, $get_insts);
+                        $inst_info = mysqli_query($cnnSWOP, $get_insts_sqlsafe);
                         while ($inst_array = mysqli_fetch_row($inst_info)) {
                             fputcsv($fp, $inst_array);
                         }
@@ -216,9 +216,9 @@ include "reports_menu.php";
                         $title_array = array("Link ID", "Institution ID", "Participant ID", "Is Primary? (1=Yes, 0=No)",
                             "Individual Connection (Participant ID)", "Connection Reason", "Date Added", "Activity Type");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT * FROM Institutions_Participants";
+                        $get_peoples_sqlsafe = "SELECT * FROM Institutions_Participants";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -239,7 +239,7 @@ include "reports_menu.php";
                             "Individual Connection First Name", "Individual Connection Last Name",
                             "Connection Reason");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Institutions_Participants_ID, Institutions.Institution_ID, Institutions.Institution_Name,
+                        $get_peoples_sqlsafe = "SELECT Institutions_Participants_ID, Institutions.Institution_ID, Institutions.Institution_Name,
     person.Participant_ID, person.Name_First, person.Name_Last,
     Is_Primary, connection.Participant_ID, connection.Name_First, connection.Name_Last, Connection_Reason
     FROM Institutions_Participants
@@ -248,7 +248,7 @@ include "reports_menu.php";
     LEFT JOIN Participants AS connection ON connection.Participant_ID=Individual_Connection";
 //echo $get_peoples;
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -270,12 +270,12 @@ include "reports_menu.php";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Leadership Development ID", "Participant ID", "Date", "Leadership Detail Achieved");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Leadership_Development_ID, Participant_ID, Date, Leadership_Detail_Name
+                        $get_peoples_sqlsafe = "SELECT Leadership_Development_ID, Participant_ID, Date, Leadership_Detail_Name
                         FROM Leadership_Development
                         INNER JOIN Leadership_Development_Details
                         ON Detail_ID= Leadership_Development_Detail_ID;";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -295,13 +295,13 @@ include "reports_menu.php";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Leadership Development ID", "Participant ID", "First Name", "Last Name", "Date", "Leadership Detail Achieved");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Leadership_Development_ID, Leadership_Development.Participant_ID, Name_First, Name_Last, Date, Leadership_Detail_Name
+                        $get_peoples_sqlsafe = "SELECT Leadership_Development_ID, Leadership_Development.Participant_ID, Name_First, Name_Last, Date, Leadership_Detail_Name
                         FROM Leadership_Development
                         INNER JOIN Leadership_Development_Details
                         ON Detail_ID= Leadership_Development_Detail_ID
                         INNER JOIN Participants ON Leadership_Development.Participant_ID=Participants.Participant_ID;";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -323,7 +323,7 @@ include "reports_menu.php";
                             "Speaks Other? (1=Yes 0=No)", "Ward", "Other_Lang_Specify",
                             "Primary_Organizer ID", " First_Interaction_Date", "ITIN Yes/No", "Date_Added", "Property ID", "Block Group");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Participants.Participant_ID, Education_Level, Gender, Lang_Eng, Lang_Span, Lang_Other, 
+                        $get_peoples_sqlsafe = "SELECT Participants.Participant_ID, Education_Level, Gender, Lang_Eng, Lang_Span, Lang_Other, 
     Ward, Other_Lang_Specify, Primary_Organizer, First_Interaction_Date, ITIN, Date_Added, Properties.Property_ID,
    Properties.Block_Group
     
@@ -333,7 +333,7 @@ include "reports_menu.php";
             GROUP BY Participants.Participant_ID ORDER BY Name_Last;";
 //echo $get_peoples;
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             /* $this_address= $people_array[13] ." ". $people_array[14] . " " . $people_array[15] . " " . $people_array[16];
                               //echo $this_address;
@@ -362,7 +362,7 @@ include "reports_menu.php";
                             "Primary Organizer Last Name", "Property ID", "Street Number", "Street Direction", "Street Name",
                             "Street Type");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Participants.Participant_ID, Participants.Name_First, 
+                        $get_peoples_sqlsafe = "SELECT Participants.Participant_ID, Participants.Name_First, 
     Participants.Name_Last, Participants.Phone_Day, Participants.Phone_Evening, Participants.Education_Level, Participants.Email, Participants.Gender, Participants.Date_of_Birth,
     Participants.Lang_Eng, Participants.Lang_Span, Participants.Lang_Other, 
     Participants.Ward, Participants.Other_Lang_Specify, Participants.Notes, Participants.Primary_Organizer, Participants.First_Interaction_Date, Participants.ITIN, 
@@ -375,7 +375,7 @@ include "reports_menu.php";
         LEFT JOIN Properties ON Properties.Property_Id=Participants_Properties.Property_ID
             GROUP BY Participants.Participant_ID ORDER BY Participants.Name_Last;";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -406,7 +406,7 @@ include "reports_menu.php";
                         $title_array = array("Pool Status Change ID", "Active", "Participant ID", "Date Changed",
                                     "Activity Type", "Member Type", "Expected Date");
                         fputcsv($fp, $title_array);
-                        $get_pool_status_changes = "SELECT Pool_Status_Changes.Pool_Status_Change_ID,
+                        $get_pool_status_changes_sqlsafe = "SELECT Pool_Status_Changes.Pool_Status_Change_ID,
                                                         Reports__Active.Value AS Active,
                                                         Pool_Status_Changes.Participant_ID,
                                                         Pool_Status_Changes.Date_Changed,
@@ -421,7 +421,7 @@ include "reports_menu.php";
                                         LEFT JOIN Reports__Active ON Pool_Status_Changes.Active = Reports__Active.ID";
                         //echo $get_peoples;
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_pool_status_changes);
+                        $people_info = mysqli_query($cnnSWOP, $get_pool_status_changes_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             /* $this_address= $people_array[13] ." ". $people_array[14] . " " . $people_array[15] . " " . $people_array[16];
                               //echo $this_address;
@@ -447,7 +447,7 @@ include "reports_menu.php";
                         $title_array = array("Pool Status Change ID", "Active", "Participant ID", "First Name",
                                     "Last Name", "Date Changed", "Activity Type", "Member Type", "Expected Date");
                         fputcsv($fp, $title_array);
-                        $get_pool_status_changes = "SELECT Pool_Status_Changes.Pool_Status_Change_ID,
+                        $get_pool_status_changes_sqlsafe = "SELECT Pool_Status_Changes.Pool_Status_Change_ID,
                                                         Reports__Active.Value AS Active,
                                                         Pool_Status_Changes.Participant_ID,
                                                         Participants.Name_First,
@@ -463,7 +463,7 @@ include "reports_menu.php";
                                         LEFT JOIN Pool_Member_Types ON Pool_Status_Changes.Member_Type = Pool_Member_Types.Type_ID
                                         LEFT JOIN Reports__Active ON Pool_Status_Changes.Active = Reports__Active.ID";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_pool_status_changes);
+                        $people_info = mysqli_query($cnnSWOP, $get_pool_status_changes_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -496,7 +496,7 @@ include "reports_menu.php";
                                     "Benchmark Info", "Date Completed", "Activity Type", "Expected Date",
                                     "More Info");
                         fputcsv($fp, $title_array);
-                        $get_pool_movement = "SELECT Pool_Progress.Pool_Progress_ID,
+                        $get_pool_movement_sqlsafe = "SELECT Pool_Progress.Pool_Progress_ID,
                                                             Pool_Progress.Participant_ID,
                                                             Pool_Benchmarks.Benchmark_Name,
                                                             Pool_Benchmarks.Benchmark_Info,
@@ -512,7 +512,7 @@ include "reports_menu.php";
                                             LEFT JOIN Pool_Benchmarks ON Pool_Progress.Benchmark_Completed = Pool_Benchmarks.Pool_Benchmark_ID";
                         //echo $get_peoples;
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_pool_movement);
+                        $people_info = mysqli_query($cnnSWOP, $get_pool_movement_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             /* $this_address= $people_array[13] ." ". $people_array[14] . " " . $people_array[15] . " " . $people_array[16];
                               //echo $this_address;
@@ -539,7 +539,7 @@ include "reports_menu.php";
                                     "Benchmark Name", "Benchmark Info", "Date Completed", "Activity Type",
                                     "Expected Date", "More Info");
                         fputcsv($fp, $title_array);
-                        $get_pool_movement = "SELECT Pool_Progress.Pool_Progress_ID,
+                        $get_pool_movement_sqlsafe = "SELECT Pool_Progress.Pool_Progress_ID,
                                                             Pool_Progress.Participant_ID,
                                                             Participants.Name_First,
                                                             Participants.Name_Last,
@@ -556,7 +556,7 @@ include "reports_menu.php";
                                             LEFT JOIN Reports__Activity_Type ON Pool_Progress.Activity_Type = Reports__Activity_Type.ID
                                             LEFT JOIN Pool_Benchmarks ON Pool_Progress.Benchmark_Completed = Pool_Benchmarks.Pool_Benchmark_ID";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_pool_movement);
+                        $people_info = mysqli_query($cnnSWOP, $get_pool_movement_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -583,9 +583,9 @@ include "reports_menu.php";
                         $title_array = array("Link ID", "Event ID", "Participant ID",
                                 "Role Type (1=Attendee; 2=Speaker; 3=Chairperson; 4=Prep work; 5=Staff)", "Exceptional");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT * FROM Participants_Events";
+                        $get_peoples_sqlsafe = "SELECT * FROM Participants_Events";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -604,12 +604,12 @@ include "reports_menu.php";
                         $title_array = array("Link ID", "Event ID", "Participant ID", "Role Type (1=Attendee; 2=Speaker; 3=Chairperson; 4=Prep work; 5=Staff)",
                             "Attendee First Name", "Attendee Last Name");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Participants_Events.*, Name_First, Name_Last
+                        $get_peoples_sqlsafe = "SELECT Participants_Events.*, Name_First, Name_Last
                                         FROM
                                             Participants_Events
                                         INNER JOIN Participants ON Participants_Events.Participant_ID = Participants.Participant_ID";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -629,9 +629,9 @@ include "reports_menu.php";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Link ID", "Participant ID", "Leader Type", "Date Logged", "Activity Type");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT * FROM Participants_Leaders";
+                        $get_peoples_sqlsafe = "SELECT * FROM Participants_Leaders";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -650,9 +650,9 @@ include "reports_menu.php";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Link ID", "Participant ID", "Leader Type", "Date Logged", "Activity Type", "First Name", "Last Name");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Participants_Leaders.*, Name_First, Name_Last FROM Participants_Leaders INNER JOIN Participants ON Participants_Leaders.Participant_Id=Participants.Participant_ID";
+                        $get_peoples_sqlsafe = "SELECT Participants_Leaders.*, Name_First, Name_Last FROM Participants_Leaders INNER JOIN Participants ON Participants_Leaders.Participant_Id=Participants.Participant_ID";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -675,7 +675,7 @@ include "reports_menu.php";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Pool ID", "Participant ID", "Date Logged", "Pool Member Type", "Block Group");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Participant_Pool_ID, Participants_Pool.Participant_ID, Date_Logged, Type_Name, 
+                        $get_peoples_sqlsafe = "SELECT Participant_Pool_ID, Participants_Pool.Participant_ID, Date_Logged, Type_Name, 
                         Properties.Block_Group
                         FROM Participants_Pool LEFT JOIN Pool_Member_Types ON Type=Type_ID
                         LEFT JOIN Participants_Properties ON (Participants_Pool.Participant_ID=
@@ -684,7 +684,7 @@ include "reports_menu.php";
                         GROUP BY Participants_Pool.Participant_ID;";
                         //echo $get_peoples;
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             /* $this_address= $people_array[4] ." ". $people_array[5] . " " . $people_array[6] . " " . $people_array[7];
                               $block_group=do_it_all($this_address, $map);
@@ -708,12 +708,12 @@ include "reports_menu.php";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Pool ID", "Participant ID", "Date Logged", "Pool Member Type", "Date Logged", "Type Name");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Participant_Pool_ID, Participants_Pool.Participant_ID, Name_First, Name_Last, Date_Logged, Type_Name
+                        $get_peoples_sqlsafe = "SELECT Participant_Pool_ID, Participants_Pool.Participant_ID, Name_First, Name_Last, Date_Logged, Type_Name
                         FROM Participants_Pool INNER JOIN Pool_Member_Types
                         ON Type=Type_ID
                         INNER JOIN Participants ON Participants_Pool.Participant_Id=Participants.Participant_ID;";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -734,10 +734,10 @@ include "reports_menu.php";
                         $title_array = array("Link ID", "Participant ID", "Property ID", "Date Linked", "Unit Number", "Rent or Own", "Start Date",
                             "End Date", "Primary Residence", "Start as Primary", "End as Primary", "Reason Ended", "Block Group");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Participants_Properties.*,  Properties.Block_Group FROM Participants_Properties 
+                        $get_peoples_sqlsafe = "SELECT Participants_Properties.*,  Properties.Block_Group FROM Participants_Properties 
         LEFT JOIN Properties ON Properties.Property_Id=Participants_Properties.Property_ID";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             /*  $this_address= $people_array[12] ." ". $people_array[13] . " " . $people_array[14] . " " . $people_array[15];
                               $block_group=do_it_all($this_address, $map);
@@ -761,13 +761,13 @@ include "reports_menu.php";
                             "End Date", "Primary Residence", "Start as Primary", "End as Primary", "Reason Ended", "First Name", "Last Name",
                             "Address Number", "Address Direction", "Address Street", "Address STreet Type");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Participants_Properties.*, Name_First, Name_Last, Properties.Address_Street_Num, Properties.Address_Street_Direction,
+                        $get_peoples_sqlsafe = "SELECT Participants_Properties.*, Name_First, Name_Last, Properties.Address_Street_Num, Properties.Address_Street_Direction,
     Properties.Address_Street_Name, Properties.Address_Street_Type FROM Participants_Properties 
     INNER JOIN Participants on Participants_Properties.Participant_Id=Participants.PARTICIPANT_ID
     INNER JOIN Properties on Properties.Property_Id=Participants_Properties.Property_ID";
 //echo $get_peoples;
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -786,9 +786,9 @@ include "reports_menu.php";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Link ID", "Participant ID", "Employer Name", "Work Time", "Date Logged");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT * FROM Pool_Employers";
+                        $get_peoples_sqlsafe = "SELECT * FROM Pool_Employers";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -807,12 +807,12 @@ include "reports_menu.php";
                         $title_array = array("First Name", "Last Name", "Link ID (Pool Employer ID)",
                                     "Participant ID", "Employer Name", "Work Time", "Date Logged");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Name_First, Name_Last, Pool_Employers.*
+                        $get_peoples_sqlsafe = "SELECT Name_First, Name_Last, Pool_Employers.*
                                         FROM
                                             Pool_Employers
                                         INNER JOIN Participants ON Participants.Participant_ID = Pool_Employers.Participant_ID";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -834,9 +834,9 @@ include "reports_menu.php";
                             "Household Location (1=In TTM Area; 2=Outside TTM but in SWOP; 3=Outside TTM and SWOP; 4=N/A)", "Housing Cost", "Employment", "Assets",
                             "Date Logged");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT * FROM Pool_Finances";
+                        $get_peoples_sqlsafe = "SELECT * FROM Pool_Finances";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -856,10 +856,10 @@ include "reports_menu.php";
                             "Household Location (1=In TTM Area; 2=Outside TTM but in SWOP; 3=Outside TTM and SWOP; 4=N/A)", "Housing Cost", "Employment", "Assets",
                             "Date Logged", "First Name", "Last Name");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Pool_Finances.*, Name_First, Name_Last FROM Pool_Finances
+                        $get_peoples_sqlsafe = "SELECT Pool_Finances.*, Name_First, Name_Last FROM Pool_Finances
     INNER JOIN Participants ON Participants.Participant_ID=Pool_Finances.Participant_ID";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -879,13 +879,13 @@ include "reports_menu.php";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Participant ID", "Outcome Name", "Date Exited", "Outcome Location");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Participant_ID, Outcome_Name, Date_Exited,  Outcome_Location_Name
+                        $get_peoples_sqlsafe = "SELECT Participant_ID, Outcome_Name, Date_Exited,  Outcome_Location_Name
 FROM Pool_Outcomes INNER JOIN Outcomes_for_Pool
 ON Pool_Outcomes.Outcome_ID=Outcomes_for_Pool.Outcome_ID
 INNER JOIN Outcome_Locations 
 ON Outcome_Location=Outcome_Location_ID;";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -903,14 +903,14 @@ ON Outcome_Location=Outcome_Location_ID;";
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Participant ID", "First Name", "Last Name", "Outcome Name", "Date Exited", "Outcome Location");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Pool_Outcomes.Participant_ID, Name_First, Name_Last, Outcome_Name, Date_Exited, Outcome_Location_Name
+                        $get_peoples_sqlsafe = "SELECT Pool_Outcomes.Participant_ID, Name_First, Name_Last, Outcome_Name, Date_Exited, Outcome_Location_Name
 FROM Pool_Outcomes 
 INNER JOIN Outcomes_for_Pool ON Pool_Outcomes.Outcome_ID=Outcomes_for_Pool.Outcome_ID
 INNER JOIN Outcome_Locations ON Outcome_Location=Outcome_Location_ID
 INNER JOIN Participants ON Participants.Participant_Id=Pool_Outcomes.Participant_ID;";
 //echo $get_peoples;
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -930,10 +930,10 @@ INNER JOIN Participants ON Participants.Participant_Id=Pool_Outcomes.Participant
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Participant ID", "Date Completed", "Activity Type", "Benchmark Name");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Participant_ID, Date_Completed, Activity_Type,
+                        $get_peoples_sqlsafe = "SELECT Participant_ID, Date_Completed, Activity_Type,
 Benchmark_Name FROM Pool_Progress INNER JOIN Pool_Benchmarks ON Benchmark_Completed=Pool_Benchmark_ID;";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -952,14 +952,14 @@ Benchmark_Name FROM Pool_Progress INNER JOIN Pool_Benchmarks ON Benchmark_Comple
                         $fp = fopen($infile, "w") or die('can\'t open file');
                         $title_array = array("Month", "Day", "Year", "First Name", "Last Name", "Benchmark Completed", "Organizer First Name", "Organizer Last Name");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT MONTH(Pool_Progress.Date_Completed), DAY(Pool_Progress.Date_Completed), YEAR(Pool_Progress.Date_Completed),
+                        $get_peoples_sqlsafe = "SELECT MONTH(Pool_Progress.Date_Completed), DAY(Pool_Progress.Date_Completed), YEAR(Pool_Progress.Date_Completed),
 Participants.Name_First, Participants.Name_Last, Pool_Benchmarks.Benchmark_Name,
 organizer.Name_First, organizer.Name_Last
 FROM Pool_Progress INNER JOIN Participants ON Pool_Progress.Participant_ID=Participants.Participant_ID
 INNER JOIN Pool_Benchmarks ON Pool_Benchmark_ID=Benchmark_Completed
 INNER JOIN Participants AS organizer ON Participants.Primary_Organizer=organizer.Participant_ID;";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -982,9 +982,9 @@ INNER JOIN Participants AS organizer ON Participants.Primary_Organizer=organizer
                         $title_array = array("Change ID", "1=Active; 0=Inactive", "Participant ID",
                                 "Date Changed", "Activity Type", "Member Type", "Expected Date");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT * FROM Pool_Status_Changes;";
+                        $get_peoples_sqlsafe = "SELECT * FROM Pool_Status_Changes;";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -1008,10 +1008,10 @@ INNER JOIN Participants AS organizer ON Participants.Primary_Organizer=organizer
                                         "First_Interaction_Date", "ITIN", "Date_Added", "Activity_Type");
                         
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT * FROM Pool_Status_Changes
+                        $get_peoples_sqlsafe = "SELECT * FROM Pool_Status_Changes
                             INNER JOIN Participants ON Participants.Participant_Id = Pool_Status_Changes.Participant_ID;";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -1032,12 +1032,12 @@ INNER JOIN Participants AS organizer ON Participants.Primary_Organizer=organizer
                         $title_array = array("Property ID", "Disposition ID", "Disposition Name", "Construction Type (4=Brick/Masonry; 5=Frame)",
                             "Home Size (1=Single-family; 2=2/3 flat; 3=Multi-unit)", "Date Entered", "Property Type (1=Residential; 2=Commercial; 3=Mixed-use)", "Block Group");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Property_ID,
+                        $get_peoples_sqlsafe = "SELECT Property_ID,
     Disposition, Disposition_Name, Construction_Type, Home_Size, Date_Entered, Property_Type, Block_Group
     
     FROM Properties LEFT JOIN Property_Dispositions ON Disposition=Disposition_ID;";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             /* $this_address= $people_array[1] ." ". $people_array[2] . " " . $people_array[3] . " " . $people_array[4];
                               $block_group=do_it_all($this_address, $map);
@@ -1062,12 +1062,12 @@ INNER JOIN Participants AS organizer ON Participants.Primary_Organizer=organizer
                             "Home Size (1=Single-family; 2=2/3 flat; 3=Multi-unit)", "Date Entered", "Property Type  (1=Residential; 2=Commercial; 3=Mixed-use)",
                             "Disposition Name");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Property_ID, Address_Street_Num,  Address_Street_Direction, Address_Street_Name,
+                        $get_peoples_sqlsafe = "SELECT Property_ID, Address_Street_Num,  Address_Street_Direction, Address_Street_Name,
 Address_Street_Type, PIN, Construction_Type, Home_Size, Date_Entered, Property_Type, Disposition_Name
 FROM Properties LEFT JOIN Property_Dispositions ON Disposition=Disposition_ID;";
 
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }
@@ -1110,12 +1110,12 @@ All Property Markers Over Time
                         $title_array = array("Progress ID", "Date Added", "Marker ID", "Additional 1", "Additional 2", "Additional 3",
                             "Additional 4", "Property ID", "Notes", "Property Marker Name", "Block Group");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Property_Progress.*, Property_Marker_Name, Block_Group
+                        $get_peoples_sqlsafe = "SELECT Property_Progress.*, Property_Marker_Name, Block_Group
     FROM Property_Progress
     LEFT JOIN Property_Marker_Names ON Marker=Property_Marker_Name_ID
     LEFT JOIN Properties ON Property_Progress.Property_Id=Properties.Property_ID;";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             /* $this_address= $people_array[10] ." ". $people_array[11] . " " . $people_array[12] . " " . $people_array[13];
                               $block_group=do_it_all($this_address, $map);
@@ -1139,12 +1139,12 @@ All Property Markers Over Time
                             "Additional 4", "Property ID", "Notes", "Property Marker Name", "Street Number", "Street Direction", "Street Name",
                             "Street Type");
                         fputcsv($fp, $title_array);
-                        $get_peoples = "SELECT Property_Progress.*, Property_Marker_Name, Properties.Address_Street_Num, Properties.Address_Street_Direction,
+                        $get_peoples_sqlsafe = "SELECT Property_Progress.*, Property_Marker_Name, Properties.Address_Street_Num, Properties.Address_Street_Direction,
     Properties.Address_Street_Name, Properties.Address_Street_Type
 FROM Property_Progress  LEFT JOIN Property_Marker_Names ON Marker=Property_Marker_Name_ID
 INNER JOIN Properties ON Property_Progress.Property_ID=Properties.Property_ID;";
                         include "../include/dbconnopen.php";
-                        $people_info = mysqli_query($cnnSWOP, $get_peoples);
+                        $people_info = mysqli_query($cnnSWOP, $get_peoples_sqlsafe);
                         while ($people_array = mysqli_fetch_row($people_info)) {
                             fputcsv($fp, $people_array);
                         }

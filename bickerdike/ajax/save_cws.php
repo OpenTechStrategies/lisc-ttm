@@ -5,7 +5,25 @@
  * the baseline over time in the same place that they track their own data over time.
  */
 
-$cws_query = "INSERT INTO Community_Wellness_Survey_Aggregates(
+include "../include/dbconnopen.php";
+
+$date_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['date']);
+$fifteen_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['fifteen']);
+$twenty_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['twenty']);
+$twenty_one_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['twenty_one']);
+$twenty_four_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['twenty_four']);
+$twenty_nine_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['twenty_nine']);
+$thirty_one_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['thirty_one']);
+$thirty_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['thirty']);
+$thirty_two_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['thirty_two']);
+$sixty_nine_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['sixty_nine']);
+$seventy_two_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['seventy_two']);
+$ninety_one_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['ninety_one']);
+$forty_one_a_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['forty_one_a']);
+$forty_one_b_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['forty_one_b']);
+$forty_four_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['forty_four']);
+
+$cws_query_sqlsafe = "INSERT INTO Community_Wellness_Survey_Aggregates(
                 Date_Administered,
                 Question_15_CWS,
                 Question_20_CWS,
@@ -22,23 +40,22 @@ $cws_query = "INSERT INTO Community_Wellness_Survey_Aggregates(
                 Question_41_b_CWS,
                 Question_44_CWS)
                 VALUES (
-                '" . $_POST['date'] ."',
-                '" . $_POST['fifteen'] ."',
-                '" . $_POST['twenty'] ."',
-                '" . $_POST['twenty_one'] ."',
-                '" . $_POST['twenty_four'] ."',
-                '" . $_POST['twenty_nine'] ."',
-                '" . $_POST['thirty_one'] ."',
-                '" . $_POST['thirty'] ."',
-                '" . $_POST['thirty_two'] ."',
-                '" . $_POST['sixty_nine'] ."',
-                '" . $_POST['seventy_two'] ."',
-                '" . $_POST['ninety_one'] ."',
-                '" . $_POST['forty_one_a'] ."',
-                '" . $_POST['forty_one_b'] ."',
-                '" . $_POST['forty_four'] ."')";
-echo $cws_query;
-include "../include/dbconnopen.php";
-mysqli_query($cnnBickerdike, $cws_query);
+                '" . $date_sqlsafe ."',
+                '" . $fifteen_sqlsafe ."',
+                '" . $twenty_sqlsafe ."',
+                '" . $twenty_one_sqlsafe ."',
+                '" . $twenty_four_sqlsafe ."',
+                '" . $twenty_nine_sqlsafe ."',
+                '" . $thirty_one_sqlsafe ."',
+                '" . $thirty_sqlsafe ."',
+                '" . $thirty_two_sqlsafe ."',
+                '" . $sixty_nine_sqlsafe ."',
+                '" . $seventy_two_sqlsafe ."',
+                '" . $ninety_one_sqlsafe ."',
+                '" . $forty_one_a_sqlsafe ."',
+                '" . $forty_one_b_sqlsafe ."',
+                '" . $forty_four_sqlsafe ."')";
+echo $cws_query_sqlsafe;
+mysqli_query($cnnBickerdike, $cws_query_sqlsafe);
 include "../include/dbconnclose.php";
 ?>

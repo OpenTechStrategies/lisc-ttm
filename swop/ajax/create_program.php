@@ -1,11 +1,11 @@
 <?php
 /* add a new campaign: */
-    $make_campaign="INSERT INTO Campaigns (
-                Campaign_Name) VALUES(
-                '" . $_POST['name'] ."')";
-    //echo $make_campaign;
     include "../include/dbconnopen.php";
-    mysqli_query($cnnSWOP, $make_campaign);
+    $make_campaign_sqlsafe="INSERT INTO Campaigns (
+                Campaign_Name) VALUES(
+                '" . mysqli_real_escape_string($cnnSWOP, $_POST['name']) ."')";
+    //echo $make_campaign;
+    mysqli_query($cnnSWOP, $make_campaign_sqlsafe);
     $id= mysqli_insert_id($cnnSWOP);
     include "../include/dbconnclose.php";
 

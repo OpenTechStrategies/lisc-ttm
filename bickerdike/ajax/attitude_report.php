@@ -47,7 +47,8 @@ Choose adult, parent, or youth results:
 //print_r($_POST);
 
 include "../include/dbconnopen.php";
-    $get_pre_averages = mysqli_query($cnnBickerdike, "CALL get_aggregate_survey_results('" . $_POST['type'] . "', 1)");
+$type_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['type']);
+    $get_pre_averages = mysqli_query($cnnBickerdike, "CALL get_aggregate_survey_results('" . $type_sqlsafe . "', 1)");
     $pre = array();
     while ($pre_averages = mysqli_fetch_array($get_pre_averages)){
         $pre[0] =$pre_averages['AVG(Question_2)'];
@@ -56,7 +57,7 @@ include "../include/dbconnopen.php";
     }
     include "../include/dbconnclose.php";
     include "../include/dbconnopen.php";
-    $get_post_averages = mysqli_query($cnnBickerdike, "CALL get_aggregate_survey_results('" . $_POST['type'] ."', 2)");
+    $get_post_averages = mysqli_query($cnnBickerdike, "CALL get_aggregate_survey_results('" . $type_sqlsafe ."', 2)");
     $post = array();
     while ($post_averages = mysqli_fetch_array($get_post_averages)){
         $post[0]  = $post_averages['AVG(Question_2)'];
@@ -64,7 +65,7 @@ include "../include/dbconnopen.php";
         $post[2] = $post_averages['AVG(Question_9_B)'];
     }
     include "../include/dbconnopen.php";
-    $get_later_averages = mysqli_query($cnnBickerdike, "CALL get_aggregate_survey_results('" . $_POST['type'] ."', 3)");
+    $get_later_averages = mysqli_query($cnnBickerdike, "CALL get_aggregate_survey_results('" . $type_sqlsafe ."', 3)");
     $later = array();
     while ($later_averages = mysqli_fetch_array($get_later_averages)){
         $later[0] = $later_averages['AVG(Question_2)'];
@@ -73,13 +74,14 @@ include "../include/dbconnopen.php";
     }
     include "../include/dbconnclose.php";
         include "../include/dbconnopen.php";
+        $year_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['year']);
         if ($_POST['year'] != 'avg'){
-        $query = "SELECT Question_15_CWS, Question_41_a_CWS, Question_41_b_CWS FROM Community_Wellness_Survey_Aggregates WHERE Community_Wellness_Survey_ID='" . $_POST['year']. "'";
+        $query_sqlsafe = "SELECT Question_15_CWS, Question_41_a_CWS, Question_41_b_CWS FROM Community_Wellness_Survey_Aggregates WHERE Community_Wellness_Survey_ID='" . $year_sqlsafe. "'";
         }
         else{
-            $query = "SELECT AVG(Question_15_CWS), AVG(Question_41_a_CWS), AVG(Question_41_b_CWS) FROM Community_Wellness_Survey_Aggregates";
+            $query_sqlsafe = "SELECT AVG(Question_15_CWS), AVG(Question_41_a_CWS), AVG(Question_41_b_CWS) FROM Community_Wellness_Survey_Aggregates";
         }
-    $get_baseline_averages = mysqli_query($cnnBickerdike, $query);
+    $get_baseline_averages = mysqli_query($cnnBickerdike, $query_sqlsafe);
     $baseline = array();
     while ($baseline_averages = mysqli_fetch_row($get_baseline_averages)){
         $baseline[0] =$baseline_averages[0];
@@ -93,10 +95,10 @@ if ($_POST['year']=='avg'){
     echo "Aggregate Baseline";
 }
 else{
-$get_year = "SELECT Date_Administered FROM Community_Wellness_Survey_Aggregates WHERE Community_Wellness_Survey_ID='" . $_POST['year'] . "'";
-//echo $get_year;
+$get_year_sqlsafe = "SELECT Date_Administered FROM Community_Wellness_Survey_Aggregates WHERE Community_Wellness_Survey_ID='" . $year_sqlsafe . "'";
+//echo $get_year_sqlsafe;
 include "../include/dbconnopen.php";
-$year = mysqli_query($cnnBickerdike, $get_year);
+$year = mysqli_query($cnnBickerdike, $get_year_sqlsafe);
 $yr = mysqli_fetch_row($year);
 echo $yr[0];
 include "../include/dbconnclose.php";

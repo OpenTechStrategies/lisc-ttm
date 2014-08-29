@@ -6,8 +6,10 @@ include "../header.php";
 //
 // *First determine the program that the logged-in user has access to.  Usually this will be a program ID number,
 // *but sometimes it will be 'a' (all) or 'n' (none).
+include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+$user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['user']);
 $get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = " . stripslashes($_COOKIE['user']) . "";
+    WHERE User_Email = '" . $user_sqlsafe . "'";
 //echo $get_program_access;
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 $program_access = mysqli_query($cnnLISC, $get_program_access);
@@ -18,14 +20,15 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
 //if not an administrator
 if ($access != 'a') {
 //test to see if they have access
+    include "../include/dbconnopen.php";
+    $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['id']);
     $access_to_participant = "SELECT Session_Names.*, Name FROM Session_Names INNER JOIN Participants_Programs ON 
     Session_Names.Session_ID = Participants_Programs.Program_ID 
     INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID
-    WHERE Participant_Id = " . $_GET['id'] . " AND
+    WHERE Participant_Id = " . $id_sqlsafe . " AND
     Programs.Program_ID = " . $access . "
     ORDER BY Name;";
 
-    include "../include/dbconnopen.php";
     $access_to_participant = mysqli_query($cnnEnlace, $access_to_participant);
 
 //if the participant is NOT in one of the programs

@@ -2,17 +2,17 @@
 /* the event status refers to whether or not the event shows up on the Community Engagement homepage.  This toggles the
  * active/inactive status. */
 if ($_POST['action']=='add'){
-    $activate = "UPDATE Events SET Active='1' WHERE Event_ID='" . $_POST['event_id'] . "'";
-    echo $activate;
     include "../include/dbconnopen.php";
-    mysqli_query($cnnTRP, $activate);
+    $activate_sqlsafe = "UPDATE Events SET Active='1' WHERE Event_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['event_id']) . "'";
+    echo $activate_sqlsafe;
+    mysqli_query($cnnTRP, $activate_sqlsafe);
     include "../include/dbconnclose.php";
 }
 elseif ($_POST['action']=='remove'){
-    $deactivate = "UPDATE Events SET Active='0' WHERE Event_ID='" . $_POST['event_id'] . "'";
-    echo $deactivate;
     include "../include/dbconnopen.php";
-    mysqli_query($cnnTRP, $deactivate);
+    $deactivate_sqlsafe = "UPDATE Events SET Active='0' WHERE Event_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['event_id']) . "'";
+    echo $deactivate_sqlsafe;
+    mysqli_query($cnnTRP, $deactivate_sqlsafe);
     include "../include/dbconnclose.php";
 }
 ?>

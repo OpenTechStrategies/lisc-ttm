@@ -11,7 +11,8 @@ include "reports_menu.php";
 <br/>
 <table class="all_projects">
     <tr><th>Quarter</th><th>Number of Institutions</th><th>Change from previous quarter</th></tr>
-    <?//find current quarter, then back up from there
+    <?php
+    //find current quarter, then back up from there
     date_default_timezone_set('America/Chicago');
     $this_year=date('Y');
     $this_month=date('m');
@@ -22,7 +23,7 @@ include "reports_menu.php";
     
     /* show this year and previous 2 years. */
     for ($i=0; $i<3; $i++){
-        $year_shown=$this_year-$i;
+    $year_shown=$this_year-$i;}
     for ($j=$this_qtr; $j>0; $j--){
         if ($j==1){ $end_of_quarter='03-31';}
     elseif ($j==2){$end_of_quarter='06-30';}
@@ -32,10 +33,10 @@ include "reports_menu.php";
     <tr><td class="all_projects"><?echo $year_shown?> - Quarter <?echo $j?></td><td class="all_projects">
         <?
         /* count institutions at a given time. */
-        $count_insts = "SELECT COUNT(*) FROM Institutions WHERE Date_Added<='$year_shown-$end_of_quarter'";
-    //echo $count_insts;
+        $count_insts_sqlsafe = "SELECT COUNT(*) FROM Institutions WHERE Date_Added<='$year_shown-$end_of_quarter'";
+    //echo $count_insts_sqlsafe;
     include "../include/dbconnopen.php";
-    $inst_ct=mysqli_query($cnnSWOP, $count_insts);
+    $inst_ct=mysqli_query($cnnSWOP, $count_insts_sqlsafe);
     $inst=mysqli_fetch_row($inst_ct);
     echo $inst[0];
     include "../include/dbconnclose.php";

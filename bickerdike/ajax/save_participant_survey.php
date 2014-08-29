@@ -6,15 +6,39 @@
  */
 
 $user_id =$_POST['user_id'];
+include "../include/dbconnopen.php";
+$user_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['user_id']);
+$eight_a_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['eight_a']);
+$eight_b_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['eight_b']);
+$two_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['2']);
+$three_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['3']);
+$four_a_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['four_a']);
+$four_b_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['four_b']);
+$five_a_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['five_a']);
+$five_b_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['five_b']);
+$six_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['6']);
+$seven_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['7']);
+$nine_a_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['nine_a']);
+$nine_b_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['nine_b']);
+$eleven_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['11']);
+$twelve_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['12']);
+$thirteen_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['13']);
+$fourteen_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['14']);
+$date_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['date']);
+$pre_post_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['pre_post']);
+$program_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['program']);
+$survey_type_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['survey_type']);
+$child_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['child']);
+
 
 /*
  * We save the minutes of activity, but it's entered as hours and minutes.  This does
  * the conversion:
  */
-$eight_answer = ($_POST['eight_a']*60)+$_POST['eight_b'];
+$eight_answer = ($eight_a_sqlsafe*60)+$eight_b_sqlsafe;
 //$user_id = $_POST['old_or_new']; 
 //echo "somehow got into the not new user thing";
-$add_survey_answers = "INSERT INTO Participant_Survey_Responses (
+$add_survey_answers_sqlsafe = "INSERT INTO Participant_Survey_Responses (
                         User_ID,
                         Question_2,
                         Question_3,
@@ -37,30 +61,29 @@ $add_survey_answers = "INSERT INTO Participant_Survey_Responses (
                         Participant_Type,
                         Child_ID
                         ) VALUES (
-                        '" . $_POST['user_id'] ."',
-                        '" . $_POST['2'] ."',
-                        '" . $_POST['3'] ."',
-                        '" . $_POST['four_a'] ."',
-                        '" . $_POST['four_b'] ."',
-                        '" . $_POST['five_a'] ."',
-                        '" . $_POST['five_b'] ."',
-                        '" . $_POST['6'] . "',
-                        '" . $_POST['7'] . "',
+                        '" . $user_id_sqlsafe ."',
+                        '" . $two_sqlsafe ."',
+                        '" . $three_sqlsafe ."',
+                        '" . $four_a_sqlsafe ."',
+                        '" . $four_b_sqlsafe ."',
+                        '" . $five_a_sqlsafe ."',
+                        '" . $five_b_sqlsafe ."',
+                        '" . $six_sqlsafe . "',
+                        '" . $seven_sqlsafe . "',
                         '" . $eight_answer . "',
-                        '" . $_POST['nine_a'] ."',
-                        '" . $_POST['nine_b'] ."',
-                        '" . $_POST['11'] . "',
-                        '" . $_POST['12'] . "',
-                        '" . $_POST['13'] . "',
-                        '" . $_POST['14'] . "',
-                        '".$_POST['date'] . "',
-                        '". $_POST['pre_post'] ."',
-                        '" . $_POST['program'] ."',
-                         '" . $_POST['survey_type'] ."',
-                             '".$_POST['child']."')";
-//echo $add_survey_answers;
-include "../include/dbconnopen.php";
-mysqli_query($cnnBickerdike, $add_survey_answers);
+                        '" . $nine_a_sqlsafe ."',
+                        '" . $nine_b_sqlsafe ."',
+                        '" . $eleven_sqlsafe . "',
+                        '" . $twelve_sqlsafe . "',
+                        '" . $thirteen_sqlsafe . "',
+                        '" . $fourteen_sqlsafe . "',
+                        '".$date_sqlsafe . "',
+                        '". $pre_post_sqlsafe ."',
+                        '" . $program_sqlsafe ."',
+                         '" . $survey_type_sqlsafe ."',
+                             '".$child_sqlsafe."')";
+//echo $add_survey_answers_sqlsafe;
+mysqli_query($cnnBickerdike, $add_survey_answers_sqlsafe);
 include "../include/dbconnclose.php";
 
 ?>

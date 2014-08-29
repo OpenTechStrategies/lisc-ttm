@@ -6,29 +6,37 @@
  * If any of the fields is blank, then it isn't included in the search query.  If it is filled in, then
  * the search includes it (zipcode is equal to the selected zip).
  */
-if ($_POST['first']==''){$first='';}else{$first=' AND First_Name LIKE "%' . $_POST['first'] . '%"';};
-if ($_POST['last']==''){$last='';}else{$last=" AND Last_Name LIKE '%" . $_POST['last'] . "%'";}
-if ($_POST['zip']==''){$zip='';}else{$zip=" AND Zipcode='" .$_POST['zip'] . "'";}
-if ($_POST['age']==''){$age='';}else{$age=" AND Age='" . $_POST['age'] . "'";}
-if ($_POST['gender']==''){$gender='';}else{$gender=" AND Gender='" . $_POST['gender'] . "'";}
-if($_POST['race']==''){$race='';}else{$race=" AND Race='" . $_POST['race'] . "'";}
-if($_POST['type']==''){$type='';}else{
+include "../include/dbconnopen.php";
+$first_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['first']);
+$last_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['last']);
+$zip_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['zip']);
+$age_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['age']);
+$gender_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['gender']);
+$race_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['race']);
+$type_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['type']);
+
+if ($_POST['first']==''){$first_sqlsafe='';}else{$first_sqlsafe=' AND First_Name LIKE "%' . $first_sqlsafe . '%"';};
+if ($_POST['last']==''){$last_sqlsafe='';}else{$last_sqlsafe=" AND Last_Name LIKE '%" . $last_sqlsafe . "%'";}
+if ($_POST['zip']==''){$zip_sqlsafe='';}else{$zip_sqlsafe=" AND Zipcode='" .$zip_sqlsafe . "'";}
+if ($_POST['age']==''){$age_sqlsafe='';}else{$age_sqlsafe=" AND Age='" . $age_sqlsafe . "'";}
+if ($_POST['gender']==''){$gender_sqlsafe='';}else{$gender_sqlsafe=" AND Gender='" . $gender_sqlsafe . "'";}
+if($_POST['race']==''){$race_sqlsafe='';}else{$race_sqlsafe=" AND Race='" . $race_sqlsafe . "'";}
+if($_POST['type']==''){$type_sqlsafe='';}else{
     if ($_POST['type']==1){
-        $type=" AND Adult='1'";
+        $type_sqlsafe=" AND Adult='1'";
     }
     elseif ($_POST['type']==2){
-        $type=" AND Parent='1'";
+        $type_sqlsafe=" AND Parent='1'";
     }
     elseif ($_POST['type']==3){
-        $type=" AND Child='1'";
+        $type_sqlsafe=" AND Child='1'";
     }
 }
 
-$uncertain_search_query = "SELECT * FROM Users WHERE User_ID!='' " . $first . $last .  $zip .  $age .  $gender . $race . $type;
-//echo $uncertain_search_query;
+$uncertain_search_query_sqlsafe = "SELECT * FROM Users WHERE User_ID!='' " . $first_sqlsafe . $last_sqlsafe .  $zip_sqlsafe .  $age_sqlsafe .  $gender_sqlsafe . $race_sqlsafe . $type_sqlsafe;
+//echo $uncertain_search_query_sqlsafe;
 
-include "../include/dbconnopen.php";
-$results =mysqli_query($cnnBickerdike, $uncertain_search_query);
+$results =mysqli_query($cnnBickerdike, $uncertain_search_query_sqlsafe);
 ?>
 <!--Results come in a dropdown format.-->
 

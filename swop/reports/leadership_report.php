@@ -110,9 +110,9 @@ include "../include/datepicker_simple.php";
                                 <tr><th>Institutional  Leaders</th><td><select id="institution_link">
                                             <option value="">-----</option>
                                              <?php
-                    $get_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
+                    $get_institutions_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name";
                     include "../include/dbconnopen.php";
-                    $institutions = mysqli_query($cnnSWOP, $get_institutions);
+                    $institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
                     while ($institution = mysqli_fetch_array($institutions)) {
                         ?>
                         <option value="<?php echo $institution['Institution_ID']; ?>"><?php echo $institution['Institution_Name']; ?></option>

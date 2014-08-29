@@ -19,35 +19,30 @@ if (($_FILES["file"]["size"] < 1000000)
     include ("../include/dbconnopen.php");
     /* if the event or person is set, then this file can be associated with the correct ID: */
     if (isset($_POST['event_id']) || isset($_POST['person_id'])) {
-        $fileName = $_FILES['file']['name'];
+        $fileName_sqlsafe = mysqli_real_escape_string($cnnTRP, $_FILES['file']['name']);
         $tmpName = $_FILES['file']['tmp_name'];
-        $fileSize = $_FILES['file']['size'];
-        $fileType = $_FILES['file']['type'];
+        $fileSize_sqlsafe = mysqli_real_escape_string($cnnTRP, $_FILES['file']['size']);
+        $fileType_sqlsafe = mysqli_real_escape_string($cnnTRP, $_FILES['file']['type']);
 
         $file_open_temp = fopen($tmpName, 'r');
         $file_content = fread($file_open_temp, filesize($tmpName));
-        
-        $file_content = mysqli_real_escape_string($cnnTRP, $file_content);
+        $file_content_sqlsafe = mysqli_real_escape_string($cnnTRP, $cnnTRP, $file_content);
         fclose($file_open_temp);
 
-        /* escape file contents: */
-        if (!get_magic_quotes_gpc()) {
-            $fileName = mysqli_real_escape_string($cnnTRP, $fileName);
-        }
         if (isset($_POST['person_id'])){
-        $query = "INSERT INTO Programs_Uploads (File_Name, File_Size, File_Type, File_Content, Program_ID, Participant_ID, Year) VALUES 
-        ('$fileName', '$fileSize', '$fileType', '$file_content', '".$_POST['event_id']."', '".$_POST['person_id']."', '".$_POST['year']."')";
+        $query_sqlsafe = "INSERT INTO Programs_Uploads (File_Name, File_Size, File_Type, File_Content, Program_ID, Participant_ID, Year) VALUES 
+        ('$fileName_sqlsafe', '$fileSize_sqlsafe', '$fileType_sqlsafe', '$file_content_sqlsafe', '" . mysqli_real_escape_string($cnnTRP, $_POST['event_id']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['person_id']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['year']) . "')";
         }
         else{
-            $query = "INSERT INTO Programs_Uploads (File_Name, File_Size, File_Type, File_Content, Program_ID, Year) VALUES 
-        ('$fileName', '$fileSize', '$fileType', '$file_content', '".$_POST['event_id']."',  '".$_POST['year']."')";
+            $query_sqlsafe = "INSERT INTO Programs_Uploads (File_Name, File_Size, File_Type, File_Content, Program_ID, Year) VALUES 
+        ('$fileName_sqlsafe', '$fileSize_sqlsafe', '$fileType_sqlsafe', '$file_content_sqlsafe', '" . mysqli_real_escape_string($cnnTRP, $_POST['event_id']) . "',  '" . mysqli_real_escape_string($cnnTRP, $_POST['year']) . "')";
         }
-       // echo $query;
-        mysqli_query($cnnTRP, $query) or die('Error, query failed'); 
+       // echo $query_sqlsafe;
+        mysqli_query($cnnTRP, $query_sqlsafe) or die('Error, query failed'); 
         
         include ("../include/dbconnclose.php");
 
-        echo "<br>File $fileName uploaded<br>";
+        echo "<br>File $fileName_sqlsafe uploaded<br>";
     } else {
         /* If the event or person isn't set, then the file can't be saved. */
         echo "<br>Please select an event or person.";

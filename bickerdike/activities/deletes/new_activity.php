@@ -24,9 +24,9 @@ include "../include/datepicker.php";
         <td><select id="new_activity_type">
                 <option value="">-----</option>
                 <?
-                $orgs = "SELECT * FROM Program_Types";
+                $orgs_sqlsafe = "SELECT * FROM Program_Types";
                 include "../include/dbconnopen.php";
-                $organisation = mysqli_query($cnnBickerdike, $orgs);
+                $organisation = mysqli_query($cnnBickerdike, $orgs_sqlsafe);
                 while ($org = mysqli_fetch_array($organisation)){
                     ?>
                 <option value="<?echo $org['Program_Type_ID'];?>"><?echo $org['Program_Type_Name'];?></option>
@@ -46,9 +46,9 @@ include "../include/datepicker.php";
         <td><select id="new_activity_organization">
                 <option value="">-----</option>
                 <?
-                $orgs = "SELECT * FROM Org_Partners";
+                $orgs_sqlsafe = "SELECT * FROM Org_Partners";
                 include "../include/dbconnopen.php";
-                $organisation = mysqli_query($cnnBickerdike, $orgs);
+                $organisation = mysqli_query($cnnBickerdike, $orgs_sqlsafe);
                 while ($org = mysqli_fetch_array($organisation)){
                     ?>
                 <option value="<?echo $org['Partner_ID'];?>"><?echo $org['Partner_Name'];?></option>

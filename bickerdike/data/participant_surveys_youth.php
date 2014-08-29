@@ -72,21 +72,21 @@ going on the live site.
     </tr>
     <?
     //count the number of surveys entered for each step
-    $count_pres ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='youth' AND Pre_Post_Late='1'";
+    $count_pres_sqlsafe ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='youth' AND Pre_Post_Late='1'";
     include "../include/dbconnopen.php";
-    $pres = mysqli_query($cnnBickerdike, $count_pres);
+    $pres = mysqli_query($cnnBickerdike, $count_pres_sqlsafe);
     $num_pres = mysqli_num_rows($pres);
     include "../include/dbconnclose.php";
     
-    $count_posts ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='youth' AND Pre_Post_Late='2'";
+    $count_posts_sqlsafe ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='youth' AND Pre_Post_Late='2'";
     include "../include/dbconnopen.php";
-    $posts = mysqli_query($cnnBickerdike, $count_posts);
+    $posts = mysqli_query($cnnBickerdike, $count_posts_sqlsafe);
     $num_posts = mysqli_num_rows($posts);
     include "../include/dbconnclose.php";
     
-    $count_laters ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='youth' AND Pre_Post_Late='3'";
+    $count_laters_sqlsafe ="SELECT * FROM Participant_Survey_Responses WHERE Participant_Type='youth' AND Pre_Post_Late='3'";
     include "../include/dbconnopen.php";
-    $laters = mysqli_query($cnnBickerdike, $count_laters);
+    $laters = mysqli_query($cnnBickerdike, $count_laters_sqlsafe);
     $num_laters = mysqli_num_rows($laters);
     include "../include/dbconnclose.php";
     
@@ -318,25 +318,25 @@ $chart_id_array=array('chart1', 'chart1_b', 'chart1_c', 'chart2', 'chart2_b', 'c
     'chart13', 'chart13_b', 'chart13_c', 'chart14', 'chart14_b', 'chart14_c', 'chart15', 'chart15_b', 'chart15_c');
 
         $chart_counter=0;
-foreach($question_array as $question){
-   // echo $question . "<br>";
+foreach($question_array as $question_sqlsafe){
+   // echo $question_sqlsafe . "<br>";
    // foreach ($type_array as $type){
         for ($i=1; $i<4; $i++){
-            //echo "right after the i's " . $question . " " . $i . "<br>";
+            //echo "right after the i's " . $question_sqlsafe . " " . $i . "<br>";
             $script_str='';
             /*
              * this routine gets the number of times each response to the question was made.
-             * The $question variable refers to the column of the question being called (so each question
+             * The $question_sqlsafe variable refers to the column of the question being called (so each question
              * will be called in order for us to get each chart below).  Each question is called, 
              * the routine returns the number of times each response was made - so, we have the information
              * for each pie chart.  
              */
                
-                $call_for_arrays="CALL pie_chart_arrays('youth', " . $i . ", '" .$question . "')";
-                //echo $call_for_arrays ;
+                $call_for_arrays_sqlsafe="CALL pie_chart_arrays('youth', " . $i . ", '" .$question_sqlsafe . "')";
+                //echo $call_for_arrays_sqlsafe ;
                 //echo $chart_id_array[$chart_counter];
             include "../include/dbconnopen.php";
-          $questions=mysqli_query($cnnBickerdike, $call_for_arrays);
+          $questions=mysqli_query($cnnBickerdike, $call_for_arrays_sqlsafe);
            /*
            * Now we have to go through some gymnastics to get the returned information into an acceptable
            * form for the jqplot creation.
@@ -345,7 +345,7 @@ foreach($question_array as $question){
           //print_r($questions);
             if (mysqli_num_rows($questions)>0){
             while ($two = mysqli_fetch_row($questions)){
-                if($question!='Question_4_B'&&$question!='Question_5_B'){
+                if($question_sqlsafe!='Question_4_B'&&$question_sqlsafe!='Question_5_B'){
                     /*This is trying to get the assignment array to have the values in order
                      * and not skip any.  Say the answers to the question were 2, 4, and 6 - we
                      * can't have the other possibilities missing from the array, because that
@@ -413,25 +413,25 @@ foreach($question_array as $question){
                //creates the correct arrays for legends, below
                 /*the labels are different for different questions, which is why there is a different
                 action for many questions.*/
-                    if ($question=='Question_2'){
+                    if ($question_sqlsafe=='Question_2'){
                         $script_str.='["' .$key.'-' . $q2_legend_array[$key] .'",'. $value . ']';
                     }
-                    elseif($question=='Question_4_A'||$question=='Question_5_A'){
+                    elseif($question_sqlsafe=='Question_4_A'||$question_sqlsafe=='Question_5_A'){
                         $script_str.='["' .$key. ' days",'. $value . ']';
                     }
-                    elseif($question=='Question_3'||$question=='Question_7'){
+                    elseif($question_sqlsafe=='Question_3'||$question_sqlsafe=='Question_7'){
                         $script_str.='["' .$key. ' servings",'. $value . ']';
                     }
-                    elseif($question=='Question_9_A'||$question=='Question_9_B'){
+                    elseif($question_sqlsafe=='Question_9_A'||$question_sqlsafe=='Question_9_B'){
                         $script_str.='["' .$key.'-' . $q9_legend_array[$key] .'",'. $value . ']';
                     }
-                    elseif($question=='Question_14'){
+                    elseif($question_sqlsafe=='Question_14'){
                         $script_str.='["' .$key.'-' . $q14_legend_array[$key] .'",'. $value . ']';
                     }
-                    elseif($question=='Question_11'||$question=='Question_12'|| $question=='Question_13'||$question=='Question_6'){
+                    elseif($question_sqlsafe=='Question_11'||$question_sqlsafe=='Question_12'|| $question_sqlsafe=='Question_13'||$question_sqlsafe=='Question_6'){
                         $script_str.='["' .$key.'-' . $yn_legend_array[$key] .'",'. $value . ']';
                     }
-                    elseif($question=='Question_4_B'||$question=='Question_5_B'){
+                    elseif($question_sqlsafe=='Question_4_B'||$question_sqlsafe=='Question_5_B'){
                         if ($key==0){
                             $script_str.='["0-15 minutes",'. $value . ']';
                         }
@@ -471,9 +471,9 @@ foreach($question_array as $question){
                     $time_title='Follow-up Surveys';
                 }
                 
-                ${$question.$type.$i}=$script_str;
+                ${$question_sqlsafe.$type.$i}=$script_str;
                // echo $script_str. "<br>";
-                //echo $question;
+                //echo $question_sqlsafe;
             $assignment_arr=array();?>
      
 <!--Now, the string(s) created by the if/elses above are used to build a chart.

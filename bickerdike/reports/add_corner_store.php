@@ -28,9 +28,9 @@ This file creates a new corner store assessment, and often a new corner store en
     <option value="">-----</option>
     <?
     /*Shows list of existing corner stores.  This is meant to allow tracking a corner store over time.*/
-    $stores = "SELECT * FROM Corner_Stores";
+    $stores_sqlsafe = "SELECT * FROM Corner_Stores";
     include "../include/dbconnopen.php";
-    $str = mysqli_query($cnnBickerdike, $stores);
+    $str = mysqli_query($cnnBickerdike, $stores_sqlsafe);
     while ($store = mysqli_fetch_array($str)){
         ?>
     <option value="<?echo $store['Corner_Store_ID'];?>"><?echo $store['Corner_Store_Name'] . " - " . $store['Corner_Store_Address'];?></option>

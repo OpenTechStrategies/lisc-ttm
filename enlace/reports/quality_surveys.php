@@ -3,10 +3,11 @@
 //
 // *First determine the program that the logged-in user has access to.  Usually this will be a program ID number,
 // *but sometimes it will be 'a' (all) or 'n' (none).
-$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = " . stripslashes($_COOKIE['user']) . "";
-//echo $get_program_access;
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+$user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['user']);
+$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
+    WHERE User_Email = '" . $user_sqlsafe . "'";
+//echo $get_program_access;
 $program_access = mysqli_query($cnnLISC, $get_program_access);
 $prog_access = mysqli_fetch_row($program_access);
 $access = $prog_access[0];
@@ -109,8 +110,9 @@ if (isset($_POST['submit_quality'])) {
             <?php
             /* get denominator for percentages: */
             $get_denom = "SELECT COUNT(*) FROM Program_Surveys";
+            $program_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['program_select']);
             if ($_POST['program_select'] != 0) {
-                $get_denom = "SELECT COUNT(*) FROM Program_Surveys WHERE Session_ID='" . $_POST['program_select'] . "'";
+                $get_denom = "SELECT COUNT(*) FROM Program_Surveys WHERE Session_ID='" . $program_select_sqlsafe . "'";
             }
 
             include "../include/dbconnopen.php";
@@ -122,7 +124,7 @@ if (isset($_POST['submit_quality'])) {
                 $get_responses = "SELECT COUNT(*) as count, " . $key . " FROM Program_Surveys GROUP BY " . $key;
                 if ($_POST['program_select'] != 0) {
                     $get_responses = "SELECT COUNT(*) as count, " . $key . " FROM Program_Surveys 
-                    WHERE Session_ID='" . $_POST['program_select'] . "' GROUP BY " . $key;
+                    WHERE Session_ID='" . $program_select_sqlsafe . "' GROUP BY " . $key;
                 }
                 // echo $get_responses . "<br>";
                 $responses = mysqli_query($cnnEnlace, $get_responses);
@@ -167,8 +169,9 @@ if (isset($_POST['submit_quality'])) {
 
                 <?php
                 /* get answers to the selected question, group count by the answer to the question. */
-                $get_responses = "SELECT COUNT(*) as count, " . $_POST['question_select'] . " FROM Program_Surveys 
-        GROUP BY " . $_POST['question_select'];
+                $question_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['question_select']);
+                $get_responses = "SELECT COUNT(*) as count, " . $question_select_sqlsafe . " FROM Program_Surveys 
+        GROUP BY " . $question_select_sqlsafe;
                 /* get denominator for percentages: */
                 $get_denom = "SELECT COUNT(*) FROM Program_Surveys";
 
@@ -218,9 +221,9 @@ if (isset($_POST['submit_quality'])) {
                 </tr>
                 <?php
                 //get responses to this question for this program.
-                $get_responses = "SELECT COUNT(*) as count, " . $_POST['question_select'] . " FROM Program_Surveys 
-        WHERE Session_ID='" . $_POST['program_select'] . "' GROUP BY " . $_POST['question_select'];
-                $get_denom = "SELECT COUNT(*) FROM Program_Surveys WHERE Session_ID='" . $_POST['program_select'] . "'";
+                $get_responses = "SELECT COUNT(*) as count, " . $question_select_sqlsafe . " FROM Program_Surveys 
+        WHERE Session_ID='" . $program_select_sqlsafe . "' GROUP BY " . $question_select_sqlsafe;
+                $get_denom = "SELECT COUNT(*) FROM Program_Surveys WHERE Session_ID='" . $program_select_sqlsafe . "'";
 
                 include "../include/dbconnopen.php";
                 $responses = mysqli_query($cnnEnlace, $get_responses);

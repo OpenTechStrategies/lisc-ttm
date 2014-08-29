@@ -12,7 +12,7 @@ include "reports_menu.php";
 <table class="leader_report_table">
     <!-- count leaders sorted by type and institution: -->
     <tr><th>Institution</th><th>Number of leaders</th></tr>
-    <?$get_leaders ="SELECT Institution_Name, Leader_Type, COUNT(Leader_Type) FROM Participants_Leaders 
+    <?$get_leaders_sqlsafe ="SELECT Institution_Name, Leader_Type, COUNT(Leader_Type) FROM Participants_Leaders 
         INNER JOIN Institutions_Participants
             ON Participants_Leaders.Participant_ID=Institutions_Participants.Participant_ID
         INNER JOIN Institutions
@@ -21,7 +21,7 @@ include "reports_menu.php";
             GROUP BY Institution_Name, Leader_Type;";
   //  echo $get_leaders;
     include "../include/dbconnopen.php";
-    $leaders=mysqli_query($cnnSWOP, $get_leaders);
+    $leaders=mysqli_query($cnnSWOP, $get_leaders_sqlsafe);
     $inst='';
     while ($lea=mysqli_fetch_row($leaders)){
         if ($lea[0]!=$inst){?>
@@ -50,7 +50,7 @@ include "reports_menu.php";
     <tr><th>Institution Name</th><th>Events Attended by Institution Affiliates</th></tr>
     <?
     /* sort people by their primary institution and the roles they've had at events. */
-        $count_roles="SELECT Institution_Name, Institutions_Participants.Participant_ID, Role_Name, Event_Name, 
+        $count_roles_sqlsafe="SELECT Institution_Name, Institutions_Participants.Participant_ID, Role_Name, Event_Name, 
             COUNT(*)
         FROM Institutions_Participants
         INNER JOIN Institutions
@@ -63,7 +63,7 @@ include "reports_menu.php";
                     GROUP BY Institution_Name, Role_Type;";
         //echo $count_roles;
         include "../include/dbconnopen.php";
-    $roleplayers=mysqli_query($cnnSWOP, $count_roles);
+    $roleplayers=mysqli_query($cnnSWOP, $count_roles_sqlsafe);
     $inst='';
     while ($role=mysqli_fetch_row($roleplayers)){
 	if ($role[0]!=$inst){?>

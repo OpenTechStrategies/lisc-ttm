@@ -1,8 +1,12 @@
 <?php
 //should check to make sure that they aren't already linked to the program
-$find_existing="SELECT * FROM Participants_Subcategories WHERE Participant_ID='" . $_POST['participant'] . "' AND
-    Subcategory_ID= '" . $_POST['subcategory'] . "'";
 include "../include/dbconnopen.php";
+$participant_sqlsafe=mysqli_real_escape_string($cnnLNSA, $_POST['participant']);
+$subcategory_sqlsafe=mysqli_real_escape_string($cnnLNSA, $_POST['subcategory']);
+$school_sqlsafe=mysqli_real_escape_string($cnnLNSA, $_POST['school']);
+$year_sqlsafe=mysqli_real_escape_string($cnnLNSA, $_POST['year']);
+$find_existing="SELECT * FROM Participants_Subcategories WHERE Participant_ID='" . $participant_sqlsafe . "' AND
+    Subcategory_ID= '" . $subcategory_sqlsafe . "'";
 $existing=mysqli_query($cnnLSNA, $find_existing);
 $exists=mysqli_num_rows($existing);
 include "../include/dbconnclose.php";
@@ -11,8 +15,8 @@ include "../include/dbconnclose.php";
 if ($exists<1){
 $add_to_program = "INSERT INTO Participants_Subcategories (Participant_ID,
     Subcategory_ID) VALUES (
-    '" . $_POST['participant'] . "',
-    '" . $_POST['subcategory'] . "')";
+    '" . $participant_sqlsafe . "',
+    '" . $subcategory_sqlsafe . "')";
 echo $add_to_program;
 include "../include/dbconnopen.php";
 mysqli_query($cnnLSNA, $add_to_program);
@@ -26,30 +30,30 @@ if ($_POST['subcategory']==19) {
     if ($exists<1){
 	$add_to_pm_workshops = "INSERT INTO Participants_Subcategories (Participant_ID,
             Subcategory_ID) VALUES (
-            '" . $_POST['participant'] . "',
+            '" . $participant_sqlsafe . "',
             '53')";
         echo $add_to_pm_workshops;
 	mysqli_query($cnnLSNA, $add_to_pm_workshops);
     }
         //this is probably already set if they are already a PM, but no harm done in redoing:
-        $make_pm = "UPDATE Participants SET Is_PM=1 WHERE Participant_ID='" . $_POST['participant'] . "'";
+        $make_pm = "UPDATE Participants SET Is_PM=1 WHERE Participant_ID='" . $participant_sqlsafe . "'";
 	mysqli_query($cnnLSNA, $make_pm);
         
 	//add PM school and year affiliation.  This is why we need to separate this out from the program link.  They can be linked
         //to multiple schools and years and still only count as one parent mentor
         //but check if they're already linked to this school, k?
-        $check_pm_school="SELECT * FROM Institutions_Participants WHERE Participant_Id='" . $_POST['participant'] . "'
-            AND Institution_ID='" . $_POST['school'] . "'";
+        $check_pm_school="SELECT * FROM Institutions_Participants WHERE Participant_Id='" . $participant_sqlsafe . "'
+            AND Institution_ID='" . $school_sqlsafe . "'";
         $school_existing=mysqli_query($cnnLSNA, $check_pm_school);
         $school_exists=mysqli_num_rows($school_existing);
         //if they aren't already linked to this school:
         if ($school_exists<1){
 	$add_pm_school ="INSERT INTO Institutions_Participants (Participant_ID, Institution_ID, Is_PM) 
-            VALUES ('" . $_POST['participant'] . "', '" . $_POST['school'] . "', '1')";
+            VALUES ('" . $participant_sqlsafe . "', '" . $school_sqlsafe . "', '1')";
 	echo $add_pm_school;
 	mysqli_query($cnnLSNA, $add_pm_school);
         }
-        $add_pm_year="INSERT INTO PM_Years (Participant, School, Year) VALUES ('" . $_POST['participant'] . "', '" . $_POST['school'] . "', '".$_POST['year']."')";
+        $add_pm_year="INSERT INTO PM_Years (Participant, School, Year) VALUES ('" . $participant_sqlsafe . "', '" . $school_sqlsafe . "', '".$year_sqlsafe."')";
         mysqli_query($cnnLSNA, $add_pm_year);
 	include "../include/dbconnclose.php";
 }
@@ -57,7 +61,7 @@ if ($_POST['subcategory']==19) {
 if ($_POST['subcategory']==53) {
 	//add school affiliation PM Friday workshops.
         //can go to friday workshops without being a parent mentor, so no requirement to add them to #19
-	$add_pm_school ="INSERT INTO Institutions_Participants (Participant_ID, Institution_ID, Is_PM) VALUES ('" . $_POST['participant'] . "', '" . $_POST['school'] . "', '1')";
+	$add_pm_school ="INSERT INTO Institutions_Participants (Participant_ID, Institution_ID, Is_PM) VALUES ('" . $participant_sqlsafe . "', '" . $school_sqlsafe . "', '1')";
 	echo $add_pm_school;
 	include "../include/dbconnopen.php";
 	mysqli_query($cnnLSNA, $add_pm_school);
