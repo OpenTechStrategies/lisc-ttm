@@ -22,10 +22,11 @@ $DOB = $date_formatted[1] . "/" . $date_formatted[2] . "/" . $date_formatted[0];
 
 /* program access determines whether the logged-in user can see program-specific information about this person.
  * The Gads Hill users may not be able to see results from museum surveys, for example. */
-$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id=Users_Privileges.User_ID
-            WHERE User_Email=" . stripslashes($_COOKIE['user']) . " AND Privilege_ID=4";
-// echo $get_program_access;
+
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id=Users_Privileges.User_ID
+            WHERE User_Email=" . mysqli_real_escape_string($cnnLISC, $_COOKIE['user']) . " AND Privilege_ID=4";
+// echo $get_program_access;
 $program_access = mysqli_query($cnnLISC, $get_program_access);
 $prog_access = mysqli_fetch_row($program_access);
 $access = $prog_access[0];
