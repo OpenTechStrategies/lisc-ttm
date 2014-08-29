@@ -88,7 +88,6 @@ if ($hash_match) {
            $i=$i+1;
            
        }
-       print_r($_COOKIE); //testing output
 }
 else {
     $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Failed login'))";
