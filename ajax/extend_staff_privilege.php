@@ -14,7 +14,7 @@ if (strlen($hash)>=20){
         VALUES ('" . $username_sqlsafe . "', '" . $hash . "')";
     //echo $lisc_query;
     mysqli_query($cnnLISC, $lisc_query);
-    $user_id = mysqli_insert_id($cnnLISC);
+    $user_id_sqlsafe = mysqli_insert_id($cnnLISC);
 
     /*
      * Give new user privileges by site.
