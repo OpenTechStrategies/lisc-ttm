@@ -22,7 +22,7 @@ if ($_POST['search_type'] == 'pool') {
             $property_sqlsafe = "";
             $new_col = explode('.', $_POST['columns'][$j]);
             include "../include/dbconnopen.php";
-            $new_col_sqlsafe=mysqli_real_escape_string($new_col[1]);
+            $new_col_sqlsafe=mysqli_real_escape_string($cnnSWOP, $new_col[1]);
            // $select_start_sqlsafe.='Properties.' . $new_col[1] ;
             $props_start_sqlsafe.='Properties.' . $new_col_sqlsafe . ", ";
            // echo "property string: " . $props_start_sqlsafe . "<br>";
