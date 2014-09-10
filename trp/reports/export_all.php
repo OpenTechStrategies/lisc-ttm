@@ -20,59 +20,22 @@ which has been removed for the use of researchers and partners in the version in
     <tr><th>Export Tables</th><th>Including names and more</th><th>Excluding all potentially identifiable information</th></tr>
     <tr><td class="all_projects">Export Academic Info</td>
         <td class="all_projects">
-             <?$infile="data/academic_info.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Participant First Name", "Last Name", "Academic Information ID", "Participant ID",  "Program ID", "School Year", "Quarter", "GPA", "ISAT Math Score", "ISAT Reading Score",
-        "ISAT Total Score", "Grade in School", "Math Grade", "Language Arts Grade", "Date Information Logged", "School ID (6=No School Selected)",
-    "School Name");
-fputcsv($fp, $title_array);
-$get_peoples = "SELECT First_Name, Last_Name, Academic_Info.*, School_Name FROM Academic_Info
-    LEFT JOIN Schools ON School=School_ID
-    LEFT JOIN Participants ON Academic_Info.Participant_ID=Participants.Participant_ID";
-include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
-while ($people_array = mysqli_fetch_row($people_info)){
-    fputcsv ($fp, $people_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>
-            <a href="<?echo $infile?>">With identifying information</a>
+            <a
+	    href="/include/generalized_download_script.php?download_name=trp_academic_info">With
+	    identifying information</a>  
         </td>
         <td class="all_projects">
-            <?$infile="data/db_academic_info.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Academic Information ID", "Participant ID", "Program ID", "School Year", "Quarter", "GPA", "ISAT Math Score", "ISAT Reading Score",
-        "ISAT Total Score", "Grade in School", "Math Grade", "Language Arts Grade", "Date Information Logged", "School ID (6=No School Selected)");
-fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM Academic_Info";
-include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
-while ($people_array = mysqli_fetch_row($people_info)){
-    fputcsv ($fp, $people_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>
-
-<a href="<?echo $infile?>">Without identifying information</a></td></tr>
+            <a
+            href="/include/generalized_download_script.php?download_name=trp_academic_info_deid">  
+            Without identifying information</a>
+        </td></tr> 
     
-        <tr><td class="all_projects">Export Events</td><td class="all_projects"></td><td class="all_projects">
-            <?$infile="data/db_events.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Event ID", "Event Name", "Event Goal Attendance", "Event Actual Attendance", "Event Date", "Active[1]/Inactive[0]");
-fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM Events";
-include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
-while ($people_array = mysqli_fetch_row($people_info)){
-    fputcsv ($fp, $people_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>
-
-<a href="<?echo $infile?>">Without identifying information</a></td></tr>
+        <tr><td class="all_projects">Export Events</td><td
+            class="all_projects"></td><td class="all_projects"> 
+            <a
+            href="/include/generalized_download_script.php?download_name=trp_events">Without
+            identifying information</a>
+        </td></tr> 
         
             <tr><td class="all_projects">Export Event Attendees</td>
                 <td class="all_projects"><?$infile="data/db_events_participants.csv";

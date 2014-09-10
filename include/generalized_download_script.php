@@ -1546,7 +1546,36 @@ function generalized_download($download_name){
             'titles'=>array("Progress ID", "Date Added", "Marker ID", "Additional 1",
                 "Additional 2", "Additional 3", "Additional 4", "Property ID", 
                 "Notes", "Property Marker Name", "Street Number", "Street Direction", 
-                "Street Name", "Street Type"))
+                "Street Name", "Street Type")),
+
+	'trp_academic_info' => array('db'=>'SWOP', 'query'=>
+            'SELECT First_Name, Last_Name, Academic_Info.*,
+                School_Name FROM Academic_Info LEFT JOIN Schools ON
+                School=School_ID LEFT JOIN Participants ON
+                Academic_Info.Participant_ID=Participants.Participant_ID',
+            'titles'=>array("Participant First Name", "Last Name",
+                "Academic Information ID", "Participant ID",  "Program
+                ID", "School Year", "Quarter", "GPA", "ISAT Math Score",
+                "ISAT Reading Score", "ISAT Total Score", "Grade in
+                School", "Math Grade", "Language Arts Grade", "Date
+                Information Logged", "School ID (6=No School Selected)",
+                "School Name")),
+
+        'trp_academic_info_deid' => array('db'=>'SWOP', 'query'=>
+            'SELECT * FROM Academic_Info', 
+            'titles'=>array("Academic
+                Information ID", "Participant ID", "Program ID", "School
+                Year", "Quarter", "GPA", "ISAT Math Score", "ISAT Reading
+                Score", "ISAT Total Score", "Grade in School", "Math
+                Grade", "Language Arts Grade", "Date Information Logged",
+                "School ID (6=No School Selected)")),
+
+        'trp_events' => array('db'=>'SWOP', 'query'=>
+            'SELECT * FROM Events',
+            'titles'=>array("Event ID", "Event Name", "Event Goal
+                Attendance", "Event Actual Attendance", "Event Date",
+                "Active[1]/Inactive[0]")
+
         
         );
     $db_array=array(2=>'LSNA', 3=>'bickerdike', 4=>'TRP', 5=>'SWOP', 6=>'enlace');
