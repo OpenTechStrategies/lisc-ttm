@@ -22,7 +22,7 @@ function generalized_download($download_name){
                 "Question 21", "Question 24", "Question 29", "Question 31", 
                 "Question 30",  "Question 32", "Question 69", "Question 72", 
                 "Question 91", "Question 41a", "Question 41b", "Question 44", 
-                "Date")),
+                "Date")), 
         
         'corner_stores'=>array('db'=>'bickerdike', 'query'=>
             'SELECT * FROM Corner_Store_Assessment INNER JOIN Corner_Stores ON '
@@ -1349,7 +1349,7 @@ function generalized_download($download_name){
                 FROM Participants_Events
                 INNER JOIN Participants ON Participants_Events.Participant_ID =
                 Participants.Participant_ID',
-            'titles'=>array("Link ID", "Event ID", "Participant ID", "Role Type (1=Attendee; 2=Speaker; 3=Chairperson; 4=Prep work; 5=Staff)",
+            'titles'=>array("Link ID", "Event ID", "Participant ID", "Role Type (1=Attendee; 2=Speaker; 3=Chairperson; 4=Prep work; 5=Staff)", "Exceptional (1=Yes)",
                             "Attendee First Name", "Attendee Last Name")),
         
         'swop_leader_deid'=>array('db'=>'SWOP', 'query'=>
@@ -1499,7 +1499,7 @@ function generalized_download($download_name){
                 "Phone_Day", "Phone_Evening", "Education_Level", "Email", "Gender",
                 "Date_of_Birth",
                 "Lang_Eng", "Lang_Span", "Lang_Other", "Ward", "Other_Lang_Specify",
-                "Notes", "Primary_Organizer",
+                "Notes", "Next Step Notes", "Primary_Organizer",
                 "First_Interaction_Date", "ITIN", "Date_Added", "Activity_Type")),
         
         'swop_properties_deid'=>array('db'=>'SWOP', 'query'=>

@@ -70,7 +70,7 @@ include "reports_menu.php";
 
                 <tr><td><br>All Institution/Participant Relationships (this is 
                         all ID-based.  To see names, look at the right column)
-                        <a href="generalized_download_script.php?download_name=swop_institutions_people_deid">
+                        <a href="/include/generalized_download_script.php?download_name=swop_institutions_people_deid">
                             Download the CSV file of all institutions/participants.
                         </a><br><br>
                     </td>
