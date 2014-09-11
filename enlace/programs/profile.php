@@ -196,8 +196,9 @@ Shows all program information.
                         </td></tr>
                     <tr><td><strong>Maximum total hours:</strong></td><td><span class="display_program"><?php echo $program->max_hrs; ?></span>
                             <input type="text" class="edit_program" id="max_hrs"</td></tr>
-                    <tr><td><input type="button" value="Edit" onclick="$('.edit_program').toggle();
-                            $('.display_program').toggle();"></td>
+                    <tr><td><input type="button" class="edit_button" value="Edit" onclick="$('.edit_program').toggle();
+                            $('.display_program').toggle();
+			    $('.edit_button').attr('value', $('.edit_button').attr('value') == 'Edit' ? 'Exit' : 'Edit');"></td>
                         <td><input type="button" value="Save Changes" onclick="
                                 //first deal with all the checkboxes
                                 if (document.getElementById('class').checked == true) {
