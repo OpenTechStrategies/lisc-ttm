@@ -63,76 +63,22 @@ which has been removed for the use of researchers and partners in the version in
             
             <tr><td class="all_projects">Community Engagement Outcomes by Month</td>
                 <td class="all_projects">
-</td><td class="all_projects">
-        <?$infile="data/db_outcomes.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Outcome", "Month", "Goal", "Actual Result");
-fputcsv($fp, $title_array);
-$get_peoples = "SELECT Outcome_Name, Month, Goal_Outcome, Actual_Outcome
-FROM Outcomes_Months INNER JOIN Outcomes ON Outcomes_Months.Outcome_ID=Outcomes.Outcome_ID;";
-include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
-while ($people_array = mysqli_fetch_row($people_info)){
-    fputcsv ($fp, $people_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>
-<a href="<?echo $infile?>">Without identifying information</a></td></tr>
+                </td><td class="all_projects">
+                <a href="/include/generalized_download_script.php?download_name=trp_community_outcomes">
+                    Without identifying information</a></td></tr>
             
             <tr><td class="all_projects">Parent-Child Relationships</td>
                 <td class="all_projects">
-                     <?$infile="data/db_families.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Child First Name", "Child Last Name", "Parent First Name", "Parent Last Name");
-fputcsv($fp, $title_array);
-$get_peoples = "SELECT Children.First_Name, Children.Last_Name, Parents.First_Name, Parents.Last_Name
-FROM Parents_Children INNER JOIN Participants as Parents ON 
-Parents.Participant_ID=Parent_ID
-INNER JOIN Participants AS Children ON
-Children.Participant_ID=Child_ID;";
-include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
-while ($people_array = mysqli_fetch_row($people_info)){
-    fputcsv ($fp, $people_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?><a href="<?echo $infile?>">With identifying information</a>
-</td><td class="all_projects">
-        <?$infile="data/db_families_deidentified.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Linking ID", "Parent ID", "Child ID");
-fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM Parents_Children";
-include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
-while ($people_array = mysqli_fetch_row($people_info)){
-    fputcsv ($fp, $people_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>
-<a href="<?echo $infile?>">Without identifying information</a></td></tr>
+                <a href="/include/generalized_download_script.php?download_name=trp_families">
+                    With identifying information</a>
+                </td><td class="all_projects">
+                <a href="/include/generalized_download_script.php?download_name=trp_families_deid">
+                    Without identifying information</a></td></tr>
             
             <tr><td class="all_projects">All Participants</td>
                 <td class="all_projects">
-                     <?$infile="data/db_participants.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Participant ID", "First Name", "Last Name", "Address Street Name", "Address Street Number", "Street Direction",
-        "Street Type", "State", "City", "Zipcode", "Phone", "Email", "Gender", "Date of Birth", "Race", "Grade Level", "Classroom", 
-    "Lunch Price  (0=No Answer; 1=Free; 2=Reduced Price; 3=None)",
-        "Neighborhood", "Eval ID", "CPS ID");
-fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM Participants";
-include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
-while ($people_array = mysqli_fetch_row($people_info)){
-    fputcsv ($fp, $people_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?><a href="<?echo $infile?>">With identifying information</a>
+                <a href="/include/generalized_download_script.php?download_name=trp_participants">
+                    With identifying information</a>
 </td><td class="all_projects">
         <?$infile="data/db_people_deidentified.csv";
 $fp=fopen($infile, "w") or die('can\'t open file');
