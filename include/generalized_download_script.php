@@ -1570,11 +1570,59 @@ function generalized_download($download_name){
                 Grade", "Language Arts Grade", "Date Information Logged",
                 "School ID (6=No School Selected)")),
 
-        'trp_events' => array('db'=>'SWOP', 'query'=>
+        'trp_events_deid' => array('db'=>'SWOP', 'query'=>
             'SELECT * FROM Events',
             'titles'=>array("Event ID", "Event Name", "Event Goal
                 Attendance", "Event Actual Attendance", "Event Date",
-                "Active[1]/Inactive[0]")
+                "Active[1]/Inactive[0]"),
+         
+        'trp_event_attendance' => array('db'=>'SWOP', 'query'=>
+            'SELECT Event_Name, Event_Date, First_Name, Last_Name FROM 
+                Events_Participants INNER JOIN Events ON Events_Participants.Event_ID=  
+                Events.Event_ID INNER JOIN Participants ON
+                Events_Participants.Participant_ID=Participants.Participant_ID',
+             'titles' => array("Event Name", "Event Date", "Attendee First Name", 
+                 "Attendee Last Name")),
+         
+        'trp_event_attendance_deid' => array('db'=>'SWOP', 'query'=>
+            'SELECT Event_Name, Event_Date, Participant_ID FROM Events_Participants 
+                INNER JOIN Events ON Events_Participants.Event_ID=Events.Event_ID',
+            'titles' => array("Link ID", "Event ID", "Participant ID")),
+
+        'trp_school_records' => array('db'=>'SWOP', 'query'=>
+            'SELECT First_Name, Last_Name, MS_to_HS_Over_Time.*, School_Name FROM 
+                MS_to_HS_Over_Time LEFT JOIN Participants ON Participants.Participant_ID
+                =MS_to_HS_Over_Time.Participant_ID LEFT JOIN Schools ON Schools.School_ID
+                =MS_to_HS_Over_Time.School_ID',
+            'titles' => array("First Name", "Last Name", "Link ID", "Participant ID", 
+                "Number of Tardies", "Number of Excused Absences", "Number of Unexcused
+                 Absences", "Number of In-school Suspensions", "Number of out of school
+                  suspensions", "Office Referrals", "Quarter", "Grade in School", 
+                  "School Year", "Program ID", "School ID", "School Name")),
+
+         'trp_school_records_deid' => array('db'=>'SWOP', 'query'=>
+             'SELECT * FROM MS_to_HS_Over_Time',
+             'titles' => array("Link ID", "Participant ID", "Number of Tardies", "Number
+                  of Excused Absences", "Number of Unexcused Absences", "Number of In-school
+                  Suspensions", "Number of out of school suspensions", "Office Referrals", 
+                  "Quarter", "Grade in School")),
+
+         'trp_explore_scores' => array('db'=>'SWOP', 'query'=>
+             SELECT First_Name, Last_Name, Explore_Scores.*, School_Name FROM Explore_Scores
+                 LEFT JOIN Participants on Explore_Scores.Participant_ID=Participants.Participant_ID
+                 LEFT JOIN Schools ON School=School_ID',
+             'titles' => array("First Name", "Last Name", "Link ID", "Participant ID",
+                 "Explore Score Pre", "Explore Score Mid", "Explore Score Post", 
+                 "Explore Score Fall of 9th Grade", "Reading ISAT", "Math ISAT", "CPS Consent", 
+                 "Program ID", "School ID", "School Year", "School Name")),
+
+         'trp_explore_scores_deid' => array('db'=>'SWOP', 'query'=>
+             'SELECT * FROM Explore_Scores',
+             'titles' => array("Link ID", "Participant ID", "Explore Score Pre", "Explore Score 
+                 Mid", "Explore Score Post", "Explore Score Fall of 9th Grade", "Reading
+                 ISAT", "Math ISAT", "CPS Consent", "Program ID", "School ID", "School Year")),
+
+          'trp_community_outcomes' => array('db'=>'SWOP', 'query'=>'')
 
         
         );

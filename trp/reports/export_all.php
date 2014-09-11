@@ -33,112 +33,33 @@ which has been removed for the use of researchers and partners in the version in
         <tr><td class="all_projects">Export Events</td><td
             class="all_projects"></td><td class="all_projects"> 
             <a
-            href="/include/generalized_download_script.php?download_name=trp_events">Without
+            href="/include/generalized_download_script.php?download_name=trp_events_deid">Without
             identifying information</a>
         </td></tr> 
         
             <tr><td class="all_projects">Export Event Attendees</td>
-                <td class="all_projects"><?$infile="data/db_events_participants.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Event Name", "Event Date", "Attendee First Name", " Attendee Last Name");
-fputcsv($fp, $title_array);
-$get_peoples = "SELECT Event_Name, Event_Date, First_Name, Last_Name FROM Events_Participants INNER JOIN Events ON Events_Participants.Event_ID=
-Events.Event_ID INNER JOIN Participants ON Events_Participants.Participant_ID=Participants.Participant_ID;";
-include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
-while ($people_array = mysqli_fetch_row($people_info)){
-    fputcsv ($fp, $people_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?><a href="<?echo $infile?>">With identifying information</a>
-</td><td class="all_projects">
-        <?$infile="data/db_events_participants_deidentified.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Link ID", "Event ID", "Participant ID");
-fputcsv($fp, $title_array);
-$get_peoples = "SELECT Event_Name, Event_Date, Participant_ID FROM Events_Participants INNER JOIN Events ON Events_Participants.Event_ID=
-Events.Event_ID";
-include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
-while ($people_array = mysqli_fetch_row($people_info)){
-    fputcsv ($fp, $people_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>    
-<a href="<?echo $infile?>">Without identifying information</a></td></tr>
-            
+                <td class="all_projects">
+                <a href="/include/generalized_download_script.php?download_name=trp_event_attendance">
+                     With identifying information</a>
+                </td><td class="all_projects">
+                <a href="/include/generalized_download_script.php?download_name=trp_event_attendance_deid">
+                    Without identifying information</a>
+                </td></tr>
             <tr><td class="all_projects">School Records, Non-Academic</td>
                 <td class="all_projects">
-                    <?php $infile="data/ms_hs_absences_etc.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("First Name", "Last Name", "Link ID", "Participant ID", "Number of Tardies", "Number of Excused Absences", "Number of Unexcused Absences", 
-        "Number of In-school Suspensions", "Number of out of school suspensions", "Office Referrals", "Quarter", "Grade in School",
-    "School Year", "Program ID", "School ID", "School Name");
-fputcsv($fp, $title_array);
-$get_peoples = "SELECT First_Name, Last_Name, MS_to_HS_Over_Time.*, School_Name FROM MS_to_HS_Over_Time
-    LEFT JOIN Participants ON Participants.Participant_ID=MS_to_HS_Over_Time.Participant_ID
-    LEFT JOIN Schools ON Schools.School_ID=MS_to_HS_Over_Time.School_ID;";
-include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
-while ($people_array = mysqli_fetch_row($people_info)){
-    fputcsv ($fp, $people_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?><a href="<?echo $infile?>">With identifying information</a>
-</td><td class="all_projects">
-        <?$infile="data/db_ms_hs_absences_etc.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Link ID", "Participant ID", "Number of Tardies", "Number of Excused Absences", "Number of Unexcused Absences", 
-        "Number of In-school Suspensions", "Number of out of school suspensions", "Office Referrals", "Quarter", "Grade in School");
-fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM MS_to_HS_Over_Time;";
-include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
-while ($people_array = mysqli_fetch_row($people_info)){
-    fputcsv ($fp, $people_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>
-<a href="<?echo $infile?>">Without identifying information</a></td></tr>
+                <a href="/include/generalized_download_script.php?download_name=trp_school_records">
+                    With identifying information</a>
+                </td><td class="all_projects">
+                <a href="/include/generalized_download_script.php?download_name=trp_school_records_deid">
+                    Without identifying information</a></td></tr>
             
             <tr><td class="all_projects">Explore and ISAT Scores</td>
-                <td class="all_projects"><?php $infile="data/explore_scores.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("First Name", "Last Name", "Link ID", "Participant ID", "Explore Score Pre", "Explore Score Mid", "Explore Score Post", 
-        "Explore Score Fall of 9th Grade", "Reading ISAT", "Math ISAT", "CPS Consent", "Program ID", "School ID", "School Year", "School Name");
-fputcsv($fp, $title_array);
-$get_peoples = "SELECT First_Name, Last_Name, Explore_Scores.*, School_Name FROM Explore_Scores
-    LEFT JOIN Participants on Explore_Scores.Participant_ID=Participants.Participant_ID
-    LEFT JOIN Schools ON School=School_ID;";
-include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
-while ($people_array = mysqli_fetch_row($people_info)){
-    fputcsv ($fp, $people_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>
-<a href="<?echo $infile?>">With identifying information</a>
-</td><td class="all_projects">
-        <?$infile="data/db_ms_hs_scores.csv";
-$fp=fopen($infile, "w") or die('can\'t open file');
-$title_array = array("Link ID", "Participant ID", "Explore Score Pre", "Explore Score Mid", "Explore Score Post", 
-        "Explore Score Fall of 9th Grade", "Reading ISAT", "Math ISAT", "CPS Consent", "Program ID", "School ID", "School Year");
-fputcsv($fp, $title_array);
-$get_peoples = "SELECT * FROM Explore_Scores;";
-include "../include/dbconnopen.php";
-$people_info = mysqli_query($cnnTRP, $get_peoples);
-while ($people_array = mysqli_fetch_row($people_info)){
-    fputcsv ($fp, $people_array);
-}
-include "../include/dbconnclose.php";
-fclose($fp);
-?>
-<a href="<?echo $infile?>">Without identifying information</a></td></tr>
+                <td class="all_projects">
+                <a href="/include/generalized_download_script.php?download_name=trp_explore_scores">
+                    With identifying information</a>
+                </td><td class="all_projects">
+                <a href="/include/generalized_download_script.php?download_name=trp_explore_scores_deid">
+                    Without identifying information</a></td></tr>
             
             <tr><td class="all_projects">NMMA Identity Survey</td>
                 <td class="all_projects">
