@@ -266,7 +266,7 @@ going on the live site.
     <!---Now, create the file for download. -->
     
     <tr>
-        <?php
+        <?/*
 $infile="downloads/survey_aggregate.csv";
 $fp=fopen($infile, "w") or die('can\'t open file');
 $title_info = array('Question', 'Pre-Survey', 'Post-Survey', '3 Months Later');
@@ -298,10 +298,10 @@ for ($i=0; $i<count($later); $i++){
         fputcsv ($fp, $put_array);
     }
     }
-fclose($fp);
+fclose($fp);*/
 
 ?>
-         <td class="all_projects" colspan="4">    <a href="<?echo $infile;?>">Download the CSV file of aggregate survey results.</a></td> 
+        <td class="all_projects" colspan="4">    <a href="<?echo'hello' /*$infile;*/?>">Download the CSV file of aggregate survey results.</a></td> */
    
     </tr>
     
@@ -328,8 +328,8 @@ $chart_id_array=array('chart1', 'chart1_b', 'chart1_c', 'chart2', 'chart2_b', 'c
 
         $chart_counter=0;
 foreach($question_array as $question_sqlsafe){
-   // echo $question_sqlsafe . "<br>";
-   // foreach ($type_array as $type){
+    echo $question_sqlsafe . "<br>";
+    //foreach ($type_array as $type){
         for ($i=1; $i<4; $i++){
             //echo "right after the i's " . $question_sqlsafe . " " . $i . "<br>";
             $script_str='';/*
@@ -342,16 +342,12 @@ foreach($question_array as $question_sqlsafe){
              * shows the responses to the survey from all the participant types who took it.
              */
                
-                $call_for_arrays_sqlsafe="CALL pie_chart_arrays_all(" . $i . ", '" .$question_sqlsafe . "')";
+                $call_for_arrays_sqlsafe="CALL pie_chart_arrays_all_individual(" . $i . ", '" .$question_sqlsafe . "')";
             include "../include/dbconnopen.php";
             $questions=mysqli_query($cnnBickerdike, $call_for_arrays_sqlsafe);
-            //echo "after questions: " . $question_sqlsafe . " " . $i . "<br>";
-             /*
-           * Now we have to go through some gymnastics to get the returned information into an acceptable
-           * form for the jqplot creation.
-           */
-          
-            while ($two = mysqli_fetch_row($questions)){
+	    while ($two = mysqli_fetch_row($questions)){
+            echo "after questions: " . $two[1] . "<br>";
+		echo 'help!' . "<br>";
                 if($question_sqlsafe!='Question_4_B'&&$question_sqlsafe!='Question_5_B'){
                     /*This is trying to get the assignment array to have the values in order
                      * and not skip any.  Say the answers to the question were 2, 4, and 6 - we
@@ -467,7 +463,7 @@ foreach($question_array as $question_sqlsafe){
                     $time_title='Follow-up Surveys';
                 }
                 
-                ${$question.$type.$i}=$script_str;
+                ${$question_sqlsafe.$i}=$script_str;
             $assignment_arr=array();?>
 
 <!--Now, the string(s) created by the if/elses above are used to build a chart.
@@ -502,7 +498,7 @@ go on the chart.
 </script><?$chart_counter++;
                 }  
                  
-   // }
+    //}
       
 }
 
@@ -523,8 +519,8 @@ go on the chart.
 <script language="javascript" type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/jquery.jqplot.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/include/jquery.jqplot.1.0.4r1121/jquery.jqplot.css" />
 
-<script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.jqplot.barRenderer.min.js"></script>
-<script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.jqplot.barRenderer.js"></script>
+<script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.barRenderer.min.js"></script>
+<script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.barRenderer.js"></script>
 <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.pieRenderer.min.js"></script>
 <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.categoryAxisRenderer.min.js"></script>
 <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.pointLabels.min.js"></script>
