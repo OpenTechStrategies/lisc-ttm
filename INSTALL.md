@@ -108,6 +108,9 @@ Steps to install:
           BrowserMatch "MSIE [2-5]" \
                    nokeepalive ssl-unclean-shutdown \
                    downgrade-1.0 force-response-1.0
+          # Assuming your DocumentRoot is "/var/www/ttm", you should
+          # add your robots.txt alias there for each VirtualHost
+          Alias /robots.txt /var/www/ttm/robots.txt
         </VirtualHost>
           
         # Redirect port 80 plain http:// traffic to port 443 https://.
@@ -124,6 +127,9 @@ Steps to install:
            #
            # ServerName ttm.example.com
            # Redirect permanent / https://ttm.example.com/
+           # Assuming your DocumentRoot is "/var/www/ttm", you should
+           # add your robots.txt alias there for each VirtualHost
+           Alias /robots.txt /var/www/ttm/robots.txt
         </VirtualHost>
 
     On Debian, the standard is to put that in a file named (e.g.)
