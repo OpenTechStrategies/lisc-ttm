@@ -69,10 +69,10 @@
 	</table>	
 </div>
 <?
-if ($_COOKIE['sites']){
+if (isset($_COOKIE['sites']) && $_COOKIE['sites']){
     if (in_array('2', $_COOKIE['sites'])){
        /* then the user has access to LSNA */
-        if ($_COOKIE['view_restricted']){
+        if (isset($_COOKIE['view_restricted']) && $_COOKIE['view_restricted']){
             //this is what needs to be hidden from both data entry and view-only people?>
 <style type="text/css">.hide_on_view {display:none}</style>
             <script type="text/javascript">
@@ -81,7 +81,7 @@ if ($_COOKIE['sites']){
                 });
                 </script>
         <?}
-        if ($_COOKIE['view_only']){
+        if (isset($_COOKIE['view_only']) && $_COOKIE['view_only']){
             /*hide these things from view-only users.*/
             ?>
 <style type="text/css">.no_view {display:none}</style><?

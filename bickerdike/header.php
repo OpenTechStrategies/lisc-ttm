@@ -47,7 +47,7 @@ if ($_COOKIE['sites']) {
     if (in_array('3', $_COOKIE['sites'])) {
 //then they have permission to view the bickerdike stuff
 //now we check to see if they have editing privileges or not:
-        if ($_COOKIE['view_restricted']) {
+        if (isset($_COOKIE['view_restricted']) && $_COOKIE['view_restricted']) {
 //print_r($_COOKIE);
             ?>
             <script type="text/javascript">
