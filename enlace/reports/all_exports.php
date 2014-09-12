@@ -68,36 +68,9 @@ Export files for all tables.  This is going to change once Taryn determines what
             <a href="/include/generalized_download_script.php?download_name=enlace_institutions">
                 Download.</a></td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/institutions_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Institution Name", "Institution Type", "Block Group",
-                "Phone", "Email");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Institution_Name, Type, Block_Group, Phone, Email
-                            FROM Institutions INNER JOIN Institution_Types
-                            ON Institution_Type = Inst_Type_ID;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                /* $this_address=$event[2]." " . $event[3] . " " . $event[4] ." ". $event[5] ;
-                  if (($event[2]=="" || $event[2]=="0") && $event[3]=="" && $event[4]=="" && $event[5]==""){
-                  // echo "set zero";
-                  $this_address="0";
-                  }
-                  //else{echo $event[5];}
-                  $block_group=do_it_all($this_address, $map);
-                  $all_array=array($event[0], $event[1], $block_group, $event[6], $event[7]); */
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
-
-        </td>
+            <a href="/include/generalized_download_script.php?download_name=enlace_institutions">
+                Download.</a></td>
     </tr>
-
 
     <tr>
         <td class="all_projects">
@@ -143,39 +116,8 @@ Export files for all tables.  This is going to change once Taryn determines what
 
 
         <td class="all_projects">
-            <?php
-            $infile = "export_container/deid_participants_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Participant ID", "Block Group", "Address_City", "Address_State", "Address_ZIP",
-                "Age", "Gender", "Grade", "School", "Role");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Participants.Participant_ID, Participants.Block_Group, Address_City, Address_State, Address_ZIP,
-Age, Gender, Grade, Institution_Name, Roles.Role
-FROM Participants
-INNER JOIN Roles ON Participants.Role=Roles.Role_ID
-INNER JOIN Institutions ON School=Inst_ID;";
-//echo $get_events;
-//attempt to get block group for each participant.
-
-
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                /*  $this_address= $event[1] . " " . $event[2] ." ". $event[3] . " " . $event[4] . " " . $event[5] . " "  .$event[6];
-                  if ($event[1]=="" && $event[2]=="" && $event[3]=="" && $event[4]=="" && $event[5]=="" && $event[6]==""){
-                  $this_address=0;
-                  }
-                  //echo $this_address . "<br>";
-                  $block_group=do_it_all($this_address, $map);
-                  $all_array=array($event[0], $block_group, $event[5], $event[6], $event[7], $event[8], $event[9], $event[10], $event[11], $event[12], $event[13]); */
-                fputcsv($fp, $event);
-                // $this_address="";
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_participants_deid">
+                Download.</a>
         </td>
     </tr>
 
@@ -349,43 +291,12 @@ INNER JOIN Institutions ON School=Inst_ID;";
             Participant consent records.
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/consent_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Participant_ID", "First_Name", "Last_Name", "School_Year", "Consent_Given (1=Yes, 0=No)", "School");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Participants_Consent.Participant_ID, First_Name, Last_Name, School_Year, Consent_Given, Institution_Name
-FROM Participants_Consent INNER JOIN Participants
-ON Participants.Participant_ID=Participants_Consent.Participant_ID
-INNER JOIN Institutions ON School=Inst_ID;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_consent_records">
+                Download.</a>
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/deid_consent_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Participant_ID", "School_Year", "Consent_Given (1=Yes, 0=No)", "School");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Participants_Consent.Participant_ID, School_Year, 
-    Consent_Given, Institution_Name FROM Participants_Consent INNER JOIN Participants
-ON Participants.Participant_ID=Participants_Consent.Participant_ID INNER JOIN Institutions ON School=Inst_ID;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_consent_records_deid">
+                Download.</a>
         </td>
     </tr>
 
@@ -396,44 +307,11 @@ ON Participants.Participant_ID=Participants_Consent.Participant_ID INNER JOIN In
             Event attendance, with roles.
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/event_attendance_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Event Name", "Event Date", "Participant ID", "First_Name", "Last_Name", "Role");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Event_Name, Event_Date, Participants_Events.Participant_ID, First_Name, Last_Name, Event_Roles.Role FROM Participants_Events
-INNER JOIN Participants ON Participants.Participant_ID=Participants_Events.Participant_ID
-INNER JOIN Event_Roles ON Role_Type=Event_Role_ID
-INNER JOIN Campaigns_Events ON Event_ID=Campaign_Event_ID;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_event_attendance">Download.</a>
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/deid_event_attendance_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Event ID", "Event Name", "Event Date", "Participant ID", "Role");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Event_ID, Event_Name, Event_Date, Participants.Participant_ID, Event_Roles.Role FROM Participants_Events
-INNER JOIN Participants ON Participants.Participant_ID=Participants_Events.Participant_ID
-INNER JOIN Event_Roles ON Role_Type=Event_Role_ID
-INNER JOIN Campaigns_Events ON Event_ID=Campaign_Event_ID;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_event_attendance_deid">
+                Download.</a>
         </td>
 
     </tr>
@@ -446,45 +324,13 @@ INNER JOIN Campaigns_Events ON Event_ID=Campaign_Event_ID;";
         </td>
 
         <td class="all_projects">
-            <?php
-            $infile = "export_container/mentorship_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Participant ID", "Mentorship Date", "Mentorship Hours", "First_Name", "Last_Name", "Program");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Participant_ID, Mentorship_Date, Mentorship_Hours_Logged, First_Name, Last_Name, Name
-FROM Participants_Mentorship
-INNER JOIN Participants ON Participant_ID=Mentee_ID
-INNER JOIN Programs ON Program_Id=Mentorship_Program;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_mentorship_hours">
+                Download.</a>
         </td>
 
         <td class="all_projects">
-            <?php
-            $infile = "export_container/deid_mentorship_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Participant ID", "Mentorship Date", "Mentorship Hours", "Program");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Participant_ID, Mentorship_Date, Mentorship_Hours_Logged, Name
-FROM Participants_Mentorship
-INNER JOIN Participants ON Participant_ID=Mentee_ID
-INNER JOIN Programs ON Program_Id=Mentorship_Program;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_mentorship_hours_deid">
+                Download.</a>
         </td>
     </tr>
 
@@ -495,28 +341,12 @@ INNER JOIN Programs ON Program_Id=Mentorship_Program;";
             All programs.
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/all_programs_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Program ID", "Program Name", "Host Organization ID", "Start Date", "End Date", "Start Hour", "Start am/pm", "End Hour", "End am/pm",
-                "Maximum Hours", "Classwork?", "Clinic?", "Referrals?", "Community?", "Counseling?", "Sports?", "Mentorship?", "Service?",
-                "Mondays?", "Tuesdays?", "Wednesdays?", "Thursdays?", "Fridays?", "Saturdays?", "Sundays?",
-                "Host Institution Name");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Programs.*, Institution_Name FROM Programs
-LEFT JOIN Institutions ON Host=Inst_ID;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_programs">
+                Download.</a>
         </td>
         <td class="all_projects">
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_programs">
+                Download.</a>
         </td>
     </tr>
 
@@ -528,46 +358,11 @@ LEFT JOIN Institutions ON Host=Inst_ID;";
             Program participation (includes date dropped if applicable).
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/program_participation_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Participant_Program Link ID", "Participant ID", "First_Name", "Last_Name", "Session", "Program", "Date Dropped");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT DISTINCT Participant_Program_ID, Participants_Programs.Participant_ID, First_Name, Last_Name,
- Session_Name, Name, Date_Dropped FROM Participants_Programs
-INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
-INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID
-INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_program_participation">                Download.</a>
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/deid_program_participation_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Participant_Program Link ID", "Participant ID", "Session", "Program", "Date Dropped");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT DISTINCT Participant_Program_ID, Participants_Programs.Participant_ID, 
- Session_Name, Name, Date_Dropped FROM Participants_Programs
-INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
-INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID
-INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_program_participation_deid">
+                Download.</a>
         </td>
     </tr>
 

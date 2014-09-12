@@ -1086,9 +1086,9 @@ function generalized_download($download_name){
                 INNER JOIN Institutions ON Institution_ID = Inst_ID',
             'titles'=>array("Campaign_Name", "Institution Name")),
         
-        /*'enlace_campaigns'=>array('db'=>'enlace', 'query'=>
+        'enlace_campaigns'=>array('db'=>'enlace', 'query'=>
             'SELECT Campaign_Name FROM Campaigns',
-            'titles'=>array("Campaign_Name")),*/ //what about access bit??
+            'titles'=>array("Campaign_Name")), //what about access bit??
         
         'enlace_institutions'=>array('db'=>'enlace', 'query'=>
             'SELECT Institution_Name, Type, Address_Num, Address_Dir, 
@@ -1098,9 +1098,61 @@ function generalized_download($download_name){
             'titles'=>array("Institution Name", "Institution Type", 
                 "Address_Num", "Address_Direction", "Address_Street", 
                 "Address_Street_Type", "Phone", "Email")),
+
+        'enlace_institutions_deid'=>array('db'=>'enlace', 'query'=>
+            'SELECT Institution_Name, Type, Block_Group, Phone, Email 
+            FROM Institutions INNER JOIN Institution_Type 
+            ON Institution_Type = Inst_Type_ID',
+            'titles'=>array("Institution Name", "Institution Type", "Block Group",
+            "Phone", "Email")),
+
         
         'enlace_participants'=>array('db'=>'enlace', 'query'=>
-            ''),
+        ''), //waiting to resolve the access permissions 
+
+        'enlace_participants_deid'=>array('db'=>'enlace', 'query'=>
+        'SELECT Participants.Participant_ID, Participants.Block_Group, Address_City, Address_State, Address_ZIP, Age, Gender, Grade, Institution_Name, Roles.Role FROM Participants INNER JOIN Roles ON Participants.Role=Roles.Role_ID INNER JOIN Institutions ON School=Inst_ID',
+        'titles' => array("Participant ID", "Block Group", "Address_City", "Address_State", "Address_ZIP",
+            "Age", "Gender", "Grade", "School", "Role")),
+        
+        'enlace_consent_records'=>array('db'=>'enlace', 'query'=>
+            'SELECT Participants_Consent.Participant_ID, First_Name, Last_Name, School_Year, Consent_Given, Institution_Name FROM Participants_Consent INNER JOIN Participants ON Participants.Participant_ID=Participants_Consent.Participant_ID INNER JOIN Institutions ON School=Inst_ID',
+        'titles' => array("Participant_ID", "First_Name", "Last_Name", "School_Year", "Consent_Given (1=Yes, 0=No)", "School")),
+
+        'enlace_consent_records_deid'=>array('db'=>'enlace', 'query'=>
+        'SELECT Participants_Consent.Participant_ID, School_Year, Consent_Given, Institution_Name FROM Participants_Consent INNER JOIN Participants ON Participants.Participant_ID=Participants_Consent.Participant_ID INNER JOIN Institutions ON School=Inst_ID',
+        'titles' => array("Participant_ID", "School_Year", "Consent_Given (1=Yes, 0=No)", "School")),
+
+        'enlace_event_attendance'=>array('db'=>'enlace', 'query'=>
+        'SELECT Event_Name, Event_Date, Participants_Events.Participant_ID, First_Name, Last_Name, Event_Roles.Role FROM Participants_Events INNER JOIN Participants ON Participants.Participant_ID=Participants_Events.Participant_ID INNER JOIN Event_Roles ON Role_Type=Event_Role_ID INNER JOIN Campaigns_Events ON Event_ID=Campaign_Event_ID',
+        'titles' => array("Event Name", "Event Date", "Participant ID", "First_Name", "Last_Name", "Role")),
+
+        'enlace_event_attendance_deid'=>array('db'=>'enlace', 'query'=>
+        'SELECT Event_ID, Event_Name, Event_Date, Participants.Participant_ID, Event_Roles.Role FROM Participants_Events INNER JOIN Participants ON Participants.Participant_ID=Participants_Events.Participant_ID INNER JOIN Event_Roles ON Role_Type=Event_Role_ID INNER JOIN Campaigns_Events ON Event_ID=Campaign_Event_ID',
+        'titles' => array("Event ID", "Event Name", "Event Date", "Participant ID", "Role")),
+
+        'enlace_mentorship_hours'=>array('db'=>'enlace', 'query'=>        
+        'SELECT Participant_ID, Mentorship_Date, Mentorship_Hours_Logged, First_Name, Last_Name, Name FROM Participants_Mentorship INNER JOIN Participants ON Participant_ID=Mentee_ID INNER JOIN Programs ON Program_Id=Mentorship_Program',
+        'titles' => array("Participant ID", "Mentorship Date", "Mentorship Hours", "First_Name", "Last_Name", "Program")),
+
+        'enlace_mentorship_hours_deid'=>array('db'=>'enlace', 'query'=>        
+        'SELECT Participant_ID, Mentorship_Date, Mentorship_Hours_Logged, Name FROM Participants_Mentorship INNER JOIN Participants ON Participant_ID=Mentee_ID INNER JOIN Programs ON Program_Id=Mentorship_Program',
+        'titles' => array("Participant ID", "Mentorship Date", "Mentorship Hours", "Program")),
+
+        'enlace_programs'=>array('db'=>'enlace', 'query'=> 
+        'SELECT Programs.*, Institution_Name FROM Programs LEFT JOIN Institutions ON Host=Inst_ID',
+        'titles' => array("Program ID", "Program Name", "Host Organization ID", "Start Date", "End Date", "Start Hour", "Start am/pm", "End Hour", "End am/pm", "Maximum Hours", "Classwork?", "Clinic?", "Referrals?", "Community?", "Counseling?", "Sports?", "Mentorship?", "Service?", "Mondays?", "Tuesdays?", "Wednesdays?", "Thursdays?", "Fridays?", "Saturdays?", "Sundays?", "Host Institution Name")),
+
+        'enlace_program_participation'=>array('db'=>'enlace', 'query'=> 
+        'SELECT DISTINCT Participant_Program_ID, Participants_Programs.Participant_ID, First_Name, Last_Name, Session_Name, Name, Date_Dropped FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID',
+        'titles' => array("Participant_Program Link ID", "Participant ID", "First_Name", "Last_Name", "Session", "Program", "Date Dropped")),
+
+        'enlace_program_participation_deid'=>array('db'=>'enlace', 'query'=> 
+        'SELECT DISTINCT Participant_Program_ID, Participants_Programs.Participant_ID,  Session_Name, Name, Date_Dropped FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID',
+        'titles' => array("Participant_Program Link ID", "Participant ID", "Session", "Program", "Date Dropped")),
+
+
+
         
         'swop_campaigns_deid'=>array('db'=>'SWOP', 'query'=>
             'SELECT * FROM Campaigns',
@@ -1608,7 +1660,7 @@ function generalized_download($download_name){
                   "Quarter", "Grade in School")),
 
          'trp_explore_scores' => array('db'=>'TRP', 'query'=>
-             SELECT First_Name, Last_Name, Explore_Scores.*, School_Name FROM Explore_Scores
+             'SELECT First_Name, Last_Name, Explore_Scores.*, School_Name FROM Explore_Scores
                  LEFT JOIN Participants on Explore_Scores.Participant_ID=Participants.Participant_ID
                  LEFT JOIN Schools ON School=School_ID',
              'titles' => array("First Name", "Last Name", "Link ID", "Participant ID",
@@ -1649,8 +1701,54 @@ function generalized_download($download_name){
                    "Lunch Price  (0=No Answer; 1=Free; 2=Reduced Price; 3=None)",
                    "Neighborhood", "Eval ID", "CPS ID")),
 
-          
-          
+          'trp_participants_deid'  => array('db' => 'TRP', 'query'=>
+              'SELECT Participant_ID, Block_Group, Gender,
+                  Grade_Level, Classroom, Lunch_Price, Neighborhood FROM
+                  Participants', 
+              'titles' => array("Participant_ID", "Block Group",
+                  "Gender", "Grade_Level", "Classroom", "Lunch_Price (0=No
+                  Answer; 1=Free; 2=Reduced Price; 3=None)",
+                  "Neighborhood")), 
+
+          'trp_participants_programs'  => array('db' => 'TRP', 'query'=>
+              'SELECT First_Name, Last_Name, Program_Name FROM
+                  Participants_Programs INNER JOIN Participants ON
+                  Participants.Participant_ID=Participants_Programs.Participant_ID
+                  INNER JOIN Programs ON
+                  Participants_Programs.Program_ID=Programs.Program_ID',
+              'titles' => array( "First Name", "Last Name", "Program
+                  Name")),
+
+          'trp_participants_programs_deid'  => array('db' => 'TRP', 'query'=>
+              'SELECT * FROM Participants_Programs',
+              'titles' => array("Linking ID", "Participant ID", "Program ID"))
+
+          'trp_programs'  => array('db' => 'TRP', 'query'=>
+              'SELECT * FROM Programs',
+              'titles' => array("Program ID", "Program Name", "Program
+                  Organization")),
+
+          'trp_gold_scores'  => array('db' => 'TRP', 'query'=>
+          'SELECT Gold_Score_Pre.Participant, First_Name, Last_Name, Gold_Score_Pre.Social_Emotional, Gold_Score_Mid.Social_Emotional, Gold_Score_Post.Social_Emotional, Gold_Score_Pre.Physical, Gold_Score_Mid.Physical, Gold_Score_Post.Physical, Gold_Score_Pre.Language, Gold_Score_Mid.Language, Gold_Score_Post.Language, Gold_Score_Pre.Cognitive, Gold_Score_Mid.Cognitive, Gold_Score_Post.Cognitive, Gold_Score_Pre.Literacy, Gold_Score_Mid.Literacy, Gold_Score_Post.Literacy, Gold_Score_Pre.Mathematics, Gold_Score_Mid.Mathematics, Gold_Score_Post.Mathematics, Gold_Score_Pre.Science_Tech, Gold_Score_Mid.Science_Tech, Gold_Score_Post.Science_Tech, Gold_Score_Pre.Social_Studies, Gold_Score_Mid.Social_Studies, Gold_Score_Post.Social_Studies, Gold_Score_Pre.Creative_Arts, Gold_Score_Mid.Creative_Arts, Gold_Score_Post.Creative_Arts, Gold_Score_Pre.English, Gold_Score_Mid.English, Gold_Score_Post.English, Gold_Score_Pre.Year, Address_Street_Num, Address_Street_Direction, Address_Street_Name, Address_Street_Type, Address_City, Address_State, Address_Zipcode, Phone, Email, DOB, Gender, CPS_ID FROM Gold_Score_Totals LEFT JOIN Participants ON Gold_Score_Totals.Participant=Participants.Participant_ID LEFT JOIN Gold_Score_Totals AS Gold_Score_Pre ON Gold_Score_Totals.Participant=Gold_Score_Pre.Participant AND Gold_Score_Pre.Test_Time=1 AND Gold_Score_Pre.Year=Gold_Score_Totals.Year LEFT JOIN Gold_Score_Totals AS Gold_Score_Mid ON Gold_Score_Totals.Participant=Gold_Score_Mid.Participant AND Gold_Score_Mid.Test_Time=2 AND Gold_Score_Mid.Year=Gold_Score_Totals.Year LEFT JOIN Gold_Score_Totals AS Gold_Score_Post ON Gold_Score_Totals.Participant=Gold_Score_Post.Participant AND Gold_Score_Post.Test_Time=3 AND Gold_Score_Post.Year=Gold_Score_Totals.Year WHERE Gold_Score_Totals.Year=1 GROUP BY Gold_Score_Totals.Participant',
+
+          'titles' => array( "Participant ID", "Participant First Name", "Participant Last Name", "Social Emotional - Pre", "Social Emotional - Mid", "Social Emotional - Post", "Physical - Pre", "Physical - Mid", "Physical - Post", "Language - Pre", "Language - Mid", "Language - Post", "Cognitive - Pre", "Cognitive - Mid", "Cognitive - Post", "Literacy - Pre", "Literacy - Mid", "Literacy - Post", "Mathematics - Pre", "Mathematics - Mid", "Mathematics - Post", "Science and Technology - Pre", "Science and Technology - Mid", "Science and Technology - Post", "Social Studies - Pre", "Social Studies - Mid", "Social Studies - Post", "Creative Arts - Pre", "Creative Arts - Mid", "Creative Arts - Post", "English - Pre", "English - Mid", "English - Post", "First, Second, or Third Year", "Address Street Number", "Address Street Direction", "Address Street Name", "Address Street Type", "City", "State", "Zipcode", "Phone", "Email", "DOB", "Gender", "CPS ID"), 
+
+          'legend' => array("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "1=No Evidence Yet; 2=Emerging; 3=Meets Program Expectation", "1=No Evidence Yet; 2=Emerging; 3=Meets Program Expectation", "1=No Evidence Yet; 2=Emerging; 3=Meets Program Expectation", "1=No Evidence Yet; 2=Emerging; 3=Meets Program Expectation","1=No Evidence Yet; 2=Emerging; 3=Meets Program Expectation", "1=No Evidence Yet; 2=Emerging; 3=Meets Program Expectation", "1=No Evidence Yet; 2=Emerging; 3=Meets Program Expectation", "1=No Evidence Yet; 2=Emerging; 3=Meets Program Expectation", "1=No Evidence Yet; 2=Emerging; 3=Meets Program Expectation", "1=No Evidence Yet; 2=Emerging; 3=Meets Program Expectation", "1=No Evidence Yet; 2=Emerging; 3=Meets Program Expectation", "1=No Evidence Yet; 2=Emerging; 3=Meets Program Expectation")), 
+
+        'trp_gold_scores_deid'  => array('db' => 'TRP', 'query' => ''),
+
+        'trp_teacher_exchange'  => array('db' => 'TRP', 'query' => 
+             'SELECT Teacher_Exchange_Rooms.*, First_Name, Last_Name FROM Teacher_Exchange_Rooms LEFT JOIN
+                Participants ON Teacher_Exchange_Rooms.Participant_ID=Participants.Participant_ID', 
+             array("Teacher Exchange ID", "Participant ID", "Classroom", "Home Teacher", 
+                 "Exchange Teacher", "Participant First Name", "Participant Last Name")),            
+
+        'trp_teacher_exchange_deid'  => array('db' => 'TRP', 'query' => 
+             'SELECT Teacher_Exchange_Rooms.* FROM Teacher_Exchange_Rooms',
+             'titles' => array("Teacher Exchange ID", "Participant ID", "Classroom", 
+                 "Home Teacher", "Exchange Teacher")),
+
+        
 
         );
     $db_array=array(2=>'LSNA', 3=>'bickerdike', 4=>'TRP', 5=>'SWOP', 6=>'enlace');
@@ -1687,7 +1785,15 @@ function generalized_download($download_name){
         $output = fopen('php://output', 'w');
 
         // output the column headings
-        fputcsv($output, $download_list_array[$download_name]['titles']);
+        fputcsv($output,
+        $download_list_array[$download_name]['titles']);
+
+        //output the legends where appropriate
+        if (isset($download_list_array[$download_name]['legend'])){
+                fputcsv($output, $download_list_array[$download_name]['legend']);
+            }
+
+        
 
         // fetch the data
         $conn_file='../' . strtolower($download_list_array[$download_name]['db'])
