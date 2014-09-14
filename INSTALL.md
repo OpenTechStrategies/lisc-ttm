@@ -185,8 +185,8 @@ Steps to install:
         mysql> quit;
         $ 
 
-7.  Put the database passwords you entered in step 5 and the database names 
-    and usernames from step 6 authentication into the web tree, by first 
+7.  Put the database passwords you entered in step 5 and the database server name, 
+    database names, and usernames from step 6 into the web tree, by first 
     copying `dbconnopen.php.tmpl` to `dbconnopen.php` in the appropriate places, 
     and then editing each of the new files:
 
