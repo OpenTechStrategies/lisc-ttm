@@ -66,11 +66,11 @@ WHERE Date_Entered <= '$month_ago' AND Date_Logged IS NULL AND Role=1";
                 INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID
                 WHERE Participant_Id='$intake[5]' ORDER BY Name";
                 //echo $get_all_programs;
-                include "../include/dbconnopen.php";
+                include "include/dbconnopen.php";
                 $all_programs = mysqli_query($cnnEnlace, $get_all_programs);
                 while ($program = mysqli_fetch_row($all_programs)) {
                     ?><a href="javascript:;" onclick="$.post(
-                                        '../ajax/set_program_id.php',
+                                        'ajax/set_program_id.php',
                                         {
                                             page: 'profile',
                                             id: '<?php echo $program[2]; ?>'
@@ -80,7 +80,7 @@ WHERE Date_Entered <= '$month_ago' AND Date_Logged IS NULL AND Role=1";
                                 }
                                 )"><?php echo $program[6] . ' - ' . $program[1]; ?></a><br><?php
                    }
-                   include "../include/dbconnclose.php";
+                   include "include/dbconnclose.php";
                    ?>
                             </td></tr>
                         <?php
