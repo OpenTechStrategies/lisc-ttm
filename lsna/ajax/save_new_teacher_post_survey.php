@@ -165,7 +165,6 @@ $save_survey_answers = "INSERT INTO PM_Teacher_Survey_Post (
 				   '" . $exp_14_sqlsafe . "',
 				   '" . $exp_15_sqlsafe . "',
 				   '" . $participant_sqlsafe . "')";
-echo $save_survey_answers;
 include "../include/dbconnopen.php";
 mysqli_query($cnnLSNA, $save_survey_answers);
 include "../include/dbconnclose.php";
@@ -226,7 +225,6 @@ else {
 	WHERE PM_Teacher_Survey_ID='" . $survey_id_sqlsafe . "'";
 	
 	include "../include/dbconnopen.php";
-	echo $edit_survey;
 	mysqli_query($cnnLSNA, $edit_survey);
 	include "../include/dbconnclose.php";
 }

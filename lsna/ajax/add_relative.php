@@ -14,7 +14,6 @@ $add_relative = "INSERT INTO Parent_Mentor_Children (Parent_ID, Child_ID)
 else{
     $add_relative = "INSERT INTO Parent_Mentor_Children (Parent_ID, Spouse_ID) VALUES ('" . $person_sqlsafe . "', '" . $spouse_sqlsafe . "')";
 }
-echo $add_relative;
 mysqli_query($cnnLSNA, $add_relative);
 include "../include/dbconnclose.php";
 

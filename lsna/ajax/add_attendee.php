@@ -9,7 +9,6 @@ $add_attendee_to_date = "INSERT INTO Subcategory_Attendance (
                             '". $program_date_id_sqlsafe."',
                             '". $user_id_sqlsafe."'
                             )";
-echo $add_attendee_to_date;
 mysqli_query($cnnLSNA, $add_attendee_to_date);
 include "../include/dbconnclose.php";
 

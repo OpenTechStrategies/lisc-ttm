@@ -8,7 +8,6 @@ else{
     $get_duplicate_campaigns_sqlsafe = "SELECT COUNT(Participant_ID) FROM Participants
 WHERE (First_Name='" . mysqli_real_escape_string($cnnTRP, $_POST['name']) . "' AND Last_Name='" . mysqli_real_escape_string($cnnTRP, $_POST['surname']) . "')";
 }
-//echo $get_duplicate_campaigns_sqlsafe;
 $is_duplicate = mysqli_query($cnnTRP, $get_duplicate_campaigns_sqlsafe);
 $duplicate = mysqli_fetch_row($is_duplicate);
 if ($duplicate[0]>0){

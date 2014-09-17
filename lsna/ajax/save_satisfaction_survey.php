@@ -80,7 +80,6 @@ else{
 		Version='" . $version_sqlsafe . "'
                     WHERE Satisfaction_Survey_ID='".$survey_id_sqlsafe."'";
 }
-echo $save_query;
 mysqli_query($cnnLSNA, $save_query);
 include "../include/dbconnclose.php";
 ?>

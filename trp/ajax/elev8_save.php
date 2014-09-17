@@ -6,7 +6,6 @@
 if ($_POST['action']=='delete'){
 include "../include/dbconnopen.php";
   $query_sqlsafe="DELETE FROM Elev8_Data WHERE Elev8_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
-echo $query_sqlsafe;
 mysqli_query($cnnTRP, $query_sqlsafe);
 include "../include/dbconnclose.php";
 }
@@ -16,7 +15,6 @@ include "../include/dbconnopen.php";
     '" . mysqli_real_escape_string($cnnTRP, $_POST['year']) . "',
         '" . mysqli_real_escape_string($cnnTRP, $_POST['element']) . "',
             '" . mysqli_real_escape_string($cnnTRP, $_POST['value']) . "' )";
-echo $query_sqlsafe;
 mysqli_query($cnnTRP, $query_sqlsafe);
 include "../include/dbconnclose.php";
 }

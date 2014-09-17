@@ -112,7 +112,6 @@ if ($_COOKIE['prog_page']=='profile'){
             <!--List of programs and campaigns sorted by issue area.  -->
     <?
     $get_categories = "SELECT * FROM Categories ORDER BY Category_Name";
-    //echo $get_categories;
     include "../include/dbconnopen.php";
     $categories = mysqli_query($cnnLSNA, $get_categories);
     while ($category = mysqli_fetch_array($categories)){
@@ -128,7 +127,6 @@ $get_related_campaigns = "SELECT * FROM Categories INNER JOIN (Category_Subcateg
     Categories.Category_ID=Category_Subcategory_Links.Category_ID AND 
     Category_Subcategory_Links.Subcategory_ID=Subcategories.Subcategory_ID
     WHERE Category_Subcategory_Links.Category_ID='" . $category['Category_ID'] . "' AND Campaign_or_Program='Campaign' ORDER BY Subcategories.Subcategory_Name;";
-//echo $get_related_campaigns;
 include "../include/dbconnopen.php";
 $related_subcategories = mysqli_query($cnnLSNA, $get_related_campaigns);
 $category_name=0;
@@ -164,7 +162,6 @@ $get_related_programs = "SELECT * FROM Categories INNER JOIN (Category_Subcatego
     Categories.Category_ID=Category_Subcategory_Links.Category_ID AND 
     Category_Subcategory_Links.Subcategory_ID=Subcategories.Subcategory_ID
     WHERE Category_Subcategory_Links.Category_ID='" . $category['Category_ID'] . "' AND Campaign_or_Program='Program' ORDER BY Subcategories.Subcategory_Name;";
-//echo $get_related_programs;
 include "../include/dbconnopen.php";
 $related_subcategories = mysqli_query($cnnLSNA, $get_related_programs);
 $related_category=0;
@@ -197,7 +194,6 @@ while ($sub = mysqli_fetch_array($related_subcategories)){
                         Category_Subcategory_Links.Subcategory_ID=Subcategories.Subcategory_ID
                         AND Subcategories.Subcategory_ID=Participants_Subcategories.Subcategory_ID
                         WHERE Category_Subcategory_Links.Category_ID='" . $category['Category_ID'] . "' GROUP BY Participant_ID";
-    //echo $count_participants;
     include "../include/dbconnopen.php";
     $count = mysqli_query($cnnLSNA, $count_participants);
     $num = mysqli_num_rows($count);

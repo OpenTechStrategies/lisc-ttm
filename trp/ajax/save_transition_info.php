@@ -21,7 +21,6 @@ if($_POST['action']=='explore'){
                     Program_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['program']) . "',
                         School='" . mysqli_real_escape_string($cnnTRP, $_POST['school']) . "',
                             School_Year='" . mysqli_real_escape_string($cnnTRP, $_POST['school_year']) . "'";
-    echo $add_explore_sqlsafe;
     mysqli_query($cnnTRP, $add_explore_sqlsafe);
     include "../include/dbconnclose.php";
 }
@@ -43,7 +42,6 @@ elseif($_POST['action']=='discipline'){
             '" . mysqli_real_escape_string($cnnTRP, $_POST['program']) . "',
             '" . mysqli_real_escape_string($cnnTRP, $_POST['school']) . "'
             )";
-    echo $record_discipline_sqlsafe;
     mysqli_query($cnnTRP, $record_discipline_sqlsafe);
     include "../include/dbconnclose.php";
 }
@@ -55,7 +53,6 @@ elseif($_POST['action']=='room'){
       . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['exchange_teacher']) . "')"
       . "ON DUPLICATE KEY UPDATE Classroom='" . mysqli_real_escape_string($cnnTRP, $_POST['classroom']) . "', "
       . "Home_Teacher='" . mysqli_real_escape_string($cnnTRP, $_POST['teacher']) ."', Exchange_Teacher='" . mysqli_real_escape_string($cnnTRP, $_POST['exchange_teacher']) . "'";
-    echo $record_room_sqlsafe;
     mysqli_query($cnnTRP, $record_room_sqlsafe);
     include "../include/dbconnclose.php";
             

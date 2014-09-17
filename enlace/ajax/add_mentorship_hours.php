@@ -5,7 +5,6 @@ if ($_POST['action']=='delete'){
     include "../include/dbconnopen.php";
     $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['id']);
     $delete_mentorship="DELETE FROM Participants_Mentorship WHERE Mentorship_Time_Id='".$id_sqlsafe."'";
-        echo $delete_mentorship;
     mysqli_query($cnnEnlace, $delete_mentorship);
     include "../include/dbconnclose.php";
 }
@@ -17,7 +16,6 @@ elseif($_POST['action']=='edit'){
     $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['id']);
     $update_mentorship = "UPDATE Participants_Mentorship SET Mentorship_Date='".$date_sqlsafe."', Mentorship_Hours_Logged='".$hours_sqlsafe."',"
             . "Mentorship_Program='".$session_sqlsafe."' WHERE Mentorship_Time_ID='".$id_sqlsafe."'";
-    echo $update_mentorship;
     mysqli_query($cnnEnlace, $update_mentorship);
     include "../include/dbconnclose.php";
 }
@@ -32,7 +30,6 @@ $new_mentorship_hours_query="INSERT INTO Participants_Mentorship (Mentee_ID, Men
         '".$date_sqlsafe."',
         '".$hours_sqlsafe."',
         '".$program_sqlsafe."')";
-echo $new_mentorship_hours_query;
 mysqli_query($cnnEnlace, $new_mentorship_hours_query);
 include "../include/dbconnclose.php";
 }

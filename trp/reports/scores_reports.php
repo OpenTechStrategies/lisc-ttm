@@ -26,7 +26,6 @@ ON Participants_Programs.Participant_ID=Academic_Info.Participant_ID
 INNER JOIN Programs ON Participants_Programs.Program_ID=Programs.Program_ID
 WHERE School_Year IS NOT NULL AND School_Year !=''
 GROUP BY Participants_Programs.Program_ID,  Quarter;";
-   // echo $somehow_someway_query;
     include "../include/dbconnopen.php";
     $gpa_avg=mysqli_query($cnnTRP, $somehow_someway_query_sqlsafe);
     $current_year="";
@@ -92,7 +91,6 @@ GROUP BY Participants_Programs.Program_ID,  Quarter;";
 AVG(Explore_Score_Post) AS post, AVG(Explore_Score_Fall) AS fall FROM Explore_Scores 
 INNER JOIN Programs ON Programs.Program_ID=Explore_Scores.Program_ID
 GROUP BY School_Year, Explore_Scores.Program_ID";
-   // echo $somehow_someway_query;
     include "../include/dbconnopen.php";
     $gpa_avg=mysqli_query($cnnTRP, $somehow_someway_query_sqlsafe);
     $current_year="";

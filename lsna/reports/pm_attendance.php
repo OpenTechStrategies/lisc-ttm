@@ -35,7 +35,6 @@ A more current version is at pm_attendance_2.php.
                 $get_PMs = "SELECT DISTINCT Parent_Mentor_ID, Institutions_Participants.* FROM PM_Actual_Attendance
                         INNER JOIN Institutions_Participants ON Participant_ID=Parent_Mentor_ID
                         WHERE Is_PM=1 AND Institutions_Participants.Institution_ID='" . $school_sqlsafe . "'";
-                //echo $get_PMs;
                 $PMs = mysqli_query($cnnLSNA, $get_PMs);
                 $num_pms_total=mysqli_num_rows($PMs);
                 echo $num_pms_total;
@@ -120,7 +119,6 @@ A more current version is at pm_attendance_2.php.
             WHERE PM_Possible_Attendance_ID IS NOT NULL " .$mo.$year.
             "   GROUP BY Month, Year;";
     }
-   // echo $get_months_query;
     include "../include/dbconnopen.php";
     $get_months = mysqli_query($cnnLSNA, $get_months_query);
     while ($months=mysqli_fetch_row($get_months)){
@@ -145,7 +143,6 @@ FROM PM_Possible_Attendance INNER JOIN PM_Actual_Attendance
     WHERE Month='".$months[0]."' AND Year='".$months[1]."'
           GROUP BY Num_Days_Attended;";
             }
-            //echo $get_percentages_query;
             $get_total = mysqli_query($cnnLSNA, $get_percentages_query);
             $total_people=0;
             while ($total = mysqli_fetch_row($get_total)){

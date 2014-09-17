@@ -87,7 +87,6 @@ $create_new_user_query_sqlsafe = "INSERT INTO Users (
                     '$child',
         '" . $phone_sqlsafe . "'
         )";
-//echo $create_new_user_query_sqlsafe;
 mysqli_query($cnnBickerdike, $create_new_user_query_sqlsafe);
 $user_id = mysqli_insert_id($cnnBickerdike);
 include "../include/dbconnclose.php";

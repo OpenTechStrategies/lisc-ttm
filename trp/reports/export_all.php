@@ -433,7 +433,6 @@ $get_y1_scores = "SELECT Gold_Score_Pre.Participant, First_Name, Last_Name, Gold
         . "LEFT JOIN Gold_Score_Totals AS Gold_Score_Mid ON Gold_Score_Totals.Participant=Gold_Score_Mid.Participant AND Gold_Score_Mid.Test_Time=2 AND Gold_Score_Mid.Year=Gold_Score_Totals.Year "
         . "LEFT JOIN Gold_Score_Totals AS Gold_Score_Post ON Gold_Score_Totals.Participant=Gold_Score_Post.Participant AND Gold_Score_Post.Test_Time=3 AND Gold_Score_Post.Year=Gold_Score_Totals.Year "
         . "WHERE Gold_Score_Totals.Year=1 GROUP BY Gold_Score_Totals.Participant ";
-//echo $get_y1_scores;
 include "../include/dbconnopen.php";
 $score_info = mysqli_query($cnnTRP, $get_y1_scores);
 while ($score_array = mysqli_fetch_row($score_info)){
@@ -457,7 +456,6 @@ $get_y2_scores = "SELECT Gold_Score_Pre.Participant, First_Name, Last_Name, Gold
         . "LEFT JOIN Gold_Score_Totals AS Gold_Score_Mid ON Gold_Score_Totals.Participant=Gold_Score_Mid.Participant AND Gold_Score_Mid.Test_Time=2 AND Gold_Score_Mid.Year=Gold_Score_Totals.Year "
         . "LEFT JOIN Gold_Score_Totals AS Gold_Score_Post ON Gold_Score_Totals.Participant=Gold_Score_Post.Participant AND Gold_Score_Post.Test_Time=3 AND Gold_Score_Post.Year=Gold_Score_Totals.Year "
         . "WHERE Gold_Score_Totals.Year=2 GROUP BY Gold_Score_Totals.Participant ";
-//echo $get_y1_scores;
 include "../include/dbconnopen.php";
 $score_info = mysqli_query($cnnTRP, $get_y2_scores);
 while ($score_array = mysqli_fetch_row($score_info)){
@@ -481,7 +479,6 @@ $get_y3_scores = "SELECT Gold_Score_Pre.Participant, First_Name, Last_Name, Gold
         . "LEFT JOIN Gold_Score_Totals AS Gold_Score_Mid ON Gold_Score_Totals.Participant=Gold_Score_Mid.Participant AND Gold_Score_Mid.Test_Time=2 AND Gold_Score_Mid.Year=Gold_Score_Totals.Year "
         . "LEFT JOIN Gold_Score_Totals AS Gold_Score_Post ON Gold_Score_Totals.Participant=Gold_Score_Post.Participant AND Gold_Score_Post.Test_Time=3 AND Gold_Score_Post.Year=Gold_Score_Totals.Year "
         . "WHERE Gold_Score_Totals.Year=3 GROUP BY Gold_Score_Totals.Participant ";
-//echo $get_y1_scores;
 include "../include/dbconnopen.php";
 $score_info = mysqli_query($cnnTRP, $get_y3_scores);
 while ($score_array = mysqli_fetch_row($score_info)){
@@ -524,7 +521,6 @@ $get_y1_scores = "SELECT Gold_Score_Pre.Participant, Gold_Score_Pre.Social_Emoti
         . "LEFT JOIN Gold_Score_Totals AS Gold_Score_Mid ON Gold_Score_Totals.Participant=Gold_Score_Mid.Participant AND Gold_Score_Mid.Test_Time=2 AND Gold_Score_Mid.Year=Gold_Score_Totals.Year "
         . "LEFT JOIN Gold_Score_Totals AS Gold_Score_Post ON Gold_Score_Totals.Participant=Gold_Score_Post.Participant AND Gold_Score_Post.Test_Time=3 AND Gold_Score_Post.Year=Gold_Score_Totals.Year "
         . "WHERE Gold_Score_Totals.Year=1 GROUP BY Gold_Score_Totals.Participant ";
-//echo $get_y1_scores;
 include "../include/dbconnopen.php";
 $score_info = mysqli_query($cnnTRP, $get_y1_scores);
 while ($score_array = mysqli_fetch_row($score_info)){
@@ -548,7 +544,6 @@ $get_y2_scores = "SELECT Gold_Score_Pre.Participant, Gold_Score_Pre.Social_Emoti
         . "LEFT JOIN Gold_Score_Totals AS Gold_Score_Mid ON Gold_Score_Totals.Participant=Gold_Score_Mid.Participant AND Gold_Score_Mid.Test_Time=2 AND Gold_Score_Mid.Year=Gold_Score_Totals.Year "
         . "LEFT JOIN Gold_Score_Totals AS Gold_Score_Post ON Gold_Score_Totals.Participant=Gold_Score_Post.Participant AND Gold_Score_Post.Test_Time=3 AND Gold_Score_Post.Year=Gold_Score_Totals.Year "
         . "WHERE Gold_Score_Totals.Year=2 GROUP BY Gold_Score_Totals.Participant ";
-//echo $get_y1_scores;
 include "../include/dbconnopen.php";
 $score_info = mysqli_query($cnnTRP, $get_y2_scores);
 while ($score_array = mysqli_fetch_row($score_info)){
@@ -573,7 +568,6 @@ $get_y3_scores = "SELECT Gold_Score_Pre.Participant, Gold_Score_Pre.Social_Emoti
         . "LEFT JOIN Gold_Score_Totals AS Gold_Score_Mid ON Gold_Score_Totals.Participant=Gold_Score_Mid.Participant AND Gold_Score_Mid.Test_Time=2 AND Gold_Score_Mid.Year=Gold_Score_Totals.Year "
         . "LEFT JOIN Gold_Score_Totals AS Gold_Score_Post ON Gold_Score_Totals.Participant=Gold_Score_Post.Participant AND Gold_Score_Post.Test_Time=3 AND Gold_Score_Post.Year=Gold_Score_Totals.Year "
         . "WHERE Gold_Score_Totals.Year=3 GROUP BY Gold_Score_Totals.Participant ";
-//echo $get_y1_scores;
 include "../include/dbconnopen.php";
 $score_info = mysqli_query($cnnTRP, $get_y3_scores);
 while ($score_array = mysqli_fetch_row($score_info)){
@@ -592,7 +586,6 @@ $fp=fopen($infile, "w") or die('can\'t open file');
 $title_array = array("Teacher Exchange ID", "Participant ID", "Classroom", "Home Teacher", "Exchange Teacher", "Participant First Name", "Participant Last Name");
 fputcsv($fp, $title_array);
 $get_scores = "SELECT Teacher_Exchange_Rooms.*, First_Name, Last_Name FROM Teacher_Exchange_Rooms LEFT JOIN Participants ON Teacher_Exchange_Rooms.Participant_ID=Participants.Participant_ID";
-//echo $get_scores;
 include "../include/dbconnopen.php";
 $score_info = mysqli_query($cnnTRP, $get_scores);
 while ($score_array = mysqli_fetch_row($score_info)){

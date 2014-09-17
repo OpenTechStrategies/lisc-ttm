@@ -67,7 +67,6 @@ if ($_GET['action'] == 'logout') {
                 include "include/dbconnopen.php";
                 $privilege_id_sqlsafe=  mysqli_real_escape_string($cnnLISC, $_COOKIE['sites'][$n]);
                 $get_privilege_name_sqlsafe = "SELECT * FROM Privileges WHERE Privilege_Id='" . $privilege_id_sqlsafe . "'";
-                //echo $get_privilege_name_sqlsafe;
                 $privilege_name = mysqli_query($cnnLISC, $get_privilege_name_sqlsafe);
                 $name = mysqli_fetch_array($privilege_name);
                 if ($name['Privilege_Name'] == 'Bickerdike') {

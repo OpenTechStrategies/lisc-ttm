@@ -29,7 +29,6 @@ $add_aca_info_sqlsafe = "INSERT INTO Academic_Info (
 		'" . mysqli_real_escape_string($cnnTRP, $_POST['lang']) . "',
         '" . mysqli_real_escape_string($cnnTRP, $_POST['school']) . "'
 	)";
-echo $add_aca_info_sqlsafe;
 mysqli_query($cnnTRP, $add_aca_info_sqlsafe);
 include "../include/dbconnclose.php";
 ?>

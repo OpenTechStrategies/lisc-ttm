@@ -40,7 +40,6 @@ include "../header.php";
                                 $get_progs_sqlsafe="SELECT DISTINCT Participant_Survey_Responses.Program_ID, Program_Name FROM Participant_Survey_Responses LEFT JOIN
                                     Programs ON Participant_Survey_Responses.Program_ID=Programs.Program_ID
                                     ORDER BY Program_Name;";
-                                echo $get_progs_sqlsafe;
                                 include "../include/dbconnopen.php";
                                 $roles = mysqli_query($cnnBickerdike, $get_progs_sqlsafe);
 					while ($role = mysqli_fetch_row($roles)) {

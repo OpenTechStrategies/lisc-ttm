@@ -25,7 +25,6 @@ elseif($_POST['action']=='subcategory'){
     $delete_query="DELETE FROM Participants_Subcategories WHERE Participant_Subcategory_ID='".$id_sqlsafe."'";
 }
 
-echo $delete_query;
 mysqli_query($cnnLSNA, $delete_query);
 include "../include/dbconnopen.php";
 ?>

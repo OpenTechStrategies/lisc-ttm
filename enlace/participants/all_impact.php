@@ -19,14 +19,12 @@ $get_assessment_info = "SELECT * FROM Assessments
                         LEFT JOIN Participants_Interpersonal_Violence ON Violence_Id=Interpersonal_Violence_ID
                         LEFT JOIN Programs ON Participants_Future_Expectations.Program=Programs.Program_ID
                         WHERE Assessment_ID='" . $id_sqlsafe . "'";
-//  echo $get_assessment_info;
 $get_assessment = mysqli_query($cnnEnlace, $get_assessment_info);
 $assessment_info = mysqli_fetch_array($get_assessment);
 $caring_id = $assessment_info['Caring_ID'];
 $baseline_id = $assessment_info['Baseline_ID'];
 $future_id = $assessment_info['Future_ID'];
 $violence_id = $assessment_info['Violence_ID'];
-//  echo $assessment_info['Participant_ID'];
 $person = new Participant();
 $person->load_with_participant_id($assessment_info[1]);
 
@@ -41,7 +39,6 @@ $get_programs = "SELECT * FROM Participants_Programs
             INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID 
             INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID
             WHERE Participants_Programs.Participant_ID='" . $person->participant_id . "'";
-//  echo $get_programs;
 $programs = mysqli_query($cnnEnlace, $get_programs);
 ?>
 <h4>Program Impact Survey - <?php echo $person->first_name . " " . $person->last_name; ?></h4>

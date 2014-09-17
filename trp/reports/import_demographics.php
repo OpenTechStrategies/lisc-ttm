@@ -86,9 +86,6 @@ if (!isset($_POST['posted'])) {
 
             //get the line
             $line = fgets($handle);
-            //echo  $line . "<br />";
-            
-           // echo "1";
 
             //open table info
             if ($line == "(\r\n") {
@@ -98,10 +95,8 @@ if (!isset($_POST['posted'])) {
                 continue;
             }
 
-            //echo "2";
             //close table info
             if ($line == ")\r\n") {
-                //echo "2aaa";
                 $parentheses--;
                 continue;
             }
@@ -150,7 +145,6 @@ if (!isset($_POST['posted'])) {
                                                         . mysqli_real_escape_string($cnnTRP, $exploded_line[6]) . "', "
                                                         . mysqli_real_escape_string($cnnTRP, $exploded_line[9]) . "', "
                                                         . mysqli_real_escape_string($cnnTRP, $exploded_line[10]) . "')";
-                            echo $add_program_sqlsafe . "<br>";
                             mysqli_query($cnnTRP, $add_program_sqlsafe);
                             $program_id=  mysqli_insert_id($cnnTRP);
 //                            

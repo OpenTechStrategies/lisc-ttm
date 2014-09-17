@@ -25,7 +25,6 @@ $DOB = $date_formatted[1] . "/" . $date_formatted[2] . "/" . $date_formatted[0];
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 $get_program_access_sqlsafe = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id=Users_Privileges.User_ID
             WHERE User_Email=" . mysqli_real_escape_string($cnnLISC, $_COOKIE['user']) . " AND Privilege_ID=4";
-// echo $get_program_access_sqlsafe;
 $program_access = mysqli_query($cnnLISC, $get_program_access_sqlsafe);
 $prog_access = mysqli_fetch_row($program_access);
 $access = $prog_access[0];

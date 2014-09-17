@@ -13,7 +13,6 @@ $delete_attendance_query_sqlsafe = "DELETE FROM Program_Dates_Users WHERE User_I
 $delete_programs_query_sqlsafe = "DELETE FROM Programs_Users WHERE User_ID='" . $user_id_sqlsafe . "'";
 $delete_health_query_sqlsafe = "DELETE FROM User_Health_Data WHERE User_ID='" . $user_id_sqlsafe . "'";
 $delete_user_query_sqlsafe = "DELETE FROM Users WHERE User_ID='" . $user_id_sqlsafe . "'";
-echo $delete_user_query_sqlsafe;
 mysqli_query($cnnBickerdike, $delete_activities_query_sqlsafe);
 mysqli_query($cnnBickerdike, $delete_surveys_query_sqlsafe);
 mysqli_query($cnnBickerdike, $delete_attendance_query_sqlsafe);

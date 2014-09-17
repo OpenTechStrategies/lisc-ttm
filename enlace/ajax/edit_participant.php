@@ -21,7 +21,6 @@
         $this_address=$_POST['address_num'] . " " .$_POST['address_dir'] . " " .$_POST['address_name'] . " " .$_POST['address_type'] . 
                 " " .$_POST['city'] . " " .$_POST['state'] . " " .$_POST['zip'];
         $block_group=do_it_all($this_address, $map);
-        echo $block_group;
         }
         else{$block_group=$address_now[7]; echo "Same block group";}
         	
@@ -74,8 +73,7 @@
                                             Early_Warning_Failed='" . $warning_failed_sqlsafe . "',
                                             Early_Warning_Discipline='" . $warning_discipline_sqlsafe . "',
                                             Referring_Teacher='" . $teacher_sqlsafe . "'
-					WHERE Participant_ID='" . $id_sqlsafe . "'";
-	echo $edit_info;			
+					WHERE Participant_ID='" . $id_sqlsafe . "'";			
 	mysqli_query($cnnEnlace, $edit_info);
 	include "../include/dbconnclose.php";
 ?>

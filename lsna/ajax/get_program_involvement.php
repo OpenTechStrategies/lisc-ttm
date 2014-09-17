@@ -1,5 +1,5 @@
 <div id="program_involvement_by_program">
-    <?//echo $_POST['program_id'];
+    <?
     include "../include/dbconnopen.php";
     $program_id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['program_id']);
     $get_sub_info = "SELECT * FROM Subcategories WHERE Subcategory_ID='" . $program_id_sqlsafe . "'";
@@ -60,7 +60,6 @@
                     ON Participants.Participant_Id=Participants_Subcategories.Participant_ID
                     WHERE (Is_PM IS NOT NULL AND Is_PM=1)
                     AND Participants_Subcategories.Subcategory_ID='" . $program_id_sqlsafe . "';";
-                //echo $count_pms;
                 include "../include/dbconnopen.php";
                 $ct_pms=mysqli_query($cnnLSNA, $count_pms);
                 $count_partis = mysqli_fetch_row($ct_pms);

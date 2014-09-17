@@ -5,7 +5,6 @@
     $note_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['note']);
 if ($_POST['type']=='program'){
     $query = "UPDATE Subcategories SET Notes='" . $note_sqlsafe . "' WHERE Subcategory_ID='" . $id_sqlsafe . "'";
-    echo $query;
     include "../include/dbconnopen.php";
     mysqli_query($cnnLSNA, $query);
     include "../include/dbconnclose.php";
@@ -14,7 +13,6 @@ if ($_POST['type']=='program'){
 /* add or edit notes for a participant */
 if ($_POST['type']=='participant'){
     $query = "UPDATE Participants SET Notes='" . $note_sqlsafe . "' WHERE Participant_ID='" . $id_sqlsafe . "'";
-    echo $query;
     include "../include/dbconnopen.php";
     mysqli_query($cnnLSNA, $query);
     include "../include/dbconnclose.php";

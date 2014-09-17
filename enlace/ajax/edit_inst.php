@@ -41,7 +41,6 @@ $edit_institution="UPDATE Institutions SET
     Phone='".$phone_sqlsafe."',
     Email='".$email_sqlsafe."'
         WHERE Inst_ID='".$inst_id_sqlsafe."'";
-echo $edit_institution;
 include "../include/dbconnopen.php";
 mysqli_query($cnnEnlace, $edit_institution);
 include "../include/dbconnclose.php";

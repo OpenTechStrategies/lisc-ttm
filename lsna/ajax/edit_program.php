@@ -13,8 +13,6 @@ $add_category = "INSERT INTO Category_Subcategory_Links (Category_ID, Subcategor
                 ('" . $type_sqlsafe . "',
                  '" . $id_sqlsafe ."'),
 				 '" . $issue_type_sqlsafe . "'";
-echo $edit_program;
-echo $add_category;
 mysqli_query($cnnLSNA, $edit_program);
 mysqli_query($cnnLSNA, $add_category);
 include "../include/dbconnclose.php";

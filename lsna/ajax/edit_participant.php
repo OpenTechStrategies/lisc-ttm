@@ -26,10 +26,8 @@ if ($address_now[0] != $_POST['address_num'] ||
             . $_POST['address_name'] . " " . $_POST['address_type'] . " "
             . $_POST['city'] . " " . $_POST['state'] . " " . $_POST['zip'];
     $block_group = do_it_all($this_address, $map);
-    echo $block_group;
 } else {
     $block_group = $address_now[7];
-    echo "Same block group";
 }
 
 /* reformat DOB and calculate age: */
@@ -69,12 +67,10 @@ if (($_POST['age'] != '') && ($_POST['age'] != 0)) {
     $birthdate = new DateTime($new_dob);
     $today = new DateTime('today');
     $age_in_years = date_diff($birthdate, $today);
-    // echo $age_in_years->format('%y years');
     $age = $age_in_years->format('%y');
 }
 $date_reformat = explode('-', $dob_sqlsafe);
 $save_date = $date_reformat[2] . '-' . $date_reformat[0] . '-' . $date_reformat[1];
-//  echo $age;
 
 /* make edits: */
 $edit_participant_query = "UPDATE Participants SET
@@ -111,7 +107,6 @@ include "../include/dbconnclose.php";
 /* add any new roles: */
 if ($_POST['role'] != '') {
     $add_role = "INSERT INTO Participants_Roles (Participant_ID, Role_ID) VALUES ('" . $id_sqlsafe . "', '" . $role_sqlsafe . "')";
-//echo $add_role;
     include "../include/dbconnopen.php";
     mysqli_query($cnnLSNA, $add_role);
     include "../include/dbconnclose.php";
@@ -126,7 +121,6 @@ if ($_POST['lang'] != '') {
     } else {
         $add_lang = "INSERT INTO Participants_Languages (Participant_ID, Language_ID) VALUES ('" . $id_sqlsafe . "', '" . $lang_sqlsafe . "')";
     }
-    echo $add_lang;
     include "../include/dbconnopen.php";
     mysqli_query($cnnLSNA, $add_lang);
     include "../include/dbconnclose.php";

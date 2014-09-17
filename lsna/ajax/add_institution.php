@@ -29,7 +29,6 @@ $new_inst_query = "INSERT INTO Institutions (
     '" . $type_sqlsafe . "',
         '$block_group'
     )";
-//echo $new_inst_query;
 mysqli_query($cnnLSNA, $new_inst_query);
 $id = mysqli_insert_id($cnnLSNA);
 include "../include/dbconnclose.php";

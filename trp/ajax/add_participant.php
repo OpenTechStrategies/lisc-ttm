@@ -273,8 +273,6 @@ $create_new_participant_query_sqlsafe = "INSERT INTO Participants (
                                     '" . mysqli_real_escape_string($cnnTRP, $_POST['grade']) . "',
                                     '" . mysqli_real_escape_string($cnnTRP, $_POST['classroom']) . "',
                                     '" . mysqli_real_escape_string($cnnTRP, $_POST['lunch']) . "')";
-
-//echo $create_new_participant_query_sqlsafe;
 mysqli_query($cnnTRP, $create_new_participant_query_sqlsafe);
 $id = mysqli_insert_id($cnnTRP);
 include "../include/dbconnclose.php";

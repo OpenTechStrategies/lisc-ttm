@@ -23,7 +23,6 @@ $get_assessment_info = "SELECT * FROM Assessments
             LEFT JOIN Participants_Baseline_Assessments ON Baseline_Id=Baseline_Assessment_ID
             LEFT JOIN Programs ON Participants_Future_Expectations.Program=Programs.Program_ID
             WHERE Assessment_ID = '" . $id_sqlsafe . "'";
-//  echo $get_assessment_info;
 $get_assessment = mysqli_query($cnnEnlace, $get_assessment_info);
 $assessment_info = mysqli_fetch_array($get_assessment);
 $caring_id = $assessment_info['Caring_ID'];
@@ -31,7 +30,6 @@ $baseline_id = $assessment_info['Baseline_ID'];
 $future_id = $assessment_info['Future_ID'];
 $violence_id = $assessment_info['Violence_ID'];
 // print_r($assessment_info);
-// echo $assessment_info['Participant_ID'];
 $person = new Participant();
 $person->load_with_participant_id($assessment_info[1]);
 
@@ -77,7 +75,6 @@ Show tables of survey questions and response options.  The chosen response is se
         $date_reformat = explode('-', $person->baseline_date);
         $day_separate = explode(' ', $date_reformat[2]);
         $new_date = $date_reformat[1] . '/' . $day_separate[0] . '/' . $date_reformat[0];
-        // echo $new_date;
         ?></caption>
     <tr><td width="20%">Do you speak languages other than English at home?</td><td width="20%"><select id="language_home">
                 <option value="0" <?php echo($assessment_info['Home_Language'] == 0 ? 'selected=="selected"' : null); ?>>N/A</option>

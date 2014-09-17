@@ -173,14 +173,11 @@ if (isset($_POST['submit_btn_assessments'])) {
                             $program_string.=")";
                         }
                     }
-                    //  echo $program_string;
                     $get_results = "SELECT COUNT(*) as count, " . $question[0] . ", $pre_post Response_Text FROM " . $table . "
                             INNER JOIN Assessment_Responses ON Response_Select=" . $question[0] . " 
                                 WHERE " . $program_string . " AND Question_ID='" . $question[0] . "'
                                     GROUP BY $pre_post " . $question[0] . "";
-                    // echo $get_results;
                 }
-                //echo $get_results;
                 $show_results = mysqli_query($cnnEnlace, $get_results);
                 $current_question = "";
                 $current_timing = "";
@@ -239,7 +236,6 @@ if (isset($_POST['submit_btn_assessments'])) {
                                     $get_denom = "SELECT COUNT(*) FROM $table WHERE " . $program_string . "";
                                 }
                             }
-                            //echo $get_denom;
                             $denom_ct = mysqli_query($cnnEnlace, $get_denom);
                             $this_denom = mysqli_fetch_row($denom_ct);
                             $denom = $this_denom[0];
@@ -282,18 +278,14 @@ if (isset($_POST['submit_btn_assessments'])) {
             WHERE Question_ID='" . $question_select_sqlsafe . "'
                 GROUP BY $pre_post " . $question_select_sqlsafe . "";
             $get_denom = "SELECT COUNT(*) FROM " . $table . " $pre_post_denom";
-            //echo $get_denom;
             $denom_ct = mysqli_query($cnnEnlace, $get_denom);
             /* $this_denom=mysqli_fetch_row($denom_ct);
               $denom=$this_denom[0]; */
-            // echo $table;
             if ($table == 'Participants_Baseline_Assessments') {
                 $this_denom = mysqli_fetch_row($denom_ct);
                 $denom = $this_denom[0];
             } else {
-                //   echo 'not baseline';
                 $get_denom = "SELECT COUNT(*), Pre_Post FROM $table  $pre_post_denom ";
-                // echo $get_denom;
                 $denom_ct = mysqli_query($cnnEnlace, $get_denom);
                 while ($this_denom = mysqli_fetch_row($denom_ct)) {
                     if ($this_denom[1] == '1') {
@@ -302,7 +294,6 @@ if (isset($_POST['submit_btn_assessments'])) {
                         $post_denom = $this_denom[0];
                     }
                 }
-                //  echo $pre_denom . "<br>" . $post_denom;
             }
         }
         /* if a program is selected: */ else {

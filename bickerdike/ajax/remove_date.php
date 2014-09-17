@@ -7,7 +7,6 @@ include "../include/dbconnopen.php";
 $program_date_id_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['program_date_id']);
 $remove_date_sqlsafe = "DELETE FROM Program_Dates WHERE
                             Program_Date_ID='". $program_date_id_sqlsafe."'";
-echo $remove_date_sqlsafe;
 mysqli_query($cnnBickerdike, $remove_date_sqlsafe);
 include "../include/dbconnclose.php";
 

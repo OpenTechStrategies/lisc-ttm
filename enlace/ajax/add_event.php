@@ -30,7 +30,6 @@ $new_event = "INSERT INTO Campaigns_Events (Event_Name, Campaign_ID, Event_Date,
             '".$address_suffix_sqlsafe."',
                 '$block_group',
             '".$event_type_sqlsafe."')";
-echo $new_event;
     mysqli_query($cnnEnlace, $new_event);
     include "../include/dbconnclose.php";
 ?>

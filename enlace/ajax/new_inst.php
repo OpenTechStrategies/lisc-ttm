@@ -30,7 +30,6 @@ $new_inst="INSERT INTO Institutions (Institution_Name, Institution_Type, Address
     '".$phone_sqlsafe."',
     '".$email_sqlsafe."'
     )";
-//echo $new_inst;
 mysqli_query($cnnEnlace, $new_inst);
 $id=mysqli_insert_id($cnnEnlace);
 include "../include/dbconnclose.php";

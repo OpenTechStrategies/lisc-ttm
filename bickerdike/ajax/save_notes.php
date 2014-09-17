@@ -8,7 +8,6 @@ if ($_POST['type']=='program'){
     $note_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['note']);
     $id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['id']);
     $query_sqlsafe = "UPDATE Programs SET Notes='" . $note_sqlsafe . "' WHERE Program_ID='" . $id_sqlsafe . "'";
-    echo $query_sqlsafe;
     mysqli_query($cnnBickerdike, $query_sqlsafe);
     include "../include/dbconnclose.php";
 }

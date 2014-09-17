@@ -13,7 +13,6 @@ $add_date_to_program_sqlsafe = "INSERT INTO Program_Dates (
                             '". $program_id_sqlsafe."',
                             '". $date_sqlsafe."'
                             )";
-echo $add_date_to_program_sqlsafe;
 mysqli_query($cnnBickerdike, $add_date_to_program_sqlsafe);
 include "../include/dbconnclose.php";
 ?>

@@ -45,7 +45,6 @@ fputcsv($fp, $title_array);
 $get_insts = "SELECT Institution_ID, Institution_Name,
     Institution_Type_Name FROM Institutions INNER JOIN Institution_Types ON 
     Institutions.Institution_Type=Institution_Types.Institution_Type_ID;";  /* Block_Group,*/
-//echo $get_insts;
 include "../include/dbconnopen.php";
 $inst_info = mysqli_query($cnnLSNA, $get_insts);
 while ($inst = mysqli_fetch_row($inst_info)){
@@ -78,7 +77,6 @@ LEFT JOIN Institutions_Participants ON PM_Actual_Attendance.Parent_Mentor_ID=
 Institutions_Participants.Participant_ID
 LEFT JOIN Institutions ON Institutions_Participants.Institution_ID=Institutions.Institution_ID
 WHERE Is_PM=1;";
-//echo $get_insts;
 include "../include/dbconnopen.php";
 $inst_info = mysqli_query($cnnLSNA, $get_insts);
 while ($inst = mysqli_fetch_row($inst_info)){
@@ -106,7 +104,6 @@ LEFT JOIN Participants as child_table ON Parent_Mentor_Children.Child_ID=child_t
 LEFT JOIN PM_Children_Info ON Parent_Mentor_Children.Child_ID=PM_Children_Info.Child_ID 
 LEFT JOIN Participants as parent_table ON Parent_Mentor_Children.Parent_ID=parent_table.Participant_ID
 LEFT JOIN Participants as spouse_table ON Parent_Mentor_Children.Spouse_ID=spouse_table.Participant_ID;";
-//echo $get_kids;
 include "../include/dbconnopen.php";
 $child_info = mysqli_query($cnnLSNA, $get_kids);
 while ($child = mysqli_fetch_array($child_info)){
@@ -189,7 +186,6 @@ $get_pre_surveys = "SELECT PM_Teacher_Survey.*, Participants.Name_First, Partici
     FROM PM_Teacher_Survey INNER JOIN Participants 
     ON PM_Teacher_Survey.Parent_Mentor_ID=Participants.Participant_ID
     LEFT JOIN Institutions ON Institutions.Institution_ID=PM_Teacher_Survey.School_Name;";
-//echo $get_pre_surveys;
 include "../include/dbconnopen.php";
 $pre_surveys = mysqli_query($cnnLSNA, $get_pre_surveys);
 while ($pre = mysqli_fetch_row($pre_surveys)){
@@ -241,7 +237,6 @@ $get_pre_surveys = "SELECT PM_Teacher_Survey.*, Institutions.Institution_Name
     FROM PM_Teacher_Survey INNER JOIN Participants 
     ON PM_Teacher_Survey.Parent_Mentor_ID=Participants.Participant_ID
     LEFT JOIN Institutions ON Institutions.Institution_ID=PM_Teacher_Survey.School_Name;";
-//echo $get_pre_surveys;
 include "../include/dbconnopen.php";
 $pre_surveys = mysqli_query($cnnLSNA, $get_pre_surveys);
 while ($pre = mysqli_fetch_row($pre_surveys)){
@@ -384,7 +379,6 @@ $get_pre_surveys = "SELECT PM_Teacher_Survey_Post.*, Institutions.Institution_Na
     FROM PM_Teacher_Survey_Post INNER JOIN Participants 
     ON PM_Teacher_Survey_Post.Parent_Mentor_ID=Participants.Participant_ID
     LEFT JOIN Institutions ON Institutions.Institution_ID=PM_Teacher_Survey_Post.School_Name;";
-//echo $get_pre_surveys;
 include "../include/dbconnopen.php";
 $pre_surveys = mysqli_query($cnnLSNA, $get_pre_surveys);
 while ($pre = mysqli_fetch_row($pre_surveys)){

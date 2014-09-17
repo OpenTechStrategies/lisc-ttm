@@ -7,7 +7,6 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 $user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['user']);
 $get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
     WHERE User_Email = '" . $user_sqlsafe . "'";
-//echo $get_program_access;
 $program_access = mysqli_query($cnnLISC, $get_program_access);
 $prog_access = mysqli_fetch_row($program_access);
 $access = $prog_access[0];
@@ -34,7 +33,6 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                             Address_Suffix, Event_Types.Type, Note_File_Name, Campaign_Name
                             FROM Campaigns_Events LEFT JOIN Campaigns ON Campaigns.Campaign_ID = Campaigns_Events.Campaign_ID
                             LEFT JOIN Event_Types ON Campaigns_Events.Type = Event_Type_ID;";
-           // echo $get_events;
             include "../include/dbconnopen.php";
             $event_info = mysqli_query($cnnEnlace, $get_events);
             while ($event = mysqli_fetch_row($event_info)) {
@@ -100,7 +98,6 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                         . $non_admin_string;
             
             $get_events = "SELECT * FROM Campaigns";
-           // echo $get_events;
             include "../include/dbconnopen.php";
             $event_info = mysqli_query($cnnEnlace, $get_events);
             while ($event = mysqli_fetch_row($event_info)) {
@@ -283,7 +280,6 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                             . $non_admin_string
                             . " WHERE Assessments.Pre_Post = 1"
                             . $non_admin_string1;
-            //echo $get_events;
             include "../include/dbconnopen.php";
             $event_info = mysqli_query($cnnEnlace, $get_events);
             while ($event = mysqli_fetch_row($event_info)) {
@@ -912,7 +908,6 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                             LEFT JOIN Programs as origin ON Referrer_Program = origin.Program_ID
                             LEFT JOIN Programs as destination ON Program_Referred = destination.Program_ID"
                     . $non_admin_string;
-           // echo $get_events;
             include "../include/dbconnopen.php";
             $event_info = mysqli_query($cnnEnlace, $get_events);
             while ($event = mysqli_fetch_row($event_info)) {
@@ -1128,7 +1123,6 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                             WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL
                             AND Post_Assessments.Pre_Post=2"
                             . $non_admin_string;
-            //echo $get_events;
             include "../include/dbconnopen.php";
             $event_info = mysqli_query($cnnEnlace, $get_events);
             while ($event = mysqli_fetch_row($event_info)) {

@@ -84,20 +84,15 @@ if (!isset($_POST['posted'])) {
             //$count--;
             //get the line
             $line = fgets($handle);
-            //echo  $line . "<br />";
-            // echo "1";
             //open table info
             if ($line == "(\r\n") {
-                //echo "1aaa";
                 $parentheses++;
                 //$parentheses
                 continue;
             }
 
-            //echo "2";
             //close table info
             if ($line == ")\r\n") {
-                //echo "2aaa";
                 $parentheses--;
                 continue;
             }
@@ -131,7 +126,6 @@ if (!isset($_POST['posted'])) {
 
                     include "../include/dbconnopen.php";
                     $get_event_name_sqlsafe = "SELECT * FROM Events WHERE Event_Name='" . mysqli_real_escape_string($cnnTRP, $exploded_line[0]) . "' AND Event_Date='" . mysqli_real_escape_string($cnnTRP, $new_date) . "'";
-                    //echo $get_event_name;
                     $event_name = mysqli_query($cnnTRP, $get_event_name_sqlsafe);
                     //test whether the event already exists or not
                     if (mysqli_num_rows($event_name) > 0) {
@@ -141,7 +135,6 @@ if (!isset($_POST['posted'])) {
                         //if it doesn't exist yet, then insert it
                         $add_event_sqlsafe = "INSERT INTO Events (Event_Name, Event_Date, Active)
                              VALUES ('" . mysqli_real_escape_string($cnnTRP, $exploded_line[0]) . "', '" . mysqli_real_escape_string($cnnTRP, $new_date) . "', 1)";
-                        //echo $add_event . "<br>";
                         mysqli_query($cnnTRP, $add_event_sqlsafe);
                         $event_id = mysqli_insert_id($cnnTRP);
                     }
@@ -152,7 +145,6 @@ if (!isset($_POST['posted'])) {
                     include "../include/dbconnopen.php";
                     $find_person_sqlsafe = "SELECT * FROM Participants WHERE First_Name='" . mysqli_real_escape_string($cnnTRP, $exploded_line[2]) . "' AND 
                             Last_Name='" . mysqli_real_escape_string($cnnTRP, $exploded_line[3]) . "'";
-                    // echo $find_person_sqlsafe;
                     $person_name = mysqli_query($cnnTRP, $find_person_sqlsafe);
                     //test whether the person already exists or not
                     if (mysqli_num_rows($person_name) > 0) {
@@ -162,7 +154,6 @@ if (!isset($_POST['posted'])) {
                         //if it doesn't exist yet, then insert it
                         $add_person_sqlsafe = "INSERT INTO Participants (First_Name, Last_Name)
                              VALUES ('" . mysqli_real_escape_string($cnnTRP, $exploded_line[2]) . "', '" . mysqli_real_escape_string($cnnTRP, $exploded_line[3]) . "')";
-                        // echo $add_person_sqlsafe . "<br>";
                         mysqli_query($cnnTRP, $add_person_sqlsafe);
                         $person_id = mysqli_insert_id($cnnTRP);
                     }

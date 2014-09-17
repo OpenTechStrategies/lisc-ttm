@@ -86,22 +86,16 @@ if (!isset($_POST['posted'])) {
 
             //get the line
             $line = fgets($handle);
-            //echo  $line . "<br />";
-            
-           // echo "1";
 
             //open table info
             if ($line == "(\r\n") {
-                //echo "1aaa";
                 $parentheses++;
                 //$parentheses
                 continue;
             }
 
-            //echo "2";
             //close table info
             if ($line == ")\r\n") {
-                //echo "2aaa";
                 $parentheses--;
                 continue;
             }
