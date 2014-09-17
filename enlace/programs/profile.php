@@ -157,47 +157,57 @@ Shows all program information.
 
                     <!--Start and end times are used to calculate maximum hours (if necessary) to show total dosage.-->
                     <tr><td><strong>Daily start time:</strong></td><td><span class="display_program"><?php echo $program->begin; ?></span>
-
-                            <select id="start_hour" class="edit_program"><option value="0">-----</option>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option>10</option>
-                                <option>11</option>
-                                <option>12</option>
+			    <?php $program_begin_option= '0';
+				  $program_begin_am='';
+				  if($program->begin != '0') {
+				  	list($program_begin_option, $program_begin_am) = preg_split(' /\s+/',$program->begin);}?>
+                            <select id="start_hour" class="edit_program">
+			        <option value="-----" <?php if($program_begin_option == '0') echo 'selected="selected"'; ?>>-----</option>
+                                <option value="1" <?php if($program_begin_option == '1') echo 'selected="selected'; ?>>1</option>
+                                <option value="2" <?php if($program_begin_option == '2') echo 'selected="selected"'; ?>>2</option>
+                                <option value="3" <?php if($program_begin_option == '3') echo 'selected="selected"'; ?>>3</option>
+                                <option value="4" <?php if($program_begin_option == '4') echo 'selected="selected"'; ?>>4</option>
+                                <option value="5" <?php if($program_begin_option == '5') echo 'selected="selected"'; ?>>5</option>
+                                <option value="6"<?php if($program_begin_option == '6') echo 'selected="selected"'; ?>>6</option>
+                                <option value="7" <?php if($program_begin_option == '7') echo 'selected="selected"'; ?>>7</option>
+                                <option value="8" <?php if($program_begin_option == '8') echo 'selected="selected"'; ?>>8</option>
+                                <option value="9" <?php if($program_begin_option == '9') echo 'selected="selected"'; ?>>9</option>
+                                <option value="10" <?php if($program_begin_option == '10') echo 'selected="selected"'; ?>>10</option>
+                                <option value="11" <?php if($program_begin_option == '11') echo 'selected="selected"'; ?>>11</option>
+                                <option value="12" <?php if($program_begin_option == '12') echo 'selected="selected"'; ?>>12</option>
+                             
                             </select>
-                            <select id="start_suffix" class="edit_program"><option value="">-----</option>
-                                <option value="am">AM</option><option value="pm">PM</option><option value="am">Noon</option></select>
+                            <select id="start_suffix" class="edit_program"><option value="-----"<?php if($program_begin_am == '') echo 'selected="selected"'; ?>>-----</option>
+                                <option value="am" <?php if($program_begin_am == 'AM') echo 'selected="selected"';?>>AM</option><option value="pm" <?php if($program_begin_am == 'PM') echo 'selected="selected"';?>>PM</option><option value="am"  <?php if($program_begin_am == 'Noon') echo 'selected="selected"';?>>Noon</option></select>
                         </td></tr>
                     <tr><td><strong>Daily end time:</strong></td><td><span class="display_program"><?php echo $program->finish; ?></span>
-
-                            <select id="end_hour" class="edit_program"><option value="0">-----</option>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option>10</option>
-                                <option>11</option>
-                                <option>12</option>
+			      <?php $program_end_option= '0';
+				   $program_end_am='';
+				  if($program->finish != 0) {
+				  	list($program_end_option, $program_end_am) = preg_split(' /\s+/',$program->finish);}?>
+                            <select id="end_hour" class="edit_program">
+                                <option value="-----" <?php if($program_end_option == '0') echo 'selected="selected"'; ?>>-----</option>
+                                <option value="1" <?php if($program_end_option == '1') echo 'selected="selected'; ?>>1</option>
+                                <option value="2" <?php if($program_end_option == '2') echo 'selected="selected"'; ?>>2</option>
+                                <option value="3" <?php if($program_end_option == '3') echo 'selected="selected"'; ?>>3</option>
+                                <option value="4" <?php if($program_end_option == '4') echo 'selected="selected"'; ?>>4</option>
+                                <option value="5" <?php if($program_end_option == '5') echo 'selected="selected"'; ?>>5</option>
+                                <option value="6"<?php if($program_end_option == '6') echo 'selected="selected"'; ?>>6</option>
+                                <option value="7" <?php if($program_end_option == '7') echo 'selected="selected"'; ?>>7</option>
+                                <option value="8" <?php if($program_end_option == '8') echo 'selected="selected"'; ?>>8</option>
+                                <option value="9" <?php if($program_end_option == '9') echo 'selected="selected"'; ?>>9</option>
+                                <option value="10" <?php if($program_end_option == '10') echo 'selected="selected"'; ?>>10</option>
+                                <option value="11" <?php if($program_end_option == '11') echo 'selected="selected"'; ?>>11</option>
+                                <option value="12" <?php if($program_end_option == '12') echo 'selected="selected"'; ?>>12</option>
                             </select>
-                            <select id="end_suffix" class="edit_program"><option value="">-----</option>
-                                <option value="am">AM</option><option value="pm">PM</option><option value="am">Noon</option></select>
+                            <select id="end_suffix" class="edit_program"><option value="-----"<?php if($program_end_am == '') echo 'selected="selected"'; ?>>-----</option>
+                                <option value="am" <?php if($program_end_am == 'AM') echo 'selected="selected"';?>>AM</option><option value="pm" <?php if($program_end_am == 'PM') echo 'selected="selected"';?>>PM</option><option value="am"  <?php if($program_end_am == 'Noon') echo 'selected="selected"';?>>Noon</option></select>
                         </td></tr>
                     <tr><td><strong>Maximum total hours:</strong></td><td><span class="display_program"><?php echo $program->max_hrs; ?></span>
-                            <input type="text" class="edit_program" id="max_hrs"</td></tr>
-                    <tr><td><input type="button" value="Edit" onclick="$('.edit_program').toggle();
-                            $('.display_program').toggle();"></td>
+                            <input type="text" value="<?php echo $program->max_hrs; ?>"class="edit_program"  id="max_hrs"</td></tr>
+                    <tr><td><input type="button" class="edit_button" value="Edit" onclick="$('.edit_program').toggle();
+                            $('.display_program').toggle();
+			    $('.edit_button').attr('value', $('.edit_button').attr('value') == 'Edit' ? 'Cancel' : 'Edit');"></td>
                         <td><input type="button" value="Save Changes" onclick="
                                 //first deal with all the checkboxes
                                 if (document.getElementById('class').checked == true) {
