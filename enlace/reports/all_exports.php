@@ -378,77 +378,12 @@ Export files for all tables.  This is going to change once Taryn determines what
             -->
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/attendance_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Participant ID", "First_Name", "Last_Name", "Date_Listed", "Session_Name", "Program", "Present (P) or Absent (A)");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Participants.Participant_ID, First_Name, Last_Name, Date_Listed, Session_Name, Name
-            FROM Absences
-            INNER JOIN Participants ON Participants.Participant_ID=Absences.Participant_ID
-            INNER JOIN Program_Dates ON Program_Date=Program_Date_ID
-            INNER JOIN Session_Names ON Program_Dates.Program_ID=Session_ID
-            INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID;";
-            $get_present = "SELECT Participants_Programs.Participant_ID, First_Name, Last_Name,
-            Date_Listed, Session_Name, Name FROM Participants_Programs
-            INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID
-            INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
-            INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID
-            INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID
-            LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID=
-            Absences.Participant_ID) WHERE Absence_ID IS NULL;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            $present_info = mysqli_query($cnnEnlace, $get_present);
-            while ($event = mysqli_fetch_row($event_info)) {
-                array_push($event, 'A');
-                fputcsv($fp, $event);
-            }
-            while ($present = mysqli_fetch_row($present_info)) {
-                array_push($present, 'P');
-                fputcsv($fp, $present);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_session_attendance">Download.</a>
         </td>
 
         <td class="all_projects">
-            <?php
-            $infile = "export_container/deidattendance_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Participant ID", "Date_Listed", "Session_Name", "Program", "Present (P) or Absent (A)");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Participants.Participant_ID,  Date_Listed, Session_Name, Name
-            FROM Absences
-            INNER JOIN Participants ON Participants.Participant_ID=Absences.Participant_ID
-            INNER JOIN Program_Dates ON Program_Date=Program_Date_ID
-            INNER JOIN Session_Names ON Program_Dates.Program_ID=Session_ID
-            INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID;";
-            $get_present = "SELECT Participants_Programs.Participant_ID, 
-            Date_Listed, Session_Name, Name FROM Participants_Programs
-            INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID
-            INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
-            INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID
-            INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID
-            LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID=
-            Absences.Participant_ID) WHERE Absence_ID IS NULL;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            $present_info = mysqli_query($cnnEnlace, $get_present);
-            while ($event = mysqli_fetch_row($event_info)) {
-                array_push($event, 'A');
-                fputcsv($fp, $event);
-            }
-            while ($present = mysqli_fetch_row($present_info)) {
-                array_push($present, 'P');
-                fputcsv($fp, $present);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_session_attendance_deid">
+                Download.</a>
         </td>
 
     </tr>
@@ -461,25 +396,7 @@ Export files for all tables.  This is going to change once Taryn determines what
             Program surveys.
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/program_surveys_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Participant_Program Link ID", "Program ID", "Question 1", "Question 2", "Question 3", "Question 4", "Question 5", "Question 6",
-                "Question 7", "Question 8", "Question 9", "Question 10", "Question 11", "Question 12", "Question 13", "Question 14", "Question 15", "Question 16",
-                "Date Added", "Session ID", "Session", "Program",);
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Program_Surveys.*, Session_Name, Name FROM Program_Surveys 
-inner join Session_Names ON Program_Surveys.Session_ID=Session_Names.Session_ID
-INNER JOIN Programs ON Programs.Program_ID=Session_Names.Program_ID;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_session_surveys">Download.</a>
         </td>
         <td class="all_projects">---</td>
     </tr>
@@ -491,22 +408,7 @@ INNER JOIN Programs ON Programs.Program_ID=Session_Names.Program_ID;";
             All sessions (by program).
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/sessions_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Session ID", "Session Name", "Program  ID", "Start Date", "End Date", "Survey Due Date", "Program");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Session_Names.*, Name FROM Session_Names
-INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_sessions">Download.</a>
         </td>
         <td class="all_projects">---</td>
     </tr>
@@ -518,45 +420,15 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID;";
             All referrals.
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/referrals_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Referral ID", "ID of referred person", "First name of referred person", "Last name of referred person",
-                "Referrer First Name", "Referrer Last Name", "Referring Institution", "Referring Program", "Program referred to", "Date Logged");
-            fputcsv($fp, $title_array);
-            $get_events = "SELECT Referral_ID, Referrals.Participant_ID, referrees.First_Name, referrees.Last_Name,
-referrers.First_Name, referrers.Last_Name, Institution_Name, origin.Name, destination.Name, Referrals.Date_Logged
-FROM Referrals 
-INNER JOIN Participants AS referrees ON Referrals.Participant_Id=referrees.Participant_ID
-INNER JOIN Participants AS referrers ON Referrals.Referrer_Person=referrers.Participant_ID
-INNER JOIN Institutions ON Referrer_Institution=Inst_ID
-INNER JOIN Programs as origin ON Referrer_Program=origin.Program_ID
-INNER JOIN Programs as destination ON Program_Referred=destination.Program_ID;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_referrals">Download.</a>
         </td>
         <td class="all_projects">
             <?php
             $infile = "export_container/deid_referrals_" . date('m_d_Y') . ".csv";
             $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = array("Referral ID", "ID of referred person",
-                "Referrer (person) ID", "Referring Institution", "Referring Program", "Program referred to", "Date Logged");
+            $title_array = ;
             fputcsv($fp, $title_array);
-            $get_events = "SELECT Referral_ID, Referrals.Participant_ID, 
-referrers.Participant_ID, Institution_Name, origin.Name, destination.Name, Referrals.Date_Logged
-FROM Referrals 
-INNER JOIN Participants AS referrees ON Referrals.Participant_Id=referrees.Participant_ID
-INNER JOIN Participants AS referrers ON Referrals.Referrer_Person=referrers.Participant_ID
-INNER JOIN Institutions ON Referrer_Institution=Inst_ID
-INNER JOIN Programs as origin ON Referrer_Program=origin.Program_ID
-INNER JOIN Programs as destination ON Program_Referred=destination.Program_ID;";
+            $get_events = "SEL;";
             include "../include/dbconnopen.php";
             $event_info = mysqli_query($cnnEnlace, $get_events);
             while ($event = mysqli_fetch_row($event_info)) {

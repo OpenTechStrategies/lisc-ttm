@@ -1151,6 +1151,30 @@ function generalized_download($download_name){
         'SELECT DISTINCT Participant_Program_ID, Participants_Programs.Participant_ID,  Session_Name, Name, Date_Dropped FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID',
         'titles' => array("Participant_Program Link ID", "Participant ID", "Session", "Program", "Date Dropped")),
 
+        'enlace_session_attendance'=>array('db'=>'enlace', 'query'=> 
+        'SELECT Participants_Programs.Participant_ID, First_Name, Last_Name, Date_Listed, Session_Name, Name FROM Participants_Programs INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID= Absences.Participant_ID)',
+        'titles' => array("Participant ID", "First_Name", "Last_Name", "Date_Listed", "Session_Name", "Program", "Present (NULL) or Absent (some number)")),
+
+        'enlace_session_attendance_deid'=>array('db'=>'enlace', 'query'=> 
+        'SELECT Participants_Programs.Participant_ID, Date_Listed, Session_Name, Name FROM Participants_Programs INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID= Absences.Participant_ID)', 
+        'titles' => array("Participant ID", "Date_Listed", "Session_Name", "Program", "Present (NULL) or Absent (some number)")), 
+
+        'enlace_session_surveys'=>array('db'=>'enlace', 'query'=> 
+'SELECT Program_Surveys.*, Session_Name, Name FROM Program_Surveys inner join Session_Names ON Program_Surveys.Session_ID=Session_Names.Session_ID INNER JOIN Programs ON Programs.Program_ID=Session_Names.Program_ID', 
+        'titles' => array("Participant_Program Link ID", "Program ID", "Question 1", "Question 2", "Question 3", "Question 4", "Question 5", "Question 6", "Question 7", "Question 8", "Question 9", "Question 10", "Question 11", "Question 12", "Question 13", "Question 14", "Question 15", "Question 16", "Date Added", "Session ID", "Session", "Program")),
+
+        'enlace_sessions'=>array('db'=>'enlace', 'query'=> 
+'SELECT Session_Names.*, Name FROM Session_Names
+INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
+        'titles' => array("Session ID", "Session Name", "Program  ID", "Start Date", "End Date", "Survey Due Date", "Program")),
+        
+        'enlace_referrals'=>array('db'=>'enlace', 'query'=> 
+'SELECT Referral_ID, Referrals.Participant_ID, referrees.First_Name, referrees.Last_Name, referrers.First_Name, referrers.Last_Name, Institution_Name, origin.Name, destination.Name, Referrals.Date_Logged FROM Referrals INNER JOIN Participants AS referrees ON Referrals.Participant_Id=referrees.Participant_ID INNER JOIN Participants AS referrers ON Referrals.Referrer_Person=referrers.Participant_ID INNER JOIN Institutions ON Referrer_Institution=Inst_ID INNER JOIN Programs as origin ON Referrer_Program=origin.Program_ID INNER JOIN Programs as destination ON Program_Referred=destination.Program_ID', 
+'titles' => array("Referral ID", "ID of referred person", "First name of referred person", "Last name of referred person", "Referrer First Name", "Referrer Last Name", "Referring Institution", "Referring Program", "Program referred to", "Date Logged")),
+
+        'enlace_referrals'=>array('db'=>'enlace', 'query'=>
+        'SELECT Referral_ID, Referrals.Participant_ID, referrers.Participant_ID, Institution_Name, origin.Name, destination.Name, Referrals.Date_Logged FROM Referrals INNER JOIN Participants AS referrees ON Referrals.Participant_Id=referrees.Participant_ID INNER JOIN Participants AS referrers ON Referrals.Referrer_Person=referrers.Participant_ID INNER JOIN Institutions ON Referrer_Institution=Inst_ID INNER JOIN Programs as origin ON Referrer_Program=origin.Program_ID INNER JOIN Programs as destination ON Program_Referred=destination.Program_ID',
+        'titles' => array("Referral ID", "ID of referred person", "Referrer (person) ID", "Referring Institution", "Referring Program", "Program referred to", "Date Logged")),
 
 
         
