@@ -1,6 +1,6 @@
 <?php
 //if action is logout
-if ($_GET['action'] == 'logout') {
+if (isset($_GET['action']) && $_GET['action'] == 'logout') {
     //kill cookie
     setcookie('user', '', time() - 3600, '/');
     setcookie('page', '', time() - 3600, '/');
