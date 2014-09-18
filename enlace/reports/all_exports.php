@@ -423,21 +423,7 @@ Export files for all tables.  This is going to change once Taryn determines what
             <a href="/include/generalized_download_script.php?download_name=enlace_referrals">Download.</a>
         </td>
         <td class="all_projects">
-            <?php
-            $infile = "export_container/deid_referrals_" . date('m_d_Y') . ".csv";
-            $fp = fopen($infile, "w") or die('can\'t open file');
-            $title_array = ;
-            fputcsv($fp, $title_array);
-            $get_events = "SEL;";
-            include "../include/dbconnopen.php";
-            $event_info = mysqli_query($cnnEnlace, $get_events);
-            while ($event = mysqli_fetch_row($event_info)) {
-                fputcsv($fp, $event);
-            }
-            include "../include/dbconnclose.php";
-            fclose($fp);
-            ?>
-            <a href="<?php echo $infile ?>">Download.</a>
+            <a href="/include/generalized_download_script.php?download_name=enlace_referrals_deid">Download.</a>
         </td>
     </tr>
 
