@@ -58,10 +58,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 $non_admin_string = " WHERE Participants_Programs.Program_ID = " . $access . ";";
             }
             
-            $get_events = "SELECT * FROM Campaigns "
-                        . "LEFT JOIN Campaigns_Events ON Campaigns.Campaign_ID = Campaigns_Events.Campaign_ID "
-                        . "LEFT JOIN Participants_Events ON Participants_Events.Event_ID = Campaigns_Events.Campaign_Event_ID "
-                        . "LEFT JOIN Participants_Programs ON Participants_Programs.Participant_ID = Participants_Events.Participant_ID"
+            $get_events = ""
                         . $non_admin_string;
             
             $get_events = "SELECT * FROM Campaigns";
@@ -114,13 +111,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                                     WHERE Programs.Program_ID = " . $access . ";";
             }
 
-            $get_events = "SELECT Participants.Participant_ID, First_Name, Last_Name, Day_Phone, Evening_Phone, Participants.Address_Num, Participants.Address_Dir, 
-                            Participants.Address_Street,
-                            Participants.Address_Street_Type, Address_City, Address_State, Address_ZIP,
-                            DOB, Age, Gender, Grade, Institution_Name, Roles.Role, Participants.Email
-                            FROM Participants
-                            LEFT JOIN Roles ON Participants.Role = Roles.Role_ID
-                            LEFT JOIN Institutions ON School = Inst_ID"
+            $get_events = ""
                             . $non_admin_string;
             include "../include/dbconnopen.php";
             $event_info = mysqli_query($cnnEnlace, $get_events);
@@ -149,7 +140,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                                     WHERE Programs.Program_ID = " . $access . ";";
             }
 
-            $get_events = "SELECT Address_City, Address_State, Address_ZIP,
+            $get_events = "SELECT Participant_ID,  Address_City, Address_State, Address_ZIP,
                             Age, Gender, Grade, Institution_Name, Roles.Role
                             FROM Participants
                             LEFT JOIN Roles ON Participants.Role = Roles.Role_ID
