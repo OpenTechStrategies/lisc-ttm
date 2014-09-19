@@ -1706,7 +1706,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
             'SELECT * FROM Events',
             'titles'=>array("Event ID", "Event Name", "Event Goal
                 Attendance", "Event Actual Attendance", "Event Date",
-                "Active[1]/Inactive[0]"),
+            "Active[1]/Inactive[0]")),
          
         'trp_event_attendance' => array('db'=>'TRP', 'query'=>
             'SELECT Event_Name, Event_Date, First_Name, Last_Name FROM 
