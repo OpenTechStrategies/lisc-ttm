@@ -1091,7 +1091,7 @@ function generalized_download($download_name){
         'titles'=>array("Campaign ID", "Campaign_Name")), //what about access bit??
         
         'enlace_institutions'=>array('db'=>'enlace', 'query'=>
-'SELECT Participants.Participant_ID, First_Name, Last_Name, Day_Phone, Evening_Phone, Participants.Address_Num, Participants.Address_Dir, Participants.Address_Street, Participants.Address_Street_Type, Address_City, Address_State, Address_ZIP, DOB, Age, Gender, Grade, Institution_Name, Roles.Role, Participants.Email FROM Participants LEFT JOIN Roles ON Participants.Role = Roles.Role_ID LEFT JOIN Institutions ON School = Inst_ID', 'titles'=>array("Institution Name", "Institution Type", "Address_Num", "Address_Direction", "Address_Street", "Address_Street_Type", "Phone", "Email")),
+'', 'titles'=>array("Institution Name", "Institution Type", "Address_Num", "Address_Direction", "Address_Street", "Address_Street_Type", "Phone", "Email")),
 
         'enlace_institutions_deid'=>array('db'=>'enlace', 'query'=>
             'SELECT Institution_Name, Type, Block_Group, Phone, Email 
@@ -1102,13 +1102,48 @@ function generalized_download($download_name){
 
         
         'enlace_participants'=>array('db'=>'enlace', 'query'=>
-        ''), //waiting to resolve the access permissions 
+        'SELECT Participants.Participant_ID, First_Name, Last_Name, Day_Phone, Evening_Phone, Participants.Address_Num, Participants.Address_Dir, Participants.Address_Street, Participants.Address_Street_Type, Address_City, Address_State, Address_ZIP, DOB, Age, Gender, Grade, Institution_Name, Roles.Role, Participants.Email FROM Participants LEFT JOIN Roles ON Participants.Role = Roles.Role_ID LEFT JOIN Institutions ON School = Inst_ID'), 
+        'non_admin_string' => 'LEFT JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID WHERE Programs.Program_ID = ',
+        'add_access' => 1,
+        'titles' => array("Participant ID", "First_Name", "Last_Name", "Day_Phone", "Evening_Phone", "Address Number", "Address Direction", "Address Street Name", "Address Street Type", "Address_City", "Address_State", "Address_ZIP", "DOB", "Age", "Gender", "Grade", "School", "Role", "Email")), //waiting to resolve the access permissions 
 
         'enlace_participants_deid'=>array('db'=>'enlace', 'query'=>
-        'SELECT Participants.Participant_ID, Participants.Block_Group, Address_City, Address_State, Address_ZIP, Age, Gender, Grade, Institution_Name, Roles.Role FROM Participants INNER JOIN Roles ON Participants.Role=Roles.Role_ID INNER JOIN Institutions ON School=Inst_ID',
-        'titles' => array("Participant ID", "Block Group", "Address_City", "Address_State", "Address_ZIP",
+        'SELECT Participant_ID,  Address_City, Address_State, Address_ZIP,
+                            Age, Gender, Grade, Institution_Name, Roles.Role
+                            FROM Participants
+                            LEFT JOIN Roles ON Participants.Role = Roles.Role_ID
+                            LEFT JOIN Institutions ON School = Inst_ID',
+        'non_admin_string' => 'LEFT JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID WHERE Programs.Program_ID = ',
+        'add_access' => 1,        
+        'titles' => array("Participant ID",  "Address_City", "Address_State", "Address_ZIP",
             "Age", "Gender", "Grade", "School", "Role")),
         
+        
+        'enlace_intake_assessments'=>array('db'=>'enlace', 'query'=>
+        'SELECT Assessment_ID, Assessments.Participant_ID, Participants.First_Name, Participants.Last_Name, Assessments.Pre_Post, Assessments.Date_Logged, Check_In, Know_You, Compliment, Crisis_Help, Pay_Attention, KnowImportance, Personal_Advice, Upset_Discussion, Friends, Finish_HS, Stay_Safe, Alive_Well, Happy_Life, Manage_Work, Proud_Parents, Solve_Problems, Interesting_Life, Coping, Cowardice, Self_Care, Anger_Mgmt, Negotiation, Self_Defense, Handle_Others, Self_Awareness, Parent_Approval, Parent_Disapproval, Teasing_Prevention FROM Assessments LEFT JOIN Participants_Caring_Adults ON Caring_ID = Caring_Adults_ID LEFT JOIN Participants_Future_Expectations ON Future_Id = Future_Expectations_ID LEFT JOIN Participants_Interpersonal_Violence ON Violence_ID = Interpersonal_Violence_ID LEFT JOIN Participants ON Assessments.Participant_Id = Participants.Participant_ID WHERE Assessments.Pre_Post = 1',        
+        'non_admin_string' => 'LEFT JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID',
+        'non_admin_string2' => ' AND Programs.Program_ID = ',
+        'add_access' => 1,
+        'titles' => array("Assessment ID", "Participant ID", "First_Name", "Last_Name", "Pre or Post", "Date Logged")),
+
+        'enlace_intake_assessments_deid'=>array('db'=>'enlace', 'query'=>
+        'SELECT Assessment_ID, Assessments.Participant_ID, Assessments.Pre_Post, Assessments.Date_Logged, Check_In, Know_You, Compliment, Crisis_Help, Pay_Attention, KnowImportance, Personal_Advice, Upset_Discussion, Friends, Finish_HS, Stay_Safe, Alive_Well, Happy_Life, Manage_Work, Proud_Parents, Solve_Problems, Interesting_Life, Coping, Cowardice, Self_Care, Anger_Mgmt, Negotiation, Self_Defense, Handle_Others, Self_Awareness, Parent_Approval, Parent_Disapproval, Teasing_Prevention FROM Assessments LEFT JOIN Participants_Caring_Adults ON Caring_ID = Caring_Adults_ID LEFT JOIN Participants_Future_Expectations ON Future_Id = Future_Expectations_ID LEFT JOIN Participants_Interpersonal_Violence ON Violence_ID = Interpersonal_Violence_ID LEFT JOIN Participants ON Assessments.Participant_Id = Participants.Participant_ID WHERE Assessments.Pre_Post = 1',        
+        'non_admin_string' => 'LEFT JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID',
+        'non_admin_string2' => ' AND Programs.Program_ID = ',
+        'add_access' => 1,
+        'titles' => array("Assessment ID", "Participant ID", "Pre or Post", "Date Logged")),
+
+
+        'enlace_impact_surveys'=>array('db'=>'enlace', 'query'=>
+        'SELECT Assessment_ID, Assessments.Participant_ID, Participants.First_Name, Participants.Last_Name, Assessments.Pre_Post, Assessments.Date_Logged, Check_In, Know_You, Compliment, Crisis_Help, Pay_Attention, KnowImportance, Personal_Advice, Upset_Discussion, Friends, Finish_HS, Stay_Safe, Alive_Well, Happy_Life, Manage_Work, Proud_Parents, Solve_Problems, Interesting_Life, Coping, Cowardice, Self_Care, Anger_Mgmt, Negotiation, Self_Defense, Handle_Others, Self_Awareness, Parent_Approval, Parent_Disapproval, Teasing_Prevention FROM Assessments LEFT JOIN Participants_Caring_Adults ON Caring_ID = Caring_Adults_ID LEFT JOIN Participants_Future_Expectations ON Future_Id = Future_Expectations_ID LEFT JOIN Participants_Interpersonal_Violence ON Violence_ID = Interpersonal_Violence_ID LEFT JOIN Participants ON Assessments.Participant_Id = Participants.Participant_ID WHERE Assessments.Pre_Post = 2',
+        'titles' => array("Assessment ID", "Participant ID", "First Name", "Last Name", "Pre or Post", "Date Logged")),
+
+        'enlace_impact_surveys_deid'=>array('db'=>'enlace', 'query'=>
+        'SELECT Assessment_ID, Assessments.Participant_ID, Assessments.Pre_Post, Assessments.Date_Logged, Check_In, Know_You, Compliment, Crisis_Help, Pay_Attention, KnowImportance, Personal_Advice, Upset_Discussion, Friends, Finish_HS, Stay_Safe, Alive_Well, Happy_Life, Manage_Work, Proud_Parents, Solve_Problems, Interesting_Life, Coping, Cowardice, Self_Care, Anger_Mgmt, Negotiation, Self_Defense, Handle_Others, Self_Awareness, Parent_Approval, Parent_Disapproval, Teasing_Prevention FROM Assessments LEFT JOIN Participants_Caring_Adults ON Caring_ID = Caring_Adults_ID LEFT JOIN Participants_Future_Expectations ON Future_Id = Future_Expectations_ID LEFT JOIN Participants_Interpersonal_Violence ON Violence_ID = Interpersonal_Violence_ID LEFT JOIN Participants ON Assessments.Participant_Id = Participants.Participant_ID WHERE Assessments.Pre_Post = 2',
+        'titles' => array("Assessment ID", "Participant ID", "Pre or Post", "Date Logged")),
+
+
+
         'enlace_consent_records'=>array('db'=>'enlace', 'query'=>
             'SELECT Participants_Consent.Participant_ID, First_Name, Last_Name, School_Year, Consent_Given, Institution_Name FROM Participants_Consent INNER JOIN Participants ON Participants.Participant_ID=Participants_Consent.Participant_ID INNER JOIN Institutions ON School=Inst_ID',
         'titles' => array("Participant_ID", "First_Name", "Last_Name", "School_Year", "Consent_Given (1=Yes, 0=No)", "School")),
@@ -1163,13 +1198,40 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         'titles' => array("Session ID", "Session Name", "Program  ID", "Start Date", "End Date", "Survey Due Date", "Program")),
         
         'enlace_referrals'=>array('db'=>'enlace', 'query'=> 
-'SELECT Referral_ID, Referrals.Participant_ID, referrees.First_Name, referrees.Last_Name, referrers.First_Name, referrers.Last_Name, Institution_Name, origin.Name, destination.Name, Referrals.Date_Logged FROM Referrals INNER JOIN Participants AS referrees ON Referrals.Participant_Id=referrees.Participant_ID INNER JOIN Participants AS referrers ON Referrals.Referrer_Person=referrers.Participant_ID INNER JOIN Institutions ON Referrer_Institution=Inst_ID INNER JOIN Programs as origin ON Referrer_Program=origin.Program_ID INNER JOIN Programs as destination ON Program_Referred=destination.Program_ID', 
+'SELECT Referral_ID, Referrals.Participant_ID, referrees.First_Name, referrees.Last_Name, referrers.First_Name, referrers.Last_Name, Institution_Name, origin.Name, destination.Name, Referrals.Date_Logged FROM Referrals LEFT JOIN Participants AS referrees ON Referrals.Participant_Id=referrees.Participant_ID LEFT JOIN Participants AS referrers ON Referrals.Referrer_Person=referrers.Participant_ID LEFT JOIN Institutions ON Referrer_Institution=Inst_ID LEFT JOIN Programs as origin ON Referrer_Program=origin.Program_ID LEFT JOIN Programs as destination ON Program_Referred=destination.Program_ID', 
 'titles' => array("Referral ID", "ID of referred person", "First name of referred person", "Last name of referred person", "Referrer First Name", "Referrer Last Name", "Referring Institution", "Referring Program", "Program referred to", "Date Logged")),
 
-        'enlace_referrals'=>array('db'=>'enlace', 'query'=>
-        'SELECT Referral_ID, Referrals.Participant_ID, referrers.Participant_ID, Institution_Name, origin.Name, destination.Name, Referrals.Date_Logged FROM Referrals INNER JOIN Participants AS referrees ON Referrals.Participant_Id=referrees.Participant_ID INNER JOIN Participants AS referrers ON Referrals.Referrer_Person=referrers.Participant_ID INNER JOIN Institutions ON Referrer_Institution=Inst_ID INNER JOIN Programs as origin ON Referrer_Program=origin.Program_ID INNER JOIN Programs as destination ON Program_Referred=destination.Program_ID',
+        'enlace_referrals_deid'=>array('db'=>'enlace', 'query'=>
+        'SELECT Referral_ID, Referrals.Participant_ID, referrers.Participant_ID, Institution_Name, origin.Name, destination.Name, Referrals.Date_Logged FROM Referrals LEFT JOIN Participants AS referrees ON Referrals.Participant_Id=referrees.Participant_ID LEFT JOIN Participants AS referrers ON Referrals.Referrer_Person=referrers.Participant_ID LEFT JOIN Institutions ON Referrer_Institution=Inst_ID LEFT JOIN Programs as origin ON Referrer_Program=origin.Program_ID LEFT JOIN Programs as destination ON Program_Referred=destination.Program_ID',
         'titles' => array("Referral ID", "ID of referred person", "Referrer (person) ID", "Referring Institution", "Referring Program", "Program referred to", "Date Logged")),
 
+        'enlace_participant_dosage' => array('db'=>'enlace', 'query'=> 
+        'SELECT Participants_Programs.Participant_ID, First_Name, Last_Name, Programs.Program_ID, Name, Session_ID, Session_Name FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID',
+        'non_admin_string' => 'AND Programs.Program_ID = ',
+        'add_access' => 1,
+        'query2' => 'GROUP BY Session_ID, Participants.Participant_ID',
+        'titles' => array("Participant ID", "First Name", "Last Name", "Program ID", "Program Name", "Session ID", "Session Name", "Number of days attended", "Sum of hours for this session", "Dosage percentage for this session")),
+
+        'enlace_participant_dosage_deid' => array('db'=>'enlace', 'query'=> 
+        'SELECT Participants_Programs.Participant_ID, Programs.Program_ID, Name, Session_ID, Session_Name FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID',
+        'query2' => 'GROUP BY Session_ID, Participants.Participant_ID',
+        'titles' => array("Participant ID", "Program ID", "Program Name", "Session ID", "Session Name",
+                "Number of days attended",
+        "Sum of hours for this session", "Dosage percentage for this session");
+
+        'enlace_new_surveys' => array('db'=>'enlace', 'query'=> 
+        'SELECT  Pre_Assessments.Participant_ID, First_Name, Last_Name, Pre_Caring.Program, Session_Name, Name, Home_Language, Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_E, BYS_T, JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, JVQ_12, US_Born, Pre_Caring.Check_In, Pre_Caring.Know_You, Pre_Caring.Compliment, Pre_Caring.Crisis_Help, Pre_Caring.Pay_Attention, Pre_Caring.KnowImportance, Pre_Caring.Personal_Advice, Pre_Caring.Upset_Discussion, Pre_Future.Friends, Pre_Future.Finish_HS, Pre_Future.Stay_Safe,  Pre_Future.Alive_Well, Pre_Future.Happy_Life, Pre_Future.Manage_Work, Pre_Future.Proud_Parents, Pre_Future.Solve_Problems, Pre_Future.Interesting_Life, Pre_Violence.Coping, Pre_Violence.Cowardice, Pre_Violence.Self_Care, Pre_Violence.Anger_Mgmt, Pre_Violence.Negotiation, Pre_Violence.Self_Defense, Pre_Violence.Handle_Others, Pre_Violence.Self_Awareness, Pre_Violence.Parent_Approval, Pre_Violence.Parent_Disapproval, Pre_Violence.Teasing_Prevention, Post_Caring.Check_In, Post_Caring.Know_You, Post_Caring.Compliment, Post_Caring.Crisis_Help, Post_Caring.Pay_Attention, Post_Caring.KnowImportance, Post_Caring.Personal_Advice, Post_Caring.Upset_Discussion, Post_Future.Friends, Post_Future.Finish_HS, Post_Future.Stay_Safe, Post_Future.Alive_Well, Post_Future.Happy_Life, Post_Future.Manage_Work, Post_Future.Proud_Parents, Post_Future.Solve_Problems, Post_Future.Interesting_Life, Post_Violence.Coping, Post_Violence.Cowardice, Post_Violence.Self_Care, Post_Violence.Anger_Mgmt, Post_Violence.Negotiation, Post_Violence.Self_Defense, Post_Violence.Handle_Others, Post_Violence.Self_Awareness, Post_Violence.Parent_Approval, Post_Violence.Parent_Disapproval, Post_Violence.Teasing_Prevention FROM Assessments AS Pre_Assessments LEFT JOIN Assessments as Post_Assessments ON (Pre_Assessments.Participant_ID=Post_Assessments.Participant_ID AND Pre_Assessments.Assessment_ID!=Post_Assessments.Assessment_ID) LEFT JOIN Participants_Baseline_Assessments ON (Pre_Assessments.Baseline_ID=Baseline_Assessment_ID) LEFT JOIN Participants_Caring_Adults AS Pre_Caring ON (Pre_Caring.Caring_Adults_ID=Pre_Assessments.Caring_ID) LEFT JOIN Participants_Caring_Adults AS Post_Caring ON (Post_Caring.Caring_Adults_ID=Post_Assessments.Caring_ID) LEFT JOIN Participants_Future_Expectations AS Pre_Future ON (Pre_Future.Future_Expectations_ID=Pre_Assessments.Future_ID) LEFT JOIN Participants_Future_Expectations AS Post_Future ON (Post_Future.Future_Expectations_ID=Post_Assessments.Future_ID) LEFT JOIN Participants_Interpersonal_Violence AS Pre_Violence ON (Pre_Violence.Interpersonal_Violence_ID=Pre_Assessments.Violence_ID) LEFT JOIN Participants_Interpersonal_Violence AS Post_Violence ON (Post_Violence.Interpersonal_Violence_ID=Post_Assessments.Violence_ID) LEFT JOIN Participants ON Pre_Assessments.Participant_ID=Participants.Participant_ID LEFT JOIN Session_Names ON Pre_Caring.Program=Session_ID LEFT JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL AND Post_Assessments.Pre_Post=2',
+        'non_admin_string' => 'AND Programs.Program_ID = ',
+        'add_access' => 1,
+        'titles' => array("Participant ID", "First Name", "Last Name", "Session ID (of program)", "Session Name", "Program Name", "Home Language", "Ethnicity", "Race")
+        'legends' => array("(id)", "(name)", "(name)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
+
+        'enlace_new_surveys_deid' => array('db'=>'enlace', 'query'=> 
+        'SELECT  Pre_Assessments.Participant_ID, Pre_Caring.Program, Session_Name, Name, Home_Language, Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_E, BYS_T, JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, JVQ_12, US_Born, Pre_Caring.Check_In, Pre_Caring.Know_You, Pre_Caring.Compliment, Pre_Caring.Crisis_Help, Pre_Caring.Pay_Attention, Pre_Caring.KnowImportance, Pre_Caring.Personal_Advice, Pre_Caring.Upset_Discussion, Pre_Future.Friends, Pre_Future.Finish_HS, Pre_Future.Stay_Safe,  Pre_Future.Alive_Well, Pre_Future.Happy_Life, Pre_Future.Manage_Work, Pre_Future.Proud_Parents, Pre_Future.Solve_Problems, Pre_Future.Interesting_Life, Pre_Violence.Coping, Pre_Violence.Cowardice, Pre_Violence.Self_Care, Pre_Violence.Anger_Mgmt, Pre_Violence.Negotiation, Pre_Violence.Self_Defense, Pre_Violence.Handle_Others, Pre_Violence.Self_Awareness, Pre_Violence.Parent_Approval, Pre_Violence.Parent_Disapproval, Pre_Violence.Teasing_Prevention, Post_Caring.Check_In, Post_Caring.Know_You, Post_Caring.Compliment, Post_Caring.Crisis_Help, Post_Caring.Pay_Attention, Post_Caring.KnowImportance, Post_Caring.Personal_Advice, Post_Caring.Upset_Discussion, Post_Future.Friends, Post_Future.Finish_HS, Post_Future.Stay_Safe, Post_Future.Alive_Well, Post_Future.Happy_Life, Post_Future.Manage_Work, Post_Future.Proud_Parents, Post_Future.Solve_Problems, Post_Future.Interesting_Life, Post_Violence.Coping, Post_Violence.Cowardice, Post_Violence.Self_Care, Post_Violence.Anger_Mgmt, Post_Violence.Negotiation, Post_Violence.Self_Defense, Post_Violence.Handle_Others, Post_Violence.Self_Awareness, Post_Violence.Parent_Approval, Post_Violence.Parent_Disapproval, Post_Violence.Teasing_Prevention FROM Assessments AS Pre_Assessments LEFT JOIN Assessments as Post_Assessments ON (Pre_Assessments.Participant_ID=Post_Assessments.Participant_ID AND Pre_Assessments.Assessment_ID!=Post_Assessments.Assessment_ID) LEFT JOIN Participants_Baseline_Assessments ON (Pre_Assessments.Baseline_ID=Baseline_Assessment_ID) LEFT JOIN Participants_Caring_Adults AS Pre_Caring ON (Pre_Caring.Caring_Adults_ID=Pre_Assessments.Caring_ID) LEFT JOIN Participants_Caring_Adults AS Post_Caring ON (Post_Caring.Caring_Adults_ID=Post_Assessments.Caring_ID) LEFT JOIN Participants_Future_Expectations AS Pre_Future ON (Pre_Future.Future_Expectations_ID=Pre_Assessments.Future_ID) LEFT JOIN Participants_Future_Expectations AS Post_Future ON (Post_Future.Future_Expectations_ID=Post_Assessments.Future_ID) LEFT JOIN Participants_Interpersonal_Violence AS Pre_Violence ON (Pre_Violence.Interpersonal_Violence_ID=Pre_Assessments.Violence_ID) LEFT JOIN Participants_Interpersonal_Violence AS Post_Violence ON (Post_Violence.Interpersonal_Violence_ID=Post_Assessments.Violence_ID) LEFT JOIN Participants ON Pre_Assessments.Participant_ID=Participants.Participant_ID LEFT JOIN Session_Names ON Pre_Caring.Program=Session_ID LEFT JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL AND Post_Assessments.Pre_Post=2',
+        'non_admin_string' => 'AND Programs.Program_ID = ',
+        'add_access' => 1,
+        'titles' => array("Participant ID", "Session ID (of program)", "Session Name", "Program Name", "Home Language", "Ethnicity", "Race")
+        'legends' => array("(id)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
 
         
         'swop_campaigns_deid'=>array('db'=>'SWOP', 'query'=>
@@ -1782,14 +1844,16 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
          * In this branch, it hasn't been fixed (apparently?), and this query 
          * will need to be fixed when we merge. 
          */
-        $get_privileges_sqlsafe="SELECT Privilege_ID FROM Users_Privileges"
+        $get_privileges_sqlsafe="SELECT Privilege_ID, Program_Access FROM Users_Privileges"
                 . " LEFT JOIN Users ON Users_Privileges.User_ID=Users.User_ID WHERE "
                 . "User_Email=" . $_COOKIE['user'] . "";
         include "dbconnopen.php";
         $privilege_set=mysqli_query($cnnLISC, $get_privileges_sqlsafe);
         $accesses=array();
+        $programs = array();
         while ($privilege=mysqli_fetch_row($privilege_set)){
             $accesses[]=$privilege[0];
+            $programs[] = $privilege[1];
         }
         $get_db_id=array_search($download_list_array[$download_name]['db'], $db_array);
         $has_permission=in_array($get_db_id, $accesses);
@@ -1820,7 +1884,17 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         include $conn_file;
         $db_name= 'cnn' . ucfirst($download_list_array[$download_name]['db']);
         $database_conn=$$db_name;
-        $query_sqlsafe=$download_list_array[$download_name]['query'];
+
+        //get program access if relevant
+        $db_key = array_search($get_db_id, $accesses);
+        $program_access = $programs[$db_key];
+
+        if ($download_list_array[$download_name]['add_access']==1){
+        $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['non_admin_string'] . $program_access . $download_list_array[$download_name]['query2'];
+        }
+        else{
+        $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['non_admin_string'] . $download_list_array[$download_name]['query2'];
+        }
         $rows = mysqli_query($database_conn, $query_sqlsafe);
         // loop over the rows, outputting them
         while ($row = mysqli_fetch_row($rows)) {

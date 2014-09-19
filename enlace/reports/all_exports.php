@@ -54,7 +54,6 @@ Export files for all tables.  This is going to change once Taryn determines what
             All campaigns.
         </td>
         <td class="all_projects">
-            <a href="/include/generalized_download_script.php?download_name=enlace_campaigns">
                Download.</a></td>
         <td class="all_projects">--</td>
     </tr>
