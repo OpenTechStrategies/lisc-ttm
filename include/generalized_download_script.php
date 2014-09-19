@@ -1102,7 +1102,7 @@ function generalized_download($download_name){
 
         
         'enlace_participants'=>array('db'=>'enlace', 'query'=>
-        'SELECT Participants.Participant_ID, First_Name, Last_Name, Day_Phone, Evening_Phone, Participants.Address_Num, Participants.Address_Dir, Participants.Address_Street, Participants.Address_Street_Type, Address_City, Address_State, Address_ZIP, DOB, Age, Gender, Grade, Institution_Name, Roles.Role, Participants.Email FROM Participants LEFT JOIN Roles ON Participants.Role = Roles.Role_ID LEFT JOIN Institutions ON School = Inst_ID'), 
+        'SELECT Participants.Participant_ID, First_Name, Last_Name, Day_Phone, Evening_Phone, Participants.Address_Num, Participants.Address_Dir, Participants.Address_Street, Participants.Address_Street_Type, Address_City, Address_State, Address_ZIP, DOB, Age, Gender, Grade, Institution_Name, Roles.Role, Participants.Email FROM Participants LEFT JOIN Roles ON Participants.Role = Roles.Role_ID LEFT JOIN Institutions ON School = Inst_ID', 
         'non_admin_string' => 'LEFT JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID WHERE Programs.Program_ID = ',
         'add_access' => 1,
         'titles' => array("Participant ID", "First_Name", "Last_Name", "Day_Phone", "Evening_Phone", "Address Number", "Address Direction", "Address Street Name", "Address Street Type", "Address_City", "Address_State", "Address_ZIP", "DOB", "Age", "Gender", "Grade", "School", "Role", "Email")), //waiting to resolve the access permissions 
