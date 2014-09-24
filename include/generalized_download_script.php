@@ -1,5 +1,5 @@
 <?php
-
+echo "Testing output.  Reached the file.";
 //takes as arguments the query, database connection and database connection
 //file, column headers, and file name.
 
@@ -7,6 +7,7 @@
 // http://code.stephenmorley.org/php/creating-downloadable-csv-files/
 
 function generalized_download($download_name){
+    echo "Testing output.  Entered the function.";
     $download_list_array=array(
         'aldermans_records'=>array('db'=>'bickerdike', 'query'=> 
             'SELECT * FROM Aldermanic_Records', 
@@ -1680,7 +1681,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
                 "Notes", "Property Marker Name", "Street Number", "Street Direction", 
                 "Street Name", "Street Type")),
 
-	'trp_academic_info' => array('db'=>'TRP', 'query'=>
+/*	'trp_academic_info' => array('db'=>'TRP', 'query'=>
             'SELECT First_Name, Last_Name, Academic_Info.*,
                 School_Name FROM Academic_Info LEFT JOIN Schools ON
                 School=School_ID LEFT JOIN Participants ON
@@ -1829,9 +1830,10 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
              'titles' => array("Teacher Exchange ID", "Participant ID", "Classroom", 
                  "Home Teacher", "Exchange Teacher")),
 
-        
+*/
 
                  );
+    echo "Testing output.  End of array.";
     $db_array=array(2=>'LSNA', 3=>'bickerdike', 4=>'TRP', 5=>'SWOP', 6=>'enlace');
     if (array_key_exists($download_name, $download_list_array)){
     if (isset($_COOKIE['user'])){
