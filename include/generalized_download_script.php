@@ -1069,7 +1069,7 @@ function generalized_download($download_name){
             'titles'=>array("Information ID", "Person ID", "Month", "Year", 
                 "Issue Area Event Type")),
         
-        'enlace_events'=>array('db'=>'enlace', 'query'=>
+        /*'enlace_events'=>array('db'=>'enlace', 'query'=>
             'SELECT Event_Name, Event_Date, Address_Num, Address_Dir, Address_Street,
                 Address_Suffix, Event_Types.Type, Note_File_Name, Campaign_Name
                 FROM Campaigns_Events LEFT JOIN Campaigns ON Campaigns.Campaign_ID
@@ -1206,16 +1206,16 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         'titles' => array("Referral ID", "ID of referred person", "Referrer (person) ID", "Referring Institution", "Referring Program", "Program referred to", "Date Logged")),
 
         'enlace_participant_dosage' => array('db'=>'enlace', 'query'=> 
-        'SELECT Participants_Programs.Participant_ID, First_Name, Last_Name, Programs.Program_ID, Name, Session_ID, Session_Name FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID',
+        'SELECT Participants_Programs.Participant_ID, Session_ID, First_Name, Last_Name, Programs.Program_ID, Name, Session_Name FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID',
         'non_admin_string' => 'AND Programs.Program_ID = ',
         'add_access' => 1,
         'query2' => 'GROUP BY Session_ID, Participants.Participant_ID',
-        'titles' => array("Participant ID", "First Name", "Last Name", "Program ID", "Program Name", "Session ID", "Session Name", "Number of days attended", "Sum of hours for this session", "Dosage percentage for this session")),
+        'titles' => array("Participant ID", "Session ID", "First Name", "Last Name", "Program ID", "Program Name", "Session Name", "Number of days attended", "Sum of hours for this session", "Dosage percentage for this session")),
 
         'enlace_participant_dosage_deid' => array('db'=>'enlace', 'query'=> 
-        'SELECT Participants_Programs.Participant_ID, Programs.Program_ID, Name, Session_ID, Session_Name FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID',
+        'SELECT Participants_Programs.Participant_ID,  Session_ID, Programs.Program_ID, Name, Session_Name FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID',
         'query2' => 'GROUP BY Session_ID, Participants.Participant_ID',
-        'titles' => array("Participant ID", "Program ID", "Program Name", "Session ID", "Session Name",
+        'titles' => array("Participant ID", "Session ID", "Program ID", "Program Name",  "Session Name",
                 "Number of days attended",
         "Sum of hours for this session", "Dosage percentage for this session")),
 
@@ -1233,7 +1233,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         'titles' => array("Participant ID", "Session ID (of program)", "Session Name", "Program Name", "Home Language", "Ethnicity", "Race")
         'legends' => array("(id)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
 
-        
+        */
         'swop_campaigns_deid'=>array('db'=>'SWOP', 'query'=>
             'SELECT * FROM Campaigns',
             'titles'=>array("Campaign Id", "Campaign Name")),
@@ -1831,7 +1831,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
 
         
 
-        );
+                 );
     $db_array=array(2=>'LSNA', 3=>'bickerdike', 4=>'TRP', 5=>'SWOP', 6=>'enlace');
     if (array_key_exists($download_name, $download_list_array)){
     if (isset($_COOKIE['user'])){
@@ -1867,15 +1867,42 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         // create a file pointer connected to the output stream
         $output = fopen('php://output', 'w');
 
+        $title_array = $download_list_array[$download_name]['titles'];
+        $legend_array = $download_list_array[$download_name]['legend'];
+
+        //create legends for certain enlace exports 
+        if ($download_list_array[$download_name] == 'enlace_new_surveys_deid' || $download_list_array[$download_name] == 'enlace_new_surveys' || $download_list_array[$download_name] == 'enlace_impact_surveys_deid' || $download_list_array[$download_name] == 'enlace_impact_surveys' || $download_list_array[$download_name] == 'enlace_intake_assessments_deid' || $download_list_array[$download_name] == 'enlace_intake_assessments_deid'){
+        $get_pre_questions = "SELECT Baseline_Assessment_Question_ID, Question FROM Baseline_Assessment_Questions ORDER BY In_Table";
+        $all_pre_questions = mysqli_query($cnnEnlace, $get_pre_questions);
+        while ($q = mysqli_fetch_row($all_pre_questions)) {
+            $title_array[] = "Pre: " . $q[1];
+            $get_response_text_sqlsafe="SELECT Response_Select, Response_Text FROM Assessment_Responses WHERE Question_ID='$q[0]'";
+            $response_text=mysqli_query($cnnEnlace, $get_response_text_sqlsafe);
+            $legend_cell="";
+            while ($response=mysqli_fetch_row($response_text)){
+                $legend_cell.= $response[0] . "=" . $response[1] . "; ";
+            }
+            $legend_array[]=$legend_cell;
+        }
+        $get_questions = "SELECT Baseline_Assessment_Question_ID, Question FROM Baseline_Assessment_Questions WHERE In_Table!='Participants_Baseline_Assessments' ORDER BY In_Table";
+        $all_questions = mysqli_query($cnnEnlace, $get_questions);
+        while ($q = mysqli_fetch_row($all_questions)) {
+            $title_array[] = "Post: " . $q[1];
+            $get_response_text_post_sqlsafe="SELECT Response_Select, Response_Text FROM Assessment_Responses WHERE Question_ID='$q[0]'";
+            $response_text_post=mysqli_query($cnnEnlace, $get_response_text_post_sqlsafe);
+            $legend_cell_post="";
+            while ($response_post=mysqli_fetch_row($response_text_post)){
+                $legend_cell_post.= $response_post[0] . "=" . $response_post[1] . "; ";
+            }
+            $legend_array[]=$legend_cell_post;
+        }
+        }
+
         // output the column headings
-        fputcsv($output,
-        $download_list_array[$download_name]['titles']);
+        fputcsv($output, $title_array);
 
         //output the legends where appropriate
-        if (isset($download_list_array[$download_name]['legend'])){
-                fputcsv($output, $download_list_array[$download_name]['legend']);
-            }
-
+        fputcsv($output, $legend_array);
         
 
         // fetch the data
@@ -1889,16 +1916,36 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         $db_key = array_search($get_db_id, $accesses);
         $program_access = $programs[$db_key];
 
+        //create full non-admin string
         if ($download_list_array[$download_name]['add_access']==1){
-        $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['non_admin_string'] . $program_access . $download_list_array[$download_name]['query2'];
-        }
+           $non_admin_string =  $download_list_array[$download_name]['non_admin_string'] . $program_access;
+        }        
         else{
-        $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['non_admin_string'] . $download_list_array[$download_name]['query2'];
+            $non_admin_string = $download_list_array[$download_name]['non_admin_string'];
         }
+
+        //determine admin or non-admin query
+        if ($program_access != 'a'){ //for non-admin users, add limitations to query
+            $query_sqlsafe = $download_list_array[$download_name]['query'] . $non_admin_string . $download_list_array[$download_name]['query2'];
+        }
+        else{ //for admin users, use the plain query
+            $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['query2'];
+        }
+
         $rows = mysqli_query($database_conn, $query_sqlsafe);
+        include "../include/dosage_percentage.php"; //only included for Enlace dosage calculation
         // loop over the rows, outputting them
         while ($row = mysqli_fetch_row($rows)) {
-            fputcsv($output, $row);}
+            // if this is the Enlace dosage export, we need to calculate dosage
+            if ($download_list_array[$download_name] == 'enlace_participant_dosage' || $download_list_array[$downlad_name] == 'enlace_participant_dosage_deid'){
+            $dosage=calculate_dosage($row[1], $row[0]);
+            array_push($row, $dosage[0]);
+            array_push($row, $dosage[1]);
+            array_push($row, $dosage[2]);
+            }
+            fputcsv($output, $row);
+            
+        }
         
 
         exit;
