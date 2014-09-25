@@ -1875,7 +1875,6 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         $title_array = $download_list_array[$download_name]['titles'];
         $legend_array = $download_list_array[$download_name]['legend'];
 
-        echo $download_name; // testing output
         if ($download_name == 'enlace_new_surveys_deid' || $download_name == 'enlace_new_surveys' || $download_name == 'enlace_impact_surveys_deid' || $download_name == 'enlace_impact_surveys' || $download_name == 'enlace_intake_assessments_deid' || $download_name == 'enlace_intake_assessments_deid'){
         $get_pre_questions = "SELECT Baseline_Assessment_Question_ID, Question FROM Baseline_Assessment_Questions ORDER BY In_Table";
         echo $get_pre_questions; // testing output
