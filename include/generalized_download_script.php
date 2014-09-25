@@ -1932,7 +1932,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         
         
         $rows = mysqli_query($database_conn, $query_sqlsafe);
-        include "../include/dosage_percentage.php"; //only included for Enlace dosage calculation
+        include "../enlace/include/dosage_percentage.php"; //only included for Enlace dosage calculation
         // loop over the rows, outputting them
         while ($row = mysqli_fetch_row($rows)) {
             // if this is the Enlace dosage export, we need to calculate dosage
