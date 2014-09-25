@@ -1901,7 +1901,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
             $legend_array[]=$legend_cell_post;
         }
         }
-
+        print_r($title_array);  //testing output
         // output the column headings
         fputcsv($output, $title_array);
 
@@ -1938,9 +1938,10 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
             // if this is the Enlace dosage export, we need to calculate dosage
             if ($download_name == 'enlace_participant_dosage' || $download_name == 'enlace_participant_dosage_deid'){
             $dosage=calculate_dosage($row[1], $row[0]);
-            array_push($row, $dosage[0]);
-            array_push($row, $dosage[1]);
-            array_push($row, $dosage[2]);
+            print_r($dosage); //testing output
+//            array_push($row, $dosage[0]);
+//            array_push($row, $dosage[1]);
+//            array_push($row, $dosage[2]);
             }
             fputcsv($output, $row);
             
