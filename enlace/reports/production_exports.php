@@ -47,6 +47,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
         </td>
         <td class="all_projects">
             <a href="/include/generalized_download_script.php?download_name=enlace_campaigns">
+                Download.</a>    
         </td>
         <td class="all_projects">---</td>
     </tr>
@@ -57,7 +58,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
             All institutions.
         </td>
         <td class="all_projects">
-            <a href="/include/generalized_download_script.php?download_name=enlace_institutions">
+            <a href="/include/generalized_download_script.php?download_name=enlace_institutions_deid">
                 Download.</a></td>
         <td class="all_projects">---</td>
     </tr>
@@ -113,9 +114,11 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
         </td>
         <td class="all_projects">
             <a href="/include/generalized_download_script.php?download_name=enlace_consent_records">
+                Download.</a>
         </td>
         <td class="all_projects">
             <a href="/include/generalized_download_script.php?download_name=enlace_consent_records_deid">
+                Download.</a>
         </td>
     </tr>
 
@@ -141,10 +144,12 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
 
         <td class="all_projects">
             <a href="/include/generalized_download_script.php?download_name=enlace_mentorship_hours">
+                Download.</a>
         </td>
 
         <td class="all_projects">
             <a href="/include/generalized_download_script.php?download_name=enlace_mentorship_hours_deid">
+                Download.</a>
         </td>
     </tr>
 
@@ -159,6 +164,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
         </td>
         <td class="all_projects">
             <a href="/include/generalized_download_script.php?download_name=enlace_programs">
+                Download.</a>
         </td>
     </tr>
 
@@ -172,6 +178,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
         </td>
         <td class="all_projects">
             <a href="/include/generalized_download_script.php?download_name=enlace_program_participation_deid">
+                Download.</a>
         </td>
     </tr>
 
@@ -190,6 +197,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
 
         <td class="all_projects">
             <a href="/include/generalized_download_script.php?download_name=enlace_session_attendance_deid">
+                Download.</a>
         </td>
     </tr>
 
