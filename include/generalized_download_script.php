@@ -1091,7 +1091,7 @@ function generalized_download($download_name){
         
         'enlace_institutions_deid'=>array('db'=>'enlace', 'query'=>
             'SELECT Institution_Name, Type, Block_Group, Phone, Email 
-            FROM Institutions INNER JOIN Institution_Type 
+            FROM Institutions INNER JOIN Institution_Types
             ON Institution_Type = Inst_Type_ID',
             'titles'=>array("Institution Name", "Institution Type", "Block Group",
             "Phone", "Email")),
@@ -1177,11 +1177,11 @@ function generalized_download($download_name){
         'titles' => array("Participant_Program Link ID", "Participant ID", "Session", "Program", "Date Dropped")),
 
         'enlace_session_attendance'=>array('db'=>'enlace', 'query'=> 
-        'SELECT Participants_Programs.Participant_ID, First_Name, Last_Name, Date_Listed, Session_Name, Name FROM Participants_Programs INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID= Absences.Participant_ID)',
+        'SELECT Participants_Programs.Participant_ID, First_Name, Last_Name, Date_Listed, Session_Name, Name, Absence_ID FROM Participants_Programs INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID= Absences.Participant_ID)',
         'titles' => array("Participant ID", "First_Name", "Last_Name", "Date_Listed", "Session_Name", "Program", "Present (NULL) or Absent (some number)")),
 
         'enlace_session_attendance_deid'=>array('db'=>'enlace', 'query'=> 
-        'SELECT Participants_Programs.Participant_ID, Date_Listed, Session_Name, Name FROM Participants_Programs INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID= Absences.Participant_ID)', 
+        'SELECT Participants_Programs.Participant_ID, Date_Listed, Session_Name, Name, Absence_ID FROM Participants_Programs INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID= Absences.Participant_ID)', 
         'titles' => array("Participant ID", "Date_Listed", "Session_Name", "Program", "Present (NULL) or Absent (some number)")), 
 
         'enlace_session_surveys'=>array('db'=>'enlace', 'query'=> 
@@ -1878,6 +1878,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
 
         if ($download_list_array[$download_name] == 'enlace_new_surveys_deid' || $download_list_array[$download_name] == 'enlace_new_surveys' || $download_list_array[$download_name] == 'enlace_impact_surveys_deid' || $download_list_array[$download_name] == 'enlace_impact_surveys' || $download_list_array[$download_name] == 'enlace_intake_assessments_deid' || $download_list_array[$download_name] == 'enlace_intake_assessments_deid'){
         $get_pre_questions = "SELECT Baseline_Assessment_Question_ID, Question FROM Baseline_Assessment_Questions ORDER BY In_Table";
+        echo $get_pre_questions; // testing output
         $all_pre_questions = mysqli_query($cnnEnlace, $get_pre_questions);
         while ($q = mysqli_fetch_row($all_pre_questions)) {
             $title_array[] = "Pre: " . $q[1];
@@ -1931,7 +1932,6 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
             $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['query2'];
         }
         
-        echo $query_sqlsafe; //testing output
         
         $rows = mysqli_query($database_conn, $query_sqlsafe);
         include "../include/dosage_percentage.php"; //only included for Enlace dosage calculation
