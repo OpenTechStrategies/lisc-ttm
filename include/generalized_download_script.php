@@ -1877,7 +1877,6 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
 
         if ($download_name == 'enlace_new_surveys_deid' || $download_name == 'enlace_new_surveys' || $download_name == 'enlace_impact_surveys_deid' || $download_name == 'enlace_impact_surveys' || $download_name == 'enlace_intake_assessments_deid' || $download_name == 'enlace_intake_assessments_deid'){
         $get_pre_questions = "SELECT Baseline_Assessment_Question_ID, Question FROM Baseline_Assessment_Questions ORDER BY In_Table";
-        echo $get_pre_questions; // testing output
         $all_pre_questions = mysqli_query($cnnEnlace, $get_pre_questions);
         while ($q = mysqli_fetch_row($all_pre_questions)) {
             $title_array[] = "Pre: " . $q[1];
@@ -1937,9 +1936,8 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         // loop over the rows, outputting them
         while ($row = mysqli_fetch_row($rows)) {
             // if this is the Enlace dosage export, we need to calculate dosage
-            if ($download_name == 'enlace_participant_dosage' || $download_name] == 'enlace_participant_dosage_deid'){
+            if ($download_name == 'enlace_participant_dosage' || $download_name == 'enlace_participant_dosage_deid'){
             $dosage=calculate_dosage($row[1], $row[0]);
-            print_r($dosage); //testing output
             array_push($row, $dosage[0]);
             array_push($row, $dosage[1]);
             array_push($row, $dosage[2]);
