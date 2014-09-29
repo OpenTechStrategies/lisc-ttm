@@ -1834,17 +1834,11 @@ LEFT JOIN
     if (isset($_COOKIE['user'])){
         //add a couple lines here to check the privileges, so we know whether
         //this person is authorized to view given exports
-        
-        /* ALERT: This query depends on the user cookie having single quotes already
-         * saved inside it.  This was a bug which has already been fixed on master,
-         * I believe.
-         * In this branch, it hasn't been fixed (apparently?), and this query 
-         * will need to be fixed when we merge. 
-         */
+
+        include "dbconnopen.php";
         $get_privileges_sqlsafe="SELECT Privilege_ID, Program_Access FROM Users_Privileges"
                 . " LEFT JOIN Users ON Users_Privileges.User_ID=Users.User_ID WHERE "
-                . "User_Email=" . $_COOKIE['user'] . "";
-        include "dbconnopen.php";
+            . "User_Email='" . mysqli_real_escape_string($cnnLISC, $_COOKIE['user']) . "'";
         $privilege_set=mysqli_query($cnnLISC, $get_privileges_sqlsafe);
         $accesses=array();
         $programs = array();
