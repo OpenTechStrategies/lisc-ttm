@@ -7,6 +7,7 @@ $school_sqlsafe=mysqli_real_escape_string($cnnLNSA, $_POST['school']);
 $year_sqlsafe=mysqli_real_escape_string($cnnLNSA, $_POST['year']);
 $find_existing="SELECT * FROM Participants_Subcategories WHERE Participant_ID='" . $participant_sqlsafe . "' AND
     Subcategory_ID= '" . $subcategory_sqlsafe . "'";
+echo $find_existing; // testing output
 $existing=mysqli_query($cnnLSNA, $find_existing);
 $exists=mysqli_num_rows($existing);
 include "../include/dbconnclose.php";

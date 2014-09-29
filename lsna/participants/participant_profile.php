@@ -1582,7 +1582,8 @@ include "../include/dbconnclose.php";
                     year: year
                 },
         function(response) {
-            window.location = 'participant_profile.php';
+            document.write(response);
+//            window.location = 'participant_profile.php';
         }
         )">
 
