@@ -1120,23 +1120,27 @@ function generalized_download($download_name){
         'non_admin_string' => 'LEFT JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID',
         'non_admin_string2' => ' AND Programs.Program_ID = ',
         'add_access' => 1,
-        'titles' => array("Assessment ID", "Participant ID", "First_Name", "Last_Name", "Pre or Post", "Date Logged")),
+        'titles' => array("Assessment ID", "Participant ID", "First_Name", "Last_Name", "Pre or Post", "Date Logged"),
+        'legend' => array("(id)", "(id)", "(name)", "(name)", "(pre or post)", "(date)")),
 
         'enlace_intake_assessments_deid'=>array('db'=>'enlace', 'query'=>
         'SELECT Assessment_ID, Assessments.Participant_ID, Assessments.Pre_Post, Assessments.Date_Logged, Check_In, Know_You, Compliment, Crisis_Help, Pay_Attention, KnowImportance, Personal_Advice, Upset_Discussion, Friends, Finish_HS, Stay_Safe, Alive_Well, Happy_Life, Manage_Work, Proud_Parents, Solve_Problems, Interesting_Life, Coping, Cowardice, Self_Care, Anger_Mgmt, Negotiation, Self_Defense, Handle_Others, Self_Awareness, Parent_Approval, Parent_Disapproval, Teasing_Prevention FROM Assessments LEFT JOIN Participants_Caring_Adults ON Caring_ID = Caring_Adults_ID LEFT JOIN Participants_Future_Expectations ON Future_Id = Future_Expectations_ID LEFT JOIN Participants_Interpersonal_Violence ON Violence_ID = Interpersonal_Violence_ID LEFT JOIN Participants ON Assessments.Participant_Id = Participants.Participant_ID WHERE Assessments.Pre_Post = 1',        
         'non_admin_string' => 'LEFT JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID',
         'non_admin_string2' => ' AND Programs.Program_ID = ',
         'add_access' => 1,
-        'titles' => array("Assessment ID", "Participant ID", "Pre or Post", "Date Logged")),
+        'titles' => array("Assessment ID", "Participant ID", "Pre or Post", "Date Logged"),
+        'legend' => array("(id)", "(id)", "(pre or post)", "(date)")),
 
 
         'enlace_impact_surveys'=>array('db'=>'enlace', 'query'=>
         'SELECT Assessment_ID, Assessments.Participant_ID, Participants.First_Name, Participants.Last_Name, Assessments.Pre_Post, Assessments.Date_Logged, Check_In, Know_You, Compliment, Crisis_Help, Pay_Attention, KnowImportance, Personal_Advice, Upset_Discussion, Friends, Finish_HS, Stay_Safe, Alive_Well, Happy_Life, Manage_Work, Proud_Parents, Solve_Problems, Interesting_Life, Coping, Cowardice, Self_Care, Anger_Mgmt, Negotiation, Self_Defense, Handle_Others, Self_Awareness, Parent_Approval, Parent_Disapproval, Teasing_Prevention FROM Assessments LEFT JOIN Participants_Caring_Adults ON Caring_ID = Caring_Adults_ID LEFT JOIN Participants_Future_Expectations ON Future_Id = Future_Expectations_ID LEFT JOIN Participants_Interpersonal_Violence ON Violence_ID = Interpersonal_Violence_ID LEFT JOIN Participants ON Assessments.Participant_Id = Participants.Participant_ID WHERE Assessments.Pre_Post = 2',
-        'titles' => array("Assessment ID", "Participant ID", "First Name", "Last Name", "Pre or Post", "Date Logged")),
+        'titles' => array("Assessment ID", "Participant ID", "First Name", "Last Name", "Pre or Post", "Date Logged"),
+        'legend' => array("(id)", "(id)", "(name)", "(name)", "(pre or post)", "(date)")),
 
         'enlace_impact_surveys_deid'=>array('db'=>'enlace', 'query'=>
         'SELECT Assessment_ID, Assessments.Participant_ID, Assessments.Pre_Post, Assessments.Date_Logged, Check_In, Know_You, Compliment, Crisis_Help, Pay_Attention, KnowImportance, Personal_Advice, Upset_Discussion, Friends, Finish_HS, Stay_Safe, Alive_Well, Happy_Life, Manage_Work, Proud_Parents, Solve_Problems, Interesting_Life, Coping, Cowardice, Self_Care, Anger_Mgmt, Negotiation, Self_Defense, Handle_Others, Self_Awareness, Parent_Approval, Parent_Disapproval, Teasing_Prevention FROM Assessments LEFT JOIN Participants_Caring_Adults ON Caring_ID = Caring_Adults_ID LEFT JOIN Participants_Future_Expectations ON Future_Id = Future_Expectations_ID LEFT JOIN Participants_Interpersonal_Violence ON Violence_ID = Interpersonal_Violence_ID LEFT JOIN Participants ON Assessments.Participant_Id = Participants.Participant_ID WHERE Assessments.Pre_Post = 2',
-        'titles' => array("Assessment ID", "Participant ID", "Pre or Post", "Date Logged")),
+        'titles' => array("Assessment ID", "Participant ID", "Pre or Post", "Date Logged"),
+        'legend' => array("(id)", "(id)", "(pre or post)", "(date)")),
 
 
 
@@ -1220,14 +1224,14 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         'non_admin_string' => 'AND Programs.Program_ID = ',
         'add_access' => '1',
         'titles' => array("Participant ID", "First Name", "Last Name", "Session ID (of program)", "Session Name", "Program Name", "Home Language", "Ethnicity", "Race"),
-        'legends' => array("(id)", "(name)", "(name)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
+        'legend' => array("(id)", "(name)", "(name)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
 
         'enlace_new_surveys_deid' => array('db'=>'enlace', 'query'=> 
         'SELECT  Pre_Assessments.Participant_ID, Pre_Caring.Program, Session_Name, Name, Home_Language, Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_E, BYS_T, JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, JVQ_12, US_Born, Pre_Caring.Check_In, Pre_Caring.Know_You, Pre_Caring.Compliment, Pre_Caring.Crisis_Help, Pre_Caring.Pay_Attention, Pre_Caring.KnowImportance, Pre_Caring.Personal_Advice, Pre_Caring.Upset_Discussion, Pre_Future.Friends, Pre_Future.Finish_HS, Pre_Future.Stay_Safe,  Pre_Future.Alive_Well, Pre_Future.Happy_Life, Pre_Future.Manage_Work, Pre_Future.Proud_Parents, Pre_Future.Solve_Problems, Pre_Future.Interesting_Life, Pre_Violence.Coping, Pre_Violence.Cowardice, Pre_Violence.Self_Care, Pre_Violence.Anger_Mgmt, Pre_Violence.Negotiation, Pre_Violence.Self_Defense, Pre_Violence.Handle_Others, Pre_Violence.Self_Awareness, Pre_Violence.Parent_Approval, Pre_Violence.Parent_Disapproval, Pre_Violence.Teasing_Prevention, Post_Caring.Check_In, Post_Caring.Know_You, Post_Caring.Compliment, Post_Caring.Crisis_Help, Post_Caring.Pay_Attention, Post_Caring.KnowImportance, Post_Caring.Personal_Advice, Post_Caring.Upset_Discussion, Post_Future.Friends, Post_Future.Finish_HS, Post_Future.Stay_Safe, Post_Future.Alive_Well, Post_Future.Happy_Life, Post_Future.Manage_Work, Post_Future.Proud_Parents, Post_Future.Solve_Problems, Post_Future.Interesting_Life, Post_Violence.Coping, Post_Violence.Cowardice, Post_Violence.Self_Care, Post_Violence.Anger_Mgmt, Post_Violence.Negotiation, Post_Violence.Self_Defense, Post_Violence.Handle_Others, Post_Violence.Self_Awareness, Post_Violence.Parent_Approval, Post_Violence.Parent_Disapproval, Post_Violence.Teasing_Prevention FROM Assessments AS Pre_Assessments LEFT JOIN Assessments as Post_Assessments ON (Pre_Assessments.Participant_ID=Post_Assessments.Participant_ID AND Pre_Assessments.Assessment_ID!=Post_Assessments.Assessment_ID) LEFT JOIN Participants_Baseline_Assessments ON (Pre_Assessments.Baseline_ID=Baseline_Assessment_ID) LEFT JOIN Participants_Caring_Adults AS Pre_Caring ON (Pre_Caring.Caring_Adults_ID=Pre_Assessments.Caring_ID) LEFT JOIN Participants_Caring_Adults AS Post_Caring ON (Post_Caring.Caring_Adults_ID=Post_Assessments.Caring_ID) LEFT JOIN Participants_Future_Expectations AS Pre_Future ON (Pre_Future.Future_Expectations_ID=Pre_Assessments.Future_ID) LEFT JOIN Participants_Future_Expectations AS Post_Future ON (Post_Future.Future_Expectations_ID=Post_Assessments.Future_ID) LEFT JOIN Participants_Interpersonal_Violence AS Pre_Violence ON (Pre_Violence.Interpersonal_Violence_ID=Pre_Assessments.Violence_ID) LEFT JOIN Participants_Interpersonal_Violence AS Post_Violence ON (Post_Violence.Interpersonal_Violence_ID=Post_Assessments.Violence_ID) LEFT JOIN Participants ON Pre_Assessments.Participant_ID=Participants.Participant_ID LEFT JOIN Session_Names ON Pre_Caring.Program=Session_ID LEFT JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL AND Post_Assessments.Pre_Post=2',
         'non_admin_string' => 'AND Programs.Program_ID = ',
         'add_access' => '1',
         'titles' => array("Participant ID", "Session ID (of program)", "Session Name", "Program Name", "Home Language", "Ethnicity", "Race"),
-        'legends' => array("(id)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
+        'legend' => array("(id)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
 
         
         'swop_campaigns_deid'=>array('db'=>'SWOP', 'query'=>
@@ -1932,9 +1936,7 @@ LEFT JOIN
         while ($row = mysqli_fetch_row($rows)) {
             // if this is the Enlace dosage export, we need to calculate dosage
             if ($download_name == 'enlace_participant_dosage' || $download_name == 'enlace_participant_dosage_deid'){
-                echo "session: " . $row[1] . " person: " . $row[0]; //testing output
                 $dosage=calculate_dosage($row[1], $row[0]);
-                print_r($dosage); //testing output
                 array_push($row, $dosage[0]);
                 array_push($row, $dosage[1]);
                 array_push($row, $dosage[2]);
