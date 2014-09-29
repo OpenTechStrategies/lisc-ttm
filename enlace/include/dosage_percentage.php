@@ -65,7 +65,7 @@ function calculate_dosage($session, $participant){
     } else {
         $percentage = 'N/A';
     }
-    return array($num_attended[0], $sum_hours, $percentage, $session_sqlsafe);
+    return array($num_attended[0], $sum_hours, $percentage);
 }
 
 /* End redeclaration-protection wrapper: */

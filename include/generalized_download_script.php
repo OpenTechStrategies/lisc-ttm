@@ -1939,7 +1939,6 @@ LEFT JOIN
             // if this is the Enlace dosage export, we need to calculate dosage
             if ($download_name == 'enlace_participant_dosage' || $download_name == 'enlace_participant_dosage_deid'){
                 $dosage=calculate_dosage($row[1], $row[0]);
-                print_r($dosage);// testing output
                 array_push($row, $dosage[0]);
                 array_push($row, $dosage[1]);
                 array_push($row, $dosage[2]);
