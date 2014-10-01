@@ -2,10 +2,10 @@
 /*delete a survey.  somewhat complicated because all the pieces must be deleted.
  * 
  */
+include "../include/dbconnopen.php";
 if ($_POST['action']=='personal'){
     $assessment_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['assessment']);
     $get_surveys="SELECT * FROM Assessments WHERE Assessment_ID='".$assessment_sqlsafe."'";
-    include "../include/dbconnopen.php";
     $surveys=mysqli_query($cnnEnlace, $get_surveys);
     $surv=mysqli_fetch_row($surveys);
     $delete_caring="DELETE FROM Participants_Caring_Adults WHERE Caring_Adults_Id=$surv[3]";
@@ -19,15 +19,12 @@ if ($_POST['action']=='personal'){
     mysqli_query($cnnEnlace, $delete_future);
     mysqli_query($cnnEnlace, $delete_violence);
     mysqli_query($cnnEnlace, $delete_query);
-    include "../include/dbconnclose.php";
 }
 /*not complicated to delete a program survey: */
 else{
 $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['id']);
 $delete_query="DELETE FROM Program_Surveys WHERE Program_Survey_ID='" . $id_sqlsafe . "'";
 echo $delete_query;
-
-include "../include/dbconnopen.php";
 mysqli_query($cnnEnlace, $delete_query);
 include "../include/dbconnclose.php";}
 ?>
