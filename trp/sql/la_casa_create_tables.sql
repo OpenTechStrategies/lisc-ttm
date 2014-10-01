@@ -23,6 +23,10 @@ PRIMARY KEY (`College_ID`),
 `College_Name` varchar(100)
 ) ENGINE=InnoDB;
 
+INSERT INTO Colleges (College_Name)
+VALUES ('University of Chicago'), ('Southern Illinois University'),
+('Howard Washington College');
+
 
 DROP TABLE IF EXISTS `La_Casa_Basics`;
 
@@ -47,13 +51,15 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `Loans_Received` varchar(45)
 ) ENGINE=InnoDB;
 
+INSERT INTO La_Casa_Basics (Participant_ID_Students, College_ID,
+Credits)
+VALUES ('69', '1', '3.5'), ('70', '2', '18');
 
 
-
- ALTER TABLE `Participants` ADD
+/* ALTER TABLE `Participants` ADD
    `Email_2` varchar(60); 
 
 ALTER TABLE `Participants` ADD
 `Mobile_Phone` varchar(45);
-
+*/
 

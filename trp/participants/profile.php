@@ -2066,7 +2066,7 @@ if ($parti['Gender'] == 'm') {
                 </tr>
                 <?php
                 include "../include/dbconnopen.php";
-                $find_college_data_sqlsafe="SELECT College_Name, Term_Type, Term, School_Year, Credits FROM La_Casa_Basics LEFT JOIN Colleges ON La_Casa_Basics.College_ID=Colleges.College_ID WHERE Student_ID='" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+                $find_college_data_sqlsafe="SELECT College_Name, Term_Type, Term, School_Year, Credits FROM La_Casa_Basics LEFT JOIN Colleges ON La_Casa_Basics.College_ID=Colleges.College_ID WHERE Participant_ID_Students = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
 
                 $college_data=mysqli_query($cnnTRP, $find_college_data_sqlsafe);
                 $total_credits = 0;
@@ -2099,7 +2099,7 @@ if ($parti['Gender'] == 'm') {
                     <th>Loans Received Volume ($)</th>
                 </tr>
 <?php
-$find_loan_data_sqlsafe = "SELECT School_Year, Loan_Applications, Loan_Volume, Loans_Received FROM La_Casa_Basics WHERE Student_ID = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+$find_loan_data_sqlsafe = "SELECT School_Year, Loan_Applications, Loan_Volume, Loans_Received FROM La_Casa_Basics WHERE Participant_ID_Students = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
                 $loan_data=mysqli_query($cnnTRP, $find_loan_data_sqlsafe);
                 $total_loans = 0;
 
