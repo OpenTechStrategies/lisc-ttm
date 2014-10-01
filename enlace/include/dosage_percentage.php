@@ -15,7 +15,7 @@ if(!function_exists("calculate_dosage")) {
  * the sum of hours this student spent in this program (if available), and
  * the dosage percentage. */
 function calculate_dosage($session, $participant){
-    include "dbconnopen.php";
+    include $_SERVER['DOCUMENT_ROOT'] . "/enlace/include/dbconnopen.php";
     $session_sqlsafe=mysqli_real_escape_string($cnnEnlace, $session);
     $participant_sqlsafe=mysqli_real_escape_string($cnnEnlace, $participant);
     /* This select finds the number of days that the student attended this
