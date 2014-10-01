@@ -60,7 +60,7 @@ if ($_POST['action'] == 'delete_session') {
 /* delete participant completely */
 else if ($_POST['action'] == 'delete_participant') {
     include "../include/dbconnopen.php";
-    $participant_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $participant_id_sqlsafe);
+    $participant_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['participant_id']);
     date_default_timezone_set('America/Chicago');
     
     //delete participant from programs
