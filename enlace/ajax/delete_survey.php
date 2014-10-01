@@ -26,5 +26,6 @@ $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['id']);
 $delete_query="DELETE FROM Program_Surveys WHERE Program_Survey_ID='" . $id_sqlsafe . "'";
 echo $delete_query;
 mysqli_query($cnnEnlace, $delete_query);
-include "../include/dbconnclose.php";}
+}
+include "../include/dbconnclose.php";
 ?>
