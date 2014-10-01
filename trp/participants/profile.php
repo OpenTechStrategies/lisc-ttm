@@ -2069,7 +2069,9 @@ if ($parti['Gender'] == 'm') {
                 $find_college_data_sqlsafe="SELECT College_Name, Term_Type, Term, School_Year, Credits FROM La_Casa_Basics LEFT JOIN Colleges ON La_Casa_Basics.College_ID=Colleges.College_ID WHERE Student_ID='" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
 
                 $college_data=mysqli_query($cnnTRP, $find_college_data_sqlsafe);
+                $total_credits = 0;
                 while ($coldat=mysqli_fetch_row($college_data)){
+                    $total_credits += $coldat[4];
                     ?>
                 <tr><td><?php echo $coldat[0]; ?></td>
                     <td><?php echo $coldat[1]; ?></td>
@@ -2080,16 +2082,43 @@ if ($parti['Gender'] == 'm') {
                         <?php
                 }
                 ?>
+                <tr>
+                     <td colspan="4">Total Credits earned: </td>
+                     <td><?php echo $total_credits; ?></td>
+                </tr>
             </table>
     
             <p></p>
 
             <table class="inner_table">
-<caption>Loans Table</caption>
-<tr><th>Number of Loan Applications</th>
-<th>Application Volume ($)</th>
-<th>Loans Received Volume ($)</th>
-<th>Year</th></tr> 
+                <caption>Loans Table</caption>
+                <tr>
+                    <th>Year</th>
+                    <th>Number of Loan Applications</th>
+                    <th>Application Volume ($)</th>
+                    <th>Loans Received Volume ($)</th>
+                </tr>
+<?php
+$find_loan_data_sqlsafe = "SELECT School_Year, Loan_Applications, Loan_Volume, Loans_Received FROM La_Casa_Basics WHERE Student_ID = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+                $loan_data=mysqli_query($cnnTRP, $find_loan_data_sqlsafe);
+                $total_loans = 0;
+
+                while ($loandata=mysqli_fetch_row($loan_data)){
+                    $total_loans += $loandata[3];
+                    ?>
+                <tr><td><?php echo $loandata[0]; ?></td>
+                    <td><?php echo $loandata[1]; ?></td>
+                    <td><?php echo $loandata[2]; ?></td>
+                    <td><?php echo $loandata[3]; ?></td>
+                </tr>
+                        <?php
+                }
+?>
+                <tr>
+                     <td colspan="3">Total Loans received: </td>
+                     <td><?php echo $total_loans; ?></td>
+                </tr>
+
 </table>
 
 

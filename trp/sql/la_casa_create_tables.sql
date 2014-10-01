@@ -1,22 +1,11 @@
 /* This SQL file will DROP, CREATE, and LOAD sample data into the tables
 *  we need for the new La Casa section of the TRP database.
 *
-*  Both of these tables reference the "Participants" table, and all 
+*  This table references the "Participants" table, and all 
 *  La Casa students and residents will be entered into that table as 
 *  their primary key.
 *  
-*  The "La_Casa_Residents" table holds all the information having to do with 
-*  students' residence at La Casa.  We expect any imported information from HDS 
-*  that does not belong in the "Participants" table to have a home in the 
-*  "La_Casa_Residents" table.  
-*
-*  The "La_Casa_Students" table holds more specialized information about the
-*  residents, but in their capacity as college students.  This will grow more
-*  complicated as time goes on, but for now we have indications that we will
-*  eventually be linking to a schools table that includes colleges and high
-*  schools.
-*
-*  Creating a La_Casa_Basics table to hold references to the Colleges
+*  This file creates a La_Casa_Basics table to hold references to the Colleges
 *  table with number of credits earned per term and specific loan
 *  information that was requested by the LC director. 
 *
@@ -25,6 +14,14 @@
 USE ttm-trp;
 
 
+DROP TABLE IF EXISTS `Colleges`;
+
+CREATE TABLE `Colleges`
+(
+`College_ID` int(11) NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (`College_ID`),
+`College_Name` varchar(100)
+) ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS `La_Casa_Basics`;
@@ -52,14 +49,6 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 
 
 
-DROP TABLE IF EXISTS `Colleges`;
-
-CREATE TABLE `Colleges`
-(
-`College_ID` int(11) NOT NULL AUTO_INCREMENT,
-PRIMARY KEY (`College_ID`),
-`College_Name` varchar(100)
-) ENGINE=InnoDB;
 
  ALTER TABLE `Participants` ADD
    `Email_2` varchar(60); 
