@@ -3,7 +3,8 @@
  * 
  */
 include "../include/dbconnopen.php";
-if ($_POST['action']=='personal'){
+if ($_POST['action']=='personal')
+{
     $assessment_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['assessment']);
     $get_surveys="SELECT * FROM Assessments WHERE Assessment_ID='".$assessment_sqlsafe."'";
     $surveys=mysqli_query($cnnEnlace, $get_surveys);
@@ -21,11 +22,12 @@ if ($_POST['action']=='personal'){
     mysqli_query($cnnEnlace, $delete_query);
 }
 /*not complicated to delete a program survey: */
-else{
-$id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['id']);
-$delete_query="DELETE FROM Program_Surveys WHERE Program_Survey_ID='" . $id_sqlsafe . "'";
-echo $delete_query;
-mysqli_query($cnnEnlace, $delete_query);
+else
+{
+    $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['id']);
+    $delete_query="DELETE FROM Program_Surveys WHERE Program_Survey_ID='" . $id_sqlsafe . "'";
+    echo $delete_query;
+    mysqli_query($cnnEnlace, $delete_query);
 }
 include "../include/dbconnclose.php";
 ?>
