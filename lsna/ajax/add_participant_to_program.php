@@ -1,10 +1,10 @@
 <?php
 //should check to make sure that they aren't already linked to the program
 include "../include/dbconnopen.php";
-$participant_sqlsafe=mysqli_real_escape_string($cnnLNSA, $_POST['participant']);
-$subcategory_sqlsafe=mysqli_real_escape_string($cnnLNSA, $_POST['subcategory']);
-$school_sqlsafe=mysqli_real_escape_string($cnnLNSA, $_POST['school']);
-$year_sqlsafe=mysqli_real_escape_string($cnnLNSA, $_POST['year']);
+$participant_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['participant']);
+$subcategory_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['subcategory']);
+$school_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['school']);
+$year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['year']);
 $find_existing="SELECT * FROM Participants_Subcategories WHERE Participant_ID='" . $participant_sqlsafe . "' AND
     Subcategory_ID= '" . $subcategory_sqlsafe . "'";
 $existing=mysqli_query($cnnLSNA, $find_existing);
@@ -17,7 +17,6 @@ $add_to_program = "INSERT INTO Participants_Subcategories (Participant_ID,
     Subcategory_ID) VALUES (
     '" . $participant_sqlsafe . "',
     '" . $subcategory_sqlsafe . "')";
-echo $add_to_program;
 include "../include/dbconnopen.php";
 mysqli_query($cnnLSNA, $add_to_program);
 include "../include/dbconnclose.php";
