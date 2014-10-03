@@ -1217,7 +1217,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
 
         'enlace_participant_dosage' => array('db'=>'enlace', 'query'=> 
         'SELECT Participants_Programs.Participant_ID, Session_ID, First_Name, Last_Name, Programs.Program_ID, Name, Session_Name FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID',
-        'non_admin_string' => 'AND Programs.Program_ID = ',
+        'non_admin_string' => 'WHERE Participants_Programs.Program_ID = ',
         'add_access' => '1',
         'query2' => ' GROUP BY Session_ID, Participants.Participant_ID',
         'titles' => array("Participant ID", "Session ID", "First Name", "Last Name", "Program ID", "Program Name", "Session Name", "Number of days attended", "Sum of hours for this session", "Dosage percentage for this session")),
@@ -1239,7 +1239,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
 
         'enlace_new_surveys_deid' => array('db'=>'enlace', 'query'=> 
         'SELECT  Pre_Assessments.Participant_ID, Pre_Caring.Program, Session_Name, Name, Home_Language, Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_E, BYS_T, JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, JVQ_12, US_Born, Pre_Caring.Check_In, Pre_Caring.Know_You, Pre_Caring.Compliment, Pre_Caring.Crisis_Help, Pre_Caring.Pay_Attention, Pre_Caring.KnowImportance, Pre_Caring.Personal_Advice, Pre_Caring.Upset_Discussion, Pre_Future.Friends, Pre_Future.Finish_HS, Pre_Future.Stay_Safe,  Pre_Future.Alive_Well, Pre_Future.Happy_Life, Pre_Future.Manage_Work, Pre_Future.Proud_Parents, Pre_Future.Solve_Problems, Pre_Future.Interesting_Life, Pre_Violence.Coping, Pre_Violence.Cowardice, Pre_Violence.Self_Care, Pre_Violence.Anger_Mgmt, Pre_Violence.Negotiation, Pre_Violence.Self_Defense, Pre_Violence.Handle_Others, Pre_Violence.Self_Awareness, Pre_Violence.Parent_Approval, Pre_Violence.Parent_Disapproval, Pre_Violence.Teasing_Prevention, Post_Caring.Check_In, Post_Caring.Know_You, Post_Caring.Compliment, Post_Caring.Crisis_Help, Post_Caring.Pay_Attention, Post_Caring.KnowImportance, Post_Caring.Personal_Advice, Post_Caring.Upset_Discussion, Post_Future.Friends, Post_Future.Finish_HS, Post_Future.Stay_Safe, Post_Future.Alive_Well, Post_Future.Happy_Life, Post_Future.Manage_Work, Post_Future.Proud_Parents, Post_Future.Solve_Problems, Post_Future.Interesting_Life, Post_Violence.Coping, Post_Violence.Cowardice, Post_Violence.Self_Care, Post_Violence.Anger_Mgmt, Post_Violence.Negotiation, Post_Violence.Self_Defense, Post_Violence.Handle_Others, Post_Violence.Self_Awareness, Post_Violence.Parent_Approval, Post_Violence.Parent_Disapproval, Post_Violence.Teasing_Prevention FROM Assessments AS Pre_Assessments LEFT JOIN Assessments as Post_Assessments ON (Pre_Assessments.Participant_ID=Post_Assessments.Participant_ID AND Pre_Assessments.Assessment_ID!=Post_Assessments.Assessment_ID) LEFT JOIN Participants_Baseline_Assessments ON (Pre_Assessments.Baseline_ID=Baseline_Assessment_ID) LEFT JOIN Participants_Caring_Adults AS Pre_Caring ON (Pre_Caring.Caring_Adults_ID=Pre_Assessments.Caring_ID) LEFT JOIN Participants_Caring_Adults AS Post_Caring ON (Post_Caring.Caring_Adults_ID=Post_Assessments.Caring_ID) LEFT JOIN Participants_Future_Expectations AS Pre_Future ON (Pre_Future.Future_Expectations_ID=Pre_Assessments.Future_ID) LEFT JOIN Participants_Future_Expectations AS Post_Future ON (Post_Future.Future_Expectations_ID=Post_Assessments.Future_ID) LEFT JOIN Participants_Interpersonal_Violence AS Pre_Violence ON (Pre_Violence.Interpersonal_Violence_ID=Pre_Assessments.Violence_ID) LEFT JOIN Participants_Interpersonal_Violence AS Post_Violence ON (Post_Violence.Interpersonal_Violence_ID=Post_Assessments.Violence_ID) LEFT JOIN Participants ON Pre_Assessments.Participant_ID=Participants.Participant_ID LEFT JOIN Session_Names ON Pre_Caring.Program=Session_ID LEFT JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID ',
-        'non_admin_string' => 'AND Participants_Programs.Program_ID = ',
+        'non_admin_string' => ' AND Participants_Programs.Program_ID = ',
         'add_access' => '1',
         'query2' => ' WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL AND Post_Assessments.Pre_Post=2 ',
         'titles' => array("Participant ID", "Session ID (of program)", "Session Name", "Program Name", "Home Language", "Ethnicity", "Race"),
@@ -1927,21 +1927,28 @@ LEFT JOIN
         $db_key = array_search($get_db_id, $accesses);
         $program_access = $programs[$db_key];
 
-        //create full non-admin string
-        if ($download_list_array[$download_name]['add_access']==1){
-           $non_admin_string =  $download_list_array[$download_name]['non_admin_string'] . $program_access;
-        }        
-        else{
-            $non_admin_string = $download_list_array[$download_name]['non_admin_string'];
-        }
-
-        //determine admin or non-admin query
-        if ($program_access != 'a'){ //for non-admin users, add limitations to query
-            $query_sqlsafe = $download_list_array[$download_name]['query'] . $non_admin_string . $download_list_array[$download_name]['query2'];
-        }
-        else{ //for admin users, use the plain query
+        if ($program_access == 'a'){ //plain query for users with full access
             $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['query2'];
         }
+        else{ //for non-admin users, add limitations to query
+            if (isset( $download_list_array[$download_name]['non_admin_string2'])){
+                if ($download_list_array[$download_name]['add_access']==1){ 
+                    $query_sqlsafe = $download_list_array[$download_name]['query'] .  $download_list_array[$download_name]['non_admin_string'] .  $download_list_array[$download_name]['query2'] .  $download_list_array[$download_name]['non_admin_string2'] .  $program_access;
+                }
+                else{
+                    $query_sqlsafe = $download_list_array[$download_name]['query'] .  $download_list_array[$download_name]['non_admin_string'] .  $download_list_array[$download_name]['query2'] .  $download_list_array[$download_name]['non_admin_string2'];
+                }
+            }
+            else{
+                if ($download_list_array[$download_name]['add_access']==1){ 
+                    $query_sqlsafe = $download_list_array[$download_name]['query'] . $non_admin_string . $program_access . $download_list_array[$download_name]['query2'];                    
+                }
+                else{
+                    $query_sqlsafe = $download_list_array[$download_name]['query'] . $non_admin_string . $download_list_array[$download_name]['query2'];
+                }
+            }
+        }
+
         echo $query_sqlsafe; //testing output
         
         $rows = mysqli_query($database_conn, $query_sqlsafe);
