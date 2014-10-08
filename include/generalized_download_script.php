@@ -1235,7 +1235,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         'non_admin_string2' => ' AND Session_Names.Program_ID = ',
         'add_access' => '1',
         'query2' => ' WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL AND Post_Assessments.Pre_Post=2 ',
-        'query3' => ' GROUP BY Pre_Assessments.Assessment_ID ';
+        'query3' => ' GROUP BY Pre_Assessments.Assessment_ID ',
         'titles' => array("Participant ID", "First Name", "Last Name", "Session ID (of program)", "Session Name", "Program Name", "Home Language", "Ethnicity", "Race"),
         'legend' => array("(id)", "(name)", "(name)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
 
@@ -1245,7 +1245,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         'non_admin_string2' => ' AND Session_Names.Program_ID = ',
         'add_access' => '1',
         'query2' => ' WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL AND Post_Assessments.Pre_Post=2 ',
-        'query3' => ' GROUP BY Pre_Assessments.Assessment_ID ';
+        'query3' => ' GROUP BY Pre_Assessments.Assessment_ID ',
         'titles' => array("Participant ID", "Session ID (of program)", "Session Name", "Program Name", "Home Language", "Ethnicity", "Race"),
         'legend' => array("(id)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
 
