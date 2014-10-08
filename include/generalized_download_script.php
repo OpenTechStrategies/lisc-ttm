@@ -1235,6 +1235,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         'non_admin_string2' => ' AND Session_Names.Program_ID = ',
         'add_access' => '1',
         'query2' => ' WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL AND Post_Assessments.Pre_Post=2 ',
+        'query3' => ' GROUP BY Pre_Assessments.Assessment_ID ';
         'titles' => array("Participant ID", "First Name", "Last Name", "Session ID (of program)", "Session Name", "Program Name", "Home Language", "Ethnicity", "Race"),
         'legend' => array("(id)", "(name)", "(name)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
 
@@ -1244,6 +1245,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         'non_admin_string2' => ' AND Session_Names.Program_ID = ',
         'add_access' => '1',
         'query2' => ' WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL AND Post_Assessments.Pre_Post=2 ',
+        'query3' => ' GROUP BY Pre_Assessments.Assessment_ID ';
         'titles' => array("Participant ID", "Session ID (of program)", "Session Name", "Program Name", "Home Language", "Ethnicity", "Race"),
         'legend' => array("(id)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
 
@@ -1930,23 +1932,23 @@ LEFT JOIN
         $program_access = $programs[$db_key];
 
         if ($program_access == 'a'){ //plain query for users with full access
-            $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['query2'];
+            $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['query2'] . $download_list_array[$download_name]['query3'];
         }
         else{ //for non-admin users, add limitations to query
             if (isset( $download_list_array[$download_name]['non_admin_string2'])){
                 if ($download_list_array[$download_name]['add_access']==1){ 
-                    $query_sqlsafe = $download_list_array[$download_name]['query'] .  $download_list_array[$download_name]['non_admin_string'] .  $download_list_array[$download_name]['query2'] .  $download_list_array[$download_name]['non_admin_string2'] .  $program_access;
+                    $query_sqlsafe = $download_list_array[$download_name]['query'] .  $download_list_array[$download_name]['non_admin_string'] .  $download_list_array[$download_name]['query2'] .  $download_list_array[$download_name]['non_admin_string2'] .  $program_access . $download_list_array[$download_name]['query3'];
                 }
                 else{
-                    $query_sqlsafe = $download_list_array[$download_name]['query'] .  $download_list_array[$download_name]['non_admin_string'] .  $download_list_array[$download_name]['query2'] .  $download_list_array[$download_name]['non_admin_string2'];
+                    $query_sqlsafe = $download_list_array[$download_name]['query'] .  $download_list_array[$download_name]['non_admin_string'] .  $download_list_array[$download_name]['query2'] .  $download_list_array[$download_name]['non_admin_string2'] . $download_list_array[$download_name]['query3'];
                 }
             }
             else{
                 if ($download_list_array[$download_name]['add_access']==1){ 
-                    $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['non_admin_string'] . $program_access . $download_list_array[$download_name]['query2'];                    
+                    $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['non_admin_string'] . $program_access . $download_list_array[$download_name]['query2'] . $download_list_array[$download_name]['query3'];
                 }
                 else{
-                    $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['non_admin_string'] . $download_list_array[$download_name]['query2'];
+                    $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['non_admin_string'] . $download_list_array[$download_name]['query2'] . $download_list_array[$download_name]['query3'];
                 }
             }
         }
