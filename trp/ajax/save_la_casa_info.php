@@ -8,6 +8,14 @@ if ($_POST['action']=='edit' && $_POST['subject'] == 'college'){
          Term  = '" . mysqli_real_escape_string($cnnTRP, $_POST['term_id']) . "',
          School_Year  = '" . mysqli_real_escape_string($cnnTRP, $_POST['school_year']) . "',
          Credits = '" . mysqli_real_escape_string($cnnTRP, $_POST['credits']) . "',
+WHERE Student_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
+   echo $edit_college_data_sqlsafe;
+   mysqli_query($cnnTRP, $edit_college_data_sqlsafe);
+                              
+}
+elseif ($_POST['action']=='edit' && $_POST['subject'] == 'loans'){
+   $edit_college_data_sqlsafe = "UPDATE La_Casa_Basics SET 
+         School_Year  = '" . mysqli_real_escape_string($cnnTRP, $_POST['school_year']) . "',
          Loan_Applications = '" . mysqli_real_escape_string($cnnTRP, $_POST['loan_apps']) . "',
          Loan_Volume  = '" . mysqli_real_escape_string($cnnTRP, $_POST['loan_volume']) . "',
          Loans_Received = '" . mysqli_real_escape_string($cnnTRP, $_POST['loans_received']) . "'
@@ -16,6 +24,7 @@ WHERE Student_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
    mysqli_query($cnnTRP, $edit_college_data_sqlsafe);
                               
 }
+
 elseif ($_POST['action'] == 'new' && $_POST['subject'] == 'college'){
        $add_college_data_sqlsafe = "INSERT INTO La_Casa_Basics
        (Participant_ID_Students,  College_ID, Term_Type, Term,

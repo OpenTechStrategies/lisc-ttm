@@ -9,6 +9,7 @@ include "../include/datepicker_simple.php";
         $('#participants_selector').addClass('selected');
         $('.basic_info_edit').hide();
         $('.add_family').hide();
+        $('.hide_college_data').hide();
     });
 </script>
 
@@ -2060,9 +2061,9 @@ if ($parti['Gender'] == 'm') {
             <h4>La Casa Information</h4>
             <table class="inner_table">
                 <caption>College Data</caption>
-                <tr><th>School Name</th><th>Term Type (Semester or Quarter)</th>
+                <tr><th>Year</th><th>School Name</th><th>Term Type (Semester or Quarter)</th>
                     <th>Term (Fall, Winter, Spring, Summer)</th>
-                    <th>Year</th><th>Credits Earned</th>
+                    <th>Credits Earned</th>
                 </tr>
                 <?php
                 include "../include/dbconnopen.php";
@@ -2073,8 +2074,20 @@ if ($parti['Gender'] == 'm') {
                 while ($coldat=mysqli_fetch_row($college_data)){
                     $total_credits += $coldat[4];
                     ?>
-                                <tr><td><span class = "hide_college_data_<?php echo $coldat[5]; ?>" > <?php echo $coldat[0]; ?> </span>
-                              <select id = "college_id" class = "show_college_edit_<?php echo $coldat[5]; ?>">
+                                <tr>
+                    <td><span class = "hide_college_data_<?php echo $coldat[5]; ?> " > <?php echo $coldat[3]; ?> </span>
+                    <select id = "college_year_id" class = "hide_college_data show_college_edit_<?php echo $coldat[5]; ?>">
+                              <option value = "0">-----</option>
+                              <option value = "2014" <?php echo ($coldat[3] == '2014' ? 'selected="selected"' : null); ?>> 2014 </option>
+                              <option value = "2015" <?php echo ($coldat[3] == '2015' ? 'selected="selected"' : null); ?>> 2015 </option>
+                              <option value = "2016" <?php echo ($coldat[3] == '2016' ? 'selected="selected"' : null); ?>> 2016 </option>
+                              <option value = "2017" <?php echo ($coldat[3] == '2017' ? 'selected="selected"' : null); ?>> 2017 </option>
+                              </select>
+
+                    </td>
+
+<td><span class = "hide_college_data_<?php echo $coldat[5]; ?>" > <?php echo $coldat[0]; ?> </span>
+                              <select id = "college_id" class = "hide_college_data show_college_edit_<?php echo $coldat[5]; ?>">
                               <option value = "0">-----</option>
                               <?php 
                               $get_college_list_sqlsafe = "SELECT * FROM Colleges";
@@ -2082,7 +2095,7 @@ if ($parti['Gender'] == 'm') {
                               $college_list = mysqli_query($cnnTRP, $get_college_list_sqlsafe);
                               while ($college = mysqli_fetch_row($college_list)){
                                     ?>
-                                    <option value = "<?php echo $college[0]; ?>" > <?php echo $college[1]; ?> </option>
+                                    <option <?php echo($coldat[0] == $college[1] ? 'selected="selected"' : null); ?> value = "<?php echo $college[0]; ?>" > <?php echo $college[1]; ?> </option>
                                     <?php
                               }
                               ?>
@@ -2092,10 +2105,10 @@ if ($parti['Gender'] == 'm') {
 if ($coldat[1] == 1 ){ echo " Semester";}
 elseif ($coldat[1] == 2 ){ echo " Quarter";}
   ?> </span>
-                              <select id = "term_type" class = "show_college_edit_<?php echo $coldat[5]; ?>">
-                              <option value = "0">-----</option>
-                              <option value = "1"> Semester </option>
-                              <option value = "2"> Quarter </option>
+                              <select id = "term_type" class = "hide_college_data show_college_edit_<?php echo $coldat[5]; ?>">
+                              <option <?php echo($coldat[1] == '0' ? 'selected="selected"' : null); ?> value = "0">-----</option>
+                              <option <?php echo($coldat[1] == '1' ? 'selected="selected"' : null); ?> value = "1"> Semester </option>
+                              <option <?php echo($coldat[1] == '2' ? 'selected="selected"' : null); ?> value = "2"> Quarter </option>
                               </select>
 </td>
                     <td><span class = "hide_college_data_<?php echo $coldat[5]; ?>" >
@@ -2105,29 +2118,19 @@ elseif ($coldat[2] == 2 ){ echo " Winter";}
 elseif ($coldat[2] == 3 ){ echo " Spring";}
 elseif ($coldat[2] == 4 ){ echo " Summer";}
  ?>                      </span>        
-                    <select id = "term_id" class = "show_college_edit_<?php echo $coldat[5]; ?>">
-                              <option value = "0">-----</option>
-                               <option value = "1"> Fall </option>
-                              <option value = "2"> Winter </option>
-                              <option value = "3"> Spring </option>
-                              <option value = "4"> Summer </option>
+                    <select id = "term_id" class = "hide_college_data show_college_edit_<?php echo $coldat[5]; ?>">
+                              <option <?php echo ($coldat[2] == '0' ? 'selected="selected"' : null); ?> value = "0">-----</option>
+                               <option <?php echo ($coldat[2] == '1' ? 'selected="selected"' : null); ?> value = "1"> Fall </option>
+                              <option <?php echo ($coldat[2] == '2' ? 'selected="selected"' : null); ?> value = "2"> Winter </option>
+                              <option <?php echo ($coldat[2] == '3' ? 'selected="selected"' : null); ?> value = "3"> Spring </option>
+                              <option <?php echo ($coldat[2] == '4' ? 'selected="selected"' : null); ?> value = "4"> Summer </option>
                               </select>
                               </td>
-                    <td><span class = "hide_college_data_<?php echo $coldat[5]; ?>" > <?php echo $coldat[3]; ?> </span>
-                    <select id = "college_year_id" class = "show_college_edit_<?php echo $coldat[5]; ?>">
-                              <option value = "0">-----</option>
-                              <option value = "2014"> 2014 </option>
-                              <option value = "2015"> 2015 </option>
-                              <option value = "2016"> 2016 </option>
-                              <option value = "2017"> 2017 </option>
-                              </select>
-
-                    </td>
                     <td><span class = "hide_college_data_<?php echo $coldat[5]; ?>" > <?php echo $coldat[4]; ?> </span>
-<input id = "credits" class = "show_college_edit_<?php echo $coldat[5]; ?>" value = "<?php echo $coldat[4]; ?>"> </td>
+<input id = "credits" class = "hide_college_data show_college_edit_<?php echo $coldat[5]; ?>" value = "<?php echo $coldat[4]; ?>"> </td>
                     <td><input type = "button" value = "Edit" onclick = "$('.show_college_edit_<?php echo $coldat[5]; ?>').toggle();
 $('.hide_college_data_<?php echo $coldat[5]; ?>').toggle();">
-                    <input type = "button" class = "show_college_edit_<?php echo $coldat[5]; ?>" value = "Save"
+                    <input type = "button" class = "hide_college_data show_college_edit_<?php echo $coldat[5]; ?>" value = "Save"
                     onclick = "
                     $.post(
                         '../ajax/save_la_casa_info.php',
@@ -2150,7 +2153,19 @@ $('.hide_college_data_<?php echo $coldat[5]; ?>').toggle();">
                         <?php
                 }
                 ?>
-                <tr><td>
+                <tr>
+                    <td>
+                    <select id = "new_college_year_id">
+                              <option value = "0">-----</option>
+                              <option value = "2014" > 2014 </option>
+                              <option value = "2015" > 2015 </option>
+                              <option value = "2016" > 2016 </option>
+                              <option value = "2017" > 2017 </option>
+                              </select>
+
+                    </td>
+
+<td>
                               <select id = "new_college_id">
                               <option value = "0">-----</option>
                               <?php 
@@ -2181,16 +2196,6 @@ $('.hide_college_data_<?php echo $coldat[5]; ?>').toggle();">
                               <option value = "4"> Summer </option>
                               </select>
                               </td>
-                    <td>
-                    <select id = "new_college_year_id">
-                              <option value = "0">-----</option>
-                              <option value = "2014"> 2014 </option>
-                              <option value = "2015"> 2015 </option>
-                              <option value = "2016"> 2016 </option>
-                              <option value = "2017"> 2017 </option>
-                              </select>
-
-                    </td>
                     <td><input type="text" id="new_credits"></td>
                     <td><input type="button" value="Add New" onclick=" 
                                     $.post(
@@ -2228,21 +2233,87 @@ $('.hide_college_data_<?php echo $coldat[5]; ?>').toggle();">
                     <th>Loans Received Volume ($)</th>
                 </tr>
 <?php
-$find_loan_data_sqlsafe = "SELECT School_Year, Loan_Applications, Loan_Volume, Loans_Received FROM La_Casa_Basics WHERE Participant_ID_Students = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+$find_loan_data_sqlsafe = "SELECT School_Year, Loan_Applications, Loan_Volume, Loans_Received, Student_ID FROM La_Casa_Basics WHERE Participant_ID_Students = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
                 $loan_data=mysqli_query($cnnTRP, $find_loan_data_sqlsafe);
                 $total_loans = 0;
 
                 while ($loandata=mysqli_fetch_row($loan_data)){
                     $total_loans += $loandata[3];
                     ?>
-                <tr><td><?php echo $loandata[0]; ?></td>
-                    <td><?php echo $loandata[1]; ?></td>
-                    <td><?php echo $loandata[2]; ?></td>
-                    <td><?php echo $loandata[3]; ?></td>
+                <tr><td><span class = "hide_loans_data_<?php echo $loandata[4]; ?>"><?php echo $loandata[0]; ?></span>
+ <select id = "loans_year_id" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>">
+                              <option value = "0">-----</option>
+                              <option value = "2014"> 2014 </option>
+                              <option value = "2015"> 2015 </option>
+                              <option value = "2016"> 2016 </option>
+                              <option value = "2017"> 2017 </option>
+                              </select></td>
+                    <td><span class = "hide_loans_data_<?php echo $loandata[4]; ?>"><?php echo $loandata[1]; ?></span>
+<input type="text" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" id="loan_apps"></td>
+                    <td><span class = "hide_loans_data_<?php echo $loandata[4]; ?>"><?php echo $loandata[2]; ?></span>
+<input type="text" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" id="loan_volume"></td>
+                    <td><span class = "hide_loans_data_<?php echo $loandata[4]; ?>"><?php echo $loandata[3]; ?></span>
+<input type="text" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" id="loans_received"></td>
+                    <td><input type = "button" value = "Edit" onclick = "$('.show_loans_edit_<?php echo $loandata[4]; ?>').toggle();
+$('.hide_loans_data_<?php echo $loandata[4]; ?>').toggle();">
+                    <input type = "button" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" value = "Save"
+                    onclick = "
+                                                                                                   alert('testing');
+                    $.post(
+                        '../ajax/save_la_casa_info.php',
+                        {
+                          action: 'edit',
+                                subject: 'loans',
+                                school_year: document.getElementById('loans_year_id').value,
+                                loan_apps: document.getElementById('loan_apps').value,
+                                loan_volume: document.getElementById('loan_volume').value,
+                                loans_received: document.getElementById('loans_received').value,
+                                id: '<?php echo $loandata[4]; ?>' 
+                                }, 
+                function(response) {
+                    document.write(response);
+                }
+                        );">
+                    </td>
+
                 </tr>
                         <?php
                 }
 ?>
+                <tr><td>
+ <select id = "new_school_year" class = "show_college_edit_<?php echo $loandata[4]; ?>">
+                              <option value = "0">-----</option>
+                              <option value = "2014"> 2014 </option>
+                              <option value = "2015"> 2015 </option>
+                              <option value = "2016"> 2016 </option>
+                              <option value = "2017"> 2017 </option>
+                              </select></td>
+                    <td>
+<input type="text" class = "show_loans_edit_<?php echo $loandata[4]; ?>" id="new_loan_apps"></td>
+                    <td>
+<input type="text" class = "show_loans_edit_<?php echo $loandata[4]; ?>" id="new_loan_volume"></td>
+                    <td>
+<input type="text" class = "show_loans_edit_<?php echo $loandata[4]; ?>" id="new_loans_received"></td>
+                 <td>   <input type = "button" value  = "Add New"
+                    onclick = "
+                    $.post(
+                        '../ajax/save_la_casa_info.php',
+                        {
+                          action: 'new',
+                                subject: 'college',
+                                school_year: document.getElementById('new_school_year').value,
+                                loan_apps: document.getElementById('new_loan_apps').value,
+                                loan_volume: document.getElementById('new_loan_volume').value,
+                                loans_received: document.getElementById('new_loans_received').value,
+                                person: '<?php echo $parti['Participant_ID']; ?>'
+                                }, 
+                function(response) {
+                    document.write(response);
+                }
+                        );">
+                    </td>
+
+                </tr>
                 <tr>
                      <td colspan="3">Total Loans received: </td>
                      <td><?php echo $total_loans; ?></td>
