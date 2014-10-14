@@ -44,7 +44,11 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `Credits` varchar(45),
 `Loan_Applications` int(3),
 `Loan_Volume` varchar(45),
-`Loans_Received` varchar(45)
+`Loans_Received` varchar(45),
+`Household_Size` int(3),
+`Parent1_AGI` int(11),
+`Parent2_AGI` int(11),
+`Student_AGI` int(11)
 ) ENGINE=InnoDB;
 
 

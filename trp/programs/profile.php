@@ -125,12 +125,80 @@ $program = mysqli_fetch_array($program_info);
                                     <td class="trp_add_table"><input type="text" id="mobile_add"></td>
                                 </tr>
                                 <tr>
-                                    <td class="trp_add_table" colspan="8"><strong>For La Casa Residents</strong></td>
+                                    <td class="trp_add_table" colspan="8"><strong>For La Casa Residents</strong></td></tr>
+<tr>
+ <td class="trp_add_table"><strong>Household size (per La Casa application)</strong></td>
+<td class="trp_add_table"><input type="text" id="household_add"></td>
+ <td class="trp_add_table"><strong>Parent 1 AGI</strong></td>
+<td class="trp_add_table"><input type="text" id="par1agi_add"></td>
+<td class="trp_add_table"><strong>Parent 2 AGI</strong></td>
+<td class="trp_add_table"><input type="text" id="par2agi_add"></td>
+<td class="trp_add_table"><strong>Student AGI</strong></td>
+<td class="trp_add_table"><input type="text" id="stntagi_add"></td>
                                 </tr>    
     <tr>
+    <td class="trp_add_table"><strong>School Year</strong></td>
+    <td class="trp_add_table">
+    <select id = "new_school_year">
+    <option value = "0">-----</option>
+    <option value = "2014" > 2014 </option>
+    <option value = "2015" > 2015 </option>
+    <option value = "2016" > 2016 </option>
+    <option value = "2017" > 2017 </option>
+    </select>
     
+    </td>
+    <td class="trp_add_table"><strong>College</strong></td>
+    <td class="trp_add_table">
+    <select id = "new_college_id">
+    <option value = "0">-----</option>
+<?php 
+    $get_college_list_sqlsafe = "SELECT * FROM Colleges";
+include "../include/dbconnopen.php";
+$college_list = mysqli_query($cnnTRP, $get_college_list_sqlsafe);
+while ($college = mysqli_fetch_row($college_list)){
+?>
+    <option value = "<?php echo $college[0]; ?>" > <?php echo $college[1]; ?> </option>
+<?php
+}
+?>
+</select>
+</td>
+<td class="trp_add_table"><strong>Term Type</strong></td>
+<td class="trp_add_table">
+<select id = "new_term_type">
+    <option value = "0">-----</option>
+    <option value = "1"> Semester </option>
+    <option value = "2"> Quarter </option>
+    </select>
+    </td>
+    <td class="trp_add_table"><strong>Term</strong></td>
+    <td class="trp_add_table">
+    <select id = "new_term_id">
+    <option value = "0">-----</option>
+    <option value = "1"> Fall </option>
+    <option value = "2"> Winter </option>
+    <option value = "3"> Spring </option>
+    <option value = "4"> Summer </option>
+    </select>
+    </td>
     </tr>
-                                
+    <tr>
+    <td class="trp_add_table"><strong>Number of Credits</strong</td>
+    <td class="trp_add_table"><input type="text" id="new_credits"></td>
+    <td class="trp_add_table"><strong>Number of Loan Applications</strong></td>
+    <td class="trp_add_table">
+    <input type="text" class = "show_loans_edit_<?php echo $loandata[4]; ?>" id="new_loan_apps"></td>
+    <td class="trp_add_table"><strong>Volume of Loan Applications</strong></td>
+    <td class="trp_add_table">
+    <input type="text" class = "show_loans_edit_<?php echo $loandata[4]; ?>" id="new_loan_volume"></td>
+    <td class="trp_add_table"><strong>Volume of Loans Received</strong></td>
+    <td class="trp_add_table">
+    <input type="text" class = "show_loans_edit_<?php echo $loandata[4]; ?>" id="new_loans_received"></td>
+    </tr>
+    <tr>
+                                  
+</tr>                                
                                 <tr>
                                     <td class="trp_add_table" colspan="8" style="text-align:center;"><input type="button" value="Add" onclick="
                                     $.post(
@@ -149,13 +217,23 @@ $program = mysqli_fetch_array($program_info);
                                             zip_add: document.getElementById('zip_add').value,
                                             phone_add: document.getElementById('phone_add').value,
                                             email2_add: document.getElementById('email2_add').value,
-                                            mobile: document.getElementById('mobile_add').value
-
-
+                                            mobile: document.getElementById('mobile_add').value,
+                                school_year: document.getElementById('new_school_year').value,
+                                loan_apps: document.getElementById('new_loan_apps').value,
+                                loan_volume: document.getElementById('new_loan_volume').value,
+                                loans_received: document.getElementById('new_loans_received').value,
+                                college_id: document.getElementById('new_college_id').value,
+                                term_type: document.getElementById('new_term_type').value,
+                                term_id: document.getElementById('new_term_id').value,
+                                credits: document.getElementById('new_credits').value,
+  household_size: document.getElementById('household_add').value,
+parent1_agi: document.getElementById('par1agi_add').value,
+parent2_agi: document.getElementById('par2agi_add').value,
+student_agi: document.getElementById('stntagi_add').value
                                         },
                                     function(response) {
-                                        //document.write(response);
-                                        document.getElementById('add_person_results').innerHTML = response;
+ document.write(response);
+         //                               document.getElementById('add_person_results').innerHTML = response;
                                     }
                                     )"/></td>
                                 </tr>
