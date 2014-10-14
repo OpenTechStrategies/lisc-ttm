@@ -847,7 +847,73 @@ student_agi: document.getElementById('stntagi_add').value
     }
     else if ($program['Program_ID'] == 6){
     ?>
-        <tr><td class="trp_add_table">Test.  This is where aggregated data would go.</td></tr>
+        <tr><td>
+
+<table class = "inner_table">
+        <caption> Race and Ethnicity </caption>
+<tr><th>Description</th><th>Percent</th><th>Count</th></tr>
+<?php
+//get the total number of people at La Casa (unique participants in
+//the La Casa Basics table), the number of people of each
+//race/ethnicity, and calculate the percentages.
+
+        $la_casa_count_sqlsafe = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID = 6;";
+        include "../include/dbconnopen.php";
+        $lc_count = mysqli_query($cnnTRP, $la_casa_count_sqlsafe);
+        $students_denominator = mysqli_num_rows($lc_count);
+        $lc_race_join_sqlsafe = "SELECT Race, COUNT(*) FROM Participants INNER JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID WHERE Participants_Programs.Program_ID = 6 GROUP BY Race;";
+        $race_counts = mysqli_query($cnnTRP, $lc_race_join_sqlsafe);
+        while ($races = mysqli_fetch_row($race_counts)){
+            if ($races[0] == 3){
+                $hispanic_count = $races[1];
+            }
+            elseif ($races[0] == 1){
+                $aa_count = $races[1];
+            }
+            elseif ($races[0] == 2){
+                $asian_count = $races[1];
+            }
+            elseif ($races[0] == 4){
+                $white_count = $races[1];
+            }
+            elseif ($races[0] == 5){
+                $other_count = $races[1];
+            }
+            elseif ($races[0] == 0){
+                $na_count = $races[1];
+            }
+        }
+
+?>
+        <tr><td>Hispanic or Latino</td>
+        <td><?php echo number_format(($hispanic_count/$students_denominator) * 100) . '%'; ?></td>
+        <td><?php echo $hispanic_count; ?></td>
+        </tr>
+        <tr><td>Black or African-American</td>
+        <td><?php echo number_format(($aa_count/$students_denominator) * 100) . '%'; ?></td>
+        <td><?php echo $aa_count; ?></td>
+        </tr>
+        <tr><td>Asian or Asian-American</td>
+        <td><?php echo number_format(($asian_count/$students_denominator) * 100) . '%'; ?></td>
+        <td><?php echo $asian_count; ?></td>
+        </tr>
+        <tr><td>White, non-Hispanic</td>
+        <td><?php echo number_format(($white_count/$students_denominator) * 100) . '%'; ?></td>
+        <td><?php echo $white_count; ?></td>
+        </tr>
+        <tr><td>Other</td>
+        <td><?php echo number_format(($other_count/$students_denominator) * 100) . '%'; ?></td>
+        <td><?php echo $other_count; ?></td>
+        </tr>
+        <tr><td>Not Reported</td>
+        <td><?php echo number_format(($na_count/$students_denominator) * 100) . '%'; ?></td>
+        <td><?php echo $na_count; ?></td>
+        </tr>
+        
+</table>
+
+</td></tr>
+
     <?php
 }
 ?>
