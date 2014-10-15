@@ -912,6 +912,64 @@ student_agi: document.getElementById('stntagi_add').value
         
 </table>
 
+<table class = "inner table">
+<caption> Household Size </caption>
+<tr><th>Household Size</th><th>Count</th><th>Percent</th></tr>
+<?php 
+        $get_household_sizes_sqlsafe = "SELECT Household_Size, Count(*) FROM La_Casa_Basics GROUP BY Household_Size;";
+        $household_sizes = mysqli_query($cnnTRP, $get_household_sizes_sqlsafe);
+        $largest_household = 0;
+        $sum_of_household_counts = 0;
+        while ($household = mysqli_fetch_row($household_sizes)){
+            if ($household[0]>$largest_household){
+                $largest_household = $household[0];
+            }
+            $sum_of_household_counts+=$household[0];
+?>
+        <tr><td><?php echo $household[0]; ?></td>
+        <td><?php echo $household[1]; ?></td>
+        <td><?php echo number_format(($household[1]/$students_denominator) * 100) . '%'; ?></td>
+        </tr>
+<?php
+        }
+?>
+<tr><td><p></p></td></tr>
+<tr><td colspan = "2"><strong>Total</strong></td><td><?php
+        $get_number_of_people_with_household_sqlsafe = "SELECT COUNT(*) FROM La_Casa_Basics WHERE Household_Size IS NOT NULL;";
+        $have_household_number = mysqli_query($cnnTRP, $get_number_of_people_with_household_sqlsafe);
+        $total_households = mysqli_fetch_row($have_household_number);
+        echo $total_households[0];
+?></td></tr>
+        <tr><td colspan = "2"><strong>Missing</strong></td><td><?php 
+echo ($students_denominator - $total_households[0]);?></td></tr>
+<tr><td colspan = "2"><strong>Largest Household</strong></td><td><?php echo $largest_household; ?></td></tr>
+<tr><td colspan = "2"><strong>Average Household Size</strong></td><td><?php echo number_format($sum_of_household_counts/$total_households[0], 2); ?></td></tr>
+</table>
+
+<p></p>
+
+<table class = "inner_table">
+<caption> Household Income </caption>
+<tr><th>Income</th><th>Percent</th><th>Count</th></tr>
+
+<?php 
+$income_sum_sqlsafe = "SELECT Parent1_AGI + Parent2_AGI +  Student_AGI AS Sum_AGI, COUNT(*) FROM La_Casa_Basics GROUP BY Sum_AGI;";
+$income_counts = mysqli_query($cnnTRP, $income_sum_sqlsafe);
+while ($income = mysqli_fetch_row($income_counts)){
+    if ($income[0] != 0 && $income[0] != NULL){
+        ?>
+        <tr><td><?php echo '$' . number_format($income[0]); ?></td>
+        <td><?php echo number_format(($income[1]/$students_denominator)*100, 2) . '%'; ?></td>
+        <td><?php echo $income[1]; ?></td>
+        </tr>
+<?php
+    }
+}
+
+?>
+
+</table>
+
 </td></tr>
 
     <?php
