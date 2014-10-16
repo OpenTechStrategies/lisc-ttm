@@ -2332,7 +2332,7 @@ $('.hide_loans_data_<?php echo $loandata[4]; ?>').toggle();">
 
         <!-- and a dropdown menu of all programs that this participant might join. -->
         <br/><strong>Add to a new program:</strong>
-        <select id="all_programs" class="no_view">
+        <select id="all_programs_add" class="no_view">
             <option value="">-----</option>
 <?php
 $get_programs = "SELECT * FROM Programs";
@@ -2345,14 +2345,14 @@ while ($prog = mysqli_fetch_row($programs)) {
 }
 include "../include/dbconnopen.php";
 ?>
-        </select><input type="button" value="Add to Program" class="no_view" onclick="$.post(
+        </select><input type="button" value="Add to Program" class="no_view" onclick="
+                    $.post(
                         '../ajax/add_participant_to_program.php',
                         {
-                            program_id: document.getElementById('all_programs').value,
+                            program_id: document.getElementById('all_programs_add').value,
                             participant: '<?php echo $parti['Participant_ID']; ?>'
-                        },
+                            }, 
                 function(response) {
-                    // document.write(response);
                     window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                 }
                 )">

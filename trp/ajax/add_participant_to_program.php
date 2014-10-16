@@ -1,4 +1,4 @@
-<?
+<?php
 /* add notes to the program-participant link.
  * 
  * add a new person to a program. */
