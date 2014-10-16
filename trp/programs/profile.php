@@ -911,8 +911,8 @@ student_agi: document.getElementById('stntagi_add').value
         </tr>
         
 </table>
-
-<table class = "inner table">
+<p></p>
+<table class = "inner_table">
 <caption> Household Size </caption>
 <tr><th>Household Size</th><th>Count</th><th>Percent</th></tr>
 <?php 
@@ -955,8 +955,32 @@ echo ($students_denominator - $total_households[0]);?></td></tr>
 <?php 
 $income_sum_sqlsafe = "SELECT Parent1_AGI + Parent2_AGI +  Student_AGI AS Sum_AGI, COUNT(*) FROM La_Casa_Basics GROUP BY Sum_AGI;";
 $income_counts = mysqli_query($cnnTRP, $income_sum_sqlsafe);
+$lowest_income = 0;
+$highest_income = 0;
+$below50 = 0;
+$below25 = 0;
+$below15 = 0;
+$avg_numer = 0;
+$avg_denom = 0;
 while ($income = mysqli_fetch_row($income_counts)){
     if ($income[0] != 0 && $income[0] != NULL){
+        if ($income[0] < $lowest_income){
+            $lowest_income = $income[0];
+        }
+        if ($income[0] > $highest_income){
+            $highest_income = $income[0];
+        }
+        if ($income[0] < 50000){
+            $below50++;
+        }
+        if ($income[0] < 25000){
+            $below25++;
+        }
+        if ($income[0] < 15000){
+            $below15++;
+        }
+        $avg_numer = $avg_numer + ($income[0])*($income[1]);
+        $avg_denom += $income[1];
         ?>
         <tr><td><?php echo '$' . number_format($income[0]); ?></td>
         <td><?php echo number_format(($income[1]/$students_denominator)*100, 2) . '%'; ?></td>
@@ -967,7 +991,21 @@ while ($income = mysqli_fetch_row($income_counts)){
 }
 
 ?>
-
+<tr><td colspan = "3"><p></p></td></tr>
+<tr><td colspan = "2"><strong>Total Number of Students with reported Household Income</strong></td>
+<td><?php echo $avg_denom; ?></td></tr>
+<tr><td colspan = "2"><strong>Lowest Household Income</strong></td>
+<td><?php echo '$' . $lowest_income; ?></td></tr>
+<tr><td colspan = "2"><strong>Highest Household Income</strong></td>
+<td><?php echo '$' . $highest_income; ?></td></tr>
+<tr><td colspan = "2"><strong>Average Household Income</strong></td>
+<td><?php echo '$' . number_format($avg_numer/$avg_denom)?></td></tr>
+<tr><td colspan = "2"><strong>Below $50,000 Annual Income</strong></td>
+<td><?php echo  $below50; ?></td></tr>
+<tr><td colspan = "2"><strong>Below $25,000 Annual Income</strong></td>
+<td><?php echo  $below25; ?></td></tr>
+<tr><td colspan = "2"><strong>Below $15,000 Annual Income</strong></td>
+<td><?php echo  $below15; ?></td></tr>
 </table>
 
 </td></tr>
