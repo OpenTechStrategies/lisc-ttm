@@ -32,7 +32,7 @@ class Program
         //set program_id
         $this->program_id = $program_id_sqlsafe;
 
-        $query_sqlsafe = "SELECT * FROM Programs WHERE Program_ID='" . $this->program_id . "'"
+        $query_sqlsafe = "SELECT * FROM Programs WHERE Program_ID='" . $this->program_id . "'";
         //echo $query_sqlsafe;
         $program_info = mysqli_query($cnnBickerdike, $query_sqlsafe);
         

@@ -32,7 +32,7 @@ class User
         //set user_id
         $this->user_id = $user_id_sqlsafe;
 
-        str_sqlsafe = "Call User__Load_With_ID('" . $this->user_id . "')";
+        $str_sqlsafe = "Call User__Load_With_ID('" . $this->user_id . "')";
 
         //echo $str_sqlsafe;
         $user_info = mysqli_query($cnnBickerdike, $str_sqlsafe);
