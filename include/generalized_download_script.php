@@ -1068,6 +1068,9 @@ function generalized_download($download_name){
             'titles'=>array("Information ID", "Person ID", "Month", "Year", 
                 "Issue Area Event Type")),
         
+        'enlace_full_dosage' => array('db' => 'enlace', 'query' => 
+        'SELECT SUM(Program_Hours), Hours_List.Participant_ID FROM Participants_Programs AS Hours_List INNER JOIN (SELECT (Daily_Hours * Num_Days_Attended) Program_Hours, Participants_Programs.Participant_ID FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_Names.Session_ID INNER JOIN (SELECT Program_ID, End_Hour - Start_Hour Daily_Hours FROM Programs) Program_Daily_Hours ON Session_Names.Program_ID = Program_Daily_Hours.Program_ID INNER JOIN (SELECT Programs.Program_ID, COUNT(Program_Date_ID) AS Num_Days_Attended FROM Program_Dates INNER JOIN Session_Names ON Program_Dates.Program_ID = Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID LEFT JOIN Absences ON Program_Dates.Program_Date_ID = Absences.Program_Date WHERE Absence_ID IS NULL GROUP BY Programs.Program_ID) Days_Per_Program ON Session_Names.Program_ID = Days_Per_Program.Program_ID GROUP BY Participants_Programs.Participant_ID) Program_Hour_Calc ON Hours_List.Participant_ID = Program_Hour_Calc.Participant_ID GROUP BY Hours_List.Participant_ID'),
+
         'enlace_events'=>array('db'=>'enlace', 'query'=>
             'SELECT Event_Name, Event_Date, Address_Num, Address_Dir, Address_Street,
                 Address_Suffix, Event_Types.Type, Note_File_Name, Campaign_Name
