@@ -1,10 +1,11 @@
 <?php
 
 function isLoggedIn($session_id){
-    include "../include/dbconnopen.php"; //connection to core db
+    $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+    include $path; //connection to core db
     $current_time = date('Y-m-d H:i:s');
     $session_id_sqlsafe = mysqli_real_escape_string($cnnLISC, $session_id);
-    $find_session_sqlsafe = "SELECT * FROM User_Sessions WHERE PHP_Session = '" . $session_id_sqlsafe . "' AND Expire_Time < '" . $current_time . "'";
+    $find_session_sqlsafe = "SELECT * FROM User_Sessions WHERE PHP_Session = '" . $session_id_sqlsafe . "' AND Expire_Time > '" . $current_time . "'";
     $session_active = mysqli_query($cnnLISC, $find_session_sqlsafe);
     $is_active = mysqli_num_rows($session_active);
     if ($is_active > 0){

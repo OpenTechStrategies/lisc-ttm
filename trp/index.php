@@ -27,9 +27,10 @@ if ($_GET['action'] == 'logout') {
     header('Location: /index.php');
 }
 ?>
-    <? include "../header.php";
-	include "header.php";
-        include "include/datepicker_simple.php";
+<?php
+include "../header.php";
+include "header.php";
+include "include/datepicker_simple.php";
 ?>
 <!--<img src="/images/ajax-loader.gif" width="40" height="40" alt="Loading..." id="ajax_loader" style="position: fixed; top: 0; left: 0;" />-->
 <div class="content">

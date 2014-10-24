@@ -1,6 +1,15 @@
 <?php
+include "../auth.php";
 //if action is logout, kill various navigation cookies: 
 if ($_GET['action'] == 'logout') {
+    include_once('ajax/session_test.php');
+    $loggingout = pleaseLogOut($_COOKIE['PHPSESSID']);
+    if ($loggingout){
+        session_unset();
+        session_destroy();
+        //kill cookie
+        setcookie('PHPSESSID', '', time() - 3600, '/');
+
     //kill cookie
     setcookie('user', '', time() - 3600, '/');
     setcookie('sites', '', time() - 3600, '/');
@@ -11,7 +20,12 @@ if ($_GET['action'] == 'logout') {
     setcookie('prog_page', '', time() - 3600, '/');
     //setcookie('session_id', '', time() - 3600, '/');
     //redirect
-    header('Location: /index.php');
+    header('Location: /index.php');    
+    }
+    else{
+        echo "An error occurred.  Please try again.  If this problem persists, contact your system administrator.";
+        } 
+
 }
 
 include "../header.php";
