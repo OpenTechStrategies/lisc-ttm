@@ -1,22 +1,33 @@
 <?php
+print_r($_COOKIE);
 //if action is logout
 if ($_GET['action'] == 'logout') {
-    //kill cookie
-    setcookie('user', '', time() - 3600, '/');
-    setcookie('page', '', time() - 3600, '/');
-    setcookie('participant', '', time() - 3600, '/');
-    setcookie('sites[0]', '', time() - 3600, '/');
-    setcookie('sites[1]', '', time() - 3600, '/');
-    setcookie('sites[2]', '', time() - 3600, '/');
-    setcookie('sites[3]', '', time() - 3600, '/');
-    setcookie('sites[4]', '', time() - 3600, '/');
-    setcookie('sites[5]', '', time() - 3600, '/');
-    setcookie('sites[6]', '', time() - 3600, '/');
-    setcookie('sites[7]', '', time() - 3600, '/');
-    setcookie('view_restricted', '', time() - 3600, '/');
-    setcookie('view_only', '', time() - 3600, '/');
-    //redirect
-    header('Location: /index.php');
+    include_once('ajax/session_test.php');
+    $loggingout = pleaseLogOut($_COOKIE['PHPSESSID']);
+    if ($loggingout){
+        session_unset();
+        session_destroy();
+        //kill cookie
+        setcookie('PHPSESSID', '', time() - 3600, '/');
+        setcookie('user', '', time() - 3600, '/');
+        setcookie('page', '', time() - 3600, '/');
+        setcookie('participant', '', time() - 3600, '/');
+        setcookie('sites[0]', '', time() - 3600, '/');
+        setcookie('sites[1]', '', time() - 3600, '/');
+        setcookie('sites[2]', '', time() - 3600, '/');
+        setcookie('sites[3]', '', time() - 3600, '/');
+        setcookie('sites[4]', '', time() - 3600, '/');
+        setcookie('sites[5]', '', time() - 3600, '/');
+        setcookie('sites[6]', '', time() - 3600, '/');
+        setcookie('sites[7]', '', time() - 3600, '/');
+        setcookie('view_restricted', '', time() - 3600, '/');
+        setcookie('view_only', '', time() - 3600, '/');
+        //redirect
+        header('Location: /index.php');
+    }
+    else{
+        echo "An error occurred.  Please try again.  If this problem persists, contact your system administrator.";
+        } 
 }
 ?>
 <!DOCTYPE html>
@@ -29,6 +40,8 @@ if ($_GET['action'] == 'logout') {
         //when the user cookie expires.
 
         include "login_page.php";
+
+
     } else {
         /*
          * If someone is logged in:

@@ -46,7 +46,13 @@ if ($hash_match) {
     //set the user cookie
        // FIXME: see issue #33 re the single-quotes around $username here
        setcookie("user", "$username", time() + 10800, '/');
-      
+       session_start();
+       session_regenerate_id();
+       $php_session_sqlsafe = mysqli_real_escape_string($cnnLISC, session_id());
+       $expire_time_sqlsafe = date('Y-m-d H:i:s', time() + 7200);
+       $save_session_sqlsafe = "INSERT INTO User_Sessions (PHP_Session, User_ID, Expire_Time) VALUES ('" . $php_session_sqlsafe . "', '" . $user_id . "', '" . $expire_time_sqlsafe . "')";
+       mysqli_query($cnnLISC, $save_session_sqlsafe);
+
        //now find which, if any, privileges they have and set an appropriate cookie
        $privileges_query = "CALL User__Find_Privileges('$username_sqlsafe')";
        $privileges = mysqli_query($cnnLISC, $privileges_query);

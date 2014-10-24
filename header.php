@@ -1,4 +1,12 @@
 <?php
+//test session here, send to error page, exit
+require_once('ajax/session_test.php');
+$loggedin = isLoggedIn($_COOKIE['PHPSESSID']);
+/*if (! $loggedin){
+    include "include/error.html";
+    exit;
+    }*/
+
 /*
  * We set the timezone here, though I'm fairly certain we also set it anywhere we needed to use
  * date().
