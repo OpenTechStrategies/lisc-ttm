@@ -38,13 +38,19 @@ function getSiteAccess($session_id, $site){
     $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
     include $path; //connection to core db
     $session_id_sqlsafe = mysqli_real_escape_string($cnnLISC, $session_id);
-    $find_site_access_sqlsafe = "SELECT Privilege_ID FROM Users_Privileges INNER JOIN User_Sessions ON User_Sessions.User_ID = Users_Privileges.User_ID WHERE PHP_Session = '" . $session_id_sqlsafe . "'";
+    $find_site_access_sqlsafe = "SELECT Site_Privilege_ID FROM Users_Privileges INNER JOIN User_Sessions ON User_Sessions.User_ID = Users_Privileges.User_ID WHERE PHP_Session = '" . $session_id_sqlsafe . "' AND Privilege_ID = '" . $site . "' AND Expire_Time != '0000-00-00 00:00:00'";
+    echo $find_site_access_sqlsafe;
     $access_result = mysqli_query($cnnLISC, $find_site_access_sqlsafe);
-    $access_array = array();
-    while ($access = mysqli_fetch_row($access_result)){
-        $access_array[] = $access[0];
+    $has_access = mysqli_num_rows($access_result);
+    echo $has_access;
+    if ($has_access >= 1){
+        $access_return = 1;
     }
-    return $access_array;
+    else{
+        $access_return = 0;
+    }
+
+    return $access_return;
 }
 
 
