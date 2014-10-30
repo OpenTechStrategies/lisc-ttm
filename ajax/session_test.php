@@ -1,5 +1,11 @@
 <?php
 
+$LSNA_id = 2;
+$Bickerdike_id = 3;
+$TRP_id = 4;
+$SWOP_id = 5;
+$Enlace_id = 6;
+
 function isLoggedIn($session_id){
     $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
     include $path; //connection to core db
@@ -21,10 +27,8 @@ function isLoggedIn($session_id){
 function pleaseLogOut($session_id){
     $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
     include $path; //connection to core db
-    echo $path;
     $session_id_sqlsafe = mysqli_real_escape_string($cnnLISC, $session_id);
     $end_session_sqlsafe = "DELETE FROM User_Sessions WHERE PHP_Session = '" . $session_id_sqlsafe . "'";
-    echo $end_session_sqlsafe;
     $session_ended = mysqli_query($cnnLISC, $end_session_sqlsafe);
     if ($session_ended){
         return true;
@@ -39,10 +43,8 @@ function getSiteAccess($session_id, $site){
     include $path; //connection to core db
     $session_id_sqlsafe = mysqli_real_escape_string($cnnLISC, $session_id);
     $find_site_access_sqlsafe = "SELECT Site_Privilege_ID FROM Users_Privileges INNER JOIN User_Sessions ON User_Sessions.User_ID = Users_Privileges.User_ID WHERE PHP_Session = '" . $session_id_sqlsafe . "' AND Privilege_ID = '" . $site . "' AND Expire_Time != '0000-00-00 00:00:00'";
-    echo $find_site_access_sqlsafe;
     $access_result = mysqli_query($cnnLISC, $find_site_access_sqlsafe);
     $has_access = mysqli_num_rows($access_result);
-    echo $has_access;
     if ($has_access >= 1){
         $access_return = 1;
     }

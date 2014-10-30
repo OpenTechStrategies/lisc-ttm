@@ -1,5 +1,4 @@
 <?php
-include "auth.php";
 //test session here, send to error page, exit
 /*
  * We set the timezone here, though I'm fairly certain we also set it anywhere we needed to use

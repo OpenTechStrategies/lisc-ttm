@@ -1,4 +1,6 @@
-<?
+<?php
+include "siteconfig.php";
+
 //if action is logout
 if ($_GET['action'] == 'logout') {
     //kill cookie
@@ -9,7 +11,7 @@ if ($_GET['action'] == 'logout') {
     setcookie('participant', '', time() - 3600, '/');
     setcookie('program', '', time() - 3600, '/');
     setcookie('prog_page', '', time() - 3600, '/');
-    //setcookie('session_id', '', time() - 3600, '/');
+    setcookie('session_id', '', time() - 3600, '/');
     setcookie('user', '', time()-3600, '/');
     setcookie('page', '', time()-3600, '/');
     setcookie('participant', '', time()-3600, '/');
@@ -75,4 +77,5 @@ include "include/datepicker_simple.php";
 
 </div>
 
-<? include "../footer.php"; ?>
+<?php
+ include "../footer.php"; ?>
