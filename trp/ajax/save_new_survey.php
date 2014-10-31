@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* add a parent survey.  It's not clear how much this will be used, since Gads Hill
  * didn't implement ETO in time to fully integrate them into this system.
  *  */

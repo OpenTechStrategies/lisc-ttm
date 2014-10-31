@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* change participant information. */
 
 /* check whether the address changed, and update the block group if it did */

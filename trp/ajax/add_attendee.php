@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* add or remove people from an event. */
 
 if ($_POST['action']=='add'){

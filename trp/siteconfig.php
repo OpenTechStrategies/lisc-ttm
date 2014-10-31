@@ -1,6 +1,7 @@
 <?php
-include "../auth.php";
-require_once('../ajax/session_test.php');
+echo "note: Siteconfig has been included <br>";
+include $_SERVER['DOCUMENT_ROOT'] . "/auth.php";
+
 //Are they authorized to be in this section of the site?
 
 $sites_authorized = getSiteAccess($_COOKIE['PHPSESSID'], $TRP_id);

@@ -1,3 +1,6 @@
+<?php
+require_once("../siteconfig.php");
+?>
 <?
 /* add notes to the program-participant link.
  * 

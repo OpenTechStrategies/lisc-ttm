@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* Save gold scores, which are administered three times.  The reformat_dates below refer
  * to those survey dates. */
 

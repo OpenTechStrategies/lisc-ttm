@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker_simple.php";

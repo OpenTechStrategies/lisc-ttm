@@ -1,3 +1,6 @@
+<?php
+require_once("../siteconfig.php");
+?>
 <?
 /* the event status refers to whether or not the event shows up on the Community Engagement homepage.  This toggles the
  * active/inactive status. */

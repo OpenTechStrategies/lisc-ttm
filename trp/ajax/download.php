@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* download a saved file from the database.  In TRP, these are generally program notes uploads. */
 if(isset($_GET['id'])) 
 {

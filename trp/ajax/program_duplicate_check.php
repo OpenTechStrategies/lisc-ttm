@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*check for duplicate person (warn before creating two people with the same name or CPS ID)*/
 include "../include/dbconnopen.php";
 if ($_POST['cps_id']!=''){

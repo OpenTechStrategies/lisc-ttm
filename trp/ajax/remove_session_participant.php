@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 
 /* remove session participant. */
 include "../include/dbconnopen.php";

@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* add a new date to a program (for attendance purposes) */
 if ($_POST['action']=='new_date'){
 include "../include/dbconnopen.php";

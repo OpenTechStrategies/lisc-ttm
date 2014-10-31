@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* save outcomes data from the Community Engagement page. */
 include "../include/dbconnopen.php";
 $new_outcomes_data_sqlsafe = "INSERT INTO Outcomes_Months (

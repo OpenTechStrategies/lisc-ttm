@@ -1,4 +1,6 @@
-<?
+<?php
+require_once( "../siteconfig.php");
+
 	include "../../header.php";
 	include "../header.php";
         
@@ -16,7 +18,7 @@
 	<h3>Programs</h3><hr/><br/>
 
 <div style="width:400px;margin-left:auto;margin-right:auto;">
-<?
+<?php
 /* list of all programs */
 	$get_programs_sqlsafe = "SELECT * FROM Programs ORDER BY Program_Name";
 	include "../include/dbconnopen.php";
@@ -28,7 +30,7 @@
 ?>
 	<h4 onclick="
 		$('#summary<?echo $program['Program_ID'];?>').slideToggle();
-	"><?echo $program['Program_Name'];?></h4>
+	"><?php echo $program['Program_Name'];?></h4>
     <!-- basic information about each program, with a link to the more detailed program profile. -->
 		<div class="program_summary" id="summary<?echo $program['Program_ID'];?>">
 			<table width="100%">
@@ -45,12 +47,12 @@
 				</tr>
 			</table>
 		</div>
-<?
+<?php
 	}
 ?>
 </div></div>
 <br/><br/>
-<?
+<?php
 	include "../include/dbconnclose.php";
 	include "../../footer.php";
 ?>

@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* save information having to do with the middle school to high school transition program. */
 
 /* save new explore scores. */

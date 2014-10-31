@@ -1,3 +1,6 @@
+<?php
+require_once("../siteconfig.php");
+?>
 	<h2>Create a New Event</h2>
         
         <!-- Add a new non-campaign-affiliated event. -->

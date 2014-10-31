@@ -1,5 +1,5 @@
 <?php
-include "siteconfig.php";
+require_once("siteconfig.php");
 ?>
 <div id="trp_header">
     <script>

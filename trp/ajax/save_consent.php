@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* Save consent per person per year (for CPS).  May need to be expanded for program-specific consent. */
 
 include "../include/dbconnopen.php";

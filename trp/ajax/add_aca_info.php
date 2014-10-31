@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* save academic information about a person.  pulls from programs on the participant profile.  Academic information is 
  * collected for programs 2, 3, and 5. */
 include "../include/dbconnopen.php";

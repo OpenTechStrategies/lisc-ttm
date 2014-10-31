@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* save elev8 aggregate data.  The "Element" is the 
  * piece of data that is being saved. */
 

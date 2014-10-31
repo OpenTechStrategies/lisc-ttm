@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* Create a new event, either linked to a campaign or not. */
 
 $date_formatted = explode('/', $_POST['date']);

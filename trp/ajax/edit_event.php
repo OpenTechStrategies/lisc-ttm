@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* change event goal/actual attendance and/or date. */
 
 $date_formatted = explode('/', $_POST['date']);

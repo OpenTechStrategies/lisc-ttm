@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* this page isn't actually used.  I have it in here as an example/template taken from the City Data Dictionary project.  */
 
 

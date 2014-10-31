@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 //This updates the Grade_Level (to [Grade_Level + 1]) of the Academic_Info
 //table that are not NULL. This should run on July 1 of every year.
 //The log file (./update_grade_levels.log) keeps track of the last year it

@@ -1,3 +1,6 @@
+<?php
+require_once("../siteconfig.php");
+?>
 <?
 /* Add a link between a parent and child, from the participant profile. */
 

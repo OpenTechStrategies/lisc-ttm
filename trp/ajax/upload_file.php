@@ -1,3 +1,6 @@
+<?php
+require_once("../siteconfig.php");
+?>
 <?php include "../../header.php";
 include "../header.php";
 //print_r($_POST);?>

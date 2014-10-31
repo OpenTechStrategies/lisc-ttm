@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 
 if ($_POST['action']=='new'){
     print_r($_POST);

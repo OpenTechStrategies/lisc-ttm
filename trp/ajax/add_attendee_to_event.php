@@ -1,3 +1,6 @@
+<?php
+require_once("../siteconfig.php");
+?>
 <?
 /* duplicate function to add_attendee.php.  Only used in search_users.php. */
 

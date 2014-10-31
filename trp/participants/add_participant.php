@@ -1,3 +1,6 @@
+<?php
+require_once("../siteconfig.php");
+?>
 <h4>New Participant</h4><br/>
 <!-- div that appears on participants.php for adding a new person to the DB 
 
