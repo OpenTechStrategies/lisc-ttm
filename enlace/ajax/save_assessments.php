@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* save new or edited assessments. */
 /*escape all posted variables:*/
 include "../include/dbconnopen.php";

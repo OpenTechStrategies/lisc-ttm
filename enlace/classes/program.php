@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 class Program {
     public $program_id; //contact id.
 

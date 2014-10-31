@@ -1,3 +1,6 @@
+<?php
+require_once("../siteconfig.php");
+?>
 <?
 /*when editing participant, if the address changes then the block group must change too*/
         include ($_SERVER['DOCUMENT_ROOT']."/include/block_group_finder.php");

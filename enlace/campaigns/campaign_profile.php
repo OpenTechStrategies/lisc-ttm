@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* profile for campaign.  Campaign class is loaded with the campaign cookie that was set after the click on whatever link brought
  * the user here.
  */

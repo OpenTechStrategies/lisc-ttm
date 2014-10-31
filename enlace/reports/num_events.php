@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 
 
 /*Obsolete.  Users decided not to use this report.*/

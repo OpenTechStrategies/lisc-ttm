@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*create a new institution*/
 include ($_SERVER['DOCUMENT_ROOT']."/include/block_group_finder.php");
 $this_address=$_POST['num'] . " " .$_POST['dir'] . " " .$_POST['street'] . " " .$_POST['suff'] . 

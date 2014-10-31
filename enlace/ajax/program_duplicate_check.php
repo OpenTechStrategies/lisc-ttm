@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*check for duplicate campaigns (warn before creating two campaigns with the same name)*/
 
 include "../include/dbconnopen.php";

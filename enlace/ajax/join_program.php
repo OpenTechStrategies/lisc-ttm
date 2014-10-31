@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* participant_program changes */
 
 // delete session and all corresponding data

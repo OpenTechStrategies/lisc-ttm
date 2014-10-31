@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 //get user's access
 //
 // *First determine the program that the logged-in user has access to.  Usually this will be a program ID number,

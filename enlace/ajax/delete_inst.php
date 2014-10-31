@@ -1,3 +1,6 @@
+<?php
+require_once("../siteconfig.php");
+?>
 <?
 /*delete institution.  doesn't remove links to people or campaigns, but those aren't
  * crucial for anything.

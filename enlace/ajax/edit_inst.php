@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*editing institution*/
 
 /*if address has changed, then the block group must change too*/

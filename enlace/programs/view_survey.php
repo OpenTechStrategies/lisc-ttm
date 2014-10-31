@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 
 /*Obsolete.  There's no longer a link to view surveys.*/
 

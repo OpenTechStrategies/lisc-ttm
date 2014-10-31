@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*This has been absorbed into all_impact and all_intake.  Obsolete.*/
 
 include "../../header.php";

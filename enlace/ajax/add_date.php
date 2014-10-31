@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 if ($_POST['action']=='delete'){
     include "../include/dbconnopen.php";
     $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['id']);

@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*download a previously uploaded file.*/
 if(isset($_GET['id'])) 
 {

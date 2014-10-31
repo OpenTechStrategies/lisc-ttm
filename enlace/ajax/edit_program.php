@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* all edits to programs */
 
 /* adding a new program session */

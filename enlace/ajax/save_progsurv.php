@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*new program survey*/
 
 include "../include/dbconnopen.php";

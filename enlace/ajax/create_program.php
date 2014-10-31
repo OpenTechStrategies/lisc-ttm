@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 
 /*make a new campaign */
     include "../include/dbconnopen.php";

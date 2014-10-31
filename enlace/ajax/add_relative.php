@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*add a child-parent connection */
 include "../include/dbconnopen.php";
 $parent_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['parent']);

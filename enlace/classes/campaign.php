@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*
  * Campaign class.  didn't end up using this for much (just getting the campaign name...)
  * but it's here in case more functions are needed.

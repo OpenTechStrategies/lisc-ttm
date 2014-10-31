@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*add new event, either to a campaign or to the Little Village-wide events*/
 
         include ($_SERVER['DOCUMENT_ROOT']."/include/block_group_finder.php");

@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*add or remove mentorship hours from a participant*/
 
 if ($_POST['action']=='delete'){

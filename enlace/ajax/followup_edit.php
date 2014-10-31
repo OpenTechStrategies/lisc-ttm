@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*add a new followup.  these are basically just notes.*/
 if ($_POST['action']=='new'){
     include "../include/dbconnopen.php";

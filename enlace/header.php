@@ -1,3 +1,6 @@
+<?php
+require_once("siteconfig.php");
+?>
 <div id="enlace_header">
     <?php
     /* most groups have permissions based style rules in the header.  Enlace doesn't, because

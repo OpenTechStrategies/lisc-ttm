@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*
  * This file is designed to prevent access to surveys for people who aren't related to the program.
  * That is, users can only view the surveys of participants in their own program.

@@ -1,4 +1,5 @@
 <?php
+require_once("../siteconfig.php");
 include "../../header.php";
 include "../header.php";
 

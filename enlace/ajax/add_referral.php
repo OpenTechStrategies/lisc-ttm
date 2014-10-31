@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 
 /*add a referral*/
 if ($_POST['action']=='new'){

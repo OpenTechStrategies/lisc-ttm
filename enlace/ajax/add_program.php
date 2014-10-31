@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* make a new program: */
 include "../include/dbconnopen.php";
 $name_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['name']);

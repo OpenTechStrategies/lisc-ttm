@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*basic adding and removing of absences*/
     include "../include/dbconnopen.php";
     $user_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['user_id']);

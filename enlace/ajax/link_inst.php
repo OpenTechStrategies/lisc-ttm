@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* link institution to campaign*/
 if ($_POST['type']=='campaign'){
     include "../include/dbconnopen.php";

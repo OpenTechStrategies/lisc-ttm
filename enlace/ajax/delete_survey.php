@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /*delete a survey.  somewhat complicated because all the pieces must be deleted.
  * 
  */

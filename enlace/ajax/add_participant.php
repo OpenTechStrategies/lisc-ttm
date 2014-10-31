@@ -1,4 +1,7 @@
 <?php
+require_once("../siteconfig.php");
+?>
+<?php
 /* several participant actions */
 
 /* add a participant to the attendees at an event */
