@@ -1,6 +1,5 @@
 <?php
 require_once( "siteconfig.php");
-
 //if action is logout
 if ($_GET['action'] == 'logout') {
     //kill cookie

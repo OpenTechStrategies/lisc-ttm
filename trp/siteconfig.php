@@ -1,5 +1,4 @@
 <?php
-echo "note: Siteconfig has been included <br>";
 include $_SERVER['DOCUMENT_ROOT'] . "/auth.php";
 
 //Are they authorized to be in this section of the site?
@@ -16,4 +15,17 @@ else{
     echo "You are authorized to view this page.";
 }
 
+$DATA_ENTRY = 0;
+$VIEW_ONLY = 0;
+
+$permission_level = getPermissionLevel($_COOKIE['PHPSESSID'], $TRP_id);
+
+if ($permission_level == 2){
+    $DATA_ENTRY = 1;
+}
+elseif ($permission_level == 3){
+    $VIEW_ONLY = 1;
+}
+echo $DATA_ENTRY;
+echo $VIEW_ONLY;
 ?>

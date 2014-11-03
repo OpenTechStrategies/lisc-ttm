@@ -185,6 +185,10 @@ No view appears in:
 ./programs/profile.php
 ./engagement/engagement.php
 
+It also shows program participation on the participant profile based
+on an access query, like Enlace.  This query sets an "access" variable
+that determines which program information is displayed.  I will need
+to change that.
 
 _Next Steps:_
 

@@ -398,6 +398,7 @@ if ($parti['Gender'] == 'm') {
             ?>
             <h4><?php echo $program['Program_Name']; ?></h4>
                             <?php
+echo $access;
                             //Early Childhood Education
                             if ($program['Program_ID'] == 1 && ($access == 'a' || $access == 1)) {
                                 ?>

@@ -1,5 +1,5 @@
 <?php
-require_once("../siteconfig.php");
+//require_once("../siteconfig.php");
 ?>
       <link href="/styles/styles.css" rel="stylesheet" type="text/css" />
         <link href="/include/jquery/1.9.1/css/redmond/jquery-ui-1.8.23.custom.css" rel="stylesheet" type="text/css" />

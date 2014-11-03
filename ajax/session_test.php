@@ -54,5 +54,29 @@ function getSiteAccess($session_id, $site){
     return $access_return;
 }
 
+function getPermissionLevel($session_id, $site){
+    $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+    include $path; //connection to core db
+    $session_id_sqlsafe = mysqli_real_escape_string($cnnLISC, $session_id);
+    $find_permission_level_sqlsafe = "SELECT Site_Privilege_ID FROM Users_Privileges INNER JOIN User_Sessions ON User_Sessions.User_ID = Users_Privileges.User_ID WHERE PHP_Session = '" . $session_id_sqlsafe . "' AND Privilege_ID = '" . $site . "' AND Expire_Time != '0000-00-00 00:00:00'";
+    $permission_result = mysqli_query($cnnLISC, $find_permission_level_sqlsafe);
+    $num_permissions = mysqli_num_rows($permission_result);
+    if ($num_permissions > 1){ //this should not happen, but just in case:
+        //choose the permission level with greatest amount of access -- i.e. the smallest number
+        $permission_level = 5;
+        while ($permission = mysqli_fetch_row($permission_result)){
+            if ($permission[0] < $permission_level){
+                $permission_level = $permission[0];
+            }
+        }
+        $returned_permission = $permission_level;
+    }
+    else{
+        $permission_level = mysqli_fetch_row($permission_result);
+        $returned_permission = $permission_level[0];
+    }
+    
+    return $returned_permission;
+}
 
 ?>
