@@ -43,13 +43,18 @@ require_once("../siteconfig.php");
                     <!-- List of events that are not affiliated with a specific campaign: -->
 			<td width="60%"><h2>TRP Events</h2><br/>
                             <!-- add a noncampaign event: -->
+<?php
+            if ($VIEW_ONLY != 1){
+?>
 				<div style="text-align:center;font-size:.9em;"><a class="add_new" onclick="
 							$('#engagement_home').hide();
 							$('#new_trp_event').show();
 							$('#trp_event_details').hide();
 							$('#outcomes').hide();
 						"><span class="add_new_button no_view">Add New Event</span></a></div>
-				
+<?php
+            }
+?>				
 				<ul id="events_list">
                                     <!-- list of active events.  Events are set as active or inactive by users.  So, all events could be
                                     active or inactive at the same time: -->
@@ -95,6 +100,9 @@ require_once("../siteconfig.php");
 								<td><span class="display event_<?echo $event['Event_ID'];?>_display"><?echo $event['Event_Actual'];?></span>
 									<input class="edit event_<?echo $event['Event_ID'];?>_edit" id="<?echo $event['Event_ID'];?>_edit_actual" value="<?echo $event['Event_Actual'];?>" style="width:70px;"/></td>
 							</tr>
+<?php
+            if ($VIEW_ONLY != 1){
+?>
 							<tr>
 								<td colspan="2"><a href="javascript:;" class="display helptext event_<?echo $event['Event_ID'];?>_edit_click no_view" onclick="
 											$('.event_<?echo $event['Event_ID'];?>_edit_click').hide();
@@ -123,6 +131,9 @@ require_once("../siteconfig.php");
                                                                          >Add attendee...</a>
 								</td>
 							</tr>
+<?php
+            }
+?>
                                                         <!-- search for a new attendee: -->
 							<tr class="add_attendee" id="add_attendee_<?echo $event['Event_ID'];?>">
 								<td></td>
@@ -157,9 +168,15 @@ require_once("../siteconfig.php");
 							</tr>
 							<tr>
                                                             <!-- set event to active or inactive: -->
+<?php
+            if ($VIEW_ONLY != 1){
+?>
 								<td>
 									<br/><input type="checkbox" id="<?echo $event['Event_ID'];?>_active" class="no_view" <?if ($event['Active']==1) { echo "checked";}?> 
                                                                                     onchange="StatusChange(this, '<?echo $event['Event_ID'];?>')"/><span style="font-size:.9em;font-style:italic;">Active?</span></td>
+<?php
+            }
+?>
 								<td></td>
 								<td>
 								</td>
@@ -247,6 +264,9 @@ require_once("../siteconfig.php");
 								<td><span class="display event_<?echo $event['Event_ID'];?>_display"><?echo $event['Event_Actual'];?></span>
 									<input class="edit event_<?echo $event['Event_ID'];?>_edit" id="<?echo $event['Event_ID'];?>_edit_actual" value="<?echo $event['Event_Actual'];?>" style="width:70px;"/></td>
 							</tr>
+<?php
+            if ($VIEW_ONLY != 1){
+?>
 							<tr>
 								<td colspan="2"><a href="javascript:;" class="display helptext event_<?echo $event['Event_ID'];?>_edit_click no_view" onclick="
 											$('.event_<?echo $event['Event_ID'];?>_edit_click').hide();
@@ -275,6 +295,9 @@ require_once("../siteconfig.php");
 									">Add attendee...</a>
 								</td>
 							</tr>
+<?php
+            }
+?>
 							<tr class="add_attendee" id="add_attendee_<?echo $event['Event_ID'];?>">
 								<td></td>
 								<td colspan="2" style="padding-left:50px;">
@@ -309,6 +332,9 @@ require_once("../siteconfig.php");
 										<div id="attendee_search_results_<?echo $event['Event_ID'];?>"></div>
 								</td>
 							</tr>
+<?php
+            if ($VIEW_ONLY != 1){
+?>
 							<tr>
 								<td>
 									<br/><input type="checkbox" id="<?echo $event['Event_ID'];?>_active"  class="no_view" <?if ($event['Active']==1) { echo "checked";}?> 
@@ -317,6 +343,9 @@ require_once("../siteconfig.php");
 								<td>
 								</td>
 							</tr>
+<?php
+            }
+?>
 						</table>
 						
 						<script type="text/javascript">
@@ -443,6 +472,10 @@ require_once("../siteconfig.php");
 									</td>
 									<td><input type="text" id="<?echo $outcome['Outcome_ID'];?>_goal" style="width:40px;"/></td>
 									<td><input type="text" id="<?echo $outcome['Outcome_ID'];?>_actual" style="width:40px;"/></td>
+<?php
+            if ($VIEW_ONLY != 1){
+?>
+
 									<td><input type="button" class="no_view" value="Add" onclick="
 										$.post(
 											'../ajax/save_outcomes_data.php',
@@ -458,6 +491,10 @@ require_once("../siteconfig.php");
 												window.location='engagement.php';
 											}
 										)"/>
+</td>
+<?php
+}
+?>
 								</tr>
 							</table>
 						</div>

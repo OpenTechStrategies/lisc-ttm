@@ -24,11 +24,17 @@ include "../include/datepicker_simple.php";
 <h3>Participants</h3><hr/><br/>
 <div id="participant_search" class="content_block">
     <!-- Link to add a new participant: -->
+<?php
+    if ($VIEW_ONLY != 1){
+?>
     <div style="text-align:center;font-size:.9em;"><a class="add_new" onclick="
             $('#participant_search').hide();
             $('#add_participant').show();
-                                                      "><span class="add_new_button no_view">Add New Participant</span></a></div><br/>
-
+                                                      ">
+<span class="add_new_button no_view">Add New Participant</span></a></div><br/>
+<?php
+    }
+?>
     <?php
     /* this was a list of all participants but is no longer available.  Too many people. */
     $get_participants = "SELECT * FROM Participants ORDER BY Last_Name";
@@ -63,6 +69,9 @@ include "../include/datepicker_simple.php";
         <tr><td><strong>CPS ID:</strong></td>
             <td><input type="text" id="cps_id_search" /></td>
             <td><strong>Program:</strong></td>
+<?php
+        if ($VIEW_ONLY != 1){
+?>
             <td><select id="person_program_search" class="no_view">
             <option value="">-----</option>
 <?php
@@ -77,6 +86,9 @@ while ($prog = mysqli_fetch_row($programs)) {
 include "../include/dbconnopen.php";
 ?>
         </select></td>
+<?php
+        }
+?>
         </tr>
         <tr>
             <td colspan="4" style="text-align:center;"><input type="button" value="Search" onclick="

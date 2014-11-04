@@ -110,6 +110,10 @@ if ($parti['Gender'] == 'm') {
                 <input type="text" class="basic_info_edit" value="<?php echo $parti['CPS_ID']; ?>" id="cps_id_edit" />
             </td>
         </tr>
+<?php
+
+    if ($VIEW_ONLY != 1){
+?>
         <tr>
             <td colspan="2"><a href="javascript:;" class="basic_info_show no_view" onclick="
                     $('.basic_info_show').toggle();
@@ -141,6 +145,9 @@ if ($parti['Gender'] == 'm') {
                         )" style="margin-left:55px;">Save!</a>
 
         </tr>
+<?php
+    }
+?>
     </table>
 </td>
 <td colspan="2">
@@ -164,6 +171,10 @@ if ($parti['Gender'] == 'm') {
                 <td><?php echo $date; ?></td>
                 <td><a href="../engagement/engagement.php?event=<?php echo $event['Event_ID']; ?>"><?php echo $event['Event_Name']; ?></a></td>
 
+<?php
+            //the removal option is not available to view only or data entry users:
+            if ($VIEW_ONLY != 1 && $DATA_ENTRY != 1){
+?>
                 <!-- Clicking "remove" here means deleting this person's attendance at this event: -->
                 <td><a href="javascript:;" class="helptext hide_on_view" onclick="
                         $.post(
@@ -179,8 +190,14 @@ if ($parti['Gender'] == 'm') {
                         )">Remove...</a></td>
             </tr>
             <?php
+}
         }
         ?>
+<?php
+
+    if ($VIEW_ONLY != 1){
+?>
+
         <!--- add to a new event: -->
         <tr class="no_view"><td><span class="helptext">Add to event:</span></td>
             <td><select id="add_to_event">
@@ -212,6 +229,9 @@ if ($parti['Gender'] == 'm') {
                     }
                     )">Add...</a></td>
         </tr>
+<?php
+}
+?>
     </table>
 </td>
 </tr>
@@ -250,6 +270,11 @@ if ($parti['Gender'] == 'm') {
             }
             ?>
         </table>
+<?php
+
+    if ($VIEW_ONLY != 1){
+?>
+
         <!-- add a parent or child: -->
         <a class="helptext no_view" href="javascript:;" onclick="
                 $('.add_family').slideToggle();
@@ -286,6 +311,9 @@ if ($parti['Gender'] == 'm') {
             <div id="find_fam_results"></div>
             <br/>
         </div>
+<?php 
+}
+?>
     </td>
     <td>
 
@@ -324,6 +352,11 @@ if ($parti['Gender'] == 'm') {
         }
     }
     ?>
+<?php
+
+    if ($VIEW_ONLY != 1){
+?>
+
                         <!-- once a consent year has been added, we can also upload and save the form itself: -->
                         <form id="file_upload_form" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data" class="no_view">
                             <input type="file" name="file" id="file" style="font-size:.7em; padding-top:4px;"/> 
@@ -332,12 +365,19 @@ if ($parti['Gender'] == 'm') {
                             <br />
                             <input type="submit" name="submit" value="Upload" style="font-size:.7em; padding-top:4px;"/>
                         </form>
-
+<?php
+}
+?>
                     </td></tr>
     <?php
 }
 // include "../include/dbconnclose.php";
 ?>
+<?php
+
+    if ($VIEW_ONLY != 1){
+?>
+
             <tr class="no_view"><!--Add new record-->
                 <td><select id="school_year_consent_new">
                         <option value="">-----</option>
@@ -373,6 +413,9 @@ if ($parti['Gender'] == 'm') {
 
                 </td>
             </tr>
+<?php
+}
+?>
         </table>
     </td>
 </tr>
@@ -2228,6 +2271,10 @@ echo $access;
                             <?php
                         }
                         ?>
+<?php
+
+    if ($VIEW_ONLY != 1){
+?>
 
         <!-- and a dropdown menu of all programs that this participant might join. -->
         <br/><strong>Add to a new program:</strong>
@@ -2255,7 +2302,10 @@ include "../include/dbconnopen.php";
                     window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                 }
                 )">
-    </td>
+<?php
+}
+?>
+ </td>
 </tr>
 
 </table>

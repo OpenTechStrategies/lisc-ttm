@@ -29,6 +29,10 @@ $program = mysqli_fetch_array($program_info);
     <table width="100%" border="1">
             <tr>
                 <td width="40%">
+<?php
+            if ($VIEW_ONLY != 1){
+?>
+
                     <h4>Add Participants to Program</h4>
                     <!-- list of people in this program, with links to their profiles. -->
                     <div class="add_participant">
@@ -187,7 +191,7 @@ $program = mysqli_fetch_array($program_info);
                                     <td><strong>24 or older?</strong></td>
                                     <td><input type="text" id="age_add"></td>
                                     <td><strong>Master or above?</strong></td>
-                                    <td><input type=text" id="masters_add"></td>
+                                    <td><input type="text" id="masters_add"></td>
                                     <td><strong>Married?</strong></td>
                                     <td><input type="text" id="married_add"></td>
                                 </tr>
@@ -283,10 +287,10 @@ $program = mysqli_fetch_array($program_info);
                                     <td><input type="text" id="selectivity_add"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Student's Expected Match Level</strong></td>
-                                    <td><input type=text" id="matchexp_add"></td>
-                                    <td><strong>Student's Actual Match Level</strong></td>
-                                    <td><input type=text" id="matchact_add"></td>
+                                    <td><strong>Student\'s Expected Match Level</strong></td>
+                                    <td><input type="text" id="matchexp_add"></td>
+                                    <td><strong>Student\'s Actual Match Level</strong></td>
+                                    <td><input type="text" id="matchact_add"></td>
                                     <td><strong>Credits Accrued (by Fall)</strong></td>
                                     <td><input type="text" id="fall_credits_add"></td>
                                     <td><strong> Credits Accrued (by Spring)</strong></td>
@@ -456,6 +460,9 @@ $program = mysqli_fetch_array($program_info);
                             <div id="add_person_results"></div>
                         </div>
                     </div>
+<?php
+                                    }
+?>
                     <hr>
                     <h4>Current Program Enrollment</h4>
                     <ul style="list-style-type:none;">
@@ -500,7 +507,9 @@ $program = mysqli_fetch_array($program_info);
                     }
                     ?>
 
-
+<?php
+        if ($VIEW_ONLY != 1){
+?>
                     <form id="file_upload_form" class="no_view" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data">
                         <input type="file" name="file" id="file" /> 
                         <input type="hidden" name="event_id" value="<?php echo $_GET['id']; ?>">
@@ -508,7 +517,9 @@ $program = mysqli_fetch_array($program_info);
                         <input type="submit" name="submit" value="Upload" />
                         <iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>
                     </form>
-
+<?php
+        }
+?>
                 </td>
                 <td>
 
@@ -996,6 +1007,9 @@ $program = mysqli_fetch_array($program_info);
         ?>
                                         <!-- people need to be enrolled in the program before they can attend a session.  Don't see the person you want to 
                                         add?  Make sure they're enrolled at the top left. -->
+<?php
+        if ($VIEW_ONLY != 1){
+?>
                                         Add attendee: <?php
                                            $get_members_sqlsafe = "SELECT Participants_Programs.Participant_Id, First_Name, Last_Name FROM Participants_Programs
                                     INNER JOIN Participants ON Participants.Participant_Id=Participants_Programs.Participant_Id WHERE Program_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
@@ -1024,11 +1038,19 @@ $program = mysqli_fetch_array($program_info);
                                             }
                                             ?>
                                         </select>
+<?php
+        }
+?>
                                     </div></td></tr>
 
                             <?php
                         }
-                        ?> <tr>
+                        ?> 
+<?php
+        if ($VIEW_ONLY != 1){
+?>
+
+<tr>
                             <!-- add a new program date: -->
                             <td>Add Date: <input type="text" id="new_early_childhood_date" class="hasDatepickers no_view"></td>
                             <td><input type="button" value="Save Date" class="no_view" onclick="
@@ -1046,6 +1068,9 @@ $program = mysqli_fetch_array($program_info);
                                     )"><br/>
                                 <span class="helptext">Dates must be entered in MM/DD/YYYY format to save correctly.</span></td>
                         </tr>
+<?php
+        }
+?>
                     </table>
 
                 </td>
@@ -1086,6 +1111,9 @@ $program = mysqli_fetch_array($program_info);
                         ?>
 
                     </ul>
+<?php
+        if ($VIEW_ONLY != 1){
+?>
                     <div class="add_participant">
 
                         <!-- add a new enrollee here (again, this person must already have a profile in the system): -->
@@ -1133,7 +1161,9 @@ $program = mysqli_fetch_array($program_info);
                             <div id="search_results"></div>
                         </div>
                     </div>
-
+<?php
+        }
+?>
 
 
 
@@ -1291,13 +1321,20 @@ $program = mysqli_fetch_array($program_info);
     ?>
 
 
+<?php
+        if ($VIEW_ONLY != 1){
+?>
                         <form id="file_upload_form" class="no_view" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data">
                             <input type="file" name="file" id="file" /> 
                             <input type="hidden" name="event_id" value="<?php echo $_GET['id']; ?>">
                             <br />
                             <input type="submit" name="submit" value="Upload" />
                             <iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>
-                        </form></div>
+                        </form>
+<?php
+        }
+?>
+</div>
 
 
                     <!--- they talked about wanting a blog-like space for teachers to share
@@ -1377,6 +1414,9 @@ else if ($program['Program_ID'] == 3) {
                 <td>
                     <!-- list of people enrolled in this program: -->
                     <h4>Program Enrollment</h4>
+<?php
+        if ($VIEW_ONLY != 1){
+?>
                     <div class="add_participant">
                         <a href="javascript:;" onclick="
                                 $('#search_to_add_participant').slideToggle();
@@ -1422,6 +1462,9 @@ else if ($program['Program_ID'] == 3) {
                             <div id="search_results"></div>
                         </div>
                     </div>
+<?php
+        }
+?>
                     <ul style="list-style-type:none;">
                         <?php
                         $get_participants_sqlsafe = "SELECT * FROM Participants_Programs INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID WHERE Program_ID='" . $program['Program_ID'] . "' ORDER BY Participants.Last_Name";
@@ -1511,6 +1554,9 @@ else if ($program['Program_ID'] == 4) {
                         <option value="16">2016</option>
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new" style="width:100px;">
+<?php
+        if ($VIEW_ONLY != 1){
+?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -1523,7 +1569,11 @@ else if ($program['Program_ID'] == 4) {
                             function(response) {
                                 window.location = 'profile.php?id=4';
                             }
-                            )"></td>
+                            )">
+<?php
+        }
+?>
+</td>
             </tr>
         </table>
         <br/>
@@ -1579,6 +1629,9 @@ else if ($program['Program_ID'] == 4) {
                         <option value="16">2016</option>
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_2" style="width:100px;">
+<?php
+        if ($VIEW_ONLY != 1){
+?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -1592,7 +1645,11 @@ else if ($program['Program_ID'] == 4) {
                                 // document.write(response);
                                 window.location = 'profile.php?id=4';
                             }
-                            )"></td>
+                            )">
+<?php
+        }
+?>
+</td>
             </tr>
         </table>
 
@@ -1648,6 +1705,9 @@ else if ($program['Program_ID'] == 4) {
                         <option value="16">2016</option>
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_3" style="width:100px;">
+<?php
+        if ($VIEW_ONLY != 1){
+?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -1661,7 +1721,11 @@ else if ($program['Program_ID'] == 4) {
                                 // document.write(response);
                                 window.location = 'profile.php?id=4';
                             }
-                            )"></td>
+                            )">
+<?php
+        }
+?>
+</td>
             </tr>
         </table>
         <br/><br/>
@@ -1716,6 +1780,9 @@ else if ($program['Program_ID'] == 4) {
                         <option value="16">2016</option>
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_4" style="width:100px;">
+<?php
+        if ($VIEW_ONLY != 1){
+?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -1729,7 +1796,11 @@ else if ($program['Program_ID'] == 4) {
                                 // document.write(response);
                                 window.location = 'profile.php?id=4';
                             }
-                            )"></td>
+                            )">
+<?php
+        }
+?>
+</td>
             </tr>
         </table>
 
@@ -1853,6 +1924,9 @@ else if ($program['Program_ID'] == 4) {
                         <option value="16">2016</option>
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_6" style="width:100px;">
+<?php
+        if ($VIEW_ONLY != 1){
+?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -1866,7 +1940,11 @@ else if ($program['Program_ID'] == 4) {
                                 // document.write(response);
                                 window.location = 'profile.php?id=4';
                             }
-                            )"></td>
+                            )">
+<?php
+        }
+?>
+</td>
             </tr>
         </table>
         <br/><br/>
@@ -1922,6 +2000,9 @@ else if ($program['Program_ID'] == 4) {
                         <option value="16">2016</option>
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_7" style="width:100px;">
+<?php
+        if ($VIEW_ONLY != 1){
+?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -1935,7 +2016,11 @@ else if ($program['Program_ID'] == 4) {
                                 // document.write(response);
                                 window.location = 'profile.php?id=4';
                             }
-                            )"></td>
+                            )">
+<?php
+        }
+?>
+</td>
             </tr>
         </table>
 
@@ -1992,6 +2077,9 @@ else if ($program['Program_ID'] == 4) {
                         <option value="16">2016</option>
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_8" style="width:100px;">
+<?php
+        if ($VIEW_ONLY != 1){
+?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
@@ -2005,7 +2093,11 @@ else if ($program['Program_ID'] == 4) {
                                 // document.write(response);
                                 window.location = 'profile.php?id=4';
                             }
-                            )"></td>
+                            )">
+<?php
+        }
+?>
+</td>
             </tr>
         </table>
 
@@ -2020,6 +2112,9 @@ else if ($program['Program_ID'] == 5) {
                     <!-- list of people in this program.  Search for another person here.  Note that the new
                     participant must already be entered in the system. -->
                     <h4>Program Enrollment</h4>
+<?php
+        if ($VIEW_ONLY != 1){
+?>
                     <div class="add_participant">
                         <a href="javascript:;" onclick="
                                 $('#search_to_add_participant').slideToggle();
@@ -2065,6 +2160,10 @@ else if ($program['Program_ID'] == 5) {
                             <div id="search_results"></div>
                         </div>
                     </div>
+<?php
+        }
+?>
+
                     <ul style="list-style-type:none;">
                         <?php
                         $get_participants_sqlsafe = "SELECT * FROM Participants_Programs INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID
@@ -2103,6 +2202,9 @@ else if ($program['Program_ID'] == 5) {
                                         ?>
 
                                         <!--- again, for someone to be an attendee s/he must already be enrolled in the program. -->
+<?php
+        if ($VIEW_ONLY != 1){
+?>
                                         <span class="helptext">Add attendee: </span><?php $get_members_sqlsafe = "SELECT Participants_Programs.Participant_Id, First_Name, Last_Name FROM Participants_Programs
                                     INNER JOIN Participants ON Participants.Participant_Id=Participants_Programs.Participant_Id WHERE Program_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
                                 //echo $get_members_sqlsafe;
@@ -2130,11 +2232,18 @@ else if ($program['Program_ID'] == 5) {
                                     }
                                     ?>
                                         </select>
+<?php
+        }
+?>
                                     </div></td></tr>
 
                                     <?php
                                 }
-                                ?> <tr>
+                                ?>
+<?php
+        if ($VIEW_ONLY != 1){
+?>
+ <tr>
                             <td>Add Date: <input type="text" id="new_early_childhood_date" class="hasDatepickers no_view"></td>
                             <td><input type="button" value="Save Date" class="no_view" onclick="
                                     $.post(
@@ -2151,6 +2260,9 @@ else if ($program['Program_ID'] == 5) {
                                     )"><br/>
                                 <span class="helptext">Dates must be entered in MM/DD/YYYY format to save correctly.</span></td>
                         </tr>
+<?php
+        }
+?>
                     </table>
                 </td>
                 <td>
