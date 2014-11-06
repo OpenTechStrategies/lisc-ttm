@@ -190,6 +190,25 @@ on an access query, like Enlace.  This query sets an "access" variable
 that determines which program information is displayed.  I will need
 to change that.
 
+_Places where program access is queried:_
+
+./enlace/reports/num_programs.php
+./enlace/reports/assessments.php
+./enlace/reports/all_exports.php
+./enlace/reports/production_exports.php
+./enlace/reports/quality_surveys.php
+./enlace/participants/participant_profile.php
+./enlace/participants/permission_check_page.php
+./enlace/ajax/delete_program.php
+./enlace/ajax/search_participants.php
+./enlace/programs/programs.php
+./enlace/programs/profile.php
+./ajax/edit_privileges.php
+./ajax/extend_staff_privilege.php
+./trp/participants/profile.php
+./trp/ajax/search_users.php
+./include/generalized_download_script.php
+
 _Next Steps:_
 
 The new regimen will need to test access against the database tables,

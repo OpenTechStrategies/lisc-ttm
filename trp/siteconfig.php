@@ -20,9 +20,12 @@ $AccessLevelTRP = getPermissionLevel($_COOKIE['PHPSESSID'], $TRP_id);
 if (($AccessLevelTRP != $AdminAccess) && ($AccessLevelTRP != $DataEntryAccess) 
 && ($AccessLevelTRP != $ReadOnlyAccess)) {
     //error!  Access level should have some other value.
-    echo "Warning.  The system couldn't find level of access for you.  For now, you will have view-only access.  Please contact a data coordinator or other administrator.";
+    echo "Warning.  The system couldn't find level of access for you.  For now, you will have view-only access.  Please contact a data coordinator or other site administrator.";
+    $Access_Level_TRP = $ReadOnlyAccess;
 }
 
-
 echo $AccessLevelTRP;
+
+$program_access_list = getProgramAccess($_COOKIE['PHPSESSID'], $TRP_id);
+
 ?>
