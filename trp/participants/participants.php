@@ -25,7 +25,7 @@ include "../include/datepicker_simple.php";
 <div id="participant_search" class="content_block">
     <!-- Link to add a new participant: -->
 <?php
-    if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
 ?>
     <div style="text-align:center;font-size:.9em;"><a class="add_new" onclick="
             $('#participant_search').hide();
@@ -33,7 +33,7 @@ include "../include/datepicker_simple.php";
                                                       ">
 <span class="add_new_button no_view">Add New Participant</span></a></div><br/>
 <?php
-    }
+} // end access level check
 ?>
     <?php
     /* this was a list of all participants but is no longer available.  Too many people. */
@@ -70,7 +70,7 @@ include "../include/datepicker_simple.php";
             <td><input type="text" id="cps_id_search" /></td>
             <td><strong>Program:</strong></td>
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
 ?>
             <td><select id="person_program_search" class="no_view">
             <option value="">-----</option>
@@ -87,7 +87,7 @@ include "../include/dbconnopen.php";
 ?>
         </select></td>
 <?php
-        }
+} // end access level check
 ?>
         </tr>
         <tr>

@@ -9,13 +9,13 @@ require_once("../siteconfig.php");
 <!--        <a href="/trp/include/import_grades.php">Import Grades</a> ||
         <a href="/trp/reports/import_demographics.php">Import Demographics</a> ||-->
 <?php
-    if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
 ?>
        <span class="trp_report no_view"> <a href="/trp/reports/import_event_attendance.php">Import Event Attendance</a> ||</span>
       <span class="trp_report no_view">  <a href="/trp/reports/import_cps.php">Import CPS File</a> ||</span>
 
       <span class="trp_report no_view">  <a href="export_all.php">Export everything</a></span>
 <?php
-    }
+} // end access level check
 ?>        
 </div><br/>

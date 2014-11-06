@@ -41,7 +41,7 @@ include "include/datepicker_simple.php";
 <!-- adds an event.  Doesn't link event to a campaign, so it shows up on the Community Engagement page. -->
 
 <?php
-if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
 ?>
 <h4>Create a New Event</h4>
 	<br/>
@@ -76,7 +76,7 @@ if ($VIEW_ONLY != 1){
 				</table>
         <div id="show_event_result"></div>
 <?php
-}
+} // end access level check
 ?>
 
 

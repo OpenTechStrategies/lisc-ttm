@@ -44,7 +44,7 @@ require_once("../siteconfig.php");
 			<td width="60%"><h2>TRP Events</h2><br/>
                             <!-- add a noncampaign event: -->
 <?php
-            if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
 				<div style="text-align:center;font-size:.9em;"><a class="add_new" onclick="
 							$('#engagement_home').hide();
@@ -53,7 +53,7 @@ require_once("../siteconfig.php");
 							$('#outcomes').hide();
 						"><span class="add_new_button no_view">Add New Event</span></a></div>
 <?php
-            }
+} // end access level check
 ?>				
 				<ul id="events_list">
                                     <!-- list of active events.  Events are set as active or inactive by users.  So, all events could be
@@ -101,7 +101,7 @@ require_once("../siteconfig.php");
 									<input class="edit event_<?echo $event['Event_ID'];?>_edit" id="<?echo $event['Event_ID'];?>_edit_actual" value="<?echo $event['Event_Actual'];?>" style="width:70px;"/></td>
 							</tr>
 <?php
-            if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
 							<tr>
 								<td colspan="2"><a href="javascript:;" class="display helptext event_<?echo $event['Event_ID'];?>_edit_click no_view" onclick="
@@ -132,7 +132,7 @@ require_once("../siteconfig.php");
 								</td>
 							</tr>
 <?php
-            }
+} // end access level check
 ?>
                                                         <!-- search for a new attendee: -->
 							<tr class="add_attendee" id="add_attendee_<?echo $event['Event_ID'];?>">
@@ -169,13 +169,13 @@ require_once("../siteconfig.php");
 							<tr>
                                                             <!-- set event to active or inactive: -->
 <?php
-            if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
 								<td>
 									<br/><input type="checkbox" id="<?echo $event['Event_ID'];?>_active" class="no_view" <?if ($event['Active']==1) { echo "checked";}?> 
                                                                                     onchange="StatusChange(this, '<?echo $event['Event_ID'];?>')"/><span style="font-size:.9em;font-style:italic;">Active?</span></td>
 <?php
-            }
+} // end access level check
 ?>
 								<td></td>
 								<td>
@@ -265,7 +265,7 @@ require_once("../siteconfig.php");
 									<input class="edit event_<?echo $event['Event_ID'];?>_edit" id="<?echo $event['Event_ID'];?>_edit_actual" value="<?echo $event['Event_Actual'];?>" style="width:70px;"/></td>
 							</tr>
 <?php
-            if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
 							<tr>
 								<td colspan="2"><a href="javascript:;" class="display helptext event_<?echo $event['Event_ID'];?>_edit_click no_view" onclick="
@@ -296,7 +296,7 @@ require_once("../siteconfig.php");
 								</td>
 							</tr>
 <?php
-            }
+} // end access level check
 ?>
 							<tr class="add_attendee" id="add_attendee_<?echo $event['Event_ID'];?>">
 								<td></td>
@@ -333,7 +333,7 @@ require_once("../siteconfig.php");
 								</td>
 							</tr>
 <?php
-            if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
 							<tr>
 								<td>
@@ -344,7 +344,7 @@ require_once("../siteconfig.php");
 								</td>
 							</tr>
 <?php
-            }
+} // end access level check
 ?>
 						</table>
 						
@@ -473,7 +473,7 @@ require_once("../siteconfig.php");
 									<td><input type="text" id="<?echo $outcome['Outcome_ID'];?>_goal" style="width:40px;"/></td>
 									<td><input type="text" id="<?echo $outcome['Outcome_ID'];?>_actual" style="width:40px;"/></td>
 <?php
-            if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
 
 									<td><input type="button" class="no_view" value="Add" onclick="
@@ -493,7 +493,7 @@ require_once("../siteconfig.php");
 										)"/>
 </td>
 <?php
-}
+} // end access level check
 ?>
 								</tr>
 							</table>

@@ -7,25 +7,22 @@ $sites_authorized = getSiteAccess($_COOKIE['PHPSESSID'], $TRP_id);
 
 //kick them out if they can't be here
 
-if (! $sites_authorized ){
+if (! $sites_authorized ) {
     header("Location: ../include/error.html");
     exit;
 }
-else{
+else {
     echo "You are authorized to view this page.";
 }
 
-$DATA_ENTRY = 0;
-$VIEW_ONLY = 0;
+$AccessLevelTRP = getPermissionLevel($_COOKIE['PHPSESSID'], $TRP_id);
 
-$permission_level = getPermissionLevel($_COOKIE['PHPSESSID'], $TRP_id);
+if (($AccessLevelTRP != $AdminAccess) && ($AccessLevelTRP != $DataEntryAccess) 
+&& ($AccessLevelTRP != $ReadOnlyAccess)) {
+    //error!  Access level should have some other value.
+    echo "Warning.  The system couldn't find level of access for you.  For now, you will have view-only access.  Please contact a data coordinator or other administrator.";
+}
 
-if ($permission_level == 2){
-    $DATA_ENTRY = 1;
-}
-elseif ($permission_level == 3){
-    $VIEW_ONLY = 1;
-}
-echo $DATA_ENTRY;
-echo $VIEW_ONLY;
+
+echo $AccessLevelTRP;
 ?>

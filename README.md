@@ -175,15 +175,15 @@ _TRP:_
 TRP uses hide_on_view and no_view just like LSNA does.  
 
 Hide on view appears in:
-./participants/profile.php (DONE)
+./participants/profile.php (DONE) check
 
 No view appears in:
-./reports/report_menu.php (DONE)  
-./index.php (DONE)  
-./participants/participants.php (DONE)  
-./participants/profile.php (DONE)  
-./programs/profile.php  (DONE)
-./engagement/engagement.php (DONE)  
+./reports/report_menu.php (DONE)  check
+./index.php (DONE)  check
+./participants/participants.php (DONE)  check  
+./participants/profile.php (DONE) check  
+./programs/profile.php  (DONE) check
+./engagement/engagement.php (DONE)  (change end of access check in Line 299?)
 
 It also shows program participation on the participant profile based
 on an access query, like Enlace.  This query sets an "access" variable

@@ -111,8 +111,7 @@ if ($parti['Gender'] == 'm') {
             </td>
         </tr>
 <?php
-
-    if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
 ?>
         <tr>
             <td colspan="2"><a href="javascript:;" class="basic_info_show no_view" onclick="
@@ -146,7 +145,7 @@ if ($parti['Gender'] == 'm') {
 
         </tr>
 <?php
-    }
+} // end access level check
 ?>
     </table>
 </td>
@@ -172,8 +171,8 @@ if ($parti['Gender'] == 'm') {
                 <td><a href="../engagement/engagement.php?event=<?php echo $event['Event_ID']; ?>"><?php echo $event['Event_Name']; ?></a></td>
 
 <?php
-            //the removal option is not available to view only or data entry users:
-            if ($VIEW_ONLY != 1 && $DATA_ENTRY != 1){
+            //the removal option is only available to admin users:
+if ($AccessLevelTRP == $AdminAccess){
 ?>
                 <!-- Clicking "remove" here means deleting this person's attendance at this event: -->
                 <td><a href="javascript:;" class="helptext hide_on_view" onclick="
@@ -189,15 +188,15 @@ if ($parti['Gender'] == 'm') {
                         }
                         )">Remove...</a></td>
             </tr>
-            <?php
-}
+<?php
+} // end access level check
+
         }
         ?>
 <?php
 
-    if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
 ?>
-
         <!--- add to a new event: -->
         <tr class="no_view"><td><span class="helptext">Add to event:</span></td>
             <td><select id="add_to_event">
@@ -230,7 +229,7 @@ if ($parti['Gender'] == 'm') {
                     )">Add...</a></td>
         </tr>
 <?php
-}
+} //end access level check
 ?>
     </table>
 </td>
@@ -272,7 +271,7 @@ if ($parti['Gender'] == 'm') {
         </table>
 <?php
 
-    if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
 ?>
 
         <!-- add a parent or child: -->
@@ -312,7 +311,7 @@ if ($parti['Gender'] == 'm') {
             <br/>
         </div>
 <?php 
-}
+} // end access level check
 ?>
     </td>
     <td>
@@ -354,7 +353,7 @@ if ($parti['Gender'] == 'm') {
     ?>
 <?php
 
-    if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
 ?>
 
                         <!-- once a consent year has been added, we can also upload and save the form itself: -->
@@ -366,7 +365,7 @@ if ($parti['Gender'] == 'm') {
                             <input type="submit" name="submit" value="Upload" style="font-size:.7em; padding-top:4px;"/>
                         </form>
 <?php
-}
+} // end access level check
 ?>
                     </td></tr>
     <?php
@@ -375,7 +374,7 @@ if ($parti['Gender'] == 'm') {
 ?>
 <?php
 
-    if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
 ?>
 
             <tr class="no_view"><!--Add new record-->
@@ -414,7 +413,7 @@ if ($parti['Gender'] == 'm') {
                 </td>
             </tr>
 <?php
-}
+} // end access level check
 ?>
         </table>
     </td>
@@ -2273,7 +2272,7 @@ echo $access;
                         ?>
 <?php
 
-    if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
 ?>
 
         <!-- and a dropdown menu of all programs that this participant might join. -->
@@ -2303,7 +2302,7 @@ include "../include/dbconnopen.php";
                 }
                 )">
 <?php
-}
+} // end access level check
 ?>
  </td>
 </tr>

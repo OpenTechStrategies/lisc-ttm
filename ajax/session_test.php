@@ -5,6 +5,11 @@ $TRP_id = 4;
 $SWOP_id = 5;
 $Enlace_id = 6;
 
+$AdminAccess = 1;
+$DataEntryAccess = 2;
+$ReadOnlyAccess = 3;
+
+
 function isLoggedIn($session_id){
     $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
     include $path; //connection to core db

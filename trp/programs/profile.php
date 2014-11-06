@@ -30,9 +30,8 @@ $program = mysqli_fetch_array($program_info);
             <tr>
                 <td width="40%">
 <?php
-            if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
-
                     <h4>Add Participants to Program</h4>
                     <!-- list of people in this program, with links to their profiles. -->
                     <div class="add_participant">
@@ -202,7 +201,7 @@ $program = mysqli_fetch_array($program_info);
                                     <td><input type="text" id="children_add"></td>
                                     <td><strong>Homeless?</strong></td>
                                     <td><input type="text" id="homeless_add"></td>
-                                    <td><strong>Self Sustaining (if student income >=$12,510</strong></td>
+                                    <td><strong>Self Sustaining (if student income >=$12,510)</strong></td>
                                     <td><input type="text" id="selfsust_add"></td>
                                 </tr>
                                 <tr>
@@ -461,7 +460,7 @@ $program = mysqli_fetch_array($program_info);
                         </div>
                     </div>
 <?php
-                                    }
+} // end access level check
 ?>
                     <hr>
                     <h4>Current Program Enrollment</h4>
@@ -508,7 +507,7 @@ $program = mysqli_fetch_array($program_info);
                     ?>
 
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
                     <form id="file_upload_form" class="no_view" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data">
                         <input type="file" name="file" id="file" /> 
@@ -518,7 +517,7 @@ $program = mysqli_fetch_array($program_info);
                         <iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>
                     </form>
 <?php
-        }
+} // end access level check
 ?>
                 </td>
                 <td>
@@ -576,7 +575,7 @@ $program = mysqli_fetch_array($program_info);
                         </tr>
 
                         <!-- these commented areas are for the scores for individual questions.
-                        we're just showing the aggregate score for each section for now, but wanted to leave
+                        we\'re just showing the aggregate score for each section for now, but wanted to leave
                         the option to save individual responses too.
                         -->
 
@@ -868,7 +867,7 @@ $program = mysqli_fetch_array($program_info);
                                 <td></td>
                         </tr>
                         <tr>
-                                <td><strong>27.</strong> Demonstrates knowledge of the Earth's environment</td>
+                                <td><strong>27.</strong> Demonstrates knowledge of the Earth\'s environment</td>
                                 <td></td>
                         </tr>
                         <tr>
@@ -1008,7 +1007,7 @@ $program = mysqli_fetch_array($program_info);
                                         <!-- people need to be enrolled in the program before they can attend a session.  Don't see the person you want to 
                                         add?  Make sure they're enrolled at the top left. -->
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
                                         Add attendee: <?php
                                            $get_members_sqlsafe = "SELECT Participants_Programs.Participant_Id, First_Name, Last_Name FROM Participants_Programs
@@ -1039,7 +1038,7 @@ $program = mysqli_fetch_array($program_info);
                                             ?>
                                         </select>
 <?php
-        }
+} // end access level check
 ?>
                                     </div></td></tr>
 
@@ -1047,7 +1046,7 @@ $program = mysqli_fetch_array($program_info);
                         }
                         ?> 
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
 
 <tr>
@@ -1069,7 +1068,7 @@ $program = mysqli_fetch_array($program_info);
                                 <span class="helptext">Dates must be entered in MM/DD/YYYY format to save correctly.</span></td>
                         </tr>
 <?php
-        }
+} // end access level check
 ?>
                     </table>
 
@@ -1112,7 +1111,7 @@ $program = mysqli_fetch_array($program_info);
 
                     </ul>
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
                     <div class="add_participant">
 
@@ -1162,7 +1161,7 @@ $program = mysqli_fetch_array($program_info);
                         </div>
                     </div>
 <?php
-        }
+} // end access level check
 ?>
 
 
@@ -1322,7 +1321,7 @@ $program = mysqli_fetch_array($program_info);
 
 
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
                         <form id="file_upload_form" class="no_view" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data">
                             <input type="file" name="file" id="file" /> 
@@ -1332,7 +1331,7 @@ $program = mysqli_fetch_array($program_info);
                             <iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>
                         </form>
 <?php
-        }
+} // end access level check
 ?>
 </div>
 
@@ -1415,7 +1414,7 @@ else if ($program['Program_ID'] == 3) {
                     <!-- list of people enrolled in this program: -->
                     <h4>Program Enrollment</h4>
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
                     <div class="add_participant">
                         <a href="javascript:;" onclick="
@@ -1463,7 +1462,7 @@ else if ($program['Program_ID'] == 3) {
                         </div>
                     </div>
 <?php
-        }
+} // end access level check
 ?>
                     <ul style="list-style-type:none;">
                         <?php
@@ -1555,7 +1554,7 @@ else if ($program['Program_ID'] == 4) {
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new" style="width:100px;">
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
@@ -1571,7 +1570,7 @@ else if ($program['Program_ID'] == 4) {
                             }
                             )">
 <?php
-        }
+} // end access level check
 ?>
 </td>
             </tr>
@@ -1630,7 +1629,7 @@ else if ($program['Program_ID'] == 4) {
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_2" style="width:100px;">
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
@@ -1647,7 +1646,7 @@ else if ($program['Program_ID'] == 4) {
                             }
                             )">
 <?php
-        }
+} // end access level check
 ?>
 </td>
             </tr>
@@ -1706,7 +1705,7 @@ else if ($program['Program_ID'] == 4) {
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_3" style="width:100px;">
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
@@ -1723,7 +1722,7 @@ else if ($program['Program_ID'] == 4) {
                             }
                             )">
 <?php
-        }
+} // end access level check
 ?>
 </td>
             </tr>
@@ -1781,7 +1780,7 @@ else if ($program['Program_ID'] == 4) {
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_4" style="width:100px;">
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
@@ -1798,7 +1797,7 @@ else if ($program['Program_ID'] == 4) {
                             }
                             )">
 <?php
-        }
+} // end access level check
 ?>
 </td>
             </tr>
@@ -1925,7 +1924,7 @@ else if ($program['Program_ID'] == 4) {
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_6" style="width:100px;">
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
@@ -1942,7 +1941,7 @@ else if ($program['Program_ID'] == 4) {
                             }
                             )">
 <?php
-        }
+} // end access level check
 ?>
 </td>
             </tr>
@@ -2001,7 +2000,7 @@ else if ($program['Program_ID'] == 4) {
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_7" style="width:100px;">
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
@@ -2018,7 +2017,7 @@ else if ($program['Program_ID'] == 4) {
                             }
                             )">
 <?php
-        }
+} // end access level check
 ?>
 </td>
             </tr>
@@ -2078,7 +2077,7 @@ else if ($program['Program_ID'] == 4) {
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_8" style="width:100px;">
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
@@ -2095,7 +2094,7 @@ else if ($program['Program_ID'] == 4) {
                             }
                             )">
 <?php
-        }
+} // end access level check
 ?>
 </td>
             </tr>
@@ -2113,7 +2112,7 @@ else if ($program['Program_ID'] == 5) {
                     participant must already be entered in the system. -->
                     <h4>Program Enrollment</h4>
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
                     <div class="add_participant">
                         <a href="javascript:;" onclick="
@@ -2161,7 +2160,7 @@ else if ($program['Program_ID'] == 5) {
                         </div>
                     </div>
 <?php
-        }
+} // end access level check
 ?>
 
                     <ul style="list-style-type:none;">
@@ -2203,7 +2202,7 @@ else if ($program['Program_ID'] == 5) {
 
                                         <!--- again, for someone to be an attendee s/he must already be enrolled in the program. -->
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
                                         <span class="helptext">Add attendee: </span><?php $get_members_sqlsafe = "SELECT Participants_Programs.Participant_Id, First_Name, Last_Name FROM Participants_Programs
                                     INNER JOIN Participants ON Participants.Participant_Id=Participants_Programs.Participant_Id WHERE Program_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
@@ -2233,7 +2232,7 @@ else if ($program['Program_ID'] == 5) {
                                     ?>
                                         </select>
 <?php
-        }
+} // end access level check
 ?>
                                     </div></td></tr>
 
@@ -2241,7 +2240,7 @@ else if ($program['Program_ID'] == 5) {
                                 }
                                 ?>
 <?php
-        if ($VIEW_ONLY != 1){
+if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 ?>
  <tr>
                             <td>Add Date: <input type="text" id="new_early_childhood_date" class="hasDatepickers no_view"></td>
@@ -2261,7 +2260,7 @@ else if ($program['Program_ID'] == 5) {
                                 <span class="helptext">Dates must be entered in MM/DD/YYYY format to save correctly.</span></td>
                         </tr>
 <?php
-        }
+} // end access level check
 ?>
                     </table>
                 </td>
