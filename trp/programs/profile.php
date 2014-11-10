@@ -1008,6 +1008,158 @@ while ($income = mysqli_fetch_row($income_counts)){
 <td><?php echo  $below15; ?></td></tr>
 </table>
 
+<table class = "inner_table">
+<caption> Major/Program of Study </caption>
+</table>
+<table class = "inner_table">
+<caption> College </caption>
+<tr><th> College Name </th><th> Type </th><th>Percent</th><th>Count</th></tr>
+<?php
+$num_linked_colleges_sqlsafe = "SELECT COUNT(*)  FROM La_Casa_Basics LEFT JOIN Colleges ON Colleges.College_ID = La_Casa_Basics.College_ID;";
+$num_colleges = mysqli_query($cnnTRP, $num_linked_colleges_sqlsafe);
+$college_denom = mysqli_fetch_row($num_colleges);
+$college_info_sqlsafe = "SELECT College_Name, COUNT(*)  FROM La_Casa_Basics LEFT JOIN Colleges ON Colleges.College_ID = La_Casa_Basics.College_ID GROUP BY La_Casa_Basics.College_ID;";
+$college_info = mysqli_query($cnnTRP, $college_info_sqlsafe);
+while ($college = mysqli_fetch_row($college_info)){
+    ?>
+<tr>
+    <td><?php if ($college[0] == null){ echo "None selected"; }
+echo $college[0]; ?></td>
+    <td></td>
+    <td><?php echo number_format(($college[1]/$college_denom[0])*100) . '%'; ?></td>
+    <td><?php echo $college[1]; ?></td>
+</tr>
+<?php
+}
+?>
+<tr><td colspan = "3"><strong>Total Number of Students</strong></td>
+<td><?php echo $students_denominator; ?></td>
+</tr>
+<tr><td colspan = "3"><strong>Total Number of Colleges</strong></td>
+<td><?php echo $college_denom[0]; ?> </td>
+</tr>
+</table>
+<table class = "inner_table">
+<caption> Total Credit Accrual To Date </caption>
+<tr><th> Credits Completed </th><th>Percent</th><th>Count</th></tr>
+<?php
+$sum_of_credits_sqlsafe = "SELECT Participant_ID_Students, SUM(Credits) FROM La_Casa_Basics GROUP BY Participant_ID_Students ORDER BY SUM(Credits);";
+$sum_credits = mysqli_query($cnnTRP, $sum_of_credits_sqlsafe);
+while ($credits = mysqli_fetch_row($sum_credits)){
+    if ($credits[1] == 0){
+        $zerocred++;
+    }
+    elseif ($credits[1] >= 1 && $credits[1] <= 15){
+        $fifteencred++;
+    }
+    elseif ($credits[1] >= 16 && $credits[1] <= 30){
+        $thirtycred++;
+    }
+    elseif ($credits[1] >= 31 && $credits[1] <= 45){
+        $fortyfivecred++;
+    }
+    elseif ($credits[1] >= 46 && $credits[1] <= 60){
+        $sixtycred++;
+    }
+    elseif ($credits[1] >= 61 && $credits[1] <= 75){
+        $seventyfivecred++;
+    }
+    elseif ($credits[1] >= 76 && $credits[1] <= 90){
+        $ninetycred++;
+    }
+    elseif ($credits[1] >= 91 && $credits[1] <= 105){
+        $hundredfivecred++;
+    }
+    elseif ($credits[1] >= 106 && $credits[1] <= 120){
+        $hundredtwentycred++;
+    }
+    elseif ($credits[1] >= 120){
+        $upperlimitcred++;
+    }
+}
+?>
+<tr><td><strong>0</strong></td>
+<td></td>
+<td><?php echo $zerocred; ?></td>
+</tr>
+<tr><td><strong>1-15</strong></td>
+<td></td>
+<td><?php echo $fifteencred; ?></td>
+</tr>
+<tr><td><strong>16-30</strong></td>
+<td></td>
+<td><?php echo $thirtycred; ?></td>
+</tr>
+<tr><td><strong>31-45</strong></td>
+<td></td>
+<td><?php echo $fortyfivecred; ?></td>
+</tr>
+<tr><td><strong>46-60</strong></td>
+<td></td>
+<td><?php echo $sixtycred; ?></td>
+</tr>
+<tr><td><strong>61-75</strong></td>
+<td></td>
+<td><?php echo $seventyfivecred; ?></td>
+</tr>
+<tr><td><strong>76-90</strong></td>
+<td></td>
+<td><?php echo $ninetycred; ?></td>
+</tr>
+<tr><td><strong>91-105</strong></td>
+<td></td>
+<td><?php echo $hundredfivecred; ?></td>
+</tr>
+<tr><td><strong>106-120</strong></td>
+<td></td>
+<td><?php echo $hundredtwentycred; ?></td>
+</tr>
+<tr><td><strong>120+</strong></td>
+<td></td>
+<td><?php echo $upperlimitcred; ?></td>
+</tr>
+<tr>
+</table>
+<table class = "inner_table">
+<caption> College GPA </caption>
+</table>
+<table class = "inner_table">
+<caption> ACT Score </caption>
+</table>
+<table class = "inner_table">
+<caption> High School GPA </caption>
+</table>
+<table class = "inner_table">
+<caption> Dependency Status </caption>
+</table>
+<table class = "inner_table">
+<caption> Gender </caption>
+</table>
+<table class = "inner_table">
+<caption> Father\'s Highest Level of Education </caption>
+</table>
+<table class = "inner_table">
+<caption> Mother\'s Highest Level of Education</caption>
+</table>
+<table class = "inner_table">
+<caption>  Student\'s Aspiration </caption>
+</table>
+<table class = "inner_table">
+<caption> First Generation College Student </caption>
+</table>
+<table class = "inner_table">
+<caption> College Match </caption>
+</table>
+<table class = "inner_table">
+<caption> Persistence and Graduation </caption>
+</table>
+<table class = "inner_table">
+<caption> Student Hometowns </caption>
+</table>
+<table class = "inner_table">
+<caption> Student High Schools </caption>
+</table>
+
 </td></tr>
 
     <?php
