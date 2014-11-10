@@ -2,20 +2,8 @@
 require_once("../siteconfig.php");
 ?>
 <?php
-/*
- * First determine if the user is an admin. Usually this will be a program ID number,
- * but sometimes it will be 'a' (all) or 'n' (none).
- */
-include "../include/dbconnopen.php";
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
-$get_program_access_sqlsafe = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = " . mysqli_real_escape_string($cnnLISC, $_COOKIE['user']) . "";
-//echo $get_program_access_sqlsafe;
-$program_access = mysqli_query($cnnLISC, $get_program_access_sqlsafe);
-$prog_access = mysqli_fetch_row($program_access);
-$access = $prog_access[0];
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
 
+include "../include/dbconnopen.php";
 /*
  * If search elements are filled in, they are added to the search query:
  */
@@ -137,7 +125,7 @@ if ($_POST['family_search'] == '1') {
             <th>Gender</th>
             <?php
             //if an administrator
-            if ($access == 'a') {
+    if ($AccessLevelTRP == $AdminAccess) {
                 //show delete area
                 ?>
                 <th>
@@ -169,7 +157,7 @@ if ($_POST['family_search'] == '1') {
                 </td>-->
                 <?php
                 //if an administrator
-                if ($access == 'a') {
+                                                                                                                                                        if ($AccessLevelTRP == $AdminAccess) {
                     //show delete area
                     ?>
                     <td class="all_projects" style="text-align: center;">

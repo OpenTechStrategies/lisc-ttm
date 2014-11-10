@@ -4,7 +4,7 @@ require_once("../siteconfig.php");
 <?php
 include "../../header.php";
 include "../header.php";
-include "../include/datepicker_simple.php";
+//include "../include/datepicker_simple.php";
 /* all information about the given participant */
 ?>
 <script type="text/javascript">
@@ -23,13 +23,7 @@ $parti = mysqli_fetch_array($get_participant);
 $date_formatted = explode('-', $parti['DOB']);
 $DOB = $date_formatted[1] . "/" . $date_formatted[2] . "/" . $date_formatted[0];
 
-/* program access determines whether the logged-in user can see program-specific information about this person.
- * The Gads Hill users may not be able to see results from museum surveys, for example. */
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
-$get_program_access_sqlsafe = "SELECT Program_Access FROM Users_Privileges INNER JOIN User_Sessions ON User_Sessions.User_Id=Users_Privileges.User_ID WHERE PHP_Session = '" . mysqli_real_escape_string($cnnLISC, $_COOKIE['PHPSESSID']) . "' AND Privilege_ID=" . $TRP_id;
-$program_access = mysqli_query($cnnLISC, $get_program_access_sqlsafe);
-$prog_access = mysqli_fetch_row($program_access);
-$access = $prog_access[0];
+
 ?>
 <div class="content_block" id="participant_profile">
     <h3>Participant Profile - <?php echo $parti['First_Name'] . " " . $parti['Last_Name']; ?>
@@ -438,9 +432,8 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
             ?>
             <h4><?php echo $program['Program_Name']; ?></h4>
                             <?php
-echo $access;
                             //Early Childhood Education
-                            if ($program['Program_ID'] == 1 && ($access == 'a' || $access == 1)) {
+                            if ($program['Program_ID'] == 1 && (in_array('a', $program_access_list) || in_array(1, $program_access_list))) {
                                 ?>
                 <div class="program_details">
                     <table width="100%">
@@ -1506,7 +1499,7 @@ echo $access;
                 </div>
         <?php
         //Middle School to High School teacher exchange
-    } else if (($program['Program_ID'] == 2 || $program['Program_ID'] == 4) && ($access == 'a' || $access == 2 || $access == 4)) {
+            } else if (($program['Program_ID'] == 2 || $program['Program_ID'] == 4) && (in_array('a', $program_access_list) || in_array(2, $program_access_list) || in_array(4, $program_access_list))) {
         $get_transition_info_sqlsafe = "SELECT * FROM Explore_Scores WHERE Participant_ID=" . $parti['Participant_ID'] .
                 " AND Program_ID='" . $program['Program_ID'] . "'";
         include "../include/dbconnopen.php";
@@ -1844,7 +1837,7 @@ echo $access;
                 </div>
         <?php
         //New Horizons/Gads Hill tutoring
-    } else if ($program['Program_ID'] == 3 && ($access == 'a' || $access == 3)) {
+    } else if ($program['Program_ID'] == 3 && (in_array('a', $program_access_list) || in_array(3, $program_access_list))) {
         ?>
                 <div class="program_details">
                     <h5>Attendance</h5>
@@ -1957,10 +1950,10 @@ echo $access;
         <?php
         //Elev8 shows the same information as the middle school to high school transition, so this 
         //option for the if is no longer relevant.
-    } else if ($program['Program_ID'] == 4 && ($access == 'a' || $access == 4)) {
+    } else if ($program['Program_ID'] == 4 && (in_array('a', $program_access_list) || in_array(4, $program_access_list))) {
 
         //NMMA Artist in Residency
-    } else if ($program['Program_ID'] == 5 && ($access == 'a' || $access == 5)) {
+    } else if ($program['Program_ID'] == 5 && (in_array('a', $program_access_list) || in_array(5, $program_access_list))) {
         ?>
                 <div class="program_details">
                     <h5>Attendance</h5>
@@ -2098,7 +2091,7 @@ echo $access;
                 </div>
                                 <?php
                             }
-            else if ($program['Program_ID'] == 6 && ($access == 'a' || $access == 6)) {
+            else if ($program['Program_ID'] == 6 && (in_array('a', $program_access_list) || in_array(6, $program_access_list))) {
                ?> 
             <div class="program_details">
             <h4>La Casa Information</h4>

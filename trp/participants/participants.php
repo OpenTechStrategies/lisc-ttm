@@ -69,9 +69,6 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
         <tr><td><strong>CPS ID:</strong></td>
             <td><input type="text" id="cps_id_search" /></td>
             <td><strong>Program:</strong></td>
-<?php
-if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
-?>
             <td><select id="person_program_search" class="no_view">
             <option value="">-----</option>
 <?php
@@ -86,9 +83,7 @@ while ($prog = mysqli_fetch_row($programs)) {
 include "../include/dbconnopen.php";
 ?>
         </select></td>
-<?php
-} // end access level check
-?>
+
         </tr>
         <tr>
             <td colspan="4" style="text-align:center;"><input type="button" value="Search" onclick="
