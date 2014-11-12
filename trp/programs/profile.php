@@ -846,6 +846,17 @@ student_agi: document.getElementById('stntagi_add').value
         <?php
     }
     else if ($program['Program_ID'] == 6){
+//choose a year for reports:
+        $year = '2014';
+        $bachelors_id_sqlsafe = "SELECT Education_ID FROM Educational_Levels WHERE Education_Level_Name = 'Bachelors'";
+        $bachelors = mysqli_query($cnnTRP, $bachelors_id_sqlsafe);
+        $bachelor = mysqli_fetch_row($bachelors);
+        $bachelors_id = $bachelor[0];
+        $high_schools_id_sqlsafe = "SELECT Education_ID FROM Educational_Levels WHERE Education_Level_Name = 'High School Diploma'";
+        $high_schools = mysqli_query($cnnTRP, $high_schools_id_sqlsafe);
+        $high_school = mysqli_fetch_row($high_schools);
+        $high_school_id = $high_school[0];
+        
     ?>
         <tr><td>
 
@@ -1010,7 +1021,33 @@ while ($income = mysqli_fetch_row($income_counts)){
 
 <table class = "inner_table">
 <caption> Major/Program of Study </caption>
+<tr><th> Major </th><th>Percent</th><th>Count</th></tr>
+<?php 
+$get_majors_sqlsafe = "SELECT Major, Count(*) FROM La_Casa_Basics GROUP BY Major;";
+$majors = mysqli_query($cnnTRP, $get_majors_sqlsafe);
+$largest_major = 0;
+$sum_of_major_counts = 0;
+while ($major = mysqli_fetch_row($majors)){
+?>
+    <tr><td><?php echo $major[0]; ?></td>
+    <td><?php echo $major[1]; ?></td>
+    <td><?php echo number_format(($major[1]/$students_denominator) * 100) . '%'; ?></td>
+    </tr>
+<?php
+}
+?>
+<tr><td><p></p></td></tr>
+<tr><td colspan = "2"><strong>Total</strong></td><td><?php
+        $get_number_of_people_with_major_sqlsafe = "SELECT COUNT(*) FROM La_Casa_Basics WHERE Major IS NOT NULL;";
+        $have_major_number = mysqli_query($cnnTRP, $get_number_of_people_with_major_sqlsafe);
+        $total_majors = mysqli_fetch_row($have_major_number);
+        echo $total_majors[0];
+?></td></tr>
+<tr><td colspan = "2"><strong>Total Number of Unique Majors</strong></td>
+<td></td>
+</tr>
 </table>
+<p></p>
 <table class = "inner_table">
 <caption> College </caption>
 <tr><th> College Name </th><th> Type </th><th>Percent</th><th>Count</th></tr>
@@ -1039,13 +1076,37 @@ echo $college[0]; ?></td>
 <td><?php echo $college_denom[0]; ?> </td>
 </tr>
 </table>
+<p></p>
 <table class = "inner_table">
 <caption> Total Credit Accrual To Date </caption>
 <tr><th> Credits Completed </th><th>Percent</th><th>Count</th></tr>
 <?php
 $sum_of_credits_sqlsafe = "SELECT Participant_ID_Students, SUM(Credits) FROM La_Casa_Basics GROUP BY Participant_ID_Students ORDER BY SUM(Credits);";
 $sum_credits = mysqli_query($cnnTRP, $sum_of_credits_sqlsafe);
+$lowest_credits = 0;
+$highest_credits = 0;
+$sum_all_credits = 0;
+$zerocred = 0;
+$fifteencred = 0;
+$thirtycred = 0;
+$fortyfivecred = 0;
+$sixtycred = 0;
+$seventyfivecred = 0;
+$ninetycred = 0;
+$hundredfivecred = 0;
+$hundredtwentycred = 0;
+$upperlimitcred = 0;
+$avg_credit_denom = mysqli_num_rows($sum_credits);
 while ($credits = mysqli_fetch_row($sum_credits)){
+    //find smallest and greatest sums of credits accrued:
+    if ($credits[1] < $lowest_credits){
+        $lowest_credits = $credits[1];
+    }
+    if ($credits[1] > $highest_credits){
+        $highest_credits = $credits[1];
+    }
+
+    //group credits by range:
     if ($credits[1] == 0){
         $zerocred++;
     }
@@ -1076,6 +1137,9 @@ while ($credits = mysqli_fetch_row($sum_credits)){
     elseif ($credits[1] >= 120){
         $upperlimitcred++;
     }
+
+    //sum all credits for average calculation:
+    $sum_all_credits += $credits[1];
 }
 ?>
 <tr><td><strong>0</strong></td>
@@ -1118,31 +1182,230 @@ while ($credits = mysqli_fetch_row($sum_credits)){
 <td></td>
 <td><?php echo $upperlimitcred; ?></td>
 </tr>
-<tr>
+<tr><td colspan = "2"><strong>Lowest Number of Credits Accrued</strong></td>
+<td><?php echo $lowest_credits; ?></td>
+</tr>
+<tr><td colspan = "2"><strong>Highest Number of Credits Accrued</strong></td>
+<td><?php echo $highest_credits; ?></td>
+</tr>
+<tr><td colspan = "2"><strong>Average Number of Credits Accrued (among students reporting)</strong></td>
+<td><?php echo number_format($sum_all_credits/$avg_credit_denom); ?></td>
+</tr>
 </table>
 <table class = "inner_table">
 <caption> College GPA </caption>
+<?php
+$college_gpa_sqlsafe = "SELECT Participant_ID_Students, College_GPA FROM La_Casa_Basics GROUP BY Participant_ID_Students, School_Year;"; //needs work to get latest GPA (should it be where year is this year?)
+$college_gpa = mysqli_query($cnnTRP, $college_gpa_sqlsafe);
+?>
 </table>
 <table class = "inner_table">
 <caption> ACT Score </caption>
+<tr><th>Score</th><th>Percent</th><th>Count</th></tr>
+<?php
+$act_score_denom_sqlsafe = "SELECT COUNT(*) FROM La_Casa_Basics WHERE School_Year = '" . $year . "'";
+$act_denom = mysqli_query($cnnTRP, $act_score_denom_sqlsafe);
+$act_denominator = mysqli_fetch_row($act_denom);
+$act_score_sqlsafe = "SELECT ACT_Score, Count(*) FROM La_Casa_Basics WHERE School_Year = '" . $year . "' GROUP BY ACT_Score;";
+$act_score = mysqli_query($cnnTRP, $act_score_sqlsafe);
+$avg_score_denom = mysqli_num_rows($act_score);
+$lowest_score = 0;
+$highest_score = 0;
+$sum_of_scores = 0;
+while ($act = mysqli_fetch_row($act_score)){
+    if ($act[1] < $lowest_score){
+        $lowest_score = $act[1];
+    }
+    if ($act[1] > $highest_score){
+        $highest_score = $act[1];
+    }
+?>
+<tr>
+    <td><?php echo $act[0]; ?></td>
+    <td><?php echo $act[1]; ?></td>
+    <td><?php echo number_format($act[1]/$act_denominator[0]*100) . '%'; ?></td>
+<?php
+    $sum_of_scores += ($act[0]*$act[1]);
+}
+?>
+<tr><td colspan = "2"><strong>Lowest ACT Score </strong></td>
+<td><?php echo $lowest_score; ?></td>
+</tr>
+<tr><td colspan = "2"><strong>Highest ACT Score </strong></td>
+<td><?php echo $highest_score; ?></td>
+</tr>
+<tr><td colspan = "2"><strong>Average ACT Score </strong></td>
+<td><?php echo number_format($sum_all_scores/$avg_score_denom); ?></td>
+</tr>
 </table>
 <table class = "inner_table">
 <caption> High School GPA </caption>
+<tr><th>High School GPA</th><th>Percent</th><th>Count</th></tr>
+<?php
+$high_school_gpa_denom_sqlsafe = "SELECT COUNT(*) FROM La_Casa_Basics WHERE School_Year = '" . $year . "'";
+$hsgpa_denom = mysqli_query($cnnTRP, $high_school_gpa_denom_sqlsafe);
+$hsgpa_denominator = mysqli_fetch_row($hsgpa_denom);
+$high_school_gpa_sqlsafe = "SELECT High_School_GPA, Count(*) FROM La_Casa_Basics WHERE School_Year = '" . $year . "' GROUP BY High_School_GPA;";
+$high_school_gpa = mysqli_query($cnnTRP, $high_school_gpa_sqlsafe);
+$avg_hsgpa_denom = mysqli_num_rows($high_school_gpa);
+$lowest_hsgpa = 0;
+$highest_hsgpa = 0;
+$sum_of_hsgpas = 0;
+$hsgpa_array_of_ranges = array(1 => array(1), 
+2 => array('low' => 1.1, 'high' => 1.5)
+2 => array('low' => 1.1, 'high' => 1.5)
+2 => array('low' => 1.1, 'high' => 1.5)
+);
+while ($hsgpa = mysqli_fetch_row($high_school_gpa)){
+    if ($hsgpa[1] < $lowest_hsgpa){
+        $lowest_hsgpa = $hsgpa[1];
+    }
+    if ($hsgpa[1] > $highest_hsgpa){
+        $highest_hsgpa = $hsgpa[1];
+    }
+?>
+<tr>
+    <td><?php echo $hsgpa[0]; ?></td>
+    <td><?php echo $hsgpa[1]; ?></td>
+    <td><?php echo number_format($hsgpa[1]/$hsgpa_denominator[0]*100) . '%'; ?></td>
+<?php
+    $sum_of_hsgpas += ($hsgpa[0]*$hsgpa[1]);
+}
+?>
+<tr><td colspan = "2"><strong>Lowest High School GPA </strong></td>
+<td><?php echo $lowest_hsgpa; ?></td>
+</tr>
+<tr><td colspan = "2"><strong>Highest High School GPA </strong></td>
+<td><?php echo $highest_hsgpa; ?></td>
+</tr>
+<tr><td colspan = "2"><strong>Average High School GPA </strong></td>
+<td><?php echo number_format($sum_all_hsgpas/$avg_hsgpa_denom); ?></td>
+</tr>
 </table>
 <table class = "inner_table">
 <caption> Dependency Status </caption>
+<tr><th>Status</th><th>Percent</th><th>Count</th></tr>
+<?php
+$dependency_status_denom_sqlsafe = "SELECT COUNT(*) FROM La_Casa_Basics WHERE School_Year = '" . $year . "'";
+$depstat_denom = mysqli_query($cnnTRP, $dependency_status_denom_sqlsafe);
+$depstat_denominator = mysqli_fetch_row($depstat_denom);
+$dependency_status_sqlsafe = "SELECT Dependency_Status, Count(*) FROM La_Casa_Basics WHERE School_Year = '" . $year . "' GROUP BY Dependency_Status;";
+$dependency_status = mysqli_query($cnnTRP, $dependency_status_sqlsafe);
+$avg_depstat_denom = mysqli_num_rows($dependency_status);
+while ($depstat = mysqli_fetch_row($dependency_status)){
+?>
+<tr>
+    <td><?php if ($depstat[0] == 1){ echo "Independent";}
+    elseif ($depstat[0] == 2){echo "Dependent";}
+    else { echo "Unknown";} ?></td>
+    <td><?php echo $depstat[1]; ?></td>
+    <td><?php echo number_format($depstat[1]/$depstat_denominator[0]*100) . '%'; ?></td>
+<?php
+    $sum_of_depstats += ($depstat[0]*$depstat[1]);
+}
+?>
 </table>
 <table class = "inner_table">
 <caption> Gender </caption>
+<tr><th>Gender</th><th>Percent</th><th>Count</th></tr>
+<?php
+$gender_denom_sqlsafe = "SELECT COUNT(*) FROM Participants INNER JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID WHERE Program_ID = 6;";
+$gender_denom = mysqli_query($cnnTRP, $gender_denom_sqlsafe);
+$gender_denominator = mysqli_fetch_row($gender_denom);
+$gender_sqlsafe = "SELECT Gender, Count(*) FROM Participants INNER JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID WHERE Program_ID = 6 GROUP BY Gender;";
+$gender = mysqli_query($cnnTRP, $gender_sqlsafe);
+while ($result = mysqli_fetch_row($gender)){
+?>
+<tr>
+    <td><?php if ($result[0] == 'f'){ echo "Female";}
+    elseif ($result[0] == 'M'){echo "Male";}
+    else { echo "Unknown";} ?></td>
+    <td><?php echo $result[1]; ?></td>
+    <td><?php echo number_format($result[1]/$gender_denominator[0]*100) . '%'; ?></td>
+<?php
+}
+?>
 </table>
 <table class = "inner_table">
 <caption> Father\'s Highest Level of Education </caption>
+<tr><th>Description</th><th>Percent</th><th>Count</th></tr>
+<?php
+$lc_father_ed_join_sqlsafe = "SELECT Education_Level_Name, COUNT(*), Education_ID FROM Participants INNER JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID LEFT JOIN La_Casa_Basics ON Participants.Participant_ID = La_Casa_Basics.Participant_ID_Students LEFT JOIN Educational_Levels ON La_Casa_Basics.Father_Highest_Level_Education = Education_ID WHERE Participants_Programs.Program_ID = 6 GROUP BY Father_Highest_Level_Education;";
+$father_ed_counts = mysqli_query($cnnTRP, $lc_father_ed_join_sqlsafe);
+$father_higher_ed_count = 0;
+$father_hs_less_count = 0;
+while ($father_eds = mysqli_fetch_row($father_ed_counts)){
+    if ($father_eds[2] >= $bachelors_id){
+        $father_higher_ed_count++;
+    }
+    elseif ($father_eds[2] < $high_school_id){
+        $father_hs_less_count++;
+    }
+?>
+    <tr><td><?php $father_eds[0]; ?></td>
+        <td><?php echo number_format(($father_eds[1]/$students_denominator) * 100) . '%'; ?></td>
+        <td><?php echo $father_eds[1]; ?></td>
+        </tr>
+<?php
+}
+
+?>
+<tr><td colspan = "2"><strong>Percent who have earned a bachelor\'s or above</strong></td><td>
+<?php $father_higher_ed_count/$father_reporting_count; ?></td></tr>
+<tr><td colspan = "2"><strong>Percent who have earned a high school diploma or less</strong></td><td>
+<?php $father_hs_less_count/$father_reporting_count; ?></td></tr>
 </table>
 <table class = "inner_table">
 <caption> Mother\'s Highest Level of Education</caption>
+<tr><th>Description</th><th>Percent</th><th>Count</th></tr>
+<?php
+$lc_mother_ed_join_sqlsafe = "SELECT Education_Level_Name, COUNT(*), Education_ID FROM Participants INNER JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID LEFT JOIN La_Casa_Basics ON Participants.Participant_ID = La_Casa_Basics.Participant_ID_Students LEFT JOIN Educational_Levels ON La_Casa_Basics.Mother_Highest_Level_Education = Education_ID WHERE Participants_Programs.Program_ID = 6 GROUP BY Mother_Highest_Level_Education;";
+$mother_ed_counts = mysqli_query($cnnTRP, $lc_mother_ed_join_sqlsafe);
+$mother_higher_ed_count = 0;
+$mother_hs_less_count = 0;
+while ($mother_eds = mysqli_fetch_row($mother_ed_counts)){
+    if ($mother_eds[2] >= $bachelors_id){
+        $mother_higher_ed_count++;
+    }
+    elseif ($mother_eds[2] < $high_school_id){
+        $mother_hs_less_count++;
+    }
+?>
+    <tr><td><?php $mother_eds[0]; ?></td>
+        <td><?php echo number_format(($mother_eds[1]/$students_denominator) * 100) . '%'; ?></td>
+        <td><?php echo $mother_eds[1]; ?></td>
+        </tr>
+<?php
+}
+
+?>
+<tr><td colspan = "2"><strong>Percent who have earned a bachelor\'s or above</strong></td><td>
+<?php $mother_higher_ed_count/$mother_reporting_count; ?></td></tr>
+<tr><td colspan = "2"><strong>Percent who have earned a high school diploma or less</strong></td><td>
+<?php $mother_hs_less_count/$mother_reporting_count; ?></td></tr>
 </table>
 <table class = "inner_table">
 <caption>  Student\'s Aspiration </caption>
+<tr><th>Description</th><th>Percent</th><th>Count</th></tr>
+<?php
+$lc_student_aspiration_join_sqlsafe = "SELECT Education_Level_Name, COUNT(*), Education_ID FROM Participants INNER JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID LEFT JOIN La_Casa_Basics ON Participants.Participant_ID = La_Casa_Basics.Participant_ID_Students LEFT JOIN Educational_Levels ON La_Casa_Basics.Student_Aspiration = Education_ID WHERE Participants_Programs.Program_ID = 6 GROUP BY Student_Aspiration;";
+$student_aspiration_counts = mysqli_query($cnnTRP, $lc_student_aspiration_join_sqlsafe);
+$student_grad_degree_count = 0;
+while ($student_aspirations = mysqli_fetch_row($student_aspiration_counts)){
+    if ($student_aspirations[2] > $bachelors_id){
+        $student_grad_degree_count++;
+    }
+?>
+    <tr><td><?php $student_aspirations[0]; ?></td>
+        <td><?php echo number_format(($student_aspirations[1]/$students_denominator) * 100) . '%'; ?></td>
+        <td><?php echo $student_aspirations[1]; ?></td>
+        </tr>
+<?php
+}
+
+?>
+<tr><td colspan = "2"><strong>Percent who aspire to a Master\'s or above</strong></td><td>
+<?php $student_grad_degree_count/$students_denominator; ?></td></tr>
 </table>
 <table class = "inner_table">
 <caption> First Generation College Student </caption>
@@ -1155,9 +1418,59 @@ while ($credits = mysqli_fetch_row($sum_credits)){
 </table>
 <table class = "inner_table">
 <caption> Student Hometowns </caption>
+<tr><th> Hometown </th><th>Percent</th><th>Count</th></tr>
+<?php 
+$get_hometowns_sqlsafe = "SELECT Student_Hometown, Count(*) FROM La_Casa_Basics GROUP BY Student_Hometown;";
+$hometowns = mysqli_query($cnnTRP, $get_hometowns_sqlsafe);
+$largest_hometown = 0;
+$sum_of_hometown_counts = 0;
+while ($hometown = mysqli_fetch_row($hometowns)){
+?>
+    <tr><td><?php echo $hometown[0]; ?></td>
+    <td><?php echo number_format(($hometown[1]/$students_denominator) * 100) . '%'; ?></td>
+    <td><?php echo $hometown[1]; ?></td>
+    </tr>
+<?php
+}
+?>
+<tr><td><p></p></td></tr>
+<tr><td colspan = "2"><strong>Total</strong></td><td><?php
+        $get_number_of_people_with_hometown_sqlsafe = "SELECT COUNT(*) FROM La_Casa_Basics WHERE Student_Hometown IS NOT NULL;";
+        $have_hometown_number = mysqli_query($cnnTRP, $get_number_of_people_with_hometown_sqlsafe);
+        $total_hometowns = mysqli_fetch_row($have_hometown_number);
+        echo $total_hometowns[0];
+?></td></tr>
+<tr><td colspan = "2"><strong>Total Number of Unique Hometowns</strong></td>
+<td></td>
+</tr>
 </table>
 <table class = "inner_table">
 <caption> Student High Schools </caption>
+<tr><th> High School </th><th>Percent</th><th>Count</th></tr>
+<?php 
+$get_high_schools_sqlsafe = "SELECT Student_High_School, Count(*) FROM La_Casa_Basics GROUP BY Student_High_School;";
+$high_schools = mysqli_query($cnnTRP, $get_high_schools_sqlsafe);
+$largest_high_school = 0;
+$sum_of_high_school_counts = 0;
+while ($high_school = mysqli_fetch_row($high_schools)){
+?>
+    <tr><td><?php echo $high_school[0]; ?></td>
+    <td><?php echo number_format(($high_school[1]/$students_denominator) * 100) . '%'; ?></td>
+    <td><?php echo $high_school[1]; ?></td>
+    </tr>
+<?php
+}
+?>
+<tr><td><p></p></td></tr>
+<tr><td colspan = "2"><strong>Total</strong></td><td><?php
+        $get_number_of_people_with_high_school_sqlsafe = "SELECT COUNT(*) FROM La_Casa_Basics WHERE Student_High_School IS NOT NULL;";
+        $have_high_school_number = mysqli_query($cnnTRP, $get_number_of_people_with_high_school_sqlsafe);
+        $total_high_schools = mysqli_fetch_row($have_high_school_number);
+        echo $total_high_schools[0];
+?></td></tr>
+<tr><td colspan = "2"><strong>Total Number of Unique High Schools</strong></td>
+<td></td>
+</tr>
 </table>
 
 </td></tr>
