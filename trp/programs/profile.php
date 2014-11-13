@@ -1194,10 +1194,75 @@ while ($credits = mysqli_fetch_row($sum_credits)){
 </table>
 <table class = "inner_table">
 <caption> College GPA </caption>
+<tr><th>College GPA</th><th>Percent</th><th>Count</th></tr>
 <?php
-$college_gpa_sqlsafe = "SELECT Participant_ID_Students, College_GPA FROM La_Casa_Basics GROUP BY Participant_ID_Students, School_Year;"; //needs work to get latest GPA (should it be where year is this year?)
+$college_gpa_sqlsafe = "SELECT College_GPA, Count(*) FROM La_Casa_Basics WHERE School_Year = '" . $year . "' GROUP BY College_GPA;";
 $college_gpa = mysqli_query($cnnTRP, $college_gpa_sqlsafe);
+$lowest_colgpa = 5;
+$highest_colgpa = 0;
+$sum_of_colgpas = 0;
+$colgpa_array_of_ranges = array(
+2 => array('low' => 1.5, 'high' => 1.9),
+3 => array('low' => 2.0, 'high' => 2.4),
+4 => array('low' => 2.5, 'high' => 2.9),
+5 => array('low' => 3.0, 'high' => 3.4),
+6 => array('low' => 3.5, 'high' => 3.9)
+);
+while ($colgpa = mysqli_fetch_row($college_gpa)){
+    if ($colgpa[0] < $lowest_colgpa && $colgpa[0] != null){
+        $lowest_colgpa = $colgpa[0];
+    }
+    if ($colgpa[0] > $highest_colgpa){
+        $highest_colgpa = $colgpa[0];
+    }
+    if ($colgpa[0] < $colgpa_array_of_ranges[2]['low'] && $colgpa[0] != null){
+        $lowest_col_gpa_count += $colgpa[1];
+    }
+    if ($colgpa[0] > $colgpa_array_of_ranges[6]['high']){
+        $highest_gpa_count += $colgpa[1];
+    }
+    foreach ($colgpa_array_of_ranges as $key => $value){
+        if ($colgpa[0] >= $value['low'] && $colgpa[0] <= $value['high']){
+            ${$key . "_count"} += $colgpa[1];
+        }
+    }
+    
 ?>
+<?php
+    $sum_of_colgpas += ($colgpa[0]);
+    if ($colgpa[0] != null){    $avg_col_gpa_denom += $colgpa[1];}
+}
+?>
+<tr>
+<td>1</td>
+<td><?php echo number_format($lowest_col_gpa_count/$students_denominator*100) . '%'; ?></td>
+<td><?php echo $lowest_col_gpa_count; ?></td>
+</tr>
+<?php
+    foreach ($colgpa_array_of_ranges as $key => $value){
+?>
+        <tr><td><?php echo $value['low'] . " - " . $value['high']; ?></td>
+        <td><?php echo number_format(${$key . "_count"}/$students_denominator*100) . '%'; ?></td>
+        <td><?php echo ${$key . "_count"}; ?></td>
+</tr>
+<?php
+      }
+ 
+?>
+<tr>
+<td>4</td>
+<td><?php echo number_format($highest_gpa_count/$students_denominator*100) . '%'; ?></td>
+<td><?php echo $highest_gpa_count; ?></td>
+</tr>
+<tr><td colspan = "2"><strong>Lowest College GPA </strong></td>
+<td><?php echo $lowest_colgpa; ?></td>
+</tr>
+<tr><td colspan = "2"><strong>Highest College GPA </strong></td>
+<td><?php echo $highest_colgpa; ?></td>
+</tr>
+    <tr><td colspan = "2"><strong>Average College GPA (of those reporting) </strong></td>
+<td><?php echo number_format($sum_of_colgpas/$avg_col_gpa_denom, 2); ?></td>
+</tr>
 </table>
 <table class = "inner_table">
 <caption> ACT Score </caption>
@@ -1212,7 +1277,7 @@ $avg_score_denom = mysqli_num_rows($act_score);
 $lowest_score = 0;
 $highest_score = 0;
 $sum_of_scores = 0;
-while ($act = mysqli_fetch_row($act_score)){
+/*while ($act = mysqli_fetch_row($act_score)){
     if ($act[1] < $lowest_score){
         $lowest_score = $act[1];
     }
@@ -1224,9 +1289,56 @@ while ($act = mysqli_fetch_row($act_score)){
     <td><?php echo $act[0]; ?></td>
     <td><?php echo $act[1]; ?></td>
     <td><?php echo number_format($act[1]/$act_denominator[0]*100) . '%'; ?></td>
+</tr>
 <?php
     $sum_of_scores += ($act[0]*$act[1]);
+    }*/
+
+/*
+Inputs: CURSOR = result of mysqli_query() 
+        INDEX is index into each row from cursor
+Outputs: The result is a string that is a set of html table rows (see below).
+
+Call this to provide rows to be inserted into a La Casa table.  For example:
+
+    Race                      | Percent | Count
+    Hispanic or Latino        | 25%     | 2
+    Black or African-American | 25%     | 2
+    Asian or Asian-American   | 13%     | 1
+
+This function returns the rows of information from "Hispanic or Latino" to the final "1."
+
+*/
+function la_casa_report_topic_gen_html($cursor, $index = 0)
+{
+    $lowest_val = null;
+    $highest_val = null;
+    $return_html_string = "";
+    while ($val = mysqli_fetch_row($cursor)) {
+        if ($lowest_val == null) {
+            $lowest_val = $val[$index];
+        }
+        elseif ($val[1] < $lowest_val){
+            $lowest_val = $val[1];
+        }
+        if ($highest_val == null) {
+            $highest_val = $val[$index];
+        }
+        elseif ($val[1] > $highest_val){
+            $highest_val = $val[1];
+        }
+        $return_html_string .= "<tr>
+        <td>". $val[0] . "</td>
+        <td>" . $val[1] . "</td>
+        <td>" . number_format($val[1]/$val_denominator[0]*100) . "%</td>
+        </tr>";
+        $sum_of_vals += ($val[0]*$val[1]);
+    }
+    return $return_html_string;
 }
+
+echo la_casa_report_topic_gen_html($act_score);
+
 ?>
 <tr><td colspan = "2"><strong>Lowest ACT Score </strong></td>
 <td><?php echo $lowest_score; ?></td>
@@ -1242,44 +1354,72 @@ while ($act = mysqli_fetch_row($act_score)){
 <caption> High School GPA </caption>
 <tr><th>High School GPA</th><th>Percent</th><th>Count</th></tr>
 <?php
-$high_school_gpa_denom_sqlsafe = "SELECT COUNT(*) FROM La_Casa_Basics WHERE School_Year = '" . $year . "'";
-$hsgpa_denom = mysqli_query($cnnTRP, $high_school_gpa_denom_sqlsafe);
-$hsgpa_denominator = mysqli_fetch_row($hsgpa_denom);
 $high_school_gpa_sqlsafe = "SELECT High_School_GPA, Count(*) FROM La_Casa_Basics WHERE School_Year = '" . $year . "' GROUP BY High_School_GPA;";
 $high_school_gpa = mysqli_query($cnnTRP, $high_school_gpa_sqlsafe);
-$avg_hsgpa_denom = mysqli_num_rows($high_school_gpa);
-$lowest_hsgpa = 0;
+$lowest_hsgpa = 5;
 $highest_hsgpa = 0;
 $sum_of_hsgpas = 0;
-$hsgpa_array_of_ranges = array(1 => array(1), 
-2 => array('low' => 1.1, 'high' => 1.5)
-2 => array('low' => 1.1, 'high' => 1.5)
-2 => array('low' => 1.1, 'high' => 1.5)
+$hsgpa_array_of_ranges = array(
+2 => array('low' => 1.5, 'high' => 1.9),
+3 => array('low' => 2.0, 'high' => 2.4),
+4 => array('low' => 2.5, 'high' => 2.9),
+5 => array('low' => 3.0, 'high' => 3.4),
+6 => array('low' => 3.5, 'high' => 3.9)
 );
 while ($hsgpa = mysqli_fetch_row($high_school_gpa)){
-    if ($hsgpa[1] < $lowest_hsgpa){
-        $lowest_hsgpa = $hsgpa[1];
+    if ($hsgpa[0] < $lowest_hsgpa && $hsgpa[0] != null){
+        $lowest_hsgpa = $hsgpa[0];
     }
-    if ($hsgpa[1] > $highest_hsgpa){
-        $highest_hsgpa = $hsgpa[1];
+    if ($hsgpa[0] > $highest_hsgpa){
+        $highest_hsgpa = $hsgpa[0];
     }
+    if ($hsgpa[0] < $hsgpa_array_of_ranges[2]['low'] && $hsgpa[0] != null){
+        $lowest_hs_gpa_count += $hsgpa[1];
+    }
+    if ($hsgpa[0] > $hsgpa_array_of_ranges[6]['high']){
+        $highest_gpa_count += $hsgpa[1];
+    }
+    foreach ($hsgpa_array_of_ranges as $key => $value){
+        if ($hsgpa[0] >= $value['low'] && $hsgpa[0] <= $value['high']){
+            ${$key . "_count"} += $hsgpa[1];
+        }
+    }
+    
 ?>
-<tr>
-    <td><?php echo $hsgpa[0]; ?></td>
-    <td><?php echo $hsgpa[1]; ?></td>
-    <td><?php echo number_format($hsgpa[1]/$hsgpa_denominator[0]*100) . '%'; ?></td>
 <?php
-    $sum_of_hsgpas += ($hsgpa[0]*$hsgpa[1]);
+    $sum_of_hsgpas += ($hsgpa[0]);
+    if ($hsgpa[0] != null){    $avg_hs_gpa_denom += $hsgpa[1];}
 }
 ?>
+<tr>
+<td>1</td>
+<td><?php echo number_format($lowest_hs_gpa_count/$students_denominator*100) . '%'; ?></td>
+<td><?php echo $lowest_hs_gpa_count; ?></td>
+</tr>
+<?php
+    foreach ($hsgpa_array_of_ranges as $key => $value){
+?>
+        <tr><td><?php echo $value['low'] . " - " . $value['high']; ?></td>
+        <td><?php echo number_format(${$key . "_count"}/$students_denominator*100) . '%'; ?></td>
+        <td><?php echo ${$key . "_count"}; ?></td>
+</tr>
+<?php
+      }
+ 
+?>
+<tr>
+<td>4</td>
+<td><?php echo number_format($highest_gpa_count/$students_denominator*100) . '%'; ?></td>
+<td><?php echo $highest_gpa_count; ?></td>
+</tr>
 <tr><td colspan = "2"><strong>Lowest High School GPA </strong></td>
 <td><?php echo $lowest_hsgpa; ?></td>
 </tr>
 <tr><td colspan = "2"><strong>Highest High School GPA </strong></td>
 <td><?php echo $highest_hsgpa; ?></td>
 </tr>
-<tr><td colspan = "2"><strong>Average High School GPA </strong></td>
-<td><?php echo number_format($sum_all_hsgpas/$avg_hsgpa_denom); ?></td>
+    <tr><td colspan = "2"><strong>Average High School GPA (of those reporting) </strong></td>
+<td><?php echo number_format($sum_of_hsgpas/$avg_hs_gpa_denom, 2); ?></td>
 </tr>
 </table>
 <table class = "inner_table">
