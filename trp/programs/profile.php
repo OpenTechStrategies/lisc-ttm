@@ -886,6 +886,7 @@ function la_casa_report_high_low_gen_html($cursor, $report_subject, $val_denomin
     $result = "";
     $reporting_number = 0;
     $avg_numerator = 0;
+    $null_count = 0;
     while ($val = mysqli_fetch_row($cursor)) {
         $reporting_number += $val[$countindex];
         if ($lowest_val == null) {
@@ -900,17 +901,22 @@ function la_casa_report_high_low_gen_html($cursor, $report_subject, $val_denomin
         elseif ($val[$description_index] > $highest_val){
             $highest_val = $val[$description_index];
         }
-        $result .= "<tr>
+        if ($val[$description_index] != null){
+            $result .= "<tr>
         <td>". $val[$description_index] . "</td>
         <td>" . number_format($val[$countindex]/$val_denominator*100) . "%</td>
         <td>" . $val[$countindex] . "</td>
         </tr>";
-        $avg_numerator += ($val[$description_index] * $val[$countindex]);
+            $avg_numerator += ($val[$description_index] * $val[$countindex]);
+        }
+        else{
+            $null_count += $val[$countindex];
+        }
     }
     $result .= "<tr>
 <td> Unknown </td>
-<td>" . number_format(($val_denominator - $reporting_number)/$val_denominator * 100 ) .  "%</td>
-<td> " . ($val_denominator - $reporting_number) . "</td>
+<td>" . number_format((($val_denominator + $null_count) - $reporting_number)/$val_denominator * 100 ) .  "%</td>
+<td> " . (($val_denominator + $null_count) - $reporting_number) . "</td>
 </tr>";
     $result .= "<tr>
         <td colspan = 2><strong> Lowest " . $report_subject
@@ -944,19 +950,30 @@ function la_casa_report_list_gen_html($cursor, $val_denominator, $countindex = 0
 {
     $result = "";
     $reporting_number = 0;
+    $null_count = 0;
+    $count_distinct_results = 0;
     while ($val = mysqli_fetch_row($cursor)) {
         $reporting_number += $val[$countindex];
+        if ($val[$description_index] != null){
+            $count_distinct_results++;
         $result .= "<tr>
         <td>". $val[$description_index] . "</td>
         <td>" . number_format($val[$countindex]/$val_denominator*100) . "%</td>
         <td>" . $val[$countindex] . "</td>
         </tr>";
+        }
+        else{
+            $null_count += $val[$countindex];
+        }
     }
     $result .= "<tr>
 <td> Unknown </td>
-<td>" . number_format(($val_denominator - $reporting_number)/$val_denominator * 100 ) .  "%</td>
-<td> " . ($val_denominator - $reporting_number) . "</td>
-</tr>";
+<td>" . number_format((($val_denominator + $null_count) - $reporting_number)/$val_denominator * 100 ) .  "%</td>
+<td> " . (($val_denominator + $null_count) - $reporting_number) . "</td>
+</tr>
+<tr><td colspan = 2><strong> Unique results </strong></td>
+<td>" . $count_distinct_results . "</td>";
+    
     return $result;
 }
         
