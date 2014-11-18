@@ -862,24 +862,43 @@ student_agi: document.getElementById('stntagi_add').value
         $students_denominator = mysqli_num_rows($lc_count);
 /*
 Inputs: CURSOR = result of mysqli_query() 
-        INDEX is index into each row from cursor
+        REPORT_SUBJECT is the string that will be printed in the
+              highest/lowest explanation rows.
+        VAL_DENOMINATOR is the denominator for the percentages.
+              Usually this is $students_denominator, calculated above.  It
+              is the number of people linked to the La Casa program (note
+              that not all of these people have information in the
+              La_Casa_Basics table).
+        IS_INCOME is a flag that determines whether this is the
+        household income report.  By default it is set to false, but in the
+        income call to the function it is set to true.
+        COUNTINDEX is the index of the count in the cursor.
+        DESCRIPTION_INDEX is the index of the result (e.g., the race)
+              in the cursor.
+        
 Outputs: The result is a string that is a set of html table rows (see below).
 
-Call this to provide rows to be inserted into a La Casa table.  For example:
+Call this to provide rows to be inserted into a La Casa table,
+including a highest row, lowest row, and average row.  For example:
 
     Race                      | Percent | Count
     Hispanic or Latino        | 25%     | 2
     Black or African-American | 25%     | 2
     Asian or Asian-American   | 13%     | 1
+    Lowest <Race>                       | Asian or Asian-American
+    Highest <Race>                      | Hispanic or Latino
+    Average <Race>                      | (this example fails here)
 
-This function returns the rows of information from "Hispanic or Latino" to the final "1."
+
+This function returns the rows of information from "Hispanic or
+Latino" to ...fails here).
 
 Reports that display the highest/lowest value and average are: Race/Ethnicity (not average),
  Household Size, Household Income,
 Credit Accrual, College GPA, ACT Score, High School GPA.
 Other than Race/Ethnicity, all of these reports also include an average row.
  */
-function la_casa_report_high_low_gen_html($cursor, $report_subject, $val_denominator, $countindex = 0, $description_index = 1)
+        function la_casa_report_high_low_gen_html($cursor, $report_subject, $val_denominator, $is_income = false, $countindex = 0, $description_index = 1)
 {
     $lowest_val = null;
     $highest_val = null;
@@ -887,6 +906,11 @@ function la_casa_report_high_low_gen_html($cursor, $report_subject, $val_denomin
     $reporting_number = 0;
     $avg_numerator = 0;
     $null_count = 0;
+    if ($is_income){
+        $below15 = 0;
+        $below25 = 0;
+        $below50 = 0;
+    }
     while ($val = mysqli_fetch_row($cursor)) {
         $reporting_number += $val[$countindex];
         if ($lowest_val == null) {
@@ -902,6 +926,17 @@ function la_casa_report_high_low_gen_html($cursor, $report_subject, $val_denomin
             $highest_val = $val[$description_index];
         }
         if ($val[$description_index] != null){
+            if ($is_income) {
+                if ($val[$description_index] < 50000){
+                    $below50 += $val[$countindex];
+                }
+                if ($val[$description_index] < 25000){
+                    $below25 += $val[$countindex];
+                }
+                if ($val[$description_index] < 15000){
+                    $below15 += $val[$countindex];
+                }
+            }
             $result .= "<tr>
         <td>". $val[$description_index] . "</td>
         <td>" . number_format($val[$countindex]/$val_denominator*100) . "%</td>
@@ -928,11 +963,32 @@ function la_casa_report_high_low_gen_html($cursor, $report_subject, $val_denomin
     <td> " . $highest_val . "</td></tr>";
     $result .= "<tr><td colspan = 2><strong> Average " . $report_subject . " </strong></td>
 <td> " . $avg_numerator/$val_denominator . " </td></tr>";
+    if ($is_income){
+        $result .= "<tr>
+        <td colspan = 2><strong> Below $50,000 Annual Income 
+</strong></td><td> " . number_format($below50/$val_denominator * 100) . "%</td></tr>";
+        $result .= "<tr>
+        <td colspan = 2><strong> Below $25,000 Annual Income 
+</strong></td><td> " . number_format($below25/$val_denominator * 100) . "%</td></tr>";
+        $result .= "<tr>
+        <td colspan = 2><strong> Below $15,000 Annual Income 
+</strong></td><td> " . number_format($below15/$val_denominator * 100) . "%</td></tr>";
+
+    }
     return $result;
 }
 /*
 Inputs: CURSOR = result of mysqli_query() 
-        INDEX is index into each row from cursor
+        VAL_DENOMINATOR is the denominator for the percentages.
+              Usually this is $students_denominator, calculated above.  It
+              is the number of people linked to the La Casa program (note
+              that not all of these people have information in the
+              La_Casa_Basics table).
+        ED_ACHIEVEMENT is a flag marking whether this call is from an
+        educational achievement report.
+        COUNTINDEX is the index of the count in the cursor.
+        DESCRIPTION_INDEX is the index of the result (e.g., the race)
+              in the cursor.
 Outputs: The result is a string that is a set of html table rows (see below).
 
 Call this to provide rows to be inserted into a La Casa table.  For example:
@@ -946,17 +1002,45 @@ This function returns the rows of information from "Hispanic or Latino" to the f
 
 Reports that display a list include: Race/Ethnicity, Major, College, Hometown
  */
-function la_casa_report_list_gen_html($cursor, $val_denominator, $countindex = 0, $description_index = 1)
+        function la_casa_report_list_gen_html($cursor, $val_denominator, $ed_achievement = false, $ed_aspiration = false, $countindex = 0, $description_index = 1, $education_index = 2)
 {
     $result = "";
     $reporting_number = 0;
     $null_count = 0;
     $count_distinct_results = 0;
+    $hs_diploma_id_sqlsafe = "SELECT Education_ID FROM Educational_Levels WHERE Education_Level_Name = 'High School Diploma'";
+    $hs_diploma_id = mysqli_query($cnnTRP, $hs_diploma_id_sqlsafe);
+    $diploma_id = mysqli_fetch_row($hs_disploma_id);
+    $hs_diploma = $diploma_id[0];
+    $bachelors_id_sqlsafe = "SELECT Education_ID FROM Educational_Levels WHERE Education_Level_Name = 'Bachelors Degree'";
+    $bachelors_id = mysqli_query($cnnTRP, $bachelors_id_sqlsafe);
+    $bach_id = mysqli_fetch_row($bachelors_id);
+    $bachelors = $bach_id[0];
+    $masters_id_sqlsafe = "SELECT Education_ID FROM Educational_Levels WHERE Education_Level_Name = 'Masters Degree'";
+    $masters_id = mysqli_query($cnnTRP, $masters_id_sqlsafe);
+    $mas_id = mysqli_fetch_row($masters_id);
+    $masters = $mas_id[0];
+    $bachelors_plus = 0;
+    $hs_less = 0;
+    $masters_plus = 0;
     while ($val = mysqli_fetch_row($cursor)) {
         $reporting_number += $val[$countindex];
         if ($val[$description_index] != null){
+            if ($ed_achievement){
+                if ($val[$education_index] < $hs_diploma){
+                    $hs_less += $val[$countindex];
+                }
+                if ($val[$education_index] >= $bachelors){
+                    $bachelors_plus += $val[$countindex];
+                }
+            }
+            if ($ed_aspiration){
+                if ($val[$education_index] >= $masters){
+                    $masters_plus += $val[$countindex];
+                }
+            }
             $count_distinct_results++;
-        $result .= "<tr>
+            $result .= "<tr>
         <td>". $val[$description_index] . "</td>
         <td>" . number_format($val[$countindex]/$val_denominator*100) . "%</td>
         <td>" . $val[$countindex] . "</td>
@@ -973,7 +1057,16 @@ function la_casa_report_list_gen_html($cursor, $val_denominator, $countindex = 0
 </tr>
 <tr><td colspan = 2><strong> Unique results </strong></td>
 <td>" . $count_distinct_results . "</td>";
-    
+    if ($ed_achievement){
+        $result .= "<tr><td> Percent who have earned a bachelor's or above </td>
+<td> " . number_format($bachelors_plus/$val_denominator * 100) . "% </td></tr>";
+        $result .= "<tr><td> Percent who have earned less than a high school diploma </td>
+<td> " . number_format($hs_less/$val_denominator * 100) . "% </td></tr>";
+    }
+    if ($ed_aspiration){
+        $result .= "<tr><td> Percent who aspire to a Master's degree or more </td>
+<td> " . number_format($masters_plus/$val_denominator * 100) . "% </td></tr>";
+    }
     return $result;
 }
         
@@ -1013,17 +1106,9 @@ function la_casa_report_list_gen_html($cursor, $val_denominator, $countindex = 0
 <?php 
 $income_sum_sqlsafe = "SELECT COUNT(*), Parent1_AGI + Parent2_AGI +  Student_AGI AS Sum_AGI FROM La_Casa_Basics GROUP BY Sum_AGI;";
 $income_counts = mysqli_query($cnnTRP, $income_sum_sqlsafe);
-$below50 = 0;
-$below25 = 0;
-$below15 = 0;
-echo la_casa_report_high_low_gen_html($income_counts, "Household Income", $students_denominator);
+$incomeflag = true;
+echo la_casa_report_high_low_gen_html($income_counts, "Household Income", $students_denominator, $incomeflag);
 ?>
-<tr><td colspan = "2"><strong>Below $50,000 Annual Income</strong></td>
-<td><?php echo  $below50; ?></td></tr>
-<tr><td colspan = "2"><strong>Below $25,000 Annual Income</strong></td>
-<td><?php echo  $below25; ?></td></tr>
-<tr><td colspan = "2"><strong>Below $15,000 Annual Income</strong></td>
-<td><?php echo  $below15; ?></td></tr>
 </table>
 
 <table class = "inner_table">
@@ -1107,7 +1192,8 @@ echo la_casa_report_list_gen_html($gender, $students_denominator);
 <?php
 $lc_father_ed_join_sqlsafe = "SELECT COUNT(*), Education_Level_Name, Education_ID FROM Participants INNER JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID LEFT JOIN La_Casa_Basics ON Participants.Participant_ID = La_Casa_Basics.Participant_ID_Students LEFT JOIN Educational_Levels ON La_Casa_Basics.Father_Highest_Level_Education = Education_ID WHERE Participants_Programs.Program_ID = 6 GROUP BY Father_Highest_Level_Education;";
 $father_ed_counts = mysqli_query($cnnTRP, $lc_father_ed_join_sqlsafe);
-echo la_casa_report_list_gen_html($father_ed_counts, $students_denominator);
+$educational_achievement_flag = true;
+echo la_casa_report_list_gen_html($father_ed_counts, $students_denominator, $educational_achievement_flag);
 ?>
 </table>
 <table class = "inner_table">
@@ -1116,7 +1202,8 @@ echo la_casa_report_list_gen_html($father_ed_counts, $students_denominator);
 <?php
 $lc_mother_ed_join_sqlsafe = "SELECT COUNT(*), Education_Level_Name, Education_ID FROM Participants INNER JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID LEFT JOIN La_Casa_Basics ON Participants.Participant_ID = La_Casa_Basics.Participant_ID_Students LEFT JOIN Educational_Levels ON La_Casa_Basics.Mother_Highest_Level_Education = Education_ID WHERE Participants_Programs.Program_ID = 6 GROUP BY Mother_Highest_Level_Education;";
 $mother_ed_counts = mysqli_query($cnnTRP, $lc_mother_ed_join_sqlsafe);
-echo la_casa_report_list_gen_html($mother_ed_counts, $students_denominator);
+$educational_achievement_flag = true;
+echo la_casa_report_list_gen_html($mother_ed_counts, $students_denominator, $educational_achievement_flag);
 ?>
 </table>
 <table class = "inner_table">
@@ -1125,7 +1212,9 @@ echo la_casa_report_list_gen_html($mother_ed_counts, $students_denominator);
 <?php
 $lc_student_aspiration_join_sqlsafe = "SELECT COUNT(*), Education_Level_Name, Education_ID FROM Participants INNER JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID LEFT JOIN La_Casa_Basics ON Participants.Participant_ID = La_Casa_Basics.Participant_ID_Students LEFT JOIN Educational_Levels ON La_Casa_Basics.Student_Aspiration = Education_ID WHERE Participants_Programs.Program_ID = 6 GROUP BY Student_Aspiration;";
 $student_aspiration_counts = mysqli_query($cnnTRP, $lc_student_aspiration_join_sqlsafe);
-echo la_casa_report_list_gen_html($student_aspiration_counts, $students_denominator);
+$education_aspiration_flag = true;
+$educational_achivement_flag = false;
+echo la_casa_report_list_gen_html($student_aspiration_counts, $students_denominator, $educational_achivement_flag, $education_aspiration_flag);
 ?>
 </table>
 <table class = "inner_table">
