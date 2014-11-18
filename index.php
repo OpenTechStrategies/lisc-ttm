@@ -1,6 +1,6 @@
 <?php
 //if action is logout
-if ($_GET['action'] == 'logout') {
+if ( (isset($_GET['action'])) && $_GET['action'] == 'logout') {
     //kill cookie
     setcookie('user', '', time() - 3600, '/');
     setcookie('page', '', time() - 3600, '/');
@@ -70,6 +70,7 @@ if ($_GET['action'] == 'logout') {
                 //echo $get_privilege_name_sqlsafe;
                 $privilege_name = mysqli_query($cnnLISC, $get_privilege_name_sqlsafe);
                 $name = mysqli_fetch_array($privilege_name);
+                var_dump($name);
                 if ($name['Privilege_Name'] == 'Bickerdike') {
                     ?>
                     You have access to the <a href="/bickerdike/">Bickerdike</a> site information. <br>
