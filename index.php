@@ -70,7 +70,6 @@ if ( (isset($_GET['action'])) && $_GET['action'] == 'logout') {
                 //echo $get_privilege_name_sqlsafe;
                 $privilege_name = mysqli_query($cnnLISC, $get_privilege_name_sqlsafe);
                 $name = mysqli_fetch_array($privilege_name);
-                var_dump($name);
                 if ($name['Privilege_Name'] == 'Bickerdike') {
                     ?>
                     You have access to the <a href="/bickerdike/">Bickerdike</a> site information. <br>
