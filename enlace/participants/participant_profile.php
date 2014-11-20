@@ -843,7 +843,7 @@ forms as well.-->
         FROM Participants_Mentorship LEFT JOIN Session_Names
         ON Mentorship_Program=Session_ID
         LEFT JOIN Programs ON Programs.Program_Id=Session_Names.Program_Id
-        WHERE Mentee_ID='" . $person->participant_id . "' ORDER BY Mentorship_Date";
+        WHERE Mentee_ID='" . $person->participant_id . "' ORDER BY Mentorship_Date DESC";
         // echo $get_mentee_hours;
         include "../include/dbconnopen.php";
         $mentee_hours = mysqli_query($cnnEnlace, $get_mentee_hours);

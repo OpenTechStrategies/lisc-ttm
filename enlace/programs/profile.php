@@ -669,8 +669,9 @@ Shows all program information.
                                     function(response) {
                                         document.getElementById('show_results').innerHTML = response;
                                         $('.add_new_person_to_session').show();
-                                    });"/><div id="show_results"></div>
-                            <span class="helptext">Select the name of the session this person participated in: </span>
+                                    });"/>
+                            <div id="show_results"></div>
+                            <div id="session_selector"><span class="helptext">Select the name of the session this person participated in: </span>
                                    <?php
                                    $related_sessions = "SELECT * FROM Session_Names WHERE Program_ID=$program->program_id";
                                    ?>
@@ -688,6 +689,7 @@ while ($sess = mysqli_fetch_row($sessions)) {
                                 include "../include/dbconnclose.php";
                                 ?>
                             </select>
+                            </div>
                             <input type="button" value="Add Participant" onclick="
                                     var session = document.getElementById('add_to_session').value;
                                     if (session == '') {
