@@ -1135,7 +1135,7 @@ echo la_casa_report_list_gen_html($num_colleges, $students_denominator);
 <caption> Total Credit Accrual To Date </caption>
 <tr><th> Credits Completed </th><th>Percent</th><th>Count</th></tr>
 <?php
-$sum_of_credits_sqlsafe = "SELECT Participant_ID_Students, SUM(Credits) FROM La_Casa_Basics GROUP BY Participant_ID_Students ORDER BY SUM(Credits);";
+$sum_of_credits_sqlsafe = "SELECT Count(*), Credit_Range FROM La_Casa_Basics INNER JOIN (SELECT  Participant_ID_Students, SUM(Credits) AS Credit_Range FROM La_Casa_Basics GROUP BY Participant_ID_Students) Result_Table ON Result_Table.Participant_ID_Students = La_Casa_Basics.Participant_ID_Students GROUP BY Credit_Range;";
 $sum_credits = mysqli_query($cnnTRP, $sum_of_credits_sqlsafe);
 echo la_casa_report_high_low_gen_html($sum_credits, "Credit Accrual", $students_denominator);
 ?>
