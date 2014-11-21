@@ -7,7 +7,7 @@ if ($_POST['action']=='edit' && $_POST['subject'] == 'college'){
          Term_Type  = '" . mysqli_real_escape_string($cnnTRP, $_POST['term_type']) . "',
          Term  = '" . mysqli_real_escape_string($cnnTRP, $_POST['term_id']) . "',
          School_Year  = '" . mysqli_real_escape_string($cnnTRP, $_POST['school_year']) . "',
-         Credits = '" . mysqli_real_escape_string($cnnTRP, $_POST['credits']) . "',
+         Credits = '" . mysqli_real_escape_string($cnnTRP, $_POST['credits']) . "'
 WHERE Student_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
    echo $edit_college_data_sqlsafe;
    mysqli_query($cnnTRP, $edit_college_data_sqlsafe);

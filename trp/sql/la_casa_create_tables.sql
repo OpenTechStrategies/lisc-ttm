@@ -55,7 +55,6 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `ACT_Score` int(5),
 `High_School_GPA` int(10),
 `Dependency_Status` int(1),
-`Gender` int(1),
 `Father_Highest_Level_Education` varchar(30),
 `Mother_Highest_Level_Education` varchar(30),
 `Student_Aspiration` varchar(30),

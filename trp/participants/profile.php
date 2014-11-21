@@ -2056,81 +2056,141 @@ if ($parti['Gender'] == 'm') {
                                 <?php
                             }
             else if ($program['Program_ID'] == 6 && ($access == 'a' || $access == 6)) {
+
+function la_casa_display_data_gen_html($result_row_item, $class_string, $array_of_options){
+    $result = "<span class = " . $class_string . ">";
+    if (array_key_exists( $result_row_item, $array_of_options)){
+        $result .= $array_of_options[$result_row_item];
+    }
+    else{
+        $result .= $result_row_item;
+    }
+    $result .= "</span>";
+    return $result;
+}
+
+function la_casa_edit_data_gen_html($array_of_options, $existing_value, $id_string, $class_string){
+    $result = "<select id = " . $id_string . " class = " . $class_string . "><option value = 0>----</option>";
+    foreach ($array_of_options as $val => $display){
+        $result .= "<option value = " . $val . " " . ($existing_value == $val ? 'selected="selected"' : null) . ">" . $display . " </option>";
+}
+    $result .= "</select>";
+    return $result;
+}
                ?> 
             <div class="program_details">
             <h4>La Casa Information</h4>
+<table class="inner_table">
+<caption>Constant Data</caption>
+<?php
+$column_array = array("Household Size", "Parent1 AGI", "Parent2 AGI", "Student AGI", "ACT Score", "High School GPA", "Dependency Status", "Father's Highest Level of Education", "Mother's Highest Level of Education", "Student's Aspiration", "First Generation College Student?", "Hometown", "High School");
+$find_constant_la_casa_sqlsafe = "SELECT Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, ACT_Score, High_School_GPA, Dependency_Status, Father_Highest_Level_Education, Mother_Highest_Level_Education, Student_Aspiration, First_Generation_College_Student, Student_Hometown, Student_High_School FROM La_Casa_Basics WHERE Participant_ID_Students = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+$constant_data=mysqli_query($cnnTRP, $find_constant_la_casa_sqlsafe);
+$constant=mysqli_fetch_row($constant_data);
+$editable_class = "constant_data_editable_" . $constant[5];
+$display_class = "constant_data_display_" . $constant[5];
+foreach ($column_array as $key => $value){
+?>
+                    <tr>
+                    <td><strong>
+<?php echo $value; ?>
+                    </strong></td>
+                    <td>
+<?php echo $constant[$key]; ?>
+                    </td>
+                    </tr>
+<?php
+}
+?>
+</table>
             <table class="inner_table">
                 <caption>College Data</caption>
                 <tr><th>Year</th><th>School Name</th><th>Term Type (Semester or Quarter)</th>
                     <th>Term (Fall, Winter, Spring, Summer)</th>
-                    <th>Credits Earned</th>
+                    <th>Credits Earned</th><th>Major</th><th>GPA</th><th>Match Level</th>
                 </tr>
                 <?php
+
                 include "../include/dbconnopen.php";
-                $find_college_data_sqlsafe="SELECT College_Name, Term_Type, Term, School_Year, Credits, Student_ID FROM La_Casa_Basics LEFT JOIN Colleges ON La_Casa_Basics.College_ID=Colleges.College_ID WHERE Participant_ID_Students = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+                $find_college_data_sqlsafe="SELECT College_Name, Term_Type, Term, School_Year, Credits, Student_ID, Major, College_GPA, College_Match FROM La_Casa_Basics LEFT JOIN Colleges ON La_Casa_Basics.College_ID=Colleges.College_ID WHERE Participant_ID_Students = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+
 
                 $college_data=mysqli_query($cnnTRP, $find_college_data_sqlsafe);
                 $total_credits = 0;
                 while ($coldat=mysqli_fetch_row($college_data)){
+$editable_class = "college_data_editable_" . $coldat[5];
+$display_class = "college_data_display_" . $coldat[5];
                     $total_credits += $coldat[4];
                     ?>
-                                <tr>
-                    <td><span class = "hide_college_data_<?php echo $coldat[5]; ?> " > <?php echo $coldat[3]; ?> </span>
-                    <select id = "college_year_id" class = "hide_college_data show_college_edit_<?php echo $coldat[5]; ?>">
-                              <option value = "0">-----</option>
-                              <option value = "2014" <?php echo ($coldat[3] == '2014' ? 'selected="selected"' : null); ?>> 2014 </option>
-                              <option value = "2015" <?php echo ($coldat[3] == '2015' ? 'selected="selected"' : null); ?>> 2015 </option>
-                              <option value = "2016" <?php echo ($coldat[3] == '2016' ? 'selected="selected"' : null); ?>> 2016 </option>
-                              <option value = "2017" <?php echo ($coldat[3] == '2017' ? 'selected="selected"' : null); ?>> 2017 </option>
-                              </select>
-
+                    <tr>
+                    <td>
+<?php
+$college_year_array = array(2014 => '2014', 2015 => '2015', 2016 => '2016', 2017 => '2017');
+echo la_casa_display_data_gen_html($coldat[3], $display_class, $college_year_array);
+echo la_casa_edit_data_gen_html($college_year_array, $coldat[3], "college_year_id", $editable_class);
+?>
                     </td>
-
-<td><span class = "hide_college_data_<?php echo $coldat[5]; ?>" > <?php echo $coldat[0]; ?> </span>
-                              <select id = "college_id" class = "hide_college_data show_college_edit_<?php echo $coldat[5]; ?>">
-                              <option value = "0">-----</option>
-                              <?php 
-                              $get_college_list_sqlsafe = "SELECT * FROM Colleges";
-                              include "../include/dbconnopen.php";
-                              $college_list = mysqli_query($cnnTRP, $get_college_list_sqlsafe);
-                              while ($college = mysqli_fetch_row($college_list)){
-                                    ?>
-                                    <option <?php echo($coldat[0] == $college[1] ? 'selected="selected"' : null); ?> value = "<?php echo $college[0]; ?>" > <?php echo $college[1]; ?> </option>
-                                    <?php
-                              }
-                              ?>
-                              </select>
-                              </td>
-                    <td><span class = "hide_college_data_<?php echo $coldat[5]; ?>" > <?php
-if ($coldat[1] == 1 ){ echo " Semester";}
-elseif ($coldat[1] == 2 ){ echo " Quarter";}
-  ?> </span>
-                              <select id = "term_type" class = "hide_college_data show_college_edit_<?php echo $coldat[5]; ?>">
-                              <option <?php echo($coldat[1] == '0' ? 'selected="selected"' : null); ?> value = "0">-----</option>
-                              <option <?php echo($coldat[1] == '1' ? 'selected="selected"' : null); ?> value = "1"> Semester </option>
-                              <option <?php echo($coldat[1] == '2' ? 'selected="selected"' : null); ?> value = "2"> Quarter </option>
-                              </select>
-</td>
-                    <td><span class = "hide_college_data_<?php echo $coldat[5]; ?>" >
-<?php 
-if ($coldat[2] == 1 ){ echo " Fall";}
-elseif ($coldat[2] == 2 ){ echo " Winter";}
-elseif ($coldat[2] == 3 ){ echo " Spring";}
-elseif ($coldat[2] == 4 ){ echo " Summer";}
- ?>                      </span>        
-                    <select id = "term_id" class = "hide_college_data show_college_edit_<?php echo $coldat[5]; ?>">
-                              <option <?php echo ($coldat[2] == '0' ? 'selected="selected"' : null); ?> value = "0">-----</option>
-                               <option <?php echo ($coldat[2] == '1' ? 'selected="selected"' : null); ?> value = "1"> Fall </option>
-                              <option <?php echo ($coldat[2] == '2' ? 'selected="selected"' : null); ?> value = "2"> Winter </option>
-                              <option <?php echo ($coldat[2] == '3' ? 'selected="selected"' : null); ?> value = "3"> Spring </option>
-                              <option <?php echo ($coldat[2] == '4' ? 'selected="selected"' : null); ?> value = "4"> Summer </option>
-                              </select>
-                              </td>
-                    <td><span class = "hide_college_data_<?php echo $coldat[5]; ?>" > <?php echo $coldat[4]; ?> </span>
-<input id = "credits" class = "hide_college_data show_college_edit_<?php echo $coldat[5]; ?>" value = "<?php echo $coldat[4]; ?>"> </td>
-                    <td><input type = "button" value = "Edit" onclick = "$('.show_college_edit_<?php echo $coldat[5]; ?>').toggle();
-$('.hide_college_data_<?php echo $coldat[5]; ?>').toggle();">
-                    <input type = "button" class = "hide_college_data show_college_edit_<?php echo $coldat[5]; ?>" value = "Save"
+                    <td>
+<?php
+$get_college_list_sqlsafe = "SELECT * FROM Colleges";
+$college_list = mysqli_query($cnnTRP, $get_college_list_sqlsafe);
+$college_array = array();
+while ($college = mysqli_fetch_row($college_list)){
+    $college_array[$college[0]] = $college[1];
+}
+echo la_casa_display_data_gen_html($coldat[0], $display_class, $college_array);
+echo la_casa_edit_data_gen_html($college_array, $coldat[0], "college_id", $editable_class);
+?>
+                    </td>
+                    <td>
+<?php
+$term_array = array(1 => 'Semester', 2 => 'Quarter');
+echo la_casa_display_data_gen_html($coldat[1], $display_class, $term_array);
+echo la_casa_edit_data_gen_html($term_array, $coldat[1], "term_type", $editable_class);
+?>
+                    </td>
+                    <td>
+<?php
+$season_array = array(1 => 'Fall', 2 => 'Winter', 3 => 'Spring', 4 => 'Summer');
+echo la_casa_display_data_gen_html($coldat[2], $display_class, $season_array);
+echo la_casa_edit_data_gen_html($season_array, $coldat[2], "term_id", $editable_class);
+?>
+                    </td>
+                    <td>
+<?php
+echo la_casa_display_data_gen_html($coldat[4], $display_class);
+?>
+<input id = "credits" class = "<?php echo $editable_class; ?>" value = "<?php echo $coldat[4]; ?>">
+                    </td>
+                    <td>
+<?php
+$get_major_list_sqlsafe = "SELECT DISTINCT Major FROM La_Casa_Basics";
+$major_list = mysqli_query($cnnTRP, $get_major_list_sqlsafe);
+$major_array = array();
+while ($major = mysqli_fetch_row($major_list)){
+    $major_array[] = $major[0];
+}
+echo la_casa_display_data_gen_html($coldat[6], $display_class, $major_array);
+echo la_casa_edit_data_gen_html($major_array, $coldat[6], "major_id", $editable_class);
+?>
+                    </td>
+                    <td>
+<?php
+echo la_casa_display_data_gen_html($coldat[7], $display_class);
+?>
+<input id = "credits" class = "<?php echo $editable_class; ?>" value = "<?php echo $coldat[7]; ?>">
+                    </td>
+                    <td>
+<?php
+$match_array = array(1 => 'Above Match', 2 => 'Match', 3 => 'Below Match');
+echo la_casa_display_data_gen_html($coldat[8], $display_class, $match_array);
+echo la_casa_edit_data_gen_html($match_array, $coldat[8], "match_id", $editable_class);
+?>
+                    </td>
+                    <td>
+<input type = "button" value = "Edit" onclick = "$('.<?php echo $display_class ?>').toggle();
+$('.<?php echo $editable_class; ?>').toggle();">
+                    <input type = "button" class = "<?php echo $editable_class; ?>" value = "Save"
                     onclick = "
                     $.post(
                         '../ajax/save_la_casa_info.php',
@@ -2155,66 +2215,47 @@ $('.hide_college_data_<?php echo $coldat[5]; ?>').toggle();">
                 ?>
                 <tr>
                     <td>
-                    <select id = "new_college_year_id">
-                              <option value = "0">-----</option>
-                              <option value = "2014" > 2014 </option>
-                              <option value = "2015" > 2015 </option>
-                              <option value = "2016" > 2016 </option>
-                              <option value = "2017" > 2017 </option>
-                              </select>
-
+<?php
+echo la_casa_edit_data_gen_html($college_year_array, 0, "new_college_year_id", $editable_class);
+?>
                     </td>
-
-<td>
-                              <select id = "new_college_id">
-                              <option value = "0">-----</option>
-                              <?php 
-                              $get_college_list_sqlsafe = "SELECT * FROM Colleges";
-                              include "../include/dbconnopen.php";
-                              $college_list = mysqli_query($cnnTRP, $get_college_list_sqlsafe);
-                              while ($college = mysqli_fetch_row($college_list)){
-                                    ?>
-                                    <option value = "<?php echo $college[0]; ?>" > <?php echo $college[1]; ?> </option>
-                                    <?php
-                              }
-                              ?>
-                              </select>
-                              </td>
                     <td>
-                              <select id = "new_term_type">
-                              <option value = "0">-----</option>
-                              <option value = "1"> Semester </option>
-                              <option value = "2"> Quarter </option>
-                              </select>
-</td>
+<?php
+echo la_casa_edit_data_gen_html($college_array, 0, "new_college_id", $editable_class);
+?>
+                    </td>
                     <td>
-                    <select id = "new_term_id">
-                              <option value = "0">-----</option>
-                              <option value = "1"> Fall </option>
-                              <option value = "2"> Winter </option>
-                              <option value = "3"> Spring </option>
-                              <option value = "4"> Summer </option>
-                              </select>
-                              </td>
-                    <td><input type="text" id="new_credits"></td>
-                    <td><input type="button" value="Add New" onclick=" 
-                                    $.post(
-                        '../ajax/save_la_casa_info.php',
-                        {
-                          action: 'new',
-                                subject: 'college',
-                                college_id: document.getElementById('new_college_id').value,
-                                term_type: document.getElementById('new_term_type').value,
-                                term_id: document.getElementById('new_term_id').value,
-                                school_year: document.getElementById('new_college_year_id').value,
-                                credits: document.getElementById('new_credits').value,
-                                person: '<?php echo $parti['Participant_ID']; ?>'
-                                }, 
-                function(response) {
-                    document.write(response);
-                }
-                        );"
-></td>
+<?php
+echo la_casa_edit_data_gen_html($term_array, 0, "new_term_type", $editable_class);
+?>
+                    </td>
+                    <td>
+<?php
+echo la_casa_edit_data_gen_html($season_array, 0, "new_term_id", $editable_class);
+?>
+                    </td>
+                    <td>
+<input type="text" id="new_credits">
+                    </td>
+                    <td>
+<input type="button" value="Add New" onclick=" 
+$.post(
+    '../ajax/save_la_casa_info.php',
+    {
+      action: 'new',
+            subject: 'college',
+            college_id: document.getElementById('new_college_id').value,
+            term_type: document.getElementById('new_term_type').value,
+            term_id: document.getElementById('new_term_id').value,
+            school_year: document.getElementById('new_college_year_id').value,
+            credits: document.getElementById('new_credits').value,
+            person: '<?php echo $parti['Participant_ID']; ?>'
+            }, 
+    function(response) {
+        document.write(response);
+    }
+);">
+                    </td>
                 </tr>
                 <tr>
                      <td colspan="4">Total Credits earned: </td>
