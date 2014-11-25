@@ -2154,11 +2154,12 @@ $.post(
             first_gen: document.getElementById('firstgen_edit').value,
             hometown: document.getElementById('hometown_edit').value,
             hs: document.getElementById('hs_edit').value,
-            id: <?php echo $constant[13]; ?> //student ID
+            id: <?php echo $parti['Participant_ID']; ?>
     },
 function(response){
     document.write(response); //testing output
-});">
+});
+">
 </td></tr>
 </table>
 <p></p>
