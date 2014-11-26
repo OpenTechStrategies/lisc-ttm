@@ -7,6 +7,7 @@ if ($_GET['action'] == 'logout') {
     if ($loggingout){
         session_unset();
         session_destroy();
+        $_SESSION['is_logged_in'] = false;
         //kill cookie
         setcookie('PHPSESSID', '', time() - 3600, '/');
         setcookie('user', '', time() - 3600, '/');

@@ -1,7 +1,7 @@
 <?php
 require("../include/phpass-0.3/PasswordHash.php");
 $hasher=new PasswordHash(8, false);
-
+require("session_test.php");
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 if (isset($_POST['username'])){
     $username = $_POST["username"];
@@ -52,6 +52,14 @@ if ($hash_match) {
        $expire_time_sqlsafe = date('Y-m-d H:i:s', time() + 7200);
        $save_session_sqlsafe = "INSERT INTO User_Sessions (PHP_Session, User_ID, Expire_Time) VALUES ('" . $php_session_sqlsafe . "', '" . $user_id . "', '" . $expire_time_sqlsafe . "')";
        mysqli_query($cnnLISC, $save_session_sqlsafe);
+
+       //saving permission information in a session, also
+       //deprecating the use of the stored routine at @akshay's suggestion
+
+       //this site_access element holds an array of subsites (keys) and user
+       //role for each subsite (value)
+       $_SESSION['site_access'] = getAllSiteAccess($user_id); 
+       $_SESSION['is_logged_in'] = true;
 
        //now find which, if any, privileges they have and set an appropriate cookie
        $privileges_query = "CALL User__Find_Privileges('$username_sqlsafe')";

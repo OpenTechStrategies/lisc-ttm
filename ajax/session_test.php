@@ -59,6 +59,19 @@ function getSiteAccess($session_id, $site){
     return $access_return;
 }
 
+function getAllSiteAccess($user_id){
+    $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+    include $path; //connection to core db
+    $user_id_sqlsafe = mysqli_real_escape_string($cnnLISC, $user_id);
+    $find_site_access_sqlsafe = "SELECT Privilege_ID, Site_Privilege_ID FROM Users_Privileges WHERE User_ID =" . $user_id;
+    $access_result = mysqli_query($cnnLISC, $find_site_access_sqlsafe);
+    $access_return = array();
+    while ($access = mysqli_fetch_row($access_result)){
+        $access_return[$access[0]] = $access[1];
+    }
+    return $access_return;
+}
+
 function getPermissionLevel($session_id, $site){
     $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
     include $path; //connection to core db
