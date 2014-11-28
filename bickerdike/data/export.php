@@ -2,8 +2,6 @@
 include "../../header.php";
 include "../header.php";
 
-//include ($_SERVER['DOCUMENT_ROOT']."/include/block_group_finder.php");
-
 /*
  * Export everything, divided into identified and de-identified.
  */

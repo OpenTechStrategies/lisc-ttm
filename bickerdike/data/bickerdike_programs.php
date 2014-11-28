@@ -11,7 +11,6 @@ aldermanic funds for environmental improvements, and healthy item sales data.
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#data_selector').addClass('selected');
-                //$('.hide_on_view').hide();
 	});
 </script>
 
@@ -28,15 +27,7 @@ aldermanic funds for environmental improvements, and healthy item sales data.
         include "../include/dbconnclose.php";
         echo $count;
     ?></strong></li>
-<!--    <li>Number of advertisements (etc.) for media messages</li>-->
 </ul></div>
-<!--    <table>
-        <tr><th>Organization Name |</th>
-            <th>Partners |</th>
-            <th>Location(s)</th>
-        </tr>
-    </table>-->
-    
     <p></p>
 
     <p></p>
@@ -84,7 +75,6 @@ aldermanic funds for environmental improvements, and healthy item sales data.
                                                             date: document.getElementById('bike_date').value
                                                         },
                                                         function (response){
-                                                           // document.write(response);
                                                            window.location = 'bickerdike_programs.php';
                                                         }
                                                 )"></td>

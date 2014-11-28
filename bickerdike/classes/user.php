@@ -33,14 +33,10 @@ class User
         $this->user_id = $user_id_sqlsafe;
 
         $str_sqlsafe = "Call User__Load_With_ID('" . $this->user_id . "')";
-
-        //echo $str_sqlsafe;
         $user_info = mysqli_query($cnnBickerdike, $str_sqlsafe);
         
         //set public variables
         $user_info_temp = mysqli_fetch_array($user_info);
-
-        //$this->user_id = $user_info_temp['user_ID']; 
         $this->user_first_name = $user_info_temp['First_Name'];
         $this->user_last_name = $user_info_temp['Last_Name'];
         $this->full_name = $user_info_temp['First_Name'] . " " . $user_info_temp['Last_Name'];
@@ -100,7 +96,6 @@ class User
         include "../include/dbconnopen.php";
         $user_programs_query_sqlsafe = "SELECT * FROM Programs LEFT JOIN (Programs_Users)
                                 ON (Programs_Users.Program_ID=Programs.Program_ID) WHERE Programs_Users.User_ID='" . $this->user_id . "'";
-        //echo $user_activities_query_sqlsafe;
         $programs = mysqli_query($cnnBickerdike, $user_programs_query_sqlsafe);
         include "../include/dbconnclose.php";
         
@@ -117,7 +112,6 @@ class User
     INNER JOIN Programs
     ON Programs.Program_ID=Participant_Survey_Responses.Program_ID
 WHERE User_ID='" . $this->user_id . "'";
-        //echo $user_activities_query_sqlsafe;
         $surveys = mysqli_query($cnnBickerdike, $user_surveys_query_sqlsafe);
         include "../include/dbconnclose.php";
         

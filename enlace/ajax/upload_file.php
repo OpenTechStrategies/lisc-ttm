@@ -8,7 +8,6 @@ include "../header.php";?>
 <?php
 /*add a file to the database.*/
 
-//print_r($_POST);
 echo "Upload: " . $_FILES["file"]["name"] . "<br />";
 echo "Type: " . $_FILES["file"]["type"] . "<br />";
 echo "Size: " . ($_FILES["file"]["size"] / 1024) . " Kb<br />";
@@ -16,14 +15,9 @@ echo "Size: " . ($_FILES["file"]["size"] / 1024) . " Kb<br />";
 /*make sure the filetype is allowed.*/
 $allowedExts = array("pdf", "doc", "docx", "zip", "xls", "xlsx");
 $extension = end(explode(".", $_FILES["file"]["name"]));
-//echo $_FILES['file']['size'];
-//print_r($allowedExts);
 if (($_FILES["file"]["size"] < 1000000)
-        && in_array($extension, $allowedExts)) { //(($_FILES["file"]["type"] == "application/pdf")|| ($_FILES["file"]["type"] == "application/msword")) && 
-   // echo "<Br> got into the db condition <br>";
+        && in_array($extension, $allowedExts)) {
     include ("../include/dbconnopen.php");
-//  if(isset($_POST['upload']) && $_FILES['userfile']['size'] > 0)
-//{
     
     /*if id is set correctly, then run the query.*/
     if (isset($_POST['event_id'])) {

@@ -74,7 +74,6 @@ include "../../bickerdike/header.php";
                         additional_dates: dates
                     },
                     function (response){
-                        //document.write(response);
                         document.getElementById('show_response').innerHTML = 'Thank you for adding this program! Now add users.';
                     }
                )

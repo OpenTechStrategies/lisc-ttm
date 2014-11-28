@@ -44,7 +44,6 @@ Choose adult, parent, or youth results:
 <input type="submit" value="OK">
 </form>
 <?
-//print_r($_POST);
 
 include "../include/dbconnopen.php";
 $type_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['type']);
@@ -96,7 +95,6 @@ if ($_POST['year']=='avg'){
 }
 else{
 $get_year_sqlsafe = "SELECT Date_Administered FROM Community_Wellness_Survey_Aggregates WHERE Community_Wellness_Survey_ID='" . $year_sqlsafe . "'";
-//echo $get_year_sqlsafe;
 include "../include/dbconnopen.php";
 $year = mysqli_query($cnnBickerdike, $get_year_sqlsafe);
 $yr = mysqli_fetch_row($year);

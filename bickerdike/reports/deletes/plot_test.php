@@ -1,11 +1,3 @@
-<!--<script language="javascript" type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/jquery.min.js"></script>
-<script language="javascript" type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/jquery.jqplot.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/include/jquery.jqplot.1.0.4r1121/jquery.jqplot.css" />
-
-<script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.jqplot.barRenderer.min.js"></script>
-<script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.jqplot.barRenderer.js"></script>
-<script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.categoryAxisRenderer.min.js"></script>
-<script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.pointLabels.min.js"></script>-->
 <!--[if IE]>
 <script src="/include/excanvas_r3/excanvas.js"></script>
 <![endif]-->

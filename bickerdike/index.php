@@ -161,22 +161,8 @@ include "../bickerdike/header.php";
 				</table><br/>
 				<div id="show_program_results"></div>
 		</td>
-		<!--<td><a href="activities/new_activity.php"class="add_new"><span class="add_new_button">Create New Event</span></a></td>-->
 	</tr>
 </table>
-
-<!--<a href="include/reports.php">View Reports</a><br>
-<a href="include/data.php">View Survey Data</a>
-<br>
-if admin:<br>
-<a href="">Create New Report</a><br>
-<a href="activities/new_activity.php">Add New Activity or Event</a><br>
-<a href="users/add_user.php">Add New User</a><br>
-<a href="">Add New Program</a>
-<p></p>
-<a href="activities/view_search_activities.php">View All Activities</a><br>
-<a href="activities/view_all_programs.php">View All Programs</a><br>
-<a href="users/all_users.php">Search/Edit Users</a><br>-->
 
 <br/><br/><br/>
 

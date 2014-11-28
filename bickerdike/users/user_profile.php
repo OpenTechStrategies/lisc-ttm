@@ -1,7 +1,6 @@
 <?php
 include "../../header.php";
 include "../header.php";
-//echo $_GET['id'];
 include "../classes/user.php";
 $user = new User();
 $user->load_with_user_id($_GET['id']);
@@ -26,7 +25,6 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
         $('.prog_3').hide();
         $('.prog_4').hide();
         $('.prog_5').hide();
-        //$('.hide_on_view').hide();
     });
 </script>
 
@@ -178,7 +176,6 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                                 <td><?php
                                     date_default_timezone_set('America/Chicago');
                                     $datetime = new DateTime($date['Program_Date']);
-                                    //echo $date . "<br>";
                                     echo date_format($datetime, 'M d, Y');
                                     ?></td>
                                 <!--Show existing attendance and add or remove attendance as necessary (with onchange)-->
@@ -194,9 +191,7 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                             <script text="javascript">
 
                                 function handleChange(cb, date) {
-                                    // alert("Changed, new value = " + cb.checked);
                                     if (cb.checked == true) {
-                                        //document.write('true/false works');
                                         $.post(
                                                 '../ajax/add_attendee.php',
                                                 {
@@ -204,7 +199,6 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                                                     program_date_id: date
                                                 },
                                         function(response) {
-                                            //document.write(response);
                                             window.location = "user_profile.php?id=<?php echo $user->user_id; ?>";
                                         }
                                         )
@@ -217,14 +211,10 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                                                     program_date_id: date
                                                 },
                                         function(response) {
-                                            //document.write(response);
                                             window.location = "user_profile.php?id=<?php echo $user->user_id; ?>";
                                         }
                                         );
                                     }
-                                    //                else{
-                                    //                    document.write('who knows what cb.checked is?? oh, it\'s this: '+cb.checked);
-                                    //                }
                                 }
                             </script>
 
@@ -240,14 +230,9 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                     <!--Create file for downloading attendance-->
 
                     <?php
-//if (!file_exists("/attendance_" .$user->user_id .".csv")){
-//    makefile("/attendance_" .$user->user_id .".csv");
-//}
                     $infile = "../data/downloads/attendance_" . $user->user_id . ".csv";
-//echo $infile;
                     $fp = fopen($infile, "w") or die('can\'t open file');
                     $query_sqlsafe = "Call User__Download_Attendance('" . $user->user_id . "')";
-//echo $query;
                     include "../include/dbconnopen.php";
                     if ($result = mysqli_query($cnnBickerdike, $query_sqlsafe)) {
                         while ($row = mysqli_fetch_array($result)) {
@@ -353,7 +338,6 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                                                     bmi: document.getElementById('bmi').value
                                                 },
                                         function(response) {
-                                            //document.write(response);
                                             window.location = 'user_profile.php?id=<?php echo $user->user_id; ?>';
                                         }
                                         )"></td>
@@ -453,11 +437,6 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
 
     </table>
     <?php
-//print_r($survey_responses_1);
-//echo "<br>";
-//print_r($survey_responses_2);
-//echo "<br>";
-//print_r($survey_responses_3);
     //Encoding the survey response arrays as json for their use in the bar graph
 
     $answers_to_json_1 = json_encode((array) $survey_responses_1);
@@ -492,10 +471,8 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
     );
     $infile2 = "../data/downloads/surveys_for_" . $user->user_id . ".csv";
     $fp = fopen($infile2, "w") or die('can\'t open file');
-//fputcsv($fp, array('Question', 'Pre', 'Post', 'Later'));
     for ($i = 0; $i < count($survey_responses_1); $i++) {
         $put_array = array($questions[$i], $survey_responses_1[$i], $survey_responses_2[$i], $survey_responses_3[$i]);
-        //fputcsv ($fp, $put_array);
     }
     fputcsv($fp, $questions);
     fputcsv($fp, $survey_responses_1);

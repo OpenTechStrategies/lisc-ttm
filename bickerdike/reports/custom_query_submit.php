@@ -2,11 +2,6 @@
 ini_set('display_errors', 'On');
 error_reporting(E_ALL | E_STRICT);
 
-//custom query submission response
-//submitted from: /reports/custom_query.php
-//
-
-//header('Content-type: text/csv');
 header("Content-type: application/octet-stream");
 
 header("Pragma: no-cache");

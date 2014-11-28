@@ -61,7 +61,6 @@ class Program
         $program_dates_query_sqlsafe = "SELECT * FROM Program_Dates LEFT JOIN (Programs)
                                 ON (Programs.Program_ID=Program_Dates.Program_ID) WHERE Program_Dates.Program_ID='" . $this->program_id . "'
                                     ORDER BY Program_Date";
-        //echo $program_dates_query;
         $dates = mysqli_query($cnnBickerdike, $program_dates_query_sqlsafe);
         include "../include/dbconnclose.php";
         
@@ -77,7 +76,6 @@ class Program
         $program_users_query_sqlsafe = "SELECT * FROM Users LEFT JOIN (Programs_Users, Programs)
                                 ON (Programs.Program_ID=Programs_Users.Program_ID AND Users.User_ID=Programs_Users.User_ID)
                                 WHERE Programs_Users.Program_ID='" . $this->program_id . "'";
-        //echo $program_users_query;
         $users = mysqli_query($cnnBickerdike, $program_users_query_sqlsafe);
         include "../include/dbconnclose.php";
         

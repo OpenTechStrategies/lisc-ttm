@@ -59,7 +59,6 @@ $edit_user_query_sqlsafe = "UPDATE Users SET
                             Notes='" . $note_sqlsafe . "',
                             Phone='" . $phone_sqlsafe . "'
                             WHERE User_ID='" . $user_id_sqlsafe . "'";
-//echo $edit_user_query_sqlsafe;
 mysqli_query($cnnBickerdike, $edit_user_query_sqlsafe);
 include "../include/dbconnclose.php";
 

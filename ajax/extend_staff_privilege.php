@@ -12,7 +12,6 @@ $username_sqlsafe=mysqli_real_escape_string($cnnLISC, $_POST['username']);
 if (strlen($hash)>=20){
     $lisc_query = "INSERT INTO Users (User_Email, User_Password)
         VALUES ('" . $username_sqlsafe . "', '" . $hash . "')";
-    //echo $lisc_query;
     mysqli_query($cnnLISC, $lisc_query);
     $user_id_sqlsafe = mysqli_insert_id($cnnLISC);
 

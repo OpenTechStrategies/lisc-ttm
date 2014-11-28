@@ -1,5 +1,4 @@
 <?php
-print_r($_COOKIE);
 //if action is logout
 if ($_GET['action'] == 'logout') {
     include_once('ajax/session_test.php');
@@ -66,7 +65,6 @@ if ($_GET['action'] == 'logout') {
 
         <?php
         echo "Thank you for logging in.<br>";
-        //  print_r($_COOKIE);
         if (in_array('all_sites', $_COOKIE['sites'])) {
             /*
              * Didn't end up using this option.

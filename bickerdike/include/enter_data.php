@@ -66,7 +66,6 @@ $user->load_with_user_id($_GET['user']);
                     type: document.getElementById('pre_post').options[document.getElementById('pre_post').selectedIndex].value
                 },
         function(response) {
-            //document.write(response);
             if (response != '') {
                 alert(response);
             }
@@ -88,7 +87,6 @@ $user->load_with_user_id($_GET['user']);
                     type: document.getElementById('pre_post').options[document.getElementById('pre_post').selectedIndex].value
                 },
         function(response) {
-            //document.write(response);
             if (response != '') {
                 alert(response);
             }
@@ -110,7 +108,6 @@ $user->load_with_user_id($_GET['user']);
                     type: document.getElementById('pre_post').options[document.getElementById('pre_post').selectedIndex].value
                 },
         function(response) {
-            //document.write(response);
             if (response != '') {
                 alert(response);
             }
@@ -214,7 +211,6 @@ $user->load_with_user_id($_GET['user']);
                             dropdown: 'yes'
                         },
                 function(response) {
-                    //document.write(response);
                     document.getElementById('show_results').innerHTML = response;
                 }
                 )"></th>
@@ -324,15 +320,6 @@ $user->load_with_user_id($_GET['user']);
                         <option value="0">No</option>
                     </select></td>
             </tr>
-    <!--        <tr>
-                <td class="question"><strong>13:</strong> (For the facilitator) Is this a pre, post, or 3-months-later survey?</td>
-                    <td class="response"><select id="pre_post_parent">
-                            <option value="">----</option>
-                            <option value="1">Pre</option>
-                            <option value="2">Post</option>
-                            <option value="3">3 months later</option>
-                        </select></td>
-            </tr>-->
             <tr>
                 <td colspan="2"><input type="button" value="Submit" onclick="
                         $.post(
@@ -363,8 +350,6 @@ $user->load_with_user_id($_GET['user']);
 
                                 },
                         function(response) {
-                            // alert('got to response, my fav thing');
-                            //document.getElementById('show_survey_response').innerHTML = response;
                             document.getElementById('show_survey_response').innerHTML = '<span style=' + 'color:#990000; font-weight:bold;' + '><strong>Thank you for entering this survey! </strong></span>';
                         }
                         );">
@@ -494,18 +479,8 @@ $user->load_with_user_id($_GET['user']);
                         <option value="0">No</option>
                     </select></td>
             </tr>
-    <!--        <tr>
-                <td class="question"><strong>14:</strong> (For the facilitator) Is this a pre, post, or 3-months-later survey?</td>
-                    <td class="response"><select id="pre_post_adult">
-                            <option value="">----</option>
-                            <option value="1">Pre</option>
-                            <option value="2">Post</option>
-                            <option value="3">3 months later</option>
-                        </select></td>
-            </tr>-->
             <tr>
                 <td colspan="2"><input type="button" value="Submit" onclick="
-                        //alert('check');
                         $.post(
                                 '../ajax/save_participant_survey.php',
                                 {
@@ -533,7 +508,6 @@ $user->load_with_user_id($_GET['user']);
                                     date: document.getElementById('survey_date').value
                                 },
                         function(response) {
-                            //document.write(response);
                             document.getElementById('show_survey_response_adult').innerHTML = '<span style=color:#990000;font-weight:bold;font-size:.9em; padding-left: 25px;>Thank you for entering this survey!</span>';
                         }
                         );">

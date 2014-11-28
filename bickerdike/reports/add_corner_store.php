@@ -133,7 +133,6 @@ This file creates a new corner store assessment, and often a new corner store en
                        date: document.getElementById('date').value
                    },
                    function (response){
-                       //document.write(response);
                        window.location = 'corner_store_report.php';
                    }
            )">

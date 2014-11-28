@@ -18,7 +18,6 @@ if ($_POST['type']==''){$zip_sqlsafe='';}else{$zip_sqlsafe=" AND Program_Type='"
 
 
 $uncertain_search_query_sqlsafe = "SELECT * FROM Programs WHERE Program_ID!='' " . $first_sqlsafe . $last_sqlsafe .  $zip_sqlsafe . "ORDER BY Program_Name";
-//echo $uncertain_search_query_sqlsafe;
 
 $results =mysqli_query($cnnBickerdike, $uncertain_search_query_sqlsafe);
 ?>
@@ -45,7 +44,7 @@ while ($program=mysqli_fetch_array($results)){
 							if ($partner = mysqli_fetch_array($org)) {
 							echo $partner['Partner_Name'];
 							}
-							//include "../include/dbconnclose.php";?></td>
+							?></td>
         <td class="all_projects">
             <!--Get the type text-->
             <?$find_org_sqlsafe = "SELECT * FROM Program_Types WHERE Program_Type_ID='" . $program['Program_Type'] . "'";
@@ -54,7 +53,7 @@ while ($program=mysqli_fetch_array($results)){
                                 if ($partner = mysqli_fetch_array($org)) {
                                     echo $partner['Program_Type_Name'];
                                 }
-                                //include "../include/dbconnclose.php";?></td>
+                                ?></td>
         <td class="all_projects hide_on_view">
             <!--See /ajax/delete_program for more this.  Deletes program.-->
             <input type="button" value="Delete Program" onclick="

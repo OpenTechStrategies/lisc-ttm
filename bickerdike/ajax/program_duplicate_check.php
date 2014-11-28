@@ -8,7 +8,6 @@
 include "../include/dbconnopen.php";
 $name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['name']);
 $get_duplicate_programs_sqlsafe = "SELECT COUNT(Program_ID) FROM Programs WHERE Program_Name='" . $name_sqlsafe . "'";
-//echo $get_duplicate_programs_sqlsafe;
 $is_duplicate = mysqli_query($cnnBickerdike, $get_duplicate_programs_sqlsafe);
 $duplicate = mysqli_fetch_row($is_duplicate);
 if ($duplicate[0]>0){

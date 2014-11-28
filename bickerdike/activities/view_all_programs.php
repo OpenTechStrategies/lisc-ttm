@@ -135,57 +135,6 @@ when the mouse hovers over it.-->
                         include "../include/dbconnclose.php";
                     }
                     ?>
-                    <?php
-                    /*
-                    //alphabetical list of all programs, each of which links to its own profile page
-                    //$program_query_sqlsafe = "SELECT * FROM Programs ORDER BY Program_Name";
-                    $program_query_sqlsafe = "SELECT Programs.*, YEAR(Programs.Program_Created_Date) AS Program_Year, "
-                                    . "Program_Types.Program_Type_Name "
-                                    . "FROM Programs, Program_Types "
-                                    . "WHERE "
-                                    . "Program_Types.Program_Type_ID = Programs.Program_Type "
-                                    . "ORDER BY "
-                                    . "Program_Type_Name, YEAR(Program_Created_Date), Program_Name";
-                    include "../include/dbconnopen.php";
-                    $programs = mysqli_query($cnnBickerdike, $program_query_sqlsafe);
-
-                    //sort by program type (category), year, alphabetical
-                    $category_div = '';
-                    $category_flag = 0;
-                    $year_div = '';
-                    $countt = 0; // to disable first element </div>s
-                    while ($program = mysqli_fetch_array($programs)) {
-                        $countt++;
-                        //category divs if different from the previous
-                        if ($category_div != $program['Program_Type']) {
-                            $category_flag = 1;
-                            $category_div = $program['Program_Type'];
-                            echo ($countt != 1) ? "</div></div><br />" : "";
-                            echo "<a href=\"javascript:;\" onclick=\"$('#category_div_" . $program['Program_Type'] . "').slideToggle('slow');\">" . $program['Program_Type_Name'] . "</a>";
-                            echo "<div id=\"category_div_" . $program['Program_Type'] . "\" style=\"display: none;\">";
-                        }
-                        //year divs if different from the previous or new category
-                        if (($year_div != $program['Program_Year']) || ($category_flag == 1)) {
-                            $year_div = $program['Program_Year'];
-                            if ($category_flag == 0) {
-                                echo ($countt != 1) ? "</div><br />\r\n" : "";
-                            }
-                            $category_flag = 0;
-                            echo "&nbsp; <a href=\"javascript:;\" onclick=\"$('#year_div_" . $program['Program_Type'] . "_" . $program['Program_Year'] . "').slideToggle('slow');\">" . $program['Program_Year'] . "</a>";
-                            echo "<div id=\"year_div_" . $program['Program_Type'] . "_" . $program['Program_Year'] . "\" style=\"display: none;\">";
-                        }
-                        ?>
-                        &nbsp; &nbsp; &bull; <a href="program_profile.php?program=<?php echo $program['Program_ID']; ?>"><?php echo $program['Program_Name']; ?></a><br />
-                        <?php
-                    }
-                    include "../include/dbconnclose.php";
-                    ?>
-                    </div>
-                </div>
-                     <?php
-                     * 
-                     */
-                ?>
             </td>
         </tr>
     </table>

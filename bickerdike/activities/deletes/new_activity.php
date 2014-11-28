@@ -75,29 +75,7 @@ include "../include/datepicker.php";
 			<p class="helptext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dates must be entered in the format YYYY-MM-DD (or use the pop-up calendar).</p>
 		</td>
 	</tr>
-<!--    <tr>
-        <td>If this event occurs on multiple dates,<br> please enter the number of dates and click "Add Dates":</td>
-        <td><input type="text" id="number_of_dates"><input type="button" id="activity_multiple_dates" value="Add Dates" onclick="
-                var count=0;
-                var length = document.getElementById('number_of_dates').value;
-                while (count<length){
-                    document.getElementById('add_date_row').innerHTML += '<input type=text id=add_date_'+count+'><br>';
-                    count++;
-                }
-                   "></td>
-    </tr>
-    <tr><td id="add_date_row"></td>
-        
-    </tr>-->
     <tr><td><input type="button" value="Save Activity" onclick="
-                   /* var count=0;
-                    var length = document.getElementById('number_of_dates').value;
-                    var dates = new Array();
-                    while (count<length){
-                        dates[count]=document.getElementById('add_date_'+count).value;
-                        count++;
-                    }
-                    //alert(dates);*/
                    $.post(
                     '../ajax/add_activity.php',
                     {
@@ -109,7 +87,6 @@ include "../include/datepicker.php";
                         new_type: document.getElementById('type_text').value
                     },
                     function (response){
-                        //document.write(response);
                         document.getElementById('show_response').innerHTML = 'Thank you for adding this program! Now <a href=activity_profile.php?activity='+response+'>add users.</a>';
                     }
                )

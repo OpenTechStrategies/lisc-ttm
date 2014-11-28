@@ -11,7 +11,6 @@ Menu of all reports and some data entry too (corner store and walkability assess
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#data_selector').addClass('selected');
-               // $('.hide_on_view').hide();
 	});
 </script>
 
@@ -24,8 +23,6 @@ Menu of all reports and some data entry too (corner store and walkability assess
 <ul>
     <li><a href="../data/participant_surveys_total.php">Participant Survey, Aggregate</a></li>
     <li><a href="../data/participant_surveys_individual_total.php">Participant (Individual) Survey, Aggregate</a></li>
-<!--    <li>Partner Program Attendance Rates</li>-->
-<!--    <li><a href="../data/partner_programs.php">Partner Program Records</a></li>-->
     <li><a href="../data/bickerdike_programs.php">Bickerdike Records: Contextual Data</a></li>
     <li><a href="../data/health_calendar.php">Health Calendar</a></li>
     <li>Corner Store Assessment -- <a href="../reports/add_corner_store.php" class="hide_on_view">Add Data</a> -- <a href="../reports/corner_store_report.php">View Cumulative Report</a></li>
@@ -43,8 +40,6 @@ Menu of all reports and some data entry too (corner store and walkability assess
         <li><a href="../reports/health_report.php">Physical Change Over Time</a></li>
         <li><a href="../data/survey_sort.php">Sort and export surveys</a></li>
         <li><a href="../reports/custom_query.php">Custom Query</a></li>
-<!--        <li>Attendance Over Time</li>
-        <li>Physical Environment Measures</li>-->
     </ul></td>
 	</tr>
 </table>

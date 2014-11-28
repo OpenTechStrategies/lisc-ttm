@@ -150,9 +150,7 @@ that arrays and loops seemed unnecessary, especially since each of them is a y/n
 <link rel="stylesheet" type="text/css" href="/include/jquery.jqplot.1.0.4r1121/jquery.jqplot.css" />
 <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.barRenderer.min.js"></script>
 <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.categoryAxisRenderer.min.js"></script>
-<!--<script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.pointLabels.min.js"></script>-->
 <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.pieRenderer.min.js"></script>
-<!--<script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.donutRenderer.min.js"></script>-->
 
 <script type="text/javascript">
 $(document).ready(function(){

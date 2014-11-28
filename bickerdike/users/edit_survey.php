@@ -31,7 +31,6 @@ while ($response = mysqli_fetch_array($answers)) {
         $user = new User();
         $user->load_with_user_id($response['User_ID']);
         $programs = $user->get_programs();
-        //print_r($programs);
         ?>
         <a href="user_profile.php?id=<? echo $response['User_ID']; ?>">Return to user profile</a><br/>
         Program in which survey was filled out: <select id="program_id">

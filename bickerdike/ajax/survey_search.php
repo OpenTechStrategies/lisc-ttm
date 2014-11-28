@@ -41,14 +41,9 @@ elseif($_POST['time']==3){
             AND Mid_Responses.Pre_Post_Late=2 
             AND Post_Responses.Pre_Post_Late=3 " . $type_sqlsafe . $program_sqlsafe . $year_sqlsafe;
 }
-
-//echo $survey_query_sqlsafe;
-
-
-//echo $survey_query_sqlsafe . "<br>";
 date_default_timezone_set('America/Chicago');
 $infile="../data/downloads/search_surveys_" . date('M-d-Y') . ".csv";
-//echo $infile;
+
 $fp=fopen($infile, "w") or die('can\'t open file');
 /*get column names for the relevant table: */
 $get_col_names_sqlsafe="SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='ttm-bickerdike' AND `TABLE_NAME`='Participant_Survey_Responses'";
@@ -58,13 +53,11 @@ $cols=mysqli_query($cnnBickerdike, $get_col_names_sqlsafe);
 /*use column names as the headings for the results file: */
 $columns=array("First Name", "Last Name");
 for ($i=0; $i<$_POST['time']; $i++){
-   // echo $i . "<br>";
 $cols=mysqli_query($cnnBickerdike, $get_col_names_sqlsafe);
 while ($col=mysqli_fetch_row($cols)){
     $columns[]=$col[0];
 }
 }
-//print_r($columns);
 fputcsv($fp, $columns);
 include "../include/dbconnopen.php";
 $results=mysqli_query($cnnBickerdike, $survey_query_sqlsafe);

@@ -291,7 +291,5 @@ $(document).ready(function(){
 <div id="chart2" style="height: 300px; width: 800px; position: relative;"></div><br>
 <div id="chart3" style="height: 300px; width: 800px; position: relative;"></div><br>
 <div id="chart4" style="height: 300px; width: 800px; position: relative;"></div><br>
-<!--<div id="chart5" style="height: 300px; width: 800px; position: relative;"></div><br>
-<div id="chart6" style="height: 300px; width: 800px; position: relative;"></div><br>-->
 
 <? include "../../footer.php"; ?>

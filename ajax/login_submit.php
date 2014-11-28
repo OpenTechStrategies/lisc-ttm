@@ -98,7 +98,6 @@ if ($hash_match) {
                    setcookie('view_restricted', $level[0], time()-10800, '/');
                }
            }
-           //echo $i . "<br>";
            $i=$i+1;
            
        }

@@ -175,8 +175,6 @@ if ($_POST['result'] == 'dropdown') {
         <?php
         while ($user = mysqli_fetch_array($results)) {
             $this_date = explode('-', $user['DOB']);
-            //  print_r($this_date);echo "<br>";
-            //  echo $user['Participant_ID']."<br>";
             if ($this_date[1]) {
                 date_default_timezone_set('America/Chicago');
                 $show_date = mktime(0, 0, 0, $this_date[1], $this_date[2], $this_date[0]);

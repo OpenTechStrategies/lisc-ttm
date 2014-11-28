@@ -36,8 +36,6 @@ $child_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['child']);
  * the conversion:
  */
 $eight_answer = ($eight_a_sqlsafe*60)+$eight_b_sqlsafe;
-//$user_id = $_POST['old_or_new']; 
-//echo "somehow got into the not new user thing";
 $add_survey_answers_sqlsafe = "INSERT INTO Participant_Survey_Responses (
                         User_ID,
                         Question_2,
@@ -82,7 +80,6 @@ $add_survey_answers_sqlsafe = "INSERT INTO Participant_Survey_Responses (
                         '" . $program_sqlsafe ."',
                          '" . $survey_type_sqlsafe ."',
                              '".$child_sqlsafe."')";
-//echo $add_survey_answers_sqlsafe;
 mysqli_query($cnnBickerdike, $add_survey_answers_sqlsafe);
 include "../include/dbconnclose.php";
 

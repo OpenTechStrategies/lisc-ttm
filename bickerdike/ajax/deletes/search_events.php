@@ -13,7 +13,6 @@ if ($_POST['end']==''){$end_sqlsafe='';}else{$end_sqlsafe=" AND Activity_Date<='
 
 
 $uncertain_search_query_sqlsafe = "SELECT * FROM User_Established_Activities WHERE User_Established_Activities_ID!='' " . $first_sqlsafe . $last_sqlsafe .  $type_sqlsafe . $start_sqlsafe . $end_sqlsafe;
-//echo $uncertain_search_query_sqlsafe;
 
 $results =mysqli_query($cnnBickerdike, $uncertain_search_query_sqlsafe);
 ?>

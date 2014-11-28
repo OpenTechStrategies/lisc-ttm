@@ -57,7 +57,6 @@ if ($_POST['action'] == 'merge') {
                                         remove: '2'
                                     },
                             function(response) {
-                                //document.write(response);
                                 document.getElementById('search_results2').innerHTML = response;
                             }
                             )"></td>

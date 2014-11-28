@@ -101,14 +101,7 @@ mysqli_query($cnnBickerdike, $make_program_sqlsafe);
 $id= mysqli_insert_id($cnnBickerdike);
 include "../include/dbconnclose.php";
 }
-?>
 
-
-
-
-
-<?
-//include "../include/datepicker.php";
 include "../classes/program.php";
 $program = new Program();
 $program->load_with_program_id($id);
@@ -218,7 +211,6 @@ while ($date = mysqli_fetch_array($dates)){
                 program: <? echo $id; ?>
             },
             function (response){
-                //document.write(response);
                 document.getElementById('show_results').innerHTML = response;
             }
         )"></td>

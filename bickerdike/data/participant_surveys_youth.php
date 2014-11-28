@@ -341,8 +341,7 @@ foreach($question_array as $question_sqlsafe){
            * Now we have to go through some gymnastics to get the returned information into an acceptable
            * form for the jqplot creation.
            */
-          
-          //print_r($questions);
+
             if (mysqli_num_rows($questions)>0){
             while ($two = mysqli_fetch_row($questions)){
                 if($question_sqlsafe!='Question_4_B'&&$question_sqlsafe!='Question_5_B'){
@@ -403,7 +402,6 @@ foreach($question_array as $question_sqlsafe){
                     }
                 }
             }
-          //print_r($assignment_arr);
              $count_check=0;
              /*
               * we use the assignment array we just created to make strings for the creation of charts.

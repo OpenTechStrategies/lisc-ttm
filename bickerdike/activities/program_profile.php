@@ -11,7 +11,6 @@ $_GET['program'];
 include "../classes/program.php";
 $program = new Program();
 $program->load_with_program_id($_GET['program']);
-//print_r($_GET);
 if ($_GET['schedule'] == 1) {
     ?><script type="text/javascript">
         $(document).ready(function() {
@@ -557,7 +556,6 @@ if ($_GET['schedule'] == 1) {
      * controlled in the Schedule.
      */
 
-//print_r($array_of_dates);
     echo "<br>";
     /*
      * This array ($attendance_num_array) was created above and is here converted to json so that it can be used as a set

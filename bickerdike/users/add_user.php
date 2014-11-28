@@ -125,8 +125,6 @@ an ID in the process.
                                             type: document.getElementById('new_user_type').options[document.getElementById('new_user_type').selectedIndex].value
                                         },
                                     function (response){
-                                        //document.write(response);
-                                        //window.location='/bickerdike/users/add_user.php';
                                         document.getElementById('confirmation').innerHTML = response;
                                     }
                                 );

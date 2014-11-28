@@ -76,7 +76,6 @@ Creates a new walkability assessment.  This will be changed and expanded in Bick
                         date: document.getElementById('date').value
                     },
                     function (response){
-                        //document.write(response);
                         window.location = 'walkability_report.php';                    }
                )
                "></td>

@@ -1,5 +1,4 @@
 <?
-//$type=$_POST['type'];
 $start=$_POST['start'];
 $end=$_POST['end'];
 $start_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $start);
@@ -19,7 +18,6 @@ Returns a table of average responses for each question.
     $count_pres_sqlsafe ="SELECT * FROM Participant_Survey_Responses WHERE  Pre_Post_Late='1'
     AND Date_Survey_Administered >= '$start_sqlsafe'
     AND Date_Survey_Administered <= '$end_sqlsafe'";
-    //echo $count_pres_sqlsafe;
     include "../include/dbconnopen.php";
     $pres = mysqli_query($cnnBickerdike, $count_pres_sqlsafe);
     $num_pres = mysqli_num_rows($pres);
@@ -51,7 +49,6 @@ Returns a table of average responses for each question.
     
     //call the routine for pre, post, and later
     include "../include/dbconnopen.php";
-    //echo "CALL get_full_aggregate_survey_results_with_dates('1', '" . $start_sqlsafe ."', '" . $end_sqlsafe . "')";
     if ($get_pre_averages = mysqli_query($cnnBickerdike, "CALL get_full_aggregate_survey_results_with_dates('1', '" . $start_sqlsafe ."', '" . $end_sqlsafe . "')")){
     $pre = array();
     while ($pre_averages = mysqli_fetch_array($get_pre_averages)){
@@ -77,7 +74,6 @@ Returns a table of average responses for each question.
     include "../include/dbconnclose.php";
     }
     include "../include/dbconnopen.php";
-    //echo "CALL get_full_aggregate_survey_results_with_dates('2', '" . $start_sqlsafe ."', '" . $end_sqlsafe . "')";
     if($get_post_averages = mysqli_query($cnnBickerdike, "CALL get_full_aggregate_survey_results_with_dates('2', '" . $start_sqlsafe ."', '" . $end_sqlsafe . "')")){
     $post = array();
     while ($post_averages = mysqli_fetch_array($get_post_averages)){
@@ -102,7 +98,6 @@ Returns a table of average responses for each question.
     }
     }
     include "../include/dbconnopen.php";
-    //echo "CALL get_full_aggregate_survey_results_with_dates('3', '" . $start_sqlsafe ."', '" . $end_sqlsafe . "')";
     if ($get_later_averages = mysqli_query($cnnBickerdike, "CALL get_full_aggregate_survey_results_with_dates('3', '" . $start_sqlsafe ."', '" . $end_sqlsafe . "')")){
     $later = array();
     while ($later_averages = mysqli_fetch_array($get_later_averages)){

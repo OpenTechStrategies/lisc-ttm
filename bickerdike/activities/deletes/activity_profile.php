@@ -169,7 +169,6 @@ $_GET['activity'];
                                 type: document.getElementById('type').value
                             },
                     function(response) {
-                        //document.write(response);
                         document.getElementById('show_results').innerHTML = response;
                         $('#add_button').show();
                     }

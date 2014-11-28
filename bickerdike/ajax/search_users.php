@@ -66,7 +66,6 @@ if ($_POST['id'] != '') {
     }
 
     $uncertain_search_query_sqlsafe = "SELECT * FROM Users WHERE User_ID!='' " . $first_sqlsafe . $last_sqlsafe . $zip_sqlsafe . $age_sqlsafe . $gender_sqlsafe . $race_sqlsafe . $type_sqlsafe . "ORDER BY Last_Name";
-//echo $uncertain_search_query_sqlsafe;
 
     include "../include/dbconnopen.php";
     $results = mysqli_query($cnnBickerdike, $uncertain_search_query_sqlsafe);
@@ -142,7 +141,6 @@ if ($_POST['dropdown'] == 'yes') {
                                     new_id: document.getElementById('choose_for_merge').value
                                 },
                         function(response) {
-                            //document.write(response);
                             document.getElementById('thanks_merge').innerHTML = 'Thank you for merging these two profiles.';
                         }
                         )"><div id="thanks_merge"></div>

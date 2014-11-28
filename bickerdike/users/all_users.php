@@ -179,7 +179,6 @@ or deleting them outright.  The merging is still not available on the live site.
 									remove: '2'
                                 },
                                 function (response){
-                                    //document.write(response);
                                     document.getElementById('search_results2').innerHTML = response;
                                 }
                            )"></td>
@@ -193,73 +192,10 @@ or deleting them outright.  The merging is still not available on the live site.
 </div>
 
 <!-------------------------------->
-
-<!--<table class="all_participants">
     <tr>
-        <th style="text-align:left;">Name</th>
-        <th>Zipcode</th>
-        <th>Main Program</th>
-        <th></th>
-    </tr>
-    <?
-    //include "../include/dbconnopen.php";
-    //$get_all_users_query_sqlsafe = "SELECT * FROM Users ORDER BY Last_Name";
-    //$all_users = mysqli_query($cnnBickerdike, $get_all_users_query_sqlsafe);
-    //$count=0;
-    //while ($user=mysqli_fetch_array($all_users)){
-    
-    ?>
-    <tr>
-        <td class="all_projects" style="text-align:left;"><a href="user_profile.php?id=<?//echo $user['User_ID'];?>"><?//echo $user['First_Name'] ." " . $user['Last_Name']?></a><br>
+        <td class="all_projects" style="text-align:left;"><a href="user_profile.php?id="></a><br>
                         <div class="edit_hide">First Name: <input type="text" id="edit_first_<?//echo $count;?>"><br>
                         Last Name: <input type="text" id="edit_last_<?//echo $count;?>"></div></td>
-                        <td class="all_projects"><?//echo $user['Zipcode'];?><br><div class="edit_hide">Zipcode: <input type="text" id="edit_zip_<?//echo $count;?>"></div></td>
-<!--        <td class="all_projects"></td>-->
-       <!-- <td class="all_projects"><!--<input type="button" value="Edit" onclick="
-                                        $('.edit_hide').toggle();
-                                        ">-->
-            <!--<input type="button" class="edit_hide" value="Save Changes" onclick="
-                                        $.post(
-                                            '../ajax/edit_user.php',
-                                            {
-                                                first_name: document.getElementById('edit_first_<?//echo $count;?>').value,
-                                                last_name: document.getElementById('edit_last_<?//echo $count;?>').value,
-                                                user_id: '<?//echo $user['User_ID'];?>',
-                                                zip: document.getElementById('edit_zip_<?//echo $count;?>').value
-                                            },
-                                            function (response){
-                                                //document.write(response);
-                                                window.location='all_users.php';
-                                            }
-                                    )
-                                    "><input type="button" value="Delete" onclick="
-                                                var first='<?//echo $user['First_Name']?>';
-                                                var last='<?//echo $user['Last_Name']?>';
-                                                var answer = confirm('Are you sure you want to delete '+first+' '+last+' from the database?');
-                                                if (answer){
-                                                    $.post(
-                                                        '../ajax/delete_user.php',
-                                                        {
-                                                            user_id: '<?//echo $user['User_ID'];?>'
-                                                        },
-                                                        function (response){
-                                                            //document.write(response);
-                                                            window.location = 'all_users.php';
-                                                        }
-                                                    );
-                                                }
-                                                else{
-                                                   // alert('guess you weren\'t sure');
-                                                }
-                                "></td>
-    </tr>
-    <?
-    //$count=$count+1;
-    //}
-    //include "../include/dbconnclose.php";?>
-</table>-->
-
-
-</div>
+                        <td class="all_projects"><?//echo $user['Zipcode'];?><br><div class="edit_hide">Zipcode: <input type="text" id="edit_zip_"></div></td>
 
 <? include "../../footer.php"; ?>

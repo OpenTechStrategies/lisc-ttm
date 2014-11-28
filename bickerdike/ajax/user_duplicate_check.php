@@ -6,7 +6,6 @@ include "../include/dbconnopen.php";
 $first_name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['first_name']);
 $last_name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['last_name']);
 $get_duplicate_users_sqlsafe = "SELECT COUNT(User_ID) FROM Users WHERE First_Name='" . $first_name_sqlsafe . "' AND Last_Name='" . $last_name_sqlsafe . "'";
-//echo $get_duplicate_users_sqlsafe;
 $is_duplicate = mysqli_query($cnnBickerdike, $get_duplicate_users_sqlsafe);
 $duplicate = mysqli_fetch_row($is_duplicate);
 /*

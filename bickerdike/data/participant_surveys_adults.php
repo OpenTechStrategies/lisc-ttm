@@ -43,8 +43,7 @@ going on the live site.
     
     <!--Sort surveys by date.  Sends them off to surveys_sorted_by_dates.php, but only 
     returns the table of averages, no line/pie charts.-->
-    
-    <? //include "../include/datepicker.php";?>
+
     Sort surveys by date:<br>
     Start date (YYYY-MM-DD): <input type="text" id="start">
     End date (YYYY-MM-DD): <input type="text" id="end"><br>
@@ -341,10 +340,7 @@ $chart_id_array=array('chart1', 'chart1_b', 'chart1_c', 'chart2', 'chart2_b', 'c
 
         $chart_counter=0;
 foreach($question_array as $question_sqlsafe){
-   // echo $question_sqlsafe . "<br>";
-   // foreach ($type_array as $type){
         for ($i=1; $i<4; $i++){
-            //echo "right after the i's " . $question_sqlsafe . " " . $i . "<br>";
             $script_str='';
             /*
              * this routine gets the number of times each response to the question was made.
@@ -354,11 +350,8 @@ foreach($question_array as $question_sqlsafe){
              * for each pie chart.  
              */
                 $call_for_arrays_sqlsafe="CALL pie_chart_arrays('adult', " . $i . ", '" .$question_sqlsafe . "')";
-                //echo $call_for_arrays_sqlsafe ;
-                //echo $chart_id_array[$chart_counter];
             include "../include/dbconnopen.php";
           $questions=mysqli_query($cnnBickerdike, $call_for_arrays_sqlsafe);
-          //print_r($questions);
           
           /*
            * Now we have to go through some gymnastics to get the returned information into an acceptable
@@ -426,7 +419,6 @@ foreach($question_array as $question_sqlsafe){
                     }
                 }
             }
-          //print_r($assignment_arr);
              $count_check=0;
              /*
               * we use the assignment array we just created to make strings for the creation of charts.
@@ -522,8 +514,6 @@ go on the chart.
         ],
         legend: {
             show: true
-            //placement: 'outsideGrid',
-            //labels: labels
         }
   });
     })
@@ -531,8 +521,8 @@ go on the chart.
     <?$chart_counter++;
                 }
         
-                else{$chart_counter++;
-                   // echo 'didnt happen <br>';
+                else{
+                    $chart_counter++;
                 }
                  
     }
@@ -558,13 +548,6 @@ go on the chart.
 <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.pieRenderer.min.js"></script>
 <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.categoryAxisRenderer.min.js"></script>
 <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.pointLabels.min.js"></script>
-
-
-
-<!--<a onclick="
-	$('#chart0_parent').slideToggle('slow');
-"><h4>Change in Reported Importance of Diet and Nutrition</h4></a>
-<div id="chart0_parent"><div id="chart0" class="jqplot-target" style="height: 300px; width: 800px; position: relative;"></div></div>-->
 
 <a onclick="
 	$('#chart1_parent').slideToggle('slow');

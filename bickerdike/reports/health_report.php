@@ -138,7 +138,7 @@ ON User_Health_Data.User_ID=Users.User_ID;";
     ?>
 
     <a class="download" href="<?php echo $infile; ?>">Download the CSV file of all health data.</a><br>
-    <p class="helptext">This download includes all health data, so it is not organized the same way as the table above.</span>
+    <p class="helptext">This download includes all health data, so it is not organized the same way as the table above.</p>
 
 </div>
 <?php include "../../footer.php"; ?>

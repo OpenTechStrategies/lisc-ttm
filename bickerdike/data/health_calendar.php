@@ -125,8 +125,6 @@ function generate_calendar($year, $month, $days = array(), $day_name_length = 3,
             }
         $calendar .= "<br></span></td>";
         }
-        //else $calendar  .= "<td>" . $program['Program_Name'] . "</td>";
-        //}
         include "../include/dbconnclose.php";
     }
     if($weekday != 7) $calendar  .= '<td id="emptydays" colspan="' . (7-$weekday) . '"  class=all_projects>&nbsp;</td>'; //remaining "empty" days

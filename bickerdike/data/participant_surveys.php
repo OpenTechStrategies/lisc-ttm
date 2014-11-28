@@ -450,11 +450,6 @@ $(document).ready(function(){
 	"><h4>Minutes of Moderate Activity on Above Days</h4></a>
 <div id="chart6_parent"><div id="chart6" style="position: relative;" class="jqplot-target"></div></div>
 
-<!--<a onclick="
-	$('#chart7').slideToggle('slow');
-	"><h4>Child Fruit and Vegetable Servings</h4></a>
-<div id="chart7" style="position: relative;" class="jqplot-target"></div>-->
-
 <a onclick="
 	$('#chart8_parent').slideToggle('slow');
 	"><h4>Child Fruit and Vegetable Servings</h4></a>

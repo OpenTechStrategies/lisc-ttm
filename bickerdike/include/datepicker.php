@@ -44,19 +44,6 @@ Makes calendars show up on the indicated ID fields.
 		$('#sales_date').datepicker();
                 $('#env_date').datepicker();
 	});
-	
-	//on aggregate survey results
-	/*$(function() {
-		$("#start").datepicker();
-		$("#end").datepicker();
-	});*/
-
-        
-        //on sort participant surveys
-//         $(function() {
-//	});
-        
-        //on subrecipients
 
 	</script>
 
