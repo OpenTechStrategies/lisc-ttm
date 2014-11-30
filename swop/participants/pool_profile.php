@@ -1127,7 +1127,6 @@ include "../include/datepicker_simple.php";
                                                            )" value="<?php echo $event['Barrier']; ?>"></input>
                                        <?php
                                    }
-                                   // print_r($event);
                                } else if ($event['Activity_Type'] == 2) {
                                    /* then this is a leadership level, and the DB int needs to be shown as text.  */
                                    if ($event['Active'] == 1) {
@@ -1137,7 +1136,6 @@ include "../include/datepicker_simple.php";
                                        ?><span class="hide_on_view">Identified as not being part of leadership development</span><?php
                             }
                             $activity_id = $event['Pool_Status_Change_ID'];
-                            // print_r($event);
                         } else if ($event['Activity_Type'] == 3) {
                             /* then this is an outcome int, and the corresponding name needs to be pulled from its table. */
                             $get_outcome_sqlsafe = "SELECT * FROM Outcomes_for_Pool WHERE Outcome_ID='" . $event['Active'] . "'";

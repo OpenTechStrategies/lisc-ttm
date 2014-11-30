@@ -127,7 +127,6 @@ if (!isset($_POST['posted'])) {
                     else{
                         //I'm going to assume (yikes!) that they'll write names as last name comma first name.  We shall see.
                         //
-                        //print_r($exploded_line);
                         //
                         //split up names (in case they just enter them as first space last)
 //                        $names=explode(' ',$exploded_line[1]);

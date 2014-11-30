@@ -18,7 +18,6 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
 
 <!--Div on reports page that shows the assessment responses:  -->
 <h3>Assessments Report</h3>
-<?php //print_r($_POST);?>
 <!--First choose a program (or all programs) and a question (or all questions) from the intake and impact surveys: -->
 
 <span class="helptext">Choose the program you would like to report on, then either export all results or see results by question:</span><br>
@@ -115,7 +114,6 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
 <?php
 /* See results (after program and question have been chosen) */
 if (isset($_POST['submit_btn_assessments'])) {
-    // print_r($_POST);
     //remember we have to account for the "show all questions" possibility
     //here it is:
     if ($_POST['question_select'] == '0') {

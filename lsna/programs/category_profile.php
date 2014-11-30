@@ -1,7 +1,6 @@
 <? 
 include "../../header.php";
-	include "../header.php";
-       //print_r($_COOKIE);
+include "../header.php";
 ?>
 
 <!--Obsolete.  Never used the category profile.-->

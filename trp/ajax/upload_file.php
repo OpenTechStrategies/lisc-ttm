@@ -3,7 +3,7 @@ require_once("../siteconfig.php");
 ?>
 <?php include "../../header.php";
 include "../header.php";
-//print_r($_POST);?>
+?>
 <!-- File that saves a file in the DB: -->
 <div align="center" style="font-weight:bold; font-size: 24;">Thank you for uploading a file!</div> <br>
 <?php

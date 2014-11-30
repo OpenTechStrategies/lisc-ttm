@@ -1,7 +1,6 @@
 <? include "../../header.php";
 	include "../header.php";
         include "../include/datepicker.php";
-//print_r($_COOKIE);
         if ($_COOKIE['page']=='profile'){
             ?>
                 <script type="text/javascript">

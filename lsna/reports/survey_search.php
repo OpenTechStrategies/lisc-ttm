@@ -70,7 +70,6 @@ $columns=array();
 while ($col=mysqli_fetch_row($cols)){
     $columns[]=$col[0];
 }
-//print_r($columns);
 fputcsv($fp, $columns);
 include "../include/dbconnopen.php";
 $results=mysqli_query($cnnLSNA, $survey_query);

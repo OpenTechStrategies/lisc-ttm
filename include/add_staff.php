@@ -138,7 +138,6 @@ Add a new user to the system.
         (Users_Privileges.User_ID=Users.User_ID) WHERE Users_Privileges.Privilege_ID='" . $site_cookie_sqlsafe . "'";
     //echo $staff_list_query_sqlsafe;
     $staff_list = mysqli_query($cnnLISC, $staff_list_query_sqlsafe);
-    print_r($staff_list);
     while ($staff=mysqli_fetch_array($staff_list)){
         echo $staff['User_ID'];
         echo $staff['User_Email'];
@@ -256,7 +255,6 @@ Add a new user to the system.
  		       (Users_Privileges.User_ID=Users.User_ID) WHERE Users_Privileges.Privilege_ID='" . $site_cookie_sqlsafe . "'";
   		  //echo $staff_list_query_sqlsafe;
  		   $staff_list = mysqli_query($cnnLISC, $staff_list_query_sqlsafe);
- 		   print_r($staff_list);
  		   while ($staff=mysqli_fetch_array($staff_list)){
    		     echo $staff['User_ID'];
    		     echo $staff['User_Email'];

@@ -1,5 +1,4 @@
 <?php
-//print_r($_POST);
 include "../include/dbconnopen.php";
 if ($_POST['include_address']==1){ $address_sqlsafe=" Participants.Address_Street_Num as Participant_Num, Participants.Address_Street_Direction as Participant_Direction,"
         . " Participants.Address_Street_Name as Participant_Street_Name, Participants.Address_Street_Type as Participant_Street_Type, "; }

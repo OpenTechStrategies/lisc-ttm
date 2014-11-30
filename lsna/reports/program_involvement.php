@@ -210,8 +210,6 @@
             }
         }
     }
-
-//print_r(get_defined_vars());
     ?>
     <!--[if IE]>
    <script src="/include/excanvas_r3/excanvas.js"></script>

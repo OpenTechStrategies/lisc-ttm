@@ -5,7 +5,6 @@ include "../header.php";?>
 
 <div align="center" style="font-weight:bold; font-size: 24;">Thank you for uploading a file!</div> <br>
 <?php
-//print_r($_POST);
 echo "Upload: " . $_FILES["file"]["name"] . "<br />";
 echo "Type: " . $_FILES["file"]["type"] . "<br />";
 echo "Size: " . ($_FILES["file"]["size"] / 1024) . " Kb<br />";

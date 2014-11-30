@@ -7,17 +7,14 @@ require_once("../siteconfig.php");
 
 $reformat_date1_a=explode('/', $_POST['date1_a']);
 include "../include/dbconnopen.php";
-//print_r($reformat_date1_a);
 if ($reformat_date1_a[1]){
 $date1_a_sqlsafe=mysqli_real_escape_string($cnnTRP, $reformat_date1_a[2]) . '-' . mysqli_real_escape_string($cnnTRP, $reformat_date1_a[0]) . '-' . mysqli_real_escape_string($cnnTRP, $reformat_date1_a[1]);}
 else{$date1_a_sqlsafe=mysqli_real_escape_string($cnnTRP, $_POST['date1_a']);}
 $reformat_date1_b=explode('/', $_POST['date1_b']);
-//print_r($reformat_date1_b);
 if ($reformat_date1_b[1]){
 $date1_b_sqlsafe=mysqli_real_escape_string($cnnTRP, $reformat_date1_b[2]) . '-' . mysqli_real_escape_string($cnnTRP, $reformat_date1_b[0]) . '-' . mysqli_real_escape_string($cnnTRP, $reformat_date1_b[1]);}
 else{$date1_b_sqlsafe=mysqli_real_escape_string($cnnTRP, $_POST['date1_b']);}
 $reformat_date1_c=explode('/', $_POST['date1_c']);
-//print_r($reformat_date1_c);
 if ($reformat_date1_c[1]){
 $date1_c_sqlsafe=mysqli_real_escape_string($cnnTRP, $reformat_date1_c[2]) . '-' . mysqli_real_escape_string($cnnTRP, $reformat_date1_c[0]) . '-' . mysqli_real_escape_string($cnnTRP, $reformat_date1_c[1]);}
 else{$date1_c_sqlsafe=mysqli_real_escape_string($cnnTRP, $_POST['date1_c']);}

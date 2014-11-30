@@ -4,7 +4,6 @@ require_once("../siteconfig.php");
 <?php
 
 if ($_POST['action']=='new'){
-    print_r($_POST);
     include "../include/dbconnopen.php";
     $add_avg_sqlsafe="INSERT INTO Class_Avg_Gold_Scores (Classroom_ID, Test_Year, Test_Time, Class_Avg, Question_ID) "
             . "VALUES ('". mysqli_real_escape_string($cnnTRP, $_POST['classroom']) ."', '". mysqli_real_escape_string($cnnTRP, $_POST['test_year']) ."',"

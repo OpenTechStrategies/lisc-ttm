@@ -29,7 +29,6 @@ foreach ($this_survey as $abbr){
     }
     $counter++;
 }
-//print_r($this_survey);
     ?>
 
 

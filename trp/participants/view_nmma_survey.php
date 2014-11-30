@@ -14,7 +14,6 @@ if ($_GET['type'] == 'identity') {
 }
 $get_info = mysqli_query($cnnTRP, $query_sqlsafe);
 $info = mysqli_fetch_array($get_info);
-//print_r($info);
 include "../include/dbconnclose.php";
 
 /* show mexican museum of art surveys, one at a time.  These surveys are linked from the participant profile. */

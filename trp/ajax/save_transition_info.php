@@ -51,7 +51,6 @@ elseif($_POST['action']=='discipline'){
     include "../include/dbconnclose.php";
 }
 elseif($_POST['action']=='room'){
-    print_r($_POST);
     include "../include/dbconnopen.php";
     $record_room_sqlsafe="INSERT INTO Teacher_Exchange_Rooms (Participant_ID, Classroom, Home_Teacher, Exchange_Teacher) VALUES"
       . "('" . mysqli_real_escape_string($cnnTRP, $_POST['student']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['classroom']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['teacher'])

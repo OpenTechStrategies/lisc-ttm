@@ -1,6 +1,6 @@
-<? include "../../header.php";
-	include "../header.php";
-        //print_r($_COOKIE);
+<?
+include "../../header.php";
+include "../header.php";
 ?>
 <!-- Add a new program or campaign here. -->
     <script type="text/javascript">

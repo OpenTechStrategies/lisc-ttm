@@ -307,7 +307,6 @@ include "../include/dbconnclose.php";
                     echo "<hr>Intake Assessment Completed: ";
                     $new_baseline_date = explode('-', $person->baseline_date);
                     $new_baseline_date_day = explode(' ', $new_baseline_date[2]);
-                    //print_r($new_baseline_date_day);
                     $display_baseline_date = $new_baseline_date[1] . '/' . $new_baseline_date_day[0] . '/' . $new_baseline_date[0];
                     echo $display_baseline_date;
                     ?></span>
@@ -351,14 +350,6 @@ include "../include/dbconnclose.php";
                         <tr><td><a href="permission_check_page.php?page=<?php echo $page; ?>&id=<?php echo $person->participant_id; ?>&assessment=<?php echo $row[5]; ?>">
                                     <?php
                                     echo $row[0] .'/'. $row[1] .'/'. $row[2];
-                                    /*
-                                    $person->baseline();
-                                    $new_baseline_date = explode('-', $person->baseline_date);
-                                    $new_baseline_date_day = explode(' ', $new_baseline_date[2]);
-                                    // print_r($new_baseline_date_day);
-                                    $display_baseline_date = $new_baseline_date[1] . '/' . $new_baseline_date_day[0] . '/' . $new_baseline_date[0];
-                                    echo $display_baseline_date;
-                                     */
                                     ?>
                                 </a></td><td><?php
                                 if ($row[3] == 2) {
@@ -851,7 +842,6 @@ forms as well.-->
         include "../include/dbconnopen.php";
         $mentee_hours = mysqli_query($cnnEnlace, $get_mentee_hours);
         while ($hrs = mysqli_fetch_row($mentee_hours)) {
-           //print_r($hrs);
             ?>
             <tr>
                 <td><?php echo $hrs[0] . '/' . $hrs[1] . '/' . $hrs[2]; ?><br>

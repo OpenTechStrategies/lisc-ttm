@@ -177,7 +177,6 @@ class Participant
             $name='detail_'.$leader[0];
             $this->$name=$leader[1];
         }
-        //print_r(get_defined_vars());
         include "../include/dbconnclose.php";
     }
     
@@ -189,7 +188,6 @@ class Participant
         $get_employment_sqlsafe="SELECT * FROM Pool_Employers WHERE Participant_ID='" . $this->participant_id . "'";
         include "../include/dbconnopen.php";
         $employ_details = mysqli_query($cnnSWOP, $get_employment_sqlsafe);
-           //print_r(get_defined_vars());
         include "../include/dbconnclose.php";
         return $employ_details;
     }

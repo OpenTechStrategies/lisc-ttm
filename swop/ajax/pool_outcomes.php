@@ -1,5 +1,4 @@
 <?php
-print_r($_POST);
 echo "<br>";
 
 /* add a pool outcome for a person. */

@@ -56,7 +56,6 @@ if ($_COOKIE['inst_page']=='profile'){
 
 <?
         }
-  //      print_r($_COOKIE);
 ?>
 
 <div class="content" id="add_new_institution">

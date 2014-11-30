@@ -126,7 +126,6 @@ if (!isset($_POST['posted'])) {
                         $exploded_line[1] === null) {
                     echo 'problem: ' . $exploded_line[0] . '<br>';
                 } else {
-                    //print_r($exploded_line);
                     //first enter or find the event that's listed
                     //in order to do so, change date from excel format to mysql format:
                     $date_pieces = explode('/', $exploded_line[1]);

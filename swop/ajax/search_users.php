@@ -3,8 +3,6 @@
  * 
  * Same idea.  Those search elements that are filled in are included in the query.  some of them
  * require joins. */
-
-//print_r($_POST);
 include "../include/dbconnopen.php";
 if ($_POST['first'] == '') {
     $first_sqlsafe = '';

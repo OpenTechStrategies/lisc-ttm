@@ -14,7 +14,6 @@
     <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.pointLabels.min.js"></script>
 
     <h4>Parent Mentor Surveys - Aggregate Results</h4><br/>
-    <?php //print_r($_POST);?>
 
     <form action="reports.php" method="post">
         <strong>Choose year and/or school to sort surveys.  Leave blank to view all.</strong>
@@ -206,7 +205,6 @@
                         $check_order = -1;
                         while ($survey = mysqli_fetch_row($questions)) {
                             foreach ($survey as $key => $value) {
-                              //  print_r($survey);
                                 if ($key == 0 && $value === null) {
                                     $value = 0;
                                 }/* sets value to zero so that something will show up (so the chart doesn't 

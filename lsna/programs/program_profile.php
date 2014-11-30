@@ -1,7 +1,6 @@
 <?php
 include "../../header.php";
 include "../header.php";
-//print_r($_COOKIE);
 ?>
 
 <!--All information about a program or campaign: -->

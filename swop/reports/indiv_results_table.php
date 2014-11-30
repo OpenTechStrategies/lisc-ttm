@@ -1,7 +1,6 @@
 <?php
 /* queries for people and properties.  Each is first sent to an ajax file (individual_search or property_search) to 
  * choose result columns, then comes here for actual results. */
-// print_r($_POST['columns']);
 if ($_POST['search_type'] == 'pool') {
     /* first get all the columns that the user has specified: */
     $very_start_sqlsafe = 'SELECT Participants.Participant_ID, ';

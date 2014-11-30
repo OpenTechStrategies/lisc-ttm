@@ -78,7 +78,6 @@ else{
         include "../include/dbconnopen.php";
         foreach ($line as $cell){
             $break=explode("\t", $cell);
-           // print_r($break);
             echo "<br>";
             //now, here we enter the student as a participant and save their information in the MS_to_HS_over_time table
             //check first whether they are already a participant

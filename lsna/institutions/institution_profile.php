@@ -61,7 +61,6 @@ if ($_COOKIE['inst_page']=='profile'){
 
 <?
         }
-  //      print_r($_COOKIE);
 ?>
 
 

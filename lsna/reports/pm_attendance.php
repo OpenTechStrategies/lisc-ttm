@@ -5,7 +5,6 @@ A more current version is at pm_attendance_2.php.
 <div id="pm_attendance">
   <?        $month_array=array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 
- // print_r($_POST);
   ?>
     <h4>Parent Mentor Attendance <?if (isset($_POST['month'])){echo ": " . $month_array[$_POST['month']-1] . " " .$_POST['year'];
     if ($_POST['school'] !=''){

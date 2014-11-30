@@ -205,12 +205,9 @@ else {
         echo "</pre>";
 
         fclose($handle);
-//print_r($exploded_line);
         //summary
         echo "Lines: <br /><pre>";
         foreach ($dbs as $key => $val) {
-            //print "$key = $val\n";
-
             //open DB
             include 'dbconnopen.php';
             $val_sqlsafe=mysqli_real_escape_string($cnnLSNA, $val);
@@ -218,7 +215,7 @@ else {
             //echo $import_query . "<br>";
             $imported_record = mysqli_query($cnnLSNA, $import_query);
 
-            if (is_object($imported_record)) { //->num_rows > 0) {
+            if (is_object($imported_record)) {
                 echo "IMPORTED!\r\n";
             } else {
                 echo "NOT IMPORTED... this line: ".$val.".\r\n";

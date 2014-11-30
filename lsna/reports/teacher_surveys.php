@@ -194,7 +194,6 @@ foreach($percent_questions_arr as $question){
             $num_options = mysqli_num_rows($questions);
             $total_post_responses=0;
           while ($survey = mysqli_fetch_row($questions)){
-             // print_r($survey);
            foreach($survey as $key => $value)
                 {
                //creates the correct arrays for results, below
@@ -523,10 +522,8 @@ foreach($task_questions_arr as $question){
                     echo 'mean: ' . number_format($survey[0]/$total_responses, 2) . "<br>";
                     $get_median = "SELECT Teacher_Involvement_A FROM PM_Teacher_Survey 
                         ORDER BY Teacher_Involvement_A LIMIT ".floor($total_responses/2).", 1;";
-                    //echo $get_median;
                     include "../include/dbconnopen.php";
                     $median=mysqli_query($cnnLSNA, $get_median);
-                    //print_r($median);
                     $med=mysqli_fetch_row($median);
                     echo 'median: ' . $med[0] . "<br>";
                 }
@@ -575,10 +572,8 @@ foreach($task_questions_arr as $question){
                 if ($question!='Teacher_Parent_Network_K' && $question!='Teacher_Parent_Network_L'){
                     echo 'mean: ' . $survey[0]/$total_post_responses . "<br>";
                     $get_median = "SELECT Teacher_Involvement_A FROM PM_Teacher_Survey ORDER BY Teacher_Involvement_A LIMIT ".floor($total_post_responses/2).", 1;";
-                    //echo $get_median;
                     include "../include/dbconnopen.php";
                     $median=mysqli_query($cnnLSNA, $get_median);
-                    //print_r($median);
                     $med=mysqli_fetch_row($median);
                     echo 'median: ' . $med[0] . "<br>";
                 }

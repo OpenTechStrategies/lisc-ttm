@@ -1,7 +1,6 @@
 <?php
 /* search properties.  This is the search backend for the properties home page, not for the query search.
  * Same idea, but fewer moving parts. */
-//print_r($_POST);
 include "../include/dbconnopen.php";
 if ($_POST['name'] == '') {
     $name_sqlsafe = '';

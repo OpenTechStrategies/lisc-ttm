@@ -2,7 +2,6 @@
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker.php";
-//print_r($_COOKIE);
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -39,7 +38,6 @@ include "../include/datepicker.php";
 
 <div id="participant_profile_div">
     <?php
-    //print_r($_COOKIE);
 
     include "../classes/participants.php";
     $parti = new Participant();
@@ -896,15 +894,10 @@ include "../include/dbconnclose.php";
     Category_Subcategory_Links.Subcategory_ID=Subcategories.Subcategory_ID
     AND Subcategories.Subcategory_ID=Participants_Subcategories.Subcategory_ID
     WHERE Participant_ID='" . $parti->participant_id . "' ORDER BY Category_Subcategory_Links.Category_ID, Subcategories.Subcategory_Name";
-                //echo $get_program_list;
                 include "../include/dbconnopen.php";
                 $programs = mysqli_query($cnnLSNA, $get_program_list);
-                // print_r($programs);
-                //  echo "<p></p>";
                 $category = 0;
                 while ($program = mysqli_fetch_array($programs)) {
-                    //print_r($program);
-                    //  echo "<br>";
                     if ($category != $program['Category_ID']) {
                         $category = $program['Category_ID'];
                         ?>

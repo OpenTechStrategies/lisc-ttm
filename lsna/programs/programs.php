@@ -1,6 +1,5 @@
 <? include "../../header.php";
 	include "../header.php";
-        //print_r($_COOKIE);
 ?>
 <!--Home/search page for programs: -->
     <script type="text/javascript">

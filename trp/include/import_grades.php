@@ -125,7 +125,6 @@ if (!isset($_POST['posted'])) {
                          echo 'problem: ' . $exploded_line[1] . '<br>';
                     }
                     else{
-                        //print_r($exploded_line);
                         //split up names
                         $names=explode(' ',$exploded_line[1]);
                         include "../include/dbconnopen.php";
@@ -292,27 +291,6 @@ if (!isset($_POST['posted'])) {
         fclose($handle);
 
         //summary
-//        echo "DBs: <br /><pre>";
-//        foreach ($dbs as $key => $val) {
-//            print "$key = $val\n";
-//
-//            //open DB
-//            include 'dbconnopen.php';
-//            $import_query_sqlsafe= "Call Import__Activity_Status_Report('" . mysqli_real_escape_string($cnnTRP, $val) . "')";
-//           // echo $import_query;
-//            $imported_record = mysqli_query($cnnTRP, $import_query_sqlsafe);
-//
-//            if (is_object($imported_record)) { //->num_rows > 0) {
-//                echo "IMPORTED!\r\n";
-//            } else {
-//                echo "NOT IMPORTED... Already exists.\r\n";
-//            }
-//
-//            //close DB
-//            include 'dbconnclose.php';
-//        }
-        //print_r($dbs);
-
         echo "<a href=\"import_grades.php\">Import Another</a>";
 
         

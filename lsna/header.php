@@ -112,5 +112,4 @@ else{
                 </script>
             <?
 }
-//print_r($_COOKIE);
 ?>

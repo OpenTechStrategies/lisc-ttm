@@ -1,7 +1,6 @@
 <?php
 include "../../header.php";
 include "../header.php";
-//print_r($_COOKIE);
 ?>
 
 <script type="text/javascript">
@@ -59,7 +58,6 @@ if ($_COOKIE['inst_page'] == 'profile') {
     </script>
     <?php
 }
-//      print_r($_COOKIE);
 ?>
 
 <div class="content" id="search_all_institutions">

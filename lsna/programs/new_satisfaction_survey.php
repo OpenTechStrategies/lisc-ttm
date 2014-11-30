@@ -1,5 +1,4 @@
 <?php
-//print_r($_POST);
 include "../../header.php";
 include "../header.php";
 include "../classes/program.php";
@@ -9,10 +8,7 @@ include "../classes/participants.php";
 $parti = new Participant();
 $parti->load_with_participant_id($_COOKIE['participant']);
 ?>
-<!--
-
--->
-                <?include "../include/datepicker.php";?>
+<?include "../include/datepicker.php";?>
 <script type="text/javascript">
     $(document).ready(function(){
                 $('#programs_selector').addClass('selected');

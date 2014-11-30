@@ -43,8 +43,6 @@ if ($_GET['history'] == 1) {
     include "../classes/property.php";
     $prop = new Property();
     $prop->load_with_id($_COOKIE['property']);
-
-    //  print_r($_COOKIE);
     ?>
     <script type="text/javascript">
         $(document).ready(function() {

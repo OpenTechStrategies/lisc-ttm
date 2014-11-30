@@ -103,27 +103,6 @@
             </td>
         </tr>
     </table>
-        
-    <?
-/*I want to set up a set of arrays that show the number of each answer to each question.  Did most kids agree, disagree, or in between?
- * 
-
-$array_of_arrays=array($participants_array, $adults_array, $pm_array, $youth_array, $pm_children_array);
-$order=0;
-foreach ($array_of_arrays as $each){
-    $order++;
-    $counter=0;
-    foreach($each as $key=>$value){
-        ${string_ . $order} .='[' . $key . ', ' . $value . ']';
-        $counter++;
-        if ($counter <count($each)){
-            ${string_ . $order}.=',';
-        }
-    }
-}
-     */
-//print_r(get_defined_vars());
-?>
  <!--[if IE]>
 <script src="/include/excanvas_r3/excanvas.js"></script>
 <![endif]-->

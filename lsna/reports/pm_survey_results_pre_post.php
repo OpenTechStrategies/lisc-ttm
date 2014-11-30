@@ -14,7 +14,6 @@
     <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.pointLabels.min.js"></script>
 
     <h4>Parent Mentor Surveys - Aggregate Results (Pre, Mid, & Post Completed)</h4><br/>
-    <?php //print_r($_POST);?>
 
     <form action="reports.php" method="post">
         <strong>Choose year and/or school to sort surveys.  Leave blank to view all.</strong>
@@ -583,8 +582,6 @@
             <?php
             $question_count++;
         }
-//print_r(get_defined_vars());
-//echo "check" .$Student_Involvement_A_1;
         ?>
 
     </table>
