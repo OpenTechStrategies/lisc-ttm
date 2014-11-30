@@ -133,7 +133,7 @@ if (!isset($_POST['posted'])) {
 //                        $name_first=$names[0];
 //                        $surname=$names[1];
                         include "../include/dbconnopen.php";
-                        $get_program_name_sqlsafe = "SELECT * FROM Participants WHERE First_Name='" . mysqli_real_escape_string($cnnTRP, $exploded_line[2]) "' AND Last_Name='" . mysqli_real_escape_string($cnnTRP, $exploded_line[1]) . "'";
+                        $get_program_name_sqlsafe = "SELECT * FROM Participants WHERE First_Name='" . mysqli_real_escape_string($cnnTRP, $exploded_line[2]) . "' AND Last_Name='" . mysqli_real_escape_string($cnnTRP, $exploded_line[1]) . "'";
                         $program_name=mysqli_query($cnnTRP, $get_program_name_sqlsafe);
                         //test whether the program already exists or not
                         if (mysqli_num_rows($program_name)>0){
