@@ -12,7 +12,6 @@ if ($_SERVER['PHP_SELF'] != '/index.php'){
         exit;
     }
     else{
-        echo "Authenticated";
     }    
 }
 
