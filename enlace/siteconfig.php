@@ -5,7 +5,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/auth.php";
 
 $sites_authorized = getSiteAccess($_COOKIE['PHPSESSID'], $Enlace_id);
 
-//kick them out if they can't be here
+//send to "Not Authorized" page if $sites_authorized is false
 
 if (! $sites_authorized ){
     header("Location: ../include/error.html");

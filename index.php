@@ -4,9 +4,6 @@ if ($_GET['action'] == 'logout') {
     include_once('ajax/session_test.php');
     $loggingout = pleaseLogOut($_COOKIE['PHPSESSID']);
     if ($loggingout){
-        session_unset();
-        session_destroy();
-        $_SESSION['is_logged_in'] = false;
         //kill cookie
         setcookie('PHPSESSID', '', time() - 3600, '/');
         setcookie('user', '', time() - 3600, '/');

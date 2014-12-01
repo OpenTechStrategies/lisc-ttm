@@ -48,10 +48,6 @@ if ($hash_match) {
        setcookie("user", "$username", time() + 10800, '/');
        session_start();
        session_regenerate_id();
-       $php_session_sqlsafe = mysqli_real_escape_string($cnnLISC, session_id());
-       $expire_time_sqlsafe = date('Y-m-d H:i:s', time() + 7200);
-       $save_session_sqlsafe = "INSERT INTO User_Sessions (PHP_Session, User_ID, Expire_Time) VALUES ('" . $php_session_sqlsafe . "', '" . $user_id . "', '" . $expire_time_sqlsafe . "')";
-       mysqli_query($cnnLISC, $save_session_sqlsafe);
 
        //saving permission information in a session, also
        //deprecating the use of the stored routine at @akshay's suggestion

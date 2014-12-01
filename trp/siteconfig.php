@@ -24,7 +24,6 @@ if (($AccessLevelTRP != $AdminAccess) && ($AccessLevelTRP != $DataEntryAccess)
     $Access_Level_TRP = $ReadOnlyAccess;
 }
 
-echo $AccessLevelTRP;
 
 $program_access_list = getProgramAccess($_COOKIE['PHPSESSID'], $TRP_id);
 
