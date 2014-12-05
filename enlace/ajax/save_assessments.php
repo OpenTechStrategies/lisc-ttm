@@ -142,7 +142,9 @@ if ($_POST['edited'] != 1) {
         $future_id = mysqli_insert_id($cnnEnlace);
         include "../include/dbconnopen.php";
         ?>
-        <!--<span style="font-weight:bold;color:#990000;">Thank you for adding this assessment!</span>-->
+        <span style="font-weight:bold;color:#990000;">Thank you for adding this assessment!
+        <a href = "../participants/participant_profile.php?id=<?php echo $_POST['person']; ?>">Click here to return to the participant profile. </a>
+</span>
         <?php
     }
     if ($_POST['action'] == 'baseline') {
@@ -186,7 +188,6 @@ if ($_POST['edited'] != 1) {
         $baseline_id = mysqli_insert_id($cnnEnlace);
         include "../include/dbconnclose.php";
         ?>
-        <span style="font-weight:bold;color:#990000;">Thank you for adding this assessment!</span>
         <?php
     }
 
@@ -278,7 +279,9 @@ Participant_ID='" . $person_sqlsafe . "',
     mysqli_query($cnnEnlace, $update_future);
     include "../include/dbconnclose.php";
     ?>
-    <span style="font-weight:bold;color:#990000;">Thank you for editing this assessment!</span>
+    <span style="font-weight:bold;color:#990000;">Thank you for editing this assessment!
+    <a href = "../participants/participant_profile.php?id=<?php echo $_POST['person']; ?>">Click here to return to the participant profile. </a>
+</span>
     <?php
 }
 ?>
