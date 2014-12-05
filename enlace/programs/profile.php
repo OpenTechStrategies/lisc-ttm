@@ -343,7 +343,7 @@ Shows all program information.
                             <td>
                                 <?php
                                 //get count of participants in this session
-                                $get_people = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_Id=$sesh[0]";
+                                $get_people = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_Id=$sesh[0] AND Participant_ID!='0'";
                                 $people = mysqli_query($cnnEnlace, $get_people);
                                 $count_people = mysqli_fetch_row($people);
                                 $num_people = $count_people[0];
