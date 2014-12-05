@@ -64,7 +64,7 @@ $jvq_9_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['jvq_9']);
 $jvq_10_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['jvq_10']);
 $jvq_11_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['jvq_11']);
 $jvq_12_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['jvq_12']);
-$base_date_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['base_date']);
+$base_date_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['base_date'] . ' 00:00:00');
 $baseline_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['baseline_id']);
 $caring_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['caring_id']);
 $violence_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['violence_id']);
@@ -77,7 +77,7 @@ if ($_POST['edited'] != 1) {
     /* add each part to its own table.  (we had to change the appearance midway through) */
     if ($_POST['action_2'] == 'caring') {
         $new_survey = "INSERT INTO Participants_Caring_Adults (Participant_ID, Pay_Attention, Check_In,
-        Compliment, Upset_Discussion, Crisis_Help, Personal_Advice, Know_You, KnowImportance, Program, Pre_Post) VALUES (
+        Compliment, Upset_Discussion, Crisis_Help, Personal_Advice, Know_You, KnowImportance, Program, Pre_Post, Date_Logged) VALUES (
         '" . $person_sqlsafe . "',
         '" . $attn_sqlsafe . "',
         '" . $check_sqlsafe . "',
@@ -88,7 +88,8 @@ if ($_POST['edited'] != 1) {
         '" . $know_sqlsafe . "',
         '" . $important_sqlsafe . "',
 		'" . $program_sqlsafe . "',
-                    '" . $pre_post_sqlsafe . "')";
+        '" . $pre_post_sqlsafe . "',
+        '" . $base_date_sqlsafe . "')";
         //echo $new_survey;
         mysqli_query($cnnEnlace, $new_survey);
         $caring_id = mysqli_insert_id($cnnEnlace);
@@ -97,7 +98,7 @@ if ($_POST['edited'] != 1) {
     if ($_POST['action_4'] == 'violence') {
         $add_peers = "INSERT INTO Participants_Interpersonal_Violence (Participant_ID, Cowardice, Teasing_Prevention, Anger_Mgmt,
         Self_Defense, Coping, Handle_Others, Negotiation, Parent_Disapproval, Parent_Approval, Self_Awareness,
-        Self_Care, Program, Pre_Post) VALUES (
+        Self_Care, Program, Pre_Post, Date_Logged) VALUES (
         '" . $person_sqlsafe . "',
         '" . $fear_sqlsafe . "',
         '" . $prevent_sqlsafe . "',
@@ -111,7 +112,8 @@ if ($_POST['edited'] != 1) {
         '" . $awareness_sqlsafe . "',
         '" . $care_sqlsafe . "',
         '" . $program_sqlsafe . "',
-                    '" . $pre_post_sqlsafe . "')";
+        '" . $pre_post_sqlsafe . "',
+        '" . $base_date_sqlsafe . "')";
         // echo $add_peers;
         include "../include/dbconnopen.php";
         mysqli_query($cnnEnlace, $add_peers);
@@ -120,7 +122,7 @@ if ($_POST['edited'] != 1) {
     }
     if ($_POST['action_3'] == 'future') {
         $add_future = "INSERT INTO Participants_Future_Expectations (Participant_ID, Solve_Problems, Stay_Safe,
-        Alive_Well, Manage_Work, Friends, Happy_Life, Interesting_Life, Proud_Parents, Finish_HS, Program, Pre_Post) VALUES (
+        Alive_Well, Manage_Work, Friends, Happy_Life, Interesting_Life, Proud_Parents, Finish_HS, Program, Pre_Post, Date_Logged) VALUES (
         '" . $person_sqlsafe . "',
         '" . $solutions_sqlsafe . "',
         '" . $safety_sqlsafe . "',
@@ -132,14 +134,17 @@ if ($_POST['edited'] != 1) {
         '" . $parents_sqlsafe . "',
         '" . $finish_hs_sqlsafe . "',
 		'" . $program_sqlsafe . "',
-                    '" . $pre_post_sqlsafe . "')";
+        '" . $pre_post_sqlsafe . "',
+        '" . $base_date_sqlsafe . "')";
         //  echo $add_future;
         include "../include/dbconnopen.php";
         mysqli_query($cnnEnlace, $add_future);
         $future_id = mysqli_insert_id($cnnEnlace);
         include "../include/dbconnopen.php";
         ?>
-        <!--<span style="font-weight:bold;color:#990000;">Thank you for adding this assessment!</span>-->
+        <span style="font-weight:bold;color:#990000;">Thank you for adding this assessment!
+        <a href = "../participants/participant_profile.php?id=<?php echo $_POST['person']; ?>">Click here to return to the participant profile. </a>
+</span>
         <?php
     }
     if ($_POST['action'] == 'baseline') {
@@ -147,35 +152,35 @@ if ($_POST['edited'] != 1) {
     Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_T, BYS_E,
     JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_T, JVQ_E, JVQ_12, Date_Logged) VALUES (
     '" . $person_sqlsafe . "',
-		'" . $program_sqlsafe . "',
+    '" . $program_sqlsafe . "',
     '" . $home_lang_sqlsafe . "',
-        '" . $pays_origin_sqlsafe . "',
-'" . $ethnicity_sqlsafe . "',
+    '" . $pays_origin_sqlsafe . "',
+    '" . $ethnicity_sqlsafe . "',
     '" . $race_sqlsafe . "',
-'" . $bys_1_sqlsafe . "',
-'" . $bys_2_sqlsafe . "',
-'" . $bys_3_sqlsafe . "',
-'" . $bys_4_sqlsafe . "',
-'" . $bys_5_sqlsafe . "',
-'" . $bys_6_sqlsafe . "',
-'" . $bys_7_sqlsafe . "',
-'" . $bys_8_sqlsafe . "',
-'" . $bys_9_sqlsafe . "',
-'" . $bys_10_sqlsafe . "',
-'" . $bys_11_sqlsafe . "',
-
-'" . $jvq_1_sqlsafe . "',
-'" . $jvq_2_sqlsafe . "',
-'" . $jvq_3_sqlsafe . "',
-'" . $jvq_4_sqlsafe . "',
-'" . $jvq_5_sqlsafe . "',
-'" . $jvq_6_sqlsafe . "',
-'" . $jvq_7_sqlsafe . "',
-'" . $jvq_8_sqlsafe . "',
-'" . $jvq_9_sqlsafe . "',
-'" . $jvq_10_sqlsafe . "',
-'" . $jvq_11_sqlsafe . "',
-'" . $jvq_12_sqlsafe . "', '" . $base_date_sqlsafe . "')";
+    '" . $bys_1_sqlsafe . "',
+    '" . $bys_2_sqlsafe . "',
+    '" . $bys_3_sqlsafe . "',
+    '" . $bys_4_sqlsafe . "',
+    '" . $bys_5_sqlsafe . "',
+    '" . $bys_6_sqlsafe . "',
+    '" . $bys_7_sqlsafe . "',
+    '" . $bys_8_sqlsafe . "',
+    '" . $bys_9_sqlsafe . "',
+    '" . $bys_10_sqlsafe . "',
+    '" . $bys_11_sqlsafe . "',
+    '" . $jvq_1_sqlsafe . "',
+    '" . $jvq_2_sqlsafe . "',
+    '" . $jvq_3_sqlsafe . "',
+    '" . $jvq_4_sqlsafe . "',
+    '" . $jvq_5_sqlsafe . "',
+    '" . $jvq_6_sqlsafe . "',
+    '" . $jvq_7_sqlsafe . "',
+    '" . $jvq_8_sqlsafe . "',
+    '" . $jvq_9_sqlsafe . "',
+    '" . $jvq_10_sqlsafe . "',
+    '" . $jvq_11_sqlsafe . "',
+    '" . $jvq_12_sqlsafe . "',
+    '" . $base_date_sqlsafe . "')";
 
 //echo $save_these;
         include "../include/dbconnopen.php";
@@ -183,7 +188,6 @@ if ($_POST['edited'] != 1) {
         $baseline_id = mysqli_insert_id($cnnEnlace);
         include "../include/dbconnclose.php";
         ?>
-        <span style="font-weight:bold;color:#990000;">Thank you for adding this assessment!</span>
         <?php
     }
 
@@ -275,7 +279,9 @@ Participant_ID='" . $person_sqlsafe . "',
     mysqli_query($cnnEnlace, $update_future);
     include "../include/dbconnclose.php";
     ?>
-    <span style="font-weight:bold;color:#990000;">Thank you for editing this assessment!</span>
+    <span style="font-weight:bold;color:#990000;">Thank you for editing this assessment!
+    <a href = "../participants/participant_profile.php?id=<?php echo $_POST['person']; ?>">Click here to return to the participant profile. </a>
+</span>
     <?php
 }
 ?>
