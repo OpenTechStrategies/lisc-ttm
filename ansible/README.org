@@ -30,10 +30,6 @@ But anyway, get a Debian box!  And then continue below.
 
 ** Set up the vagrant image
 
-Making this image is the most complex part (you could use a prebuilt
-image, but I don't trust them).  Once you have it, the rest is easy
-peasy.
-
 To set up the image, run:
 
 : vagrant up && vagrant ssh -c /vagrant/ansible/scripts/setup_dev_db.sh
