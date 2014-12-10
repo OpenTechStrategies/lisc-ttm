@@ -12,12 +12,12 @@ but works on Debian Wheezy.  You need a Vagrant box that runs
 Debian... this is the hardest part of this guide, but luckily it is
 only done once.
 
-It's recommended that you put together a box yourself that you can
-trust, but this process is not easy if done manually (though if you
-want to completely do it yourself, [[http://hadooppowered.com/2014/05/10/create-a-debian-wheezy-vagrant-box/][this guide works]]).
-
 There are some [[https://github.com/dotzero/vagrant-debian-wheezy-64][scripts that do box-building for you]], this might make
-things a lot easier!
+things a lot easier!  Plus, it's using a reproducible script, which is
+good.
+
+If you'd like to put together a box yourself that you can trust, this
+process is not easy if done manually, but [[http://hadooppowered.com/2014/05/10/create-a-debian-wheezy-vagrant-box/][this guide works]].
 
 If you really feel overwhelmed, you could use [[http://www.vagrantbox.es/][vagrantbox.es]] but keep
 in mind, most of these images are not reproducible.
