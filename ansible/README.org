@@ -14,10 +14,12 @@ only done once.
 
 There are some [[https://github.com/dotzero/vagrant-debian-wheezy-64][scripts that do box-building for you]], this might make
 things a lot easier!  Plus, it's using a reproducible script, which is
-good.
+good.  (Unfortunately, I've tried building this myself, and haven't
+been able to log in to the built machine
 
 If you'd like to put together a box yourself that you can trust, this
-process is not easy if done manually, but [[http://hadooppowered.com/2014/05/10/create-a-debian-wheezy-vagrant-box/][this guide works]].
+process is not easy if done manually, but [[http://hadooppowered.com/2014/05/10/create-a-debian-wheezy-vagrant-box/][this guide works]].  One nice
+thing about this is you can set up your own public/private key pair.
 
 If you really feel overwhelmed, you could use [[http://www.vagrantbox.es/][vagrantbox.es]] but keep
 in mind, most of these images are not reproducible.
