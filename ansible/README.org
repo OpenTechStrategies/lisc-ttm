@@ -5,16 +5,35 @@
 This is a quick-to-setup-and-tear-down vagrant + ansible setup for the
 TTM project.
 
-* How to use it
+* Preliminary: get a Vagrant box
 
-Check out this repository, cd to the base directory of it.
+TTM is deployed to Debian testing (Jessie, at the time of writing),
+but works on Debian Wheezy.  You need a Vagrant box that runs
+Debian... this is the hardest part of this guide, but luckily it is
+only done once.
+
+It's recommended that you put together a box yourself that you can
+trust, but this process is not easy if done manually (though if you
+want to completely do it yourself, [[http://hadooppowered.com/2014/05/10/create-a-debian-wheezy-vagrant-box/][this guide works]]).
+
+There are some [[https://github.com/dotzero/vagrant-debian-wheezy-64][scripts that do box-building for you]], this might make
+things a lot easier!
+
+If you really feel overwhelmed, you could use [[http://www.vagrantbox.es/][vagrantbox.es]] but keep
+in mind, most of these images are not reproducible.
+
+But anyway, get a Debian box!  And then continue below.
+
+* How to use it
 
 ** Set up the vagrant image
 
-You'll need a properly configured debian wheezy image titled
-"vagrant-debian-wheezy" with a vagrant user that has sudo permissions.
+cd to the base directory of your TTM checkout and run:
 
-The key for this vagrant user should be at: ~/.ssh/vagrant
+: vagrant init debian-wheezy
+
+(If you use a different base box, you can replace "debian-wheezy" with
+that name.)
 
 Making this image is the most complex part (you could use a prebuilt
 image, but I don't trust them).  Once you have it, the rest is easy
