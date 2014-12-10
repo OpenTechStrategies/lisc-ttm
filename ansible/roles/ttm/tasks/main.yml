@@ -1,0 +1,74 @@
+- name: apt-get update
+  apt: update-cache=yes
+  sudo: yes
+
+- name: Install dependencies
+  apt: name={{item}} state=installed
+  sudo: yes
+  with_items:
+    - mysql-server
+    - mysql-client
+    - apache2
+    - apache2-doc
+    - openssl
+    - git
+    - php5
+    - php5-mysql
+    - libapache2-mod-php5
+    - postfix
+
+- name: Copy over dbconnopen files
+  copy: owner=www-data group=www-data src=../files/dbconnopen_dev/{{item}}.php dest=/var/www/ttm/{{item}}/include/dbconnopen.php
+  sudo: yes
+  with_items:
+    - enlace
+    - lsna
+    - bickerdike
+    - swop
+    - trp
+
+- name: Copy over core dbconnopen file
+  sudo: yes
+  copy: owner=www-data group=www-data src=../files/dbconnopen_dev/core.php dest=/var/www/ttm/include/dbconnopen.php
+
+- name: Install ttm.conf Apache config
+  copy: owner=www-data group=www-data src=../files/apache-ttm-nossl.conf dest=/etc/apache2/sites-available/ttm.conf
+  sudo: yes
+  notify:
+    - restart apache
+
+# Do we need this?
+- name: Install httpd.conf
+  copy: owner=www-data group=www-data src=../files/httpd.conf dest=/etc/apache2/httpd.conf
+  sudo: yes
+  notify:
+    - restart apache
+
+- name: Symlink Apache config into place
+  file: src=/etc/apache2/sites-available/ttm.conf dest=/etc/apache2/sites-enabled/ttm.conf state=link
+  sudo: yes
+  notify:
+    - restart apache
+
+- name: Symlink relevant Apache modules
+  file: src=/etc/apache2/mods-available/{{item}} dest=/etc/apache2/mods-enabled/{{item}} state=link
+  with_items:
+    - ssl.conf
+    - ssl.load
+    - php5.conf
+    - php5.load
+    - rewrite.load
+    # - php5_cgi.conf
+    # - php5_cgi.load
+    # - socache_dbm.load
+    # - socache_memcache.load
+    # - socache_shmcb.load
+  sudo: yes
+  notify:
+    - restart apache
+
+- name: Remove old apache config, if exists
+  command: /bin/rm -f /etc/apache2/sites-enabled/000-default removes=/etc/apache2/sites-enabled/000-default
+  sudo: yes
+  notify:
+    - restart apache
