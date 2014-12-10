@@ -30,13 +30,6 @@ But anyway, get a Debian box!  And then continue below.
 
 ** Set up the vagrant image
 
-cd to the base directory of your TTM checkout and run:
-
-: vagrant init debian-wheezy
-
-(If you use a different base box, you can replace "debian-wheezy" with
-that name.)
-
 Making this image is the most complex part (you could use a prebuilt
 image, but I don't trust them).  Once you have it, the rest is easy
 peasy.
