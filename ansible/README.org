@@ -9,12 +9,7 @@ TTM project.
 
 Check out this repository, cd to the base directory of it.
 
-** Do a git checkout of lisc-ttm
-
-: git clone git@github.com:OpenTechStrategies/lisc-ttm.git src/ttm
-
 ** Set up the vagrant image
-
 
 You'll need a properly configured debian wheezy image titled
 "vagrant-debian-wheezy" with a vagrant user that has sudo permissions.
@@ -27,19 +22,37 @@ peasy.
 
 To set up the image, run:
 
-: vagrant up && vagrant ssh -c /vagrant/scripts/setup_dev_db.sh
+: vagrant up && vagrant ssh -c /vagrant/ansible/scripts/setup_dev_db.sh
 
 You're done!
-
-(If you ever want to start over, just run "vagrant destroy" and
-run the above command again.)
 
 You should be able to open the test site at http://127.0.0.1:8080/ in
 your browser.
 
-To shut down the VM, run "vagrant halt".  To set it back up again, run
-"vagrant up".
-
-The source directory in src/ttm is mounted inside the vagrant VM image
+Your checkout of this codebase is mounted inside the vagrant VM image
 and connected to apache, so you can hack away with all your local tools!
+
+** Using
+
+If you want to shut down the vm, try:
+
+: vagrant halt
+
+To bring it back up again:
+
+: vagrant up
+
+If you update the ansible rules, you can re-run provisioning:
+
+: vagrant provision
+
+Don't need this vm anymore?
+
+: vagrant destroy
+
+You can always go back through the setup steps again.
+
+For more info:
+
+: vagrant --help
 
