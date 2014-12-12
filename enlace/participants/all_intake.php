@@ -686,6 +686,7 @@ if (isset($_GET['id'])) {
                     awareness: document.getElementById('self_awareness').value,
                     care: document.getElementById('self_care').value,
                     violence_id: '<?php echo $violence_id; ?>',
+                    assessment_id: '<?php echo $id_sqlsafe; ?>',
                     edited: '<?php echo $edit; ?>'
                 },
         function(response) {

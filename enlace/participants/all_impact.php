@@ -384,6 +384,7 @@ if (isset($_GET['id'])) {
                     care: document.getElementById('self_care').value,
                     violence_id: '<?php echo $violence_id; ?>',
                     edited: '<?php echo $edit; ?>',
+                    assessment_id: '<?php echo $id_sqlsafe; ?>',
                     base_date: document.getElementById('admin_date').value
                 },
         function(response) {
