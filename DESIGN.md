@@ -155,3 +155,55 @@ or around the individual functions/variables in the file:
         }
 
 The former way is usually better.
+
+
+How to Add a New User
+-----------------------
+
+In most cases the subsite users will add new users themselves, but in
+the case where a new user needs access to more than one subsite or
+there is no active user at a subsite then the development team will
+need to add a user.
+To do so:
+
+1. Log in.
+2. On the landing page, you'll see an "Alter Privileges" menu item
+between "Homepage" and "Log Out."  This menu item is only visible to
+logged-in users with Administrative privileges. Click on "Alter
+Privileges."
+3. That brings you to "/include/add_staff.php."  Here you'll see a
+section for "Add User."
+4. Fill out the add user section.  Note that there is (currently, as
+of 2014-12-15) no way to grant a new user access to one or more
+specific subsites in the UI.  By default, the user will have access to the
+subsite that the creating user has access to.  If the creating user
+(the logged-in user who fills out the "Add User" form) has access to
+multiple subsites, then the new user will, by default, have access to
+the subsite linked to the logged-in user first in the Users Privileges
+table. See Issue #99 for discussion on this design flaw.
+5. At this point, the user has been created and has access to one
+subsite.  If the user needs access to more than one subsite, or to a
+different subsite than they were granted access to by default, then
+the creating user needs to SSH into the server and make changes to a
+DB table.
+6. Look in the Users table to find the User ID of the newly created
+user (the username will be stored in the User Email column of that
+table, see issue #14).  Subsite access is stored in the
+Users Privileges table, using that User ID as a foreign key.   
+About the Users Privileges table:  
+The Privilege ID column refers to the Privileges table, which is a list of
+subsites.  The Site Privilege ID column refers to the Site Privileges
+table, which refers to the levels of access (administrator, data
+entry, and read-only).  The Site Privilege ID column can be
+manipulated from the UI, but for the moment the Privilege ID column
+must be altered directly in the server (again, see issue #99).
+If the subsite has been inaccurately assigned, the
+Privilege ID column is the one that needs to be changed.  Consult the
+Privileges table to find the correct Privilege ID for the desired
+subsite, and update the row to point to that ID instead.
+If the new user needs access to multiple subsites, then insert a row
+for each subsite into the Users Privileges table with the appropriate
+subsite ID in the Privilege ID column and the correct level of access ID
+in the Site Privilege ID column.
+7. Log in using the newly created user's credentials to ensure that
+everything has been correctly configured, and that's all!
