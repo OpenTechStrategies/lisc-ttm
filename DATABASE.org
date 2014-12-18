@@ -5,6 +5,10 @@ Description of the database layout.
 There are 6 main databases, and a large (137) number of uniquely named
 tables.
 
+Many have the same names, but they often diverge.  When new feature
+requests came in historically, code and structure was copied from
+previous similar features, leading to the present structure.
+
 * Which databases have what?
 
 | Table name                           | core | lsna | swop | bickerdike | trp | enlace |
@@ -153,6 +157,15 @@ tables.
 
 ** Core
 
+Core holds the users and their privileges and keeps track of when they
+log in in the log table.
+
+Privileges and Site privileges are confusing a bit name-wise, so for
+clarity:
+ - *Privileges:* holds the names of the subsites
+ - *Site_Privileges:* holds level of access (admin, read only, data entry)
+
+
 *** Log
 
 | Field         | Type        | Null | Key | Default           | Extra          |
@@ -194,6 +207,9 @@ tables.
 | User_Privilege_Created_Date | timestamp  | YES  |     | CURRENT_TIMESTAMP |                |
 | Program_Access              | varchar(1) | YES  |     | NULL              |                |
 
+** Enlace
+** LSNA
+** SWOP
 ** Bickerdike
 
 *** Activities_Users
@@ -312,6 +328,7 @@ tables.
 | Participant_Type         | varchar(45) | YES  |     | NULL    |                |
 | Child_ID                 | int(11)     | YES  |     | NULL    |                |
 
+*** Program tables
 *** Program_Dates
 
 | Field           | Type    | Null | Key | Default | Extra          |
