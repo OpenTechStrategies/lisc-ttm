@@ -39,8 +39,17 @@ You're done!
 You should be able to open the test site at http://127.0.0.1:8080/ in
 your browser.
 
-Your checkout of this codebase is mounted inside the vagrant VM image
-and connected to apache, so you can hack away with all your local tools!
+** Auto-sync yer files with rsync!
+
+Your local checkout is rsync'ed over to the server, so you can hack
+away with all your local tools!  You can re-rsync via:
+
+: vagrant rsync
+
+But what if you're doing a lot of work, want the server to keep
+updating automatically every time you run that command?  Easy!  Run:
+
+: vagrant rsync-auto
 
 ** Using
 
