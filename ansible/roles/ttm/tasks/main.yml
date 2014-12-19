@@ -37,6 +37,10 @@
   notify:
     - restart apache
 
+# We wouldn't do this like so on prod!
+- name: Set up database with test data
+  command: /vagrant/ansible/scripts/setup_dev_db.sh creates=/home/vagrant/yes-we-set-up-db
+
 # Do we need this?
 - name: Install httpd.conf
   copy: owner=www-data group=www-data src=../files/httpd.conf dest=/etc/apache2/httpd.conf

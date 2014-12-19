@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 echo "Setting up db with test data..."
 
 cd /var/www/ttm
@@ -10,5 +12,7 @@ done
 sudo mysql -u root < /vagrant/ansible/scripts/test_permissions.sql
 
 sudo mysql -u root < data/lisc-ttm-sample-data.sql
+
+touch /home/vagrant/yes-we-set-up-db
 
 echo "... done."
