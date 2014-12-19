@@ -32,7 +32,7 @@ But anyway, get a Debian box!  And then continue below.
 
 To set up the image, run:
 
-: vagrant up && vagrant ssh -c /vagrant/ansible/scripts/setup_dev_db.sh
+: vagrant up
 
 You're done!
 
