@@ -18,46 +18,49 @@ DEV_IMAGE=.vm/dev.qcow2
 # Turn on (if needed) and provision the server
 
 provision: up
-	./deploy/scripts/provision.sh
+	@./deploy/scripts/provision.sh
 
 
 # Spin up
 # =======
 
-up: $PIDFILE
+up: $(PIDFILE)
 
 # This is where we really turn it on
-$PIDFILE: vm
-	./deploy/scripts/run_vm.sh
+$(PIDFILE): vm
+	@./deploy/scripts/run_vm.sh
 
 
 # Create the base image
 # =====================
 
-base: $BASE_IMAGE
+base: $(BASE_IMAGE)
 
 # This is where we really make the base image
-$BASE_IMAGE:
-	./deploy/scripts/make_base_image.sh
+$(BASE_IMAGE):
+	@./deploy/scripts/make_base_image.sh
 
 
 # Create the user's dev VM
 # ========================
 
-vm: $DEV_IMAGE
+vm: $(DEV_IMAGE)
 
-$DEV_IMAGE: base
-	cp $BASE_IMAGE $DEV_IMAGE
+$(DEV_IMAGE): $(BASE_IMAGE)
+	@echo -n "Copying over the base file... "
+	@cp $(BASE_IMAGE) $(DEV_IMAGE)
+	@echo $(DEV_IMAGE)
+	@echo "copied."
 
 
 # Turning stuff off and destroying
 # ================================
 
 halt:
-	./deploy/scripts/halt_if_running.sh
+	@./deploy/scripts/halt_if_running.sh
 
 destroy: halt
-	-rm -f $DEV_IMAGE
+	-rm -f $(DEV_IMAGE)
 
 destroy-base: halt
-	-rm -f $BASE_IMAGE
+	-rm -f $(BASE_IMAGE)
