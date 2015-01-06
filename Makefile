@@ -38,7 +38,7 @@ base: $BASE_IMAGE
 
 # This is where we really make the base image
 $BASE_IMAGE:
-	./ansible/scripts/make_base_image.sh
+	./deploy/scripts/make_base_image.sh
 
 
 # Create the user's dev VM
