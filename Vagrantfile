@@ -95,7 +95,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # end
 
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "ansible/main.yml"
+    ansible.playbook = "deploy/main.yml"
   end
 
   # Enable provisioning with chef server, specifying the chef server URL,
