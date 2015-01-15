@@ -1,0 +1,77 @@
+#+TITLE: Vagrant / Ansible easy setup for TTM
+
+* What is this?
+
+This is a quick-to-setup-and-tear-down vagrant + ansible setup for the
+TTM project.
+
+* Preliminary: get a Vagrant box
+
+TTM is deployed to Debian testing (Jessie, at the time of writing),
+but works on Debian Wheezy.  You need a Vagrant box that runs
+Debian... this is the hardest part of this guide, but luckily it is
+only done once.
+
+There are some [[https://github.com/dotzero/vagrant-debian-wheezy-64][scripts that do box-building for you]], this might make
+things a lot easier!  Plus, it's using a reproducible script, which is
+good.  (Unfortunately, I've tried building this myself, and haven't
+been able to log in to the built machine
+
+If you'd like to put together a box yourself that you can trust, this
+process is not easy if done manually, but [[http://hadooppowered.com/2014/05/10/create-a-debian-wheezy-vagrant-box/][this guide works]].  One nice
+thing about this is you can set up your own public/private key pair.
+
+If you really feel overwhelmed, you could use [[http://www.vagrantbox.es/][vagrantbox.es]] but keep
+in mind, most of these images are not reproducible.
+
+But anyway, get a Debian box!  And then continue below.
+
+* How to use it
+
+** Set up the vagrant image
+
+To set up the image, run:
+
+: vagrant up
+
+You're done!
+
+You should be able to open the test site at http://127.0.0.1:8080/ in
+your browser.
+
+** Auto-sync yer files with rsync!
+
+Your local checkout is rsync'ed over to the server, so you can hack
+away with all your local tools!  You can re-rsync via:
+
+: vagrant rsync
+
+But what if you're doing a lot of work, want the server to keep
+updating automatically every time you run that command?  Easy!  Run:
+
+: vagrant rsync-auto
+
+** Using
+
+If you want to shut down the vm, try:
+
+: vagrant halt
+
+To bring it back up again:
+
+: vagrant up
+
+If you update the ansible rules, you can re-run provisioning:
+
+: vagrant provision
+
+Don't need this vm anymore?
+
+: vagrant destroy
+
+You can always go back through the setup steps again.
+
+For more info:
+
+: vagrant --help
+

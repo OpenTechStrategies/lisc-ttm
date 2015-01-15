@@ -12,8 +12,6 @@ if (isset($_POST['username'])){
 // Initialized to "*" because that's PHPass's signal of invalidity.
 $password_in_db="*";
 $username_sqlsafe=mysqli_real_escape_string($cnnLISC, $username);
-$password_sqlsafe=mysqli_real_escape_string($cnnLISC, $password);
-
 
 $user_query = "SELECT User_ID, User_Password FROM Users WHERE User_Email = '$username_sqlsafe'";
 $query_result = mysqli_query($cnnLISC, $user_query);

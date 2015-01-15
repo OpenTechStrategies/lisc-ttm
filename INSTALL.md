@@ -166,7 +166,7 @@ Steps to install:
             mysql -u root -p < ${name}/sql/ttm-${name}_routines.sql;  \
           done
 
-6.  Set up authentication / authorization for the MySQL databases:
+6.  Set up authentication / authorization for the MySQL databases. These users will be used for executing the SQL stored procedures:
 
         $ mysql -u root -p
         Password: ********

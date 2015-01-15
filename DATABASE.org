@@ -1,0 +1,922 @@
+Description of the database layout.
+
+* Overview
+
+There are 6 main databases, and a large (137) number of uniquely named
+tables.
+
+Many have the same names, but they often diverge.  When new feature
+requests came in historically, code and structure was copied from
+previous similar features, leading to the present structure.
+
+* Which databases have what?
+
+| Table name                           | core | lsna | swop | bickerdike | trp | enlace |
+|--------------------------------------+------+------+------+------------+-----+--------|
+| Absences                             |      |      |      |            |     | X      |
+| Academic_Info                        |      |      |      |            | X   |        |
+| Activities_Users                     |      |      |      | X          |     |        |
+| Aldermanic_Records                   |      |      |      | X          |     |        |
+| Assessment_Responses                 |      |      |      |            |     | X      |
+| Assessments                          |      |      |      |            |     | X      |
+| Baseline_Assessment_Questions        |      |      |      |            |     | X      |
+| Bike_Trails                          |      |      |      | X          |     |        |
+| Blog_Notes                           |      |      |      |            | X   |        |
+| Class_Avg_Gold_Scores                |      |      |      |            | X   |        |
+| CLC_Subcategory                      |      | X    |      |            |     |        |
+| CLCs                                 |      | X    |      |            |     |        |
+| Categories                           |      | X    |      |            |     |        |
+| Category_Subcategory_Links           |      | X    |      |            |     |        |
+| Campaigns                            |      |      | X    |            |     | X      |
+| Campaigns_Events                     |      |      | X    |            |     | X      |
+| Campaigns_Institutions               |      |      | X    |            |     | X      |
+| Child_Parent                         |      |      |      |            |     | X      |
+| Community_Wellness_Survey_Aggregates |      |      |      | X          |     |        |
+| Corner_Store_Assessment              |      |      |      | X          |     |        |
+| Corner_Stores                        |      |      |      | X          |     |        |
+| Current_Housing                      |      |      | X    |            |     |        |
+| DAP_Group_Scoring                    |      |      |      |            | X   |        |
+| Elev8_Data                           |      |      |      |            | X   |        |
+| Elev8_Elements                       |      |      |      |            | X   |        |
+| Event_Roles                          |      |      |      |            |     | X      |
+| Event_Types                          |      |      |      |            |     | X      |
+| Events                               |      |      |      |            | X   |        |
+| Events_Participants                  |      |      |      |            | X   |        |
+| Explore_Scores                       |      |      |      |            | X   |        |
+| Followups                            |      |      |      |            |     | X      |
+| Funded_Organization_Records_Stores   |      |      |      | X          |     |        |
+| Goals_Development                    |      | X    |      |            |     |        |
+| GOLD_Score_Ranges                    |      |      |      |            | X   |        |
+| GOLD_Scores                          |      |      |      |            | X   |        |
+| Gads_Hill_Parent_Survey              |      |      |      |            | X   |        |
+| Gold_Classrooms                      |      |      |      |            | X   |        |
+| Gold_Score_Sections                  |      |      |      |            | X   |        |
+| Gold_Score_Totals                    |      |      |      |            | X   |        |
+| Households                           |      |      | X    |            |     |        |
+| Households_Participants              |      |      | X    |            |     |        |
+| Institution_Types                    |      |      |      |            |     | X      |
+| Institutions                         |      |      |      |            |     | X      |
+| Import_Destination                   |      | X    |      |            |     |        |
+| Institution_Types                    |      | X    | X    |            |     |        |
+| Institutions                         |      | X    | X    |            |     |        |
+| Institutions_Participants            |      | X    | X    |            |     |        |
+| Institutions_Subcategories           |      | X    |      |            |     |        |
+| Issue_Areas                          |      | X    |      |            |     |        |
+| Issue_Attendance                     |      | X    |      |            |     |        |
+| Languages                            |      | X    |      |            |     |        |
+| Log                                  | X    |      |      |            |     |        |
+| MS_to_HS_Over_Time                   |      |      |      |            | X   |        |
+| NMMA_Identity_Survey                 |      |      |      |            | X   |        |
+| NMMA_Participants                    |      |      |      |            | X   |        |
+| NMMA_Traditions_Survey               |      |      |      |            | X   |        |
+| New_Horizons_Participants            |      |      |      |            | X   |        |
+| Outcome_Locations                    |      |      | X    |            |     |        |
+| Outcomes                             |      |      |      |            | X   |        |
+| Outcomes_Months                      |      |      |      |            | X   |        |
+| Outcomes_Participants                |      |      |      |            | X   |        |
+| Outcomes_for_Pool                    |      |      | X    |            |     |        |
+| Org_Partners                         |      |      |      | X          |     |        |
+| PM_Actual_Attendance                 |      | X    |      |            |     |        |
+| PM_Children_Info                     |      | X    |      |            |     |        |
+| PM_Monthly_Attendance                |      | X    |      |            |     |        |
+| PM_Possible_Attendance               |      | X    |      |            |     |        |
+| PM_Program_Completion                |      | X    |      |            |     |        |
+| PM_Teacher_Survey                    |      | X    |      |            |     |        |
+| PM_Teacher_Survey_Post               |      | X    |      |            |     |        |
+| PM_Years                             |      | X    |      |            |     |        |
+| Parent_Mentor_Children               |      | X    |      |            |     |        |
+| Parent_Mentor_Survey                 |      | X    |      |            |     |        |
+| Parents_Children                     |      |      |      |            | X   |        |
+| Participants                         |      | X    | X    |            | X   | X      |
+| Participants_Baseline_Assessments    |      |      |      |            |     | X      |
+| Participants_Caring_Adults           |      |      |      |            |     | X      |
+| Participants_Consent                 |      |      |      |            | X   | X      |
+| Participants_Events                  |      |      | X    |            |     | X      |
+| Participants_Future_Expectations     |      |      |      |            |     | X      |
+| Participants_Growth                  |      | X    |      |            |     |        |
+| Participants_Interpersonal_Violence  |      |      |      |            |     | X      |
+| Participants_Languages               |      | X    |      |            |     |        |
+| Participants_Leaders                 |      |      | X    |            |     |        |
+| Participants_Mentorship              |      |      |      |            |     | X      |
+| Participants_Pool                    |      |      | X    |            |     |        |
+| Participants_Program_Sessions        |      |      |      |            | X   |        |
+| Participants_Programs                |      |      |      |            | X   | X      |
+| Participants_Properties              |      |      | X    |            |     |        |
+| Participants_Roles                   |      | X    | X    |            |     |        |
+| Participants_Subcategories           |      | X    |      |            |     |        |
+| Participants_Teachers                |      |      |      |            | X   |        |
+| Participant_Survey_Questions         |      |      |      | X          |     |        |
+| Participant_Survey_Responses         |      |      |      | X          |     |        |
+| Pool_Benchmarks                      |      |      | X    |            |     |        |
+| Pool_Employers                       |      |      | X    |            |     |        |
+| Pool_Finances                        |      |      | X    |            |     |        |
+| Pool_Member_Types                    |      |      | X    |            |     |        |
+| Pool_Outcomes                        |      |      | X    |            |     |        |
+| Pool_Progress                        |      |      | X    |            |     |        |
+| Pool_Status_Changes                  |      |      | X    |            |     |        |
+| Privileges                           | X    |      |      |            |     |        |
+| Program_Attendance                   |      |      |      |            | X   |        |
+| Program_Dates                        |      |      |      | X          | X   | X      |
+| Program_Dates_Users                  |      |      |      | X          |     |        |
+| Program_Sessions                     |      |      |      |            | X   |        |
+| Program_Surveys                      |      |      |      |            |     | X      |
+| Program_Types                        |      |      |      | X          |     |        |
+| Programs                             |      |      |      | X          | X   | X      |
+| Programs_Uploads                     |      |      |      |            | X   |        |
+| Programs_Users                       |      |      |      | X          |     |        |
+| Properties                           |      |      | X    |            |     |        |
+| Property_Dispositions                |      |      | X    |            |     |        |
+| Property_Files                       |      |      | X    |            |     |        |
+| Property_Marker_Names                |      |      | X    |            |     |        |
+| Property_Markers                     |      |      | X    |            |     |        |
+| Property_Progress                    |      |      | X    |            |     |        |
+| Property_Rehab_Progress              |      |      | X    |            |     |        |
+| Reports__Active                      |      |      | X    |            |     |        |
+| Reports__Activity_Type               |      |      | X    |            |     |        |
+| Reports__ITIN                        |      |      | X    |            |     |        |
+| Referrals                            |      |      |      |            |     | X      |
+| Roles                                |      | X    |      |            |     | X      |
+| Satisfaction_Surveys                 |      | X    |      |            |     |        |
+| Schools                              |      |      |      |            | X   |        |
+| Session_Names                        |      |      |      |            |     | X      |
+| Site_Privileges                      | X    |      |      |            |     |        |
+| Subcategories                        |      | X    |      |            |     |        |
+| Subcategory_Attendance               |      | X    |      |            |     |        |
+| Subcategory_Dates                    |      | X    |      |            |     |        |
+| Teacher_Exchange_Rooms               |      |      |      |            | X   |        |
+| Teachers                             |      |      |      |            | X   |        |
+| User_Established_Activities          |      |      |      | X          |     |        |
+| User_Health_Data                     |      |      |      | X          |     |        |
+| Users                                | X    |      |      | X          |     |        |
+| Users_Privileges                     | X    |      |      |            |     |        |
+| Walkability_Assessment               |      |      |      | X          |     |        |
+
+* Common tables breakdown
+
+... is it worth breaking these all down here?
+
+** Core
+
+Core holds the users and their privileges and keeps track of when they
+log in in the log table.
+
+Privileges and Site privileges are confusing a bit name-wise, so for
+clarity:
+ - *Privileges:* holds the names of the subsites
+ - *Site_Privileges:* holds level of access (admin, read only, data entry)
+
+
+*** Logging
+
+**** Log
+
+| Field         | Type        | Null | Key | Default           | Extra          |
+|---------------+-------------+------+-----+-------------------+----------------|
+| Log_ID        | int(11)     | NO   | PRI | NULL              | auto_increment |
+| Log_Event     | varchar(50) | YES  |     | NULL              |                |
+| Log_Timestamp | timestamp   | YES  |     | CURRENT_TIMESTAMP |                |
+
+
+*** Users and permissions
+
+**** Privileges
+
+| Field          | Type        | Null | Key | Default | Extra          |
+|----------------+-------------+------+-----+---------+----------------|
+| Privilege_ID   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Privilege_Name | varchar(45) | YES  |     | NULL    |                |
+
+**** Site_Privileges
+
+| Field               | Type        | Null | Key | Default | Extra          |
+|---------------------+-------------+------+-----+---------+----------------|
+| Site_Privilege_ID   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Site_Privilege_Name | varchar(45) | YES  |     | NULL    |                |
+
+**** Users
+
+| Field         | Type        | Null | Key | Default | Extra          |
+|---------------+-------------+------+-----+---------+----------------|
+| User_Id       | int(11)     | NO   | PRI | NULL    | auto_increment |
+| User_Email    | varchar(45) | YES  |     | NULL    |                |
+| User_Password | varchar(64) | YES  |     | NULL    |                |
+
+**** Users_Privileges
+
+| Field                       | Type       | Null | Key | Default           | Extra          |
+|-----------------------------+------------+------+-----+-------------------+----------------|
+| Users_Privileges_Id         | int(11)    | NO   | PRI | NULL              | auto_increment |
+| User_ID                     | int(11)    | YES  |     | NULL              |                |
+| Privilege_Id                | int(11)    | YES  |     | NULL              |                |
+| Site_Privilege_ID           | int(11)    | YES  |     | NULL              |                |
+| User_Privilege_Created_Date | timestamp  | YES  |     | CURRENT_TIMESTAMP |                |
+| Program_Access              | varchar(1) | YES  |     | NULL              |                |
+
+** Enlace
+
+There's participants linked to programs.  In fact, participants are
+linked to sessions and programs are broken up into sessions.
+
+:  programs -> sessions
+:                ^
+:                |
+:          participants
+
+ - A program is a set of dates that are run by an institution
+ - A session is one instance of that program
+   (so there can be a summer session and a fall session of the same program)
+ - A participant is any person who is enrolling in the session
+
+This is pretty much what Enlace does, tracking information
+(attendance, other survey data) around orgs which run programs to run
+youth programs.
+
+*** Misc
+
+**** Absences
+
+|----------------+---------+------+-----+---------+----------------|
+| Field          | Type    | Null | Key | Default | Extra          |
+|----------------+---------+------+-----+---------+----------------|
+| Absence_ID     | int(11) | NO   | PRI | NULL    | auto_increment |
+| Participant_ID | int(11) | YES  | MUL | NULL    |                |
+| Program_Date   | int(11) | YES  |     | NULL    |                |
+|----------------+---------+------+-----+---------+----------------|
+
+**** Campaigns
+
+|---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
+|---------------+--------------+------+-----+---------+----------------+
+| Campaign_ID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Campaign_Name | varchar(150) | YES  |     | NULL    |                |
+|---------------+--------------+------+-----+---------+----------------+
+
+**** Campaigns_Events
+
+|-------------------+--------------+------+-----+---------+----------------+
+| Field             | Type         | Null | Key | Default | Extra          |
+|-------------------+--------------+------+-----+---------+----------------+
+| Campaign_Event_ID | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Event_Name        | varchar(100) | YES  |     | NULL    |                |
+| Event_Date        | date         | YES  |     | NULL    |                |
+| Campaign_ID       | int(11)      | YES  |     | NULL    |                |
+| Address_Num       | varchar(45)  | YES  |     | NULL    |                |
+| Address_Dir       | varchar(1)   | YES  |     | NULL    |                |
+| Address_Street    | varchar(45)  | YES  |     | NULL    |                |
+| Address_Suffix    | varchar(45)  | YES  |     | NULL    |                |
+| Block_Group       | varchar(45)  | YES  |     | NULL    |                |
+| Type              | int(11)      | YES  |     | NULL    |                |
+| Note_File_Name    | varchar(100) | YES  |     | NULL    |                |
+| Note_File_Size    | varchar(45)  | YES  |     | NULL    |                |
+| Note_File_Type    | varchar(45)  | YES  |     | NULL    |                |
+| Note_File_Content | longblob     | YES  |     | NULL    |                |
+|-------------------+--------------+------+-----+---------+----------------+
+
+**** Campaigns_Institutions
+
+|---------------------------+---------+------+-----+---------+----------------+
+| Field                     | Type    | Null | Key | Default | Extra          |
+|---------------------------+---------+------+-----+---------+----------------+
+| Campaigns_Institutions_ID | int(11) | NO   | PRI | NULL    | auto_increment |
+| Institution_ID            | int(11) | YES  | MUL | NULL    |                |
+| Campaign_ID               | int(11) | YES  |     | NULL    |                |
+|---------------------------+---------+------+-----+---------+----------------+
+
+**** Child_Parent
+
+|-----------+---------+------+-----+---------+----------------+
+| Field     | Type    | Null | Key | Default | Extra          |
+|-----------+---------+------+-----+---------+----------------+
+| Family_ID | int(11) | NO   | PRI | NULL    | auto_increment |
+| Child_ID  | int(11) | YES  | MUL | NULL    |                |
+| Parent_ID | int(11) | YES  | MUL | NULL    |                |
+|-----------+---------+------+-----+---------+----------------+
+
+**** Event_Roles
+
+|---------------+-------------+------+-----+---------+----------------+
+| Field         | Type        | Null | Key | Default | Extra          |
+|---------------+-------------+------+-----+---------+----------------+
+| Event_Role_ID | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Role          | varchar(45) | YES  |     | NULL    |                |
+|---------------+-------------+------+-----+---------+----------------+
+
+**** Event_Types
+
+|---------------+-------------+------+-----+---------+----------------+
+| Field         | Type        | Null | Key | Default | Extra          |
+|---------------+-------------+------+-----+---------+----------------+
+| Event_Type_ID | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Type          | varchar(45) | YES  |     | NULL    |                |
+|---------------+-------------+------+-----+---------+----------------+
+
+**** Followups
+
+|-------------+--------------+------+-----+-------------------+----------------|
+| Field       | Type         | Null | Key | Default           | Extra          |
+|-------------+--------------+------+-----+-------------------+----------------|
+| Followup_ID | int(11)      | NO   | PRI | NULL              | auto_increment |
+| Participant | int(11)      | YES  |     | NULL              |                |
+| Note        | varchar(600) | YES  |     | NULL              |                |
+| Date        | timestamp    | YES  |     | CURRENT_TIMESTAMP |                |
+|-------------+--------------+------+-----+-------------------+----------------|
+
+**** Institution_Types
+
+|--------------+-------------+------+-----+---------+----------------+
+| Field        | Type        | Null | Key | Default | Extra          |
+|--------------+-------------+------+-----+---------+----------------+
+| Inst_Type_ID | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Type         | varchar(45) | YES  |     | NULL    |                |
+|--------------+-------------+------+-----+---------+----------------+
+
+**** Institutions
+
+|---------------------+-------------+------+-----+---------+----------------+
+| Field               | Type        | Null | Key | Default | Extra          |
+|---------------------+-------------+------+-----+---------+----------------+
+| Inst_ID             | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Institution_Name    | varchar(45) | YES  |     | NULL    |                |
+| Institution_Type    | int(11)     | YES  |     | NULL    |                |
+| Address_Num         | int(11)     | YES  |     | NULL    |                |
+| Address_Dir         | varchar(45) | YES  |     | NULL    |                |
+| Address_Street      | varchar(45) | YES  |     | NULL    |                |
+| Address_Street_Type | varchar(45) | YES  |     | NULL    |                |
+| Block_Group         | varchar(45) | YES  |     | NULL    |                |
+| Point_Person        | int(11)     | YES  |     | NULL    |                |
+| Phone               | varchar(45) | YES  |     | NULL    |                |
+| Email               | varchar(45) | YES  |     | NULL    |                |
+|---------------------+-------------+------+-----+---------+----------------+
+
+**** Program_Dates
+
+|-----------------+---------+------+-----+---------+----------------+
+| Field           | Type    | Null | Key | Default | Extra          |
+|-----------------+---------+------+-----+---------+----------------+
+| Program_Date_ID | int(11) | NO   | PRI | NULL    | auto_increment |
+| Program_ID      | int(11) | YES  | MUL | NULL    |                |
+| Date_Listed     | date    | YES  |     | NULL    |                |
+|-----------------+---------+------+-----+---------+----------------+
+
+**** Program_Surveys
+
+|-------------------+-----------+------+-----+-------------------+----------------+
+| Field             | Type      | Null | Key | Default           | Extra          |
+|-------------------+-----------+------+-----+-------------------+----------------+
+| Program_Survey_ID | int(11)   | NO   | PRI | NULL              | auto_increment |
+| Program_ID        | int(11)   | YES  | MUL | NULL              |                |
+| Question_1        | int(11)   | YES  |     | NULL              |                |
+| Question_2        | int(11)   | YES  |     | NULL              |                |
+| Question_3        | int(11)   | YES  |     | NULL              |                |
+| Question_4        | int(11)   | YES  |     | NULL              |                |
+| Question_5        | int(11)   | YES  |     | NULL              |                |
+| Question_6        | int(11)   | YES  |     | NULL              |                |
+| Question_7        | int(11)   | YES  |     | NULL              |                |
+| Question_8        | int(11)   | YES  |     | NULL              |                |
+| Question_9        | int(11)   | YES  |     | NULL              |                |
+| Question_10       | int(11)   | YES  |     | NULL              |                |
+| Question_11       | int(11)   | YES  |     | NULL              |                |
+| Question_12       | int(11)   | YES  |     | NULL              |                |
+| Question_13       | int(11)   | YES  |     | NULL              |                |
+| Question_14       | int(11)   | YES  |     | NULL              |                |
+| Question_15       | int(11)   | YES  |     | NULL              |                |
+| Question_16       | int(11)   | YES  |     | NULL              |                |
+| Date_Logged       | timestamp | YES  |     | CURRENT_TIMESTAMP |                |
+| Session_ID        | int(11)   | YES  | MUL | NULL              |                |
+|-------------------+-----------+------+-----+-------------------+----------------+
+
+**** Programs
+
+|---------------------+-------------+------+-----+---------+----------------+
+| Field               | Type        | Null | Key | Default | Extra          |
+|---------------------+-------------+------+-----+---------+----------------+
+| Program_ID          | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Name                | varchar(45) | YES  |     | NULL    |                |
+| Host                | varchar(45) | YES  |     | NULL    |                |
+| Start_Date          | date        | YES  |     | NULL    |                |
+| End_Date            | date        | YES  |     | NULL    |                |
+| Start_Hour          | int(11)     | YES  |     | NULL    |                |
+| Start_Suffix        | varchar(45) | YES  |     | NULL    |                |
+| End_Hour            | int(11)     | YES  |     | NULL    |                |
+| End_Suffix          | varchar(45) | YES  |     | NULL    |                |
+| Max_Hours           | varchar(45) | YES  |     | NULL    |                |
+| Activity_Class      | int(11)     | YES  |     | NULL    |                |
+| Activity_Clinic     | int(11)     | YES  |     | NULL    |                |
+| Activity_Referrals  | int(11)     | YES  |     | NULL    |                |
+| Activity_Community  | int(11)     | YES  |     | NULL    |                |
+| Activity_Counseling | int(11)     | YES  |     | NULL    |                |
+| Activity_Sports     | int(11)     | YES  |     | NULL    |                |
+| Activity_Mentor     | int(11)     | YES  |     | NULL    |                |
+| Activity_Service    | int(11)     | YES  |     | NULL    |                |
+| Monday              | int(11)     | YES  |     | NULL    |                |
+| Tuesday             | int(11)     | YES  |     | NULL    |                |
+| Wednesday           | int(11)     | YES  |     | NULL    |                |
+| Thursday            | int(11)     | YES  |     | NULL    |                |
+| Friday              | int(11)     | YES  |     | NULL    |                |
+| Saturday            | int(11)     | YES  |     | NULL    |                |
+| Sunday              | int(11)     | YES  |     | NULL    |                |
+|---------------------+-------------+------+-----+---------+----------------+
+
+**** Referrals
+
+|----------------------+-----------+------+-----+-------------------+----------------+
+| Field                | Type      | Null | Key | Default           | Extra          |
+|----------------------+-----------+------+-----+-------------------+----------------+
+| Referral_ID          | int(11)   | NO   | PRI | NULL              | auto_increment |
+| Participant_ID       | int(11)   | YES  | MUL | NULL              |                |
+| Referrer_Person      | int(11)   | YES  |     | NULL              |                |
+| Referrer_Program     | int(11)   | YES  |     | NULL              |                |
+| Referrer_Institution | int(11)   | YES  |     | NULL              |                |
+| Program_Referred     | int(11)   | YES  |     | NULL              |                |
+| Date_Logged          | timestamp | YES  |     | CURRENT_TIMESTAMP |                |
+|----------------------+-----------+------+-----+-------------------+----------------+
+
+**** Roles
+
+|---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
+|---------+-------------+------+-----+---------+----------------+
+| Role_ID | int(11)     | NO   | PRI | NULL    | auto_increment | 
+| Role    | varchar(45) | YES  |     | NULL    |                |
+|---------+-------------+------+-----+---------+----------------+
+
+**** Session_Names
+
+|--------------+-------------+------+-----+---------+----------------+
+| Field        | Type        | Null | Key | Default | Extra          |
+|--------------+-------------+------+-----+---------+----------------+
+| Session_ID   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Session_Name | varchar(45) | YES  |     | NULL    |                |
+| Program_ID   | int(11)     | YES  | MUL | NULL    |                |
+| Start_Date   | date        | YES  |     | NULL    |                |
+| End_Date     | date        | YES  |     | NULL    |                |
+| Survey_Due   | date        | YES  |     | NULL    |                |
+|--------------+-------------+------+-----+---------+----------------+
+
+
+
+*** Intake / impact survey
+
+The survey is in four parts... (it's actually administered twice, the
+first time (pre-program) has four parts, and the second time
+(post-program) has three parts).  The first part is only administered
+pre-survey.  This is stored in [[*Participants_Baseline_Assessments][Participants_Baseline_Assessments]].
+(The other three are [[*Participants_Caring_Adults][Participants_Caring_Adults]],
+[[*Participants_Future_Expectations][Participants_Future_Expectations]], and [[*Participants_Interpersonal_Violence][Participants_Interpersonal_Violence]].)
+
+The [[*Assessments][Assessments]] table links these survey parts together and to a
+participant.  (This gets a bit tricky because each of the survey
+table, ie [[*Participants_Baseline_Assessments][Participants_Baseline_Assessments]] and friends also stores a
+participant id... this is data duplication, possibly could be done via
+a clever join instead.)
+
+[[*Baseline_Assessment_Questions][Baseline_Assessment_Questions]] and [[*Assessment_Responses][Assessment_Responses]] are just
+textual responses to the survey.  The text of the questions are saved
+here, but it's a multiple choice survey.
+
+
+**** Assessment_Responses
+
+|------------------------+-------------+------+-----+---------+----------------+
+| Field                  | Type        | Null | Key | Default | Extra          |
+|------------------------+-------------+------+-----+---------+----------------+
+| Assessment_Response_ID | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Question_ID            | varchar(50) | YES  |     | NULL    |                |
+| Response_Select        | int(11)     | YES  |     | NULL    |                |
+| Response_Text          | text        | YES  |     | NULL    |                |
+|------------------------+-------------+------+-----+---------+----------------+
+
+**** Assessments
+
+|----------------+-----------+------+-----+-------------------+----------------+
+| Field          | Type      | Null | Key | Default           | Extra          |
+|----------------+-----------+------+-----+-------------------+----------------+
+| Assessment_ID  | int(11)   | NO   | PRI | NULL              | auto_increment |
+| Participant_ID | int(11)   | YES  | MUL | NULL              |                |
+| Baseline_ID    | int(11)   | YES  |     | NULL              |                |
+| Caring_ID      | int(11)   | YES  |     | NULL              |                |
+| Future_ID      | int(11)   | YES  |     | NULL              |                |
+| Violence_ID    | int(11)   | YES  |     | NULL              |                |
+| Pre_Post       | int(11)   | YES  |     | NULL              |                |
+| Date_Logged    | timestamp | YES  |     | CURRENT_TIMESTAMP |                |
+|----------------+-----------+------+-----+-------------------+----------------+
+
+**** Baseline_Assessment_Questions
+
+|---------------------------------+-------------+------+-----+---------+-------+
+| Field                           | Type        | Null | Key | Default | Extra |
+|---------------------------------+-------------+------+-----+---------+-------+
+| Baseline_Assessment_Question_ID | varchar(50) | NO   | PRI | NULL    |       |
+| Question                        | text        | YES  |     | NULL    |       |
+| In_Table                        | varchar(45) | YES  |     | NULL    |       |
+|---------------------------------+-------------+------+-----+---------+-------+
+
+**** Participants_Baseline_Assessments
+
+|------------------------+-----------+------+-----+-------------------+----------------+
+| Field                  | Type      | Null | Key | Default           | Extra          |
+|------------------------+-----------+------+-----+-------------------+----------------+
+| Baseline_Assessment_ID | int(11)   | NO   | PRI | NULL              | auto_increment |
+| Participant_ID         | int(11)   | YES  |     | NULL              |                |
+| Program                | int(11)   | YES  |     | NULL              |                |
+| Home_Language          | int(11)   | YES  |     | NULL              |                |
+| US_Born                | int(11)   | YES  |     | NULL              |                |
+| Ethnicity              | int(11)   | YES  |     | NULL              |                |
+| Race                   | int(11)   | YES  |     | NULL              |                |
+| BYS_1                  | int(11)   | YES  |     | NULL              |                |
+| BYS_2                  | int(11)   | YES  |     | NULL              |                |
+| BYS_3                  | int(11)   | YES  |     | NULL              |                |
+| BYS_4                  | int(11)   | YES  |     | NULL              |                |
+| BYS_5                  | int(11)   | YES  |     | NULL              |                |
+| BYS_6                  | int(11)   | YES  |     | NULL              |                |
+| BYS_7                  | int(11)   | YES  |     | NULL              |                |
+| BYS_8                  | int(11)   | YES  |     | NULL              |                |
+| BYS_9                  | int(11)   | YES  |     | NULL              |                |
+| BYS_T                  | int(11)   | YES  |     | NULL              |                |
+| BYS_E                  | int(11)   | YES  |     | NULL              |                |
+| JVQ_1                  | int(11)   | YES  |     | NULL              |                |
+| JVQ_2                  | int(11)   | YES  |     | NULL              |                |
+| JVQ_3                  | int(11)   | YES  |     | NULL              |                |
+| JVQ_4                  | int(11)   | YES  |     | NULL              |                |
+| JVQ_5                  | int(11)   | YES  |     | NULL              |                |
+| JVQ_6                  | int(11)   | YES  |     | NULL              |                |
+| JVQ_7                  | int(11)   | YES  |     | NULL              |                |
+| JVQ_8                  | int(11)   | YES  |     | NULL              |                |
+| JVQ_9                  | int(11)   | YES  |     | NULL              |                |
+| JVQ_T                  | int(11)   | YES  |     | NULL              |                |
+| JVQ_E                  | int(11)   | YES  |     | NULL              |                |
+| JVQ_12                 | int(11)   | YES  |     | NULL              |                |
+| Date_Logged            | timestamp | YES  |     | CURRENT_TIMESTAMP |                |
+|------------------------+-----------+------+-----+-------------------+----------------+
+
+**** Participants_Caring_Adults
+
+|------------------+-----------+------+-----+-------------------+----------------+
+| Field            | Type      | Null | Key | Default           | Extra          |
+|------------------+-----------+------+-----+-------------------+----------------+
+| Caring_Adults_ID | int(11)   | NO   | PRI | NULL              | auto_increment |
+| Participant_ID   | int(11)   | YES  |     | NULL              |                |
+| Pay_Attention    | int(11)   | YES  |     | NULL              |                |
+| Check_In         | int(11)   | YES  |     | NULL              |                |
+| Compliment       | int(11)   | YES  |     | NULL              |                |
+| Upset_Discussion | int(11)   | YES  |     | NULL              |                |
+| Crisis_Help      | int(11)   | YES  |     | NULL              |                |
+| Personal_Advice  | int(11)   | YES  |     | NULL              |                |
+| Know_You         | int(11)   | YES  |     | NULL              |                |
+| KnowImportance   | int(11)   | YES  |     | NULL              |                |
+| Date_Logged      | timestamp | YES  |     | CURRENT_TIMESTAMP |                |
+| Program          | int(11)   | YES  |     | NULL              |                |
+| Pre_Post         | int(11)   | YES  |     | NULL              |                |
+|------------------+-----------+------+-----+-------------------+----------------+
+
+**** Participants_Future_Expectations
+
+|------------------------+-----------+------+-----+-------------------+----------------+
+| Field                  | Type      | Null | Key | Default           | Extra          |
+|------------------------+-----------+------+-----+-------------------+----------------+
+| Future_Expectations_ID | int(11)   | NO   | PRI | NULL              | auto_increment |
+| Participant_ID         | int(11)   | YES  |     | NULL              |                |
+| Solve_Problems         | int(11)   | YES  |     | NULL              |                |
+| Stay_Safe              | int(11)   | YES  |     | NULL              |                |
+| Alive_Well             | int(11)   | YES  |     | NULL              |                |
+| Manage_Work            | int(11)   | YES  |     | NULL              |                |
+| Friends                | int(11)   | YES  |     | NULL              |                |
+| Happy_Life             | int(11)   | YES  |     | NULL              |                |
+| Interesting_Life       | int(11)   | YES  |     | NULL              |                |
+| Proud_Parents          | int(11)   | YES  |     | NULL              |                |
+| Finish_HS              | int(11)   | YES  |     | NULL              |                |
+| Date_Logged            | timestamp | YES  |     | CURRENT_TIMESTAMP |                |
+| Program                | int(11)   | YES  |     | NULL              |                |
+| Pre_Post               | int(11)   | YES  |     | NULL              |                |
+|------------------------+-----------+------+-----+-------------------+----------------+
+
+**** Participants_Interpersonal_Violence
+
+|---------------------------+-----------+------+-----+-------------------+----------------+
+| Field                     | Type      | Null | Key | Default           | Extra          |
+|---------------------------+-----------+------+-----+-------------------+----------------+
+| Interpersonal_Violence_ID | int(11)   | NO   | PRI | NULL              | auto_increment |
+| Participant_ID            | int(11)   | YES  | MUL | NULL              |                |
+| Cowardice                 | int(11)   | YES  |     | NULL              |                |
+| Teasing_Prevention        | int(11)   | YES  |     | NULL              |                |
+| Anger_Mgmt                | int(11)   | YES  |     | NULL              |                |
+| Self_Defense              | int(11)   | YES  |     | NULL              |                |
+| Coping                    | int(11)   | YES  |     | NULL              |                |
+| Handle_Others             | int(11)   | YES  |     | NULL              |                |
+| Negotiation               | int(11)   | YES  |     | NULL              |                |
+| Parent_Disapproval        | int(11)   | YES  |     | NULL              |                |
+| Parent_Approval           | int(11)   | YES  |     | NULL              |                |
+| Self_Awareness            | int(11)   | YES  |     | NULL              |                |
+| Self_Care                 | int(11)   | YES  |     | NULL              |                |
+| Date_Logged               | timestamp | YES  |     | CURRENT_TIMESTAMP |                |
+| Program                   | int(11)   | YES  | MUL | NULL              |                |
+| Pre_Post                  | int(11)   | YES  |     | NULL              |                |
+|---------------------------+-----------+------+-----+-------------------+----------------+
+
+
+*** Participants
+**** Participants
+
+|--------------------------+-------------+------+-----+-------------------+----------------+
+| Field                    | Type        | Null | Key | Default           | Extra          |
+|--------------------------+-------------+------+-----+-------------------+----------------+
+| Participant_ID           | int(11)     | NO   | PRI | NULL              | auto_increment |
+| First_Name               | varchar(45) | YES  |     | NULL              |                |
+| Last_Name                | varchar(45) | YES  |     | NULL              |                |
+| Day_Phone                | varchar(45) | YES  |     | NULL              |                |
+| Evening_Phone            | varchar(45) | YES  |     | NULL              |                |
+| Address_Num              | int(11)     | YES  |     | NULL              |                |
+| Address_Dir              | varchar(2)  | YES  |     | NULL              |                |
+| Address_Street           | varchar(45) | YES  |     | NULL              |                |
+| Address_Street_Type      | varchar(45) | YES  |     | NULL              |                |
+| Address_City             | varchar(45) | YES  |     | NULL              |                |
+| Address_State            | varchar(45) | YES  |     | NULL              |                |
+| Address_ZIP              | int(5)      | YES  |     | NULL              |                |
+| Block_Group              | varchar(45) | YES  |     | NULL              |                |
+| DOB                      | varchar(45) | YES  |     | NULL              |                |
+| Age                      | int(3)      | YES  |     | NULL              |                |
+| Gender                   | varchar(45) | YES  |     | NULL              |                |
+| Grade                    | varchar(45) | YES  |     | NULL              |                |
+| Grade_Entered            | int(11)     | YES  |     | NULL              |                |
+| School                   | int(11)     | YES  |     | NULL              |                |
+| Role                     | int(11)     | YES  |     | NULL              |                |
+| Date_Entered             | timestamp   | YES  |     | CURRENT_TIMESTAMP |                |
+| Email                    | varchar(45) | YES  |     | NULL              |                |
+| Early_Warning_Absences   | int(11)     | YES  |     | NULL              |                |
+| Early_Warning_Failed     | int(11)     | YES  |     | NULL              |                |
+| Early_Warning_Discipline | int(11)     | YES  |     | NULL              |                |
+| Referring_Teacher        | int(11)     | YES  |     | NULL              |                |
+|--------------------------+-------------+------+-----+-------------------+----------------+
+
+**** Participants_Consent
+
+|----------------+---------+------+-----+---------+----------------+
+| Field          | Type    | Null | Key | Default | Extra          |
+|----------------+---------+------+-----+---------+----------------+
+| Consent_ID     | int(11) | NO   | PRI | NULL    | auto_increment |
+| Participant_ID | int(11) | YES  | MUL | NULL    |                |
+| School_Year    | int(11) | YES  |     | NULL    |                |
+| Consent_Given  | int(11) | YES  |     | NULL    |                |
+|----------------+---------+------+-----+---------+----------------+
+
+**** Participants_Events
+
+|------------------------+---------+------+-----+---------+----------------+
+| Field                  | Type    | Null | Key | Default | Extra          |
+|------------------------+---------+------+-----+---------+----------------+
+| Participants_Events_ID | int(11) | NO   | PRI | NULL    | auto_increment |
+| Event_ID               | int(11) | YES  |     | NULL    |                |
+| Participant_ID         | int(11) | YES  |     | NULL    |                |
+| Role_Type              | int(11) | YES  |     | NULL    |                |
+|------------------------+---------+------+-----+---------+----------------+
+
+**** Participants_Mentorship
+
+|-------------------------+-------------+------+-----+---------+----------------+
+| Field                   | Type        | Null | Key | Default | Extra          |
+|-------------------------+-------------+------+-----+---------+----------------+
+| Mentorship_Time_ID      | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Mentee_ID               | int(11)     | YES  |     | NULL    |                |
+| Mentorship_Date         | date        | YES  |     | NULL    |                |
+| Mentorship_Hours_Logged | varchar(45) | YES  |     | NULL    |                |
+| Mentorship_Program      | int(11)     | YES  |     | NULL    |                |
+|-------------------------+-------------+------+-----+---------+----------------+
+
+**** Participants_Programs
+
+|------------------------+-----------+------+-----+-------------------+----------------+
+| Field                  | Type      | Null | Key | Default           | Extra          |
+|------------------------+-----------+------+-----+-------------------+----------------+
+| Participant_Program_ID | int(11)   | NO   | PRI | NULL              | auto_increment |
+| Participant_ID         | int(11)   | YES  |     | NULL              |                |
+| Program_ID             | int(11)   | YES  |     | NULL              |                |
+| Date_Added             | timestamp | YES  |     | CURRENT_TIMESTAMP |                |
+| Date_Dropped           | date      | YES  |     | NULL              |                |
+|------------------------+-----------+------+-----+-------------------+----------------+
+
+
+** LSNA
+** SWOP
+** Bickerdike
+
+*** Activities_Users
+
+
+| Field                        | Type    | Null | Key | Default | Extra          | Note |
+|------------------------------+---------+------+-----+---------+----------------+------|
+| Event_User_ID                | int(11) | NO   | PRI | NULL    | auto_increment |      |
+| User_Established_Activity_ID | int(11) | YES  | MUL | NULL    |                |      |
+| User_ID                      | int(11) | YES  | MUL | NULL    |                |      |
+
+*** Aldermanic_Records
+
+| Field                           | Type        | Null | Key | Default | Extra          |
+|---------------------------------+-------------+------+-----+---------+----------------|
+| Aldermanic_Record_ID            | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Environmental_Improvement_Money | varchar(45) | YES  |     | NULL    |                |
+| Date                            | date        | YES  |     | NULL    |                |
+
+*** Bike_Trails
+
+| Field            | Type        | Null | Key | Default | Extra          |
+|------------------+-------------+------+-----+---------+----------------|
+| Bike_Trails_ID   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Miles_Bike_Lanes | varchar(45) | YES  |     | NULL    |                |
+| Date             | date        | YES  |     | NULL    |                |
+
+*** Community_Wellness_Survey_Aggregates
+
+| Field                        | Type        | Null | Key | Default | Extra          |
+|------------------------------+-------------+------+-----+---------+----------------|
+| Community_Wellness_Survey_ID | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Date_Administered            | varchar(45) | YES  |     | NULL    |                |
+| Question_15_CWS              | varchar(11) | YES  |     | NULL    |                |
+| Question_20_CWS              | varchar(11) | YES  |     | NULL    |                |
+| Question_21_CWS              | varchar(11) | YES  |     | NULL    |                |
+| Question_24_CWS              | varchar(11) | YES  |     | NULL    |                |
+| Question_29_CWS              | varchar(11) | YES  |     | NULL    |                |
+| Question_31_CWS              | varchar(11) | YES  |     | NULL    |                |
+| Question_30_CWS              | varchar(11) | YES  |     | NULL    |                |
+| Question_32_CWS              | varchar(11) | YES  |     | NULL    |                |
+| Question_69_CWS              | varchar(11) | YES  |     | NULL    |                |
+| Question_72_CWS              | varchar(11) | YES  |     | NULL    |                |
+| Question_91_CWS              | varchar(11) | YES  |     | NULL    |                |
+| Question_41_a_CWS            | varchar(11) | YES  |     | NULL    |                |
+| Question_41_b_CWS            | varchar(11) | YES  |     | NULL    |                |
+| Question_44_CWS              | varchar(11) | YES  |     | NULL    |                |
+
+*** Corner_Store_Assessment
+
+| Field                      | Type    | Null | Key | Default | Extra          |
+|----------------------------+---------+------+-----+---------+----------------|
+| Corner_Store_Assessment_ID | int(11) | NO   | PRI | NULL    | auto_increment |
+| Corner_Store_ID            | int(11) | YES  |     | NULL    |                |
+| 2_plus_fresh_veg_options   | int(1)  | YES  |     | NULL    |                |
+| Lowfat_Milk_Available      | int(1)  | YES  |     | NULL    |                |
+| Health_Promotion_Signage   | int(1)  | YES  |     | NULL    |                |
+| Healthy_Items_In_Front     | int(1)  | YES  |     | NULL    |                |
+| Date_Evaluated             | date    | YES  |     | NULL    |                |
+
+*** Corner_Stores
+
+| Field                | Type         | Null | Key | Default | Extra          |
+|----------------------+--------------+------+-----+---------+----------------|
+| Corner_Store_ID      | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Corner_Store_Name    | varchar(45)  | YES  |     | NULL    |                |
+| Corner_Store_Address | varchar(100) | YES  |     | NULL    |                |
+
+*** Funded_Organization_Records_Stores
+
+| Field                                 | Type        | Null | Key | Default | Extra          |
+|---------------------------------------+-------------+------+-----+---------+----------------|
+| Funded_Organization_Records_Stores_ID | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Store_ID                              | int(11)     | YES  |     | NULL    |                |
+| Date                                  | date        | YES  |     | NULL    |                |
+| Sales_Data                            | varchar(45) | YES  |     | NULL    |                |
+
+*** Org_Partners
+
+| Field        | Type         | Null | Key | Default | Extra          |
+|--------------+--------------+------+-----+---------+----------------|
+| Partner_ID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Partner_Name | varchar(150) | YES  |     | NULL    |                |
+
+*** Participant_Survey_Questions
+
+| Field         | Type         | Null | Key | Default | Extra |
+|---------------+--------------+------+-----+---------+-------|
+| Question_Num  | varchar(45)  | NO   | PRI | NULL    |       |
+| Question_Text | varchar(400) | YES  |     | NULL    |       |
+
+*** Participant_Survey_Responses
+
+| Field                    | Type        | Null | Key | Default | Extra          |
+|--------------------------+-------------+------+-----+---------+----------------|
+| Participant_Survey_ID    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| User_ID                  | int(11)     | YES  | MUL | NULL    |                |
+| Question_2               | int(11)     | YES  |     | NULL    |                |
+| Question_3               | int(11)     | YES  |     | NULL    |                |
+| Question_4_A             | int(11)     | YES  |     | NULL    |                |
+| Question_4_B             | int(11)     | YES  |     | NULL    |                |
+| Question_5_A             | int(11)     | YES  |     | NULL    |                |
+| Question_5_B             | int(11)     | YES  |     | NULL    |                |
+| Question_6               | int(11)     | YES  |     | NULL    |                |
+| Question_7               | int(11)     | YES  |     | NULL    |                |
+| Question_8               | int(11)     | YES  |     | NULL    |                |
+| Question_9_A             | int(11)     | YES  |     | NULL    |                |
+| Question_9_B             | int(11)     | YES  |     | NULL    |                |
+| Question_11              | int(11)     | YES  |     | NULL    |                |
+| Question_12              | int(11)     | YES  |     | NULL    |                |
+| Question_13              | int(11)     | YES  |     | NULL    |                |
+| Question_14              | int(11)     | YES  |     | NULL    |                |
+| Date_Survey_Administered | date        | YES  |     | NULL    |                |
+| Pre_Post_Late            | int(11)     | YES  |     | NULL    |                |
+| Program_ID               | int(11)     | YES  | MUL | NULL    |                |
+| Participant_Type         | varchar(45) | YES  |     | NULL    |                |
+| Child_ID                 | int(11)     | YES  |     | NULL    |                |
+
+*** Program tables
+*** Program_Dates
+
+| Field           | Type    | Null | Key | Default | Extra          |
+|-----------------+---------+------+-----+---------+----------------|
+| Program_Date_ID | int(11) | NO   | PRI | NULL    | auto_increment |
+| Program_ID      | int(11) | YES  | MUL | NULL    |                |
+| Program_Date    | date    | YES  |     | NULL    |                |
+
+*** Program_Dates_Users
+
+| Field                  | Type    | Null | Key | Default | Extra          |
+|------------------------+---------+------+-----+---------+----------------|
+| Program_Dates_Users_ID | int(11) | NO   | PRI | NULL    | auto_increment |
+| Program_Date_ID        | int(11) | YES  | MUL | NULL    |                |
+| User_ID                | int(11) | YES  | MUL | NULL    |                |
+
+*** Program_Types
+
+| Field             | Type         | Null | Key | Default | Extra          |
+|-------------------+--------------+------+-----+---------+----------------|
+| Program_Type_ID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Program_Type_Name | varchar(100) | YES  |     | NULL    |                |
+
+*** Programs
+
+| Field                | Type         | Null | Key | Default           | Extra          |
+|----------------------+--------------+------+-----+-------------------+----------------|
+| Program_ID           | int(11)      | NO   | PRI | NULL              | auto_increment |
+| Program_Name         | varchar(100) | YES  |     | NULL              |                |
+| Program_Organization | varchar(100) | YES  |     | NULL              |                |
+| Program_Type         | varchar(45)  | YES  |     | NULL              |                |
+| Program_Created_Date | timestamp    | YES  |     | CURRENT_TIMESTAMP |                |
+| Notes                | varchar(400) | YES  |     | NULL              |                |
+
+*** Programs_Users
+
+| Field           | Type    | Null | Key | Default | Extra          |
+|-----------------+---------+------+-----+---------+----------------|
+| Program_User_ID | int(11) | NO   | PRI | NULL    | auto_increment |
+| Program_ID      | int(11) | YES  | MUL | NULL    |                |
+| User_ID         | int(11) | YES  | MUL | NULL    |                |
+
+*** User_Established_Activities
+
+| Field                          | Type         | Null | Key | Default           | Extra          |
+|--------------------------------+--------------+------+-----+-------------------+----------------|
+| User_Established_Activities_ID | int(11)      | NO   | PRI | NULL              | auto_increment |
+| Activity_Name                  | varchar(100) | YES  |     | NULL              |                |
+| Activity_Date                  | date         | YES  |     | NULL              |                |
+| Activity_Created_Date          | timestamp    | YES  |     | CURRENT_TIMESTAMP |                |
+| Activity_Type                  | int(11)      | YES  |     | NULL              |                |
+| Activity_Org                   | int(11)      | YES  |     | NULL              |                |
+| Notes                          | varchar(400) | YES  |     | NULL              |                |
+
+*** User_Health_Data
+
+| Field               | Type        | Null | Key | Default | Extra          |
+|---------------------+-------------+------+-----+---------+----------------|
+| User_Health_Data_ID | int(11)     | NO   | PRI | NULL    | auto_increment |
+| User_ID             | int(11)     | YES  | MUL | NULL    |                |
+| Height_Feet         | varchar(45) | YES  |     | NULL    |                |
+| Height_Inches       | varchar(45) | YES  |     | NULL    |                |
+| Weight              | varchar(45) | YES  |     | NULL    |                |
+| BMI                 | varchar(45) | YES  |     | NULL    |                |
+| Date                | date        | YES  |     | NULL    |                |
+| User_Count          | int(11)     | YES  |     | NULL    |                |
+
+*** Users
+
+| Field                    | Type         | Null | Key | Default | Extra          |
+|--------------------------+--------------+------+-----+---------+----------------|
+| User_ID                  | int(11)      | NO   | PRI | NULL    | auto_increment |
+| First_Name               | varchar(45)  | YES  |     | NULL    |                |
+| Last_Name                | varchar(45)  | YES  |     | NULL    |                |
+| Zipcode                  | int(11)      | YES  |     | NULL    |                |
+| DOB                      | date         | YES  |     | NULL    |                |
+| Gender                   | varchar(45)  | YES  |     | NULL    |                |
+| Age                      | varchar(45)  | YES  |     | NULL    |                |
+| Race                     | varchar(45)  | YES  |     | NULL    |                |
+| Address_Street_Name      | varchar(95)  | YES  |     | NULL    |                |
+| Adult                    | int(1)       | YES  |     | NULL    |                |
+| Parent                   | int(1)       | YES  |     | NULL    |                |
+| Child                    | int(1)       | YES  |     | NULL    |                |
+| email_address            | varchar(150) | YES  |     | NULL    |                |
+| Notes                    | varchar(400) | YES  |     | NULL    |                |
+| Address_Number           | int(6)       | YES  |     | NULL    |                |
+| Address_Street_Direction | varchar(3)   | YES  |     | NULL    |                |
+| Address_Street_Type      | varchar(15)  | YES  |     | NULL    |                |
+| Phone                    | varchar(45)  | YES  |     | NULL    |                |
+| Block_Group              | varchar(45)  | YES  |     | NULL    |                |
+
+*** Walkability_Assessment
+
+| Field                     | Type         | Null | Key | Default | Extra          |
+|---------------------------+--------------+------+-----+---------+----------------|
+| Walkability_Assessment_ID | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Date_Evaluated            | date         | YES  |     | NULL    |                |
+| Cars_Stop                 | int(1)       | YES  |     | NULL    |                |
+| Intersection_Assessed     | varchar(100) | YES  |     | NULL    |                |
+| Speed_Limit_Obeyed        | int(1)       | YES  |     | NULL    |                |
+| No_Gaps_In_Sidewalk       | int(1)       | YES  |     | NULL    |                |
+| Crosswalk_Painted         | int(1)       | YES  |     | NULL    |                |
+

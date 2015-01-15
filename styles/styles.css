@@ -1137,3 +1137,21 @@ div#footer span#byline{
 	font-size:12px;
 	margin-top:5px;
 }
+
+#search_parti_table span.helptext {
+    font-size: 15px;
+    margin-right: 5px;
+    text-align: left;
+}
+
+#search_parti_table #show_results {
+    text-align: left;
+    margin-top: 13px;
+    margin-bottom: 13px;
+    background-color: yellow;
+}
+
+#search_parti_table #session_selector {
+    text-align: left;
+    margin-bottom: 9px;
+}
