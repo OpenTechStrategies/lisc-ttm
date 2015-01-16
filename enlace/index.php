@@ -3,7 +3,7 @@ require_once("siteconfig.php");
 
 //if action is logout, kill various navigation cookies: 
 if ($_GET['action'] == 'logout') {
-    include_once('ajax/session_test.php');
+    include_once $_SERVER['DOCUMENT_ROOT'] . "/core/tools/auth.php";
     $loggingout = pleaseLogOut($_COOKIE['PHPSESSID']);
     if ($loggingout){
         session_unset();

@@ -1,7 +1,7 @@
 <?php
 //if action is logout
 if ($_GET['action'] == 'logout') {
-    include_once('ajax/session_test.php');
+    include_once $_SERVER['DOCUMENT_ROOT'] . "/core/tools/auth.php";
     $loggingout = pleaseLogOut($_COOKIE['PHPSESSID']);
     if ($loggingout){
         //kill cookie

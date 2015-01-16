@@ -1,6 +1,5 @@
 <?php
-//require_once('ajax/session_test.php');
-include $_SERVER['DOCUMENT_ROOT'] . "/ajax/session_test.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/tools/auth.php";
 //is this person logged in?
 
 if ($_SERVER['PHP_SELF'] != '/index.php'){
