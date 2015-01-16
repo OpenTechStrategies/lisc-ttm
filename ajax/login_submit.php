@@ -1,7 +1,7 @@
 <?php
 require("../include/phpass-0.3/PasswordHash.php");
 $hasher=new PasswordHash(8, false);
-require("../core/tools/session_test.php");
+include_once $_SERVER['DOCUMENT_ROOT'] . "/core/tools/auth.php";
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 if (isset($_POST['username'])){
     $username = $_POST["username"];
