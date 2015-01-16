@@ -1267,7 +1267,7 @@ include "../include/dbconnclose.php";
                             ?>
                                 <!--Edit school and year right here!-->
                                 <a href="javascript:;" onclick="$('#edit_pm_year_<?php echo $yr[2] ?>').toggle();">Edit</a>
-<a href="javascript:;" onclick="                           $.post(
+<a href="javascript:;" class = "no_view" onclick="                           $.post(
                                    '../ajax/delete_elements.php',
                                    {
                                        action: 'pm_year',
