@@ -1267,6 +1267,16 @@ include "../include/dbconnclose.php";
                             ?>
                                 <!--Edit school and year right here!-->
                                 <a href="javascript:;" onclick="$('#edit_pm_year_<?php echo $yr[2] ?>').toggle();">Edit</a>
+<a href="javascript:;" onclick="                           $.post(
+                                   '../ajax/delete_elements.php',
+                                   {
+                                       action: 'pm_year',
+                                       id: '<?php echo $yr[2]; ?>'
+                                   },
+                           function(response) {
+                               window.location='participant_profile.php';
+                           }
+                           )">Delete School and Year</a>
                         <div id="edit_pm_year_<?php echo $yr[2] ?>" class="edit_pm_affiliation" style="font-weight: normal;">
                             <select id="edit_school_<?php echo $yr[2] ?>"><option value="">------</option>
                         <?php
@@ -1322,7 +1332,7 @@ include "../include/dbconnclose.php";
                 &nbsp;&nbsp;&nbsp;<a onclick="
                                 $('.prog_<?php echo $program['Subcategory_ID']; ?>').slideToggle();
                                      " class="helptext">Show/hide program dates</a></th><th class="no_view">
-                    <input type="button" value="Delete" onclick="
+                    <input type="button" value="Delete Program" onclick="
                            $.post(
                                    '../ajax/delete_elements.php',
                                    {
@@ -1330,8 +1340,7 @@ include "../include/dbconnclose.php";
                                        id: '<?php echo $program['Participant_Subcategory_ID']; ?>'
                                    },
                            function(response) {
-                               document.write(response);
-                               //window.location='participant_profile.php';
+                               window.location='participant_profile.php';
                            }
                            )">
                 </th>
