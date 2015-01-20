@@ -10,6 +10,18 @@ $DataEntryAccess = 2;
 $ReadOnlyAccess = 3;
 
 
+function startSession() {
+    // startSession
+    // ------------
+    //
+    // Start the session if it hasn't been yet.
+    // If it has been, do nothing.
+
+    if (! $_SESSION) {
+        session_start();
+    }
+}
+
 function isLoggedIn($session_id){
     return $_SESSION['is_logged_in'];
 }
