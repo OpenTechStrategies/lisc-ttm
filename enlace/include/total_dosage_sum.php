@@ -9,7 +9,7 @@ if(!function_exists("calculate_dosage_sum")) {
  * ID and returns the sum of hours this student spent in all programs
  * and through all mentorship sessions. */
 function calculate_dosage_sum($participant){
-    include "dbconnopen.php";
+    include $_SERVER['DOCUMENT_ROOT'] . "/enlace/include/dbconnopen.php";
     $participant_sqlsafe = mysqli_real_escape_string($cnnEnlace, $participant);
 
     //find hours in programs
@@ -73,5 +73,5 @@ function calculate_dosage_sum($participant){
 }
 
 // example calculation
-// echo calculate_dosage_sum(4);
+// echo calculate_dosage_sum(2);
 ?>
