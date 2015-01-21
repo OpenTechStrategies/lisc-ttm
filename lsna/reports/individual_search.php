@@ -131,12 +131,12 @@ ON Subcategory_Date=Wright_College_Program_Date_ID ";
     $event = " AND Wright_College_Program_Date_ID='" . $event_sqlsafe . "'";
 }
 if ($_POST['pm'] == 1) {
-    $pm_join = " LEFT JOIN Participants_Subcategories ON Participants.Participant_ID=Participants_Subcategories.Participant_ID ";
-    $pm = " AND Participants_Subcategories.Subcategory_ID=19 ";
+    $pm_join = " LEFT JOIN Participants_Subcategories AS PS_left ON Participants.Participant_ID=PS_left.Participant_ID ";
+    $pm = " AND PS_left.Subcategory_ID=19 ";
 } elseif ($_POST['pm'] == 2) {//$pm_join=" LEFT JOIN Participants_Subcategories ON Participants.Participant_ID=Participants_Subcategories.Participant_ID ";
     $pm_join = "LEFT JOIN
- Participants_Subcategories 
-ON (Participants.Participant_Id=Participants_Subcategories.Participant_ID AND Participants_Subcategories.Subcategory_ID='19')";
+ Participants_Subcategories AS PS_left
+ON (Participants.Participant_Id=PS_left.Participant_ID AND PS_left.Subcategory_ID='19')";
 //$pm=" AND Subcategory_ID!=19 ";
     $pm = " AND Participant_Subcategory_ID IS NULL";
 } else {

@@ -101,11 +101,7 @@ aldermanic funds for environmental improvements, and healthy item sales data.
         <th>Fiscal Year</th>
     </tr>
     <? date_default_timezone_set('America/Chicago');
-<<<<<<< HEAD
-    $get_trail_info = "SELECT * FROM Aldermanic_Records";
-=======
-    $get_trail_info_sqlsafe = "SELECT * FROM `lisc-bickerdike.chapinhall.org`.Aldermanic_Records";
->>>>>>> Issue-19-sqlsafe
+    $get_trail_info_sqlsafe = "SELECT * FROM Aldermanic_Records";
     include "../include/dbconnopen.php";
     $trails = mysqli_query($cnnBickerdike, $get_trail_info_sqlsafe);
         while ($trail = mysqli_fetch_array($trails)){
