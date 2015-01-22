@@ -225,7 +225,7 @@ include "../header.php";
                                                                     '../ajax/set_institution_id.php',
                                                                     {
                                                                         page: 'profile',
-                                                                        institution_id: '<?php echo $institution['Institution_ID']; ?>'
+                                                                        id: '<?php echo $institution['Institution_ID']; ?>'
                                                                     },
                                                             function(response) {
                                                                 //alert(response);
