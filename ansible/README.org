@@ -5,7 +5,8 @@
 This is a quick-to-setup-and-tear-down vagrant + ansible setup for the
 TTM project.
 
-* Preliminary: get a Vagrant box
+* Preliminary
+** Get a Vagrant box
 
 TTM is deployed to Debian testing (Jessie, at the time of writing),
 but works on Debian Wheezy.  You need a Vagrant box that runs
@@ -26,8 +27,31 @@ in mind, most of these images are not reproducible.
 
 But anyway, get a Debian box!  And then continue below.
 
-* How to use it
+** Install on host machine
+You need to install some dependencies and create a config file on the
+host machine. You should install with your package manager:
+- vagrant
+- ansible
 
+You also need to add to ~/.vagrant.d/Vagrantfile:
+#+BEGIN_SRC ruby
+  # -*- mode: ruby -*-
+  # vi: set ft=ruby :
+
+  # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+  VAGRANTFILE_API_VERSION = "2"
+
+  Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    # Every Vagrant virtual environment requires a box to build off of.
+    config.vm.box = "vagrant-debian-wheezy"
+
+    config.ssh.private_key_path = "~/.ssh/id_rsa"
+  end
+#+END_SRC
+
+Once you've done that you should continue with the instructions
+below.
+* How to use it
 ** Set up the vagrant image
 
 To set up the image, run:
