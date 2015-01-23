@@ -38,14 +38,14 @@ class User {
     // A hashmap of site id to permission level
     public $site_permissions;
 
-    function __construct($user_id) {
+    public function __construct($user_id) {
         startSession();
         $this->id = $user_id;
         $this->username = getUsernameFromId($user_id);
         $this->site_permissions = getAllSiteAccess($user_id);
     }
 
-    function has_site_access($site) {
+    public function has_site_access($site) {
         return siteAccessInPermissions($site, $this->site_permissions);
     }
 }
