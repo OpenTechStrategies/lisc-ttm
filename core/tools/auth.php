@@ -24,12 +24,21 @@ function startSession() {
 
 
 class User {
+    // User class
+    //
+    // This should be started up and inserted into the session very
+    // early on in the page.
+
     public $id;
     public $username;
+
+    // @@: could be private, but not really needed,
+    //   useful to have public for debugging
+
     // A hashmap of site id to permission level
     public $site_permissions;
 
-    function __construct($user_id = NULL) {
+    function __construct($user_id) {
         startSession();
         $this->id = $user_id;
         $this->username = getUsernameFromId($user_id);
