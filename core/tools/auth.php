@@ -17,10 +17,46 @@ function startSession() {
     // Start the session if it hasn't been yet.
     // If it has been, do nothing.
 
-    if (! $_SESSION) {
+    if (! defined("_SESSION")) {
         session_start();
     }
 }
+
+
+class User {
+    public $id;
+    public $username;
+    // A hashmap of site id to permission level
+    public $site_permissions;
+
+    function __construct($user_id = NULL) {
+        startSession();
+        $this->id = $user_id;
+        $this->username = getUsernameFromId($user_id);
+        $this->site_permissions = getAllSiteAccess($user_id);
+    }
+}
+
+function getUsernameFromId($user_id) {
+    global $cnnLISC;
+
+    $userid_sqlsafe = mysqli_real_escape_string($cnnLISC, $user_id);
+    $user_query = "SELECT User_Email FROM Users WHERE User_ID = '$userid_sqlsafe'";
+    $query_result = mysqli_query($cnnLISC, $user_query);
+
+    $user_exists = mysqli_num_rows($query_result);
+    if (! $user_exists = mysqli_num_rows($query_result)) {
+        $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $userid_sqlsafe . "', ' - Unknown userid'))";
+        mysqli_query($cnnLISC, $log_call);
+        // maybe something else could be done?
+        die("ERROR: user with id " . htmlspecialchars($user_id) . " not found");
+    }
+    $user_row = mysqli_fetch_row($query_result);
+    $username=$user_row[0];
+    return $username;
+}
+
+
 
 function isLoggedIn($session_id){
     return $_SESSION['is_logged_in'];
