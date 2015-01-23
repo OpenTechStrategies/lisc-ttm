@@ -44,7 +44,13 @@ class User {
         $this->username = getUsernameFromId($user_id);
         $this->site_permissions = getAllSiteAccess($user_id);
     }
+
+    function has_site_access($site) {
+        return siteAccessInPermissions($site, $this->site_permissions);
+    }
 }
+
+
 
 function getUsernameFromId($user_id) {
     global $cnnLISC;
@@ -66,7 +72,6 @@ function getUsernameFromId($user_id) {
 }
 
 
-
 function isLoggedIn($session_id){
     return $_SESSION['is_logged_in'];
 }
@@ -81,12 +86,23 @@ function pleaseLogOut($session_id){
     return true;
 }
 
-function getSiteAccess($session_id, $site){
+
+function siteAccessInPermissions($site, $permissions) {
+    // Check for site access for $site in $permissions
+    //
+    // $permissions should come from getAllSiteAccess()
     $access_return = false;
-    if (array_key_exists($site, $_SESSION['site_access'])){
+    if (array_key_exists($site, $permissions)){
         $access_return = true;
     }
     return $access_return;
+}
+
+
+// Old function, for backwards compatibility
+
+function getSiteAccess($session_id, $site){
+    return siteAccessInPermissions($site, $_SESSION['site_access']);
 }
 
 function getAllSiteAccess($user_id){
