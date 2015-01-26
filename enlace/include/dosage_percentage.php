@@ -42,22 +42,31 @@ function calculate_dosage($session, $participant){
     $program_daily_hours="SELECT Start_Hour, Start_Suffix, End_Hour, End_Suffix,"
             . " Max_Hours FROM Programs INNER JOIN Session_Names "
             . " ON Session_Names.Program_ID=Programs.Program_ID WHERE Session_ID='$session_sqlsafe'";
-    $daily_hours = mysqli_query($cnnEnlace, $program_daily_hours);
-    $hours = mysqli_fetch_row($daily_hours);
-    /*if max hours not specified for program, use start and end times:*/
-    if ($hours[4]=='' || $hours[4] == NULL){
-        if ($hours[3]=='pm'){
-            $hours[2]=$hours[2]+12;
-        }
-        if ($hours[1]=='pm'){
-            $hours[0]=$hours[0]+12;
-        }
-        $max_daily_hours_calc=$hours[2]-$hours[0];
-        $sum_hours=$num_attended[0]*$max_daily_hours_calc;
-    }
-    else{
-        $sum_hours=$num_attended[0]*$hours[4];
-    }
+    $program_hours_per_day = mysqli_query($cnnEnlace, $program_daily_hours);
+    $program_hours = mysqli_fetch_array($program_hours_per_day);
+ if ($program_hours['Start_Hour'] != '' && $program_hours['Start_Hour'] != 0  && $program_hours['End_Hour'] != '' && $program_hours['End_Hour'] != 0){
+     if ($program_hours['End_Suffix'] == 'pm'){
+         $program_hours['End_Hour'] += 12;
+     }
+     if ($program_hours['Start_Suffix'] == 'pm'){
+         $program_hours['Start_Hour'] += 12;
+     }
+     $daily_hours = $program_hours['End_Hour'] - $program_hours['Start_Hour'];
+ }
+ elseif ($program_hours['Max_Hours'] != '' && $program_hours['Max_Hours'] != 0){
+     $daily_hours = $program_hours['Max_Hours'];
+ }
+ else {
+     // the default is two hours
+     $daily_hours = 2;
+ }
+
+ //final test
+ if ($daily_hours == 0 || $daily_hours == ''){
+     $daily_hours = 2;
+ }
+ $sum_hours=$num_attended[0]*$daily_hours;
+  
     include "dbconnclose.php";
     /* Calculate the dosage percentage based on days attended and total days: */
     if ($max[0] != 0) {
