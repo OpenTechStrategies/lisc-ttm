@@ -20,14 +20,13 @@ $new_inst_query = "INSERT INTO Institutions (
     Street_Num,
     Street_Direction,
     Street_Name,
-    Street_Type, Block_Group) VALUES (
+    Street_Type) VALUES (
     '" . $name_sqlsafe . "',
 	'" . $inst_type_sqlsafe . "',
     '" . $num_sqlsafe . "',
     '" . $dir_sqlsafe . "',
     '" . $street_name_sqlsafe . "',
-    '" . $type_sqlsafe . "',
-        '$block_group'
+    '" . $type_sqlsafe . "'
     )";
 //echo $new_inst_query;
 mysqli_query($cnnLSNA, $new_inst_query);
@@ -44,13 +43,12 @@ include "../include/dbconnclose.php";
                         '/lsna/ajax/set_institution_id.php',
                         {
                             page: 'profile',
-                            institution_id:'<?echo $id; ?>'
+                            id: '<?php echo $id; ?>'
                         },
                         function (response){
                             if (response!='1'){
                                 document.getElementById('show_error').innerHTML = response;
                             }
-                            document.write(response);
                             window.location='/lsna/institutions/institution_profile.php';
                        }
            );
