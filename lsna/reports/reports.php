@@ -84,7 +84,7 @@ if (isset($_POST['satisfaction_program'])) {
 <div class="content">
     <h3>Reports</h3><hr/><br/>
     <a href="query.php" class="report_tab">Participant Query Search</a>&nbsp;&nbsp; <a href="survey_query.php" class="report_tab">Survey Query Search</a>
-    <br>
+    <a href="issue_events_report.php" class="report_tab">Services Rendered Report</a><br>
     <a class="report_tab" id="pm_survey_tab" href="javascript:;" onclick="
             $('#parent_mentor_survey').show();
             $('#parent_mentor_survey_pre_post').slideUp();
