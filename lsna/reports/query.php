@@ -2,6 +2,12 @@
 include "../../header.php";
 include "../header.php";
 ?>
+<script type="text/javascript">
+        $(document).ready(function() {
+            $('#show_campaign_checkboxes').hide();
+            $('#show_program_checkboxes').hide();
+        });
+</script>
 <!--Query search for participants, modeled on SWOP's query report. -->
 <h4>Search All Participants</h4>
 <table class="search_table">
@@ -121,35 +127,53 @@ include "../header.php";
 	</tr>
         <tr>
             <td class="all_projects"><strong>Program Involved In:</strong></td>
-            <td class="all_projects"><select id="program_chosen"><option value="">------</option>
+            <td class="all_projects">
     <?php
     $get_schools = "SELECT * FROM Subcategories WHERE Campaign_or_Program='Program' ORDER BY Subcategory_Name";
     include "../include/dbconnopen.php";
     $programs = mysqli_query($cnnLSNA, $get_schools);
+?>
+<a href="javascript:;" onclick = "$('#show_program_checkboxes').toggle();">Show programs</a>
+<table id = "show_program_checkboxes">
+<?php
     while ($program = mysqli_fetch_array($programs)){
         ?>
-    <option value="<?php echo $program['Subcategory_ID'];?>"><?php echo $program['Subcategory_Name'];?></option>
-            <?php
-    }
-    include "../include/dbconnclose.php";
-    ?>
-    
-</select></td>
+<tr>
+<td>
+<label for="program_list"><?php echo $program['Subcategory_Name'];?>:</label>
+</td>
+<td>
+<input type="checkbox" name = "programs[]"  id="program_list" value="<?php echo $program['Subcategory_ID'];?>" />
+</td>
+</tr>
+<?php
+}
+?>
+</table>
+</td>
             <td class="all_projects"><strong>Campaign Involved In:</strong></td>
-            <td class="all_projects"><select id="campaign_chosen"><option value="">------</option>
+            <td class="all_projects">
+<a href="javascript:;" onclick = "$('#show_campaign_checkboxes').toggle();">Show campaigns</a>
+<table id = "show_campaign_checkboxes">
     <?php
     $get_schools = "SELECT * FROM Subcategories WHERE Campaign_or_Program='Campaign' ORDER BY Subcategory_Name";
     include "../include/dbconnopen.php";
     $programs = mysqli_query($cnnLSNA, $get_schools);
     while ($program = mysqli_fetch_array($programs)){
-        ?>
-    <option value="<?php echo $program['Subcategory_ID'];?>"><?php echo $program['Subcategory_Name'];?></option>
-            <?php
-    }
-    include "../include/dbconnclose.php";
-    ?>
-    
-</select></td>
+?>
+<tr>
+<td>
+<label for="campaign_list"><?php echo $program['Subcategory_Name'];?>:</label>
+</td>
+<td>
+<input type="checkbox" name = "campaigns[]"  id="campaign_list" value="<?php echo $program['Subcategory_ID'];?>" />
+</td>
+</tr>
+<?php
+}
+?>
+</table>
+</td>
         </tr>
         <tr>
             <td class="all_projects"><strong>Affiliated Institution:</strong></td>
@@ -296,8 +320,25 @@ WHERE Subcategories.Campaign_or_Program='Campaign';";
                             if (document.getElementById('include_evening_phone').checked==true){ var include_evening_phone=1; } else{ var include_evening_phone=0;}
                             if (document.getElementById('include_languages_spoken').checked==true){ var include_languages_spoken=1; } else{ var include_languages_spoken=0;}
                             if (document.getElementById('include_email').checked==true){ var include_email=1; } else{ var include_email=0;}
-        
-                            $.post(
+var programs = document.getElementsByName('programs[]');
+var program_array = new Array();
+var program_array_key = 0;
+for (var k = 0; k < programs.length; k++) {
+    if (programs[k].checked == true) {
+        program_array[program_array_key] = programs[k].value;
+        program_array_key++;
+    }
+}
+var campaigns = document.getElementsByName('campaigns[]');
+var campaign_array = new Array();
+var campaign_array_key = 0;
+for (var k = 0; k < campaigns.length; k++) {
+if (campaigns[k].checked == true) {
+campaign_array[campaign_array_key] = campaigns[k].value;
+campaign_array_key++;
+}
+}
+                          $.post(
                                 '/lsna/reports/individual_search.php',
                                 {
                                     first: document.getElementById('first_name').value,
@@ -311,8 +352,8 @@ WHERE Subcategories.Campaign_or_Program='Campaign';";
                                     school: document.getElementById('school_search').value,
                                     dob: document.getElementById('dob').value,
                                     grade: document.getElementById('grade').value,
-                                    program: document.getElementById('program_chosen').value,
-                                    campaign: document.getElementById('campaign_chosen').value,
+                                    program: program_array,
+                                    campaign: campaign_array,
                                     institution: document.getElementById('inst_search').value,
                                     event: document.getElementById('event_search').value,
                                     pm: document.getElementById('pm_check').value,

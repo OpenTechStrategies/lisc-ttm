@@ -471,6 +471,10 @@ table, ie [[*Participants_Baseline_Assessments][Participants_Baseline_Assessment
 participant id... this is data duplication, possibly could be done via
 a clever join instead.)
 
+Note that the Pre_Post column in the Assessments table contains either
+a 1 or a 2.  The 1 indicates that the assessment is a pre or "intake"
+survey.  The 2 means that it's a post or "impact" survey.
+
 [[*Baseline_Assessment_Questions][Baseline_Assessment_Questions]] and [[*Assessment_Responses][Assessment_Responses]] are just
 textual responses to the survey.  The text of the questions are saved
 here, but it's a multiple choice survey.
