@@ -17,7 +17,7 @@ function startSession() {
     // Start the session if it hasn't been yet.
     // If it has been, do nothing.
 
-    if (! defined("_SESSION")) {
+    if (! isset($_SESSION)) {
         session_start();
     }
 }
