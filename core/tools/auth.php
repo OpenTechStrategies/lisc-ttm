@@ -123,7 +123,8 @@ function getUsernameFromId($user_id) {
     return $username;
 }
 
-
+// TODO: Needs a friendlier array fetch if not set,
+//   something like python's .get("foo", False)
 function isLoggedIn($session_id){
     return $_SESSION['is_logged_in'];
 }
