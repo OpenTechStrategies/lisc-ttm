@@ -23,9 +23,20 @@ function startSession() {
 }
 
 
-function enforceUserHasAccess($user, $site_id) {
+function enforceUserHasAccess($user, $site_id,
+                              $access_level = NULL, $program_access = NULL) {
     if (!$user->has_site_access($site_id)) {
         die("User does not have permissions to access this site.");
+    }
+
+    // TODO: Add access level check
+    if (!is_null($access_level)) {
+        echo("test test<br />");
+    }
+
+    // TODO: Add for program access check
+    if (!is_null($program_access)) {
+        echo("test test<br />");
     }
 }
 
@@ -54,6 +65,40 @@ class User {
 
     public function has_site_access($site) {
         return siteAccessInPermissions($site, $this->site_permissions);
+    }
+
+    // Get an array of all programs this user currently has access to
+    //
+    // Args:
+    //  - site: The site ID we are checking this user's program access for
+    //
+    // Returns:
+    //  An array of all program ids that user has access to.
+    //  These correspond to... (Fill in here)
+    //
+    // NOTES:
+    //  - "n" is None, a special case.  The reason for this rather than
+    //    an empty array is that there are some duplicate rows (:\) in
+    //    the db, and "none" takes precedence in case of duplication there.
+    //  - In the future, this code, and the database needs to be updated
+    //    for a many to many relationship.  As it stands, a user can really
+    //    only have one program access per section.
+    public function program_access($site) {
+        $program_access_array = array();
+        if (session_id() == $session_id){
+            // this needs to be updated to include the possibility of
+            // access to multiple programs.
+            $program_access_array[] = $this->site_permissions[$site][1];
+        }    
+
+        // note that if 'n' is in array, then the logged-in user has access
+        // to no programs, and we delete the rest of the array.  The 'n'
+        // takes precedence over any other entries.
+        if (in_array('n', $program_access_array)){
+            $program_access_array = array('n');
+        }
+
+        return $program_access_array;
     }
 }
 
@@ -125,6 +170,9 @@ function getAllSiteAccess($user_id){
     return $access_return;
 }
 
+// TODO: Delete this after the user object stuff works, and refactor
+//   all code that presently uses it
+
 function getPermissionLevel($session_id, $site){
     session_start();
     if (session_id() == $session_id){
@@ -136,6 +184,9 @@ function getPermissionLevel($session_id, $site){
         return false;
     }
 }
+
+// TODO: Delete this after the user object stuff works, and refactor
+//   all code that presently uses it
 
 function getProgramAccess($session_id, $site){
     $program_access_array = array();
