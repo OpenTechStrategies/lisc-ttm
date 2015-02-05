@@ -23,6 +23,13 @@ function startSession() {
 }
 
 
+function enforceUserHasAccess($user, $site_id) {
+    if (!$user->has_site_access($site_id)) {
+        die("User does not have permissions to access this site.");
+    }
+}
+
+
 class User {
     // User class
     //
