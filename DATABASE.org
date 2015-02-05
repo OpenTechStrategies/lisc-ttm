@@ -703,79 +703,57 @@ here, but it's a multiple choice survey.
 ** LSNA
 ** SWOP
 *** Campaigns
-+---------------+--------------+------+-----+---------+----------------+
 | Field         | Type         | Null | Key | Default | Extra          |
-+---------------+--------------+------+-----+---------+----------------+
+|---------------+--------------+------+-----+---------+----------------|
 | Campaign_ID   | int(11)      | NO   | PRI | NULL    | auto_increment |
 | Campaign_Name | varchar(100) | YES  |     | NULL    |                |
-+---------------+--------------+------+-----+---------+----------------+
 
 *** Campaigns_Events
-+-------------------+--------------+------+-----+---------+----------------+
 | Field             | Type         | Null | Key | Default | Extra          |
-+-------------------+--------------+------+-----+---------+----------------+
+|-------------------+--------------+------+-----+---------+----------------|
 | Campaign_Event_ID | int(11)      | NO   | PRI | NULL    | auto_increment |
 | Event_Name        | varchar(100) | YES  |     | NULL    |                |
 | Event_Date        | date         | YES  |     | NULL    |                |
 | Campaign_ID       | int(11)      | YES  |     | NULL    |                |
 | Subcampaign       | varchar(100) | YES  |     | NULL    |                |
 | Location          | varchar(100) | YES  |     | NULL    |                |
-+-------------------+--------------+------+-----+---------+----------------+
 
 *** Campaigns_Institutions
-+---------------------------+---------+------+-----+---------+----------------+
 | Field                     | Type    | Null | Key | Default | Extra          |
-+---------------------------+---------+------+-----+---------+----------------+
+|---------------------------+---------+------+-----+---------+----------------|
 | Campaigns_Institutions_ID | int(11) | NO   | PRI | NULL    | auto_increment |
 | Institution_ID            | int(11) | YES  |     | NULL    |                |
 | Campaign_ID               | int(11) | YES  |     | NULL    |                |
-+---------------------------+---------+------+-----+---------+----------------+
 
 *** Current_Housing
-+----------------------+--------------+------+-----+---------+----------------+
 | Field                | Type         | Null | Key | Default | Extra          |
-+----------------------+--------------+------+-----+---------+----------------+
+|----------------------+--------------+------+-----+---------+----------------|
 | Current_Housing_ID   | int(11)      | NO   | PRI | NULL    | auto_increment |
 | Current_Housing_Name | varchar(100) | YES  |     | NULL    |                |
-+----------------------+--------------+------+-----+---------+----------------+
-
-+----------------------+--------------+------+-----+---------+----------------+
-| Field                | Type         | Null | Key | Default | Extra          |
-+----------------------+--------------+------+-----+---------+----------------+
-| Current_Housing_ID   | int(11)      | NO   | PRI | NULL    | auto_increment |
-| Current_Housing_Name | varchar(100) | YES  |     | NULL    |                |
-+----------------------+--------------+------+-----+---------+----------------+
 
 *** Households
-+------------------+-------------+------+-----+---------+----------------+
 | Field            | Type        | Null | Key | Default | Extra          |
-+------------------+-------------+------+-----+---------+----------------+
+|------------------+-------------+------+-----+---------+----------------|
 | New_Household_ID | int(11)     | NO   | PRI | NULL    | auto_increment |
 | Household_Name   | varchar(45) | YES  |     | NULL    |                |
-+------------------+-------------+------+-----+---------+----------------+
 
 *** Households_Participants
-+----------------------------+---------+------+-----+---------+----------------+
 | Field                      | Type    | Null | Key | Default | Extra          |
-+----------------------------+---------+------+-----+---------+----------------+
+|----------------------------+---------+------+-----+---------+----------------|
 | Households_Participants_ID | int(11) | NO   | PRI | NULL    | auto_increment |
 | Household_ID               | int(11) | YES  | MUL | NULL    |                |
 | Participant_ID             | int(11) | YES  | MUL | NULL    |                |
 | Head_of_Household          | int(11) | YES  |     | NULL    |                |
-+----------------------------+---------+------+-----+---------+----------------+
 
 *** Institution_Types
-+-----------+-------------+------+-----+---------+----------------+
 | Field     | Type        | Null | Key | Default | Extra          |
-+-----------+-------------+------+-----+---------+----------------+
+|-----------+-------------+------+-----+---------+----------------|
 | Type_ID   | int(11)     | NO   | PRI | NULL    | auto_increment |
 | Type_Name | varchar(45) | YES  |     | NULL    |                |
-+-----------+-------------+------+-----+---------+----------------+
 
 *** Institutions
-+------------------+--------------+------+-----+-------------------+----------------+
 | Field            | Type         | Null | Key | Default           | Extra          |
-+------------------+--------------+------+-----+-------------------+----------------+
+|------------------+--------------+------+-----+-------------------+----------------|
 | Institution_ID   | int(11)      | NO   | PRI | NULL              | auto_increment |
 | Institution_Name | varchar(150) | YES  |     | NULL              |                |
 | Street_Num       | int(11)      | YES  |     | NULL              |                |
@@ -787,11 +765,11 @@ here, but it's a multiple choice survey.
 | Phone            | varchar(45)  | YES  |     | NULL              |                |
 | Contact_Person   | int(11)      | YES  |     | NULL              |                |
 | Date_Added       | timestamp    | YES  |     | CURRENT_TIMESTAMP |                |
-+------------------+--------------+------+-----+-------------------+----------------+
+
 *** Institutions_Participants
-+------------------------------+--------------+------+-----+-------------------+----------------+
+
 | Field                        | Type         | Null | Key | Default           | Extra          |
-+------------------------------+--------------+------+-----+-------------------+----------------+
+|------------------------------+--------------+------+-----+-------------------+----------------|
 | Institutions_Participants_ID | int(11)      | NO   | PRI | NULL              | auto_increment |
 | Institution_ID               | int(11)      | YES  | MUL | NULL              |                |
 | Participant_ID               | int(11)      | YES  | MUL | NULL              |                |
@@ -800,56 +778,45 @@ here, but it's a multiple choice survey.
 | Connection_Reason            | varchar(400) | YES  |     | NULL              |                |
 | Date_Logged                  | timestamp    | YES  |     | CURRENT_TIMESTAMP |                |
 | Activity_Type                | int(11)      | YES  |     | NULL              |                |
-+------------------------------+--------------+------+-----+-------------------+----------------+
 
 *** Leadership_Development
-+---------------------------+-----------+------+-----+-------------------+----------------+
 | Field                     | Type      | Null | Key | Default           | Extra          |
-+---------------------------+-----------+------+-----+-------------------+----------------+
+|---------------------------+-----------+------+-----+-------------------+----------------|
 | Leadership_Development_ID | int(11)   | NO   | PRI | NULL              | auto_increment |
 | Participant_ID            | int(11)   | YES  | MUL | NULL              |                |
 | Detail_ID                 | int(11)   | YES  | MUL | NULL              |                |
 | Date                      | timestamp | YES  |     | CURRENT_TIMESTAMP |                |
-+---------------------------+-----------+------+-----+-------------------+----------------+
 
 *** Leadership_Development_Details
 
-+----------------------------------+--------------+------+-----+---------+----------------+
+
 | Field                            | Type         | Null | Key | Default | Extra          |
-+----------------------------------+--------------+------+-----+---------+----------------+
+|----------------------------------+--------------+------+-----+---------+----------------|
 | Leadership_Development_Detail_ID | int(11)      | NO   | PRI | NULL    | auto_increment |
 | Leadership_Detail_Name           | varchar(150) | YES  |     | NULL    |                |
-+----------------------------------+--------------+------+-----+---------+----------------+
 
 *** Leadership_Levels
 
-+-----------------+-------------+------+-----+---------+----------------+
 | Field           | Type        | Null | Key | Default | Extra          |
-+-----------------+-------------+------+-----+---------+----------------+
+|-----------------+-------------+------+-----+---------+----------------|
 | Leader_Level_ID | int(11)     | NO   | PRI | NULL    | auto_increment |
 | Leader_Level    | varchar(45) | YES  |     | NULL    |                |
-+-----------------+-------------+------+-----+---------+----------------+
 
 *** Outcome_Locations
-+-----------------------+--------------+------+-----+---------+----------------+
 | Field                 | Type         | Null | Key | Default | Extra          |
-+-----------------------+--------------+------+-----+---------+----------------+
+|-----------------------+--------------+------+-----+---------+----------------|
 | Outcome_Location_ID   | int(11)      | NO   | PRI | NULL    | auto_increment |
 | Outcome_Location_Name | varchar(100) | YES  |     | NULL    |                |
-+-----------------------+--------------+------+-----+---------+----------------+
 
 *** Outcomes_for_Pool
-+--------------+-------------+------+-----+---------+----------------+
 | Field        | Type        | Null | Key | Default | Extra          |
-+--------------+-------------+------+-----+---------+----------------+
+|--------------+-------------+------+-----+---------+----------------|
 | Outcome_ID   | int(11)     | NO   | PRI | NULL    | auto_increment |
 | Outcome_Name | varchar(45) | YES  |     | NULL    |                |
-+--------------+-------------+------+-----+---------+----------------+
 
 *** Participants
-+--------------------------+----------------+------+-----+-------------------+----------------+
 | Field                    | Type           | Null | Key | Default           | Extra          |
-+--------------------------+----------------+------+-----+-------------------+----------------+
+|--------------------------+----------------+------+-----+-------------------+----------------|
 | Participant_ID           | int(11)        | NO   | PRI | NULL              | auto_increment |
 | Name_First               | varchar(45)    | YES  |     | NULL              |                |
 | Name_Middle              | varchar(45)    | YES  |     | NULL              |                |
@@ -876,46 +843,37 @@ here, but it's a multiple choice survey.
 | ITIN                     | int(11)        | YES  |     | NULL              |                |
 | Date_Added               | timestamp      | YES  |     | CURRENT_TIMESTAMP |                |
 | Activity_Type            | int(11)        | YES  |     | NULL              |                |
-+--------------------------+----------------+------+-----+-------------------+----------------+
 
 *** Participants_Events
-+------------------------+---------+------+-----+---------+----------------+
 | Field                  | Type    | Null | Key | Default | Extra          |
-+------------------------+---------+------+-----+---------+----------------+
+|------------------------+---------+------+-----+---------+----------------|
 | Participants_Events_ID | int(11) | NO   | PRI | NULL    | auto_increment |
 | Event_ID               | int(11) | YES  |     | NULL    |                |
 | Participant_ID         | int(11) | YES  | MUL | NULL    |                |
 | Role_Type              | int(11) | YES  |     | NULL    |                |
 | Exceptional            | int(11) | YES  |     | NULL    |                |
-+------------------------+---------+------+-----+---------+----------------+
 
 *** Participants_Leaders
-+------------------------+-----------+------+-----+-------------------+----------------+
 | Field                  | Type      | Null | Key | Default           | Extra          |
-+------------------------+-----------+------+-----+-------------------+----------------+
+|------------------------+-----------+------+-----+-------------------+----------------|
 | Participants_Leader_ID | int(11)   | NO   | PRI | NULL              | auto_increment |
 | Participant_ID         | int(11)   | YES  |     | NULL              |                |
 | Leader_Type            | int(11)   | YES  |     | NULL              |                |
 | Date_Logged            | timestamp | YES  |     | CURRENT_TIMESTAMP |                |
 | Activity_Type          | int(11)   | YES  |     | NULL              |                |
-+------------------------+-----------+------+-----+-------------------+----------------+
 
 *** Participants_Pool
-+---------------------+-----------+------+-----+-------------------+----------------+
 | Field               | Type      | Null | Key | Default           | Extra          |
-+---------------------+-----------+------+-----+-------------------+----------------+
+|---------------------+-----------+------+-----+-------------------+----------------|
 | Participant_Pool_ID | int(11)   | NO   | PRI | NULL              | auto_increment |
 | Participant_ID      | int(11)   | YES  | MUL | NULL              |                |
 | Date_Joined         | date      | YES  |     | NULL              |                |
 | Date_Logged         | timestamp | YES  |     | CURRENT_TIMESTAMP |                |
 | Type                | int(11)   | YES  | MUL | NULL              |                |
-+---------------------+-----------+------+-----+-------------------+----------------+
 
 *** Participants_Properties
-
-+-------------------------+-------------+------+-----+-------------------+----------------+
 | Field                   | Type        | Null | Key | Default           | Extra          |
-+-------------------------+-------------+------+-----+-------------------+----------------+
+|-------------------------+-------------+------+-----+-------------------+----------------|
 | Participant_Property_ID | int(11)     | NO   | PRI | NULL              | auto_increment |
 | Participant_ID          | int(11)     | YES  |     | NULL              |                |
 | Property_ID             | int(11)     | YES  |     | NULL              |                |
@@ -928,47 +886,20 @@ here, but it's a multiple choice survey.
 | Start_Primary           | datetime    | YES  |     | NULL              |                |
 | End_Primary             | datetime    | YES  |     | NULL              |                |
 | Reason_End              | varchar(45) | YES  |     | NULL              |                |
-+-------------------------+-------------+------+-----+-------------------+----------------+
-12 rows in set (0.00 sec)
-
-*** Participants_Roles
-+-----------+-------------+------+-----+---------+----------------+
-| Field     | Type        | Null | Key | Default | Extra          |
-+-----------+-------------+------+-----+---------+----------------+
-| Role_ID   | int(11)     | NO   | PRI | NULL    | auto_increment |
-| Role_Name | varchar(45) | YES  |     | NULL    |                |
-+-----------+-------------+------+-----+---------+----------------+
-2 rows in set (0.00 sec)
 
 *** Pool_Benchmarks
-+-------------------+--------------+------+-----+-----------+----------------+
 | Field             | Type         | Null | Key | Default   | Extra          |
-+-------------------+--------------+------+-----+-----------+----------------+
+|-------------------+--------------+------+-----+-----------+----------------|
 | Pool_Benchmark_ID | int(11)      | NO   | PRI | NULL      | auto_increment |
 | Benchmark_Name    | varchar(100) | YES  |     | NULL      |                |
 | Pipeline_Type     | int(11)      | YES  |     | NULL      |                |
 | Benchmark_Info    | varchar(45)  | YES  |     | NULL      |                |
 | Step_Number       | int(11)      | YES  |     | NULL      |                |
 | Benchmark_Type    | varchar(45)  | YES  |     | Benchmark |                |
-+-------------------+--------------+------+-----+-----------+----------------+
-6 rows in set (0.00 sec)
-
-*** Pool_Employers
-+------------------+--------------+------+-----+-------------------+----------------+
-| Field            | Type         | Null | Key | Default           | Extra          |
-+------------------+--------------+------+-----+-------------------+----------------+
-| Pool_Employer_ID | int(11)      | NO   | PRI | NULL              | auto_increment |
-| Participant_ID   | int(11)      | YES  |     | NULL              |                |
-| Employer_Name    | varchar(150) | YES  |     | NULL              |                |
-| Work_Time        | varchar(4)   | YES  |     | NULL              |                |
-| Date_Logged      | timestamp    | YES  |     | CURRENT_TIMESTAMP |                |
-+------------------+--------------+------+-----+-------------------+----------------+
-5 rows in set (0.00 sec)
 
 *** Pool_Finances
-+--------------------+--------------+------+-----+-------------------+----------------+
 | Field              | Type         | Null | Key | Default           | Extra          |
-+--------------------+--------------+------+-----+-------------------+----------------+
+|--------------------+--------------+------+-----+-------------------+----------------|
 | Pool_Finance_ID    | int(11)      | NO   | PRI | NULL              | auto_increment |
 | Participant_ID     | int(11)      | YES  | MUL | NULL              |                |
 | Credit_Score       | int(11)      | YES  |     | NULL              |                |
@@ -979,36 +910,27 @@ here, but it's a multiple choice survey.
 | Employment         | varchar(100) | YES  |     | NULL              |                |
 | Assets             | varchar(100) | YES  |     | NULL              |                |
 | Date_Logged        | timestamp    | YES  |     | CURRENT_TIMESTAMP |                |
-+--------------------+--------------+------+-----+-------------------+----------------+
-10 rows in set (0.01 sec)
 
 *** Pool_Member_Types
-+-----------+--------------+------+-----+---------+----------------+
 | Field     | Type         | Null | Key | Default | Extra          |
-+-----------+--------------+------+-----+---------+----------------+
+|-----------+--------------+------+-----+---------+----------------|
 | Type_ID   | int(11)      | NO   | PRI | NULL    | auto_increment |
 | Type_Name | varchar(100) | YES  |     | NULL    |                |
 | Pipeline  | varchar(45)  | YES  |     | NULL    |                |
-+-----------+--------------+------+-----+---------+----------------+
-3 rows in set (0.00 sec)
 
 *** Pool_Outcomes
-+------------------+-----------+------+-----+-------------------+----------------+
 | Field            | Type      | Null | Key | Default           | Extra          |
-+------------------+-----------+------+-----+-------------------+----------------+
+|------------------+-----------+------+-----+-------------------+----------------|
 | Pool_Outcome_ID  | int(11)   | NO   | PRI | NULL              | auto_increment |
 | Participant_ID   | int(11)   | YES  | MUL | NULL              |                |
 | Outcome_ID       | int(11)   | YES  | MUL | NULL              |                |
 | Outcome_Location | int(11)   | YES  | MUL | NULL              |                |
 | Date_Exited      | timestamp | YES  |     | CURRENT_TIMESTAMP |                |
 | Activity_Type    | int(11)   | YES  |     | NULL              |                |
-+------------------+-----------+------+-----+-------------------+----------------+
-6 rows in set (0.00 sec)
 
 *** Pool_Progress
-+---------------------+--------------+------+-----+-------------------+----------------+
 | Field               | Type         | Null | Key | Default           | Extra          |
-+---------------------+--------------+------+-----+-------------------+----------------+
+|---------------------+--------------+------+-----+-------------------+----------------|
 | Pool_Progress_ID    | int(11)      | NO   | PRI | NULL              | auto_increment |
 | Participant_ID      | int(11)      | YES  | MUL | NULL              |                |
 | Benchmark_Completed | int(11)      | YES  | MUL | NULL              |                |
@@ -1017,13 +939,10 @@ here, but it's a multiple choice survey.
 | Expected_Date       | date         | YES  |     | NULL              |                |
 | More_Info           | int(11)      | YES  | MUL | NULL              |                |
 | Barrier_Notes       | varchar(100) | YES  |     | NULL              |                |
-+---------------------+--------------+------+-----+-------------------+----------------+
-8 rows in set (0.00 sec)
 
 *** Pool_Status_Changes
-+-----------------------+-----------+------+-----+-------------------+----------------+
 | Field                 | Type      | Null | Key | Default           | Extra          |
-+-----------------------+-----------+------+-----+-------------------+----------------+
+|-----------------------+-----------+------+-----+-------------------+----------------|
 | Pool_Status_Change_ID | int(11)   | NO   | PRI | NULL              | auto_increment |
 | Active                | int(11)   | YES  |     | NULL              |                |
 | Participant_ID        | int(11)   | YES  |     | NULL              |                |
@@ -1031,13 +950,10 @@ here, but it's a multiple choice survey.
 | Activity_Type         | int(11)   | YES  |     | NULL              |                |
 | Member_Type           | int(11)   | YES  | MUL | NULL              |                |
 | Expected_Date         | date      | YES  |     | NULL              |                |
-+-----------------------+-----------+------+-----+-------------------+----------------+
-7 rows in set (0.00 sec)
 
 *** Properties
-+--------------------------+-------------+------+-----+-------------------+----------------+
 | Field                    | Type        | Null | Key | Default           | Extra          |
-+--------------------------+-------------+------+-----+-------------------+----------------+
+|--------------------------+-------------+------+-----+-------------------+----------------|
 | Property_ID              | int(11)     | NO   | PRI | NULL              | auto_increment |
 | Address_Street_Num       | int(11)     | YES  |     | NULL              |                |
 | Address_Street_Direction | varchar(45) | YES  |     | NULL              |                |
@@ -1056,44 +972,32 @@ here, but it's a multiple choice survey.
 | Home_Size                | int(11)     | YES  |     | NULL              |                |
 | Date_Entered             | timestamp   | YES  |     | CURRENT_TIMESTAMP |                |
 | Property_Type            | int(11)     | YES  |     | NULL              |                |
-+--------------------------+-------------+------+-----+-------------------+----------------+
-18 rows in set (0.01 sec)
 
 *** Property_Dispositions
-+------------------+-------------+------+-----+---------+----------------+
 | Field            | Type        | Null | Key | Default | Extra          |
-+------------------+-------------+------+-----+---------+----------------+
+|------------------+-------------+------+-----+---------+----------------|
 | Disposition_ID   | int(11)     | NO   | PRI | NULL    | auto_increment |
 | Disposition_Name | varchar(45) | YES  |     | NULL    |                |
-+------------------+-------------+------+-----+---------+----------------+
-2 rows in set (0.00 sec)
 
 *** Property_Files
-+--------------+-------------+------+-----+---------+----------------+
 | Field        | Type        | Null | Key | Default | Extra          |
-+--------------+-------------+------+-----+---------+----------------+
+|--------------+-------------+------+-----+---------+----------------|
 | File_ID      | int(11)     | NO   | PRI | NULL    | auto_increment |
 | Property_ID  | int(11)     | YES  |     | NULL    |                |
 | File_Name    | varchar(45) | YES  |     | NULL    |                |
 | File_Size    | varchar(45) | YES  |     | NULL    |                |
 | File_Type    | varchar(45) | YES  |     | NULL    |                |
 | File_Content | blob        | YES  |     | NULL    |                |
-+--------------+-------------+------+-----+---------+----------------+
-6 rows in set (0.00 sec)
 
 *** Property_Marker_Names
-+-------------------------+-------------+------+-----+---------+----------------+
 | Field                   | Type        | Null | Key | Default | Extra          |
-+-------------------------+-------------+------+-----+---------+----------------+
+|-------------------------+-------------+------+-----+---------+----------------|
 | Property_Marker_Name_ID | int(11)     | NO   | PRI | NULL    | auto_increment |
 | Property_Marker_Name    | varchar(45) | YES  |     | NULL    |                |
-+-------------------------+-------------+------+-----+---------+----------------+
-2 rows in set (0.00 sec)
 
 *** Property_Markers
-+-----------------------+-------------+------+-----+-------------------+----------------+
 | Field                 | Type        | Null | Key | Default           | Extra          |
-+-----------------------+-------------+------+-----+-------------------+----------------+
+|-----------------------+-------------+------+-----+-------------------+----------------|
 | Property_Marker_ID    | int(11)     | NO   | PRI | NULL              | auto_increment |
 | Is_Vacant             | int(11)     | YES  |     | NULL              |                |
 | Is_Secured_Boarded    | int(11)     | YES  |     | NULL              |                |
@@ -1112,13 +1016,10 @@ here, but it's a multiple choice survey.
 | Property_ID           | int(11)     | YES  | MUL | NULL              |                |
 | Date_Logged           | timestamp   | YES  |     | CURRENT_TIMESTAMP |                |
 | Home_Size             | int(11)     | YES  |     | NULL              |                |
-+-----------------------+-------------+------+-----+-------------------+----------------+
-18 rows in set (0.00 sec)
 
 *** Property_Progress
-+----------------------+-------------+------+-----+-------------------+----------------+
 | Field                | Type        | Null | Key | Default           | Extra          |
-+----------------------+-------------+------+-----+-------------------+----------------+
+|----------------------+-------------+------+-----+-------------------+----------------|
 | Property_Progress_ID | int(11)     | NO   | PRI | NULL              | auto_increment |
 | Date_Added           | timestamp   | YES  |     | CURRENT_TIMESTAMP |                |
 | Marker               | int(1)      | YES  |     | NULL              |                |
@@ -1128,13 +1029,10 @@ here, but it's a multiple choice survey.
 | Addtl_Info_4         | varchar(45) | YES  |     | NULL              |                |
 | Property_ID          | int(11)     | YES  |     | NULL              |                |
 | Notes                | text        | YES  |     | NULL              |                |
-+----------------------+-------------+------+-----+-------------------+----------------+
-9 rows in set (0.00 sec)
 
 *** Property_Rehab_Progress
-+----------------------------+--------------+------+-----+---------+----------------+
 | Field                      | Type         | Null | Key | Default | Extra          |
-+----------------------------+--------------+------+-----+---------+----------------+
+|----------------------------+--------------+------+-----+---------+----------------|
 | Property_Rehab_Progress_ID | int(11)      | NO   | PRI | NULL    | auto_increment |
 | Property_ID                | int(11)      | YES  | UNI | NULL    |                |
 | Interest_Date              | date         | YES  |     | NULL    |                |
@@ -1152,35 +1050,25 @@ here, but it's a multiple choice survey.
 | Days_on_Market             | int(11)      | YES  |     | NULL    |                |
 | Subsidy_Amount             | int(11)      | YES  |     | NULL    |                |
 | Possession_Date            | date         | YES  |     | NULL    |                |
-+----------------------------+--------------+------+-----+---------+----------------+
-17 rows in set (0.01 sec)
 
 *** Reports__Active
-+-------+-------------+------+-----+---------+----------------+
 | Field | Type        | Null | Key | Default | Extra          |
-+-------+-------------+------+-----+---------+----------------+
+|-------+-------------+------+-----+---------+----------------|
 | ID    | int(11)     | NO   | PRI | NULL    | auto_increment |
 | Value | varchar(50) | NO   |     | NULL    |                |
-+-------+-------------+------+-----+---------+----------------+
-2 rows in set (0.00 sec)
 
 *** Reports__Activity_Type
-+-------+-------------+------+-----+---------+----------------+
 | Field | Type        | Null | Key | Default | Extra          |
-+-------+-------------+------+-----+---------+----------------+
+|-------+-------------+------+-----+---------+----------------|
 | ID    | int(11)     | NO   | PRI | NULL    | auto_increment |
 | Value | varchar(50) | NO   |     | NULL    |                |
-+-------+-------------+------+-----+---------+----------------+
-2 rows in set (0.00 sec)
 
 *** Reports__ITIN
 
-+-------+-------------+------+-----+---------+----------------+
 | Field | Type        | Null | Key | Default | Extra          |
-+-------+-------------+------+-----+---------+----------------+
+|-------+-------------+------+-----+---------+----------------|
 | ID    | int(11)     | NO   | PRI | NULL    | auto_increment |
 | Value | varchar(50) | NO   |     | NULL    |                |
-+-------+-------------+------+-----+---------+----------------+
 
 ** Bickerdike
 
