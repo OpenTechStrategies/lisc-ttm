@@ -54,12 +54,13 @@ function enforceUserHasAccess($user, $site_id,
         die_unauthorized("User does not have the appropriate access level for this site.");
     }
 
+    global $AdminAccess;
     // If program access check is requested, and this program doesn't show up
     // in the user's list of known programs... error out!
     if (!is_null($program_access) &&
-        !in_array($program_access, $this->program_access())) {
+        !in_array($program_access, $user->program_access($site_id))) {
         // An exception is made for admin users
-        if (!($this->site_access_level($site_id) === $AdminAccess)) {
+        if (!($user->site_access_level($site_id) == $AdminAccess)) {
             die_unauthorized("Don't have permission to access this program!");
         }
     }
