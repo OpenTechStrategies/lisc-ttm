@@ -30,9 +30,12 @@ foreach ($_POST['program'] as $prog){
 $campaign_sqlsafe = array();
 foreach ($_POST['campaign'] as $camp){
     $campaign_sqlsafe[] = mysqli_real_escape_string($cnnLSNA, $camp);
-    }
+}
+$event_sqlsafe = array();
+foreach ($_POST['event'] as $ev){
+    $event_sqlsafe[] = mysqli_real_escape_string($cnnLSNA, $ev);
+}
 $institution_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['institution']);
-$event_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['event']);
 $year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['year']);
 $consent_2013_14_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['consent_2013_14']);
 $consent_2014_15_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['consent_2014_15']);
@@ -151,14 +154,26 @@ if ($_POST['institution'] == '') {
     Institutions_Participants.Participant_ID ";
     $institution = " AND Institution_ID='" . $institution_sqlsafe . "'";
 }
-if ($_POST['event'] == '') {
+if (!$_POST['event']) {
     $event_join = "";
     $event = "";
 } else {
     $event_join = " INNER JOIN Subcategory_Attendance ON Participants.Participant_ID=
     Subcategory_Attendance.Participant_ID LEFT JOIN Subcategory_Dates
 ON Subcategory_Date=Wright_College_Program_Date_ID ";
-    $event = " AND Wright_College_Program_Date_ID='" . $event_sqlsafe . "'";
+    $event = " AND ( ";
+    $first_event = 0;
+    foreach ($event_sqlsafe as $evn){
+        if ($first_event == 0){
+         $event .= " Wright_College_Program_Date_ID = '" . $evn . "' ";
+        }
+        else{
+         $event .= " OR Wright_College_Program_Date_ID = '" . $evn . "' ";
+        }
+        $first_event++;
+    }
+    $event .= " ) ";
+
 }
 if ($_POST['pm'] == 1) {
     $pm_join = " LEFT JOIN Participants_Subcategories AS PS_left ON Participants.Participant_ID=PS_left.Participant_ID ";

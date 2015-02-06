@@ -6,6 +6,7 @@ include "../header.php";
         $(document).ready(function() {
             $('#show_campaign_checkboxes').hide();
             $('#show_program_checkboxes').hide();
+            $('#show_event_checkboxes').hide();
         });
 </script>
 <!--Query search for participants, modeled on SWOP's query report. -->
@@ -189,25 +190,36 @@ include "../header.php";
     }
     include "../include/dbconnclose.php";
     ?>
-</select></td>
+</td>
             <td class="all_projects"><strong>Event Attended:</strong></td>
-            <td class="all_projects"><select id="event_search"><option value="">------</option>
+            <td class="all_projects">
     <?php
     $get_schools = "SELECT * FROM Subcategory_Dates INNER JOIN Subcategories ON Subcategory_Dates.Subcategory_ID=
 Subcategories.Subcategory_ID
 WHERE Subcategories.Campaign_or_Program='Campaign';";
     include "../include/dbconnopen.php";
     $programs = mysqli_query($cnnLSNA, $get_schools);
+?>
+<a href="javascript:;" onclick = "$('#show_event_checkboxes').toggle();">Show events</a>
+<table id = "show_event_checkboxes">
+<?php
     while ($program = mysqli_fetch_array($programs)){
         ?>
-    <option value="<?php echo $program['Wright_College_Program_Date_ID'];?>"><?php echo $program['Date'] . ": " . $program['Activity_Name'] . " (" . 
-        $program['Subcategory_Name'] . ")";?></option>
+<tr>
+<td>
+<label for="event_list"><?php echo $program['Date'] . ": " . $program['Activity_Name'] . " (" .
+$program['Subcategory_Name'] . ")";?></label>
+</td>
+<td>
+<input type="checkbox" name = "events[]"  id="event_list" value="<?php echo $program['Subcategory_ID'];?>" />
+</td>
+</tr>
             <?php
     }
     include "../include/dbconnclose.php";
     ?>
-    
-</select></td>
+    </table>
+</td>
         </tr>
         <tr><td class="all_projects"><strong>Is Parent Mentor:</strong></td><td class="all_projects"><select id="pm_check"><option value="">-----</option>
                     <option value="1">Yes</option>
@@ -338,6 +350,15 @@ campaign_array[campaign_array_key] = campaigns[k].value;
 campaign_array_key++;
 }
 }
+var events = document.getElementsByName('events[]');
+var event_array = new Array();
+var event_array_key = 0;
+for (var k = 0; k < events.length; k++) {
+if (events[k].checked == true) {
+event_array[event_array_key] = events[k].value;
+event_array_key++;
+}
+}
                           $.post(
                                 '/lsna/reports/individual_search.php',
                                 {
@@ -355,7 +376,7 @@ campaign_array_key++;
                                     program: program_array,
                                     campaign: campaign_array,
                                     institution: document.getElementById('inst_search').value,
-                                    event: document.getElementById('event_search').value,
+                                    event: event_array,
                                     pm: document.getElementById('pm_check').value,
                                     year: document.getElementById('search_year').value,
                                     consent_2013_14: document.getElementById('consent_2013_14').value,
