@@ -130,9 +130,9 @@ class User {
     //    Note that the lower the integer, the stronger permissions,
     //    with 1 being full admin access.
     public function site_access_level($site) {
-        $site_permissions = $this->site_permissions['site_access'];
+        $site_permissions = $this->site_permissions;
         if (array_key_exists($site, $site_permissions)) {
-            return $site_permissions['site_access'][$site][0];
+            return $site_permissions[$site][0];
         } else {
             return NULL;
         }
