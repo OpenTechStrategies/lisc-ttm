@@ -13,6 +13,22 @@ $DataEntryAccess = 2;
 $ReadOnlyAccess = 3;
 
 
+// Death to the unauthorized!
+//
+//   o
+//   |__
+//   \ o)
+//    ||--C   >>>>   >>>>
+//   /  \
+//  _L___L_
+// (O_O_O_O)
+//
+// Give a 401 error and die with $message, if any
+function die_unauthorized($message = "") {
+    header("HTTP/1.0 401 Unauthorized");
+    die($message);
+}
+
 function startSession() {
     // startSession
     // ------------
@@ -29,17 +45,22 @@ function startSession() {
 function enforceUserHasAccess($user, $site_id,
                               $access_level = NULL, $program_access = NULL) {
     if (!$user->has_site_access($site_id)) {
-        die("User does not have permissions to access this site.");
+        die_unauthorized("User does not have permissions to access this site.");
     }
 
     // TODO: Add access level check
     if (!is_null($access_level)) {
-        echo("test test<br />");
+        echo("test access level <br />");
     }
 
-    // TODO: Add for program access check
-    if (!is_null($program_access)) {
-        echo("test test<br />");
+    // If program access check is requested, and this program doesn't show up
+    // in the user's list of known programs... error out!
+    if (!is_null($program_access) &&
+        !in_array($program_access, $this->program_access())) {
+        // An exception is made for admin users
+        if (!$this->site_permission_level($site_id) == $AdminAccess) {
+            die_unauthorized("Don't have permission to access this program!");
+        }
     }
 }
 
