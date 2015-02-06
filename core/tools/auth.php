@@ -123,7 +123,7 @@ class User {
         // note that if 'n' is in array, then the logged-in user has access
         // to no programs, and we delete the rest of the array.  The 'n'
         // takes precedence over any other entries.
-        if (in_array('n', $program_access_array)){
+        if (in_array('n', $program_access_array)) {
             // @@: Why not just return an empty array???
             $program_access_array = array('n');
         }
@@ -193,7 +193,7 @@ function getUsernameFromId($user_id) {
 
 // TODO: Needs a friendlier array fetch if not set,
 //   something like python's .get("foo", False)
-function isLoggedIn($session_id){
+function isLoggedIn($session_id) {
     maybeStartSession();
     if (array_key_exists('is_logged_in', $_SESSION)) {
         return $_SESSION['is_logged_in'];
@@ -202,11 +202,11 @@ function isLoggedIn($session_id){
     }
 }
 
-function pleaseLogOut($session_id){
+function pleaseLogOut($session_id) {
     session_unset();
     session_destroy();
     setcookie('PHPSESSID', '', time() - 3600, '/');
-    foreach ($_SESSION as $key => $value){
+    foreach ($_SESSION as $key => $value) {
         setcookie($key, '', time() - 3600, '/');
     }
     return true;
@@ -218,7 +218,7 @@ function siteAccessInPermissions($site, $permissions) {
     //
     // $permissions should come from getAllSiteAccess()
     $access_return = false;
-    if (array_key_exists($site, $permissions)){
+    if (array_key_exists($site, $permissions)) {
         $access_return = true;
     }
     return $access_return;
@@ -227,18 +227,18 @@ function siteAccessInPermissions($site, $permissions) {
 
 // Old function, for backwards compatibility
 
-function getSiteAccess($session_id, $site){
+function getSiteAccess($session_id, $site) {
     return siteAccessInPermissions($site, $_SESSION['site_access']);
 }
 
-function getAllSiteAccess($user_id){
+function getAllSiteAccess($user_id) {
     $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
     include $path; //connection to core db
     $user_id_sqlsafe = mysqli_real_escape_string($cnnLISC, $user_id);
     $find_site_access_sqlsafe = "SELECT Privilege_ID, Site_Privilege_ID, Program_Access FROM Users_Privileges WHERE User_ID =" . $user_id;
     $access_result = mysqli_query($cnnLISC, $find_site_access_sqlsafe);
     $access_return = array();
-    while ($access = mysqli_fetch_row($access_result)){
+    while ($access = mysqli_fetch_row($access_result)) {
         $access_return[$access[0]] = array($access[1], $access[2]);
     }
     return $access_return;
@@ -247,10 +247,10 @@ function getAllSiteAccess($user_id){
 // TODO: Delete this after the user object stuff works, and refactor
 //   all code that presently uses it
 
-function getPermissionLevel($session_id, $site){
+function getPermissionLevel($session_id, $site) {
     session_start();
-    if (session_id() == $session_id){
-        if (array_key_exists($site, $_SESSION['site_access'])){
+    if (session_id() == $session_id) {
+        if (array_key_exists($site, $_SESSION['site_access'])) {
             return $_SESSION['site_access'][$site][0];
         }
     }
@@ -262,10 +262,10 @@ function getPermissionLevel($session_id, $site){
 // TODO: Delete this after the user object stuff works, and refactor
 //   all code that presently uses it
 
-function getProgramAccess($session_id, $site){
+function getProgramAccess($session_id, $site) {
     $program_access_array = array();
     session_start();
-    if (session_id() == $session_id){
+    if (session_id() == $session_id) {
         //this needs to be updated to include the possibility of
         //access to multiple programs.
         $program_access_array[] = $_SESSION['site_access'][$site][1];
@@ -274,7 +274,7 @@ function getProgramAccess($session_id, $site){
     //to no programs, and we delete the rest of the array.  The 'n'
     //takes precedence over any other entries.
 
-    if (in_array('n', $program_access_array)){
+    if (in_array('n', $program_access_array)) {
         $program_access_array = array('n');
     }
 
