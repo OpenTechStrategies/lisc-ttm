@@ -29,7 +29,7 @@ function die_unauthorized($message = "") {
     die($message);
 }
 
-function startSession() {
+function maybeStartSession() {
     // startSession
     // ------------
     //
@@ -58,7 +58,7 @@ class User {
     public $site_permissions;
 
     public function __construct($user_id) {
-        startSession();
+        maybeStartSession();
         $this->id = $user_id;
         $this->username = getUsernameFromId($user_id);
         $this->site_permissions = getAllSiteAccess($user_id);
@@ -194,7 +194,12 @@ function getUsernameFromId($user_id) {
 // TODO: Needs a friendlier array fetch if not set,
 //   something like python's .get("foo", False)
 function isLoggedIn($session_id){
-    return $_SESSION['is_logged_in'];
+    maybeStartSession();
+    if (array_key_exists('is_logged_in', $_SESSION)) {
+        return $_SESSION['is_logged_in'];
+    } else {
+        return false;
+    }
 }
 
 function pleaseLogOut($session_id){
