@@ -5,8 +5,11 @@ $TRP_id = 4;
 $SWOP_id = 5;
 $Enlace_id = 6;
 
+// Can add and delete users, as well as write and delete data
 $AdminAccess = 1;
+// Can add/modify data, but not delete it (??) <- cdonnelly: verify
 $DataEntryAccess = 2;
+// Only able to read data on the site.
 $ReadOnlyAccess = 3;
 
 
@@ -84,12 +87,7 @@ class User {
     //    for a many to many relationship.  As it stands, a user can really
     //    only have one program access per section.
     public function program_access($site) {
-        $program_access_array = array();
-        if (session_id() == $session_id){
-            // this needs to be updated to include the possibility of
-            // access to multiple programs.
-            $program_access_array[] = $this->site_permissions[$site][1];
-        }    
+        $program_access_array[] = $this->site_permissions[$site][1];
 
         // note that if 'n' is in array, then the logged-in user has access
         // to no programs, and we delete the rest of the array.  The 'n'
@@ -99,6 +97,23 @@ class User {
         }
 
         return $program_access_array;
+    }
+
+    // Get the site permission level for $SITE
+    //
+    // Returns:
+    //  An integer representing the permission level (see the $FooAccess
+    //    variables defined above to see what these are)
+    //
+    //    Note that the lower the integer, the stronger permissions,
+    //    with 1 being full admin access.
+    public function site_permission_level($site) {
+        $site_permissions = $this->site_permissions['site_access'];
+        if (array_key_exists($site, $site_permissions)) {
+            return $site_permissions['site_access'][$site][0];
+        } else {
+            return NULL;
+        }
     }
 }
 
