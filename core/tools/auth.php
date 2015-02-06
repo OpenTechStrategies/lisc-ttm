@@ -48,9 +48,10 @@ function enforceUserHasAccess($user, $site_id,
         die_unauthorized("User does not have permissions to access this site.");
     }
 
-    // TODO: Add access level check
-    if (!is_null($access_level)) {
-        echo("test access level <br />");
+    // Make sure that the user has the access level if required
+    if (!is_null($access_level) &&
+        !$user->has_site_access_level($site_id, $access_level)) {
+        die_unauthorized("User does not have the appropriate access level for this site.");
     }
 
     // If program access check is requested, and this program doesn't show up
@@ -58,7 +59,7 @@ function enforceUserHasAccess($user, $site_id,
     if (!is_null($program_access) &&
         !in_array($program_access, $this->program_access())) {
         // An exception is made for admin users
-        if (!$this->site_permission_level($site_id) == $AdminAccess) {
+        if (!($this->site_access_level($site_id) === $AdminAccess)) {
             die_unauthorized("Don't have permission to access this program!");
         }
     }
@@ -120,7 +121,7 @@ class User {
         return $program_access_array;
     }
 
-    // Get the site permission level for $SITE
+    // Get the site permission/access level for $SITE
     //
     // Returns:
     //  An integer representing the permission level (see the $FooAccess
@@ -128,7 +129,7 @@ class User {
     //
     //    Note that the lower the integer, the stronger permissions,
     //    with 1 being full admin access.
-    public function site_permission_level($site) {
+    public function site_access_level($site) {
         $site_permissions = $this->site_permissions['site_access'];
         if (array_key_exists($site, $site_permissions)) {
             return $site_permissions['site_access'][$site][0];
@@ -136,8 +137,28 @@ class User {
             return NULL;
         }
     }
-}
 
+    // Return true or false whether the user has minimum $ACCESS_LEVEL
+    //   for $SITE.
+    //
+    // The check here is "does the user have at least as much access_level as
+    //   the requirement."  But since lower access levels are more powerful,
+    //   we're actually making sure the user's value is <= the requirement.
+    public function has_site_access_level($site, $access_level) {
+        $user_access_level = $this->site_access_level($site);
+
+        // NULL means no access level at all for this site
+        if (is_null($user_access_level)) {
+            return false;
+        }
+
+        if ($user_access_level <= $access_level) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
 
 
 function getUsernameFromId($user_id) {
@@ -158,6 +179,7 @@ function getUsernameFromId($user_id) {
     $username=$user_row[0];
     return $username;
 }
+
 
 // TODO: Needs a friendlier array fetch if not set,
 //   something like python's .get("foo", False)
