@@ -7,7 +7,7 @@ $Enlace_id = 6;
 
 // Can add and delete users, as well as write and delete data
 $AdminAccess = 1;
-// Can add/modify data, but not delete it (??) <- cdonnelly: verify
+// Can add/modify data, but not delete it
 $DataEntryAccess = 2;
 // Only able to read data on the site.
 $ReadOnlyAccess = 3;
