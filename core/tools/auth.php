@@ -42,31 +42,6 @@ function startSession() {
 }
 
 
-function enforceUserHasAccess($user, $site_id,
-                              $access_level = NULL, $program_access = NULL) {
-    if (!$user->has_site_access($site_id)) {
-        die_unauthorized("User does not have permissions to access this site.");
-    }
-
-    // Make sure that the user has the access level if required
-    if (!is_null($access_level) &&
-        !$user->has_site_access_level($site_id, $access_level)) {
-        die_unauthorized("User does not have the appropriate access level for this site.");
-    }
-
-    global $AdminAccess;
-    // If program access check is requested, and this program doesn't show up
-    // in the user's list of known programs... error out!
-    if (!is_null($program_access) &&
-        !in_array($program_access, $user->program_access($site_id))) {
-        // An exception is made for admin users
-        if (!($user->site_access_level($site_id) == $AdminAccess)) {
-            die_unauthorized("Don't have permission to access this program!");
-        }
-    }
-}
-
-
 class User {
     // User class
     //
@@ -87,6 +62,39 @@ class User {
         $this->id = $user_id;
         $this->username = getUsernameFromId($user_id);
         $this->site_permissions = getAllSiteAccess($user_id);
+    }
+
+    // Enforce that the user has access to this site.
+    //
+    // Args:
+    //  - site_id: The site ID we're checking if the user has access to
+    //  - access_level: (optional) Minimum "access level" this user must have
+    //    to continue (a lower integer means more access; see above
+    //    definitions for details)
+    //  - program_access: (optional) Verify that the user has access to this
+    //    program to continue.
+    function enforce_has_access($site_id,
+                                $access_level = NULL, $program_access = NULL) {
+        if (!$this->has_site_access($site_id)) {
+            die_unauthorized("User does not have permissions to access this site.");
+        }
+
+        // Make sure that the user has the access level if required
+        if (!is_null($access_level) &&
+            !$this->has_site_access_level($site_id, $access_level)) {
+            die_unauthorized("User does not have the appropriate access level for this site.");
+        }
+
+        global $AdminAccess;
+        // If program access check is requested, and this program doesn't show up
+        // in the user's list of known programs... error out!
+        if (!is_null($program_access) &&
+            !in_array($program_access, $this->program_access($site_id))) {
+            // An exception is made for admin users
+            if (!($this->site_access_level($site_id) == $AdminAccess)) {
+                die_unauthorized("Don't have permission to access this program!");
+            }
+        }
     }
 
     public function has_site_access($site) {
@@ -116,6 +124,7 @@ class User {
         // to no programs, and we delete the rest of the array.  The 'n'
         // takes precedence over any other entries.
         if (in_array('n', $program_access_array)){
+            // @@: Why not just return an empty array???
             $program_access_array = array('n');
         }
 
