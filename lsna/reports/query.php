@@ -7,6 +7,15 @@ include "../header.php";
             $('#show_campaign_checkboxes').hide();
             $('#show_program_checkboxes').hide();
             $('#show_event_checkboxes').hide();
+            $('#program_select_all').click(function () {
+                $('.program_checkbox').prop('checked', this.checked);
+            });
+            $('#campaign_select_all').click(function () {
+                $('.campaign_checkbox').prop('checked', this.checked);
+            });
+            $('#event_select_all').click(function () {
+                $('.event_checkbox').prop('checked', this.checked);
+            });
         });
 </script>
 <!--Query search for participants, modeled on SWOP's query report. -->
@@ -136,6 +145,14 @@ include "../header.php";
 ?>
 <a href="javascript:;" onclick = "$('#show_program_checkboxes').toggle();">Show programs</a>
 <table id = "show_program_checkboxes">
+<tr>
+<td>
+<label for="program_list">Select all:</label>
+</td>
+<td>
+<input type="checkbox"  id="program_select_all"  />
+</td>
+</tr>
 <?php
     while ($program = mysqli_fetch_array($programs)){
         ?>
@@ -144,7 +161,7 @@ include "../header.php";
 <label for="program_list"><?php echo $program['Subcategory_Name'];?>:</label>
 </td>
 <td>
-<input type="checkbox" name = "programs[]"  id="program_list" value="<?php echo $program['Subcategory_ID'];?>" />
+<input type="checkbox" name = "programs[]"  id="program_list" class = "program_checkbox" value="<?php echo $program['Subcategory_ID'];?>" />
 </td>
 </tr>
 <?php
@@ -156,6 +173,14 @@ include "../header.php";
             <td class="all_projects">
 <a href="javascript:;" onclick = "$('#show_campaign_checkboxes').toggle();">Show campaigns</a>
 <table id = "show_campaign_checkboxes">
+<tr>
+<td>
+<label for="campaign_list">Select all:</label>
+</td>
+<td>
+<input type="checkbox"  id="campaign_select_all"  />
+</td>
+</tr>
     <?php
     $get_schools = "SELECT * FROM Subcategories WHERE Campaign_or_Program='Campaign' ORDER BY Subcategory_Name";
     include "../include/dbconnopen.php";
@@ -167,7 +192,7 @@ include "../header.php";
 <label for="campaign_list"><?php echo $program['Subcategory_Name'];?>:</label>
 </td>
 <td>
-<input type="checkbox" name = "campaigns[]"  id="campaign_list" value="<?php echo $program['Subcategory_ID'];?>" />
+<input type="checkbox" name = "campaigns[]"  id="campaign_list" class = "campaign_checkbox" value="<?php echo $program['Subcategory_ID'];?>" />
 </td>
 </tr>
 <?php
@@ -202,6 +227,14 @@ WHERE Subcategories.Campaign_or_Program='Campaign';";
 ?>
 <a href="javascript:;" onclick = "$('#show_event_checkboxes').toggle();">Show events</a>
 <table id = "show_event_checkboxes">
+<tr>
+<td>
+<label for="event_list">Select all:</label>
+</td>
+<td>
+<input type="checkbox"  id="event_select_all"  />
+</td>
+</tr>
 <?php
     while ($program = mysqli_fetch_array($programs)){
         ?>
@@ -211,7 +244,7 @@ WHERE Subcategories.Campaign_or_Program='Campaign';";
 $program['Subcategory_Name'] . ")";?></label>
 </td>
 <td>
-<input type="checkbox" name = "events[]"  id="event_list" value="<?php echo $program['Subcategory_ID'];?>" />
+<input type="checkbox" name = "events[]"  id="event_list" class = "event_checkbox" value="<?php echo $program['Subcategory_ID'];?>" />
 </td>
 </tr>
             <?php
