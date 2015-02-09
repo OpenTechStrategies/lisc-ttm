@@ -244,7 +244,7 @@ WHERE Subcategories.Campaign_or_Program='Campaign';";
 $program['Subcategory_Name'] . ")";?></label>
 </td>
 <td>
-<input type="checkbox" name = "events[]"  id="event_list" class = "event_checkbox" value="<?php echo $program['Subcategory_ID'];?>" />
+<input type="checkbox" name = "events[]"  id="event_list" class = "event_checkbox" value="<?php echo $program['Wright_College_Program_Date_ID']?>" />
 </td>
 </tr>
             <?php
