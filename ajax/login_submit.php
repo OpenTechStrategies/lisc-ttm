@@ -41,19 +41,24 @@ if ($hash_match) {
     
     mysqli_query($cnnLISC, $log_call);
     
-    //set the user cookie
-       // FIXME: see issue #33 re the single-quotes around $username here
-       setcookie("user", "$username", time() + 10800, '/');
        session_start();
        session_regenerate_id();
 
        //saving permission information in a session, also
        //deprecating the use of the stored routine at @akshay's suggestion
 
+       $_SESSION['user_id'] = $user_id;
+
+       // -------------------------------------------------------------------
+       // LEGACY code of setting the user in the cookie.
+       // Should be removed by the end of #78!
+       // FIXME: see issue #33 re the single-quotes around $username here
        //this site_access element holds an array of subsites (keys) and user
        //role for each subsite (value)
        $_SESSION['site_access'] = getAllSiteAccess($user_id); 
+       setcookie("user", "$username", time() + 10800, '/');
        $_SESSION['is_logged_in'] = true;
+       // -------------------------------------------------------------------
 
        //now find which, if any, privileges they have and set an appropriate cookie
        $privileges_query = "CALL User__Find_Privileges('$username_sqlsafe')";
