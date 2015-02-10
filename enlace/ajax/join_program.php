@@ -1,5 +1,7 @@
 <?php
 /* participant_program changes */
+require_once("../classes/assessment.php");
+require_once("../classes/participant.php");
 
 // delete session and all corresponding data
 if ($_POST['action'] == 'delete_session') {
@@ -172,31 +174,30 @@ else {
 
     $add_person_to_program = "INSERT INTO Participants_Programs (Participant_ID, Program_ID) VALUES (
     '" . $participant_sqlsafe . "', '" . $program_id_sqlsafe . "')";
-    echo $add_person_to_program;
     mysqli_query($cnnEnlace, $add_person_to_program);
+    include "../include/dbconnclose.php";
+    
+    // Construct a participant object
+    $participant = new Participant();
+    $participant->load_with_participant_id($participant_sqlsafe);
 
-    // Check if they have a previous impact survey which can be used as their intake survey.
-    $impact_survey_search = "SELECT * FROM Assessments WHERE Date_Logged >= DATE_SUB(now(), INTERVAL 6 MONTH)";
-    $impact_surveys = mysqli_query($cnnEnlace, $impact_survey_search);
-    if ($impact_surveys) {
-        /* We've found one so we want to duplicate that and store it as an intake survey
-           Ideally we'd reference the Assessment from the session table but in the interests
-           of time we'll duplicate the data and store a different Session_ID.
-        */
-        $impact_survey = mysqli_fetch_assoc($impact_surveys);
-
-
-
-        // Now we need to duplicate it but set a different Session_ID
-        // Note: Pre_Post field can be 1 or 2 which are intake and impact respectively.
-        $add_intake_survey = "INSERT INTO Assessments (Participant_ID, Baseline_ID, Caring_ID, Future_ID, Violence_ID, Pre_Post, Date_Logged, Session_ID) VALUES (";
-        $add_intake_survey = $add_intake_survey . "'" . $impact_survey['Participant_ID'] . "', '" . $impact_survey['Baseline_ID'] . "', '".
-                             $impact_survey['Caring_ID'] . "', '". $impact_survey['Future_ID'] . "', '" . $impact_survey['Violence_ID'] . "', '1', '".
-                             $impact_survey['Date_Logged'] . "', '" . $program_id_sqlsafe . "')";
-
-        mysqli_query($cnnEnlace, $add_intake_survey);
+    // Find the participants surveys are impact surveys from the last 6 months. 
+    $assessments = $participant->find_previous_surveys(6, Assessment::IMPACT_TYPE);
+    print_r($assessments);
+    if ($assessments) {
+        // A survey exists, we should now duplicate the newest (first in array)
+        $assessment = $assessments[0];
+        
+        // Removing the primary key will cause Assessment to create a new one on Assessment->save()
+        $assessment->assessment_id = null;
+        
+        // Change the type and session
+        $assessment->pre_post = Assessment::INTAKE_TYPE;
+        $assessment->session_id = $program_id_sqlsafe;
+        
+        // Save this back to the database
+        $assessment->save();
 
     }
-    include "../include/dbconnclose.php";
 }
 ?>
