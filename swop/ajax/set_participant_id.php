@@ -7,11 +7,11 @@ if ($_POST['page']=='profile'){
     setcookie('participant', '', time() - 3600, '/');
     setcookie('new_pool', '', time()-3600, '/');
     $_COOKIE['participant']=setcookie("participant", $_POST['participant_id'], time() + 7200, '/');
-    $is_in_pool = "SELECT Active FROM Pool_Status_Changes WHERE Participant_ID='".$_POST['participant_id']."' 
+    include "../include/dbconnopen.php";
+    $is_in_pool_sqlsafe = "SELECT Active FROM Pool_Status_Changes WHERE Participant_ID='".mysqli_real_escape_string($cnnSWOP, $_POST['participant_id'])."' 
             ORDER BY Date_Changed DESC LIMIT 0,1;";
     
-    include "../include/dbconnopen.php";
-    $in_pool = mysqli_query($cnnSWOP, $is_in_pool);
+    $in_pool = mysqli_query($cnnSWOP, $is_in_pool_sqlsafe);
     include "../include/dbconnclose.php";
     $pool=  mysqli_fetch_row($in_pool);
     if ($pool[0]==1){

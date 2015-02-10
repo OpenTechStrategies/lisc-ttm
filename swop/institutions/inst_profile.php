@@ -1,9 +1,9 @@
 <?php
 include "../../header.php";
 include "../header.php";
-$get_inst_info = "SELECT * FROM Institutions WHERE Institution_ID='" . $_COOKIE['institution'] . "'";
 include "../include/dbconnopen.php";
-$inst_info=mysqli_query($cnnSWOP, $get_inst_info);
+$get_inst_info_sqlsafe = "SELECT * FROM Institutions WHERE Institution_ID='" . mysqli_real_escape_string($cnnSWOP, $_COOKIE['institution']) . "'";
+$inst_info=mysqli_query($cnnSWOP, $get_inst_info_sqlsafe);
 $inst=mysqli_fetch_array($inst_info);
 include "../include/dbconnclose.php";
 
@@ -31,19 +31,19 @@ include "../include/dbconnclose.php";
 	<tr>
 		<td><strong>Institution Type: </strong></td>
 		<td><span class="show_info"><?
-                $get_type="SELECT Type_Name FROM Institution_Types WHERE Type_ID='".$inst['Institution_Type'] . "'";
+                $get_type_sqlsafe="SELECT Type_Name FROM Institution_Types WHERE Type_ID='".$inst['Institution_Type'] . "'";
               //  echo $get_type;
                  include "../include/dbconnopen.php";
-                $this_type=mysqli_query($cnnSWOP, $get_type);
+                $this_type=mysqli_query($cnnSWOP, $get_type_sqlsafe);
                 $type=mysqli_fetch_row($this_type);
                 echo $type[0];
                 ?></span>
 			<select id="type_edit" class="edit_info">
 				<option value="">-------</option>
 				<?//get types
-                        $select_types="SELECT * FROM Institution_Types";
+                        $select_types_sqlsafe="SELECT * FROM Institution_Types";
                         include "../include/dbconnopen.php";
-                        $types=mysqli_query($cnnSWOP, $select_types);
+                        $types=mysqli_query($cnnSWOP, $select_types_sqlsafe);
                         while ($type=mysqli_fetch_row($types)){
                             ?>
                         <option value="<?echo $type[0]?>" <?echo ($inst['Institution_Type']==$type[0] ? 'selected="selected"' :null);?>><?echo $type[1];?></option>
@@ -61,18 +61,18 @@ include "../include/dbconnclose.php";
                 as an "associated participant" (on the right side of the page) and then choose him or her from this dropdown list.
                 -->
 		<td><?
-				$get_contact = "SELECT * FROM Participants WHERE Participant_ID='".$inst['Contact_Person']."'";
+				$get_contact_sqlsafe = "SELECT * FROM Participants WHERE Participant_ID='".$inst['Contact_Person']."'";
 				include "../include/dbconnopen.php";
-				$contact_info = mysqli_query($cnnSWOP, $get_contact);
+				$contact_info = mysqli_query($cnnSWOP, $get_contact_sqlsafe);
 				$contact = mysqli_fetch_array($contact_info);
 			?>
 			<span class="show_info"><?echo $contact['Name_First']." ".$contact['Name_Last'];?></span>
 			<select id="contact_edit" class="edit_info">
 				<option value="">----------</option>
 			<?
-				$get_participants = "SELECT * FROM Institutions_Participants 
+				$get_participants_sqlsafe = "SELECT * FROM Institutions_Participants 
                                     INNER JOIN Participants ON Institutions_Participants.Participant_ID=Participants.Participant_ID WHERE Institutions_Participants.Institution_ID='".$inst['Institution_ID']."'";
-				$participants = mysqli_query($cnnSWOP, $get_participants);
+				$participants = mysqli_query($cnnSWOP, $get_participants_sqlsafe);
 				while ($parti = mysqli_fetch_array($participants)) {
 			?>
 				<option value="<?echo $parti['Participant_ID'];?>"><?echo $parti['Name_First']." ".$parti['Name_Last'];?></option>
@@ -139,10 +139,10 @@ include "../include/dbconnclose.php";
             <!-- show all campaigns to which this institution is linked, and add more if desired. -->
 </td><td style="vertical-align:top;padding-left:30px;"><h4>Associated Campaigns</h4>
 
-<?$get_persons = "SELECT * FROM Campaigns_Institutions INNER JOIN Campaigns ON Campaigns_Institutions.Campaign_ID=
+<?$get_persons_sqlsafe = "SELECT * FROM Campaigns_Institutions INNER JOIN Campaigns ON Campaigns_Institutions.Campaign_ID=
     Campaigns.Campaign_ID WHERE Institution_ID='".$inst['Institution_ID']."'";
 include "../include/dbconnopen.php";
-$persons=mysqli_query($cnnSWOP, $get_persons);
+$persons=mysqli_query($cnnSWOP, $get_persons_sqlsafe);
 while ($person=  mysqli_fetch_array($persons)){
     ?><a href="javascript:;" onclick="
 			$.post(
@@ -159,9 +159,9 @@ include "../include/dbconnclose.php";
 <span class="helptext">Associate a campaign with this institution: </span><br/><select id="campaign_select">
     <option value="">-----</option>
     <?
-    $get_all_participants="SELECT * FROM Campaigns";
+    $get_all_participants_sqlsafe="SELECT * FROM Campaigns";
     include "../include/dbconnopen.php";
-    $people=mysqli_query($cnnSWOP, $get_all_participants);
+    $people=mysqli_query($cnnSWOP, $get_all_participants_sqlsafe);
                 while ($person=mysqli_fetch_array($people)){
                     ?>
                 <option value="<?echo $person['Campaign_ID'];?>"><?echo $person['Campaign_Name'];?></option>
@@ -190,10 +190,10 @@ include "../include/dbconnclose.php";
 <h4>Associated Participants</h4>
 
  
-<?$get_persons = "SELECT * FROM Institutions_Participants INNER JOIN Participants ON Institutions_Participants.Participant_ID=
+<?$get_persons_sqlsafe = "SELECT * FROM Institutions_Participants INNER JOIN Participants ON Institutions_Participants.Participant_ID=
     Participants.Participant_ID WHERE Institution_Id='".$inst['Institution_ID']."'";
 include "../include/dbconnopen.php";
-$persons=mysqli_query($cnnSWOP, $get_persons);
+$persons=mysqli_query($cnnSWOP, $get_persons_sqlsafe);
 $count_people=0;
 while ($person=  mysqli_fetch_array($persons)){
     /* show only two people above the break. */

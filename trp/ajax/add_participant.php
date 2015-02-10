@@ -3,8 +3,14 @@
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/block_group_finder.php");
 $this_address = $_POST['address_num'] . " " . $_POST['address_dir'] . " " . $_POST['address_name'] . " " . $_POST['address_type'] .
         " " . $_POST['city'] . " " . $_POST['state'] . " " . $_POST['zip'];
-$block_group = do_it_all($this_address, $map);
-print_r($_POST); //testing output
+
+// We don't have to SQL-sanitize the inputs to do_it_all() because
+// it's just calling the Google Maps geocoder and returning us the
+// result.  If there's a problem with the inputs, that's Google's
+// problem, not ours (from a security point of view, at least).
+$block_group_sqlsafe = do_it_all($this_address, $map);
+
+include "../include/dbconnopen.php";
 
 if ($_POST['action']=='add_to_program'){
     include "../include/dbconnopen.php";
@@ -68,9 +74,9 @@ if ($_POST['action']=='add_to_program'){
 else{
 //format date of birth (DOB)
 $dob_formatted = explode('/', $_POST['dob']);
-$dob_formatted = $dob_formatted[2] . "-" . $dob_formatted[0] . "-" . $dob_formatted[1];
+$dob_formatted_sqlsafe = mysqli_real_escape_string($cnnTRP, $dob_formatted[2]) . "-" . mysqli_real_escape_string($cnnTRP, $dob_formatted[0]) . "-" . mysqli_real_escape_string($cnnTRP, $dob_formatted[1]);
 
-$create_new_participant_query = "INSERT INTO Participants (
+$create_new_participant_query_sqlsafe = "INSERT INTO Participants (
                                     First_Name,
                                     Last_Name,
                                     Address_Street_Name,
@@ -90,28 +96,27 @@ $create_new_participant_query = "INSERT INTO Participants (
                                     Classroom,
                                     Lunch_Price
                                 ) VALUES (
-                                    '" . $_POST['first_name'] . "',
-                                    '" . $_POST['last_name'] . "',
-                                    '" . $_POST['address_name'] . "',
-                                    '" . $_POST['address_num'] . "',
-                                    '" . $_POST['address_dir'] . "',
-                                    '" . $_POST['address_type'] . "',
-                                    '" . $_POST['city'] . "',
-                                    '" . $_POST['state'] . "',
-                                    '" . $_POST['zip'] . "',
-                                        '$block_group',
-                                    '" . $_POST['day_phone'] . "',
-                                    '" . $_POST['email'] . "',
-                                    '" . $_POST['gender'] . "',
-                                    '" . $dob_formatted . "',
-                                    '" . $_POST['race'] . "',    
-                                    '" . $_POST['grade'] . "',
-                                    '" . $_POST['classroom'] . "',
-                                    '" . $_POST['lunch'] . "')";
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['first_name']) . "',
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['last_name']) . "',
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['address_name']) . "',
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['address_num']) . "',
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['address_dir']) . "',
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['address_type']) . "',
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['city']) . "',
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['state']) . "',
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['zip']) . "',
+                                        '$block_group_sqlsafe',
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['day_phone']) . "',
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['email']) . "',
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['gender']) . "',
+                                    '" . $dob_formatted_sqlsafe . "',
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['race']) . "',    
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['grade']) . "',
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['classroom']) . "',
+                                    '" . mysqli_real_escape_string($cnnTRP, $_POST['lunch']) . "')";
 
-//echo $create_new_participant_query;
-include "../include/dbconnopen.php";
-mysqli_query($cnnTRP, $create_new_participant_query);
+//echo $create_new_participant_query_sqlsafe;
+mysqli_query($cnnTRP, $create_new_participant_query_sqlsafe);
 $id = mysqli_insert_id($cnnTRP);
 include "../include/dbconnclose.php";
 ?>

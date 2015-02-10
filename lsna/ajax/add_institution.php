@@ -7,23 +7,28 @@ $this_address=$_POST['num'] . " " .$_POST['dir'] . " " .$_POST['street_name'] . 
                 " Chicago IL";
         $block_group=do_it_all($this_address, $map);
         
+include "../include/dbconnopen.php";
+$name_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['name']);
+$inst_type_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['inst_type']);
+$num_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['num']);
+$dir_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['dir']);
+$street_name_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['street_name']);
+$type_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['type']);
 $new_inst_query = "INSERT INTO Institutions (
     Institution_Name,
 	Institution_Type,
     Street_Num,
     Street_Direction,
     Street_Name,
-    Street_Type, Block_Group) VALUES (
-    '" . $_POST['name'] . "',
-	'" . $_POST['inst_type'] . "',
-    '" . $_POST['num'] . "',
-    '" . $_POST['dir'] . "',
-    '" . $_POST['street_name'] . "',
-    '" . $_POST['type'] . "',
-        '$block_group'
+    Street_Type) VALUES (
+    '" . $name_sqlsafe . "',
+	'" . $inst_type_sqlsafe . "',
+    '" . $num_sqlsafe . "',
+    '" . $dir_sqlsafe . "',
+    '" . $street_name_sqlsafe . "',
+    '" . $type_sqlsafe . "'
     )";
 //echo $new_inst_query;
-include "../include/dbconnopen.php";
 mysqli_query($cnnLSNA, $new_inst_query);
 $id = mysqli_insert_id($cnnLSNA);
 include "../include/dbconnclose.php";
@@ -38,13 +43,12 @@ include "../include/dbconnclose.php";
                         '/lsna/ajax/set_institution_id.php',
                         {
                             page: 'profile',
-                            institution_id:'<?echo $id; ?>'
+                            id: '<?php echo $id; ?>'
                         },
                         function (response){
                             if (response!='1'){
                                 document.getElementById('show_error').innerHTML = response;
                             }
-                            document.write(response);
                             window.location='/lsna/institutions/institution_profile.php';
                        }
            );

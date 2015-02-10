@@ -7,6 +7,11 @@ Table of contents:
  * Requirements
  * Installation
  
+Note: You should consider looking in ansible/README.org for a more
+"automated" deployment-for-hacking setup.  The more manual steps (also
+usable for deploying to a server, since we aren't *yet* using ansible
+for that) below.
+
 Introduction
 ------------
 
@@ -161,11 +166,12 @@ Steps to install:
 
 5.  Load the MySQL stored procedures:
 
+        $ cd /var/www/ttm
         $ for name in core bickerdike enlace lsna swop trp; do        \
             mysql -u root -p < ${name}/sql/ttm-${name}_routines.sql;  \
           done
 
-6.  Set up authentication / authorization for the MySQL databases:
+6.  Set up authentication / authorization for the MySQL databases. These users will be used for executing the SQL stored procedures:
 
         $ mysql -u root -p
         Password: ********
@@ -184,9 +190,10 @@ Steps to install:
         mysql> quit;
         $ 
 
-7.  Put the corresponding authentication info in the web tree, by
-    first renaming `dbconnopen.php.tmpl` to `dbconnopen.php` in the
-    appropriate places, and then editing each of the latter:
+7.  Put the database passwords you entered in step 5 and the database server name, 
+    database names, and usernames from step 6 into the web tree, by first 
+    copying `dbconnopen.php.tmpl` to `dbconnopen.php` in the appropriate places, 
+    and then editing each of the new files:
 
         $ cd /var/www/ttm
         $ for name in `find . -name dbconnopen.php.tmpl`; do         \
@@ -222,7 +229,17 @@ Steps to install:
         $ for name in core bickerdike enlace lsna swop trp; do        \
              mysql -u root -p ttm-${name} < ttm-${name}-backup-*.sql; \
           done
+ 
+10. Verify that your site is set up correctly by logging into the site
+    using either:
 
-10. Set up backups.  Read `maintenance/backup-ttm.tmpl`, then run
+        Username: admin 
+        Password: password 
+ 
+    or one of the other usernames and passwords documented in:
+
+        [where should this be documented?]
+
+11. Set up backups.  Read `maintenance/backup-ttm.tmpl`, then run
    `maintenance/make-backup-script` to create a backup script that is
    customized for your site.

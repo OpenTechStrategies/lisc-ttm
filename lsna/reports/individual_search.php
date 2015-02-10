@@ -11,16 +11,38 @@ $save_date = $date_reformat[2] . '-' . $date_reformat[0] . '-' . $date_reformat[
  * in the query.  If the space is left blank, then the variable in the query is empty.
  * For first name, for example, if it's left blank then "$first" doesn't add anything to the query.  If a first name
  * has been entered, then Participants.Name_First must include that name or name fragment. */
+include "../include/dbconnopen.php";
+$first_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['first']);
+$role_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['role']);
+$last_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['last']);
+$gender_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['gender']);
+$language_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['language']);
+$zip_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['zip']);
+$ward_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['ward']);
+$phone_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['phone']);
+$school_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['school']);
+$grade_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['grade']);
+$program_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['program']);
+$campaign_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['campaign']);
+$institution_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['institution']);
+$event_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['event']);
+$year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['year']);
+$consent_2013_14_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['consent_2013_14']);
+$consent_2014_15_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['consent_2014_15']);
+$consent_2015_16_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['consent_2015_16']);
+
+
+
 if ($_POST['first'] == '') {
     $first = '';
 } else {
-    $first = ' AND Participants.Name_First LIKE "%' . $_POST['first'] . '%"';
+    $first = ' AND Participants.Name_First LIKE "%' . $first_sqlsafe . '%"';
 };
 /* some variables require a join to another table: */
 if ($_POST['role'] != '') {
     $role_join = " INNER JOIN Participants_Roles
     ON Participants.Participant_ID=Participants_Roles.Participant_ID ";
-    $role = " AND Participants_Roles.Role_ID='" . $_POST['role'] . "' ";
+    $role = " AND Participants_Roles.Role_ID='" . $role_sqlsafe . "' ";
 } else {
     $role_join = "";
     $role = "";
@@ -29,40 +51,40 @@ if ($_POST['role'] != '') {
 if ($_POST['last'] == '') {
     $last = '';
 } else {
-    $last = " AND Participants.Name_Last LIKE '%" . $_POST['last'] . "%'";
+    $last = " AND Participants.Name_Last LIKE '%" . $last_sqlsafe . "%'";
 }
 if ($_POST['gender'] == '') {
     $gender = '';
 } else {
-    $gender = " AND Participants.Gender='" . $_POST['gender'] . "'";
+    $gender = " AND Participants.Gender='" . $gender_sqlsafe . "'";
 }
 if ($_POST['language'] == '') {
     $language = '';
 } else {
     $language_join = " INNER JOIN Participants_Languages ON Participants.Participant_Id=Participants_Languages.Participant_ID ";
-    $language = " AND Language_ID='" . $_POST['language'] . "' ";
+    $language = " AND Language_ID='" . $language_sqlsafe . "' ";
 } //actually needs a join
 if ($_POST['zip'] == '') {
     $zip = '';
 } else {
-    $zip = " AND Participants.Address_Zip='" . $_POST['zip'] . "' ";
+    $zip = " AND Participants.Address_Zip='" . $zip_sqlsafe . "' ";
 }
 if ($_POST['ward'] == '') {
     $ward = '';
 } else {
-    $ward = " AND Participants.Ward='" . $_POST['ward'] . "'";
+    $ward = " AND Participants.Ward='" . $ward_sqlsafe . "'";
 }
 if ($_POST['phone'] == '') {
     $phone = '';
 } else {
-    $phone = " AND (Participants.Phone_Day LIKE '%" . $_POST['phone'] . "%' OR 
-                Participants.Phone_Evening LIKE '%" . $_POST['phone'] . "%')";
+    $phone = " AND (Participants.Phone_Day LIKE '%" . $phone_sqlsafe . "%' OR 
+                Participants.Phone_Evening LIKE '%" . $phone_sqlsafe . "%')";
 }
 if ($_POST['school'] == '') {
     $school = "";
 } else {
     $pm_year_join = " LEFT JOIN PM_Years ON Participants.Participant_ID=PM_Years.Participant ";
-    $school = " AND PM_Years.School='" . $_POST['school'] . "' ";
+    $school = " AND PM_Years.School='" . $school_sqlsafe . "' ";
 }
 if ($_POST['dob'] == '') {
     $dob = '';
@@ -72,7 +94,7 @@ if ($_POST['dob'] == '') {
 if ($_POST['grade'] == '') {
     $grade = '';
 } else {
-    $grade = " AND Participants.Grade_Level='" . $_POST['grade'] . "'";
+    $grade = " AND Participants.Grade_Level='" . $grade_sqlsafe . "'";
 }
 if ($_POST['program'] == '' && $_POST['campaign'] == '') {
     $subcategory_join = "";
@@ -82,14 +104,14 @@ if ($_POST['program'] == '') {
 } else {
     $subcategory_join = " INNER JOIN Participants_Subcategories ON Participants.Participant_ID=
     Participants_Subcategories.Participant_ID ";
-    $program = " AND Participants_Subcategories.Subcategory_ID='" . $_POST['program'] . "'";
+    $program = " AND Participants_Subcategories.Subcategory_ID='" . $program_sqlsafe . "'";
 }
 if ($_POST['campaign'] == '') {
     $campaign = "";
 } else {
     $subcategory_join = " INNER JOIN Participants_Subcategories ON Participants.Participant_ID=
     Participants_Subcategories.Participant_ID ";
-    $campaign = " AND Participants_Subcategories.Subcategory_ID='" . $_POST['campaign'] . "'";
+    $campaign = " AND Participants_Subcategories.Subcategory_ID='" . $campaign_sqlsafe . "'";
 }
 if ($_POST['institution'] == '') {
     $institution_join = "";
@@ -97,7 +119,7 @@ if ($_POST['institution'] == '') {
 } else {
     $institution_join = " INNER JOIN Institutions_Participants ON Participants.Participant_ID=
     Institutions_Participants.Participant_ID ";
-    $institution = " AND Institution_ID='" . $_POST['institution'] . "'";
+    $institution = " AND Institution_ID='" . $institution_sqlsafe . "'";
 }
 if ($_POST['event'] == '') {
     $event_join = "";
@@ -106,15 +128,15 @@ if ($_POST['event'] == '') {
     $event_join = " INNER JOIN Subcategory_Attendance ON Participants.Participant_ID=
     Subcategory_Attendance.Participant_ID LEFT JOIN Subcategory_Dates
 ON Subcategory_Date=Wright_College_Program_Date_ID ";
-    $event = " AND Wright_College_Program_Date_ID='" . $_POST['event'] . "'";
+    $event = " AND Wright_College_Program_Date_ID='" . $event_sqlsafe . "'";
 }
 if ($_POST['pm'] == 1) {
-    $pm_join = " LEFT JOIN Participants_Subcategories ON Participants.Participant_ID=Participants_Subcategories.Participant_ID ";
-    $pm = " AND Participants_Subcategories.Subcategory_ID=19 ";
+    $pm_join = " LEFT JOIN Participants_Subcategories AS PS_left ON Participants.Participant_ID=PS_left.Participant_ID ";
+    $pm = " AND PS_left.Subcategory_ID=19 ";
 } elseif ($_POST['pm'] == 2) {//$pm_join=" LEFT JOIN Participants_Subcategories ON Participants.Participant_ID=Participants_Subcategories.Participant_ID ";
     $pm_join = "LEFT JOIN
- Participants_Subcategories 
-ON (Participants.Participant_Id=Participants_Subcategories.Participant_ID AND Participants_Subcategories.Subcategory_ID='19')";
+ Participants_Subcategories AS PS_left
+ON (Participants.Participant_Id=PS_left.Participant_ID AND PS_left.Subcategory_ID='19')";
 //$pm=" AND Subcategory_ID!=19 ";
     $pm = " AND Participant_Subcategory_ID IS NULL";
 } else {
@@ -126,29 +148,29 @@ if ($_POST['year'] == '') {
     $year = '';
 } else {
     $pm_year_join = " LEFT JOIN PM_Years ON Participants.Participant_ID=Participant ";
-    $year = " AND Year='" . $_POST['year'] . "'";
+    $year = " AND Year='" . $year_sqlsafe . "'";
 }
 
 if ($_POST['consent_2013_14'] == '') {
     $consent_2013_14 = '';
 } elseif ($_POST['consent_2013_14'] == '0') {
-    $consent_2013_14 = " AND (Participants.Consent_2013_14='" . $_POST['consent_2013_14'] . "' OR Participants.Consent_2013_14 IS NULL)";
+    $consent_2013_14 = " AND (Participants.Consent_2013_14='" . $consent_2013_14_sqlsafe . "' OR Participants.Consent_2013_14 IS NULL)";
 } elseif ($_POST['consent_2013_14'] == '1') {
-    $consent_2013_14 = " AND Participants.Consent_2013_14='" . $_POST['consent_2013_14'] . "'";
+    $consent_2013_14 = " AND Participants.Consent_2013_14='" . $consent_2013_14_sqlsafe . "'";
 }
 if ($_POST['consent_2014_15'] == '') {
     $consent_2014_15 = '';
 } elseif ($_POST['consent_2014_15'] == '0') {
-    $consent_2014_15 = " AND (Participants.Consent_2014_15='" . $_POST['consent_2014_15'] . "' OR Participants.Consent_2014_15 IS NULL)";
+    $consent_2014_15 = " AND (Participants.Consent_2014_15='" . $consent_2014_15_sqlsafe . "' OR Participants.Consent_2014_15 IS NULL)";
 } elseif ($_POST['consent_2014_15'] == '1') {
-    $consent_2014_15 = " AND Participants.Consent_2014_15='" . $_POST['consent_2014_15'] . "'";
+    $consent_2014_15 = " AND Participants.Consent_2014_15='" . $consent_2014_15_sqlsafe . "'";
 }
 if ($_POST['consent_2015_16'] == '') {
     $consent_2015_16 = '';
 } elseif ($_POST['consent_2015_16'] == '0') {
-    $consent_2015_16 = " AND (Participants.Consent_2015_16='" . $_POST['consent_2015_16'] . "' OR Participants.Consent_2015_16 IS NULL)";
+    $consent_2015_16 = " AND (Participants.Consent_2015_16='" . $consent_2015_16_sqlsafe . "' OR Participants.Consent_2015_16 IS NULL)";
 } elseif ($_POST['consent_2015_16'] == '1') {
-    $consent_2015_16 = " AND Participants.Consent_2015_16='" . $_POST['consent_2015_16'] . "'";
+    $consent_2015_16 = " AND Participants.Consent_2015_16='" . $consent_2015_16_sqlsafe . "'";
 }
 
 /* all the query pieces come together here.  For the terms that weren't filled in, these joins and requirements are empty. */

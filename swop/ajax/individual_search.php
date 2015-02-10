@@ -4,45 +4,45 @@
 //null - that is, find people who /don't have/ a primary institution or something like that.
 
 if ($_POST['inst'] != 0) {
-    $institution = " AND Institution_ID='" . $_POST['inst'] . "' AND Is_Primary=1 ";
-    $join_inst = " INNER JOIN Institutions_Participants ON Participants.Participant_ID=Institutions_Participants.Participant_ID ";
+    $institution_sqlsafe = " AND Institution_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['inst']) . "' AND Is_Primary=1 ";
+    $join_inst_sqlsafe = " INNER JOIN Institutions_Participants ON Participants.Participant_ID=Institutions_Participants.Participant_ID ";
 } else {
-    $institution = "";
-    $join_inst = "";
+    $institution_sqlsafe = "";
+    $join_inst_sqlsafe = "";
 }
 
-    $join_inst = " INNER JOIN Institutions_Participants ON Participants.Participant_ID=Institutions_Participants.Participant_ID ";
+    $join_inst_sqlsafe = " INNER JOIN Institutions_Participants ON Participants.Participant_ID=Institutions_Participants.Participant_ID ";
 
 
 
 if ($_POST['type'] != 0) {
-    $type = " AND member_type.Member_Type='" . $_POST['type'] . "' ";
-    $member_type_join = " INNER JOIN 
+    $type_sqlsafe = " AND member_type.Member_Type='" . mysqli_real_escape_string($cnnSWOP, $_POST['type']) . "' ";
+    $member_type_join_sqlsafe = " INNER JOIN 
         (SELECT Active, Participant_ID, max(Date_Changed) as lastdate FROM Pool_Status_Changes
         GROUP BY Participant_ID) lasttypestatus
         ON member_type.Date_Changed=lasttypestatus.lastdate ";
 } else {
-    $type = "";
-    $member_type_join = "";
+    $type_sqlsafe = "";
+    $member_type_join_sqlsafe = "";
 }
 //note that this is a little trickier because we have to get the most recent benchmark completed.  that's where the extra join comes in.
 if ($_POST['step'] != 0) {
-    $step = " AND Pool_Progress.Benchmark_Completed='" . $_POST['step'] . "' AND Pool_Progress.Participant_ID 
+    $step_sqlsafe = " AND Pool_Progress.Benchmark_Completed='" . mysqli_real_escape_string($cnnSWOP, $_POST['step']) . "' AND Pool_Progress.Participant_ID 
     = progress.Participant_ID ";
-    $benchmarks = " INNER JOIN Pool_Progress ON Participants.Participant_ID=Pool_Progress.Participant_ID 
+    $benchmarks_sqlsafe = " INNER JOIN Pool_Progress ON Participants.Participant_ID=Pool_Progress.Participant_ID 
         INNER JOIN (
         SELECT Participant_ID, Benchmark_Completed, MAX(Date_Completed) as LDATE
         FROM Pool_Progress
         GROUP BY Participant_ID) progress
 ON Pool_Progress.Date_Completed = progress.LDATE ";
 } else {
-    $step = "";
-    $benchmarks = "";
+    $step_sqlsafe = "";
+    $benchmarks_sqlsafe = "";
 }
 
 
 
-    $benchmarks = " INNER JOIN Pool_Progress ON Participants.Participant_ID=Pool_Progress.Participant_ID 
+    $benchmarks_sqlsafe = " INNER JOIN Pool_Progress ON Participants.Participant_ID=Pool_Progress.Participant_ID 
         INNER JOIN (
         SELECT Participant_ID, Benchmark_Completed, MAX(Date_Completed) as LDATE
         FROM Pool_Progress
@@ -52,69 +52,69 @@ ON Pool_Progress.Date_Completed = progress.LDATE ";
     
 //benchmark that has been completed
 if ($_POST['step_done'] != 0) {
-    $step_done = " AND Participants.Participant_ID IN (SELECT Participant_ID FROM Pool_Progress WHERE Benchmark_Completed = '" . $_POST['step_done'] . "') ";
+    $step_done_sqlsafe = " AND Participants.Participant_ID IN (SELECT Participant_ID FROM Pool_Progress WHERE Benchmark_Completed = '" . mysqli_real_escape_string($cnnSWOP, $_POST['step_done']). "') ";
 } else {
-    $step_done = "";
+    $step_done_sqlsafe = "";
 }
 
 if ($_POST['start'] != '') {
-    $start = " AND member_type.Date_Changed>='" . $_POST['start'] . "' AND member_type.Active=1 ";
-    $date_join = " INNER JOIN 
+    $start_sqlsafe = " AND member_type.Date_Changed>='" . mysqli_real_escape_string($cnnSWOP, $_POST['start']) . "' AND member_type.Active=1 ";
+    $date_join_sqlsafe = " INNER JOIN 
         (SELECT Active, Participant_ID, max(Date_Changed) as lastdate FROM Pool_Status_Changes
         GROUP BY Participant_ID) laststatus
         ON member_type.Date_Changed=laststatus.lastdate ";
 } else {
-    $start = "";
+    $start_sqlsafe = "";
 }
 if ($_POST['end'] != '') {
-    $end = " AND member_type.Date_Changed<='" . $_POST['end'] . "' AND member_type.Active=1 ";
-    $date_join = " INNER JOIN 
+    $end_sqlsafe = " AND member_type.Date_Changed<='" . mysqli_real_escape_string($cnnSWOP, $_POST['end']) . "' AND member_type.Active=1 ";
+    $date_join_sqlsafe = " INNER JOIN 
         (SELECT Active, Participant_ID, max(Date_Changed) as lastdate FROM Pool_Status_Changes
         GROUP BY Participant_ID) laststatus
         ON member_type.Date_Changed=laststatus.lastdate ";
 } else {
-    $end = "";
+    $end_sqlsafe = "";
 }
 
 if ($_POST['type'] != 0 || $_POST['start'] != '' || $_POST['end'] != '') {
-    $status = " INNER JOIN Pool_Status_Changes as member_type
+    $status_sqlsafe = " INNER JOIN Pool_Status_Changes as member_type
         ON Participants.Participant_ID=member_type.Participant_ID ";
 } else {
-    $status = "";
+    $status_sqlsafe = "";
 }
 if ($_POST['laggers'] != '') {//first get the date based on the number of days ago
     date_default_timezone_set('America/Chicago');
     $last_date = mktime(0, 0, 0, date("m"), date("d") - ($_POST['laggers']), date("Y"));
-    $last_date = date("Y-m-d", $last_date);
-    $lag = " AND Pool_Progress.Date_Completed<='" . $last_date . "' AND Pool_Progress.Participant_ID 
+    $last_date_sqlsafe = mysqli_real_escape_string($cnnSWOP, date("Y-m-d", $last_date));
+    $lag_sqlsafe = " AND Pool_Progress.Date_Completed<='" . $last_date_sqlsafe . "' AND Pool_Progress.Participant_ID 
     = progress.Participant_ID AND still_active.Active=1 ";
-    $benchmarks = " INNER JOIN Pool_Progress ON Participants.Participant_ID=Pool_Progress.Participant_ID 
+    $benchmarks_sqlsafe = " INNER JOIN Pool_Progress ON Participants.Participant_ID=Pool_Progress.Participant_ID 
         INNER JOIN (
         SELECT Participant_ID, Benchmark_Completed, MAX(Date_Completed) as LDATE
         FROM Pool_Progress
         GROUP BY Participant_ID) progress
     ON Pool_Progress.Date_Completed = progress.LDATE ";
-    $date_join = "INNER JOIN Pool_Status_Changes as still_active ON Participants.Participant_ID=still_active.Participant_ID
+    $date_join_sqlsafe = "INNER JOIN Pool_Status_Changes as still_active ON Participants.Participant_ID=still_active.Participant_ID
  INNER JOIN (SELECT Active, Participant_ID, max(Date_Changed) as lastdate FROM Pool_Status_Changes
         GROUP BY Participant_ID) laststatus
         ON still_active.Date_Changed=laststatus.lastdate ";
 } else {
-    $lag = " ";
+    $lag_sqlsafe = " ";
 }
 
 if ($_POST['organizer'] != '0') {
-    $organizer = " AND Participants.Primary_Organizer='" . $_POST['organizer'] . "' ";
-    $organizer_join = " INNER JOIN Participants AS Organizer_Info ON Participants.Primary_Organizer = Organizer_Info.Participant_ID ";
+    $organizer_sqlsafe = " AND Participants.Primary_Organizer='" . mysqli_real_escape_string($cnnSWOP, $_POST['organizer']) . "' ";
+    $organizer_join_sqlsafe = " INNER JOIN Participants AS Organizer_Info ON Participants.Primary_Organizer = Organizer_Info.Participant_ID ";
 } else {
-    $organizer = "";
-    $organizer_join = "";
+    $organizer_sqlsafe = "";
+    $organizer_join_sqlsafe = "";
 }
-    $organizer_join = " INNER JOIN Participants AS Organizer_Info ON Participants.Primary_Organizer = Organizer_Info.Participant_ID ";
+    $organizer_join_sqlsafe = " INNER JOIN Participants AS Organizer_Info ON Participants.Primary_Organizer = Organizer_Info.Participant_ID ";
 
 if ($_POST['first_name'] != '') {
-    $first_name = " AND Participants.Name_First LIKE '%" . $_POST['first_name'] . "%' ";
+    $first_name_sqlsafe = " AND Participants.Name_First LIKE '%" . mysqli_real_escape_string($cnnSWOP, $_POST['first_name']). "%' ";
 } else {
-    $first_name = "";
+    $first_name_sqlsafe = "";
 }
 
 /*
@@ -126,76 +126,76 @@ if ($_POST['middle_name'] != '') {
 */
 
 if ($_POST['last_name'] != '') {
-    $last_name = " AND Participants.Name_Last LIKE '%" . $_POST['last_name'] . "%' ";
+    $last_name_sqlsafe = " AND Participants.Name_Last LIKE '%" . mysqli_real_escape_string($cnnSWOP, $_POST['last_name']) . "%' ";
 } else {
-    $last_name = "";
+    $last_name_sqlsafe = "";
 }
 
 if ($_POST['email'] != '') {
-    $email = " AND Participants.Email LIKE '%" . $_POST['email'] . "%' ";
+    $email_sqlsafe = " AND Participants.Email LIKE '%" . mysqli_real_escape_string($cnnSWOP, $_POST['email']) . "%' ";
 } else {
-    $email = "";
+    $email_sqlsafe = "";
 }
 
 if ($_POST['phone'] != '') {
-    $phone = " AND (Participants.Phone_Day LIKE '%" . $_POST['phone'] . "%' 
-                OR Participants.Phone_Evening LIKE '%" . $_POST['phone'] . "%') ";
+    $phone_sqlsafe = " AND (Participants.Phone_Day LIKE '%" . mysqli_real_escape_string($cnnSWOP, $_POST['phone']) . "%' 
+                OR Participants.Phone_Evening LIKE '%" . mysqli_real_escape_string($cnnSWOP, $_POST['phone']) . "%') ";
 } else {
-    $phone = "";
+    $phone_sqlsafe = "";
 }
 
 if ($_POST['notes'] != '') {
-    $notes = " AND Participants.Notes LIKE '%" . $_POST['notes'] . "%' ";
+    $notes_sqlsafe = " AND Participants.Notes LIKE '%" . mysqli_real_escape_string($cnnSWOP, $_POST['notes']) . "%' ";
 } else {
-    $notes = "";
+    $notes_sqlsafe = "";
 }
 
 if ($_POST['date_of_birth'] != '') {
-    $date_of_birth = " AND Participants.Date_of_Birth = '" . $_POST['date_of_birth'] . "' ";
+    $date_of_birth_sqlsafe = " AND Participants.Date_of_Birth = '" . mysqli_real_escape_string($cnnSWOP, $_POST['date_of_birth']) . "' ";
 } else {
-    $date_of_birth = "";
+    $date_of_birth_sqlsafe = "";
 }
 
 if ($_POST['gender'] != '0') {
-    $gender = " AND Participants.Gender = '" . $_POST['gender'] . "' ";
+    $gender_sqlsafe = " AND Participants.Gender = '" . mysqli_real_escape_string($cnnSWOP, $_POST['gender']) . "' ";
 } else {
-    $gender = "";
+    $gender_sqlsafe = "";
 }
 
 if ($_POST['has_itin'] != '') {
-    $has_itin = " AND Participants.ITIN = " . $_POST['has_itin'] . " ";
+    $has_itin_sqlsafe = " AND Participants.ITIN = " . mysqli_real_escape_string($cnnSWOP, $_POST['has_itin']) . " ";
 } else {
-    $has_itin = "";
+    $has_itin_sqlsafe = "";
 }
 
 if ($_POST['language_spoken'] == 'English') {
-    $language_spoken = " AND Participants.Lang_Eng = 1 ";
+    $language_spoken_sqlsafe = " AND Participants.Lang_Eng = 1 ";
 } else if ($_POST['language_spoken'] == 'Spanish') {
-    $language_spoken = " AND Participants.Lang_Span = 1 ";
+    $language_spoken_sqlsafe = " AND Participants.Lang_Span = 1 ";
 } else if ($_POST['language_spoken'] == 'Other') {
-    $language_spoken = " AND Participants.Lang_Other = 1 ";
+    $language_spoken_sqlsafe = " AND Participants.Lang_Other = 1 ";
 } else {
-    $language_spoken = "";
+    $language_spoken_sqlsafe = "";
 }
 
 if ($_POST['ward'] != '0') {
-    $ward = " AND Participants.Ward = '" . $_POST['ward'] . "' ";
+    $ward_sqlsafe = " AND Participants.Ward = '" . mysqli_real_escape_string($cnnSWOP, $_POST['ward']) . "' ";
 } else {
-    $ward = "";
+    $ward_sqlsafe = "";
 }
     
-$search_pool = "SELECT * FROM Participants " . $status . $join_inst . $benchmarks
-        . $date_join . $organizer_join . $member_type_join
+$search_pool_sqlsafe = "SELECT * FROM Participants " . $status_sqlsafe . $join_inst_sqlsafe . $benchmarks_sqlsafe
+        . $date_join_sqlsafe . $organizer_join_sqlsafe . $member_type_join_sqlsafe
         . "LEFT JOIN Participants_Properties ON Participants.Participant_ID=Participants_Properties.Participant_ID
             WHERE Participants.Participant_ID IS NOT NULL "
-        . $institution . $type . $step . $step_done . $start . $end . $lag . $organizer
-        . $first_name /* . $middle_name */ . $last_name . $email . $phone . $notes
-        . $date_of_birth . $gender . $has_itin . $ward . $language_spoken;
+        . $institution_sqlsafe . $type_sqlsafe . $step_sqlsafe . $step_done_sqlsafe . $start_sqlsafe . $end_sqlsafe . $lag_sqlsafe . $organizer_sqlsafe
+        . $first_name_sqlsafe /* . $middle_name */ . $last_name_sqlsafe . $email_sqlsafe . $phone_sqlsafe . $notes_sqlsafe
+        . $date_of_birth_sqlsafe . $gender_sqlsafe . $has_itin_sqlsafe . $ward_sqlsafe . $language_spoken_sqlsafe;
 
 //echo $search_pool . "<p>";
 
 include "../include/dbconnopen.php";
-$search_results = mysqli_query($cnnSWOP, $search_pool);
+$search_results = mysqli_query($cnnSWOP, $search_pool_sqlsafe);
 ?>
 
 <table class="all_projects">

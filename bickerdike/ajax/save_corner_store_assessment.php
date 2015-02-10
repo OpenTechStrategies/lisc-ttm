@@ -9,9 +9,17 @@
  * If the store was selected from a dropdown, it already exists in the database.
  * In that case, the assessment can be entered directly.
  */
+include "../include/dbconnopen.php";
+$store_id_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['store_id']);
+$produce_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['produce']);
+$milk_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['milk']);
+$promotions_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['promotions']);
+$stock_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['stock']);
+$date_sqlsafe=  mysqli_real_escape_string($cnnBickerdike, $_POST['date']);
+
 if (isset($_POST['store_id']) && $_POST['store_id'] != ''){
-    include "../include/dbconnopen.php";
-    $corner_query = "INSERT INTO Corner_Store_Assessment
+    
+    $corner_query_sqlsafe = "INSERT INTO Corner_Store_Assessment
         (Corner_Store_ID,
         2_plus_fresh_veg_options,
         Lowfat_Milk_Available,
@@ -19,14 +27,14 @@ if (isset($_POST['store_id']) && $_POST['store_id'] != ''){
         Healthy_Items_In_Front,
         Date_Evaluated)
         VALUES
-        ('" . $_POST['store_id'] ."',
-        '" . $_POST['produce'] . "',
-        '" . $_POST['milk'] ."',
-        '" . $_POST['promotions'] . "',
-        '" . $_POST['stock'] . "',
-        '" . $_POST['date'] . "')";
-    echo $corner_query;
-    mysqli_query($cnnBickerdike, $corner_query);
+        ('" . $store_id_sqlsafe ."',
+        '" . $produce_sqlsafe . "',
+        '" . $milk_sqlsafe ."',
+        '" . $promotions_sqlsafe . "',
+        '" . $stock_sqlsafe . "',
+        '" . $date_sqlsafe . "')";
+    echo $corner_query_sqlsafe;
+    mysqli_query($cnnBickerdike, $corner_query_sqlsafe);
     $this_id = mysqli_insert_id($cnnBickerdike);
     include "../include/dbconnclose.php";
 }
@@ -37,14 +45,16 @@ if (isset($_POST['store_id']) && $_POST['store_id'] != ''){
  */
 else{
 include "../include/dbconnopen.php";
-$new_store = "INSERT INTO Corner_Stores (Corner_Store_Name,
+$name_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['name']);
+$address_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['address']);
+$new_store_sqlsafe = "INSERT INTO Corner_Stores (Corner_Store_Name,
      Corner_Store_Address)
      VALUES
-     ('" . $_POST['name'] ."',
-      '" . $_POST['address'] . "')";
-mysqli_query($cnnBickerdike, $new_store);
+     ('" . $name_sqlsafe ."',
+      '" . $address_sqlsafe . "')";
+mysqli_query($cnnBickerdike, $new_store_sqlsafe);
 $store_id = mysqli_insert_id($cnnBickerdike);
-$corner_query = "INSERT INTO Corner_Store_Assessment
+$corner_query_sqlsafe = "INSERT INTO Corner_Store_Assessment
     (Corner_Store_ID,
      2_plus_fresh_veg_options,
      Lowfat_Milk_Available,
@@ -53,13 +63,13 @@ $corner_query = "INSERT INTO Corner_Store_Assessment
      Date_Evaluated)
      VALUES
      ('" . $store_id . "',
-      '" . $_POST['produce'] . "',
-      '" . $_POST['milk'] ."',
-      '" . $_POST['promotions'] . "',
-      '" . $_POST['stock'] . "',
-      '" . $_POST['date'] . "')";
-echo $corner_query;
-mysqli_query($cnnBickerdike, $corner_query);
+      '" . $produce_sqlsafe . "',
+      '" . $milk_sqlsafe ."',
+      '" . $promotions_sqlsafe . "',
+      '" . $stock_sqlsafe . "',
+      '" . $date_sqlsafe . "')";
+echo $corner_query_sqlsafe;
+mysqli_query($cnnBickerdike, $corner_query_sqlsafe);
 include "../include/dbconnclose.php";
 }
 

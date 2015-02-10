@@ -21,9 +21,10 @@ class Participant {
      * @return array Loaded participant object array.
      */
     public function load_with_participant_id($participant_id) {
-        $this->participant_id = $participant_id;
-        $get_participant_info = "SELECT * FROM Participants WHERE Participant_ID='$participant_id'";
         include "../include/dbconnopen.php";
+        $participant_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $participant_id);
+        $this->participant_id = $participant_id_sqlsafe;
+        $get_participant_info = "SELECT * FROM Participants WHERE Participant_ID='$participant_id_sqlsafe'";
         $participant_info = mysqli_query($cnnEnlace, $get_participant_info);
         $temp_participant = mysqli_fetch_array($participant_info);
         include "../include/dbconnclose.php";

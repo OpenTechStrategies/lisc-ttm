@@ -69,31 +69,32 @@ if ($_POST['action'] == 'get_addtl_info') {
     }
 //add new rehab marker	
 } else if ($_POST['action'] == 'save') {
-    $add_marker = "INSERT INTO Property_Progress (Marker, Addtl_Info_1, Addtl_Info_2, Addtl_Info_3, Addtl_Info_4, Property_ID)
-					VALUES ('" . $_POST['marker'] . "', '" . $_POST['addtl_info_1'] . "', '" . $_POST['addtl_info_2'] . "', '" . $_POST['addtl_info_3'] . "', '" . $_POST['addtl_info_4'] . "', '" . $_POST['property'] . "')";
-    echo $add_marker;
     include "../include/dbconnopen.php";
-    mysqli_query($cnnSWOP, $add_marker);
+    $add_marker_sqlsafe = "INSERT INTO Property_Progress (Marker, Addtl_Info_1, Addtl_Info_2, Addtl_Info_3, Addtl_Info_4, Property_ID)
+					VALUES ('" . mysqli_real_escape_string($cnnSWOP, $_POST['marker']) . "', '" . mysqli_real_escape_string($cnnSWOP, $_POST['addtl_info_1']) . "', '" . mysqli_real_escape_string($cnnSWOP, $_POST['addtl_info_2']) . "', "
+            . "'" . mysqli_real_escape_string($cnnSWOP, $_POST['addtl_info_3']) . "', '" . mysqli_real_escape_string($cnnSWOP, $_POST['addtl_info_4']) . "', '" . mysqli_real_escape_string($cnnSWOP, $_POST['property']) . "')";
+    echo $add_marker_sqlsafe;
+    mysqli_query($cnnSWOP, $add_marker_sqlsafe);
     include "../include/dbconnclose.php";
 //add/edit notes	
 } else if ($_POST['action'] == 'save_notes') {
-    $save_notes = "UPDATE Property_Progress SET Notes='" . $_POST['note'] . "' WHERE Property_Progress_ID='" . $_POST['event'] . "'";
-    echo $save_notes;
     include "../include/dbconnopen.php";
-    mysqli_query($cnnSWOP, $save_notes);
+    $save_notes_sqlsafe = "UPDATE Property_Progress SET Notes='" . mysqli_real_escape_string($cnnSWOP, $_POST['note']) . "' WHERE Property_Progress_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['event']). "'";
+    echo $save_notes_sqlsafe;
+    mysqli_query($cnnSWOP, $save_notes_sqlsafe);
     include "../include/dbconnclose.php";
 } elseif ($_POST['action'] == 'delete') {
     /* delete a marker (progress step) */
-    $get_marker = "SELECT Marker, Property_ID FROM Property_Progress WHERE Property_Progress_ID='" . $_POST['id'] . "'";
-    $delete_step = "DELETE FROM Property_Progress WHERE Property_Progress_ID='" . $_POST['id'] . "'";
+    $get_marker_sqlsafe = "SELECT Marker, Property_ID FROM Property_Progress WHERE Property_Progress_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['id']) . "'";
+    $delete_step_sqlsafe = "DELETE FROM Property_Progress WHERE Property_Progress_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['id']) . "'";
     include "../include/dbconnopen.php";
-    $marker = mysqli_query($cnnSWOP, $get_marker);
+    $marker = mysqli_query($cnnSWOP, $get_marker_sqlsafe);
     $marker_num = mysqli_fetch_row($marker);
     if ($marker_num[0] == 9) {
-        $delete_price = "UPDATE Properties SET Sale_Price='' WHERE Property_ID='" . $marker_num[1] . "'";
+        $delete_price_sqlsafe = "UPDATE Properties SET Sale_Price='' WHERE Property_ID='" . $marker_num[1] . "'";
     }
-    mysqli_query($cnnSWOP, $delete_price);
-    mysqli_query($cnnSWOP, $delete_step);
+    mysqli_query($cnnSWOP, $delete_price_sqlsafe);
+    mysqli_query($cnnSWOP, $delete_step_sqlsafe);
     include "../include/dbconnclose.php";
 }
 ?>

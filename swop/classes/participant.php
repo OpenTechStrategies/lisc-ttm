@@ -25,12 +25,13 @@ class Participant
      */
     public function load_with_participant_id($participant_id)
     {
-        $this->participant_id = $participant_id;
-
         //open DB
         include "../include/dbconnopen.php";
-        $load_query="SELECT * FROM Participants WHERE Participant_ID='" . $this->participant_id . "'";
-        $participant_info = mysqli_query($cnnSWOP, $load_query);
+        $participant_id_sqlsafe=mysqli_real_escape_string($cnnSWOP, $participant_id);
+        $this->participant_id = $participant_id_sqlsafe;
+
+        $load_query_sqlsafe="SELECT * FROM Participants WHERE Participant_ID='" . $this->participant_id . "'";
+        $participant_info = mysqli_query($cnnSWOP, $load_query_sqlsafe);
         
         //set public variables
         $participant_info_temp = mysqli_fetch_array($participant_info);
@@ -39,11 +40,11 @@ class Participant
         $this->participant_first_name = $participant_info_temp['Name_First'];
         $this->participant_last_name = $participant_info_temp['Name_Last'];
         $this->gender = $participant_info_temp['Gender'];
-            $address_info="SELECT Address_Street_Num, Address_Street_Direction, Address_Street_Name, Address_Street_Type 
+            $address_info_sqlsafe="SELECT Address_Street_Num, Address_Street_Direction, Address_Street_Name, Address_Street_Type 
                     FROM Participants_Properties INNER JOIN Properties ON Participants_Properties.Property_ID=
                     Properties.Property_ID WHERE Primary_Residence=1 AND Participant_ID='" . $this->participant_id . "' AND (End_Primary IS NULL
                     OR End_Primary='0000-00-00 00:00:00')";
-            $address=mysqli_query($cnnSWOP, $address_info);
+            $address=mysqli_query($cnnSWOP, $address_info_sqlsafe);
             $address_info_temp=mysqli_fetch_array($address);
             $this->address_full = $address_info_temp['Address_Street_Num'] . " " .$address_info_temp['Address_Street_Direction'] . " ".
                     $address_info_temp['Address_Street_Name']  . " ".$address_info_temp['Address_Street_Type'];
@@ -58,8 +59,8 @@ class Participant
         $this->full_name = $participant_info_temp['Name_First'] . " " . $participant_info_temp['Name_Middle'] . " " . $participant_info_temp['Name_Last'];
         $this->phone_day = $participant_info_temp['Phone_Day'];
         $this->phone_evening = $participant_info_temp['Phone_Evening'];
-        $primary_organizer_name="SELECT Name_First, Name_Last FROM Participants WHERE Participant_ID='" . $participant_info_temp['Primary_Organizer'] . "'";
-        $organizer_name=mysqli_query($cnnSWOP, $primary_organizer_name);
+        $primary_organizer_name_sqlsafe="SELECT Name_First, Name_Last FROM Participants WHERE Participant_ID='" . $participant_info_temp['Primary_Organizer'] . "'";
+        $organizer_name=mysqli_query($cnnSWOP, $primary_organizer_name_sqlsafe);
         $organizer=mysqli_fetch_row($organizer_name);
         $this->organizer=$organizer[0] . " " . $organizer[1];
         $this->organizer_id= $participant_info_temp['Primary_Organizer'];
@@ -76,11 +77,11 @@ class Participant
      */
     public function get_finances()
     {
-        $finance_query = "SELECT * FROM Pool_Finances INNER JOIN Current_Housing
+        $finance_query_sqlsafe = "SELECT * FROM Pool_Finances INNER JOIN Current_Housing
             ON Pool_Finances.Current_Housing=Current_Housing.Current_Housing_ID WHERE Participant_ID='" . $this->participant_id . "'";
        // echo $finance_query;
         include "../include/dbconnopen.php";
-        $finances = mysqli_query($cnnSWOP, $finance_query);
+        $finances = mysqli_query($cnnSWOP, $finance_query_sqlsafe);
         include "../include/dbconnclose.php";
         $credit_array=array();
         $income_array=array();
@@ -108,7 +109,7 @@ class Participant
      *Get the member type name for pool members (ex: needs loan extension)
      */
     public function get_type(){
-        $get_this_type="SELECT Type_Name FROM Pool_Status_Changes INNER JOIN Pool_Member_Types ON Pool_Status_Changes.Member_Type=
+        $get_this_type_sqlsafe="SELECT Type_Name FROM Pool_Status_Changes INNER JOIN Pool_Member_Types ON Pool_Status_Changes.Member_Type=
             Pool_Member_Types.Type_ID 
             INNER JOIN (SELECT max(Date_Changed) as lastdate FROM Pool_Status_Changes
         WHERE Participant_ID='" . $this->participant_id . "' AND Pool_Status_Changes.Active=1) laststatus
@@ -116,7 +117,7 @@ class Participant
             WHERE Participant_ID='" . $this->participant_id . "' AND Pool_Status_Changes.Active=1";
         //echo $get_this_type;
         include "../include/dbconnopen.php";
-        $this_type = mysqli_query($cnnSWOP, $get_this_type);
+        $this_type = mysqli_query($cnnSWOP, $get_this_type_sqlsafe);
         $type=mysqli_fetch_row($this_type);
         include "../include/dbconnclose.php";
         
@@ -127,14 +128,14 @@ class Participant
      *Get the member type id for pool members 
      */
     public function get_type_id(){
-        $get_this_type="SELECT Member_Type FROM Pool_Status_Changes 
+        $get_this_type_sqlsafe="SELECT Member_Type FROM Pool_Status_Changes 
             INNER JOIN (SELECT max(Date_Changed) as lastdate FROM Pool_Status_Changes
         WHERE Participant_ID='" . $this->participant_id . "' AND Pool_Status_Changes.Active=1) laststatus
         ON Pool_Status_Changes.Date_Changed=laststatus.lastdate
         WHERE Participant_ID='" . $this->participant_id . "'";
         //echo $get_this_type;
         include "../include/dbconnopen.php";
-        $this_type = mysqli_query($cnnSWOP, $get_this_type);
+        $this_type = mysqli_query($cnnSWOP, $get_this_type_sqlsafe);
         $type=mysqli_fetch_row($this_type);
         include "../include/dbconnclose.php";
         
@@ -145,10 +146,10 @@ class Participant
      * Find the most current address listed for the given participant (property with Primary_Residence=1 and most recently logged)
      */
     public function get_address(){
-        $get_addresses = "SELECT * FROM Participants_Addresses WHERE Participant_ID='" . $this->participant_id . "' ORDER BY Date_Logged DESC";
+        $get_addresses_sqlsafe = "SELECT * FROM Participants_Addresses WHERE Participant_ID='" . $this->participant_id . "' ORDER BY Date_Logged DESC";
        // echo $get_addresses;
         include "../include/dbconnopen.php";
-        $this_type = mysqli_query($cnnSWOP, $get_addresses);
+        $this_type = mysqli_query($cnnSWOP, $get_addresses_sqlsafe);
         $address=mysqli_fetch_array($this_type);
         include "../include/dbconnclose.php";
         $this->address_full = $address['Address_Num'] . " " .$address['Address_Dir'] . " ".
@@ -169,9 +170,9 @@ class Participant
      * on the site as checkboxes, and in the database in the "Leadership_Development" and "Leadership_Development_Details" tables.
      */
     public function get_leadership_development(){
-        $get_leadership = "SELECT Detail_ID, Date FROM Leadership_Development WHERE Participant_ID='" . $this->participant_id . "' ORDER BY Detail_ID;";
+        $get_leadership_sqlsafe = "SELECT Detail_ID, Date FROM Leadership_Development WHERE Participant_ID='" . $this->participant_id . "' ORDER BY Detail_ID;";
         include "../include/dbconnopen.php";
-        $leader_details = mysqli_query($cnnSWOP, $get_leadership);
+        $leader_details = mysqli_query($cnnSWOP, $get_leadership_sqlsafe);
         while ($leader=mysqli_fetch_row($leader_details)){
             $name='detail_'.$leader[0];
             $this->$name=$leader[1];
@@ -185,9 +186,9 @@ class Participant
      * returns the set of employers that have been entered for this person.
      */
     public function get_employers(){
-        $get_employment="SELECT * FROM Pool_Employers WHERE Participant_ID='" . $this->participant_id . "'";
+        $get_employment_sqlsafe="SELECT * FROM Pool_Employers WHERE Participant_ID='" . $this->participant_id . "'";
         include "../include/dbconnopen.php";
-        $employ_details = mysqli_query($cnnSWOP, $get_employment);
+        $employ_details = mysqli_query($cnnSWOP, $get_employment_sqlsafe);
            //print_r(get_defined_vars());
         include "../include/dbconnclose.php";
         return $employ_details;

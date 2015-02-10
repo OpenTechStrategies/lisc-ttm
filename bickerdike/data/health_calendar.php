@@ -101,11 +101,11 @@ function generate_calendar($year, $month, $days = array(), $day_name_length = 3,
         date_default_timezone_set('America/Chicago');
         $time = time();
         $this_date = date('Y', $time) . "-" . date('m', $time) . "-" . $day;
-        $get_program_names = "SELECT * FROM Programs LEFT JOIN (Program_Dates)
+        $get_program_names_sqlsafe = "SELECT * FROM Programs LEFT JOIN (Program_Dates)
                                 ON (Program_Dates.Program_ID=Programs.Program_ID) WHERE Program_Dates.Program_Date='" . $this_date . "'";
-        //echo $get_program_names . "<br>";
+        //echo $get_program_names_sqlsafe . "<br>";
         include "../include/dbconnopen.php";
-        $programs = mysqli_query($cnnBickerdike, $get_program_names);
+        $programs = mysqli_query($cnnBickerdike, $get_program_names_sqlsafe);
         $names = array();
         while ($program=mysqli_fetch_array($programs)){
             $names[] = $program['Program_Name'];

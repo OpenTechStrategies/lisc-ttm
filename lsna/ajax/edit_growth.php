@@ -3,15 +3,20 @@
  * ultimate version of the database.  This will probably come back, though.
  */
 if ($_POST['adult_ed_year'] != ''){
+    include "../include/dbconnopen.php";
+    $adult_ed_year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['adult_ed_year']);
+    $start_level_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['start_level']);
+    $end_level_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['end_level']);
+    $ged_completion_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['ged_completion']);
+    $id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['id']);
     $edit_growth = "UPDATE Participants_Growth SET
-         Year='" . $_POST['adult_ed_year'] . "',
-          Start_Level='" . $_POST['start_level'] . "',
-          End_Level='" . $_POST['end_level'] . "',
-          GED_Completed='" . $_POST['ged_completion'] . "'
-         WHERE Participant_Growth_ID='" . $_POST['id'] ."'";
+         Year='" . $adult_ed_year_sqlsafe . "',
+          Start_Level='" . $start_level_sqlsafe . "',
+          End_Level='" . $end_level_sqlsafe . "',
+          GED_Completed='" . $ged_completion_sqlsafe . "'
+         WHERE Participant_Growth_ID='" . $id_sqlsafe ."'";
     
     echo $edit_growth;
-    include "../include/dbconnopen.php";
     mysqli_query($cnnLSNA, $edit_growth);
     include "../include/dbconnclose.php";
 }

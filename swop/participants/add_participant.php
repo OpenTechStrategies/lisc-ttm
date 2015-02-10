@@ -50,9 +50,9 @@
 				<td colspan="3"><select id="inst_quick_search">
                                     <option value="">-----</option>
                                     <?
-                                                        $get_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
+                                                        $get_institutions_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name";
                                                         include "../include/dbconnopen.php";
-                                                        $institutions = mysqli_query($cnnSWOP, $get_institutions);
+                                                        $institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
                                                         while ($institution = mysqli_fetch_array($institutions)) {?>
                                     <option value="<?echo $institution['Institution_ID'];?>"><?echo $institution['Institution_Name'];?></option>
                                                         <?}
@@ -90,9 +90,9 @@
                 <select id="primary_inst_new">
     <option value="">-----</option>
     <?
-			$get_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
+			$get_institutions_sqlsafe = "SELECT * FROM Institutions ORDER BY Institution_Name";
 			include "../include/dbconnopen.php";
-			$institutions = mysqli_query($cnnSWOP, $get_institutions);
+			$institutions = mysqli_query($cnnSWOP, $get_institutions_sqlsafe);
 			while ($institution = mysqli_fetch_array($institutions)) {?>
     <option value="<?echo $institution['Institution_ID'];?>"><?echo $institution['Institution_Name'];?></option>
 			<?}
@@ -115,9 +115,9 @@
 		<td><select id="pool_type">
 			<option value="">-------</option>
 									<?
-               $get_types="SELECT * FROM Pool_Member_Types;";
+               $get_types_sqlsafe="SELECT * FROM Pool_Member_Types;";
                 include "../include/dbconnopen.php";
-                $all_types=mysqli_query($cnnSWOP, $get_types);
+                $all_types=mysqli_query($cnnSWOP, $get_types_sqlsafe);
                 while ($type=mysqli_fetch_row($all_types)){
                 ?><option value="<?echo $type[0];?>"><?echo $type[1];?></option>
                         <?

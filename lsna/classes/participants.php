@@ -20,11 +20,13 @@ class Participant {
      * @return array Loaded participant object array.
      */
     public function load_with_participant_id($participant_id) {
-        //set participant_id
-        $this->participant_id = $participant_id;
-
+        
         //open DB
         include "../include/dbconnopen.php";
+        $participant_id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $participant_id);
+        //set participant_id
+        $this->participant_id = $participant_id_sqlsafe;
+
         //echo "Call participant__Load_With_ID('" . $this->participant_id . "')";
         $participant_info = mysqli_query($cnnLSNA, "Call Participant__Load_With_ID('" . $this->participant_id . "')");
 

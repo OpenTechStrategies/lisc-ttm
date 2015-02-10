@@ -19,8 +19,8 @@ see /ajax/dropdown_changes for the way this works.
     <tr><td class="dropdown_name">Roles</td><td><span class="helptext">Existing dropdown: </span><br/><select><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Participants_Roles";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Participants_Roles";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -44,8 +44,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Delete from dropdown: </span><br/><select id="delete_select"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Participants_Roles";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Participants_Roles";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -69,8 +69,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Edit element: </span><br/><select id="element_edited"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Participants_Roles";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Participants_Roles";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -94,8 +94,8 @@ see /ajax/dropdown_changes for the way this works.
     <tr><td class="dropdown_name">Leader Levels</td><td><span class="helptext">Existing dropdown: </span><br/><select><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Leadership_Levels";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Leadership_Levels";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -119,8 +119,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Delete from dropdown: </span><br/><select id="leader_delete"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Leadership_Levels";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Leadership_Levels";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -144,8 +144,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Edit element </span></br><select id="leader_edited"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Leadership_Levels";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Leadership_Levels";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -177,8 +177,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Existing dropdown: </span><br/><select  style="width:150px"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Pool_Member_Types";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Pool_Member_Types";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -209,8 +209,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Delete from dropdown: </span><br/><select id="pool_types_delete"  style="width:150px"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Pool_Member_Types";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Pool_Member_Types";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -235,8 +235,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Existing dropdown: </span></br><select id="pool_types_edited" style="width:150px"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Pool_Member_Types";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Pool_Member_Types";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -272,8 +272,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Existing dropdown: </span><br/><select  style="width:150px"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Pool_Benchmarks";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Pool_Benchmarks";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -286,8 +286,8 @@ see /ajax/dropdown_changes for the way this works.
             <select id="pool_types_all" style="width:150px"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Pool_Member_Types";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Pool_Member_Types";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[2]; ?>"><?php echo $role[1]; ?></option>
@@ -317,8 +317,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Delete from dropdown: </span><br/><select id="all_benchmarks" style="width:150px"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Pool_Benchmarks";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Pool_Benchmarks";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -342,8 +342,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Edit dropdown: </span><br/><select id="benchmarks_edit" style="width:150px"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Pool_Benchmarks";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Pool_Benchmarks";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -356,8 +356,8 @@ see /ajax/dropdown_changes for the way this works.
             <select id="pool_types_all_edit" style="width:150px"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Pool_Member_Types";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Pool_Member_Types";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[2]; ?>"><?php echo $role[1]; ?></option>
@@ -399,8 +399,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Existing dropdown: </span><br/><select><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Outcomes_for_Pool";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Outcomes_for_Pool";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -424,8 +424,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Delete from dropdown: </span><br/><select id="all_outcomes"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Outcomes_for_Pool";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Outcomes_for_Pool";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -449,8 +449,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Edit: </span><br/><select id="edited_outcome"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Outcomes_for_Pool";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Outcomes_for_Pool";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -477,8 +477,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Existing dropdown: </span><br/><select><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Outcome_Locations";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Outcome_Locations";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -502,8 +502,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Delete from dropdown: </span><br/><select id="all_locations"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Outcome_Locations";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Outcome_Locations";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -527,8 +527,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Edit: </span><br/><select id="edited_location"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Outcome_Locations";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Outcome_Locations";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -557,8 +557,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Existing dropdown: </span><br/><select><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Property_Dispositions";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Property_Dispositions";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -582,8 +582,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Delete from dropdown: </span><br/><select id="all_dispositions"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Property_Dispositions";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Property_Dispositions";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -607,8 +607,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Edit: </span><br/><select id="edited_disposition"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Property_Dispositions";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Property_Dispositions";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -636,8 +636,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Existing dropdown: </span><br/><select><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Property_Marker_Names";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Property_Marker_Names";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -661,8 +661,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Delete from dropdown: </span><br/><select id="all_markers"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Property_Marker_Names";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Property_Marker_Names";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -686,8 +686,8 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Edit: </span><br/><select id="edited_marker"><?php
                 //get roles
                 include "../include/dbconnopen.php";
-                $select_roles = "SELECT * FROM Property_Marker_Names";
-                $roles = mysqli_query($cnnSWOP, $select_roles);
+                $select_roles_sqlsafe = "SELECT * FROM Property_Marker_Names";
+                $roles = mysqli_query($cnnSWOP, $select_roles_sqlsafe);
                 while ($role = mysqli_fetch_row($roles)) {
                     ?>
                     <option value="<?php echo $role[0]; ?>"><?php echo $role[1]; ?></option>
@@ -732,9 +732,9 @@ see /ajax/dropdown_changes for the way this works.
             that location.</td><td><span class="helptext">Delete location: </span><br/><select id="event_location">
                 <option value="0">-------</option>
                 <?php
-                $get_subcampaigns = "SELECT DISTINCT Location FROM Campaigns_Events WHERE Location!='0' AND Location IS NOT NULL  ORDER BY Location";
+                $get_subcampaigns_sqlsafe = "SELECT DISTINCT Location FROM Campaigns_Events WHERE Location!='0' AND Location IS NOT NULL  ORDER BY Location";
                 include "../include/dbconnopen.php";
-                $subcampaigns = mysqli_query($cnnSWOP, $get_subcampaigns);
+                $subcampaigns = mysqli_query($cnnSWOP, $get_subcampaigns_sqlsafe);
                 while ($subcam = mysqli_fetch_row($subcampaigns)) {
                     ?>
                     <option><?php echo $subcam[0]; ?></option>
@@ -757,9 +757,9 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Edit location: </span><br/><select id="event_location_edit">
                 <option value="0">-------</option>
                 <?php
-                $get_subcampaigns = "SELECT DISTINCT Location FROM Campaigns_Events WHERE Location!='0' AND Location IS NOT NULL  ORDER BY Location";
+                $get_subcampaigns_sqlsafe = "SELECT DISTINCT Location FROM Campaigns_Events WHERE Location!='0' AND Location IS NOT NULL  ORDER BY Location";
                 include "../include/dbconnopen.php";
-                $subcampaigns = mysqli_query($cnnSWOP, $get_subcampaigns);
+                $subcampaigns = mysqli_query($cnnSWOP, $get_subcampaigns_sqlsafe);
                 while ($subcam = mysqli_fetch_row($subcampaigns)) {
                     ?>
                     <option><?php echo $subcam[0]; ?></option>
@@ -788,10 +788,10 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Delete subcampaign: </span><br/><select id="subcampaign">
                 <option value="0">-------</option>
                 <?php
-                $get_subcampaigns = "SELECT DISTINCT Subcampaign FROM Campaigns_Events WHERE Subcampaign!='0' AND Subcampaign IS NOT NULL 
-        AND Campaign_ID='" . $_COOKIE['campaign'] . "' ORDER BY Subcampaign";
                 include "../include/dbconnopen.php";
-                $subcampaigns = mysqli_query($cnnSWOP, $get_subcampaigns);
+                $get_subcampaigns_sqlsafe = "SELECT DISTINCT Subcampaign FROM Campaigns_Events WHERE Subcampaign!='0' AND Subcampaign IS NOT NULL 
+        AND Campaign_ID='" . mysqli_real_escape_string($cnnSWOP, $_COOKIE['campaign']) . "' ORDER BY Subcampaign";
+                $subcampaigns = mysqli_query($cnnSWOP, $get_subcampaigns_sqlsafe);
                 while ($subcam = mysqli_fetch_row($subcampaigns)) {
                     ?>
                     <option><?php echo $subcam[0]; ?></option>
@@ -814,10 +814,10 @@ see /ajax/dropdown_changes for the way this works.
         <td><span class="helptext">Edit subcampaign: </span><br/><select id="edit_subcampaign">
                 <option value="0">-------</option>
                 <?php
-                $get_subcampaigns = "SELECT DISTINCT Subcampaign FROM Campaigns_Events WHERE Subcampaign!='0' AND Subcampaign IS NOT NULL 
-        AND Campaign_ID='" . $_COOKIE['campaign'] . "' ORDER BY Subcampaign";
                 include "../include/dbconnopen.php";
-                $subcampaigns = mysqli_query($cnnSWOP, $get_subcampaigns);
+                $get_subcampaigns_sqlsafe = "SELECT DISTINCT Subcampaign FROM Campaigns_Events WHERE Subcampaign!='0' AND Subcampaign IS NOT NULL 
+        AND Campaign_ID='" . mysqli_real_escape_string($cnnSWOP, $_COOKIE['campaign']) . "' ORDER BY Subcampaign";
+                $subcampaigns = mysqli_query($cnnSWOP, $get_subcampaigns_sqlsafe);
                 while ($subcam = mysqli_fetch_row($subcampaigns)) {
                     ?>
                     <option><?php echo $subcam[0]; ?></option>

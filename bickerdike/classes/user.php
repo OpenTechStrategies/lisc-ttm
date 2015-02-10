@@ -26,13 +26,16 @@ class User
      */
     public function load_with_user_id($user_id)
     {
-        //set user_id
-        $this->user_id = $user_id;
-
         //open DB
         include "../include/dbconnopen.php";
-        //echo "Call User__Load_With_ID('" . $this->user_id . "')";
-        $user_info = mysqli_query($cnnBickerdike, "Call User__Load_With_ID('" . $this->user_id . "')");
+        $user_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $user_id);
+        //set user_id
+        $this->user_id = $user_id_sqlsafe;
+
+        $str_sqlsafe = "Call User__Load_With_ID('" . $this->user_id . "')";
+
+        //echo $str_sqlsafe;
+        $user_info = mysqli_query($cnnBickerdike, $str_sqlsafe);
         
         //set public variables
         $user_info_temp = mysqli_fetch_array($user_info);
@@ -67,8 +70,8 @@ class User
      */
     public function get_health_data(){
         include "../include/dbconnopen.php";
-        $user_health_data_query = "SELECT * FROM User_Health_Data WHERE User_ID='" . $this->user_id . "'";
-        $health_data = mysqli_query($cnnBickerdike, $user_health_data_query);
+        $user_health_data_query_sqlsafe = "SELECT * FROM User_Health_Data WHERE User_ID='" . $this->user_id . "'";
+        $health_data = mysqli_query($cnnBickerdike, $user_health_data_query_sqlsafe);
         
         include "../include/dbconnclose.php";
         
@@ -81,9 +84,9 @@ class User
      */
     public function get_activities(){
         include "../include/dbconnopen.php";
-        $user_activities_query = "SELECT DISTINCT User_Established_Activity_ID FROM Activities_Users WHERE User_ID='" . $this->user_id . "'";
-        //echo $user_activities_query;
-        $activities = mysqli_query($cnnBickerdike, $user_activities_query);
+        $user_activities_query_sqlsafe = "SELECT DISTINCT User_Established_Activity_ID FROM Activities_Users WHERE User_ID='" . $this->user_id . "'";
+        //echo $user_activities_query_sqlsafe;
+        $activities = mysqli_query($cnnBickerdike, $user_activities_query_sqlsafe);
         include "../include/dbconnclose.php";
         
         return $activities;
@@ -95,10 +98,10 @@ class User
      */
     public function get_programs(){
         include "../include/dbconnopen.php";
-        $user_programs_query = "SELECT * FROM Programs LEFT JOIN (Programs_Users)
+        $user_programs_query_sqlsafe = "SELECT * FROM Programs LEFT JOIN (Programs_Users)
                                 ON (Programs_Users.Program_ID=Programs.Program_ID) WHERE Programs_Users.User_ID='" . $this->user_id . "'";
-        //echo $user_activities_query;
-        $programs = mysqli_query($cnnBickerdike, $user_programs_query);
+        //echo $user_activities_query_sqlsafe;
+        $programs = mysqli_query($cnnBickerdike, $user_programs_query_sqlsafe);
         include "../include/dbconnclose.php";
         
         return $programs;
@@ -110,12 +113,12 @@ class User
      */
     public function get_surveys(){
         include "../include/dbconnopen.php";
-        $user_surveys_query = "SELECT * FROM Participant_Survey_Responses 
+        $user_surveys_query_sqlsafe = "SELECT * FROM Participant_Survey_Responses 
     INNER JOIN Programs
     ON Programs.Program_ID=Participant_Survey_Responses.Program_ID
 WHERE User_ID='" . $this->user_id . "'";
-        //echo $user_activities_query;
-        $surveys = mysqli_query($cnnBickerdike, $user_surveys_query);
+        //echo $user_activities_query_sqlsafe;
+        $surveys = mysqli_query($cnnBickerdike, $user_surveys_query_sqlsafe);
         include "../include/dbconnclose.php";
         
         return $surveys;

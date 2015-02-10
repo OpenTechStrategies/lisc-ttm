@@ -52,8 +52,8 @@
                                     active or inactive at the same time: -->
 				<?
 					include "../include/dbconnopen.php";
-					$events_query = "SELECT * FROM Events  WHERE Active=1 ORDER BY Event_Date DESC";
-					$events = mysqli_query($cnnTRP, $events_query);
+					$events_query_sqlsafe = "SELECT * FROM Events  WHERE Active=1 ORDER BY Event_Date DESC";
+					$events = mysqli_query($cnnTRP, $events_query_sqlsafe);
 					while ($event = mysqli_fetch_array($events)) {
 					$date_formatted = explode('-', $event['Event_Date']);
 					$display_date = $date_formatted[1]."/".$date_formatted[2]."/".$date_formatted[0];
@@ -72,8 +72,8 @@
                                                                 <!-- link specific people to this event (if desired) -->
 								<td rowspan="3"><h5>Attendee List</h5>
 									<?
-										$event_attendance = "SELECT * FROM Participants INNER JOIN Events_Participants ON Participants.Participant_ID=Events_Participants.Participant_ID WHERE Events_Participants.Event_ID='" . $event['Event_ID'] . "' ORDER BY Participants.Last_Name";
-										$attendees = mysqli_query($cnnTRP, $event_attendance);
+										$event_attendance_sqlsafe = "SELECT * FROM Participants INNER JOIN Events_Participants ON Participants.Participant_ID=Events_Participants.Participant_ID WHERE Events_Participants.Event_ID='" . $event['Event_ID'] . "' ORDER BY Participants.Last_Name";
+										$attendees = mysqli_query($cnnTRP, $event_attendance_sqlsafe);
 										while ($attendee = mysqli_fetch_array($attendees)) {
 									?>
 										<a href="../participants/profile.php?id=<?echo $attendee['Participant_ID'];?>" style="font-size:.9em;margin-left:10px;"><?echo $attendee['First_Name'] . " " . $attendee['Last_Name'];?></a><br/>
@@ -205,8 +205,8 @@
                             <ul id="events_list" class="inactive_events">
 				<?
 					include "../include/dbconnopen.php";
-					$events_query = "SELECT * FROM Events WHERE Active!=1 OR Active IS NULL ORDER BY Event_Date DESC";
-					$events = mysqli_query($cnnTRP, $events_query);
+					$events_query_sqlsafe = "SELECT * FROM Events WHERE Active!=1 OR Active IS NULL ORDER BY Event_Date DESC";
+					$events = mysqli_query($cnnTRP, $events_query_sqlsafe);
 					while ($event = mysqli_fetch_array($events)) {
                                          
 					$date_formatted = explode('-', $event['Event_Date']);
@@ -224,8 +224,8 @@
 								</td>
 								<td rowspan="3"><h5>Attendee List</h5>
 									<?
-										$event_attendance = "SELECT * FROM Participants INNER JOIN Events_Participants ON Participants.Participant_ID=Events_Participants.Participant_ID WHERE Events_Participants.Event_ID='" . $event['Event_ID'] . "' ORDER BY Participants.Last_Name";
-										$attendees = mysqli_query($cnnTRP, $event_attendance);
+										$event_attendance_sqlsafe = "SELECT * FROM Participants INNER JOIN Events_Participants ON Participants.Participant_ID=Events_Participants.Participant_ID WHERE Events_Participants.Event_ID='" . $event['Event_ID'] . "' ORDER BY Participants.Last_Name";
+										$attendees = mysqli_query($cnnTRP, $event_attendance_sqlsafe);
 										while ($attendee = mysqli_fetch_array($attendees)) {
 									?>
 										<a href="../participants/profile.php?id=<?echo $attendee['Participant_ID'];?>" style="font-size:.9em;margin-left:10px;"><?echo $attendee['First_Name'] . " " . $attendee['Last_Name'];?></a><br/>
@@ -361,8 +361,8 @@
 			<ul id="outcomes_list">
 			<?
 				include "../include/dbconnopen.php";
-				$outcomes_query = "SELECT * FROM Outcomes";
-				$outcomes = mysqli_query($cnnTRP, $outcomes_query);
+				$outcomes_query_sqlsafe = "SELECT * FROM Outcomes";
+				$outcomes = mysqli_query($cnnTRP, $outcomes_query_sqlsafe);
 				while ($outcome = mysqli_fetch_array($outcomes)) {
 			?>
 					<li>
@@ -380,8 +380,8 @@
 								</tr>
 								<?
                                                                 include "../include/dbconnopen.php";
-									$outcomes_data_query = "SELECT * FROM Outcomes_Months WHERE Outcome_ID='" . $outcome['Outcome_ID'] . "' ORDER BY Year,Month";
-									$outcomes_data = mysqli_query($cnnTRP, $outcomes_data_query);
+									$outcomes_data_query_sqlsafe = "SELECT * FROM Outcomes_Months WHERE Outcome_ID='" . $outcome['Outcome_ID'] . "' ORDER BY Year,Month";
+									$outcomes_data = mysqli_query($cnnTRP, $outcomes_data_query_sqlsafe);
                                                                         $months_with_outcomes=mysqli_num_rows($outcomes_data);
                                                                         if ($months_with_outcomes>0){
 									while ($outcomes_datum = mysqli_fetch_array($outcomes_data)) {

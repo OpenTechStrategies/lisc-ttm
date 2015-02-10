@@ -4,20 +4,20 @@
 
 /* or, delete elements: */
 if ($_POST['action']=='delete'){
-    $query="DELETE FROM Elev8_Data WHERE Elev8_ID='".$_POST['id']."'";
-echo $query;
 include "../include/dbconnopen.php";
-mysqli_query($cnnTRP, $query);
+  $query_sqlsafe="DELETE FROM Elev8_Data WHERE Elev8_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
+echo $query_sqlsafe;
+mysqli_query($cnnTRP, $query_sqlsafe);
 include "../include/dbconnclose.php";
 }
 else{
-$query="INSERT INTO Elev8_Data (Month, Year, Element, Value) VALUES ('".$_POST['month']."',
-    '".$_POST['year']."',
-        '".$_POST['element']."',
-            '".$_POST['value']."' )";
-echo $query;
 include "../include/dbconnopen.php";
-mysqli_query($cnnTRP, $query);
+  $query_sqlsafe="INSERT INTO Elev8_Data (Month, Year, Element, Value) VALUES ('" . mysqli_real_escape_string($cnnTRP, $_POST['month']) . "',
+    '" . mysqli_real_escape_string($cnnTRP, $_POST['year']) . "',
+        '" . mysqli_real_escape_string($cnnTRP, $_POST['element']) . "',
+            '" . mysqli_real_escape_string($cnnTRP, $_POST['value']) . "' )";
+echo $query_sqlsafe;
+mysqli_query($cnnTRP, $query_sqlsafe);
 include "../include/dbconnclose.php";
 }
 ?>

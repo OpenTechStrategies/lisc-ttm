@@ -23,11 +23,12 @@ include "../../header.php";
 <h3>Category Profile</h3>
 <span align="left">
 <?
+include "../include/dbconnopen.php";
+$category_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_COOKIE['category']);
 $get_related_subcategories = "SELECT * FROM Categories INNER JOIN (Category_Subcategory_Links, Subcategories) ON
     Categories.Category_ID=Category_Subcategory_Links.Category_ID AND 
     Category_Subcategory_Links.Subcategory_ID=Subcategories.Subcategory_ID
-    WHERE Category_Subcategory_Links.Category_ID='" . $_COOKIE['category'] . "'";
-include "../include/dbconnopen.php";
+    WHERE Category_Subcategory_Links.Category_ID='" . $category_sqlsafe . "'";
 $related_subcategories = mysqli_query($cnnLSNA, $get_related_subcategories);
 $category=0;
 while ($sub = mysqli_fetch_array($related_subcategories)){
@@ -61,7 +62,7 @@ include "../include/dbconnclose.php";
                         Categories.Category_ID=Category_Subcategory_Links.Category_ID AND 
                         Category_Subcategory_Links.Subcategory_ID=Subcategories.Subcategory_ID
                         AND Subcategories.Subcategory_ID=Participants_Subcategories.Subcategory_ID
-                        WHERE Category_Subcategory_Links.Category_ID='" . $_COOKIE['category'] . "' GROUP BY Participant_ID";
+                        WHERE Category_Subcategory_Links.Category_ID='" . $category_sqlsafe . "' GROUP BY Participant_ID";
     include "../include/dbconnopen.php";
     $count = mysqli_query($cnnLSNA, $count_participants);
     $num = mysqli_num_rows($count);

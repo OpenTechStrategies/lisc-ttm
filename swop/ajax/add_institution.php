@@ -5,7 +5,8 @@ $this_address=$_POST['address_num'] . " " .$_POST['address_dir'] . " " .$_POST['
                 " Chicago IL";
         $block_group=do_it_all($this_address, $map);
 
-$create_new_institution_query = "INSERT INTO Institutions (
+include "../include/dbconnopen.php";
+$create_new_institution_query_sqlsafe = "INSERT INTO Institutions (
                                     Institution_Name,
                                     Street_Name,
                                     Street_Num,
@@ -16,25 +17,24 @@ $create_new_institution_query = "INSERT INTO Institutions (
                                     Phone,
                                     Contact_Person
                                 ) VALUES (
-                                    '" . $_POST['name'] . "',
-                                    '" . $_POST['address_name'] . "',
-                                    '" . $_POST['address_num'] . "',
-                                    '" . $_POST['address_dir'] . "',
-                                    '" . $_POST['address_type'] . "',
-                                        '$block_group',
-                                    '" . $_POST['type'] . "',
-                                    '" . $_POST['phone'] . "',
-                                    '" . $_POST['contact'] . "')";
-//echo $create_new_institution_query;
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['name']). "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['address_name']). "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['address_num']). "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['address_dir']). "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['address_type']). "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $block_group). "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['type']). "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['phone']). "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['contact']) . "')";
+//echo $create_new_institution_query_sqlsafe;
 
-include "../include/dbconnopen.php";
-mysqli_query($cnnSWOP, $create_new_institution_query);
+mysqli_query($cnnSWOP, $create_new_institution_query_sqlsafe);
 $id = mysqli_insert_id($cnnSWOP);
 
 //connect contact to institution automatically
 if ($_POST['contact']!=''){
-    $contact_query="INSERT INTO Institutions_Participants (Institution_ID, Participant_ID) VALUES ($id, '".$_POST['contact']."')";
-    mysqli_query($cnnSWOP, $contact_query);
+    $contact_query_sqlsafe="INSERT INTO Institutions_Participants (Institution_ID, Participant_ID) VALUES ($id, '".mysqli_real_escape_string($cnnSWOP, $_POST['contact'])."')";
+    mysqli_query($cnnSWOP, $contact_query_sqlsafe);
 }
 
 include "../include/dbconnclose.php";

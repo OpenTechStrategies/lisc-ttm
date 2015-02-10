@@ -1,12 +1,13 @@
 <?php
+include "../include/dbconnopen.php";
 if ($_POST['housing']==''){
     /*5 is n/a, or something of the sort.  Current housing links to another table, so it's
      * useful to have SOMETHING entered there.
      */
-    $housing=5;
-}else{$housing=$_POST['housing'];}
+    $housing_sqlsafe=5;
+}else{$housing_sqlsafe=mysqli_real_escape_string($cnnSWOP, $_POST['housing']);}
 /* add new finances.  There's no option to edit finances, only add new ones (possible weakness). */
-$new_finance_checkin="INSERT INTO Pool_Finances (Participant_ID,
+$new_finance_checkin_sqlsafe="INSERT INTO Pool_Finances (Participant_ID,
                     Credit_Score,
                     Income,
                     Current_Housing,
@@ -14,22 +15,21 @@ $new_finance_checkin="INSERT INTO Pool_Finances (Participant_ID,
                     Housing_Cost,
                     Assets)
                     VALUES
-                    ('".$_POST['person'] ."',
-                    '".$_POST['credit'] ."',
-                     '".$_POST['income'] ."',
-                     '".$housing ."',
-                     '".$_POST['location'] ."',
-                     '".$_POST['cost'] ."',
-                     '".$_POST['assets'] ."')";
+                    ('".mysqli_real_escape_string($cnnSWOP, $_POST['person']) ."',
+                    '".mysqli_real_escape_string($cnnSWOP, $_POST['credit']) ."',
+                     '".mysqli_real_escape_string($cnnSWOP, $_POST['income']) ."',
+                     '".$housing_sqlsafe ."',
+                     '".mysqli_real_escape_string($cnnSWOP, $_POST['location']) ."',
+                     '".mysqli_real_escape_string($cnnSWOP, $_POST['cost']) ."',
+                     '".mysqli_real_escape_string($cnnSWOP, $_POST['assets']) ."')";
 /* since finance table includes employment, there is also an employers table to show where people work. */
-$new_employer="INSERT INTO Pool_Employers (Participant_ID, Employer_Name, Work_Time) VALUES ('".$_POST['person'] ."',
-                    '".$_POST['employer'] ."',
-                     '".$_POST['work_time'] ."')";
-echo $new_finance_checkin . "<br>";
-echo $new_employer;
-include "../include/dbconnopen.php";
-mysqli_query($cnnSWOP, $new_finance_checkin);
-mysqli_query($cnnSWOP, $new_employer);
+$new_employer_sqlsafe="INSERT INTO Pool_Employers (Participant_ID, Employer_Name, Work_Time) VALUES ('".mysqli_real_escape_string($cnnSWOP, $_POST['person']) ."',
+                    '".mysqli_real_escape_string($cnnSWOP, $_POST['employer']) ."',
+                     '".mysqli_real_escape_string($cnnSWOP, $_POST['work_time']) ."')";
+echo $new_finance_checking_sqlsafe . "<br>";
+echo $new_employer_sqlsafe;
+mysqli_query($cnnSWOP, $new_finance_checking_sqlsafe);
+mysqli_query($cnnSWOP, $new_employer_sqlsafe);
 $id = mysqli_insert_id($cnnSWOP);
 include "../include/dbconnclose.php";
 ?>

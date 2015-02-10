@@ -4,8 +4,8 @@ if(isset($_GET['id']))
 // if id is set then get the file with the id from database
 /*download the file.*/
 include ("../include/dbconnopen.php");
-$id=$_GET['id'];
-$query = "SELECT File_Name, File_Type, File_Size, File_Content FROM Property_Files WHERE File_ID = '$id'";
+$id_sqlsafe=mysqli_real_escape_string($cnnSWOP, $_GET['id']);
+$query = "SELECT File_Name, File_Type, File_Size, File_Content FROM Property_Files WHERE File_ID = '$id_sqlsafe'";
 
 $result = mysqli_query($cnnSWOP, $query) or die('Error, query failed');
 list($name, $type, $size, $content)= mysqli_fetch_array($result);

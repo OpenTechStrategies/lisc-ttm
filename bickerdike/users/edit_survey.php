@@ -6,10 +6,11 @@ include "../header.php";
  * Displays and makes editable survey responses, based on a Get of the survey ID. 
  */
 
-$get_survey_answers = "SELECT * FROM Participant_Survey_Responses WHERE Participant_Survey_ID='" . $_GET['id'] . "'";
-//echo $get_survey_answers;
 include "../include/dbconnopen.php";
-$answers = mysqli_query($cnnBickerdike, $get_survey_answers);
+$id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_GET['id']);
+$get_survey_answers_sqlsafe = "SELECT * FROM Participant_Survey_Responses WHERE Participant_Survey_ID='" . $id_sqlsafe . "'";
+//echo $get_survey_answers;
+$answers = mysqli_query($cnnBickerdike, $get_survey_answers_sqlsafe);
 while ($response = mysqli_fetch_array($answers)) {
     ?>
     <script type="text/javascript">
