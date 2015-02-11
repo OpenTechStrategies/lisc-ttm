@@ -191,6 +191,34 @@ function getUsernameFromId($user_id) {
 }
 
 
+// Get the current user that's set up in the session, if any,
+//   as a User() object.
+// 
+// If no user_id is set in the session, return NULL.
+function getCurrentUser() {
+    maybeStartSession();
+    $user_id = NULL;
+    if (array_key_exists('user_id', $_SESSION)) {
+        $user_id = $_SESSION['user_id'];
+    }
+
+    if (is_null($user_id)) {
+        return NULL;
+    }
+
+    return new User($user_id);
+}
+
+
+$USER = NULL;
+
+// Setup the $USER global variable
+function setupUserGlobal() {
+    global $USER;
+    $USER = getCurrentUser();
+}
+
+
 // TODO: Needs a friendlier array fetch if not set,
 //   something like python's .get("foo", False)
 function isLoggedIn($session_id) {
@@ -201,6 +229,7 @@ function isLoggedIn($session_id) {
         return false;
     }
 }
+
 
 function pleaseLogOut($session_id) {
     session_unset();
