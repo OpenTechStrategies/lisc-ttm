@@ -284,9 +284,7 @@ class Participant {
         $scope_sqlsafe = mysqli_real_escape_string($cnnEnlace, $scope);
         $survey_type_sqlsafe = mysqli_real_escape_string($cnnEnlace, $survey_type);
         
-        $impact_assessment_search = "SELECT * FROM Assessments WHERE Date_Logged >= DATE_SUB(now(), INTERVAL ".$survey_type_sqlsafe." MONTH)
-                                     AND Participant_ID='".$this->participant_id."' AND Pre_POST='".$survey_type."' ORDER BY Date_Logged DESC";
-        
+        $impact_assessment_search = "SELECT * FROM Assessments WHERE Date_Logged >= DATE_SUB(now(), INTERVAL " . $scope_sqlsafe . " MONTH) AND Participant_ID='" . $this->participant_id . "' ORDER BY Date_Logged DESC";
         $impact_assessments = mysqli_query($cnnEnlace, $impact_assessment_search);
         
         if (!$impact_assessments) {

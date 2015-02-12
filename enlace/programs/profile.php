@@ -466,9 +466,8 @@ Shows all program information.
                 <!--List of participants in this program, sorted by session:-->
                 <h4>Participants</h4>
                 <?php
-                $get_all_participants = "SELECT Session_Names.Session_ID, Session_Names.Session_Name, Participants.Participant_ID, Participants_Programs.Date_Dropped, Participant_Program_ID, Participants.First_Name, Participants.Last_Name, COUNT(Assessments.Assessment_ID) FROM Participants_Programs INNER JOIN Participants ON Participants.Participant_ID=Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_ID LEFT JOIN Assessments ON Participants.Participant_ID = Assessments.Participant_ID WHERE Session_Names.Program_ID='$program->program_id' GROUP BY Participants.Participant_ID ORDER BY Session_Names.Session_ID, Participants.Last_Name";
+                $get_all_participants = "SELECT Session_Names.Session_ID, Session_Names.Session_Name, Participants.Participant_ID, Participants_Programs.Date_Dropped, Participant_Program_ID, Participants.First_Name, Participants.Last_Name, COUNT(Assessments.Assessment_ID) FROM Participants_Programs INNER JOIN Participants ON Participants.Participant_ID=Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_ID LEFT JOIN Assessments ON (Participants.Participant_ID = Assessments.Participant_ID AND Session_Names.Session_ID = Assessments.Session_ID) WHERE Session_Names.Program_ID='$program->program_id' GROUP BY Session_Names.Session_ID, Participants.Participant_ID ORDER BY Session_Names.Session_ID, Participants.Last_Name";
 
-                //echo $get_all_participants;
                 include "../include/dbconnopen.php";
                 $all_participants = mysqli_query($cnnEnlace, $get_all_participants);
                 $all_surveys = mysqli_query($cnnEnlace, $get_intake_surveys);
@@ -704,7 +703,6 @@ while ($sess = mysqli_fetch_row($sessions)) {
                                                 participant: document.getElementById('relative_search').value
                                             },
                                     function(response) {
-                                        //document.write(response);
                                         window.location = 'profile.php';
                                     }
                                     )" id="add_participant_button">

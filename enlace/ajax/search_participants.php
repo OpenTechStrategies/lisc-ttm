@@ -94,7 +94,7 @@ if ($_POST['result'] == 'dropdown') {
     <span class="helptext">Select the name of the person you would like to add: </span><select id="relative_search">
         <option value="">-----</option>
         <?php while ($user = mysqli_fetch_array($results)) {
-            ?><option value="<?echo $user['Participant_ID']?>"><?php echo $user['First_Name'] . " " . $user['Last_Name']; ?></option><?php
+            ?><option value="<?php echo $user['Participant_ID']?>"><?php echo $user['First_Name'] . " " . $user['Last_Name']; ?></option><?php
         }
         ?>
     </select>
