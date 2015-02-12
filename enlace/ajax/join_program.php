@@ -172,8 +172,7 @@ else {
     $participant_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['participant']);
     $program_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['program_id']);
 
-    $add_person_to_program = "INSERT INTO Participants_Programs (Participant_ID, Program_ID) VALUES (
-    '" . $participant_sqlsafe . "', '" . $program_id_sqlsafe . "')";
+    $add_person_to_program = "INSERT INTO Participants_Programs (Participant_ID, Program_ID) VALUES ('$participant_sqlsafe', '$program_id_sqlsafe')";
     mysqli_query($cnnEnlace, $add_person_to_program);
     include "../include/dbconnclose.php";
     

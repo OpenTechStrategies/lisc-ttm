@@ -326,7 +326,7 @@ include "../include/dbconnclose.php";
                     <?php
                     //get assessments:
                     $query = "SELECT MONTH(Participants_Caring_Adults.Date_Logged), DAY(Participants_Caring_Adults.Date_Logged), YEAR(Participants_Caring_Adults.Date_Logged), 
-                Assessments.Pre_Post, Name, Assessment_ID FROM Assessments
+                Assessments.Pre_Post, Programs.Name, Assessment_ID FROM Assessments
                 LEFT JOIN Participants_Caring_Adults ON Caring_Id=Caring_Adults_ID
                 LEFT JOIN Participants_Future_Expectations ON Future_Id=Future_Expectations_ID
                 LEFT JOIN Participants_Interpersonal_Violence ON Violence_Id=Interpersonal_Violence_ID

@@ -1,5 +1,7 @@
 <?php
 /* several participant actions */
+require_once("../classes/assessment.php");
+require_once("../classes/participant.php");
 
 /* add a participant to the attendees at an event */
 if ($_POST['action'] == 'link_event') {
@@ -87,11 +89,32 @@ if ($_POST['action'] == 'link_event') {
     if($_POST['action']=='add_program'){
             include "../include/dbconnopen.php";
             $program_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['program_id']);
-            $add_person_to_program = "INSERT INTO Participants_Programs (Participant_ID, Program_ID) VALUES (
-            '" . $id . "', '" . $program_id_sqlsafe . "')";
+            $add_person_to_program = "INSERT INTO Participants_Programs (Participant_ID, Program_ID) VALUES ('$id', '$program_id_sqlsafe')";
            // echo $add_person_to_program;
             mysqli_query($cnnEnlace, $add_person_to_program);
             include "../include/dbconnclose.php";
+            
+            // Construct a participant object
+            $participant = new Participant();
+            $participant->load_with_participant_id($id);
+            
+            // Find the participants surveys are impact surveys from the last 6 months. 
+            $assessments = $participant->find_previous_surveys(6, Assessment::IMPACT_TYPE);
+            if ($assessments) {
+	            	// A survey exists, we should now duplicate the newest (first in array)
+	            	$assessment = $assessments[0];
+	            	
+	            	// Removing the primary key will cause Assessment to create a new one on Assessment->save()
+	            	$assessment->assessment_id = null;
+	            	
+	            	// Change the type and session
+	            	$assessment->pre_post = Assessment::INTAKE_TYPE;
+	            	$assessment->session_id = $program_id_sqlsafe;
+	            	
+	            	// Save this back to the database
+	            	$assessment->save();
+            }
+            
     }
     
     ?>
