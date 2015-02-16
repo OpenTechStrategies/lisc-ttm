@@ -215,6 +215,7 @@ class User {
 // (Also checks if the user is logged in!)
 function user_site_access_check($site_id,
                                 $access_level = NULL, $program_access = NULL) {
+    global $USER;
     if (is_null($USER)) {
         return array(false, "Not logged in!");
     }
