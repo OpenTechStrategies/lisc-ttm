@@ -95,7 +95,7 @@ class User {
     // explaining the problem in detail.
     public function site_access_check($site_id,
                                       $access_level = NULL, $program_access = NULL) {
-        if (!siteAccessInPermissions($site, $this->site_permissions)) {
+        if (!siteAccessInPermissions($site_id, $this->site_permissions)) {
             return array(
                 false,
                 "User does not have permissions to access this site.");
