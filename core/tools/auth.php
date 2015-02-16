@@ -291,7 +291,7 @@ function setupUserGlobal() {
 
 // TODO: Needs a friendlier array fetch if not set,
 //   something like python's .get("foo", False)
-function isLoggedIn($session_id) {
+function isLoggedIn($session_id = NULL) {
     maybeStartSession();
     if (array_key_exists('user_id', $_SESSION)) {
         return !is_null($_SESSION['user_id']);
@@ -301,7 +301,7 @@ function isLoggedIn($session_id) {
 }
 
 
-function pleaseLogOut($session_id) {
+function pleaseLogOut($session_id = NULL) {
     session_unset();
     session_destroy();
     setcookie('PHPSESSID', '', time() - 3600, '/');
