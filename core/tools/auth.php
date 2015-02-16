@@ -75,7 +75,7 @@ class User {
     //    program to continue.
     function enforce_has_access($site_id,
                                 $access_level = NULL, $program_access = NULL) {
-        list ($has_access, $error_msg) = $this->has_site_access(
+        list ($has_access, $error_msg) = $this->site_access_check(
             $site_id, $access_level, $program_access);
         
         if (!$has_access) {
@@ -89,8 +89,8 @@ class User {
     //   array(has_access, "error message")
     // where `has_access' is a boolean and `error message' is some error message
     // explaining the problem in detail.
-    public function has_site_access($site_id,
-                                    $access_level = NULL, $program_access = NULL) {
+    public function site_access_check($site_id,
+                                      $access_level = NULL, $program_access = NULL) {
         if (!siteAccessInPermissions($site, $this->site_permissions)) {
             return array(
                 false,
@@ -120,6 +120,13 @@ class User {
         // empty quote just to simplify code, maybe?
         // premature junktimization? :)
         return array(true, "");
+    }
+
+    // Like has_site_access but just returns the boolean on whether or not
+    // the user has site access or not.
+    public function has_site_access(
+        $site_id, $access_level = NULL, $program_access = NULL) {
+        return $this->site_access_check($site_id, $access_level, $program_access)[0];
     }
 
     // Get an array of all programs this user currently has access to
