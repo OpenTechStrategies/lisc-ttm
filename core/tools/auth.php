@@ -24,10 +24,13 @@ $ReadOnlyAccess = 3;
 // (O_O_O_O)
 //
 // Give a 401 error and die with $message, if any
-function die_unauthorized($message = "") {
+$die_unauthorized = function($message = "") {
     header("HTTP/1.0 401 Unauthorized");
     die($message);
-}
+};
+
+
+
 
 function maybeStartSession() {
     // startSession
@@ -78,7 +81,12 @@ class User {
     //    is used.
     public function enforce_has_access($site_id,
                                        $access_level = NULL, $program_access = NULL,
-                                       $failure_func = die_unauthorized) {
+                                       $failure_func = NULL) {
+        if (is_null($failure_func)) {
+            global $die_unauthorized;
+            $failure_func = $die_unauthorized;
+        }
+
         list ($has_access, $error_msg) = $this->site_access_check(
             $site_id, $access_level, $program_access);
         
@@ -218,7 +226,12 @@ function user_site_access_check($site_id,
 // (Also checks if the user is logged in!)
 function user_enforce_has_access($site_id,
                                  $access_level = NULL, $program_access = NULL,
-                                 $failure_func = die_unauthorized) {
+                                 $failure_func = NULL) {
+    if (is_null($failure_func)) {
+        global $die_unauthorized;
+        $failure_func = $die_unauthorized;
+    }
+
     list ($has_access, $error_msg) = user_site_access_check(
         $site_id, $access_level, $program_access);
     
