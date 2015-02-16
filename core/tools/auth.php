@@ -73,7 +73,7 @@ class User {
     //    definitions for details)
     //  - program_access: (optional) Verify that the user has access to this
     //    program to continue.
-    function enforce_has_access($site_id,
+    public function enforce_has_access($site_id,
                                 $access_level = NULL, $program_access = NULL) {
         list ($has_access, $error_msg) = $this->site_access_check(
             $site_id, $access_level, $program_access);
@@ -195,6 +195,30 @@ class User {
         } else {
             return false;
         }
+    }
+}
+
+
+// Like User->site_access_check() but uses logged in $USER
+// (Also checks if the user is logged in!)
+function user_site_access_check($site_id,
+                                $access_level = NULL, $program_access = NULL) {
+    if (is_null($USER)) {
+        return array(false, "Not logged in!");
+    }
+
+    return $USER->site_access_check($site_id, $access_level, $program_access);
+}
+
+// Like User->enforce_access_check() but uses logged in $USER
+// (Also checks if the user is logged in!)
+function user_enforce_has_access($site_id,
+                                 $access_level = NULL, $program_access = NULL) {
+    list ($has_access, $error_msg) = user_site_access_check(
+        $site_id, $access_level, $program_access);
+    
+    if (!$has_access) {
+        die_unauthorized($error_msg);
     }
 }
 
