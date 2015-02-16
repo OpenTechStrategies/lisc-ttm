@@ -73,13 +73,17 @@ class User {
     //    definitions for details)
     //  - program_access: (optional) Verify that the user has access to this
     //    program to continue.
+    //  - failure_func: (optional) Provide a function that will handle how the
+    //    unauthorized access is taken care of.  By default, $die_unauthorized
+    //    is used.
     public function enforce_has_access($site_id,
-                                $access_level = NULL, $program_access = NULL) {
+                                       $access_level = NULL, $program_access = NULL,
+                                       $failure_func = die_unauthorized) {
         list ($has_access, $error_msg) = $this->site_access_check(
             $site_id, $access_level, $program_access);
         
         if (!$has_access) {
-            die_unauthorized($error_msg);
+            return $failure_func($error_msg);
         }
     }
 
@@ -213,12 +217,13 @@ function user_site_access_check($site_id,
 // Like User->enforce_access_check() but uses logged in $USER
 // (Also checks if the user is logged in!)
 function user_enforce_has_access($site_id,
-                                 $access_level = NULL, $program_access = NULL) {
+                                 $access_level = NULL, $program_access = NULL,
+                                 $failure_func = die_unauthorized) {
     list ($has_access, $error_msg) = user_site_access_check(
         $site_id, $access_level, $program_access);
     
     if (!$has_access) {
-        die_unauthorized($error_msg);
+        return $failure_func($error_msg);
     }
 }
 
