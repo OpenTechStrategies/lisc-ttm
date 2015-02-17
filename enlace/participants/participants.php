@@ -1,7 +1,9 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Enlace_id);
+
 include "../../header.php";
 include "../header.php";
 ?>
@@ -53,7 +55,7 @@ include "../header.php";
                             <option value="<?php echo $role['Role_ID']; ?>"><?php echo $role['Role']; ?></option>
                             <?php
                         }
-                        include "../include/dbconnclose.php";
+                        include "../include/dbconnclose.php"; 
                         ?>
                     </select>
                 </td>
@@ -91,7 +93,7 @@ include "../header.php";
                             <option value="<?php echo $program[0];?>"><?php echo $program[1]; ?></option>
                             <?php
                         }
-                        include "../include/dbconnclose.php";
+                        include "../include/dbconnclose.php"; 
                         ?>
                     </select></td>
                 <td class="all_projects"><strong>Database ID: </strong></td>

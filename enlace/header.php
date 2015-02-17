@@ -1,24 +1,6 @@
-<?php
-require_once("siteconfig.php");
-?>
 <div id="enlace_header">
-    <?php
-    /* most groups have permissions based style rules in the header.  Enlace doesn't, because
-     * they only have administrative users (so far).
-     */
-    ?>
     <script>
         $(document).ready(function() {
-<?php
-if (!isset($_COOKIE['user'])) {
-    /* if the user isn't logged in or their log in has expired, the header
-     * returns them to the login screen.
-     */
-    ?>
-                window.location = '/index.php';
-    <?php
-}
-?>
             $("td.menu_item").hover(function() {
                 $(this).addClass("select");
             }, function() {

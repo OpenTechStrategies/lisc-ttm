@@ -106,7 +106,7 @@ class User {
         if (!siteAccessInPermissions($site_id, $this->site_permissions)) {
             return array(
                 false,
-                "User does not have permissions to access this site.");
+                "Sorry!  You do not have permission to access this site.");
         }
 
         // Make sure that the user has the access level if required

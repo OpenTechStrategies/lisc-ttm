@@ -1,7 +1,4 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
 /*
  * First determine if the user is an admin. Usually this will be a program ID number,
  * but sometimes it will be 'a' (all) or 'n' (none).

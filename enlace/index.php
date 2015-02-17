@@ -1,5 +1,4 @@
 <?php
-require_once("siteconfig.php");
 
 //if action is logout, kill various navigation cookies: 
 if ($_GET['action'] == 'logout') {
