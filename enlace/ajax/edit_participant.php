@@ -1,7 +1,9 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Enlace_id, 2);
+
 /*when editing participant, if the address changes then the block group must change too*/
         include ($_SERVER['DOCUMENT_ROOT']."/include/block_group_finder.php");
         $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['id']);

@@ -1,7 +1,4 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
 /*set program id so that the links work properly*/
 
 /*set program ID*/

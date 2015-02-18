@@ -1,7 +1,10 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Enlace_id, 1);
+
+
 /*delete institution.  doesn't remove links to people or campaigns, but those aren't
  * crucial for anything.
  */

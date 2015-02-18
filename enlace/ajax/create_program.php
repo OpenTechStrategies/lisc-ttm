@@ -1,7 +1,7 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($Enlace_id, 2);
 
 /*make a new campaign */
     include "../include/dbconnopen.php";
@@ -35,7 +35,7 @@ Name: <input type="text" id="event" ><br>
                     document.getElementById('first_campaign_date').value = '';
                     document.getElementById('first_campaign_date').focus();
                 }
-            );"><br/>
+            ).fail(function() {alert('You do not have permission to perform this action.');});"><br/>
 <div id="show_ok"></div>
 <br/><br/>
 
@@ -53,4 +53,4 @@ Or, <a href="javascript:;" onclick="
                                                         }
                                                         window.location='campaign_profile.php';
                                                     }
-                                              )">go to campaign profile</a>.<br/><br/>
+                                              ).fail(function() {alert('You do not have permission to perform this action.');})">go to campaign profile</a>.<br/><br/>

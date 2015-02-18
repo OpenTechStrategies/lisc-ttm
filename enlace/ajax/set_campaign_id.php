@@ -1,7 +1,4 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
 /*set campaign cookie so that the links take us to the correct profile.*/
 if ($_POST['id']){
     
