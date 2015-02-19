@@ -1,58 +1,51 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Enlace_id);
+
 include "../../header.php";
 include "../header.php";
 
 //make sure the user has access to the participant
-//
-// *First determine the program that the logged-in user has access to.  Usually this will be a program ID number,
-// *but sometimes it will be 'a' (all) or 'n' (none).
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
-$user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['user']);
-$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = '" . $user_sqlsafe . "'";
-//echo $get_program_access;
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
-$program_access = mysqli_query($cnnLISC, $get_program_access);
-$prog_access = mysqli_fetch_row($program_access);
-$access = $prog_access[0];
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
 
-//if not an administrator
-if ($access != 'a') {
-//test to see if they have access
+// check if user has access to all programs
+$access_array = $USER->program_access($Enlace_id);
+$access = $access_array[0];
+
+if ($access != 'a'){ //i.e., if the user does not have access to all programs
     include "../include/dbconnopen.php";
     $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['id']);
-    $access_to_participant = "SELECT Session_Names.*, Name FROM Session_Names INNER JOIN Participants_Programs ON 
-    Session_Names.Session_ID = Participants_Programs.Program_ID 
-    INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID
-    WHERE Participant_Id = " . $id_sqlsafe . " AND
-    Programs.Program_ID = " . $access . "
-    ORDER BY Name;";
-
-    $access_to_participant = mysqli_query($cnnEnlace, $access_to_participant);
-
-//if the participant is NOT in one of the programs
-    if ($access_to_participant->num_rows == 0) {
-//deny access
-        ?>
-        <h2>Access Denied</h2>
-        <p>Access: <?php echo $access; ?><br>You do not have permission to view this participant.
-            If you believe you have reached this page in error, please contact a system administrator.</p>
-        <?php
-        include "../../footer.php";
-        return;
+    $participant_program_list = "SELECT Session_Names.*, Name FROM Session_Names INNER JOIN Participants_Programs ON Session_Names.Session_ID = Participants_Programs.Program_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID WHERE Participant_Id = " . $id_sqlsafe . " ORDER BY Name;";
+    $access_to_participant = mysqli_query($cnnEnlace, $participant_program_list);
+    $access_array = array();
+    while ($program_access = mysqli_fetch_array($access_to_participant)){
+        if ($USER->has_site_access($Enlace_id, NULL, $program_access['Program_ID'])){
+            $access_array[] = 'true';
+        }
+        else{
+            $access_array[] = 'false';
+        }
     }
-    include "../include/dbconnclose.php";
-}
 
+
+    // where 'b' is never a program ID, and so will always fail
+    // if the user does not have access to any program the participant is
+    // linked to, then s/he should not have access to this page.
+
+    // and the user doesn't have access to all programs 
+    if (! in_array(TRUE, $access_array, TRUE)) { 
+        user_enforce_has_access($Enlace_id, NULL, 'b');
+    }
+    else{
+        echo "in array";
+    }
+}
 /* This page shows all the information about a person in one place.
  * The participant id comes in through a Get.
  */
-
 include "../include/datepicker_wtw.php";
+
 //get participant info
 include "../classes/participant.php";
 $person = new Participant();
@@ -372,7 +365,7 @@ include "../include/dbconnclose.php";
                                                 // document.write(response);
                                                 window.location = 'participant_profile.php?id=<?php echo $person->participant_id; ?>'
                                             }
-                                            );
+                                            ).fail(function() {alert('You do not have permission to perform this action.');});
                                         }">Delete Survey</a>
                             </td></tr>
                         <?php
@@ -462,10 +455,9 @@ include "../include/dbconnclose.php";
                                     warning_discipline: discipline
                                 },
                         function(response) {
-                            //document.write(response);
                             window.location = 'participant_profile.php?id=<?php echo $person->participant_id; ?>';
                         }
-                        )" style="margin-left:55px;">Save!</a>
+                        ).fail(function() { alert('You do not have permission to perform this action.');});" style="margin-left:55px;">Save!</a>
 
             </td>
         </tr>
@@ -581,7 +573,7 @@ include "../include/dbconnclose.php";
                                     function(response) {
                                         document.getElementById('show_results_family').innerHTML = response;
                                         $('#add_buttons').show();
-                                    });"/>
+                                    }).fail(function() {alert('You do not have permission to perform this action.');});"/>
                         </td>
                     </tr>
 
@@ -596,10 +588,9 @@ include "../include/dbconnclose.php";
                                         child: document.getElementById('relative_search').options[document.getElementById('relative_search').selectedIndex].value
                                     },
                             function(response) {
-                                //document.write(response);
                                 window.location = 'participant_profile.php?id=<?php echo $person->participant_id ?>';
                             }
-                            )">&nbsp;&nbsp;
+                            ).fail(function() {alert('You do not have permission to perform this action.');})">&nbsp;&nbsp;
                             <input type="button" value="Add As Parent" onclick="$.post(
                                             '../ajax/add_relative.php',
                                             {
@@ -607,10 +598,9 @@ include "../include/dbconnclose.php";
                                                 parent: document.getElementById('relative_search').value
                                             },
                                     function(response) {
-                                        //document.write(response);
                                         window.location = 'participant_profile.php?id=<?php echo $person->participant_id ?>';
                                     }
-                                    )">
+                                    ).fail(function() {alert('You do not have permission to perform this action.');})">
 
 
                         </td></tr>
@@ -640,7 +630,7 @@ include "../include/dbconnclose.php";
                                         function(response) {
                                             window.location = 'participant_profile.php?id=<?php echo $person->participant_id ?>';
                                         }
-                                        )">&nbsp;&nbsp;
+                                        ).fail(function() {alert('You do not have permission to perform this action.');})">
                                         <input type="button" value="Add As Parent" onclick="$.post(
                                                         '../ajax/add_participant.php',
                                                         {
@@ -654,7 +644,7 @@ include "../include/dbconnclose.php";
                                                     //document.write(response);
                                                     window.location = 'participant_profile.php?id=<?php echo $person->participant_id ?>';
                                                 }
-                                                )">
+                                                ).fail(function() {alert('You do not have permission to perform this action.');})">
                             </table>
                     </td></tr></table></td></tr></table>
 <br/><br/>
@@ -714,7 +704,7 @@ forms as well.-->
                         document.write(response);
                         //window.location='participant_profile.php';
                     }
-                    )"></td>
+                    ).fail(function() {alert('You do not have permission to perform this action.');})"></td>
         </tr>
     </table>
     <?php
@@ -745,7 +735,7 @@ forms as well.-->
                                 function(response) {
                                     window.location = '/enlace/programs/profile.php';
                                 }
-                                )"><?php echo $program[6] . ' - ' . $program[1]; ?></a><br><?php
+                                ).fail(function() {alert('You do not have permission to perform this action.');})"><?php echo $program[6] . ' - ' . $program[1]; ?></a><br><?php
                    }
                    include "../include/dbconnclose.php";
                    ?></td>
@@ -763,7 +753,7 @@ forms as well.-->
                                 },
                         function(response) {
                             document.getElementById('show_sessions_results').innerHTML = response;
-                        })">
+                        }).fail(function() {alert('You do not have permission to perform this action.');})">
                     <option value="0">-----</option>
                     <?php
                     $get_all_programs = "SELECT Program_ID, Name FROM Programs ORDER BY Name";
@@ -788,7 +778,7 @@ forms as well.-->
                         function(response) {
                             window.location = 'participant_profile.php?id=<?php echo $person->participant_id; ?>';
                         }
-                        )"></td>
+                        ).fail(function() {alert('You do not have permission to perform this action.');})"></td>
         </tr>
     </table>
 
@@ -880,7 +870,7 @@ forms as well.-->
                                  //     document.write(response);
                                    window.location = 'participant_profile.php?id=<?php echo $person->participant_id; ?>';
                                 }
-                                )" value="Save"></td>
+                                ).fail(function() {alert('You do not have permission to perform this action.');})" value="Save"></td>
                 <td><!--Delete hours!-->
                     <input type="button" onclick="$.post(
                                         '../ajax/add_mentorship_hours.php',
@@ -892,7 +882,7 @@ forms as well.-->
                                     //  document.write(response);
                                     window.location = 'participant_profile.php?id=<?php echo $person->participant_id; ?>';
                                 }
-                                )" value="Delete">
+                                ).fail(function() {alert('You do not have permission to perform this action.');})" value="Delete">
                 </td>
             </tr>
             <?php
@@ -930,7 +920,7 @@ forms as well.-->
                         // document.write(response);
                         window.location = 'participant_profile.php?id=<?php echo $person->participant_id; ?>';
                     }
-                    );"></td>
+                    ).fail(function() {alert('You do not have permission to perform this action.');});"></td>
         </tr> 
     </table>
 
@@ -1016,7 +1006,7 @@ forms as well.-->
                                         function(response) {
                                             document.getElementById('show_results').innerHTML = response;
                                             $('#search_parti_table').hide();
-                                        });"/>
+                                        }).fail(function() {alert('You do not have permission to perform this action.');});"/>
 
 
                             </td>
@@ -1079,7 +1069,7 @@ forms as well.-->
                                 //document.write(response);
                                 window.location = 'participant_profile.php?id=<?php echo $person->participant_id ?>';
                             }
-                            );">
+                            ).fail(function() {alert('You do not have permission to perform this action.');});">
                 </div>
 
             </td>
@@ -1127,7 +1117,7 @@ forms as well.-->
                             //document.write(response);
                             window.location = 'participant_profile.php?id=<?php echo $person->participant_id; ?>';
                         }
-                        )">Add followup note here.</textarea></td></tr>
+                        ).fail(function() {alert('You do not have permission to perform this action.');})">Add followup note here.</textarea></td></tr>
         </table>
 
 

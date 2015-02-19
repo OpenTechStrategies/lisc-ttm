@@ -99,8 +99,9 @@ class User {
     //
     // This returns an array with two bits of information:
     //   array(has_access, "error message")
-    // where `has_access' is a boolean and `error message' is some error message
-    // explaining the problem in detail.
+    // where `has_access' is a boolean.  If `has_access` is true then
+    // the error message is NULL.  Otherwise the error message is a
+    // string explaining the problem in detail.
     public function site_access_check($site_id,
                                       $access_level = NULL, $program_access = NULL) {
         if (!siteAccessInPermissions($site_id, $this->site_permissions)) {
@@ -117,24 +118,21 @@ class User {
                 "User does not have the appropriate access level for this site.");
         }
 
+        // If program access check is requested, do it.
         global $AdminAccess;
-        // If program access check is requested, and this program doesn't show up
-        // in the user's list of known programs... error out!
         if (!is_null($program_access) &&
             !in_array($program_access, $this->program_access($site_id))) {
             // An exception is made for admin users
             if (!($this->site_access_level($site_id) == $AdminAccess)) {
                 return array(
                     false,
-                    "Don't have permission to access this program!");
+                    "Sorry!  You don't have permission to access this page.  Please contact your site administrator for more information.");
             }
         }
-        // empty quote just to simplify code, maybe?
-        // premature junktimization? :)
-        return array(true, "");
+        return array(true, NULL);
     }
 
-    // Like has_site_access but just returns the boolean on whether or not
+    // Like site_access_check but just returns the boolean on whether or not
     // the user has site access or not.
     public function has_site_access(
         $site_id, $access_level = NULL, $program_access = NULL) {
@@ -148,7 +146,7 @@ class User {
     //
     // Returns:
     //  An array of all program ids that user has access to.
-    //  These correspond to... (Fill in here)
+    //  These correspond to programs within each subsite.
     //
     // NOTES:
     //  - "n" is None, a special case.  The reason for this rather than
@@ -262,10 +260,9 @@ function getUsernameFromId($user_id) {
 }
 
 
-// Get the current user that's set up in the session, if any,
-//   as a User() object.
+// Return a new User() object based on the current logged-in user.
 // 
-// If no user_id is set in the session, return NULL.
+// If no user is set in the session, return NULL.
 function getCurrentUser() {
     maybeStartSession();
     $user_id = NULL;

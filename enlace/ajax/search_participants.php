@@ -1,19 +1,11 @@
 <?php
-/*
- * First determine if the user is an admin. Usually this will be a program ID number,
- * but sometimes it will be 'a' (all) or 'n' (none).
- */
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
-$user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['user']);
-$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = '" . $user_sqlsafe . "'";
+user_enforce_has_access($Enlace_id);
 
-$program_access = mysqli_query($cnnLISC, $get_program_access);
-$prog_access = mysqli_fetch_row($program_access);
-$access = $prog_access[0];
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
-
+$access_array = $USER->program_access($Enlace_id);
+$access = $access_array[0];
 
 /* search from the participants homepage. */
 /* if a search term is filled in, then it is included in the query.  otherwise it isn't. */
@@ -94,7 +86,7 @@ if ($_POST['result'] == 'dropdown') {
     <span class="helptext">Select the name of the person you would like to add: </span><select id="relative_search">
         <option value="">-----</option>
         <?php while ($user = mysqli_fetch_array($results)) {
-            ?><option value="<?echo $user['Participant_ID']?>"><?php echo $user['First_Name'] . " " . $user['Last_Name']; ?></option><?php
+            ?><option value="<?php echo $user['Participant_ID']?>"><?php echo $user['First_Name'] . " " . $user['Last_Name']; ?></option><?php
         }
         ?>
     </select>
@@ -122,7 +114,7 @@ if ($_POST['result'] == 'dropdown') {
                                 },
                         function(response) {
                             document.getElementById('show_results').innerHTML = response;
-                        });">ID</a></th>
+                        }).fail(function() {alert('You do not have permission to perform this action.');});">ID</a></th>
             <th><a href="javascript:;" onclick="$.post(
                                 '/enlace/ajax/search_participants.php',
                                 {
@@ -139,7 +131,7 @@ if ($_POST['result'] == 'dropdown') {
                                 },
                         function(response) {
                             document.getElementById('show_results').innerHTML = response;
-                        });">Name</a></th>
+                        }).fail(function() {alert('You do not have permission to perform this action.');});">Name</a></th>
             <th><a href="javascript:;" onclick="$.post(
                                 '/enlace/ajax/search_participants.php',
                                 {
@@ -156,10 +148,10 @@ if ($_POST['result'] == 'dropdown') {
                                 },
                         function(response) {
                             document.getElementById('show_results').innerHTML = response;
-                        });">DOB</a></th>
+                        }).fail(function() {alert('You do not have permission to perform this action.');});">DOB</a></th>
                 <?php
                 //if an administrator
-                if ($access == 'a') {
+                if ($USER->site_access_level($Enlace_id) == $AdminAccess) {
                     //show delete area
                     ?>
                     <th>
@@ -190,7 +182,8 @@ if ($_POST['result'] == 'dropdown') {
                     ?></td>
                 <?php
                 //if an administrator
-                if ($access == 'a') {
+
+                if ($USER->site_access_level($Enlace_id) == $AdminAccess) {
                     //show delete area
                     ?>
                 <td class="all_projects" style="text-align: center;">
@@ -210,7 +203,7 @@ if ($_POST['result'] == 'dropdown') {
                                                     }
                                                     )
                                                 }
-                                            }" style="font-size:.8em; color: #f00; font-weight: bold;">X</a>
+                                            }.fail(function() {alert('You do not have permission to perform this action.');})" style="font-size:.8em; color: #f00; font-weight: bold;">X</a>
                     </td>
                     <?php
                 }
