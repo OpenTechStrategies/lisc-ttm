@@ -165,8 +165,7 @@ class User {
         // to no programs, and we delete the rest of the array.  The 'n'
         // takes precedence over any other entries.
         if (in_array('n', $program_access_array)) {
-            // @@: Why not just return an empty array???
-            $program_access_array = array('n');
+            $program_access_array = array();
         }
 
         return $program_access_array;
