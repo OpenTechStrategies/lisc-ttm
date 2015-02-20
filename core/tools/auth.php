@@ -123,10 +123,11 @@ class User {
 
         // If program access check is requested, do it.
         global $AdminAccess;
-        if (!is_null($program_access) &&
-            !in_array($program_access, $this->program_access($site_id))) {
-            // An exception is made for admin users
-            if (!($this->site_access_level($site_id) == $AdminAccess)) {
+        if (!is_null($program_access)) {
+            $our_program_access = $this->program_access($site_id);
+            if (!in_array($program_access, $our_program_access) &&
+                // 'a' in program access means "has all program access for this site"
+                !in_array('a', $our_program_access)) {
                 return array(
                     false,
                     "Sorry!  You don't have permission to access this page.  Please contact your site administrator for more information.");
