@@ -69,13 +69,8 @@ class User {
 
     // Enforce that the user has access to this site.
     //
-    // Args:
-    //  - site_id: The site ID we're checking if the user has access to
-    //  - access_level: (optional) Minimum "access level" this user must have
-    //    to continue (a lower integer means more access; see above
-    //    definitions for details)
-    //  - program_access: (optional) Verify that the user has access to this
-    //    program to continue.
+    // Args are exactly the same as for site_access_check, with one
+    // addition:
     //  - failure_func: (optional) Provide a function that will handle how the
     //    unauthorized access is taken care of.  By default, $die_unauthorized
     //    is used.
@@ -96,6 +91,14 @@ class User {
     }
 
     // Performs a check of whether this user has site access.
+    //
+    // Args:
+    //  - site_id: The site ID we're checking if the user has access to
+    //  - access_level: (optional) Minimum "access level" this user must have
+    //    to continue (a lower integer means more access; see above
+    //    definitions for details)
+    //  - program_access: (optional) Verify that the user has access to this
+    //    program to continue.
     //
     // This returns an array with two bits of information:
     //   array(has_access, "error message")
