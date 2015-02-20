@@ -2,7 +2,7 @@
 include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
-user_enforce_has_access($Enlace_id, 3);
+user_enforce_has_access($Enlace_id, $ReadOnlyAccess);
 
 /*check for duplicate campaigns (warn before creating two campaigns with the same name)*/
 

@@ -2,14 +2,14 @@
 include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
-user_enforce_has_access($Enlace_id, 2);
+user_enforce_has_access($Enlace_id, $DataEntryAccess);
 
 /* participant_program changes */
 
 // delete session and all corresponding data
 if ($_POST['action'] == 'delete_session') {
 
-    user_enforce_has_access($Enlace_id, 1);
+    user_enforce_has_access($Enlace_id, $AdminAccess);
 
     include "../include/dbconnopen.php";
     $session_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['session_id']);
@@ -67,7 +67,7 @@ if ($_POST['action'] == 'delete_session') {
 }
 /* delete participant completely */
 else if ($_POST['action'] == 'delete_participant') {
-    user_enforce_has_access($Enlace_id, 1);
+    user_enforce_has_access($Enlace_id, $AdminAccess);
     include "../include/dbconnopen.php";
     $participant_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['participant_id']);
     date_default_timezone_set('America/Chicago');
@@ -152,7 +152,7 @@ else if ($_POST['action'] == 'delete_participant') {
 }
 /* drop from program.  we delete people from participants_programs */ 
 elseif ($_POST['action'] == 'delete_participant_from_program') {
-    user_enforce_has_access($Enlace_id, 1);
+    user_enforce_has_access($Enlace_id, $AdminAccess);
     date_default_timezone_set('America/Chicago');
     include "../include/dbconnopen.php";
     $link_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['link_id']);

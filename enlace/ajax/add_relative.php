@@ -3,7 +3,7 @@
 include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
-user_enforce_has_access($Enlace_id, 2);
+user_enforce_has_access($Enlace_id, $DataEntryAccess);
 
 /*add a child-parent connection */
 include "../include/dbconnopen.php";
