@@ -155,6 +155,10 @@ class User {
     //  - "n" is None, a special case.  The reason for this rather than
     //    an empty array is that there are some duplicate rows (:\) in
     //    the db, and "none" takes precedence in case of duplication there.
+    //  - Another special case is 'a', which really means "all access for
+    //    programs on this site".  If we see 'a' we thusly return "just a".
+    //    So if you see 'a' returned from this function, you know the
+    //    user has access to whatever program to some degree.
     //  - In the future, this code, and the database needs to be updated
     //    for a many to many relationship.  As it stands, a user can really
     //    only have one program access per section.
@@ -166,6 +170,8 @@ class User {
         // takes precedence over any other entries.
         if (in_array('n', $program_access_array)) {
             $program_access_array = array();
+        } else if (in_array('a', $program_access_array)) {
+            $program_access_array = array('a');
         }
 
         return $program_access_array;
