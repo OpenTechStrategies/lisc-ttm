@@ -1,10 +1,41 @@
 <div id="program_involvement">
     <h4>Extent of Involvement - All Programs and Campaigns</h4>
+<?php
+include "../include/datepicker.php";
+if (isset($_POST['submit'])){
+    //reformat
+    $start_date_array = explode('-', $_POST['start_date']);
+    $start_date = $start_date_array[2] . '-' . $start_date_array[0] . '-' . $start_date_array[1];
+    $end_date_array = explode('-', $_POST['end_date']);
+    $end_date = $end_date_array[2] . '-' . $end_date_array[0] . '-' . $end_date_array[1];
+}
+else{
+    //default values
+     $start_date = '2013-01-01';
+     $end_date = '2013-12-31';
+}
+
+
+?>
+
     <!--
     Shows how many programs & campaigns people are involved in.
     -->
     <span class="helptext">This table provides a summary of the total number of different programs and campaigns that participants (and types of participants) have been involved in.</span><br/>
     <table class="program_involvement_table">
+    <caption> Showing results from <?php $start_date_display=date_create($start_date);
+echo date_format($start_date_display,"M d, Y");
+ ?> to <?php $end_date_display=date_create($end_date);
+echo date_format($end_date_display,"M d, Y"); ?> </caption>
+<form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" name="filterByDate">
+     <tr><th>Start Date:</th>
+     <th><input type = "text" name = "start_date" class = "hadDatepicker"></th>
+     <th>End Date:</th>
+     <th><input type = "text" name = "end_date" class = "hadDatepicker"></th>
+     <th><input type = "submit" value = "Sort" name = "submit"></th>
+</form
+     </tr>
+
         <tr style="font-size:.9em;"><th>Number of Programs and Campaigns</th>
             <th>Number of Participants</th>
             <th>Number of Adults</th>
@@ -15,8 +46,7 @@
         <?php
         //so here we count up the number of programs and campaigns in a while loop
         //first I'm going to get the highest number of programs/campaigns that anyone is involved in.
-        $count_participants = "SELECT Participant_ID, COUNT(*) FROM Participants_Subcategories GROUP BY Participant_ID ORDER BY COUNT(*) DESC;";
-        // echo $count_participants;
+        $count_participants = "SELECT Participant_ID, COUNT(*) FROM Participants_Subcategories WHERE Date_Linked >= '$start_date' AND Date_Linked <= '$end_date' GROUP BY Participant_ID ORDER BY COUNT(*) DESC;";
         include "../include/dbconnopen.php";
         $ct_participants = mysqli_query($cnnLSNA, $count_participants);
         $top_num = mysqli_fetch_row($ct_participants);
@@ -35,7 +65,7 @@
                 <td>
                     <?php
                     $counter_num = 0;
-                    $count_participants = "SELECT Participant_ID, COUNT(*) FROM Participants_Subcategories GROUP BY Participant_ID ORDER BY COUNT(*) DESC;";
+                    $count_participants = "SELECT Participant_ID, COUNT(*) FROM Participants_Subcategories WHERE  Date_Linked >= '$start_date' AND Date_Linked <= '$end_date' GROUP BY Participant_ID ORDER BY COUNT(*) DESC;";
                     include "../include/dbconnopen.php";
                     $ct_participants = mysqli_query($cnnLSNA, $count_participants);
                     while ($count_partis = mysqli_fetch_row($ct_participants)) {
@@ -56,7 +86,7 @@
                     $count_adults = "SELECT Participants_Subcategories.Participant_ID, COUNT(*) 
                     FROM Participants_Subcategories INNER JOIN Participants
                     ON Participants.Participant_Id=Participants_Subcategories.Participant_ID
-                    WHERE (Is_Child IS NULL OR Is_Child=3 OR Is_Child=0)
+                    WHERE (Is_Child IS NULL OR Is_Child=3 OR Is_Child=0)  AND Date_Linked >= '$start_date' AND Date_Linked <= '$end_date'
                     GROUP BY Participant_ID ORDER BY COUNT(*) DESC;";
                     include "../include/dbconnopen.php";
                     $ct_adults = mysqli_query($cnnLSNA, $count_adults);
@@ -84,6 +114,7 @@
                     INNER JOIN Participants ON Participants.Participant_Id=Participants_Subcategories.Participant_ID 
                     INNER JOIN (SELECT DISTINCT Participant_ID FROM Participants_Subcategories WHERE Subcategory_ID=19) as check_pm 
                     ON check_pm.Participant_ID=Participants_Subcategories.Participant_ID 
+WHERE  Date_Linked >= '$start_date' AND Date_Linked <= '$end_date'
                     GROUP BY check_pm.Participant_ID ORDER BY COUNT(*) DESC;";
                     // echo $count_pms;
                     include "../include/dbconnopen.php";
@@ -108,6 +139,7 @@
                     FROM Participants_Subcategories INNER JOIN Participants
                     ON Participants.Participant_Id=Participants_Subcategories.Participant_ID
                     WHERE (Is_Child IS NOT NULL AND Is_Child=2)
+AND  Date_Linked >= '$start_date' AND Date_Linked <= '$end_date'
                     GROUP BY Participant_ID ORDER BY COUNT(*) DESC;";
                     include "../include/dbconnopen.php";
                     $ct_youth = mysqli_query($cnnLSNA, $count_youth);
@@ -130,6 +162,7 @@
                     $count_youth = "SELECT DISTINCT(Child_ID), COUNT(Subcategory_ID)
                     FROM Participants_Subcategories INNER JOIN Parent_Mentor_Children
                     ON Parent_Mentor_Children.Child_Id=Participants_Subcategories.Participant_ID
+WHERE  Date_Linked >= '$start_date' AND Date_Linked <= '$end_date'
                     GROUP BY Parent_Mentor_Children_Link_ID;";
                     include "../include/dbconnopen.php";
                     $ct_youth = mysqli_query($cnnLSNA, $count_youth);
@@ -169,7 +202,7 @@
             </td>
             <td>
                 <?php
-                $get_pms = "SELECT DISTINCT Participant_ID FROM Participants_Subcategories WHERE Subcategory_ID='19'";
+                $get_pms = "SELECT DISTINCT Participant_ID FROM Participants_Subcategories WHERE Subcategory_ID='19' AND  Date_Linked >= '$start_date' AND Date_Linked <= '$end_date'";
                 $pms = mysqli_query($cnnLSNA, $get_pms);
                 $num_pms = mysqli_num_rows($pms);
                 echo $num_pms;
@@ -193,85 +226,6 @@
         </tr>
     </table>
     <br/><br/>
-    <?php
-    /* I want to set up a set of arrays that show the number of each answer to each question.  Did most kids agree, disagree, or in between?
-     * 
-     */
-    $array_of_arrays = array($participants_array, $adults_array, $pm_array, $youth_array, $pm_children_array);
-    $order = 0;
-    foreach ($array_of_arrays as $each) {
-        $order++;
-        $counter = 0;
-        foreach ($each as $key => $value) {
-            ${string_ . $order} .='[' . $key . ', ' . $value . ']';
-            $counter++;
-            if ($counter < count($each)) {
-                ${string_ . $order}.=',';
-            }
-        }
-    }
-
-//print_r(get_defined_vars());
-    ?>
-    <!--[if IE]>
-   <script src="/include/excanvas_r3/excanvas.js"></script>
-   <![endif]-->
-   <!--<script language="javascript" type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/jquery.min.js"></script>-->
-    <script language="javascript" type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/jquery.jqplot.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/include/jquery.jqplot.1.0.4r1121/jquery.jqplot.css" />
-    <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.barRenderer.min.js"></script>
-    <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.categoryAxisRenderer.min.js"></script>
-    <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.pointLabels.min.js"></script>
-
-    <script type="text/javascript">
-        var answers1 = [<?php echo $string_1; ?>];
-        var answers2 = [<?php echo $string_2; ?>];
-        var answers3 = [<?php echo $string_3; ?>];
-        var answers4 = [<?php echo $string_4; ?>];
-        var answers5 = [<?php echo $string_5; ?>];
-        $(document).ready(function() {
-            var plot2 = $.jqplot('chart2', [answers1, answers2, answers3, answers4, answers5],
-                    {
-                        seriesDefaults: {
-                            renderer: $.jqplot.BarRenderer,
-                            pointLabels: {show: true, edgeTolerance: -15},
-                            rendererOptions: {
-                                barDirection: 'vertical',
-                                barMargin: 10,
-                                barWidth: 10
-                            }
-                        },
-                        series: [
-                            {label: 'Total Participants'},
-                            {label: 'Adults'},
-                            {label: 'Parent Mentors'},
-                            {label: 'Youth'},
-                            {label: 'Children of Parent Mentors'}
-                        ],
-                        // Show the legend and put it outside the grid, but inside the
-                        // plot container, shrinking the grid to accomodate the legend.
-                        // A value of "outside" would not shrink the grid and allow
-                        // the legend to overflow the container.
-                        legend: {
-                            show: true,
-                            placement: 'outsideGrid'
-                        },
-                        axes: {
-                            yaxis: {
-                                min: 0,
-                                max: 10
-                            },
-                            xaxis: {
-                                renderer: $.jqplot.CategoryAxisRenderer,
-                                min: 0,
-                                max: 12
-                            }
-                        }
-                    });
-        });
-    </script>
-    <div id="chart2" style="height: 300px; width: 1000px; position: relative; margin-left:auto; margin-right:auto;"></div>
-
     <br/><br/> 
 
     <!--Shows how many of each type of person are involved in each program/campaign: -->
@@ -302,7 +256,7 @@
                                 $counter_num = 0;
                                 $count_participants = "SELECT DISTINCT Participant_ID 
                     FROM Participants_Subcategories 
-                    WHERE Subcategory_ID='" . $program['Subcategory_ID'] . "';";
+                    WHERE Subcategory_ID='" . $program['Subcategory_ID'] . "' AND  Date_Linked >= '$start_date' AND Date_Linked <= '$end_date';";
                                 $ct_participants = mysqli_query($cnnLSNA, $count_participants);
                                 $count_partis = mysqli_num_rows($ct_participants);
                                 echo $count_partis;
@@ -315,6 +269,7 @@
                                 $count_adults = "SELECT DISTINCT Participants_Subcategories.Participant_ID FROM Participants_Subcategories INNER JOIN Participants
                     ON Participants.Participant_Id=Participants_Subcategories.Participant_ID
                     WHERE (Is_Child IS NULL OR Is_Child=3 OR Is_Child=0)
+AND  Date_Linked >= '$start_date' AND Date_Linked <= '$end_date'
                     AND Participants_Subcategories.Subcategory_ID='" . $program['Subcategory_ID'] . "';";
                                 $ct_adults = mysqli_query($cnnLSNA, $count_adults);
                                 $count_partis = mysqli_num_rows($ct_adults);
@@ -328,7 +283,7 @@
                                 $count_pms = "SELECT COUNT(DISTINCT Participants_Subcategories.Participant_ID) FROM Participants_Subcategories 
                 INNER JOIN Participants ON Participants.Participant_Id=Participants_Subcategories.Participant_ID 
                 INNER JOIN (SELECT * FROM Participants_Subcategories WHERE Subcategory_ID=19) as check_pm ON check_pm.Participant_ID=Participants_Subcategories.Participant_ID
-                WHERE Participants_Subcategories.Subcategory_ID='" . $program['Subcategory_ID'] . "';";
+                WHERE Participants_Subcategories.Subcategory_ID='" . $program['Subcategory_ID'] . "' AND  Date_Linked >= '$start_date' AND Date_Linked <= '$end_date' ;";
                                 // echo $count_pms;
                                 $ct_pms = mysqli_query($cnnLSNA, $count_pms);
                                 $count_partis = mysqli_fetch_row($ct_pms);
@@ -343,6 +298,7 @@
                     FROM Participants_Subcategories INNER JOIN Participants
                     ON Participants.Participant_Id=Participants_Subcategories.Participant_ID
                     WHERE (Is_Child IS NOT NULL AND Is_Child=2)
+AND Date_Linked >= '$start_date' AND Date_Linked <= '$end_date'
                     AND Participants_Subcategories.Subcategory_ID='" . $program['Subcategory_ID'] . "';";
                                 $ct_youth = mysqli_query($cnnLSNA, $count_youth);
                                 $count_partis = mysqli_fetch_row($ct_youth);
@@ -357,7 +313,8 @@
                                 $count_children = "SELECT COUNT(*) FROM 
                     Participants_Subcategories INNER JOIN Parent_Mentor_Children 
                     ON Parent_Mentor_Children.Child_Id=Participants_Subcategories.Participant_ID 
-                    WHERE Participants_Subcategories.Subcategory_Id='" . $program['Subcategory_ID'] . "'";
+                    WHERE Participants_Subcategories.Subcategory_Id='" . $program['Subcategory_ID'] . "'
+AND  Date_Linked >= '$start_date' AND Date_Linked <= '$end_date'";
                                 $ct_youth = mysqli_query($cnnLSNA, $count_children);
                                 $count_partis = mysqli_fetch_row($ct_youth);
                                 echo $count_partis[0];
