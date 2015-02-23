@@ -1,10 +1,38 @@
-<?php //include "../../header.php";?>
 <div id="participant_roles">
     <!--Records how many people had each role for each campaign.  Parent mentors are broken out at the bottom.
     -->
     <h4>Participant Roles</h4>
-    <?php include "../classes/program.php";?>
+<?php
+     include "../classes/program.php";
+include "../include/datepicker.php";
+if (isset($_POST['submit'])){
+    //reformat
+    $start_date_array = explode('-', $_POST['start_date']);
+    $start_date = $start_date_array[2] . '-' . $start_date_array[0] . '-' . $start_date_array[1];
+    $end_date_array = explode('-', $_POST['end_date']);
+    $end_date = $end_date_array[2] . '-' . $end_date_array[0] . '-' . $end_date_array[1];
+}
+else{
+    //default values
+     $start_date = '2013-01-01';
+     $end_date = '2013-12-31';
+}
+
+
+?>
     <table class="all_projects">
+     <caption> Showing results from <?php $start_date_display=date_create($start_date);
+echo date_format($start_date_display,"M d, Y");
+ ?> to <?php $end_date_display=date_create($end_date);
+echo date_format($end_date_display,"M d, Y"); ?> </caption>
+<form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" name="filterByDate">
+     <tr><th>Start Date:</th>
+     <th><input type = "text" name = "start_date" class = "hadDatepicker"></th>
+     <th>End Date:</th>
+     <th><input type = "text" name = "end_date" class = "hadDatepicker"></th>
+     <th><input type = "submit" value = "Sort" name = "submit"></th>
+</form
+     </tr>
         <tr><th></th><th>Attendee</th>
             <th>Speaker</th>
             <th>Chairperson</th>
@@ -14,7 +42,7 @@
         <?php
         $get_programs_with_participation="SELECT DISTINCT(Subcategory_ID) FROM Subcategory_Attendance INNER JOIN Subcategory_Dates
             ON Subcategory_Attendance.Subcategory_Date=Subcategory_Dates.Wright_College_Program_Date_Id
-            WHERE Type_of_Participation IS NOT NULL;";
+            WHERE Type_of_Participation IS NOT NULL AND Subcategory_Dates.Date >= '$start_date' AND Subcategory_Dates.Date <= '$end_date';";
         //loop through programs that have event participation/role (i.e. attendees without role don't count)
         include "../include/dbconnopen.php";
         $programs_count=mysqli_query($cnnLSNA, $get_programs_with_participation);
@@ -29,8 +57,7 @@
         $get_types_count = "SELECT Type_of_Participation, COUNT(*) FROM Subcategory_Attendance INNER JOIN Subcategory_Dates
             ON Subcategory_Attendance.Subcategory_Date=Subcategory_Dates.Wright_College_Program_Date_Id
             WHERE Type_of_Participation IS NOT NULL
-            AND Subcategory_ID='" . $prog[0] . "'
-            GROUP BY Type_of_Participation;";
+            AND Subcategory_ID='" . $prog[0] . "' AND Subcategory_Dates.Date >= '$start_date' AND Subcategory_Dates.Date <= '$end_date' GROUP BY Type_of_Participation;";
         
         $types_count=mysqli_query($cnnLSNA, $get_types_count);
         $td_count=1;
@@ -87,8 +114,7 @@
          */
         $get_types_count = "SELECT Type_of_Participation, COUNT(*) FROM Subcategory_Attendance INNER JOIN Subcategory_Dates
             ON Subcategory_Attendance.Subcategory_Date=Subcategory_Dates.Wright_College_Program_Date_Id
-            WHERE Type_of_Participation IS NOT NULL
-            GROUP BY Type_of_Participation;";
+            WHERE Type_of_Participation IS NOT NULL AND Subcategory_Dates.Date >= '$start_date' AND Subcategory_Dates.Date <= '$end_date' GROUP BY Type_of_Participation;";
         //echo $get_types_count;
         include "../include/dbconnopen.php";
         $types_count=mysqli_query($cnnLSNA, $get_types_count);
@@ -114,7 +140,7 @@
 INNER JOIN (Subcategory_Dates, Participants ) ON (Subcategory_Attendance.Subcategory_Date=Subcategory_Dates.Wright_College_Program_Date_Id 
 	AND Subcategory_Attendance.Participant_ID=Participants.Participant_ID) 
 INNER JOIN Participants_Subcategories ON Participants.Participant_ID=Participants_Subcategories.Participant_ID
-WHERE Type_of_Participation IS NOT NULL AND Participants_Subcategories.Subcategory_ID=19 GROUP BY Type_of_Participation;";
+WHERE Type_of_Participation IS NOT NULL AND Participants_Subcategories.Subcategory_ID=19 AND Subcategory_Dates.Date >= '$start_date' AND Subcategory_Dates.Date <= '$end_date' GROUP BY Type_of_Participation;";
        // echo $get_types_count;
         include "../include/dbconnopen.php";
         $types_count=mysqli_query($cnnLSNA, $get_types_count);
