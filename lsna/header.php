@@ -1,12 +1,12 @@
 <div id="lsna_header">
 	<script>
 		$(document).ready(function(){
-		<?
+		<?php
 	if (!isset($_COOKIE['user'])) {
             /*if not logged in (or if cookie expires), go to the login screen: */
 	?>
 		window.location = '/index.php';
-	<?
+	<?php
 	}
 	?>
 			$("td.menu_item").hover(function(){
@@ -68,7 +68,7 @@
 		</tr>
 	</table>	
 </div>
-<?
+<?php
 if ($_COOKIE['sites']){
     if (in_array('2', $_COOKIE['sites'])){
        /* then the user has access to LSNA */
@@ -80,11 +80,11 @@ if ($_COOKIE['sites']){
                     $('.hide_on_view').hide();
                 });
                 </script>
-        <?}
+        <?php }
         if ($_COOKIE['view_only']){
             /*hide these things from view-only users.*/
             ?>
-<style type="text/css">.no_view {display:none}</style><?
+<style type="text/css">.no_view {display:none}</style><?php
         }
     }
     else{
@@ -97,7 +97,7 @@ if ($_COOKIE['sites']){
 					window.location='/index.php';
                 });
                 </script>
-            <?
+            <?php
     }
     include "include/datepicker.php";
 }
@@ -110,7 +110,6 @@ else{
                     window.location = '/index.php';
                 });
                 </script>
-            <?
+            <?php
 }
-//print_r($_COOKIE);
 ?>

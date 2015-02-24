@@ -1,3 +1,7 @@
+<?php
+include "../../header.php";
+include "../header.php";
+?>
 <div id="participant_roles">
     <!--Records how many people had each role for each campaign.  Parent mentors are broken out at the bottom.
     -->
@@ -156,3 +160,7 @@ WHERE Type_of_Participation IS NOT NULL AND Participants_Subcategories.Subcatego
         </tr>
     </table>
 </div>
+
+<?php
+include "../../footer.php";
+?>
