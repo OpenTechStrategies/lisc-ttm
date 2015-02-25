@@ -293,6 +293,7 @@ class Participant {
         
         
         // Build an array of all the results
+        $assessments = array();
         while ($assessment = mysqli_fetch_array($impact_assessments)) {
             $assessments[] = Assessment::createFromDatabase($assessment);
         }
