@@ -415,6 +415,18 @@ function run_cleanup_tasks() {
     }
 }
 
+// Reset $CLEANUP_TASKS, maybe on a new connection?
+// This could be useful in case run_cleanup_tasks is never hit.
+// It's not clear yet whether that will result in extra tasks
+// happening on the next connection.
+//
+// Not sure where to use this, but seems helpful.
+// Can you think of one? :)
+function clear_cleanup_tasks() {
+    global $CLEANUP_TASKS;
+    $CLEANUP_TASKS = array();
+}
+
 ?>
 <script text="javascript">
     function failAlert(){
