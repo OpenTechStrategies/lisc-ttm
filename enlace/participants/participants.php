@@ -119,7 +119,7 @@ include "../header.php";
                                     },
                             function(response) {
                                 document.getElementById('show_results').innerHTML = response;
-                            });"/>
+                            }).fail(function() {alert('You do not have permission to perform this action.');});"/>
                 </td>
             </tr>
         </table>
@@ -241,7 +241,7 @@ include "../header.php";
                             function(response) {
                                 document.getElementById('confirmation').innerHTML = response;
                             }
-                            );" value="Save" /></td>
+                            ).fail(function() {alert('You do not have permission to perform this action.');});" value="Save" /></td>
                 </tr>
             </table>
             <div id="confirmation" style="text-align:center;"></div>

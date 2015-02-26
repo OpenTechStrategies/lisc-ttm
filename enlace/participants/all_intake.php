@@ -1,9 +1,31 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
 include "../../header.php";
 include "../header.php";
+
+user_enforce_has_access($Enlace_id);
+
+/* so allow them in if it's a new survey OR if they have access to all
+ * programs ('a') or if they have access to a program that is linked
+ * to this...person? or this survey?: */
+
+$access_array = $USER->program_access($Enlace_id);
+
+include "../include/dbconnopen.php";
+$person_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['person']);
+$get_program_list = "SELECT Session_Names.Program_ID FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_ID WHERE Participant_ID = '" . $person_sqlsafe . "'";
+$program_connected = mysqli_query($cnnEnlace, $get_program_list);
+$access_granted = false;
+while ($program_id = mysqli_fetch_row($program_connected)){
+    if (in_array($program_id, $access_array)){
+        $access_granted = true;
+    }
+}
+
+if (!isset($_GET['assessment']) || in_array('a', $access_array) || $access_granted){
+
 ?>
 <div style="display:none;"><?php include "../include/datepicker_wtw.php"; ?></div>
 <?php
@@ -16,9 +38,9 @@ include "../header.php";
 include "../classes/participant.php";
 
 include "../include/dbconnopen.php";
-$id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['id']);
+$id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['assessment']);
 $person_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['person']);
-/* if the assessment is not new, then Get['id'] exists, and this query returns the entered responses. */
+/* if the assessment is not new, then Get['assessment'] exists, and this query returns the entered responses. */
 $get_assessment_info = "SELECT * FROM Assessments 
             LEFT JOIN Participants_Caring_Adults ON Caring_Id=Caring_Adults_ID
             LEFT JOIN Participants_Future_Expectations ON Future_Id=Future_Expectations_ID
@@ -36,7 +58,7 @@ $person = new Participant();
 $person->load_with_participant_id($assessment_info[1]);
 
 /* if it IS a new assessment, then we get the person from the get[person]: */
-if (!isset($_GET['id'])) {
+if (!isset($_GET['assessment'])) {
     $person = new Participant();
     $person->load_with_participant_id($person_sqlsafe);
 }
@@ -534,7 +556,7 @@ Show tables of survey questions and response options.  The chosen response is se
 <?php
 //determine whether this is new or edited
 //this information is used in the /ajax/ file.
-if (isset($_GET['id'])) {
+if (isset($_GET['assessment'])) {
     $edit = 1;
 } else {
     $edit = 0;
@@ -690,9 +712,11 @@ if (isset($_GET['id'])) {
                 },
         function(response) {
             document.getElementById('show_intake_response').innerHTML += response;
-        });">
+        }).fail(function() {alert('You do not have permission to perform this action.');});">
 
 <div id="show_intake_response"></div>
 <br />
 <br />
-<?php include "../../footer.php"; ?>
+<?php
+} //ends access check if condition
+ include "../../footer.php"; ?>

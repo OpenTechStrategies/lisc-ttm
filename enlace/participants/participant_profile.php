@@ -11,9 +11,8 @@ include "../header.php";
 
 // check if user has access to all programs
 $access_array = $USER->program_access($Enlace_id);
-$access = $access_array[0];
 
-if ($access != 'a'){ //i.e., if the user does not have access to all programs
+if ( !(in_array('a', $access_array))){ //i.e., if the user does not have access to all programs
     include "../include/dbconnopen.php";
     $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['id']);
     $participant_program_list = "SELECT Session_Names.*, Name FROM Session_Names INNER JOIN Participants_Programs ON Session_Names.Session_ID = Participants_Programs.Program_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID WHERE Participant_Id = " . $id_sqlsafe . " ORDER BY Name;";
@@ -28,7 +27,6 @@ if ($access != 'a'){ //i.e., if the user does not have access to all programs
         }
     }
 
-
     // where 'b' is never a program ID, and so will always fail
     // if the user does not have access to any program the participant is
     // linked to, then s/he should not have access to this page.
@@ -36,9 +34,6 @@ if ($access != 'a'){ //i.e., if the user does not have access to all programs
     // and the user doesn't have access to all programs 
     if (! in_array(TRUE, $access_array, TRUE)) { 
         user_enforce_has_access($Enlace_id, NULL, 'b');
-    }
-    else{
-        echo "in array";
     }
 }
 /* This page shows all the information about a person in one place.
@@ -333,14 +328,14 @@ include "../include/dbconnclose.php";
                     $result = mysqli_query($cnnEnlace, $query);
                     while ($row = mysqli_fetch_row($result)) {
                         if ($row[3] == 2) {
-                            $page = 'impact';
+                            $page = 'all_impact';
                         } elseif ($row[3] == 1) {
-                            $page = 'intake';
+                            $page = 'all_intake';
                         } else {
                             $page = 'error';
                         }
                         ?>
-                        <tr><td><a href="permission_check_page.php?page=<?php echo $page; ?>&id=<?php echo $person->participant_id; ?>&assessment=<?php echo $row[5]; ?>">
+                        <tr><td><a href="<?php echo $page; ?>.php?person=<?php echo $person->participant_id; ?>&assessment=<?php echo $row[5]; ?>">
                                     <?php
                                     echo $row[0] .'/'. $row[1] .'/'. $row[2];
                                     ?>
@@ -380,8 +375,8 @@ include "../include/dbconnclose.php";
             echo "class='youth_info'";
         }
         ?>>
-            <td colspan="2"><a href="permission_check_page.php?id=<?php echo $person->participant_id; ?>&page=intake">Add New Intake Assessment</a><br>
-                <a href="permission_check_page.php?id=<?php echo $person->participant_id; ?>&page=impact">Add New Program Impact Survey</a></td>
+            <td colspan="2"><a href="all_intake.php?person=<?php echo $person->participant_id; ?>">Add New Intake Assessment</a><br>
+                <a href="all_impact.php?person=<?php echo $person->participant_id; ?>">Add New Program Impact Survey</a></td>
         </tr>
         <tr>
             <td colspan="2"><a href="javascript:;" class="basic_info_show" onclick="
