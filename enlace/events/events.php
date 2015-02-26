@@ -1,10 +1,12 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?
-	include "../../header.php";
-	include "../header.php";
-	include "../include/datepicker_wtw.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Enlace_id);
+
+include "../../header.php";
+include "../header.php";
+include "../include/datepicker_wtw.php";
 ?>
 
 <!--
@@ -92,7 +94,7 @@ Page that shows Little Village events that aren't connected to a campaign.
                     //document.write(response);
                     window.location='events.php';
                 }
-            );">&nbsp;&nbsp;&nbsp;<span class="helptext">Dates must be entered in the format YYYY-MM-DD.</span></td></tr>
+            ).fail(failAlert);">&nbsp;&nbsp;&nbsp;<span class="helptext">Dates must be entered in the format YYYY-MM-DD.</span></td></tr>
 		</table>
 	</td>
 	<td>
@@ -172,7 +174,7 @@ Page that shows Little Village events that aren't connected to a campaign.
             			                    },
              			                   function (response){
                			                     document.getElementById('show_results').innerHTML = response;
-               			                 });"/><div id="show_results"></div>
+               			                 }).fail(failAlert);"/><div id="show_results"></div>
 						<input type="button" value="Add Participant" onclick="$.post(
 									'../ajax/add_participant.php',
 									{
@@ -184,7 +186,7 @@ Page that shows Little Village events that aren't connected to a campaign.
 										//document.write(response);
 										window.location='events.php?event=<?echo $event['Campaign_Event_ID'];?>';
 									}
-								)" id="add_participant_button" />
+								).fail(failAlert);" id="add_participant_button" />
 					</td>
 				</tr>
 			</table>

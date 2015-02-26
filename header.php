@@ -1,4 +1,8 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($Enlace_id);
+
 //test session here, send to error page, exit
 /*
  * We set the timezone here, though I'm fairly certain we also set it anywhere we needed to use

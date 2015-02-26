@@ -119,7 +119,7 @@ include "../header.php";
                                     },
                             function(response) {
                                 document.getElementById('show_results').innerHTML = response;
-                            }).fail(function() {alert('You do not have permission to perform this action.');});"/>
+                            }).fail(failAlert);"/>
                 </td>
             </tr>
         </table>

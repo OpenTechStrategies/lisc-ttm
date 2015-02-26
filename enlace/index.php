@@ -1,8 +1,11 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Enlace_id);
 
 //if action is logout, kill various navigation cookies: 
 if ($_GET['action'] == 'logout') {
-    include_once $_SERVER['DOCUMENT_ROOT'] . "/core/tools/auth.php";
     $loggingout = pleaseLogOut($_COOKIE['PHPSESSID']);
     if ($loggingout){
         session_unset();
@@ -92,7 +95,7 @@ WHERE Date_Entered <= '$month_ago' AND Date_Logged IS NULL AND Role=1";
                                 function(response) {
                                     window.location = '/enlace/programs/profile.php';
                                 }
-                                )"><?php echo $program[6] . ' - ' . $program[1]; ?></a><br><?php
+                                ).fail(failAlert);"><?php echo $program[6] . ' - ' . $program[1]; ?></a><br><?php
                    }
                    include "include/dbconnclose.php";
                    ?>

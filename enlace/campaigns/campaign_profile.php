@@ -1,7 +1,9 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Enlace_id);
+
 /* profile for campaign.  Campaign class is loaded with the campaign cookie that was set after the click on whatever link brought
  * the user here.
  */
@@ -72,7 +74,7 @@ $campaign->load_with_id($_COOKIE['campaign']);
                                 //document.getElementById('show_ok').innerHTML += 'Thank you for adding '+document.getElementById('event').value + ' <br>';
                                 window.location = 'campaign_profile.php';
                             }
-                            );">&nbsp;&nbsp;&nbsp;<span class="helptext">Dates must be entered in the format YYYY-MM-DD.</span>
+                            ).fail(failAlert);">&nbsp;&nbsp;&nbsp;<span class="helptext">Dates must be entered in the format YYYY-MM-DD.</span>
                             <div id="show_ok"></div></td></tr>
                 </table>
 
@@ -123,7 +125,7 @@ $campaign->load_with_id($_COOKIE['campaign']);
                             //document.write(response);
                             window.location = 'campaign_profile.php';
                         }
-                        )"></td>
+                        ).fail(failAlert)"></td>
         </tr>	
         <tr>
             <!--List of events associated with this campaign:
@@ -223,7 +225,7 @@ $campaign->load_with_id($_COOKIE['campaign']);
                                                                 //document.write(response);
                                                                 window.location = 'campaign_profile.php';
                                                             }
-                                                            )" style="margin:0;">
+                                                            ).fail(failAlert);" style="margin:0;">
                                         <option value="">----------</option>
                                         <option value="1" <?php echo ($attendee['Role_Type'] == '1' ? 'selected="selected"' : null); ?>>Attendee</option>
                                         <option value="2" <?php echo ($attendee['Role_Type'] == '2' ? 'selected="selected"' : null); ?>>Speaker</option>
@@ -268,7 +270,7 @@ $campaign->load_with_id($_COOKIE['campaign']);
                                                 //document.write(response);
                                                 window.location = 'campaign_profile.php';
                                             }
-                                            )">
+                                            ).fail(failAlert);">
                             </td>
                             <td class="all_projects"><?php echo $event[Address_Num] . " " . $event['Address_Dir'] . " " . $event['Address_Street'] . " " . $event['Address_Suffix']; ?></td>
                             <td class="all_projects"><?php

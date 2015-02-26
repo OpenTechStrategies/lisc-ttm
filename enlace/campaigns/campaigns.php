@@ -1,23 +1,14 @@
 <?php
-require_once("../siteconfig.php");
-	include "../../header.php";
-	include "../header.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
-//if($_COOKIE['prog_page']=='profile'){
-//     ?>
-<!--<script type="text/javascript">
-	$(document).ready(function(){
-		$('#programs_selector').addClass('selected');
-                $('#add_new_campaign').hide();
-                $('#search_all_campaigns').hide();
-                $('#campaign_profile').show();
-                $('.attendee_role_edit').hide();
-	});
-</script>-->
-<?
-//}
-//else{
-        ?>
+user_enforce_has_access($Enlace_id);
+
+include "../../header.php";
+include "../header.php";
+
+
+?>
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#campaigns_selector').addClass('selected');
@@ -26,8 +17,6 @@ require_once("../siteconfig.php");
 		$('#add_date').hide();
 	});
 </script>
-<?//}
-?>
 
 <div id="campaign_search" class="content_block">
 	<h3>Campaigns</h3><hr/><br/>
@@ -46,7 +35,7 @@ require_once("../siteconfig.php");
                     
 		<h4>Campaign List</h4>
 	<ul class="programs_by_category">
-        <?
+        <?php
 $get_campaigns="SELECT * FROM Campaigns ORDER BY Campaign_Name";
 
 include "../include/dbconnopen.php";
@@ -57,13 +46,13 @@ while ($campaign=mysqli_fetch_array($campaigns)){
 <a href="javascript:;" onclick="$.post(
             '../ajax/set_campaign_id.php',
             {
-                id: '<?echo $campaign['Campaign_ID'];?>'
+                id: '<?php echo $campaign['Campaign_ID'];?>'
             },
             function (response){
-            window.location='campaign_profile.php';})">
-            <?echo $campaign['Campaign_Name'];?></a><br>
+            window.location='campaign_profile.php';}).fail(failAlert);">
+            <?php echo $campaign['Campaign_Name'];?></a><br>
 	
-        <?
+        <?php
 }
 include "../include/dbconnclose.php";?>
                                 </td>
@@ -107,7 +96,7 @@ include "../include/dbconnclose.php";?>
                             function (response){
                                 document.getElementById('show_add_participants').innerHTML = response;
                             }
-                        );
+                        ).fail(failAlert);
                         }
                 }
                 //if there isn't one with this name already:
@@ -120,14 +109,14 @@ include "../include/dbconnclose.php";?>
                             function (response){
                                 document.getElementById('show_add_participants').innerHTML = response;
                             }
-                        );
+                        ).fail(failAlert);
                 }
             }
-          );
+          ).fail(failAlert);
      }"></th></tr>
 </table>
 
-<?include "../include/datepicker_wtw.php";?>
+<?php // include "../include/datepicker_wtw.php";?>
 <div id="show_add_participants"></div>
 	
 	<!--<div style="text-align:center;"><a class="add_new" href="new_campaign.php"><span class="add_new_button">Add New Campaign</span></a></div><br/><br/>-->
@@ -145,7 +134,7 @@ include "../include/dbconnclose.php";?>
                                 function (response){
                                     document.getElementById('show_results_campaign_search').innerHTML = response;
                                 }
-                           )"></th></tr>
+                           ).fail(failAlert);"></th></tr>
 </table>--><br/>
 <div id="show_results_campaign_search"></div></td>
 	</tr>
@@ -157,7 +146,7 @@ include "../include/dbconnclose.php";?>
 
 </div>
 
-<?
+<?php
 	include "../../footer.php";
 ?>
 	

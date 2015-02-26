@@ -416,3 +416,8 @@ function run_cleanup_tasks() {
 }
 
 ?>
+<script text="javascript">
+    function failAlert(){
+        alert('You do not have permission to perform this action.');
+    }
+</script>

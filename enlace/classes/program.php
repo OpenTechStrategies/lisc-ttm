@@ -1,7 +1,10 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Enlace_id);
+
 class Program {
     public $program_id; //contact id.
 
