@@ -38,7 +38,9 @@ function get_or_setup_db_conn($db_id, $setup_func) {
 function maybe_close_dbconn($db_id) {
     global $DBCONNS;
     if (array_key_exists($db_id, $DBCONNS)) {
-        mysqli_close($DBCONNS[$db_id]);
+        $conn = $DBCONNS[$db_id];
+        unset($DBCONNS[$db_id]);
+        mysqli_close($conn);
         return true;
     } else {
         return false;
