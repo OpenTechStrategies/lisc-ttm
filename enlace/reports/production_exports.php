@@ -1,20 +1,10 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
-//get user's access
-//
-// *First determine the program that the logged-in user has access to.  Usually this will be a program ID number,
-// *but sometimes it will be 'a' (all) or 'n' (none).
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
-$user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['user']);
-$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = '" . $user_sqlsafe . "'";
-//echo $get_program_access;
-$program_access = mysqli_query($cnnLISC, $get_program_access);
-$prog_access = mysqli_fetch_row($program_access);
-$access = $prog_access[0];
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($Enlace_id, $DataEntryAccess);
+
+
 ?>
 
 <h3>Export All Information</h3>

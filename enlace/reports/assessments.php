@@ -1,19 +1,11 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($Enlace_id);
+
 //get user's access
-//
-// *First determine the program that the logged-in user has access to.  Usually this will be a program ID number,
-// *but sometimes it will be 'a' (all) or 'n' (none).
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
-$user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['user']);
-$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = '" .$user_sqlsafe . "'";
-$program_access = mysqli_query($cnnLISC, $get_program_access);
-$prog_access = mysqli_fetch_row($program_access);
-$access = $prog_access[0];
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
+$access_array = $USER->program_access($Enlace_id);
 ?>
 
 <!--Div on reports page that shows the assessment responses:  -->
@@ -28,11 +20,11 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
     <a href="javascript:;" onclick="$('#program_list').toggle();">Show/hide programs</a>
     <div id="program_list"><?php
         //if not an administrator
-        if ($access != 'a') {
+    if ( ! in_array('a', $access_array)) {
             //get user's programs
             $get_all_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names INNER JOIN Programs 
                             ON Session_Names.Program_ID=Programs.Program_ID
-                            WHERE Programs.Program_ID = " . $access . " ORDER BY Name";
+                            WHERE Programs.Program_ID = " . $access_array[0] . " ORDER BY Name";
         } else {
             $get_all_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names INNER JOIN Programs 
                             ON Session_Names.Program_ID=Programs.Program_ID ORDER BY Name";
@@ -85,7 +77,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
     <input type="submit" value="Show Results" name="submit_btn_assessments"
     <?php
     //if not an administrator
-    if ($access != 'a') {
+            if ( ! in_array('a', $access_array)) {
         //make sure a checkbox is checked
         ?>
                onclick="return test_program_select();"
@@ -94,7 +86,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
            ?>>
            <?php
            //if not an administrator
-           if ($access != 'a') {
+if ( ! in_array('a', $access_array)) {
                //make sure a checkbox is checked
                ?>
         <script>

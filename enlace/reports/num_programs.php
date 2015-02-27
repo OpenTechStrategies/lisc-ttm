@@ -1,19 +1,12 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($Enlace_id);
+
 //get user's access
-//
-// *First determine the program that the logged-in user has access to.  Usually this will be a program ID number,
-// *but sometimes it will be 'a' (all) or 'n' (none).
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
-$user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['user']);
-$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = '" . $user_sqlsafe . "'";
-$program_access = mysqli_query($cnnLISC, $get_program_access);
-$prog_access = mysqli_fetch_row($program_access);
-$access = $prog_access[0];
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
+
+$access_array = $USER->program_access($Enlace_id);
 ?>
 
 <br/>
@@ -63,12 +56,12 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
         </tr>
         <?php
         //if not an administrator
-        if ($access != 'a') {
+         if (! in_array('a', $access_array)) {
             //get user's programs
             $all_progs = "SELECT Name, Session_Name, Session_ID, COUNT(Participant_ID) FROM Session_Names 
                             INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_ID 
                             INNER JOIN Programs ON Session_Names.Program_Id = Programs.Program_ID 
-                            WHERE Programs.Program_ID = " . $access . "
+                            WHERE Programs.Program_ID = " . $access_array[0] . "
                             GROUP BY Session_ID;";
         } else {
             //get all programs
@@ -122,10 +115,10 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 //get distinct participants, then count rows
                 // $distinct_people="SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID<10;";
                 //if not an administrator
-                if ($access != 'a') {
+            if ( ! in_array('a', $access_array)) {
                     //get user's programs
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs "
-                            . "WHERE Program_ID = " . $access . ";";
+                            . "WHERE Program_ID = " . $access[0] . ";";
                 } else {
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs;";
                 }
@@ -140,10 +133,10 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 //get distinct participants, then count rows
                 //$distinct_people="SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID<10 AND Date_Dropped IS NOT NULL;";
                 //if not an administrator
-                if ($access != 'a') {
+                    if ( ! in_array('a', $access_array)) {
                     //get user's programs
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs "
-                            . "WHERE Program_ID = " . $access . " AND Date_Dropped IS NOT NULL;";
+                            . "WHERE Program_ID = " . $access[0] . " AND Date_Dropped IS NOT NULL;";
                 } else {
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Date_Dropped IS NOT NULL;";
                 }
@@ -159,10 +152,10 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 //get distinct participants, then count rows
                 // $distinct_people="SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID<10 AND Date_Dropped IS NULL;";
                 //if not an administrator
-                if ($access != 'a') {
+                    if ( ! in_array('a', $access_array)) {
                     //get user's programs
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs "
-                            . "WHERE Program_ID = " . $access . " AND Date_Dropped IS NULL;";
+                            . "WHERE Program_ID = " . $access[0] . " AND Date_Dropped IS NULL;";
                 } else {
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE  Date_Dropped IS NULL;";
                 }
@@ -183,10 +176,10 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 <?php
                 //get distinct participants, then count rows
                 //if not an administrator
-                if ($access != 'a') {
+                    if ( ! in_array('a', $access_array)) {
                     //get user's programs
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs "
-                            . "WHERE Program_ID = " . $access . ";";
+                            . "WHERE Program_ID = " . $access[0] . ";";
                 } else {
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs;";
                 }
@@ -201,10 +194,10 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 <?php
                 //get distinct participants, then count rows
                 //if not an administrator
-                if ($access != 'a') {
+                    if ( ! in_array('a', $access_array)) {
                     //get user's programs
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs "
-                            . "WHERE Program_ID = " . $access . " AND Date_Dropped IS NOT NULL;";
+                            . "WHERE Program_ID = " . $access[0] . " AND Date_Dropped IS NOT NULL;";
                 } else {
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs WHERE Date_Dropped IS NOT NULL;";
                 }
@@ -219,10 +212,10 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 <?php
                 //get distinct participants, then count rows
                 //if not an administrator
-                if ($access != 'a') {
+                    if ( ! in_array('a', $access_array)) {
                     //get user's programs
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs "
-                            . "WHERE Program_ID = " . $access . " AND Date_Dropped IS NULL;";
+                            . "WHERE Program_ID = " . $access[0] . " AND Date_Dropped IS NULL;";
                 } else {
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs "
                             . "WHERE Date_Dropped IS NULL;";
@@ -254,12 +247,12 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
         include "../include/dbconnopen.php";
         $month_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['month_select']);
         $year_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['year_select']);
-        if ($access != 'a') {
+        if ( ! in_array('a', $access_array)) {
             //get user's programs
             $all_progs = "SELECT Name, Session_Name, Session_ID, COUNT(Participant_ID) FROM Session_Names 
                             INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_ID 
                             INNER JOIN Programs ON Session_Names.Program_Id = Programs.Program_ID 
-                            WHERE Participants_Programs.Program_ID = " . $access . " AND MONTH(Date_Added) <= '" . $month_select_sqlsafe . "' AND
+                            WHERE Participants_Programs.Program_ID = " . $access[0] . " AND MONTH(Date_Added) <= '" . $month_select_sqlsafe . "' AND
                             YEAR(Date_Added) <= '" . $year_select_sqlsafe . "' GROUP BY Session_ID;";
         } else {
             $all_progs = "SELECT Name, Session_Name, Session_ID, COUNT(Participant_ID) FROM Session_Names 
@@ -278,10 +271,10 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 <td class="all_projects">
                     <?php
                     //if not an administrator
-                    if ($access != 'a') {
+            if ( ! in_array('a', $access_array)) {
                         //get user's programs
                         $total_enrolled = "SELECT COUNT(*) FROM Participants_Programs "
-                                . "WHERE Program_ID = " . $access . " AND MONTH(Date_Added) <= '" . $month_select_sqlsafe . "' AND
+                                . "WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added) <= '" . $month_select_sqlsafe . "' AND
                                 YEAR(Date_Added) <= '" . $year_select_sqlsafe . "' AND Program_ID = $program[2]";
                     } else {
                         $total_enrolled = "SELECT COUNT(*) FROM Participants_Programs WHERE MONTH(Date_Added) <= '" . $month_select_sqlsafe . "' AND
@@ -297,9 +290,9 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 <td class="all_projects">
                     <?php
                     //if not an administrator
-                    if ($access != 'a') {
+                    if ( ! in_array('a', $access_array)) {
                         //get user's programs
-                        $total_dropped = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID = " . $access . " AND MONTH(Date_Dropped)<='" . $month_select_sqlsafe . "' AND
+                        $total_dropped = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Dropped)<='" . $month_select_sqlsafe . "' AND
                             YEAR(Date_Dropped)<='" . $year_select_sqlsafe . "' AND Program_ID=$program[2] AND Date_Dropped IS NOT NULL";
                     } else {
                         $total_dropped = "SELECT COUNT(*) FROM Participants_Programs WHERE MONTH(Date_Dropped)<='" . $month_select_sqlsafe . "' AND
@@ -316,9 +309,9 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                     <?php
                     //echo total remaining (at the selected month and year)
                     //if not an administrator
-                    if ($access != 'a') {
+                    if ( ! in_array('a', $access_array)) {
                         //get user's programs
-                        $total_current = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID = " . $access . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
+                        $total_current = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
                                 YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Program_ID=$program[2] AND Date_Dropped IS NULL";
                     } else {
                         $total_current = "SELECT COUNT(*) FROM Participants_Programs WHERE MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
@@ -343,9 +336,9 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 <?php
                 //get distinct participants, then count rows
                 //if not an administrator
-                if ($access != 'a') {
+        if ( ! in_array('a', $access_array)) {
                     //get user's programs
-                    $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
+                    $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
             YEAR(Date_Added)<='" . $year_select_sqlsafe . "';";
                 } else {
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
@@ -364,9 +357,9 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 <?php
                 //get distinct participants, then count rows
                 //if not an administrator
-                if ($access != 'a') {
+                if ( ! in_array('a', $access_array)) {
                     //get user's programs
-                    $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
+                    $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
                              YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Date_Dropped IS NOT NULL;";
                 } else {
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
@@ -385,9 +378,9 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 <?php
                 //get distinct participants, then count rows
                 //if not an administrator
-                if ($access != 'a') {
+                if ( ! in_array('a', $access_array)) {
                     //get user's programs
-                    $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
+                    $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
                             YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Date_Dropped IS NULL;";
                 } else {
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
@@ -411,9 +404,9 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 <?php
                 //get distinct participants, then count rows
                 //if not an administrator
-                if ($access != 'a') {
+                if ( ! in_array('a', $access_array)) {
                     //get user's programs
-                    $distinct_people = "SELECT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
+                    $distinct_people = "SELECT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
                             YEAR(Date_Added)<='" . $year_select_sqlsafe . "';";
                 } else {
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs WHERE MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
@@ -431,9 +424,9 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 <?php
                 //get distinct participants, then count rows
                 //if not an administrator
-                if ($access != 'a') {
+                if ( ! in_array('a', $access_array)) {
                     //get user's programs
-                    $distinct_people = "SELECT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
+                    $distinct_people = "SELECT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
                             YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Date_Dropped IS NOT NULL;";
                 } else {
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs WHERE MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
@@ -451,9 +444,9 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
                 <?php
                 //get distinct participants, then count rows
                 //if not an administrator
-                if ($access != 'a') {
+                if ( ! in_array('a', $access_array)) {
                     //get user's programs
-                    $distinct_people = "SELECT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
+                    $distinct_people = "SELECT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
                             YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Date_Dropped IS NULL;";
                 } else {
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs WHERE MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
