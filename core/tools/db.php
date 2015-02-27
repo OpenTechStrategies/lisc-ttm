@@ -14,9 +14,9 @@ $DBCONNS = array();
 // Returns:
 //  Set up database connection.
 
-function get_or_setup_cb_conn($db_id, $setup_func) {
+function get_or_setup_db_conn($db_id, $setup_func) {
     global $DBCONNS;
-    if (array_key_exists($DBCONNS, $db_id)) {
+    if (array_key_exists($db_id, $DBCONNS)) {
         return $DBCONNS[$db_id];
     } else {
         $conn = $setup_func();
@@ -37,7 +37,7 @@ function get_or_setup_cb_conn($db_id, $setup_func) {
 
 function maybe_close_dbconn($db_id) {
     global $DBCONNS;
-    if (array_key_exists($DBCONNS, $db_id)) {
+    if (array_key_exists($db_id, $DBCONNS)) {
         mysqli_close($DBCONNS[$db_id]);
         return true;
     } else {
