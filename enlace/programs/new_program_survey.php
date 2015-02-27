@@ -1,7 +1,8 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Enlace_id);
 
 /*Add a new program quality survey here: */
 
@@ -38,7 +39,7 @@ $prog_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['prog']);
                 function (response){
                     window.location='profile.php';
                 }
-            )">Return to program profile.</a>-->
+            ).fail(failAlert);">Return to program profile.</a>-->
 <div width="100%" style="text-align:center;">
 
     
@@ -206,7 +207,7 @@ $prog_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['prog']);
                                 function (response){
                                     document.getElementById('progsurv_response').innerHTML=response;
                                 }
-                           )"></td></tr>
+                           ).fail(failAlert);"></td></tr>
 </table>
 
 <div id="progsurv_response"></div>

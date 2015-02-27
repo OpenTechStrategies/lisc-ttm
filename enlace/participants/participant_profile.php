@@ -8,34 +8,16 @@ include "../../header.php";
 include "../header.php";
 
 //make sure the user has access to the participant
+include "../include/dbconnopen.php";
+$id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['id']);
+$participant_program_list = "SELECT Session_Names.*, Name FROM Session_Names INNER JOIN Participants_Programs ON Session_Names.Session_ID = Participants_Programs.Program_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID WHERE Participant_Id = " . $id_sqlsafe . " ORDER BY Name;";
+$access_to_participant = mysqli_query($cnnEnlace, $participant_program_list);
+$program_array = array();
+while ($program = mysqli_fetch_array($access_to_participant)){
+    $program_array[] = $program['Program_ID'];
+}    
+$USER->enforce_access_program_array($Enlace_id, $program_array);
 
-// check if user has access to all programs
-$access_array = $USER->program_access($Enlace_id);
-
-if ( !(in_array('a', $access_array))){ //i.e., if the user does not have access to all programs
-    include "../include/dbconnopen.php";
-    $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['id']);
-    $participant_program_list = "SELECT Session_Names.*, Name FROM Session_Names INNER JOIN Participants_Programs ON Session_Names.Session_ID = Participants_Programs.Program_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID WHERE Participant_Id = " . $id_sqlsafe . " ORDER BY Name;";
-    $access_to_participant = mysqli_query($cnnEnlace, $participant_program_list);
-    $access_array = array();
-    while ($program_access = mysqli_fetch_array($access_to_participant)){
-        if ($USER->has_site_access($Enlace_id, NULL, $program_access['Program_ID'])){
-            $access_array[] = 'true';
-        }
-        else{
-            $access_array[] = 'false';
-        }
-    }
-
-    // where 'b' is never a program ID, and so will always fail
-    // if the user does not have access to any program the participant is
-    // linked to, then s/he should not have access to this page.
-
-    // and the user doesn't have access to all programs 
-    if (! in_array(TRUE, $access_array, TRUE)) { 
-        user_enforce_has_access($Enlace_id, NULL, 'b');
-    }
-}
 /* This page shows all the information about a person in one place.
  * The participant id comes in through a Get.
  */

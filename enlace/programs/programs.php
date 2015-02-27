@@ -1,23 +1,14 @@
 <?php
-require_once("../siteconfig.php");
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Enlace_id);
+
 include "../../header.php";
 include "../header.php";
 
-//make sure the user has access to the program
-//
-// *First determine the program that the logged-in user has access to.  Usually this will be a program ID number,
-// *but sometimes it will be 'a' (all) or 'n' (none).
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
-$user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['user']);
-$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = '" . $user_sqlsafe . "'";
-//echo $get_program_access;
-$program_access = mysqli_query($cnnLISC, $get_program_access);
-$prog_access = mysqli_fetch_row($program_access);
-$access = $prog_access[0];
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
-
-?><div style="display:none"><?php include "../include/datepicker_wtw.php"; ?></div>
+?>
+<div style="display:none"><?php include "../include/datepicker_wtw.php"; ?></div>
 
 <!--
 List of all programs, and, at the bottom, a place to add a new program.
@@ -53,7 +44,7 @@ List of all programs, and, at the bottom, a place to add a new program.
             </td>
             <?php
             //if an administrator
-            if ($access == 'a') {
+        if ($USER->site_access_level($Enlace_id) <= $AdminAccess) {
                 //show delete area
                 ?>
                 <td>
@@ -78,14 +69,14 @@ List of all programs, and, at the bottom, a place to add a new program.
                         function(response) {
                             window.location = 'profile.php';
                         }
-                        )"><?php echo $temp_program['Name']; ?></a>
+                        ).fail(failAlert);"><?php echo $temp_program['Name']; ?></a>
                 </td>
                 <td>
                     <?php echo $temp_program['Institution_Name']; ?>
                 </td>
                 <?php
                 //if an administrator
-                if ($access == 'a') {
+        if ($USER->site_access_level($Enlace_id) <= $AdminAccess) {
                     //show delete area
                     ?>
                     <td style="text-align: center;">
@@ -102,7 +93,7 @@ List of all programs, and, at the bottom, a place to add a new program.
                                                         //document.write(response);
                                                         window.location='programs.php';
                                                     }
-                                                    )
+                                                    ).fail(failAlert);
                                                 }
                                             }" style="font-size: .8em; color: #f00; font-weight: bold;">X</a>
                     </td>
@@ -174,7 +165,7 @@ List of all programs, and, at the bottom, a place to add a new program.
                                                function(response) {
                                                    document.getElementById('add_new_program_confirm').innerHTML = response;
                                                }
-                                               )"/>
+                                               ).fail(failAlert);"/>
                     <div id="add_new_program_confirm"></div>
                 </td></tr>
         </table></div>

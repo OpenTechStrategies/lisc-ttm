@@ -178,6 +178,26 @@ class User {
         return $program_access_array;
     }
 
+    // Find whether a user has access to any one of an array of programs
+    // Args:
+    // - site:  The site ID we are checking this user's program access for
+    // - program_array: The set of programs that the user might have access to
+    // Returns:
+    // true if the user has access to any one of the programs in
+    // $program_array, and enforces a page exit otherwise 
+    public function enforce_access_program_array($site, $program_array){
+        if ( in_array('a', $this->program_access($site))){
+            return true;
+            
+        }
+        foreach ($program_array as $program){
+            if ( in_array($program, $this->program_access)){
+                return true;
+            }
+        }
+        return $failure_func("You are not connected to any of this participant's programs, so you do not have permission to view this page.");
+    }
+
     // Get the site permission/access level for $SITE
     //
     // Returns:
