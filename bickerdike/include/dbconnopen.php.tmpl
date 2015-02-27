@@ -1,6 +1,9 @@
 <?php
 
-$cnnBickerdike = mysqli_connect("DB_SERVER", "BICKERDIKE_DB_USER", "BICKERDIKE_DB_PASS", "BICKERDIKE_DB_NAME")
-	or die ("Error Connecting To The Database Because: " . mysqli_connect_error());
+include_once $_SERVER['DOCUMENT_ROOT'] . "/core/tools/db.php";
+
+$cnnBickerdike = get_or_setup_db_conn(
+    "bickerdike",  // maybe cnnBickerdike?
+    new ConnectionMaker("DB_SERVER", "BICKERDIKE_DB_USER", "BICKERDIKE_DB_PASS", "BICKERDIKE_DB_NAME"));
 
 ?>

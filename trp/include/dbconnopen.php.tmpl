@@ -1,6 +1,9 @@
 <?php
 
-$cnnTRP = mysqli_connect("DB_SERVER", "TRP_DB_USER", "TRP_DB_PASS", "TRP_DB_NAME")
-	or die ("Error Connecting To The Database Because: " . mysqli_connect_error());
+include_once $_SERVER['DOCUMENT_ROOT'] . "/core/tools/db.php";
+
+$cnnTRP = get_or_setup_db_conn(
+    "TRP",
+    new ConnectionMaker("DB_SERVER", "TRP_DB_USER", "TRP_DB_PASS", "TRP_DB_NAME"));
 
 ?>

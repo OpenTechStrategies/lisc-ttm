@@ -1,6 +1,9 @@
 <?php
 
-$cnnLSNA = mysqli_connect("DB_SERVER", "LSNA_DB_USER", "LSNA_DB_PASS", "LSNA_DB_NAME")
-	or die ("Error Connecting To The Database Because: " . mysqli_connect_error());
+include_once $_SERVER['DOCUMENT_ROOT'] . "/core/tools/db.php";
+
+$cnnLSNA = get_or_setup_db_conn(
+    "LSNA",
+    new ConnectionMaker("DB_SERVER", "LSNA_DB_USER", "LSNA_DB_PASS", "LSNA_DB_NAME"));
 
 ?>

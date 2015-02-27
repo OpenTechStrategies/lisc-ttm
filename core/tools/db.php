@@ -58,4 +58,42 @@ function close_all_dbconn() {
     }
 }
 
+
+// Convenience class for making database connection init thunk for
+//   get_or_setup_db_con()
+// 
+// With want to generate a database-initizing thunk, and absence of
+// proper closures in PHP, we'll make do with using an invokable
+// class instead.
+//
+// Args:
+//  - $server: server name, eg "localhost"
+//  - $user: user name, eg "ttmcorerw"
+//  - $pass: password, eg "SUPER_SECURE"
+//  - $db_name: name of the database we're connecting to, eg "ttm-core"
+
+class ConnectionMaker {
+    public $server;
+    public $user;
+    public $pass;
+    public $db_name;
+
+    public function __construct($server, $user, $pass, $db_name) {
+        $this->server = $server;
+        $this->user = $user;
+        $this->pass = $pass;
+        $this->db_name = $db_name;
+    }
+
+    public function __invoke() {
+        $connection = mysqli_connect(
+            $this->server,
+            $this->user,
+            $this->pass,
+            $this->db_name)
+	    or die ("Error Connecting To The Database Because: " . mysqli_connect_error());
+        return $connection;
+    }
+}
+
 ?>

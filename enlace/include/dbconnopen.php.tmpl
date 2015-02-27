@@ -1,6 +1,9 @@
 <?php
 
-$cnnEnlace = mysqli_connect("DB_SERVER", "ENLACE_DB_USER", "ENLACE_DB_PASS", "ENLACE_DB_NAME")
-	or die ("Error Connecting To The Database Because: " . mysqli_connect_error());
+include_once $_SERVER['DOCUMENT_ROOT'] . "/core/tools/db.php";
+
+$cnnEnlace = get_or_setup_db_conn(
+    "enlace",
+    new ConnectionMaker("DB_SERVER", "ENLACE_DB_USER", "ENLACE_DB_PASS", "ENLACE_DB_NAME"));
 
 ?>
