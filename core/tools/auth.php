@@ -387,46 +387,6 @@ function getProgramAccess($session_id, $site) {
     return $program_access_array;
 }
 
-// =================================================================
-// Cleanup tools
-//
-// The purpose of this section is to have a way to clean up whenever
-// a request ends.  Database connections must be closed, and...
-// well maybe just database connections need to be closed.
-// Still, the code here is general enough where if you set up
-// anything else that needs to be shut down, you can here.
-// =================================================================
-
-// The $CLEANUP_TASKS array stores all the tasks that are currently
-// registered as being needed to be cleaned up / run
-
-$CLEANUP_TASKS = array();
-
-function append_cleanup_task($task) {
-    global $CLEANUP_TASKS;
-    $CLEANUP_TASKS[] = $task;
-}
-
-function run_cleanup_tasks() {
-    global $CLEANUP_TASKS;
-    while (count($CLEANUP_TASKS) > 0) {
-        $task = array_pop($CLEANUP_TASKS);
-        $task();
-    }
-}
-
-// Reset $CLEANUP_TASKS, maybe on a new connection?
-// This could be useful in case run_cleanup_tasks is never hit.
-// It's not clear yet whether that will result in extra tasks
-// happening on the next connection.
-//
-// Not sure where to use this, but seems helpful.
-// Can you think of one? :)
-function clear_cleanup_tasks() {
-    global $CLEANUP_TASKS;
-    $CLEANUP_TASKS = array();
-}
-
 ?>
 <script text="javascript">
     function failAlert(){
