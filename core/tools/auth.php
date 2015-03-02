@@ -270,7 +270,8 @@ function user_enforce_has_access($site_id,
 
 
 function getUsernameFromId($user_id) {
-    global $cnnLISC;
+    $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+    include $path; //connection to core db
 
     $userid_sqlsafe = mysqli_real_escape_string($cnnLISC, $user_id);
     $user_query = "SELECT User_Email FROM Users WHERE User_ID = '$userid_sqlsafe'";
