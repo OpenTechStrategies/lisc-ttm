@@ -4,7 +4,7 @@ include "../header.php";
 include "../include/datepicker.php";
 $_GET['user'];
 include "../classes/user.php";
-$user = new User();
+$user = new Bickerdike_User();
 $user->load_with_user_id($_GET['user']);
 ?>
 

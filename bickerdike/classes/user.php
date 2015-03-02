@@ -1,5 +1,5 @@
 <?php
-class User
+class Bickerdike_User
 {
     
     public $user_id; //contact id.

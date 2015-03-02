@@ -28,7 +28,7 @@ while ($response = mysqli_fetch_array($answers)) {
          */
 
         include "../classes/user.php";
-        $user = new User();
+        $user = new Bickerdike_User();
         $user->load_with_user_id($response['User_ID']);
         $programs = $user->get_programs();
         ?>

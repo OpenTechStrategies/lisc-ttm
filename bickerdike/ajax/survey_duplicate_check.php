@@ -17,7 +17,7 @@ elseif ($_POST['type']==3){
 /*then gets the user so that it can use his/her name in the response.*/
 
 include "../classes/user.php";
-$user = new User();
+$user = new Bickerdike_User();
 $user->load_with_user_id($_POST['user']);
 
 /*then gets the program so that it can use its name in the response.*/

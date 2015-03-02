@@ -2,7 +2,7 @@
 include "../../header.php";
 include "../header.php";
 include "../classes/user.php";
-$user = new User();
+$user = new Bickerdike_User();
 $user->load_with_user_id($_GET['id']);
 ?>
 
