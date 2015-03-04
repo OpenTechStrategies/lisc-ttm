@@ -78,6 +78,18 @@ elseif($_POST['action']=='new_service'){
     mysqli_query($cnnLSNA, $query);
     include "../include/dbconnclose.php";
 }
+elseif( isset($_POST['save_number'])){
+    include "../include/dbconnopen.php";
+    $num_served_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['num_served']);
+    $save_number_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['save_number']);
+    $issue_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['issue']);
+    $month_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['month_served']);
+    $year_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['year_served']);    
+    $query="INSERT INTO Issue_Service (Number_Served, Issue_ID, Month, Year) VALUES ('" . $num_served_sqlsafe . "', '" . $issue_sqlsafe . "', '" . $month_sqlsafe . "', '" . $year_sqlsafe . "')";
+    echo $query;
+    mysqli_query($cnnLSNA, $query);
+    include "../include/dbconnclose.php";
+}
 else{
 include "../include/dbconnopen.php";
 $issue_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['issue']);
