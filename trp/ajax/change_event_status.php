@@ -1,7 +1,9 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id, $DataEntryAccess);
+
 /* the event status refers to whether or not the event shows up on the Community Engagement homepage.  This toggles the
  * active/inactive status. */
 if ($_POST['action']=='add'){

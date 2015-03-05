@@ -1,7 +1,9 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id, $DataEntryAccess);
+
 /* create a new profile for a person.  get their block group and save it according to their address. */
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/block_group_finder.php");
 $this_address = $_POST['address_num'] . " " . $_POST['address_dir'] . " " . $_POST['address_name'] . " " . $_POST['address_type'] .

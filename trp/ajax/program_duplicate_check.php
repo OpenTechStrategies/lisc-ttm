@@ -1,11 +1,13 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id, $DataEntryAccess);
+
 /*check for duplicate person (warn before creating two people with the same name or CPS ID)*/
 include "../include/dbconnopen.php";
 if ($_POST['cps_id']!=''){
-$get_duplicate_campaigns_sqlsafe = "SELECT COUNT(Participant_ID) FROM Participants
+    $get_duplicate_campaigns_sqlsafe = "SELECT COUNT(Participant_ID) FROM Participants
 WHERE (First_Name='" . mysqli_real_escape_string($cnnTRP, $_POST['name']) . "' AND Last_Name='". mysqli_real_escape_string($cnnTRP, $_POST['surname']) ."') OR CPS_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['cps_id']) . "'";}
 else{
     $get_duplicate_campaigns_sqlsafe = "SELECT COUNT(Participant_ID) FROM Participants

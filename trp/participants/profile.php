@@ -105,7 +105,7 @@ if ($parti['Gender'] == 'm') {
             </td>
         </tr>
 <?php
-if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
+if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
 ?>
         <tr>
             <td colspan="2"><a href="javascript:;" class="basic_info_show no_view" onclick="
@@ -166,7 +166,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
 
 <?php
             //the removal option is only available to admin users:
-if ($AccessLevelTRP == $AdminAccess){
+if ($USER->site_access_level($TRP_id)  == $AdminAccess){
 ?>
                 <!-- Clicking "remove" here means deleting this person's attendance at this event: -->
                 <td><a href="javascript:;" class="helptext hide_on_view" onclick="
@@ -189,7 +189,7 @@ if ($AccessLevelTRP == $AdminAccess){
         ?>
 <?php
 
-if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
+if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
 ?>
         <!--- add to a new event: -->
         <tr class="no_view"><td><span class="helptext">Add to event:</span></td>
@@ -265,7 +265,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
         </table>
 <?php
 
-if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
+if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
 ?>
 
         <!-- add a parent or child: -->
@@ -347,7 +347,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
     ?>
 <?php
 
-if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
+if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
 ?>
 
                         <!-- once a consent year has been added, we can also upload and save the form itself: -->
@@ -368,7 +368,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
 ?>
 <?php
 
-if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
+if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
 ?>
 
             <tr class="no_view"><!--Add new record-->
@@ -2265,7 +2265,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
                         ?>
 <?php
 
-if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
+if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
 ?>
 
         <!-- and a dropdown menu of all programs that this participant might join. -->

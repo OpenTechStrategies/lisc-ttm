@@ -1,7 +1,9 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id, $DataEntryAccess);
+
 /* save new mexican museum of art survey.  There are actually 2 surveys that participants take in this
  * program, and I have them both saving here and being filled in on the same page. */
 $date_formatted = explode('/', $_POST['date']);

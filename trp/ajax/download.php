@@ -1,7 +1,9 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id, $DataEntryAccess);
+
 /* download a saved file from the database.  In TRP, these are generally program notes uploads. */
 if(isset($_GET['id'])) 
 {

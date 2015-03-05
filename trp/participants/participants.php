@@ -29,7 +29,7 @@ include "../include/datepicker_simple.php";
 <div id="participant_search" class="content_block">
     <!-- Link to add a new participant: -->
 <?php
-if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
+    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
 ?>
     <div style="text-align:center;font-size:.9em;"><a class="add_new" onclick="
             $('#participant_search').hide();

@@ -1,7 +1,9 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id, $DataEntryAccess);
+
 
 include "../include/dbconnopen.php";
 /*
@@ -125,7 +127,7 @@ if ($_POST['family_search'] == '1') {
             <th>Gender</th>
             <?php
             //if an administrator
-    if ($AccessLevelTRP == $AdminAccess) {
+    if ($USER->site_access_level($TRP_id)  == $AdminAccess) {
                 //show delete area
                 ?>
                 <th>
@@ -157,7 +159,7 @@ if ($_POST['family_search'] == '1') {
                 </td>-->
                 <?php
                 //if an administrator
-                                                                                                                                                        if ($AccessLevelTRP == $AdminAccess) {
+    if ($USER->site_access_level($TRP_id)  == $AdminAccess) {
                     //show delete area
                     ?>
                     <td class="all_projects" style="text-align: center;">
