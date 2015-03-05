@@ -1,7 +1,9 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
 include "../../header.php";
 include "../header.php";
 //include "../include/datepicker_simple.php";
@@ -133,7 +135,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
                         function(response) {
                             window.location = 'profile.php?id=<?php echo $parti['Participant_ID'] ?>';
                         }
-                        )" style="margin-left:55px;">Save!</a>
+                        ).fail(failAlert);" style="margin-left:55px;">Save!</a>
 
         </tr>
 <?php
@@ -178,7 +180,7 @@ if ($AccessLevelTRP == $AdminAccess){
                             //document.write(response);
                             window.location = 'profile.php?id=<?php echo $parti['Participant_ID'] ?>';
                         }
-                        )">Remove...</a></td>
+                        ).fail(failAlert);">Remove...</a></td>
             </tr>
 <?php
 } // end access level check
@@ -218,7 +220,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
                         //document.write(response);
                         window.location = 'profile.php?id=<?php echo $parti['Participant_ID'] ?>';
                     }
-                    )">Add...</a></td>
+                    ).fail(failAlert);">Add...</a></td>
         </tr>
 <?php
 } //end access level check
@@ -293,7 +295,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
                                 //document.write(response);
                                 document.getElementById('find_fam_results').innerHTML = response;
                             }
-                            )"/>
+                            ).fail(failAlert);"/>
                 </tr>
             </table>
 
@@ -396,7 +398,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
                             //document.write(response);
                             window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                         }
-                        )"></td>
+                        ).fail(failAlert);"></td>
                 <td>
 
 
@@ -485,7 +487,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
                                    function(response){
                                       // document.write(response);
                                       window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
-                                   });">
+                                   }).fail(failAlert);">
                                     <?php 
                                 //get class avgs based on classroom above
                                 $avg_query_sqlsafe="SELECT * FROM Class_Avg_Gold_Scores WHERE Classroom_ID='$class_chosen[0]'";
@@ -1474,7 +1476,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
                                                     //alert('test');
                                                     window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                                                 }
-                                                )
+                                                ).fail(failAlert);
                                                                                           "/></td>
                                     </tr>
                                 </table></td></tr>
@@ -1490,7 +1492,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
                                         function(response) {
                                             // document.write(response);
                                             window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
-                                        })"><?php echo $program['Notes'] ?></textarea>
+                                        }).fail(failAlert);"><?php echo $program['Notes'] ?></textarea>
                             </td></tr>
                     </table>
 
@@ -1608,7 +1610,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
                                         //document.write(response);
                                         window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                                     }
-                                    )">Save...</a></td>
+                            ).fail(failAlert);">Save...</a></td>
                         </tr>
                     </table>
                     <br/><br/>
@@ -1644,7 +1646,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
                                         window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                                     }
                                                         
-                                                        )"></td></tr>
+                                                   ).fail(failAlert);"></td></tr>
                     </table>
                     
                     <?php }?>
@@ -1738,7 +1740,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
                                     //  document.write(response);
                                     window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                                 }
-                                )">Add new...</td>
+                                ).fail(failAlert);">Add new...</td>
                         </tr>
                     </table>
                     <br/><br/>
@@ -1830,7 +1832,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
                                         //    document.write(response);
                                         window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                                     }
-                                    )">Add new...</td>
+                                    ).fail(failAlert);">Add new...</td>
                         </tr>
                     </table>
                     <br/><br/>
@@ -1925,7 +1927,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
                                         document.write(response);
                                         //window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                                     }
-                                    )
+                                    ).fail(failAlert);
                                    ">Add new...</td>
                         </tr>
                     </table>
@@ -2083,7 +2085,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
                                         // document.write(response);
                                         window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                                     }
-                                    )
+                                    ).fail(failAlert);
                                    ">Add new...</td>
                         </tr>
                     </table>
@@ -2291,7 +2293,7 @@ include "../include/dbconnopen.php";
                     // document.write(response);
                     window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                 }
-                )">
+        ).fail(failAlert);">
 <?php
 } // end access level check
 ?>

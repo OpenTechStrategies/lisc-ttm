@@ -1,5 +1,9 @@
 <?php
-require_once("../siteconfig.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
 ?>
 <?php
 include "../../header.php";
@@ -102,7 +106,7 @@ include "../include/dbconnopen.php";
                        //document.write(response);
                         document.getElementById('show_trp_results').innerHTML = response;
                     }
-                    )
+                    ).fail(failAlert);
                     $('#ajax_loader').fadeOut('slow');
             "/></td>
         </tr>

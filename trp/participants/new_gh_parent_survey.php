@@ -1,5 +1,9 @@
 <?php
-require_once("../siteconfig.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
 ?>
 <?
 	include "../../header.php";
@@ -166,26 +170,10 @@ require_once("../siteconfig.php");
         <td class="pm_survey response"></td></tr>
     
     <tr><th colspan="2"><input type="button" value="Save Survey" onclick="
-        //var participant = document.getElementById('relative_search').options[document.getElementById('relative_search').selectedIndex].value;
-//        var participant = '<?//echo $_COOKIE['participant'];?>';
-//        if (participant==''){
-//            var select_dropdown=document.getElementById('relative_search');
-//            if(select_dropdown != null){
-//               // alert('yes!');
-//                var participant = document.getElementById('relative_search').options[document.getElementById('relative_search').selectedIndex].value;
-//            }
-//            else{
-//                alert('Please choose a participant.');
-//                return false;
-//            }
-            //var participant = document.getElementById('relative_search').options[document.getElementById('relative_search').selectedIndex].value;
-        //}
   
         $.post(
                '../ajax/save_new_survey.php',
                {
-                   //participant: participant,
-                   //child: document.getElementById('new_child').options[document.getElementById('new_child').selectedIndex].value,
                    child: '<?echo $_GET['origin'];?>',
                     date: document.getElementById('new_survey_date').value,
                    grade:  document.getElementById('new_grade').value,
@@ -205,10 +193,9 @@ require_once("../siteconfig.php");
                    second_4:  document.getElementById('second_4').options[document.getElementById('second_4').selectedIndex].value
                },
                function (response){
-                   //document.write(response);
                    document.getElementById('show_survey_response').innerHTML = '<span style=color:#990000;font-weight:bold;font-size:.9em; padding-left: 25px;>Thank you for entering this survey!</span>';
                }
-               )"></th></tr>
+               ).fail(failAlert);"></th></tr>
 </table>
 <div id="show_survey_response"></div>
 </div>

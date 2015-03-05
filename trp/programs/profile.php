@@ -1,7 +1,8 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
-require_once("../siteconfig.php");
-
+user_enforce_has_access($TRP_id);
 
 include "../../header.php";
 include "../header.php";
@@ -79,7 +80,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
                                                 //document.write(response);
                                                 document.getElementById('search_results').innerHTML = response;
                                             }
-                                            )"/></td>
+                                            ).fail(failAlert);"/></td>
                                 </tr>
                             </table>
                             <!-- choose person and add to program here. -->
@@ -453,7 +454,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
                                         //document.write(response);
                                         document.getElementById('add_person_results').innerHTML = response;
                                     }
-                                    )"/></td>
+                                    ).fail(failAlert);"/></td>
                                 </tr>
                             </table>
                             <div id="add_person_results"></div>
@@ -974,7 +975,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
                                    function(response){
                                       // document.write(response);
                                        window.location = 'profile.php?id=<?php echo $_GET['id']; ?>';
-                                   });"></td>
+                                   }).fail(failAlert);"></td>
                         </tr>
                     </table>
                 </td>
@@ -1026,7 +1027,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
                                                 //document.write(response);
                                                 window.location = 'profile.php?id=<?php echo $_GET['id']; ?>';
                                             }
-                                            )">
+                                            ).fail(failAlert);">
                                             <option value="">-----</option>
                                             <?php
                                             $members = mysqli_query($cnnTRP, $get_members_sqlsafe);
@@ -1064,7 +1065,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
                                         // document.write(response);
                                         window.location = 'profile.php?id=<?php echo $_GET['id']; ?>';
                                     }
-                                    )"><br/>
+                                    ).fail(failAlert);"><br/>
                                 <span class="helptext">Dates must be entered in MM/DD/YYYY format to save correctly.</span></td>
                         </tr>
 <?php
@@ -1154,7 +1155,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
                                                 //document.write(response);
                                                 document.getElementById('search_results').innerHTML = response;
                                             }
-                                            )"/></td>
+                                            ).fail(failAlert);"/></td>
                                 </tr>
                             </table>
                             <div id="search_results"></div>

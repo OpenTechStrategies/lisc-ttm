@@ -1,7 +1,9 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
 	include "../../header.php";
 	include "../header.php";
         include "../include/datepicker_simple.php";
@@ -122,7 +124,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
                                                                                             function (response){
                                                                                                 window.location = 'engagement.php?event=<?echo $event['Event_ID'];?>';
                                                                                             }
-                                                                                    )
+                                                                                    ).fail(failAlert);
 								" style="margin-left:30px;">Save changes</a><br/></td>
 								<td>
 									<a href="javascript:;" class="helptext no_view" onclick="
@@ -160,7 +162,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 													function (response){
 														document.getElementById('attendee_search_results_<?echo $event['Event_ID'];?>').innerHTML = response;
 													}
-												)"/></td>
+												).fail(failAlert);"/></td>
 											</tr>
 										</table>
 										<div id="attendee_search_results_<?echo $event['Event_ID'];?>"></div>
@@ -196,7 +198,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 										function (response){
 											window.location = "engagement.php?event=<?echo $event['Event_ID'];?>";
 										}
-									)
+									).fail(failAlert);
 								}
 								else if (cb.checked== false) {
 									$.post(
@@ -209,7 +211,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 										function (response){
 											window.location = "engagement.php";
 										}
-									)
+									).fail(failAlert);
 								}
 							}
 						</script>
@@ -287,7 +289,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
                                                                                                 //document.write(response);
                                                                                                 window.location = 'engagement.php?event=<?echo $event['Event_ID'];?>';
                                                                                             }
-                                                                                    )
+                                                                                    ).fail(failAlert);
 								" style="margin-left:30px;">Save changes</a><br/></td>
 								<td>
 									<a href="javascript:;" class="helptext no_view" onclick="
@@ -326,7 +328,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
                                                                                                         //    alert('and got a response!');
 														document.getElementById('attendee_search_results_<?echo $event['Event_ID'];?>').innerHTML = response;
 													}
-												)"/></td>
+												).fail(failAlert);"/></td>
 											</tr>
 										</table>
 										<div id="attendee_search_results_<?echo $event['Event_ID'];?>"></div>
@@ -361,7 +363,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 										function (response){
 											window.location = "engagement.php?event=<?echo $event['Event_ID'];?>";
 										}
-									)
+									).fail(failAlert);
 								}
 								else if (cb.checked== false) {
 									$.post(
@@ -374,7 +376,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 										function (response){
 											window.location = "engagement.php?event=<?echo $event['Event_ID'];?>";
 										}
-									)
+									).fail(failAlert);
 								}
 							}
 						</script>
@@ -490,7 +492,7 @@ if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess) {
 												//alert(response);
 												window.location='engagement.php';
 											}
-										)"/>
+										).fail(failAlert);"/>
 </td>
 <?php
 } // end access level check

@@ -1,5 +1,9 @@
 <?php
-require_once("../siteconfig.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
 ?>
 <?php
 include "../../header.php";
@@ -112,7 +116,8 @@ if (isset($_GET['survey'])) {
         ?>
         <tr>
             <td colspan="2" style="text-align:center;border:0;"><input type="button" value="Save" onclick="
-                    $.post('../ajax/save_nmma_survey.php',
+                    $.post(
+'../ajax/save_nmma_survey.php',
                             {
                                 participant: '<?php echo $_GET['participant']; ?>',
                                 date: document.getElementById('survey_date').value,
@@ -141,7 +146,7 @@ if (isset($_GET['survey'])) {
                     function(response) {
                         document.getElementById('traditions_survey_saved').innerHTML = response;
                     }
-                    )"/>
+                    ).fail(failAlert);"/>
                 <div id="traditions_survey_saved"></div>
             </td>
         </tr>

@@ -1,7 +1,9 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker_simple.php";
@@ -149,7 +151,7 @@ include "../include/dbconnclose.php";
                         function(response) {
                             document.getElementById('traditions_survey_saved').innerHTML = response;
                         }
-                        )"/>
+                        ).fail(failAlert);"/>
                     <div id="traditions_survey_saved"></div>
                 </td>
             </tr>

@@ -1,5 +1,8 @@
 <?php
-require_once("../siteconfig.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
 ?>
 <h4>New Participant</h4><br/>
 <!-- div that appears on participants.php for adding a new person to the DB 
@@ -118,8 +121,7 @@ No required fields.
                                 function(response) {
                                     document.getElementById('confirmation').innerHTML = response;
                                 }
-                                )
-                                        ;
+                                ).fail(failAlert);
                                                     }
                                             }
                                             else{
@@ -147,10 +149,10 @@ No required fields.
                                 function(response) {
                                     document.getElementById('confirmation').innerHTML = response;
                                 }
-                                );
+                                ).fail(failAlert);
                                             }
                                         }
-                                      );
+                                      ).fail(failAlert);
                                  
                                 "/></td>
     </tr>

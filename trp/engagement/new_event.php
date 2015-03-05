@@ -1,5 +1,9 @@
 <?php
-require_once("../siteconfig.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
 ?>
 	<h2>Create a New Event</h2>
         
@@ -32,7 +36,7 @@ require_once("../siteconfig.php");
                                                                         function (response){
                                                                             document.getElementById('show_event_result').innerHTML =response;
                                                                         }
-                                                                   )"/></strong></td>
+                                                                   ).fail(failAlert);"/></strong></td>
 					</tr>
 				</table>
         <div id="show_event_result"></div>
