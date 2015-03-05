@@ -1,7 +1,10 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?include "../../header.php";
+include "../../header.php";
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
 include "../header.php";
 include "report_menu.php";
 

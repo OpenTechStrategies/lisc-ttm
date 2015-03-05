@@ -1,7 +1,9 @@
 <?php
-require_once("../siteconfig.php");
-?>
-<?
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
 	include "../../header.php";
 	include "../header.php";
 ?>
@@ -14,12 +16,12 @@ require_once("../siteconfig.php");
 
 <div class="content_block">
 	<h3>Reports</h3><hr/><br/>
-        <?include "report_menu.php";?>
+        <?php include "report_menu.php";?>
 </div>
 
 
 
-<?
+<?php
 	include "../../footer.php";
 ?>
 	

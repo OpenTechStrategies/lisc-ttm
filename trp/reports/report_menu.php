@@ -1,5 +1,8 @@
 <?php
-require_once("../siteconfig.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
 ?>
 <div class="content_block" style="text-align:center;">
 <!--        <span class="trp_report"><a href="/trp/reports/reports.php">Reports Home</a> ||</span>-->
@@ -9,7 +12,7 @@ require_once("../siteconfig.php");
 <!--        <a href="/trp/include/import_grades.php">Import Grades</a> ||
         <a href="/trp/reports/import_demographics.php">Import Demographics</a> ||-->
 <?php
-if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
+    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
 ?>
        <span class="trp_report no_view"> <a href="/trp/reports/import_event_attendance.php">Import Event Attendance</a> ||</span>
       <span class="trp_report no_view">  <a href="/trp/reports/import_cps.php">Import CPS File</a> ||</span>

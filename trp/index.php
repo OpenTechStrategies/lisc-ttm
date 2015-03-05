@@ -1,5 +1,9 @@
 <?php
-require_once( "siteconfig.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
 //if action is logout
 if ($_GET['action'] == 'logout') {
     //kill cookie
@@ -41,7 +45,7 @@ include "include/datepicker_simple.php";
 <!-- adds an event.  Doesn't link event to a campaign, so it shows up on the Community Engagement page. -->
 
 <?php
-if ($AccessLevelTRP == $AdminAccess || $AccessLevelTRP == $DataEntryAccess){
+    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
 ?>
 <h4>Create a New Event</h4>
 	<br/>

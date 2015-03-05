@@ -1,5 +1,9 @@
 <?php
-//require_once("../siteconfig.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
 ?>
       <link href="/styles/styles.css" rel="stylesheet" type="text/css" />
         <link href="/include/jquery/1.9.1/css/redmond/jquery-ui-1.8.23.custom.css" rel="stylesheet" type="text/css" />
