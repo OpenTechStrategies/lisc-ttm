@@ -1,4 +1,6 @@
 <?php
+include_once $_SERVER['DOCUMENT_ROOT'] . "/core/tools/db.php";
+
 $LSNA_id = 2;
 $Bickerdike_id = 3;
 $TRP_id = 4;
@@ -26,6 +28,7 @@ $ReadOnlyAccess = 3;
 // Give a 401 error and die with $message, if any
 $die_unauthorized = function($message = "") {
     header("HTTP/1.0 401 Unauthorized");
+    close_all_dbconn();
     die($message);
 };
 
