@@ -1,7 +1,18 @@
 <?php
-//include "../../header.php";
+include "../../header.php";
 include "../header.php";
 ?>
+<script type = "text/javascript">
+    $(document).ready(function(){
+        $('.save_form').hide();
+        $('form').live('submit', function(){
+            $.post($(this).attr('action'), $(this).serialize(), function(response){
+                window.location = "issue_events_report.php";
+            },'json');
+            return false;
+        });
+    });
+</script>
 <!--Query search for people who attended some of the Issue Area Events (e.g. signed up for SNAP)-->
     <h3>Services Rendered Report</h3>
 <table class="all_projects">
@@ -24,7 +35,7 @@ while ($area=mysqli_fetch_row($areas)){
     echo $num_participants_served = mysqli_num_rows($ytd_num_call);
 ?>
     </td>
-<td>
+<td class="all_projects"><b>
 <?php
     date_default_timezone_set('America/Chicago');
     $get_year=date('Y');
@@ -32,8 +43,9 @@ while ($area=mysqli_fetch_row($areas)){
     $ytd_num_nonpart=mysqli_query($cnnLSNA, $ytd_num_manual);
     echo $number_nonparticipants = mysqli_fetch_array($ytd_num_nonpart)[0];
 
-?>
-<form method = "post" action = "add_issue_attendance.php">
+?></b>
+<br><a href = "javascript:;" onclick = "$('#save_form_<?php echo $area[0]; ?>').toggle()">Add non-participants</a>
+<form method = "post" action = "add_issue_attendance.php" id = "save_form_<?php echo $area[0]; ?>" class = "save_form"">
 <input type="text" name="num_served" size = "5">
 <input type = "hidden" name = "save_number">
 <input type = "hidden" name = "issue" value = "<?php echo $area[0]; ?>">
@@ -63,7 +75,7 @@ while ($area=mysqli_fetch_row($areas)){
 <input type="submit" name="Save_number_manually" value="Save">
 </form>
 </td>
-<td>
+<td class="all_projects">
 <?php
     echo $num_participants_served + $number_nonparticipants;
 ?>
