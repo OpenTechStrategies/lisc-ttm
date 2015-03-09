@@ -46,7 +46,7 @@ user_enforce_has_access($TRP_id);
 			<td width="60%"><h2>TRP Events</h2><br/>
                             <!-- add a noncampaign event: -->
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
 				<div style="text-align:center;font-size:.9em;"><a class="add_new" onclick="
 							$('#engagement_home').hide();
@@ -103,7 +103,7 @@ user_enforce_has_access($TRP_id);
 									<input class="edit event_<?echo $event['Event_ID'];?>_edit" id="<?echo $event['Event_ID'];?>_edit_actual" value="<?echo $event['Event_Actual'];?>" style="width:70px;"/></td>
 							</tr>
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
 							<tr>
 								<td colspan="2"><a href="javascript:;" class="display helptext event_<?echo $event['Event_ID'];?>_edit_click no_view" onclick="
@@ -171,7 +171,7 @@ user_enforce_has_access($TRP_id);
 							<tr>
                                                             <!-- set event to active or inactive: -->
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
 								<td>
 									<br/><input type="checkbox" id="<?echo $event['Event_ID'];?>_active" class="no_view" <?if ($event['Active']==1) { echo "checked";}?> 
@@ -267,7 +267,7 @@ user_enforce_has_access($TRP_id);
 									<input class="edit event_<?echo $event['Event_ID'];?>_edit" id="<?echo $event['Event_ID'];?>_edit_actual" value="<?echo $event['Event_Actual'];?>" style="width:70px;"/></td>
 							</tr>
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
 							<tr>
 								<td colspan="2"><a href="javascript:;" class="display helptext event_<?echo $event['Event_ID'];?>_edit_click no_view" onclick="
@@ -335,7 +335,7 @@ user_enforce_has_access($TRP_id);
 								</td>
 							</tr>
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
 							<tr>
 								<td>
@@ -475,7 +475,7 @@ user_enforce_has_access($TRP_id);
 									<td><input type="text" id="<?echo $outcome['Outcome_ID'];?>_goal" style="width:40px;"/></td>
 									<td><input type="text" id="<?echo $outcome['Outcome_ID'];?>_actual" style="width:40px;"/></td>
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+    if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
 
 									<td><input type="button" class="no_view" value="Add" onclick="

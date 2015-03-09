@@ -31,7 +31,7 @@ $program = mysqli_fetch_array($program_info);
             <tr>
                 <td width="40%">
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+    if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                     <h4>Add Participants to Program</h4>
                     <!-- list of people in this program, with links to their profiles. -->
@@ -508,7 +508,7 @@ $program = mysqli_fetch_array($program_info);
                     ?>
 
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                     <form id="file_upload_form" class="no_view" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data">
                         <input type="file" name="file" id="file" /> 
@@ -1008,7 +1008,7 @@ $program = mysqli_fetch_array($program_info);
                                         <!-- people need to be enrolled in the program before they can attend a session.  Don't see the person you want to 
                                         add?  Make sure they're enrolled at the top left. -->
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                                         Add attendee: <?php
                                            $get_members_sqlsafe = "SELECT Participants_Programs.Participant_Id, First_Name, Last_Name FROM Participants_Programs
@@ -1047,7 +1047,7 @@ $program = mysqli_fetch_array($program_info);
                         }
                         ?> 
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+    if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
 
 <tr>
@@ -1112,7 +1112,7 @@ $program = mysqli_fetch_array($program_info);
 
                     </ul>
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                     <div class="add_participant">
 
@@ -1322,7 +1322,7 @@ $program = mysqli_fetch_array($program_info);
 
 
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                         <form id="file_upload_form" class="no_view" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data">
                             <input type="file" name="file" id="file" /> 
@@ -1415,7 +1415,7 @@ else if ($program['Program_ID'] == 3) {
                     <!-- list of people enrolled in this program: -->
                     <h4>Program Enrollment</h4>
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+    if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                     <div class="add_participant">
                         <a href="javascript:;" onclick="
@@ -1555,7 +1555,7 @@ else if ($program['Program_ID'] == 4) {
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new" style="width:100px;">
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+    if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
@@ -1630,7 +1630,7 @@ else if ($program['Program_ID'] == 4) {
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_2" style="width:100px;">
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
@@ -1706,7 +1706,7 @@ else if ($program['Program_ID'] == 4) {
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_3" style="width:100px;">
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
@@ -1781,7 +1781,7 @@ else if ($program['Program_ID'] == 4) {
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_4" style="width:100px;">
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
@@ -1925,7 +1925,7 @@ else if ($program['Program_ID'] == 4) {
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_6" style="width:100px;">
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
@@ -2001,7 +2001,7 @@ else if ($program['Program_ID'] == 4) {
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_7" style="width:100px;">
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
@@ -2078,7 +2078,7 @@ else if ($program['Program_ID'] == 4) {
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_8" style="width:100px;">
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                     <input type="button" value="Save"  class="no_view" onclick="
                             $.post(
@@ -2113,7 +2113,7 @@ else if ($program['Program_ID'] == 5) {
                     participant must already be entered in the system. -->
                     <h4>Program Enrollment</h4>
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+    if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                     <div class="add_participant">
                         <a href="javascript:;" onclick="
@@ -2203,7 +2203,7 @@ else if ($program['Program_ID'] == 5) {
 
                                         <!--- again, for someone to be an attendee s/he must already be enrolled in the program. -->
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
                                         <span class="helptext">Add attendee: </span><?php $get_members_sqlsafe = "SELECT Participants_Programs.Participant_Id, First_Name, Last_Name FROM Participants_Programs
                                     INNER JOIN Participants ON Participants.Participant_Id=Participants_Programs.Participant_Id WHERE Program_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
@@ -2241,7 +2241,7 @@ else if ($program['Program_ID'] == 5) {
                                 }
                                 ?>
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
  <tr>
                             <td>Add Date: <input type="text" id="new_early_childhood_date" class="hasDatepickers no_view"></td>

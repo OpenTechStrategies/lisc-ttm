@@ -44,7 +44,7 @@ List of all programs, and, at the bottom, a place to add a new program.
             </td>
             <?php
             //if an administrator
-        if ($USER->site_access_level($Enlace_id) <= $AdminAccess) {
+        if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
                 //show delete area
                 ?>
                 <td>
@@ -76,7 +76,7 @@ List of all programs, and, at the bottom, a place to add a new program.
                 </td>
                 <?php
                 //if an administrator
-        if ($USER->site_access_level($Enlace_id) <= $AdminAccess) {
+            if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
                     //show delete area
                     ?>
                     <td style="text-align: center;">

@@ -13,6 +13,7 @@ include "../header.php";
  * to this...person? or this survey?: */
 
 $access_array = $USER->program_access($Enlace_id);
+$has_all_programs = in_array('a', $access_array);
 
 include "../include/dbconnopen.php";
 $person_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['person']);
@@ -25,7 +26,7 @@ while ($program_id = mysqli_fetch_row($program_connected)){
     }
 }
 
-if (!isset($_GET['assessment']) || in_array('a', $access_array) || $access_granted){
+if (!isset($_GET['assessment']) || $has_all_programs || $access_granted){
 
 /*
  * This file is either a new impact survey, an editable impact survey, or a view for the impact survey.

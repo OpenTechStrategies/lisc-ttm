@@ -151,7 +151,7 @@ if ($_POST['result'] == 'dropdown') {
                         }).fail(function() {alert('You do not have permission to perform this action.');});">DOB</a></th>
                 <?php
                 //if an administrator
-                if ($USER->site_access_level($Enlace_id) == $AdminAccess) {
+    if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
                     //show delete area
                     ?>
                     <th>
@@ -183,7 +183,7 @@ if ($_POST['result'] == 'dropdown') {
                 <?php
                 //if an administrator
 
-                if ($USER->site_access_level($Enlace_id) == $AdminAccess) {
+                    if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
                     //show delete area
                     ?>
                 <td class="all_projects" style="text-align: center;">

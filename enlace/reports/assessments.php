@@ -6,6 +6,8 @@ user_enforce_has_access($Enlace_id);
 
 //get user's access
 $access_array = $USER->program_access($Enlace_id);
+
+$has_all_programs = in_array('a', $access_array);
 ?>
 
 <!--Div on reports page that shows the assessment responses:  -->
@@ -20,7 +22,7 @@ $access_array = $USER->program_access($Enlace_id);
     <a href="javascript:;" onclick="$('#program_list').toggle();">Show/hide programs</a>
     <div id="program_list"><?php
         //if not an administrator
-    if ( ! in_array('a', $access_array)) {
+    if ( ! $has_all_programs) {
             //get user's programs
             $get_all_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names INNER JOIN Programs 
                             ON Session_Names.Program_ID=Programs.Program_ID
@@ -77,7 +79,7 @@ $access_array = $USER->program_access($Enlace_id);
     <input type="submit" value="Show Results" name="submit_btn_assessments"
     <?php
     //if not an administrator
-            if ( ! in_array('a', $access_array)) {
+            if ( ! $has_all_programs) {
         //make sure a checkbox is checked
         ?>
                onclick="return test_program_select();"
@@ -86,7 +88,7 @@ $access_array = $USER->program_access($Enlace_id);
            ?>>
            <?php
            //if not an administrator
-if ( ! in_array('a', $access_array)) {
+if ( ! $has_all_programs) {
                //make sure a checkbox is checked
                ?>
         <script>

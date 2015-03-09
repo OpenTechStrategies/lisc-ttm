@@ -46,7 +46,7 @@ while($inst=mysqli_fetch_array($insts)){
         	<td>
 <?php
     /*Delete button only available to admin users: */
-    if ($USER->site_access_level($Enlace_id) <= $AdminAccess){
+    if ($USER->has_site_access($Enlace_id, $AdminAccess)){
 ?>
 <a href="javascript:;" onclick="
         		$.post(

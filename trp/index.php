@@ -45,7 +45,7 @@ include "include/datepicker_simple.php";
 <!-- adds an event.  Doesn't link event to a campaign, so it shows up on the Community Engagement page. -->
 
 <?php
-    if ($USER->site_access_level($TRP_id) <= $DataEntryAccess) {
+    if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
 <h4>Create a New Event</h4>
 	<br/>

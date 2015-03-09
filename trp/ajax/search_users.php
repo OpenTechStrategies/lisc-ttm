@@ -127,7 +127,7 @@ if ($_POST['family_search'] == '1') {
             <th>Gender</th>
             <?php
             //if an administrator
-    if ($USER->site_access_level($TRP_id)  == $AdminAccess) {
+    if ($USER->has_site_access($TRP_id, $AdminAccess)) {
                 //show delete area
                 ?>
                 <th>
@@ -159,7 +159,7 @@ if ($_POST['family_search'] == '1') {
                 </td>-->
                 <?php
                 //if an administrator
-    if ($USER->site_access_level($TRP_id)  == $AdminAccess) {
+                                                                                                                                                        if ($USER->has_site_access($TRP_id, $AdminAccess)) {
                     //show delete area
                     ?>
                     <td class="all_projects" style="text-align: center;">

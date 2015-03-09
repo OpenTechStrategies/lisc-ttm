@@ -4,6 +4,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
 user_enforce_has_access($TRP_id);
 
+$program_access_list = $USER->program_access($TRP_id);
+
+$has_all_programs =  in_array('a', $program_access_list);
+
 include "../../header.php";
 include "../header.php";
 //include "../include/datepicker_simple.php";
@@ -105,7 +109,7 @@ if ($parti['Gender'] == 'm') {
             </td>
         </tr>
 <?php
-if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
+    if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
         <tr>
             <td colspan="2"><a href="javascript:;" class="basic_info_show no_view" onclick="
@@ -166,7 +170,7 @@ if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
 
 <?php
             //the removal option is only available to admin users:
-if ($USER->site_access_level($TRP_id)  == $AdminAccess){
+            if ($USER->has_site_access($TRP_id, $AdminAccess)){
 ?>
                 <!-- Clicking "remove" here means deleting this person's attendance at this event: -->
                 <td><a href="javascript:;" class="helptext hide_on_view" onclick="
@@ -189,7 +193,7 @@ if ($USER->site_access_level($TRP_id)  == $AdminAccess){
         ?>
 <?php
 
-if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
         <!--- add to a new event: -->
         <tr class="no_view"><td><span class="helptext">Add to event:</span></td>
@@ -265,7 +269,7 @@ if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
         </table>
 <?php
 
-if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
 
         <!-- add a parent or child: -->
@@ -347,7 +351,7 @@ if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
     ?>
 <?php
 
-if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
 
                         <!-- once a consent year has been added, we can also upload and save the form itself: -->
@@ -368,7 +372,7 @@ if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
 ?>
 <?php
 
-if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
 
             <tr class="no_view"><!--Add new record-->
@@ -435,7 +439,7 @@ if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
             <h4><?php echo $program['Program_Name']; ?></h4>
                             <?php
                             //Early Childhood Education
-                            if ($program['Program_ID'] == 1 && (in_array('a', $program_access_list) || in_array(1, $program_access_list))) {
+                            if ($program['Program_ID'] == 1 && ($has_all_programs || in_array(1, $program_access_list))) {
                                 ?>
                 <div class="program_details">
                     <table width="100%">
@@ -1501,7 +1505,7 @@ if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
                 </div>
         <?php
         //Middle School to High School teacher exchange
-            } else if (($program['Program_ID'] == 2 || $program['Program_ID'] == 4) && (in_array('a', $program_access_list) || in_array(2, $program_access_list) || in_array(4, $program_access_list))) {
+            } else if (($program['Program_ID'] == 2 || $program['Program_ID'] == 4) && ($has_all_programs || in_array(2, $program_access_list) || in_array(4, $program_access_list))) {
         $get_transition_info_sqlsafe = "SELECT * FROM Explore_Scores WHERE Participant_ID=" . $parti['Participant_ID'] .
                 " AND Program_ID='" . $program['Program_ID'] . "'";
         include "../include/dbconnopen.php";
@@ -1839,7 +1843,7 @@ if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
                 </div>
         <?php
         //New Horizons/Gads Hill tutoring
-    } else if ($program['Program_ID'] == 3 && (in_array('a', $program_access_list) || in_array(3, $program_access_list))) {
+    } else if ($program['Program_ID'] == 3 && ($has_all_programs || in_array(3, $program_access_list))) {
         ?>
                 <div class="program_details">
                     <h5>Attendance</h5>
@@ -1952,10 +1956,10 @@ if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
         <?php
         //Elev8 shows the same information as the middle school to high school transition, so this 
         //option for the if is no longer relevant.
-    } else if ($program['Program_ID'] == 4 && (in_array('a', $program_access_list) || in_array(4, $program_access_list))) {
+    } else if ($program['Program_ID'] == 4 && ($has_all_programs || in_array(4, $program_access_list))) {
 
         //NMMA Artist in Residency
-    } else if ($program['Program_ID'] == 5 && (in_array('a', $program_access_list) || in_array(5, $program_access_list))) {
+    } else if ($program['Program_ID'] == 5 && ( $has_all_programs || in_array(5, $program_access_list))) {
         ?>
                 <div class="program_details">
                     <h5>Attendance</h5>
@@ -2093,7 +2097,7 @@ if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
                 </div>
                                 <?php
                             }
-            else if ($program['Program_ID'] == 6 && (in_array('a', $program_access_list) || in_array(6, $program_access_list))) {
+            else if ($program['Program_ID'] == 6 && ( $has_all_programs || in_array(6, $program_access_list))) {
                ?> 
             <div class="program_details">
             <h4>La Casa Information</h4>
@@ -2265,7 +2269,7 @@ if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
                         ?>
 <?php
 
-if ($USER->site_access_level($TRP_id) <= $DataEntryAccess){
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
 
         <!-- and a dropdown menu of all programs that this participant might join. -->

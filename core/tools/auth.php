@@ -188,7 +188,12 @@ class User {
     // Returns:
     // true if the user has access to any one of the programs in
     // $program_array, and enforces a page exit otherwise 
-    public function enforce_access_program_array($site, $program_array){
+    public function enforce_access_program_array($site, $program_array, $failure_func = NULL){
+        if (is_null($failure_func)) {
+            global $die_unauthorized;
+            $failure_func = $die_unauthorized;
+        }
+
         if ( in_array('a', $this->program_access($site))){
             return true;
             

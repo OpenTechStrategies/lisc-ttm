@@ -7,6 +7,8 @@ user_enforce_has_access($Enlace_id);
 //get user's access
 
 $access_array = $USER->program_access($Enlace_id);
+
+$has_all_programs =  in_array('a', $access_array);
 ?>
 
 <br/>
@@ -55,8 +57,7 @@ $access_array = $USER->program_access($Enlace_id);
             <th>Current enrollment</th>
         </tr>
         <?php
-        //if not an administrator
-         if (! in_array('a', $access_array)) {
+         if (! $has_all_programs) {
             //get user's programs
             $all_progs = "SELECT Name, Session_Name, Session_ID, COUNT(Participant_ID) FROM Session_Names 
                             INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_ID 
@@ -114,8 +115,7 @@ $access_array = $USER->program_access($Enlace_id);
             <td class="all_projects"><?php
                 //get distinct participants, then count rows
                 // $distinct_people="SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID<10;";
-                //if not an administrator
-            if ( ! in_array('a', $access_array)) {
+            if ( ! $has_all_programs) {
                     //get user's programs
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs "
                             . "WHERE Program_ID = " . $access[0] . ";";
@@ -132,8 +132,7 @@ $access_array = $USER->program_access($Enlace_id);
             <td class="all_projects"><?php
                 //get distinct participants, then count rows
                 //$distinct_people="SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID<10 AND Date_Dropped IS NOT NULL;";
-                //if not an administrator
-                    if ( ! in_array('a', $access_array)) {
+                    if ( ! $has_all_programs) {
                     //get user's programs
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs "
                             . "WHERE Program_ID = " . $access[0] . " AND Date_Dropped IS NOT NULL;";
@@ -151,8 +150,7 @@ $access_array = $USER->program_access($Enlace_id);
                 <?php
                 //get distinct participants, then count rows
                 // $distinct_people="SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID<10 AND Date_Dropped IS NULL;";
-                //if not an administrator
-                    if ( ! in_array('a', $access_array)) {
+                    if ( ! $has_all_programs) {
                     //get user's programs
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs "
                             . "WHERE Program_ID = " . $access[0] . " AND Date_Dropped IS NULL;";
@@ -175,8 +173,7 @@ $access_array = $USER->program_access($Enlace_id);
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                //if not an administrator
-                    if ( ! in_array('a', $access_array)) {
+                    if ( ! $has_all_programs) {
                     //get user's programs
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs "
                             . "WHERE Program_ID = " . $access[0] . ";";
@@ -193,8 +190,7 @@ $access_array = $USER->program_access($Enlace_id);
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                //if not an administrator
-                    if ( ! in_array('a', $access_array)) {
+                    if ( ! $has_all_programs) {
                     //get user's programs
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs "
                             . "WHERE Program_ID = " . $access[0] . " AND Date_Dropped IS NOT NULL;";
@@ -211,8 +207,7 @@ $access_array = $USER->program_access($Enlace_id);
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                //if not an administrator
-                    if ( ! in_array('a', $access_array)) {
+                    if ( ! $has_all_programs) {
                     //get user's programs
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs "
                             . "WHERE Program_ID = " . $access[0] . " AND Date_Dropped IS NULL;";
@@ -243,11 +238,10 @@ $access_array = $USER->program_access($Enlace_id);
         </tr>
         <?php
         //get all programs that existed in the selected month and year
-        //if not an administrator
         include "../include/dbconnopen.php";
         $month_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['month_select']);
         $year_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['year_select']);
-        if ( ! in_array('a', $access_array)) {
+        if ( ! $has_all_programs) {
             //get user's programs
             $all_progs = "SELECT Name, Session_Name, Session_ID, COUNT(Participant_ID) FROM Session_Names 
                             INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_ID 
@@ -270,8 +264,7 @@ $access_array = $USER->program_access($Enlace_id);
                 <td class="all_projects"><?php echo $program[1] ?></td>
                 <td class="all_projects">
                     <?php
-                    //if not an administrator
-            if ( ! in_array('a', $access_array)) {
+            if ( ! $has_all_programs) {
                         //get user's programs
                         $total_enrolled = "SELECT COUNT(*) FROM Participants_Programs "
                                 . "WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added) <= '" . $month_select_sqlsafe . "' AND
@@ -289,8 +282,7 @@ $access_array = $USER->program_access($Enlace_id);
                 </td>
                 <td class="all_projects">
                     <?php
-                    //if not an administrator
-                    if ( ! in_array('a', $access_array)) {
+                    if ( ! $has_all_programs) {
                         //get user's programs
                         $total_dropped = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Dropped)<='" . $month_select_sqlsafe . "' AND
                             YEAR(Date_Dropped)<='" . $year_select_sqlsafe . "' AND Program_ID=$program[2] AND Date_Dropped IS NOT NULL";
@@ -308,8 +300,7 @@ $access_array = $USER->program_access($Enlace_id);
                 <td class="all_projects">
                     <?php
                     //echo total remaining (at the selected month and year)
-                    //if not an administrator
-                    if ( ! in_array('a', $access_array)) {
+                    if ( ! $has_all_programs) {
                         //get user's programs
                         $total_current = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
                                 YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Program_ID=$program[2] AND Date_Dropped IS NULL";
@@ -335,8 +326,7 @@ $access_array = $USER->program_access($Enlace_id);
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                //if not an administrator
-        if ( ! in_array('a', $access_array)) {
+        if ( ! $has_all_programs) {
                     //get user's programs
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
             YEAR(Date_Added)<='" . $year_select_sqlsafe . "';";
@@ -356,8 +346,7 @@ $access_array = $USER->program_access($Enlace_id);
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                //if not an administrator
-                if ( ! in_array('a', $access_array)) {
+                if ( ! $has_all_programs) {
                     //get user's programs
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
                              YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Date_Dropped IS NOT NULL;";
@@ -377,8 +366,7 @@ $access_array = $USER->program_access($Enlace_id);
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                //if not an administrator
-                if ( ! in_array('a', $access_array)) {
+                if ( ! $has_all_programs) {
                     //get user's programs
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
                             YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Date_Dropped IS NULL;";
@@ -403,8 +391,7 @@ $access_array = $USER->program_access($Enlace_id);
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                //if not an administrator
-                if ( ! in_array('a', $access_array)) {
+                if ( ! $has_all_programs) {
                     //get user's programs
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
                             YEAR(Date_Added)<='" . $year_select_sqlsafe . "';";
@@ -423,8 +410,7 @@ $access_array = $USER->program_access($Enlace_id);
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                //if not an administrator
-                if ( ! in_array('a', $access_array)) {
+                if ( ! $has_all_programs) {
                     //get user's programs
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
                             YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Date_Dropped IS NOT NULL;";
@@ -443,8 +429,7 @@ $access_array = $USER->program_access($Enlace_id);
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                //if not an administrator
-                if ( ! in_array('a', $access_array)) {
+                if ( ! $has_all_programs) {
                     //get user's programs
                     $distinct_people = "SELECT Participant_ID FROM Participants_Programs WHERE Program_ID = " . $access[0] . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND
                             YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Date_Dropped IS NULL;";
