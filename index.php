@@ -34,7 +34,7 @@ if ($_GET['action'] == 'logout') {
             <!--                <ul class="navigation">-->
             <!--<li class="navigation">-->
             <a href="#"><span>Homepage</span></a><!--</li>-->
-            <?php if (!in_array(1, $USER->site_permissions)) {
+            <?php if (!in_array($AdminAccess, $USER->site_permissions)) {
 
                 /* Only admin users can alter privileges, so this will only be visible
                  * for them.
