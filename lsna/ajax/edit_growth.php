@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id, $DataEntryAccess);
+
 /*This is obsolete for now.  They decided not to include the adult ed in the 
  * ultimate version of the database.  This will probably come back, though.
  */

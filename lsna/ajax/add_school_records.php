@@ -1,4 +1,9 @@
 <?
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id, $DataEntryAccess);
+
 /*add academic info.  not just for parent mentor children, but for anyone with the child/youth role. */
 	include "../include/dbconnopen.php";
         $participant_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['participant']);

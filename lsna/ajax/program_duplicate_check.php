@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id, $DataEntryAccess);
+
 /*check for duplicate program/campaign names: */
 include "../include/dbconnopen.php";
 $subcategory_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['subcategory']);

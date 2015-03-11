@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id, $DataEntryAccess);
+
 /* PM_Years is the new way to track where and when people are active parent mentors
  *  saves the year and school for new (and old) parent mentors.
  */

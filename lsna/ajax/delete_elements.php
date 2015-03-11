@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id, $AdminAccess);
+
 /*delete various elements from places in the system (relatively self-explanatory).*/
 include "../include/dbconnopen.php";
 $id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['id']);

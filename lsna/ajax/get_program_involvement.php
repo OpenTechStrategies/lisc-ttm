@@ -1,4 +1,9 @@
 <div id="program_involvement_by_program">
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id, $DataEntryAccess);
+
     <?//echo $_POST['program_id'];
     include "../include/dbconnopen.php";
     $program_id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['program_id']);

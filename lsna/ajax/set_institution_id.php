@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id);
+
 /* sets cookies for institution profiles and search page: */
 if ($_POST['id']){
     setcookie('participant', '', time() - 3600, '/');

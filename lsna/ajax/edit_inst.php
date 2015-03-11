@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id, $DataEntryAccess);
+
 /*edit block group if institution address has changed.*/
 include ($_SERVER['DOCUMENT_ROOT']."/include/block_group_finder.php");
 include "../include/dbconnopen.php";

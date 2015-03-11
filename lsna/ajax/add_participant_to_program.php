@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id, $DataEntryAccess);
+
 //should check to make sure that they aren't already linked to the program
 include "../include/dbconnopen.php";
 $participant_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['participant']);

@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id, $DataEntryAccess);
+
 /* Add or remove a development goal.  These are notes to track participant
  *  progress.
  */
@@ -20,6 +25,7 @@ $save_date=$date_reformat[2] . '-'. $date_reformat[0] . '-'. $date_reformat[1];
     echo 'Thank you for adding this meeting.';
 }
 elseif($_POST['action']=='delete'){
+    user_enforce_has_access($LSNA_id, $AdminAccess);
     $delete_goal="DELETE FROM Goals_Development WHERE Goals_Development_ID='" . $id_sqlsafe . "'";
     include "../include/dbconnopen.php";
     mysqli_query($cnnLSNA, $delete_goal);

@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id, $DataEntryAccess);
+
 /* add parent mentor attendance.  This is a little tricky, because the attendance
  * is saved as days of the month attended versus days possible in that month.  There
  * are too many tables for this (in the DB).
