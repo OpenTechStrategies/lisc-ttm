@@ -1,35 +1,25 @@
-<?
-//if action is logout
-if ($_GET['action'] == 'logout') {
-    //kill cookie
-    setcookie('user', '', time() - 3600, '/');
-    setcookie('sites', '', time() - 3600, '/');
-    setcookie('page', '', time() - 3600, '/');
-    setcookie('category', '', time() - 3600, '/');
-    setcookie('participant', '', time() - 3600, '/');
-    setcookie('program', '', time() - 3600, '/');
-    setcookie('prog_page', '', time() - 3600, '/');
-    //setcookie('session_id', '', time() - 3600, '/');
-    //redirect
-    header('Location: /index.php');
-}
-?>
-    <? include "../header.php";
-	include "header.php";
-	include "include/datepicker.php";
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id);
+
+include "../header.php";
+include "header.php";
+include "include/datepicker.php";
 ?>
 <div class="content">
 <h2 id="lsna_welcome">Welcome to the Logan Square Testing the Model Data Center!</h2><hr/><br/>
 <div style="text-align:center;">
     <!-- Count all people included in the system. -->
-	<?
+	<?php
 		$get_participants = "SELECT * FROM Participants";
 		include "include/dbconnopen.php";
 		$participants = mysqli_query($cnnLSNA, $get_participants);
 		$num_participants = mysqli_num_rows($participants);
 		include "include/dbconnclose.php";
 	?>
-	There are currently <strong><?echo $num_participants;?></strong> participants in the system.
+	There are currently <strong><?php echo $num_participants;?></strong> participants in the system.
 </div>
 <br/><br/>
 <!--Link to quickly add a new campaign event.-->
@@ -44,14 +34,14 @@ if ($_GET['action'] == 'logout') {
 		<td>
 			<select id="new_event_campaign">
 				<option value="">----------</option>
-			<?
+			<?php
 				$get_campaigns = "SELECT * FROM Subcategories WHERE Campaign_or_Program='Campaign' ORDER BY Subcategory_Name";
 				include "include/dbconnopen.php";
 				$campaigns = mysqli_query($cnnLSNA, $get_campaigns);
 				while ($campaign = mysqli_fetch_array($campaigns)) {
 			?>
-				<option value="<?echo $campaign['Subcategory_ID'];?>"><?echo $campaign['Subcategory_Name'];?></option>
-			<?
+				<option value="<?php echo $campaign['Subcategory_ID'];?>"><?php echo $campaign['Subcategory_Name'];?></option>
+			<?php
 				}
 				include "include/dbconnclose.php";
 			?>
@@ -143,4 +133,4 @@ if ($_GET['action'] == 'logout') {
 <br/><br/>
 </div>
 
-<? include "../footer.php"; ?>
+<?php include "../footer.php"; ?>

@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id);
+
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker.php";
@@ -35,8 +40,14 @@ include "../include/datepicker.php";
 <div class="content_block" id="participant_search_div">
     <h3>Participants</h3><hr/><br/>
 
-    <div style="text-align:center;" class="no_view"><a class="add_new" href="new_participant.php"><span class="add_new_button">Add New Participant</span></a></div><br/>
-
+    
+<?php
+        if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<div style="text-align:center;" ><a class="add_new" href="new_participant.php"><span class="add_new_button">Add New Participant</span></a></div><br/>
+<?php
+        }
+?>
     <!--search participants: -->
     <h4>Search All Participants</h4>
     <table class="search_table">
@@ -130,7 +141,7 @@ include "../include/datepicker.php";
                                 function(response) {
                                     document.getElementById('show_results').innerHTML = response;
                                 }
-                                );
+                                ).fail(failAlert);
                        "/>
             </td>
         </tr>

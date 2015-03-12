@@ -1,67 +1,43 @@
-<? include "../../header.php";
-	include "../header.php";
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id);
+
+include "../../header.php";
+include "../header.php";
 ?>
+
 <script type="text/javascript">
-            $(document).ready(function() {
-                $('#ajax_loader').hide();
-            });
+    $(document).ready(function() {
+        $('#ajax_loader').hide();
+    });
             
-            $(document).ajaxStart(function() {
-                $('#ajax_loader').fadeIn('slow');
-            });
+$(document).ajaxStart(function() {
+    $('#ajax_loader').fadeIn('slow');
+});
             
-            $(document).ajaxStop(function() {
-                $('#ajax_loader').fadeOut('slow');
-            });
+$(document).ajaxStop(function() {
+    $('#ajax_loader').fadeOut('slow');
+});
 </script>
 
-<?
-/*these ifs are left over from when the institution pages were divs that were hidden or shown depending
- * on the cookie of the moment.  This is now always the profile page, so the following
- * script is correct:
- */
-if ($_COOKIE['inst_page']=='profile'){
-            ?>
-
-                <script type="text/javascript">
-	$(document).ready(function() {
-	$('#institutions_selector').addClass('selected');
-	$("a.add_new").hover(function(){
-				$(this).addClass("selected");
-			}, function() {
-				$(this).removeClass("selected");
-			});
-		$('#search_all_institutions').hide();
-		$('#add_new_institution').hide();
-		$('#institution_profile_div').show();
-        $('.show_edit_space').hide();
-		$('.edit').hide();
-	});
-
-</script>
-                <?
-        }
-        elseif ($_COOKIE['inst_page']=='search' || !isset($_COOKIE['inst_page'])){
-        ?>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$('#institutions_selector').addClass('selected');
-                $("a.add_new").hover(function(){
-				$(this).addClass("selected");
-			}, function() {
-				$(this).removeClass("selected");
-			});
-		$('#search_all_institutions').show();
-		$('#add_new_institution').hide();
-		$('#institution_profile_div').hide();
-                $('.show_edit_space').hide();
-	});
+                $(document).ready(function() {
+                    $('#institutions_selector').addClass('selected');
+                    $("a.add_new").hover(function(){
+                        $(this).addClass("selected");
+                    }, function() {
+                        $(this).removeClass("selected");
+                    });
+                    $('#search_all_institutions').hide();
+                    $('#add_new_institution').hide();
+                    $('#institution_profile_div').show();
+                    $('.show_edit_space').hide();
+                    $('.edit').hide();
+                });
 
 </script>
-
-<?
-        }
-?>
 
 
 <div class="content" id="institution_profile_div">
@@ -128,7 +104,11 @@ $inst->load_with_institution_id($_COOKIE['institution']);
 		</td></tr>
 	<tr>
 		<td></td>
-		<td><input type="button" class="display no_view" value="Edit" onclick="$('.edit').toggle();$('.display').toggle();" />
+		<td>
+<?php
+if ($USER->has_site_access($LSNA_id, $DataEntryAccess){
+?>
+<input type="button" class="display" value="Edit" onclick="$('.edit').toggle();$('.display').toggle();" />
 			<input type="button" class="edit" value="Save" onclick="
 					$.post(
 						'../ajax/edit_inst.php',
@@ -144,7 +124,10 @@ $inst->load_with_institution_id($_COOKIE['institution']);
 						function (response){
 							window.location='institution_profile.php';
 						}
-			);"/>
+			).fail(failAlert);"/>
+<?php
+}
+?>
 		</td>
 	</tr>
 			</table>
@@ -168,7 +151,7 @@ $inst->load_with_institution_id($_COOKIE['institution']);
                      document.getElementById('show_error').innerHTML = response;
                      }
                      window.location='/lsna/programs/program_profile.php';
-                     })"><?echo $program['Subcategory_Name'];?></a><br/><?
+                     }).fail(failAlert);"><?echo $program['Subcategory_Name'];?></a><br/><?
     }
     ?></div><br/>
     
@@ -190,7 +173,7 @@ $inst->load_with_institution_id($_COOKIE['institution']);
                             }
                             window.location='../participants/participant_profile.php';
                        }
-           );
+           ).fail(failAlert);
 		"><?echo $participant['Name_First'] . " " . $participant['Name_Last'];?></a><br><?
     }
     ?></div>

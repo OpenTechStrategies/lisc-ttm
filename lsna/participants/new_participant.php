@@ -1,107 +1,38 @@
-<? include "../../header.php";
-	include "../header.php";
-        include "../include/datepicker.php";
-        if ($_COOKIE['page']=='profile'){
-            ?>
-                <script type="text/javascript">
-	$(document).ready(function() {
-		$('.edit_basic_info').hide();
-		$('.edit_adult_ed').hide();
-                $('.edit_attendance').hide();
-		$('.add_adult_ed').hide();
-		$('#participants_selector').addClass('selected');
-		$("a.add_new").hover(function(){
-				$(this).addClass("selected");
-			}, function() {
-				$(this).removeClass("selected");
-			});
-		$('#participant_search_div').hide();
-		$('#new_participant_div').hide();
-		$('#participant_profile_div').show();
-                $('#add_buttons').hide();
-				$('.program_dates').hide();
-	});
-        $(document).ready(function() {
-                $('#ajax_loader').hide();
-            });
-            
-            $(document).ajaxStart(function() {
-                $('#ajax_loader').fadeIn('slow');
-            });
-            
-            $(document).ajaxStop(function() {
-                $('#ajax_loader').fadeOut('slow');
-            });
-</script>
-                <?
-        }
-        elseif ($_COOKIE['page']=='new'){
-            ?>
-                <script type="text/javascript">
-	$(document).ready(function() {
-		$('#participants_selector').addClass('selected');
-		$("a.add_new").hover(function(){
-				$(this).addClass("selected");
-			}, function() {
-				$(this).removeClass("selected");
-			});
-		$('#participant_search_div').hide();
-		$('#new_participant_div').show();
-		$('#participant_profile_div').hide();
-                $('#add_buttons').hide();
-	});
-        $(document).ready(function() {
-                $('#ajax_loader').hide();
-            });
-            
-            $(document).ajaxStart(function() {
-                $('#ajax_loader').fadeIn('slow');
-            });
-            
-            $(document).ajaxStop(function() {
-                $('#ajax_loader').fadeOut('slow');
-            });
-</script>
-                <?
-        }
-        else{
-        ?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('#participants_selector').addClass('selected');
-		$("a.add_new").hover(function(){
-				$(this).addClass("selected");
-			}, function() {
-				$(this).removeClass("selected");
-			});
-		$('#participant_search_div').show();
-		$('#participant_profile_div').hide();
-                $('#add_buttons').hide();
-	});
-        $(document).ready(function() {
-                $('#ajax_loader').hide();
-            });
-            
-            $(document).ajaxStart(function() {
-                $('#ajax_loader').fadeIn('slow');
-            });
-            
-            $(document).ajaxStop(function() {
-                $('#ajax_loader').fadeOut('slow');
-            });
-</script>
+user_enforce_has_access($LSNA_id);
 
-<?
-        }
+include "../../header.php";
+include "../header.php";
+include "../include/datepicker.php";
 ?>
 
-<div id="new_participant_div" class="content_block">
-    <script type="text/javascript">
-    $(document).ready(function(){
-        $('.hide_institutions').hide();
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#participants_selector').addClass('selected');
+        $("a.add_new").hover(function(){
+            $(this).addClass("selected");
+        }, function() {
+            $(this).removeClass("selected");
+        });
+        $('#add_buttons').hide();
     });
-    </script>
+$(document).ready(function() {
+    $('#ajax_loader').hide();
+});
+            
+$(document).ajaxStart(function() {
+    $('#ajax_loader').fadeIn('slow');
+});
+            
+$(document).ajaxStop(function() {
+    $('#ajax_loader').fadeOut('slow');
+});
+</script>
+
+<div id="new_participant_div" class="content_block">
     
 	<h3>Add New Participant</h3><hr/><br/>
         <!--Link back to search/home page.-->
@@ -113,13 +44,13 @@
 		<td ><input type="text" id="first_name_new" />&nbsp;&nbsp;<input type="text" id="last_name_new" /></td>
 		<td rowspan="3" width="16%"><strong>Role: </strong></td>
 		<td rowspan="3">
-				<?      $get_roles = "SELECT * FROM Roles";
+				<?php      $get_roles = "SELECT * FROM Roles";
 					include "../include/dbconnopen.php";
 					$roles = mysqli_query($cnnLSNA, $get_roles);
 					while ($role = mysqli_fetch_array($roles)) {
 					?>
-						<input type="checkbox" id="role_<? echo $role['Role_ID']; ?>_new" name="role[]" value="<? echo $role['Role_ID']; ?>"/><? echo $role['Role_Title']; ?><br/>
-					<?}
+						<input type="checkbox" id="role_<?php echo $role['Role_ID']; ?>_new" name="role[]" value="<?php echo $role['Role_ID']; ?>"/><?php echo $role['Role_Title']; ?><br/>
+					<?php }
 					include "../include/dbconnclose.php"; ?>
 		</td>
 	</tr>
@@ -229,35 +160,6 @@
                     return false;
                 }
                 
-                /*users requested an exact phone format, and then decided they didn't want it. */
-                
-                //check phone format
-//                var x=document.getElementById('evening_phone_new').value;
-//                if (x!=''){
-//                    var openpos=x.indexOf('(');
-//                    var closepos=x.indexOf(')');
-//                    var dashpos=x.indexOf('-');
-//                    //alert('open: '+openpos+' close: '+closepos+' dash: '+dashpos);
-//                    if (openpos!=0 || closepos!=openpos+4 || dashpos!=closepos+5)
-//                    {
-//                    alert('Not a valid evening phone number');
-//                    return false;
-//                    }
-//                }
-//
-//            var y=document.getElementById('day_phone_new').value;
-//            if (y!=''){
-//                var openpos=y.indexOf('(');
-//                var closepos=y.indexOf(')');
-//                var dashpos=y.indexOf('-');
-//                //alert('open: '+openpos+' close: '+closepos+' dash: '+dashpos);
-//                if (openpos!=0 || closepos!=openpos+4 || dashpos!=closepos+5)
-//                {
-//                alert('Not a valid day phone number');
-//                return false;
-//                }
-//            }
-
         var roles = document.getElementsByName('role[]');
         var role_array= new Array();
         for (var k=0; k<roles.length; k++){
@@ -318,7 +220,7 @@
 						function (response){
 							document.getElementById('confirmation').innerHTML = response;
 						}
-				);
+				).fail(failAlert);
                     }
                 }
                      else{
@@ -354,21 +256,21 @@
                                                     //alert(response);
 							document.getElementById('confirmation').innerHTML = response;
 						}
-				);
+				).fail(failAlert);
                     }
                 }
-               );"/></td>
+               ).fail(failAlert);"/></td>
         </tr>
         <tr class="hide_institutions">
-            <td colspan="4"><?
+            <td colspan="4"><?php
 					$get_roles = "SELECT * FROM Institutions";
 					include "../include/dbconnopen.php";
 					$roles = mysqli_query($cnnLSNA, $get_roles);
 					while ($inst = mysqli_fetch_array($roles)) {
 					?>
-						<input type="checkbox" id="inst_<? echo $inst['Institution_ID']; ?>_new" name="institution[]"
-                                                       value="<? echo $inst['Institution_ID']; ?>"/><? echo $inst['Institution_Name']; ?><br/>
-					<?}
+						<input type="checkbox" id="inst_<?php echo $inst['Institution_ID']; ?>_new" name="institution[]"
+                                                       value="<?php echo $inst['Institution_ID']; ?>"/><?php echo $inst['Institution_Name']; ?><br/>
+					<?php }
 					include "../include/dbconnclose.php";
 				?></td>
         </tr>
@@ -383,4 +285,4 @@
 
 </div>
 
-<?include "../../footer.php";?>
+<?php include "../../footer.php";?>

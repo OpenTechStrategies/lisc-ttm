@@ -1,5 +1,11 @@
-<? include "../../header.php";
-	include "../header.php";
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id);
+
+include "../../header.php";
+include "../header.php";
 ?>
 <!--Add a new institution: -->
 <script type="text/javascript">
@@ -16,30 +22,6 @@
             });
 </script>
 
-<?
-if ($_COOKIE['inst_page']=='profile'){
-            ?>
-
-                <script type="text/javascript">
-	$(document).ready(function() {
-	$('#institutions_selector').addClass('selected');
-	$("a.add_new").hover(function(){
-				$(this).addClass("selected");
-			}, function() {
-				$(this).removeClass("selected");
-			});
-		$('#search_all_institutions').hide();
-		$('#add_new_institution').hide();
-		$('#institution_profile_div').show();
-        $('.show_edit_space').hide();
-		$('.edit').hide();
-	});
-
-</script>
-                <?
-        }
-        elseif ($_COOKIE['inst_page']=='search' || !isset($_COOKIE['inst_page'])){
-        ?>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#institutions_selector').addClass('selected');
@@ -53,10 +35,6 @@ if ($_COOKIE['inst_page']=='profile'){
 	});
 
 </script>
-
-<?
-        }
-?>
 
 <div class="content" id="add_new_institution">
 
@@ -113,7 +91,7 @@ if ($_COOKIE['inst_page']=='profile'){
                     function (response){
                         document.getElementById('institution_response_bucket').innerHTML = response;
                     }
-               )"></td>
+               ).fail(failAlert);"></td>
     </tr>
 </table>
 

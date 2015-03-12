@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id);
 
 include "../../header.php";
 include "../header.php";
@@ -406,7 +410,7 @@ Add a new teacher pre-survey
                   // document.write(response);
                    document.getElementById('show_survey_response').innerHTML = '<span style=color:#990000;font-weight:bold;font-size:.9em; padding-left: 25px;>Thank you for entering this survey!</span>';
                }
-               )">
+               ).fail(failAlert);">
 			   <div id="show_survey_response"></div></th></tr>
 </table>
 
