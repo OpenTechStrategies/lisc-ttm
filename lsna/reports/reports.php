@@ -1,4 +1,9 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id);
+
 include "../../header.php";
 include "../header.php";
 ?>
@@ -205,17 +210,20 @@ if (isset($_POST['satisfaction_program'])) {
             $('.report_tab').removeClass('selected');
             $(this).addClass('selected');
        ">Parent Mentor Attendance</a>-->
-
-    <a class="report_tab no_view" id="teacher_survey_tab" href="export_all.php">Export Data</a>
-    <a class="report_tab no_view" id="teacher_survey_tab" href="../include/import_sample.php">Import Data</a>
-
+<?php
+    if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+    <a class="report_tab" id="teacher_survey_tab" href="export_all.php">Export Data</a>
+    <a class="report_tab" id="teacher_survey_tab" href="../include/import_sample.php">Import Data</a>
+<?php
+    } //end access check
+?>
     <br/>
     <br/>
 
 
     <?php
     include "pm_survey_results.php";
-   // include "pm_survey_results_pre_post.php";
     include "teacher_surveys.php";
     include "teacher_surveys_pre_post.php";
     include "satisfaction_surveys.php";

@@ -1,4 +1,9 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id);
+
 include "../../header.php";
 include "../header.php";
 ?>
@@ -102,7 +107,7 @@ include "../header.php";
                                     function (response){
                                         document.getElementById('survey_response').innerHTML=response;
                                     }
-                               )"></td></tr>
+                               ).fail(failAlert);"></td></tr>
         </table>
 
 <p></p>

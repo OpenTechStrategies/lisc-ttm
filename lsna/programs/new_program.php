@@ -167,4 +167,4 @@ include "../include/dbconnclose.php";
 
 </div>
 
-<?include "../../footer.php";?>
+<?php include "../../footer.php";?>

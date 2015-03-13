@@ -19,19 +19,7 @@ user_enforce_has_access($LSNA_id);
                         <td class="menu_item"><!-- Link to participants page.  Sets search page cookie, unsets the profile and new cookies. -->
                             <a href="/lsna/participants/participants.php">Participants</a></td>
 			<td class="menu_item"><!-- Link to programs/campaigns page.  Sets search page cookie, unsets the profile and new cookies. -->
-                            <a href="javascript:;" onclick="
-                                                  $.post(
-                                                    '/lsna/ajax/set_program_id.php',
-                                                    {
-                                                        page: 'search'
-                                                    },
-                                                    function (response){
-                                                        if (response!='1'){
-                                                            document.getElementById('show_error').innerHTML = response;
-                                                        }
-                                                        window.location='/lsna/programs/programs.php';
-                                                    }
-                                              )" id="programs_selector">Issue Areas</a></td>
+                            <a href="/lsna/programs/programs.php">Issue Areas</a></td>
 			<td class="menu_item">
                             <a href="/lsna/institutions/institutions.php">Institutions</a></td>
 			<td class="menu_item"><a href="/lsna/reports/reports.php" id="reports_selector">Reports</a></td>

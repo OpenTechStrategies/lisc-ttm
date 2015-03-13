@@ -1,4 +1,9 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id);
+
 /* create query and get results for the survey query search in survey_query.php */
 
 include "../include/dbconnopen.php";

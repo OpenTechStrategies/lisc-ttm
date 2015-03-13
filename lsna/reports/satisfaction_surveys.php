@@ -1,4 +1,9 @@
-<?php //include "../../header.php";  ?>
+<?php 
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id);
+?>
 <div id="satisfaction">
     <!--Set up similarly to the parent mentor surveys, but less complicated. -->
     <?php

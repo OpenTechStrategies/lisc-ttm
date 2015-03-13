@@ -163,11 +163,11 @@ while ($sub = mysqli_fetch_array($related_subcategories)){
 	
 	<td>
 <?php
-$USER->has_site_access($LSNA_id, $DataEntryAccess)){
+if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
 ?>
 <div style="text-align:center;"><a class="add_new" href="new_program.php"><span class="add_new_button no_view">Add New Program or Campaign</span></a></div>
 <?php
-                                                   }
+} //end access check
 ?>
 <br/><br/>
 <h4>Search Programs and Campaigns</h4>

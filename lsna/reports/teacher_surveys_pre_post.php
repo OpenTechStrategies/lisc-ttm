@@ -1,15 +1,11 @@
 <div id="teacher_surveys_pre_post">
-    <!--This jqplot stuff is actually irrelevant, since we didn't end up making a chart for the teacher surveys: -->
+<?php
+     include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
-    <!--[if IE]>
-<script src="/include/excanvas_r3/excanvas.js"></script>
-<![endif]-->
-<!--<script language="javascript" type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/jquery.min.js"></script>-->
-    <script language="javascript" type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/jquery.jqplot.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/include/jquery.jqplot.1.0.4r1121/jquery.jqplot.css" />
-    <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.barRenderer.min.js"></script>
-    <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.categoryAxisRenderer.min.js"></script>
-    <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.pointLabels.min.js"></script>
+user_enforce_has_access($LSNA_id);
+
+?>
 
     <!--Since the pre and post surveys ask some different questions, the responses are separated here. -->
     <h4>Pre-Program Surveys</h4>

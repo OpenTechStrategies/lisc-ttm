@@ -1,3 +1,9 @@
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id);
+?>
 <!--
 Query construction and results for the Participant Query Search (see query.php)
 -->
@@ -249,7 +255,7 @@ while ($user = mysqli_fetch_array($results)) {
                                 document.write(response);
                                 window.location = '/lsna/participants/participant_profile.php';
                             }
-                            );
+                            ).fail(failAlert);
                                                                  "><?php echo $user['Name_First'] . " " . $user['Name_Last']; ?></a></td>
             <td class="all_projects"><?php if ($user['Gender'] == 'm') {
         echo 'Male';
