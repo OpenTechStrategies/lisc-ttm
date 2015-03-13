@@ -1,4 +1,9 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id);
+
 include "../../header.php";
 include "../header.php";
 include "../classes/program.php";
@@ -300,7 +305,7 @@ onclick. -->
                             function (response){
                                 document.getElementById('show_survey_thanks_satisfaction').innerHTML = 'Thank you for adding this survey!';
                             }
-                    )
+                    ).fail(failAlert);
                           "></th></tr>
         </table>
         
@@ -476,7 +481,7 @@ onclick. -->
                                 //document.write(response);
                                 document.getElementById('show_survey_thanks_satisfaction').innerHTML = 'Thank you for adding this survey!';
                             }
-                    )
+                    ).fail(failAlert);
                           "></th></tr>
         </table>
         <p></p>

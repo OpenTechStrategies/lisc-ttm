@@ -1,4 +1,10 @@
-<?
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id);
+
+
 include "../../header.php";
 include "../header.php";
 ?>
@@ -118,7 +124,7 @@ include "../include/dbconnclose.php";
 								$('#show_next_parts').show();
                                 document.getElementById('show_add_participants').innerHTML = response;
                             }
-                        );
+                        ).fail(failAlert);
                         }
                 }
                 else{
@@ -137,10 +143,10 @@ include "../include/dbconnclose.php";
 				$('#show_next_parts').show();
                                 document.getElementById('show_add_participants').innerHTML = response;
                             }
-                        );
+                        ).fail(failAlert);
                 }
             }
-          );
+          ).fail(failAlert);
      }"></th></tr>
 </table><br/><br/>
 
