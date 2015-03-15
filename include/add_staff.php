@@ -128,7 +128,7 @@ Add a new user to the system.
 			//window.location='/include/add_staff.php';
 			document.getElementById('confirm_add_user').innerHTML = response;
         }
-   )">
+   ).fail(failAlert);">
 <div id="confirm_add_user"></div></td>
 	</tr>
 </table>
@@ -218,7 +218,7 @@ Add a new user to the system.
             document.write(response);
             document.getElementById('updated_privilege').innerHTML = 'Thanks!  This user\'s privilege setting has been updated.';
         }
-   )">
+   ).fail(failAlert);">
 <div id="updated_privilege"></div></td>
 		<td></td>
 	</tr>
@@ -281,7 +281,7 @@ Add a new user to the system.
         function (response){
 			document.getElementById('updated_password').innerHTML = 'Thanks!  This user\'s password has been updated.';
         }
-    )
+    ).fail(failAlert);
     }">
 	<div id="updated_password"></div>
 	</td>

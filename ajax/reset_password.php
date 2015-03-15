@@ -1,5 +1,7 @@
 <?php
 require("../include/phpass-0.3/PasswordHash.php");
+include_once $_SERVER['DOCUMENT_ROOT'] . "/core/include/enforce_admin_of_something.php";
+
 $hasher=new PasswordHash(8, false);
 /*Resetting the password from the Alter Privileges page (e.g. for a user who has forgotten 
  * his/her password)

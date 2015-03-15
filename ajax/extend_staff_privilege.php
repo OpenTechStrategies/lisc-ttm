@@ -1,5 +1,7 @@
 <?php
 
+include_once $_SERVER['DOCUMENT_ROOT'] . "/core/include/enforce_admin_of_something.php";
+
 require("../include/phpass-0.3/PasswordHash.php");
 $hasher=new PasswordHash(8, false);
 
@@ -7,6 +9,7 @@ $new_password=$_POST['password'];
 $hash=$hasher->HashPassword($new_password);
 
 include "../include/dbconnopen.php";
+
 $username_sqlsafe=mysqli_real_escape_string($cnnLISC, $_POST['username']);
 //add staff to login in lisc database as a whole
 if (strlen($hash)>=20){

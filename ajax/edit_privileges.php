@@ -7,9 +7,14 @@
  * Privilege_ID refers to the site that is editing the user's information.
  */
 include "../include/dbconnopen.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
-$user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_POST['user']);
+// Make sure the user performing this action
+// really is an admin.
+$USER->enforce_has_access($_POST['site'], $AdminAccess);
+
 $site_sqlsafe=mysqli_real_escape_string($cnnLISC, $_POST['site']);
+$user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_POST['user']);
 $privilege_sqlsafe=mysqli_real_escape_string($cnnLISC, $_POST['privilege']);
 $program_sqlsafe=  mysqli_real_escape_string($cnnLISC, $_POST['program']);
 
