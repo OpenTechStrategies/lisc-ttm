@@ -1,6 +1,7 @@
 <?php
 //include "../../header.php";
 include "../header.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 ?>
 
 <!--
@@ -14,6 +15,41 @@ file for adding new users, editing user privileges, and resetting user passwords
             </div>
 <div id="manage_privileges">
 <h3>Add User</h3><hr/><br/>
+
+<?php
+
+// So, this isn't fun, but is a kind of legacy of the old system.  You
+// can only set permissions for one subsite at a time.  We might as
+// well make this explicit.
+
+// This could be fixed, but would require both updating the form generation
+// and ajax-handling code to know how to handle multiple fields.
+
+$subsite_access = NULL;
+$subsite_access_name = "";
+
+if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
+    $subsite_access = $Enlace_id;
+    $subsite_access_name = "Enlace";
+
+    include "../enlace/include/dbconnopen.php";
+    $get_all_programs_sqlsafe="SELECT Programs.Program_ID, Name FROM Programs ORDER BY Name";
+    $all_programs=mysqli_query($cnnEnlace, $get_all_programs_sqlsafe);
+    include "../enlace/include/dbconnclose.php";
+
+} else if ($USER->has_site_access($TRP_id, $AdminAccess)) {
+    $subsite_access = $TRP_id;
+    $subsite_access_name = "TRP";
+
+    include "../trp/include/dbconnopen.php";
+    $get_all_programs_sqlsafe="SELECT Programs.Program_ID, Program_Name FROM Programs ORDER BY Program_Name";
+    $all_programs=mysqli_query($cnnTRP, $get_all_programs_sqlsafe);
+    include "../trp/include/dbconnclose.php";
+}
+
+?>
+
+
 <!--
 Add a new user to the system.
 -->
@@ -40,23 +76,19 @@ Add a new user to the system.
         Enlace and TRP show information based on program-specific privileges, which are 
         included here:
         -->
-        <?if ($_COOKIE['sites'][0]==6){?>
         <tr>
             <td>Program Affiliation:</td>
-            <td colspan="2"><select id="affiliated_program">
-                    <option value="n">No Program Access</option>
-                    <option value="a">Access to all program information</option>
-                    <?//get enlace programs
-                    include "../enlace/include/dbconnopen.php";
-                    $get_all_programs_sqlsafe="SELECT Programs.Program_ID, Name FROM Programs ORDER BY Name";
-                    $all_programs=mysqli_query($cnnEnlace, $get_all_programs_sqlsafe);
-                    while ($program=mysqli_fetch_row($all_programs)){
-                       ?><option value="<?echo $program[0];?>">
-                <?echo $program[1];?></option><?
-                    }
-                    include "../enlace/include/dbconnclose.php";
-                    ?>
-                </select></td>
+            <td colspan="2">
+              <select id="affiliated_program">
+                <option value="n">No Program Access</option>
+                <option value="a">Access to all program information</option>
+                <?while ($program=mysqli_fetch_row($all_programs)) { ?>
+                  <option value="<?echo $program[0];?>">
+                    <?echo $program[1];?>
+                  </option>
+                <?}?>
+              </select>
+            </td>
         </tr>
         <tr>
         	<td></td>
@@ -64,39 +96,13 @@ Add a new user to the system.
                     in that program.
                 </span></td>
         </tr>
-        <?}?>
-        <?if ($_COOKIE['sites'][0]==4){?>
-        <tr>
-            <td>Program Affiliation:</td>
-            <td><select id="affiliated_program">
-                    <option value="n">No Program Access</option>
-                    <option value="a">Access to all program information</option>
-                    <?//get enlace programs
-                    include "../trp/include/dbconnopen.php";
-                    $get_all_programs_sqlsafe="SELECT Programs.Program_ID, Program_Name FROM Programs ORDER BY Program_Name";
-                    $all_programs=mysqli_query($cnnTRP, $get_all_programs_sqlsafe);
-                    while ($program=mysqli_fetch_row($all_programs)){
-                       ?><option value="<?echo $program[0];?>">
-                <?echo $program[1];?></option><?
-                    }
-                    include "../trp/include/dbconnclose.php";
-                    ?>
-                </select></td>
-        </tr>
-        <tr>
-        	<td></td>
-        	<td><span class="helptext">By affiliating a person with a program, you allow them access to view and enter surveys for youth 
-                    in that program.
-                </span></td>
-        </tr>
-        <?}?>
         <!--
         The site of the user is drawn from the site of the logged-in user.  This is a problem for admin users, 
         for whom the first site cookie will be used, regardless of whether that is the intended site.
         -->
 	<tr>
 		<td colspan="2"><input type="button" value="Save" onclick="
-                    if (<?echo $_COOKIE['sites'][0]?>==6 || <?echo $_COOKIE['sites'][0]?>==4 ){var set_program=document.getElementById('affiliated_program').value;}
+                    if (<?php if (is_null($subsite_access)) { echo("false"); } else { echo("true"); } ?>){var set_program=document.getElementById('affiliated_program').value;}
                     else{var set_program='';}
        $.post(
         '../ajax/extend_staff_privilege.php',
@@ -104,7 +110,7 @@ Add a new user to the system.
             username: document.getElementById('username').value,
             password: document.getElementById('password').value,
             level: document.getElementById('privilege_level').options[document.getElementById('privilege_level').selectedIndex].value,
-            site: '<?echo $_COOKIE['sites'][0];?>',
+            site: '<?echo $subsite_access?>',
             program: set_program
         },
         function (response){
@@ -133,6 +139,7 @@ Add a new user to the system.
      * be the first site that they are linked to)
      */
     include "../include/dbconnopen.php";
+
     $site_cookie_sqlsafe = mysqli_real_escape_string($cnnLISC, $_COOKIE['sites'][0]);
     $staff_list_query_sqlsafe = "SELECT * FROM Users LEFT JOIN Users_Privileges ON 
         (Users_Privileges.User_ID=Users.User_ID) WHERE Users_Privileges.Privilege_ID='" . $site_cookie_sqlsafe . "'";
@@ -161,62 +168,29 @@ Add a new user to the system.
 	</tr>
         <!--Again, for TRP and Enlace program-specific privileges will show up:-->
         
-		<?if ($_COOKIE['sites'][0]==6){?>
      	<tr>  
             <td>Program Affiliation:</td>
-            <td><select id="edit_affiliated_program">
-                    <option value="n">No Program Access</option>
-                    <option value="a">Access to all program information</option>
-                    <?//get enlace programs
-                    include "../enlace/include/dbconnopen.php";
-                    
-                    $get_all_programs_sqlsafe="SELECT Programs.Name, Programs.Program_ID FROM Programs
-                           ORDER BY Name";
-                    // echo $get_all_programs_sqlsafe;
-                    $all_programs=mysqli_query($cnnEnlace, $get_all_programs_sqlsafe);
-                    while ($program=mysqli_fetch_row($all_programs)){
-                       ?> <option value="<?echo $program[1];?>">
-                <?echo $program[0];?></option><?
-                    }
-                    include "../enlace/include/dbconnclose.php";
-                    ?>
-                </select></td>
-    </tr>
+            <td>
+              <select id="edit_affiliated_program">
+                <option value="n">No Program Access</option>
+                <option value="a">Access to all program information</option>
+                <?
+                while ($program=mysqli_fetch_row($all_programs)){
+                ?>
+                  <option value="<?echo $program[1];?>">
+                    <?echo $program[0];?>
+                  </option><?}?>
+              </select>
+            </td>
+        </tr>
     <tr>
     	<td></td>
-    	<td><span class="helptext">By affiliating a person with a program, you allow them access to view and enter surveys for youth 
-                    in that program.
-                </span></td>
+    	<td><span class="helptext">By affiliating a person with a program, you allow them access to view and enter surveys for youth in that program.</span></td>
     </tr>
-        <?}?><?if ($_COOKIE['sites'][0]==4){?>
-	<tr>
-            <td>Program Affiliation:</td>
-            <td><select id="edit_affiliated_program">
-                    <option value="n">No Program Access</option>
-                    <option value="a">Access to all program information</option>
-                    <?//get enlace programs
-                    include "../trp/include/dbconnopen.php";
-                    $get_all_programs_sqlsafe="SELECT Programs.Program_ID, Program_Name FROM Programs ORDER BY Program_Name";
-                    $all_programs=mysqli_query($cnnTRP, $get_all_programs_sqlsafe);
-                    while ($program=mysqli_fetch_row($all_programs)){
-                       ?><option value="<?echo $program[0];?>">
-                <?echo $program[1];?></option><?
-                    }
-                    include "../trp/include/dbconnclose.php";
-                    ?>
-                </select><br/> </td>
-	</tr>
-	<tr>
-		<td></td>
-		<td><span class="helptext">By affiliating a person with a program, you allow them access to view and enter surveys for youth 
-                    in that program.
-                </span></td>
-	</tr>
-        <?}?>
 
 	<tr>
 		<td><input type="button" value="Save" onclick="
-    if (<?echo $_COOKIE['sites'][0]?>==6 || <?echo $_COOKIE['sites'][0]?>==4)
+    if (<?php if (is_null($subsite_access)) { echo("false"); } else { echo("true"); } ?>)
     {var set_program=document.getElementById('edit_affiliated_program').value;}
                     else{var set_program='';}
        $.post(
@@ -224,7 +198,7 @@ Add a new user to the system.
         {
             user: document.getElementById('staff_list').options[document.getElementById('staff_list').selectedIndex].value,
             privilege: document.getElementById('privileges').options[document.getElementById('privileges').selectedIndex].value,
-            site: '<?echo $_COOKIE['sites'][0]?>',
+            site: '<? echo $subsite_access; ?>',
             program: set_program
         },
         function (response){
@@ -240,6 +214,7 @@ Add a new user to the system.
 
 
 <br><br>
+
 
 <h3>Reset Password</h3><hr/><br/>
 <table>
