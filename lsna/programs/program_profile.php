@@ -743,6 +743,20 @@ include "../header.php";
                                             <option value="9">Petitions/Postcards</option>
                                             <option value="10">Other</option>
                                         </select>
+                                     <span class="helptext">Funder:</span>  <select id="funder">
+<option value = "">-----</option>
+<?php
+$institution_list = "SELECT Institution_ID, Institution_Name FROM Institutions LEFT JOIN Institution_Types on Institution_Type = Institution_Type_ID WHERE Institution_Type_Name = 'Funder'";
+include "../include/dbconnopen.php";
+$funders_result_sqlsafe = mysqli_query($cnnLSNA, $institution_list);
+while ($funder = mysqli_fetch_row($funders_result_sqlsafe)){
+    ?>
+    <option value = "<?php echo $funder[0]; ?>"><?php echo $funder[1];?></option>
+<?php
+}
+?>
+                                     </select>
+
                                         <!--Save a new date.  Check to make sure that the campaign doesn't already have an event on this date (deduplicate): -->
                                         <input type="button" value="Save" onclick="
                                             $.post(
@@ -762,6 +776,7 @@ include "../header.php";
                                                                     program_id: '<?php echo $program->program_id ?>',
                                                                     date: document.getElementById('new_date').value,
                                                                     name: document.getElementById('date_activity_name').value,
+   funder: document.getElementById('funder').value,
                                                                     type: document.getElementById('date_activity_type').options[document.getElementById('date_activity_type').selectedIndex].value
                                                                 },
                                                         function(response) {
@@ -778,6 +793,7 @@ include "../header.php";
                                                                 program_id: '<?php echo $program->program_id ?>',
                                                                 date: document.getElementById('new_date').value,
                                                                 name: document.getElementById('date_activity_name').value,
+   funder: document.getElementById('funder').value,
                                                                 type: document.getElementById('date_activity_type').options[document.getElementById('date_activity_type').selectedIndex].value
                                                             },
                                                     function(response) {
@@ -793,7 +809,7 @@ include "../header.php";
                                 </tr>
                                 <tr>
                                     <!--Show the schedule: -->
-                                    <th>Delete this Session</th><th>Session/Activity Name</th><th width="10%">Date</th>
+                                    <th>Delete this Session</th><th>Funder</th><th>Session/Activity Name</th><th width="10%">Date</th>
                                     <th width="25%">Participants and Involvement Type</th><th>Session/Activity Type</th>
                                     <th>No. of Participants</th><th>Add/Remove Participants</th>
                                 </tr>
@@ -822,6 +838,7 @@ include "../header.php";
                                             }
                                             );
                                         }"></td>
+<td style="padding-bottom:0;"><?php echo $date['Institution_Name']; ?></td>
                                         <td style="padding-bottom:0;"><?php echo $date['Activity_Name']; ?></td>
                                         <td style="padding-bottom:0;"><?php
                                             $array_of_dates[] = $date['Date'];
@@ -1121,6 +1138,19 @@ include "../header.php";
                                             <option value="9">Petitions/Postcards</option>
                                             <option value="10">Other</option>
                                         </select>
+                                     <span class="helptext">Funder:</span>  <select id="funder">
+<option value = "">-----</option>
+<?php
+$institution_list = "SELECT Institution_ID, Institution_Name FROM Institutions LEFT JOIN Institution_Types on Institution_Type = Institution_Type_ID WHERE Institution_Type_Name = 'Funder'";
+include "../include/dbconnopen.php";
+$funders_result_sqlsafe = mysqli_query($cnnLSNA, $institution_list);
+while ($funder = mysqli_fetch_row($funders_result_sqlsafe)){
+    ?>
+    <option value = "<?php echo $funder[0]; ?>"><?php echo $funder[1];?></option>
+<?php
+}
+?>
+                                     </select>
                                         <!--Save a new date.  Check to make sure that the campaign doesn't already have an event on this date (deduplicate): -->
                                         <input type="button" value="Save" onclick="
                                             $.post(
@@ -1139,12 +1169,13 @@ include "../header.php";
                                                                 {
                                                                     program_id: '<?php echo $program->program_id ?>',
                                                                     date: document.getElementById('new_date').value,
-                                                                    name: document.getElementById('date_activity_name').value,
-                                                                    type: document.getElementById('date_activity_type').options[document.getElementById('date_activity_type').selectedIndex].value
+   name: document.getElementById('date_activity_name').value,
+   funder: document.getElementById('funder').value,
+   type: document.getElementById('date_activity_type').options[document.getElementById('date_activity_type').selectedIndex].value
                                                                 },
                                                         function(response) {
                                                             //document.write(response);
-                                                            window.location = 'program_profile.php?schedule=1';
+                                                           window.location = 'program_profile.php?schedule=1';
                                                         }
                                                         );
                                                     }
@@ -1155,12 +1186,12 @@ include "../header.php";
                                                             {
                                                                 program_id: '<?php echo $program->program_id ?>',
                                                                 date: document.getElementById('new_date').value,
-                                                                name: document.getElementById('date_activity_name').value,
-                                                                type: document.getElementById('date_activity_type').options[document.getElementById('date_activity_type').selectedIndex].value
+name: document.getElementById('date_activity_name').value,
+funder: document.getElementById('funder').value,
+type: document.getElementById('date_activity_type').options[document.getElementById('date_activity_type').selectedIndex].value
                                                             },
                                                     function(response) {
-                                                        //document.write(response);
-                                                        window.location = 'program_profile.php?schedule=1';
+                                                           window.location = 'program_profile.php?schedule=1';
                                                     }
                                                     );
                                                 }
@@ -1172,7 +1203,7 @@ include "../header.php";
                                 <tr>
                                     <!-- <th>Date</th><th width="25%">Participants</th><th>No. of Participants</th><th>Add/Remove Participants</th> -->
                                     <!--Show the schedule: -->
-                                    <th>Delete this Session</th><th>Session/Activity Name</th><th width="10%">Date</th>
+                                    <th>Delete this Session</th><th>Session Funder</th><th>Session/Activity Name</th><th width="10%">Date</th>
                                     <th width="25%">Participants and Involvement Type</th><th>Session/Activity Type</th>
                                     <th>No. of Participants</th><th>Add/Remove Participants</th>
                                 </tr>
@@ -1208,6 +1239,11 @@ include "../header.php";
                                             );
                                         }"></td>
                                         <td style="padding-bottom:0;"><?php echo $date['Activity_Name']; ?></td>
+<td style="padding-bottom:0;"><?php echo $date['Institution_Name']; 
+?>
+
+
+</td>
                                         <td style="padding-bottom:0;"><?php
                                             $array_of_dates[] = $date['Date'];
                                             $datetime = new DateTime($date['Date']);
