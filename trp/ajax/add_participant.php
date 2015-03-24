@@ -49,9 +49,7 @@ if ($_POST['action']=='add_to_program'){
     mysqli_query($cnnTRP, $connect_to_program);
     
     $insert_la_casa_basics = "INSERT INTO La_Casa_Basics (Participant_ID_Students,
-  College_ID, Term_Type, Term,
-       School_Year, Credits, Loan_Applications, Loan_Volume,
-       Loans_Received, Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI)
+  College_ID, Term_Type, Term, School_Year, Credits, Loan_Applications, Loan_Volume, Loans_Received, Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, Scholarship_Apps, Scholarship_Num, Scholarship_Volume, Scholarships_Received, Household_Income, AMI, Move_In_Date, Move_Out_Date, Mid_Twenties, Masters_Degree, Married, Has_Children, Homeless, Self_Sustaining, Dependency_Status, Internship_Status, Intern_Hours)
        VALUES
        ( '" . $new_id . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['college_id']) . "',
@@ -65,8 +63,24 @@ if ($_POST['action']=='add_to_program'){
 '" . mysqli_real_escape_string($cnnTRP, $_POST['household_size']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['parent1_agi']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['parent2_agi']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['student_agi']) . "'
-
+'" . mysqli_real_escape_string($cnnTRP, $_POST['student_agi']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['scholarship_apps']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['scholarship_num']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['scholarship_volume']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['scholarships_received']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['household_income']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['AMI']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_date']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['move_out_date']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['mid_twenties']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['masters_degree']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['married']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['has_children']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['homeless']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['self_sustaining']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['dependency_status']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['internship_status']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['intern_hours']) . "'
 )";
     echo $insert_la_casa_basics; //testing output
     mysqli_query($cnnTRP, $insert_la_casa_basics);

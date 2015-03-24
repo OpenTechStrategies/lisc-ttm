@@ -62,7 +62,23 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `College_Match` varchar(30),
 `Persistence_Graduation` varchar(30),
 `Student_Hometown` varchar(100),
-`Student_High_School` varchar(100)
+`Student_High_School` varchar(100),
+`Scholarship_Apps` int(11),
+`Scholarship_Num` int(11),
+`Scholarship_Volume` int(11),
+`Scholarships_Received` int(11),
+`Household_Income` int(11),
+`AMI` int(11),
+`Move_In_Date` date,
+`Move_Out_Date` date,
+`Mid_Twenties` int(11),
+`Masters_Degree` int(11),
+`Married` int(11),
+`Has_Children` int(11),
+`Homeless` int(11),
+`Self_Sustaining` int(11),
+`Internship_Status` int(11),
+`Intern_Hours` int(11)
 
 ) ENGINE=InnoDB;
 

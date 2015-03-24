@@ -15,6 +15,7 @@ $program = mysqli_fetch_array($program_info);
         $('#search_to_add_participant').hide();
         $('.attendee_list').hide();
         $('#create_and_add_participant').hide();
+        $('#intern_hours').hide();
     });
 </script>
 
@@ -170,6 +171,7 @@ while ($college = mysqli_fetch_row($college_list)){
     <option value = "0">-----</option>
     <option value = "1"> Semester </option>
     <option value = "2"> Quarter </option>
+    <option value = "3"> Other </option>    <!-- Need to document this properly -->
     </select>
     </td>
     <td class="trp_add_table"><strong>Term</strong></td>
@@ -196,6 +198,112 @@ while ($college = mysqli_fetch_row($college_list)){
     <td class="trp_add_table">
     <input type="text" class = "show_loans_edit_<?php echo $loandata[4]; ?>" id="new_loans_received"></td>
     </tr>
+<tr>
+    <td class="trp_add_table"><strong>Number of Scholarship Applications</strong></td>
+    <td class="trp_add_table">
+    <input type="text" class = "show_scholarships_edit_<?php echo $scholarshipdata[4]; ?>" id="new_scholarship_apps"></td>
+    <td class="trp_add_table"><strong>Number of Scholarships Offered</strong></td>
+    <td class="trp_add_table">
+    <input type="text" class = "show_scholarships_edit_<?php echo $scholarshipdata[4]; ?>" id="new_scholarship_num"></td>
+    <td class="trp_add_table"><strong>Volume of Scholarship Funding Offered</strong></td>
+    <td class="trp_add_table">
+    <input type="text" class = "show_scholarships_edit_<?php echo $scholarshipdata[4]; ?>" id="new_scholarship_volume"></td>
+    <td class="trp_add_table"><strong>Volume of Scholarship Funding Received</strong></td>
+    <td class="trp_add_table">
+    <input type="text" class = "show_scholarships_edit_<?php echo $scholarshipdata[4]; ?>" id="new_scholarships_received"></td>
+
+</tr>
+<tr>
+    <td class="trp_add_table"><strong>Total household income</strong></td>
+    <td class="trp_add_table">
+    <input type="text" id="new_household_income"></td>
+
+    <td class="trp_add_table"><strong>AMI</strong></td>
+    <td class="trp_add_table">
+    <input type="text" id="new_AMI"></td>
+
+    <td class="trp_add_table"><strong>Move in date</strong></td>
+    <td class="trp_add_table">
+    <input type="text" id="new_move_in_date"></td>
+
+    <td class="trp_add_table"><strong>Move out date</strong></td>
+    <td class="trp_add_table">
+    <input type="text" id="new_move_out_date"></td>
+
+</tr>
+<tr>
+
+    <td class="trp_add_table"><strong>Age 24 or older?</strong></td>
+    <td class="trp_add_table">
+    <select id="new_24_or_older">
+    <option value = "">-----</option>
+    <option value = "1">Yes</option>
+    <option value = "2">No</option>
+    </select>
+    </td>
+
+    <td class="trp_add_table"><strong>Masters degree or above?</strong></td>
+    <td class="trp_add_table">
+    <select id="new_masters_degree">
+    <option value = "">-----</option>
+    <option value = "1">Yes</option>
+    <option value = "2">No</option>
+    </select>
+    </td>
+
+    <td class="trp_add_table"><strong>Married?</strong></td>
+    <td class="trp_add_table">
+    <select id="new_married">
+    <option value = "">-----</option>
+    <option value = "1">Yes</option>
+    <option value = "2">No</option>
+    </select>
+    </td>
+
+    <td class="trp_add_table"><strong>Has Children?</strong></td>
+    <td class="trp_add_table">
+    <select id="new_has_children">
+    <option value = "">-----</option>
+    <option value = "1">Yes</option>
+    <option value = "2">No</option>
+    </select>
+</td>
+</tr>
+<tr>
+    <td class="trp_add_table"><strong>Homeless?</strong></td>
+    <td class="trp_add_table">
+    <select id="new_homeless">
+    <option value = "">-----</option>
+    <option value = "1">Yes</option>
+    <option value = "2">No</option>
+    </select>
+    </td>
+    <td class="trp_add_table"><strong>Self sustaining?</strong></td>
+    <td class="trp_add_table">
+    <select id="new_self_sustaining">
+    <option value = "">-----</option>
+    <option value = "1">Yes</option>
+    <option value = "2">No</option>
+    </select>
+    </td>
+    <td class="trp_add_table"><strong>Dependency Status</strong></td>
+    <td class="trp_add_table">
+    <select id="new_dependency_status">
+    <option value = "">-----</option>
+    <option value = "1">Yes</option>
+    <option value = "2">No</option>
+    </select>
+    </td>
+    <td class="trp_add_table"><strong>Has Internship?</strong></td>
+    <td class="trp_add_table">
+    <select id="new_internship_status" onchange="$(#new_intern_hours).show();">
+    <option value = "">-----</option>
+    <option value = "1">Yes</option>
+    <option value = "2">No</option>
+    </select>
+    <span id="new_intern_hours">Hours per term: <input type="text" id="new_internship_hours"></span>
+    </td>
+</tr>
     <tr>
                                   
 </tr>                                
@@ -218,18 +326,39 @@ while ($college = mysqli_fetch_row($college_list)){
                                             phone_add: document.getElementById('phone_add').value,
                                             email2_add: document.getElementById('email2_add').value,
                                             mobile: document.getElementById('mobile_add').value,
-                                school_year: document.getElementById('new_school_year').value,
-                                loan_apps: document.getElementById('new_loan_apps').value,
-                                loan_volume: document.getElementById('new_loan_volume').value,
-                                loans_received: document.getElementById('new_loans_received').value,
-                                college_id: document.getElementById('new_college_id').value,
-                                term_type: document.getElementById('new_term_type').value,
-                                term_id: document.getElementById('new_term_id').value,
-                                credits: document.getElementById('new_credits').value,
-  household_size: document.getElementById('household_add').value,
-parent1_agi: document.getElementById('par1agi_add').value,
-parent2_agi: document.getElementById('par2agi_add').value,
-student_agi: document.getElementById('stntagi_add').value
+                                            school_year: document.getElementById('new_school_year').value,
+                                            loan_apps: document.getElementById('new_loan_apps').value,
+                                            loan_volume: document.getElementById('new_loan_volume').value,
+                                            loans_received: document.getElementById('new_loans_received').value,
+                                            college_id: document.getElementById('new_college_id').value,
+                                            term_type: document.getElementById('new_term_type').value,
+                                            term_id: document.getElementById('new_term_id').value,
+                                            credits: document.getElementById('new_credits').value,
+                                            household_size: document.getElementById('household_add').value,
+                                            parent1_agi: document.getElementById('par1agi_add').value,
+                                            parent2_agi: document.getElementById('par2agi_add').value,
+                                            student_agi: document.getElementById('stntagi_add').value,
+                                            scholarship_apps: document.getElementById('new_scholarship_apps').value,
+                                            scholarship_num: document.getElementById('new_scholarship_num').value,
+                                            scholarship_volume: document.getElementById('new_scholarship_volume').value,
+                                            scholarships_received: document.getElementById('new_scholarships_received').value,
+                                            household_income: document.getElementById('new_household_income').value,
+                                            AMI: document.getElementById('new_AMI').value,
+                                            move_in_date: document.getElementById('new_move_in_date').value,
+                                            move_out_date: document.getElementById('new_move_out_date').value,
+                                            mid_twenties: document.getElementById('new_24_or_older').value,
+                                            masters_degree: document.getElementById('new_masters_degree').value,
+                                            married: document.getElementById('new_married').value,
+                                            has_children: document.getElementById('new_has_children').value,
+                                            homeless: document.getElementById('new_homeless').value,
+                                            self_sustaining: document.getElementById('new_self_sustaining').value,
+                                            dependency_status: document.getElementById('new_dependency_status').value,
+                                            internship_status: document.getElementById('new_internship_status').value,
+                                            intern_hours: document.getElementById('new_intern_hours').value
+
+
+
+
                                         },
                                     function(response) {
  document.write(response);
