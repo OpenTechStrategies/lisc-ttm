@@ -102,7 +102,14 @@ $program = mysqli_fetch_array($program_info);
                                 </tr>
                                 <tr>
                                      <td class="trp_add_table"><strong>Race:</strong></td>
-                                    <td class="trp_add_table"><input type="text" id="race_add" style="width:100px;"/></td>
+                                    <td class="trp_add_table"><select id="race_add">
+                <option value="0">N/A</option>
+                <option value="1">African-American</option>
+                <option value="2">Asian-American</option>
+                <option value="3">Latin@</option>
+                <option value="4">White</option>
+                <option value="5">Other</option>
+            </select></td>
                                     <td class="trp_add_table" colspan="6"></td>
                                 </tr>
                                 <tr>
@@ -163,6 +170,12 @@ while ($college = mysqli_fetch_row($college_list)){
 <?php
 }
 ?>
+</select><br>
+Or add a new college: <input type = "text" id = "new_college_name">
+<select id = "new_college_type">
+<option value = "">----</option>
+<option>2-year</option>
+<option>4-year</option>
 </select>
 </td>
 <td class="trp_add_table"><strong>Term Type</strong></td>
@@ -331,6 +344,8 @@ while ($college = mysqli_fetch_row($college_list)){
                                             loan_volume: document.getElementById('new_loan_volume').value,
                                             loans_received: document.getElementById('new_loans_received').value,
                                             college_id: document.getElementById('new_college_id').value,
+                                            college_name: document.getElementById('new_college_name').value,
+                                            college_type: document.getElementById('new_college_type').value,
                                             term_type: document.getElementById('new_term_type').value,
                                             term_id: document.getElementById('new_term_id').value,
                                             credits: document.getElementById('new_credits').value,
@@ -354,11 +369,7 @@ while ($college = mysqli_fetch_row($college_list)){
                                             self_sustaining: document.getElementById('new_self_sustaining').value,
                                             dependency_status: document.getElementById('new_dependency_status').value,
                                             internship_status: document.getElementById('new_internship_status').value,
-                                            intern_hours: document.getElementById('new_intern_hours').value
-
-
-
-
+                                            intern_hours: document.getElementById('new_internship_hours').value
                                         },
                                     function(response) {
  document.write(response);
@@ -996,7 +1007,7 @@ Inputs: CURSOR = result of mysqli_query()
         household income report.  By default it is set to false, but in the
         income call to the function it is set to true.
         COUNTINDEX is the index of the count in the cursor.
-        DESCRIPTION_INDEX is the index of the result (e.g., the race)
+        DESCRIPTION_INDEX is the index of the result (e.g., "African-American")
               in the cursor.
         
 Outputs: The result is a string that is a set of html table rows (see below).
@@ -1110,8 +1121,10 @@ Inputs: CURSOR = result of mysqli_query()
         ED_ACHIEVEMENT is a flag marking whether this call is from an
         educational achievement report.
         COUNTINDEX is the index of the count in the cursor.
-        DESCRIPTION_INDEX is the index of the result (e.g., the race)
-              in the cursor.
+        DESCRIPTION_INDEX is the column number of the result (e.g., the race)
+              in CURSOR.  It is always 1.
+        EDUCATION_INDEX is the column number of the education type in CURSOR.
+              It is always 2. 
 Outputs: The result is a string that is a set of html table rows (see below).
 
 Call this to provide rows to be inserted into a La Casa table.  For example:
@@ -1125,7 +1138,7 @@ This function returns the rows of information from "Hispanic or Latino" to the f
 
 Reports that display a list include: Race/Ethnicity, Major, College, Hometown
  */
-        function la_casa_report_list_gen_html($cursor, $val_denominator, $ed_achievement = false, $ed_aspiration = false, $countindex = 0, $description_index = 1, $education_index = 2)
+function la_casa_report_list_gen_html($cursor, $val_denominator, $ed_achievement = false, $ed_aspiration = false, $countindex = 0, $description_index = 1, $education_index = 2)
 {
     $result = "";
     $reporting_number = 0;
@@ -1146,7 +1159,10 @@ Reports that display a list include: Race/Ethnicity, Major, College, Hometown
     $bachelors_plus = 0;
     $hs_less = 0;
     $masters_plus = 0;
-    while ($val = mysqli_fetch_row($cursor)) {
+
+    $race_array = array("0" => "N/A", "1" => "African-American", "2" => "Asian-American", "3" => "Latin@", "4" => "White", "5" => "Other");
+    $gender_array = array("f" => "Female", "m" => "Male");
+    while ($val = mysqli_fetch_array($cursor)) {
         $reporting_number += $val[$countindex];
         if ($val[$description_index] != null){
             if ($ed_achievement){
@@ -1162,9 +1178,19 @@ Reports that display a list include: Race/Ethnicity, Major, College, Hometown
                     $masters_plus += $val[$countindex];
                 }
             }
+
             $count_distinct_results++;
-            $result .= "<tr>
-        <td>". $val[$description_index] . "</td>
+            $result .= "<tr> <td>";
+            if ( array_key_exists('Race', $val)){
+                $result .= $race_array[$val[$description_index]];
+            }
+            elseif ( array_key_exists('Gender', $val)){
+                $result .= $gender_array[$val[$description_index]];
+            }
+            else{
+                $result .= $val[$description_index];
+            }
+                $result .= "</td>
         <td>" . number_format($val[$countindex]/$val_denominator*100) . "%</td>
         <td>" . $val[$countindex] . "</td>
         </tr>";
@@ -1238,7 +1264,7 @@ echo la_casa_report_high_low_gen_html($income_counts, "Household Income", $stude
 <caption> Major/Program of Study </caption>
 <tr><th> Major </th><th>Percent</th><th>Count</th></tr>
 <?php 
-$get_majors_sqlsafe = "SELECT Count(*), Major FROM La_Casa_Basics GROUP BY Major;";
+$get_majors_sqlsafe = "SELECT Count(*), Major FROM LC_Terms GROUP BY Major;";
 $majors = mysqli_query($cnnTRP, $get_majors_sqlsafe);
 echo la_casa_report_list_gen_html($majors, $students_denominator);
 ?>
@@ -1248,7 +1274,7 @@ echo la_casa_report_list_gen_html($majors, $students_denominator);
 <caption> College </caption>
 <tr><th> College Name </th><th> Type </th><th>Percent</th><th>Count</th></tr>
 <?php
-$num_linked_colleges_sqlsafe = "SELECT COUNT(*)  FROM La_Casa_Basics LEFT JOIN Colleges ON Colleges.College_ID = La_Casa_Basics.College_ID;";
+$num_linked_colleges_sqlsafe = "SELECT COUNT(*)  FROM LC_Terms LEFT JOIN Colleges ON Colleges.College_ID = LC_Terms.College_ID;";
 $num_colleges = mysqli_query($cnnTRP, $num_linked_colleges_sqlsafe);
 echo la_casa_report_list_gen_html($num_colleges, $students_denominator);
 ?>
@@ -1258,7 +1284,7 @@ echo la_casa_report_list_gen_html($num_colleges, $students_denominator);
 <caption> Total Credit Accrual To Date </caption>
 <tr><th> Credits Completed </th><th>Percent</th><th>Count</th></tr>
 <?php
-$sum_of_credits_sqlsafe = "SELECT Count(*), Credit_Range FROM La_Casa_Basics INNER JOIN (SELECT  Participant_ID_Students, SUM(Credits) AS Credit_Range FROM La_Casa_Basics GROUP BY Participant_ID_Students) Result_Table ON Result_Table.Participant_ID_Students = La_Casa_Basics.Participant_ID_Students GROUP BY Credit_Range;";
+$sum_of_credits_sqlsafe = "SELECT Count(*), Credit_Range FROM LC_Terms INNER JOIN (SELECT  Participant_ID_Students, SUM(Credits) AS Credit_Range FROM LC_Terms GROUP BY Participant_ID_Students) Result_Table ON Result_Table.Participant_ID_Students = LC_Terms.Participant_ID GROUP BY Credit_Range;";
 $sum_credits = mysqli_query($cnnTRP, $sum_of_credits_sqlsafe);
 echo la_casa_report_high_low_gen_html($sum_credits, "Credit Accrual", $students_denominator);
 ?>
@@ -1267,7 +1293,7 @@ echo la_casa_report_high_low_gen_html($sum_credits, "Credit Accrual", $students_
 <caption> College GPA </caption>
 <tr><th>College GPA</th><th>Percent</th><th>Count</th></tr>
 <?php
-$college_gpa_sqlsafe = "SELECT Count(*), College_GPA FROM La_Casa_Basics WHERE School_Year = '" . $year . "' GROUP BY College_GPA;";
+$college_gpa_sqlsafe = "SELECT Count(*), College_GPA FROM LC_Terms WHERE School_Year = '" . $year . "' GROUP BY College_GPA;";
 $college_gpa = mysqli_query($cnnTRP, $college_gpa_sqlsafe);
 echo la_casa_report_high_low_gen_html($college_gpa, "College GPA", $students_denominator);
 ?>
@@ -1353,7 +1379,7 @@ echo la_casa_report_list_gen_html($first_gen, $students_denominator);
 <caption> College Match </caption>
 <tr><th> College Match  </th><th>Percent</th><th>Count</th></tr>
 <?php
-$college_match_list_sqlsafe = "SELECT COUNT(*), College_Match FROM La_Casa_Basics GROUP BY College_Match";
+$college_match_list_sqlsafe = "SELECT COUNT(*), College_Match FROM LC_Terms GROUP BY College_Match";
 $college_match = mysqli_query($cnnTRP, $college_match_list_sqlsafe);
 echo la_casa_report_list_gen_html($college_match, $students_denominator);
 ?>

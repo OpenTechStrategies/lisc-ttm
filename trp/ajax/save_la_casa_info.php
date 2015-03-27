@@ -1,41 +1,51 @@
 <?php
 include "../include/dbconnopen.php";
+if ($_POST['college_name'] != ''){
+        $insert_new_college = "INSERT INTO Colleges (College_Name, College_Type) VALUES ('" . mysqli_real_escape_string($cnnTRP, $_POST['college_name']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['college_type']) . "')";
+        mysqli_query($cnnTRP, $insert_new_college);
+        $college_id_sqlsafe = mysqli_insert_id($cnnTRP);
+    }
+    else{
+        $college_id_sqlsafe = mysqli_real_escape_string($cnnTRP, $_POST['college_id']);
+    }
 
 if ($_POST['action']=='edit' && $_POST['subject'] == 'college'){
-   $edit_college_data_sqlsafe = "UPDATE La_Casa_Basics SET 
-         College_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['college_id']) . "',
+   $edit_college_data_sqlsafe = "UPDATE LC_Terms SET 
+         College_ID = '" . $college_id_sqlsafe . "',
          Term_Type  = '" . mysqli_real_escape_string($cnnTRP, $_POST['term_type']) . "',
          Term  = '" . mysqli_real_escape_string($cnnTRP, $_POST['term_id']) . "',
          School_Year  = '" . mysqli_real_escape_string($cnnTRP, $_POST['school_year']) . "',
          Credits = '" . mysqli_real_escape_string($cnnTRP, $_POST['credits']) . "',
-         Major  = '" . mysqli_real_escape_string($cnnTRP, $_POST['major']) . "',
+         Major  = '" . mysqli_real_escape_string($cnnTRP, $_POST['major_name']) . "',
          College_GPA = '" . mysqli_real_escape_string($cnnTRP, $_POST['gpa']) . "',
-         College_Match = '" . mysqli_real_escape_string($cnnTRP, $_POST['match']) . "'
-             WHERE Student_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
+         College_Match = '" . mysqli_real_escape_string($cnnTRP, $_POST['match']) . "',
+         Internship_Status =  '" . mysqli_real_escape_string($cnnTRP, $_POST['internship_status']) . "',
+         Intern_Hours =   '" . mysqli_real_escape_string($cnnTRP, $_POST['intern_hours']) . "'
+             WHERE Term_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
    echo $edit_college_data_sqlsafe;
    mysqli_query($cnnTRP, $edit_college_data_sqlsafe);
                               
 }
 elseif ($_POST['action']=='edit' && $_POST['subject'] == 'loans'){
-   $edit_college_data_sqlsafe = "UPDATE La_Casa_Basics SET 
+   $edit_college_data_sqlsafe = "UPDATE LC_Terms SET 
          School_Year  = '" . mysqli_real_escape_string($cnnTRP, $_POST['school_year']) . "',
          Loan_Applications = '" . mysqli_real_escape_string($cnnTRP, $_POST['loan_apps']) . "',
          Loan_Volume  = '" . mysqli_real_escape_string($cnnTRP, $_POST['loan_volume']) . "',
          Loans_Received = '" . mysqli_real_escape_string($cnnTRP, $_POST['loans_received']) . "'
-WHERE Student_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
+WHERE Term_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
    echo $edit_college_data_sqlsafe;
    mysqli_query($cnnTRP, $edit_college_data_sqlsafe);
                               
 }
 
 elseif ($_POST['action'] == 'new' && $_POST['subject'] == 'college'){
-       $add_college_data_sqlsafe = "INSERT INTO La_Casa_Basics
-       (Participant_ID_Students,  College_ID, Term_Type, Term,
+       $add_college_data_sqlsafe = "INSERT INTO LC_Terms
+       (Participant_ID,  College_ID, Term_Type, Term,
        School_Year, Credits, Loan_Applications, Loan_Volume,
        Loans_Received, Major, College_Match, College_GPA)
        VALUES
        ( '" . mysqli_real_escape_string($cnnTRP, $_POST['person']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['college_id']) . "',
+'" . $college_id_sqlsafe . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['term_type']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['term_id']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['school_year']) . "',
@@ -73,6 +83,7 @@ Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, ACT_Score, High_School_GP
 '" . mysqli_real_escape_string($cnnTRP, $_POST['hometown']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['hs']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "');";
+        echo $insert_constant_data_sqlsafe; //testing output
         mysqli_query($cnnTRP, $insert_constant_data_sqlsafe);
     }
     else{

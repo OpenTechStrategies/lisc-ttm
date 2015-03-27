@@ -38,20 +38,10 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
     (`Participant_ID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-`College_ID` int(11), 
-`Term_Type` varchar(45),
-`Term` varchar(45),
-`School_Year` int(4),
-`Credits` varchar(45),
-`Loan_Applications` int(3),
-`Loan_Volume` varchar(45),
-`Loans_Received` varchar(45),
 `Household_Size` int(3),
 `Parent1_AGI` int(11),
 `Parent2_AGI` int(11),
 `Student_AGI` int(11),
-`Major` varchar(100),
-`College_GPA` varchar(30),
 `ACT_Score` int(5),
 `High_School_GPA` varchar(30),
 `Dependency_Status` varchar(10),
@@ -59,7 +49,6 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `Mother_Highest_Level_Education` int(11),
 `Student_Aspiration` int(11),
 `First_Generation_College_Student` varchar(30),
-`College_Match` varchar(30),
 `Persistence_Graduation` varchar(30),
 `Student_Hometown` varchar(100),
 `Student_High_School` varchar(100),
@@ -76,10 +65,44 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `Married` int(11),
 `Has_Children` int(11),
 `Homeless` int(11),
-`Self_Sustaining` int(11),
+`Self_Sustaining` int(11)
+
+) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS `LC_Terms`;
+
+CREATE TABLE LC_Terms
+(
+`Term_ID` int(11) NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (`Term_ID`),
+`Participant_ID` int(11),
+INDEX `student_by_term` (`Participant_ID`),
+FOREIGN KEY (`Participant_ID`) REFERENCES `Participants`
+    (`Participant_ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+`College_ID` int(11), 
+`Term_Type` varchar(45),
+`Term` varchar(45),
+`School_Year` int(4),
+`Credits` varchar(45),
+`Loan_Applications` int(3),
+`Loan_Volume` varchar(45),
+`Loans_Received` varchar(45),
+`Major` varchar(100),
+`College_Match` varchar(30),
+`College_GPA` varchar(30),
 `Internship_Status` int(11),
 `Intern_Hours` int(11)
+) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS `Majors`;
+
+CREATE TABLE `Majors`
+(
+`Major_ID` int(11) NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (`Major_ID`),
+`Major_Name` varchar(100)
 ) ENGINE=InnoDB;
 
 

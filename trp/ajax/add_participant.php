@@ -47,19 +47,21 @@ if ($_POST['action']=='add_to_program'){
             . "Program_ID) VALUES ('" . $new_id . "', '" . $_POST['program'] . 
             "')";
     mysqli_query($cnnTRP, $connect_to_program);
+
+    //insert new college, if one created
+    if ($_POST['college_name'] != ''){
+        $insert_new_college = "INSERT INTO Colleges (College_Name, College_Type) VALUES ('" . mysqli_real_escape_string($cnnTRP, $_POST['college_name']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['college_type']) . "')";
+        mysqli_query($cnnTRP, $insert_new_college);
+        $college_id_sqlsafe = mysqli_insert_id($cnnTRP);
+    }
+    else{
+        $college_id_sqlsafe = mysqli_real_escape_string($cnnTRP, $_POST['college_id']);
+    }
     
     $insert_la_casa_basics = "INSERT INTO La_Casa_Basics (Participant_ID_Students,
-  College_ID, Term_Type, Term, School_Year, Credits, Loan_Applications, Loan_Volume, Loans_Received, Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, Scholarship_Apps, Scholarship_Num, Scholarship_Volume, Scholarships_Received, Household_Income, AMI, Move_In_Date, Move_Out_Date, Mid_Twenties, Masters_Degree, Married, Has_Children, Homeless, Self_Sustaining, Dependency_Status, Internship_Status, Intern_Hours)
+Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, Scholarship_Apps, Scholarship_Num, Scholarship_Volume, Scholarships_Received, Household_Income, AMI, Move_In_Date, Move_Out_Date, Mid_Twenties, Masters_Degree, Married, Has_Children, Homeless, Self_Sustaining, Dependency_Status)
        VALUES
        ( '" . $new_id . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['college_id']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['term_type']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['term_id']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['school_year']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['credits']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['loan_apps']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['loan_volume']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['loans_received']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['household_size']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['parent1_agi']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['parent2_agi']) . "',
@@ -78,12 +80,27 @@ if ($_POST['action']=='add_to_program'){
 '" . mysqli_real_escape_string($cnnTRP, $_POST['has_children']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['homeless']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['self_sustaining']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['dependency_status']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['internship_status']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['intern_hours']) . "'
+'" . mysqli_real_escape_string($cnnTRP, $_POST['dependency_status']) . "'
 )";
     echo $insert_la_casa_basics; //testing output
     mysqli_query($cnnTRP, $insert_la_casa_basics);
+
+    $insert_lc_by_term = "INSERT INTO LC_Terms (Participant_ID, College_ID, Term_Type, Term, School_Year, Credits, Loan_Applications, Loan_Volume, Loans_Received, Internship_Status, Intern_Hours) VALUES ('" 
+ . $new_id . "',
+'". $college_id_sqlsafe . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['term_type']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['term_id']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['school_year']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['credits']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['loan_apps']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['loan_volume']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['loans_received']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['internship_status']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['intern_hours']) . "'
+)";
+    echo $insert_lc_by_term; //testing output
+    mysqli_query($cnnTRP, $insert_lc_by_term);
+
 }
 else{
 //format date of birth (DOB)
