@@ -115,7 +115,7 @@ if ($_POST['family_search'] == '1') {
                             participant: <?php echo $user['Participant_ID']; ?>
                         },
                 function(response) {
-                    window.location = '../programs/profile.php?id=<?php echo $_POST['program']; ?>';
+                    window.location = '../programs/profile.php?id=<?php echo $_POST['program_id']; ?>';
                 }
                 )">Add to program...</a>
                 <br/>

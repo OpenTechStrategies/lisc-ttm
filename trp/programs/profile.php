@@ -91,7 +91,7 @@ $program = mysqli_fetch_array($program_info);
                                     <td class="trp_add_table"><strong>Last Name:</strong></td>
                                     <td class="trp_add_table"><input type="text" id="surname_add" style="width:100px;" /></td>
                                     <td class="trp_add_table"><strong>DOB:</strong></td>
-                                    <td class="trp_add_table"><input type="text" id="dob_add" style="width:70px;" /></td>
+                                    <td class="trp_add_table"><input type="text" id="dob_add" class="hasDatepickers" style="width:70px;" /></td>
                                     <td class="trp_add_table"><strong>Gender:</strong></td>
                                     <td class="trp_add_table"><select id="gender_add">
                                             <option value="">---------</option>
@@ -237,11 +237,11 @@ Or add a new college: <input type = "text" id = "new_college_name">
 
     <td class="trp_add_table"><strong>Move in date</strong></td>
     <td class="trp_add_table">
-    <input type="text" id="new_move_in_date"></td>
+    <input type="text" id="new_move_in_date" class="hasDatepickers"></td>
 
     <td class="trp_add_table"><strong>Move out date</strong></td>
     <td class="trp_add_table">
-    <input type="text" id="new_move_out_date"></td>
+    <input type="text" id="new_move_out_date" class="hasDatepickers"></td>
 
 </tr>
 <tr>
@@ -314,7 +314,7 @@ Or add a new college: <input type = "text" id = "new_college_name">
     <option value = "1">Yes</option>
     <option value = "2">No</option>
     </select>
-    <span id="new_intern_hours">Hours per term: <input type="text" id="new_internship_hours"></span>
+    <span id="new_intern_hours">Hours per week: <input type="text" id="new_internship_hours"></span>
     </td>
 </tr>
     <tr>
@@ -372,8 +372,7 @@ Or add a new college: <input type = "text" id = "new_college_name">
                                             intern_hours: document.getElementById('new_internship_hours').value
                                         },
                                     function(response) {
- document.write(response);
-         //                               document.getElementById('add_person_results').innerHTML = response;
+                                       document.getElementById('add_person_results').innerHTML = response;
                                     }
                                     )"/></td>
                                 </tr>
@@ -1162,6 +1161,8 @@ function la_casa_report_list_gen_html($cursor, $val_denominator, $ed_achievement
 
     $race_array = array("0" => "N/A", "1" => "African-American", "2" => "Asian-American", "3" => "Latin@", "4" => "White", "5" => "Other");
     $gender_array = array("f" => "Female", "m" => "Male");
+    $yn_array = array(1 => "Yes", 2 => "No");
+    $match_array = array(1 => "Above Match", 2 => "Match", 3 => "Below Match");
     while ($val = mysqli_fetch_array($cursor)) {
         $reporting_number += $val[$countindex];
         if ($val[$description_index] != null){
@@ -1186,6 +1187,12 @@ function la_casa_report_list_gen_html($cursor, $val_denominator, $ed_achievement
             }
             elseif ( array_key_exists('Gender', $val)){
                 $result .= $gender_array[$val[$description_index]];
+            }
+            elseif ( array_key_exists('Dependency_Status', $val) || array_key_exists('First_Generation_College_Student', $val)){
+                $result .= $yn_array[$val[$description_index]];
+            }
+            elseif ( array_key_exists('College_Match', $val)){
+                $result .= $match_array[$val[$description_index]];
             }
             else{
                 $result .= $val[$description_index];
@@ -1272,9 +1279,9 @@ echo la_casa_report_list_gen_html($majors, $students_denominator);
 <p></p>
 <table class = "inner_table">
 <caption> College </caption>
-<tr><th> College Name </th><th> Type </th><th>Percent</th><th>Count</th></tr>
+<tr><th> College Name </th><th>Percent</th><th>Count</th></tr>
 <?php
-$num_linked_colleges_sqlsafe = "SELECT COUNT(*)  FROM LC_Terms LEFT JOIN Colleges ON Colleges.College_ID = LC_Terms.College_ID;";
+$num_linked_colleges_sqlsafe = "SELECT COUNT(*), College_Name FROM LC_Terms LEFT JOIN Colleges ON Colleges.College_ID = LC_Terms.College_ID GROUP BY College_Name;";
 $num_colleges = mysqli_query($cnnTRP, $num_linked_colleges_sqlsafe);
 echo la_casa_report_list_gen_html($num_colleges, $students_denominator);
 ?>
@@ -1284,7 +1291,7 @@ echo la_casa_report_list_gen_html($num_colleges, $students_denominator);
 <caption> Total Credit Accrual To Date </caption>
 <tr><th> Credits Completed </th><th>Percent</th><th>Count</th></tr>
 <?php
-$sum_of_credits_sqlsafe = "SELECT Count(*), Credit_Range FROM LC_Terms INNER JOIN (SELECT  Participant_ID_Students, SUM(Credits) AS Credit_Range FROM LC_Terms GROUP BY Participant_ID_Students) Result_Table ON Result_Table.Participant_ID_Students = LC_Terms.Participant_ID GROUP BY Credit_Range;";
+$sum_of_credits_sqlsafe = "SELECT Count(*), Credit_Range FROM LC_Terms INNER JOIN (SELECT  Participant_ID, SUM(Credits) AS Credit_Range FROM LC_Terms GROUP BY Participant_ID) Result_Table ON Result_Table.Participant_ID = LC_Terms.Participant_ID GROUP BY Credit_Range;";
 $sum_credits = mysqli_query($cnnTRP, $sum_of_credits_sqlsafe);
 echo la_casa_report_high_low_gen_html($sum_credits, "Credit Accrual", $students_denominator);
 ?>
@@ -1293,7 +1300,7 @@ echo la_casa_report_high_low_gen_html($sum_credits, "Credit Accrual", $students_
 <caption> College GPA </caption>
 <tr><th>College GPA</th><th>Percent</th><th>Count</th></tr>
 <?php
-$college_gpa_sqlsafe = "SELECT Count(*), College_GPA FROM LC_Terms WHERE School_Year = '" . $year . "' GROUP BY College_GPA;";
+$college_gpa_sqlsafe = "SELECT Count(*), College_GPA FROM LC_Terms GROUP BY College_GPA;";
 $college_gpa = mysqli_query($cnnTRP, $college_gpa_sqlsafe);
 echo la_casa_report_high_low_gen_html($college_gpa, "College GPA", $students_denominator);
 ?>
@@ -1321,7 +1328,7 @@ echo la_casa_report_high_low_gen_html($high_school_gpa, "High School GPA", $stud
 <caption> Dependency Status </caption>
 <tr><th>Status</th><th>Percent</th><th>Count</th></tr>
 <?php
-$dependency_status_sqlsafe = "SELECT Count(*), Dependency_Status FROM La_Casa_Basics WHERE School_Year = '" . $year . "' GROUP BY Dependency_Status;";
+$dependency_status_sqlsafe = "SELECT Count(*), Dependency_Status FROM La_Casa_Basics GROUP BY Dependency_Status;";
 $dependency_status = mysqli_query($cnnTRP, $dependency_status_sqlsafe);
 echo la_casa_report_list_gen_html($dependency_status, $students_denominator);
 ?>

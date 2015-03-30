@@ -118,8 +118,38 @@ which has been removed for the use of researchers and partners in the version in
                     Without identifying information</a></td></tr>
     
             
-</table><br/></br>
+</table>
 
-<?
+<h2> La Casa Information</h2>
+<table class="all_projects">
+
+       <tr><td class="all_projects">Constant La Casa Data</td>
+                <td class="all_projects">
+                <a href="/include/generalized_download_script.php?download_name=trp_lc_constant_data">
+                    With identifying information</a>
+                </td><td class="all_projects">
+                <a href="/include/generalized_download_script.php?download_name=trp_lc_constant_data_deid">
+                    Without identifying information</a></td></tr>
+
+       <tr><td class="all_projects">La Casa Data by term</td>
+                <td class="all_projects">
+                <a href="/include/generalized_download_script.php?download_name=trp_lc_by_term">
+                    With identifying information</a>
+                </td><td class="all_projects">
+                <a href="/include/generalized_download_script.php?download_name=trp_lc_by_term_deid">
+                    Without identifying information</a></td></tr>
+
+       <tr><td class="all_projects">La Casa Colleges</td>
+                <td class="all_projects">
+                <a href="/include/generalized_download_script.php?download_name=trp_lc_colleges">
+                    With identifying information</a>
+                </td><td class="all_projects">
+</td></tr>
+     
+</table>
+
+<br/></br>
+
+<?php
 	include "../../footer.php";
 ?>

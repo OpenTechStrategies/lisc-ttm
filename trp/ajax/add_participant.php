@@ -13,6 +13,8 @@ $block_group_sqlsafe = do_it_all($this_address, $map);
 include "../include/dbconnopen.php";
 
 if ($_POST['action']=='add_to_program'){
+    $reformat_date = explode('/', $_POST['dob_add']);
+$dob_format = $reformat_date[2] . '-' . $reformat_date[0] . '-' . $reformat_date[1];
     include "../include/dbconnopen.php";
     $create_new_participant_lc="INSERT INTO Participants (
                First_Name,
@@ -38,7 +40,7 @@ if ($_POST['action']=='add_to_program'){
                '" . mysqli_real_escape_string($cnnTRP, $_POST['mobile_add']) . "',
                '" . mysqli_real_escape_string($cnnTRP, $_POST['email2_add']) . "',
                '" . mysqli_real_escape_string($cnnTRP, $_POST['gender_add']) . "',
-               '" . mysqli_real_escape_string($cnnTRP, $_POST['dob_add']) . "',
+               '" . mysqli_real_escape_string($cnnTRP, $dob_format) . "',
                '" . mysqli_real_escape_string($cnnTRP, $_POST['race_add']) . "')";
     mysqli_query($cnnTRP, $create_new_participant_lc);
     $new_id=mysqli_insert_id($cnnTRP); //returns the new participant ID
@@ -57,7 +59,11 @@ if ($_POST['action']=='add_to_program'){
     else{
         $college_id_sqlsafe = mysqli_real_escape_string($cnnTRP, $_POST['college_id']);
     }
-    
+    $reformat_date = explode('/', $_POST['move_in_date']);
+$movein_format = $reformat_date[2] . '-' . $reformat_date[0] . '-' . $reformat_date[1];    
+    $reformat_date = explode('/', $_POST['move_out_date']);
+$moveout_format = $reformat_date[2] . '-' . $reformat_date[0] . '-' . $reformat_date[1];    
+
     $insert_la_casa_basics = "INSERT INTO La_Casa_Basics (Participant_ID_Students,
 Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, Scholarship_Apps, Scholarship_Num, Scholarship_Volume, Scholarships_Received, Household_Income, AMI, Move_In_Date, Move_Out_Date, Mid_Twenties, Masters_Degree, Married, Has_Children, Homeless, Self_Sustaining, Dependency_Status)
        VALUES
@@ -72,8 +78,8 @@ Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, Scholarship_Apps, Scholar
 '" . mysqli_real_escape_string($cnnTRP, $_POST['scholarships_received']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['household_income']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['AMI']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_date']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['move_out_date']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $movein_format) . "',
+'" . mysqli_real_escape_string($cnnTRP, $moveout_format) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['mid_twenties']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['masters_degree']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['married']) . "',

@@ -42,7 +42,7 @@ elseif ($_POST['action'] == 'new' && $_POST['subject'] == 'college'){
        $add_college_data_sqlsafe = "INSERT INTO LC_Terms
        (Participant_ID,  College_ID, Term_Type, Term,
        School_Year, Credits, Loan_Applications, Loan_Volume,
-       Loans_Received, Major, College_Match, College_GPA)
+       Loans_Received, Major, College_Match, College_GPA, Internship_Status, Intern_Hours)
        VALUES
        ( '" . mysqli_real_escape_string($cnnTRP, $_POST['person']) . "',
 '" . $college_id_sqlsafe . "',
@@ -55,7 +55,9 @@ elseif ($_POST['action'] == 'new' && $_POST['subject'] == 'college'){
 '" . mysqli_real_escape_string($cnnTRP, $_POST['loans_received']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['major']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['match']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['gpa']) . "'
+'" . mysqli_real_escape_string($cnnTRP, $_POST['gpa']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['internship_status']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['internship_hours']) . "'
 
 )";
        echo $add_college_data_sqlsafe;

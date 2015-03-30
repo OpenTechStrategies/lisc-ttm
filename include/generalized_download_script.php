@@ -1853,7 +1853,25 @@ LEFT JOIN
              'titles' => array("Teacher Exchange ID", "Participant ID", "Classroom", 
                  "Home Teacher", "Exchange Teacher")),
 
+        'trp_lc_constant_data' => array('db' => 'TRP', 'query' =>
+        'SELECT Participants.First_Name, Participants.Last_Name, La_Casa_Basics.* FROM La_Casa_Basics LEFT JOIN Participants ON Participant_ID_Students = Participant_ID',
+        'titles' => array("First Name", "Last Name", "Unique ID", "Participant ID", "Household Size", "Parent1 AGI", "Parent2 AGI", "Student AGI", "ACT Score", "High School GPA", "Dependency Status", "Father's Highest Level of Education", "Mother's Highest Level of Education", "Student Aspiration", "First Generation College Student", "Persistence/Graduation", "Student Hometown", "Student High School", "Number of Scholarship Applications", "Number of Scholarships Received", "Scholarship Volume Offered", "Scholarships Volume Received", "Household Income", "AMI", "Move In Date", "Move Out Date", "24 or older?", "Masters Degree?", "Married?", "Has Children?", "Homeless?", "Self Sustaining?")),
 
+        'trp_lc_constant_data_deid' => array('db' => 'TRP', 'query' =>
+        'SELECT * FROM La_Casa_Basics LEFT JOIN Participants ON Participant_ID_Students = Participant_ID',
+        'titles' => array("Unique ID", "Participant ID", "Household Size", "Parent1 AGI", "Parent2 AGI", "Student AGI", "ACT Score", "High School GPA", "Dependency Status", "Father's Highest Level of Education", "Mother's Highest Level of Education", "Student Aspiration", "First Generation College Student", "Persistence/Graduation", "Student Hometown", "Student High School", "Number of Scholarship Applications", "Number of Scholarships Received", "Scholarship Volume Offered", "Scholarships Volume Received", "Household Income", "AMI", "Move In Date", "Move Out Date", "24 or older?", "Masters Degree?", "Married?", "Has Children?", "Homeless?", "Self Sustaining?")),
+
+        'trp_lc_by_term' => array('db' => 'TRP', 'query' =>
+        'SELECT First_Name, Last_Name, LC_Terms.Participant_ID, College_Name, Term_Type, Term, School_Year, Credits, Loan_Applications, Loan_Volume, Loans_Received, Major, College_Match, College_GPA, Internship_Status, Intern_Hours FROM LC_Terms LEFT JOIN Participants ON LC_Terms.Participant_ID = Participants.Participant_ID LEFT JOIN Colleges ON LC_Terms.College_ID = Colleges.College_ID',
+        'titles' => array( "First Name", "Last Name", "Participant ID", "College Name", "Term Type", "Term", "School Year", "Credits", "Loan Applications", "Loan Volume", "Loans Received", "Major", "College Match", "College GPA", "Internship Status", "Intern Hours")),
+
+        'trp_lc_by_term_deid' => array('db' => 'TRP', 'query' =>
+        'SELECT LC_Terms.Participant_ID, College_Name, Term_Type, Term, School_Year, Credits, Loan_Applications, Loan_Volume, Loans_Received, Major, College_Match, College_GPA, Internship_Status, Intern_Hours FROM LC_Terms LEFT JOIN Participants ON LC_Terms.Participant_ID = Participants.Participant_ID LEFT JOIN Colleges ON LC_Terms.College_ID = Colleges.College_ID',
+        'titles' => array( "Participant ID", "College Name", "Term Type", "Term", "School Year", "Credits", "Loan Applications", "Loan Volume", "Loans Received", "Major", "College Match", "College GPA", "Internship Status", "Intern Hours")),
+
+        'trp_lc_colleges' => array('db' => 'TRP', 'query' =>
+        'SELECT * FROM Colleges',
+        'titles' => array("College ID", "College Name", "College Type (2-year or 4-year)"))
 
                  );
     $db_array=array(2=>'LSNA', 3=>'bickerdike', 4=>'TRP', 5=>'SWOP', 6=>'enlace');

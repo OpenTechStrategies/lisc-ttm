@@ -2207,7 +2207,7 @@ $.post(
             id: <?php echo $parti['Participant_ID']; ?>
     },
 function(response){
-    document.write(response); //testing output
+    window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
 });
 ">
 </td></tr>
@@ -2223,7 +2223,7 @@ function(response){
                 <?php
 
                 include "../include/dbconnopen.php";
-                $find_college_data_sqlsafe="SELECT College_Name, Term_Type, Term, School_Year, Credits, Term_ID, Major, College_GPA, College_Match, Internship_Status, Intern_Hours FROM LC_Terms LEFT JOIN Colleges ON LC_Terms.College_ID=Colleges.College_ID WHERE Participant_ID = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+                $find_college_data_sqlsafe="SELECT College_Name, Term_Type, Term, School_Year, Credits, Term_ID, Major, College_GPA, College_Match, Internship_Status, Intern_Hours, Colleges.College_ID FROM LC_Terms LEFT JOIN Colleges ON LC_Terms.College_ID=Colleges.College_ID WHERE Participant_ID = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
                 $college_data=mysqli_query($cnnTRP, $find_college_data_sqlsafe);
                 $total_credits = 0;
 //setting these arrays outside the loop so that they are available to the "new" row after the loop
@@ -2263,7 +2263,7 @@ echo la_casa_edit_data_gen_html($college_year_array, $coldat[3], $id_string, $ed
 
 echo la_casa_display_data_gen_html($coldat[0], $display_class, $college_array);
 $id_string = "college_id_" . $coldat[5];
-echo la_casa_edit_data_gen_html($college_array, $coldat[0], $id_string, $editable_class);
+echo la_casa_edit_data_gen_html($college_array, $coldat[11], $id_string, $editable_class);
 // or add a new college
 ?>
 <span class = "<?php echo $editable_class; ?>"><br>
@@ -2300,7 +2300,7 @@ echo la_casa_display_data_gen_html($coldat[4], $display_class);
 echo la_casa_display_data_gen_html($coldat[6], $display_class, $major_array);
 ?>
 <span class = "<?php echo $editable_class; ?>">
-<input type = "text" id = "major_name_<?php echo $coldat[5]; ?>">
+<input type = "text" value = "<?php echo $coldat[6]; ?>" id = "major_name_<?php echo $coldat[5]; ?>">
 </span>
                     </td>
                     <td>
@@ -2322,9 +2322,9 @@ echo la_casa_edit_data_gen_html($match_array, $coldat[8], $id_string, $editable_
 echo la_casa_display_data_gen_html($coldat[9], $display_class, $internship_yn);
 if ($coldat[10] != null) { echo "<br>Hours: " . $coldat[10];}
 $id_string = "internship_id_" . $coldat[5];
-echo la_casa_edit_data_gen_html($internship_yn, 0, $id_string, $editable_class);
+echo la_casa_edit_data_gen_html($internship_yn, $coldat[9], $id_string, $editable_class);
 ?>
-<br><span class = "<?php echo $editable_class; ?>"><strong>Hours: </strong><input type = "text" id = "internship_hours_id_<?php echo $coldat[5]; ?>" size = "5px"><span>
+<br><span class = "<?php echo $editable_class; ?>"><strong>Hours: </strong><input type = "text" value = "<?php echo $coldat[10]; ?>"id = "internship_hours_id_<?php echo $coldat[5]; ?>" size = "5px"><span>
 </td>
 
                     <td>
@@ -2389,9 +2389,8 @@ echo la_casa_edit_data_gen_html($season_array, 0, "new_term_id", $editable_class
 <input type="text" id="new_credits" size = "5">
                     </td>
                     <td>
-<?php
-echo la_casa_edit_data_gen_html($major_array, 0, "new_major_id", $editable_class);
-?>
+<input type = "text" id = "new_major_name">
+
                     </td>
                     <td>
 <input type="text" id="new_gpa" size = "5">
@@ -2405,6 +2404,8 @@ echo la_casa_edit_data_gen_html($match_array, 0, "new_match_id", $editable_class
 <?php
 echo la_casa_edit_data_gen_html($internship_yn, 0, "new_internship_id", $editable_class);
 ?>
+<br><span class = "<?php echo $editable_class; ?>"><strong>Hours: </strong><input type = "text" id = "new_internship_hours_id" size = "5px"><span>
+
 </td>
                     <td>
 <input type="button" value="Add New" onclick=" 
@@ -2421,10 +2422,12 @@ $.post(
             major:  document.getElementById('new_major_id').value,
             gpa:  document.getElementById('new_gpa').value,
             match:  document.getElementById('new_match_id').value,
+            internship_status: document.getElementById('new_internship_id').value,
+            internship_hours: document.getElementById('new_internship_hours_id').value,
             person: '<?php echo $parti['Participant_ID']; ?>'
             }, 
     function(response) {
-        document.write(response);
+                    window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
     }
 );">
                     </td>
@@ -2456,22 +2459,21 @@ $find_loan_data_sqlsafe = "SELECT School_Year, Loan_Applications, Loan_Volume, L
                 <tr><td><span class = "hide_loans_data_<?php echo $loandata[4]; ?>"><?php echo $loandata[0]; ?></span>
  <select id = "loans_year_id_<?php echo $loandata[4]; ?>" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>">
                               <option value = "0">-----</option>
-                              <option value = "2014"> 2014 </option>
-                              <option value = "2015"> 2015 </option>
-                              <option value = "2016"> 2016 </option>
-                              <option value = "2017"> 2017 </option>
+                              <option <?php echo ( $loandata[0] == 2014 ? 'selected="selected"' : null) ?>  value = "2014"> 2014 </option>
+                              <option <?php echo ( $loandata[0] == 2015 ? 'selected="selected"' : null) ?> value = "2015"> 2015 </option>
+                              <option <?php echo ( $loandata[0] == 2016 ? 'selected="selected"' : null) ?> value = "2016"> 2016 </option>
+                              <option <?php echo ( $loandata[0] == 2017 ? 'selected="selected"' : null) ?> value = "2017"> 2017 </option>
                               </select></td>
                     <td><span class = "hide_loans_data_<?php echo $loandata[4]; ?>"><?php echo $loandata[1]; ?></span>
-<input type="text" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" id="loan_apps_<?php echo $loandata[4]; ?>"></td>
+<input type="text" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" value = "<?php echo $loandata[1]; ?>" id="loan_apps_<?php echo $loandata[4]; ?>"></td>
                     <td><span class = "hide_loans_data_<?php echo $loandata[4]; ?>"><?php echo $loandata[2]; ?></span>
-<input type="text" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" id="loan_volume_<?php echo $loandata[4]; ?>"></td>
+<input type="text" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" value = "<?php echo $loandata[2]; ?>" id="loan_volume_<?php echo $loandata[4]; ?>"></td>
                     <td><span class = "hide_loans_data_<?php echo $loandata[4]; ?>"><?php echo $loandata[3]; ?></span>
-<input type="text" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" id="loans_received_<?php echo $loandata[4]; ?>"></td>
+<input type="text" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" value = "<?php echo $loandata[3]; ?>" id="loans_received_<?php echo $loandata[4]; ?>"></td>
                     <td><input type = "button" value = "Edit" onclick = "$('.show_loans_edit_<?php echo $loandata[4]; ?>').toggle();
 $('.hide_loans_data_<?php echo $loandata[4]; ?>').toggle();">
                     <input type = "button" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" value = "Save"
                     onclick = "
-                                                                                                   alert('testing');
                     $.post(
                         '../ajax/save_la_casa_info.php',
                         {
@@ -2484,7 +2486,7 @@ $('.hide_loans_data_<?php echo $loandata[4]; ?>').toggle();">
                                 id: '<?php echo $loandata[4]; ?>' 
                                 }, 
                 function(response) {
-                    document.write(response);
+                    window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                 }
                         );">
                     </td>
@@ -2521,7 +2523,7 @@ $('.hide_loans_data_<?php echo $loandata[4]; ?>').toggle();">
                                 person: '<?php echo $parti['Participant_ID']; ?>'
                                 }, 
                 function(response) {
-                    document.write(response);
+                    window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                 }
                         );">
                     </td>
