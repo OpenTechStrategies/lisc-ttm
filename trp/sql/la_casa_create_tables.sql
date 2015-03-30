@@ -96,14 +96,6 @@ FOREIGN KEY (`Participant_ID`) REFERENCES `Participants`
 `Intern_Hours` int(11)
 ) ENGINE=InnoDB;
 
-DROP TABLE IF EXISTS `Majors`;
-
-CREATE TABLE `Majors`
-(
-`Major_ID` int(11) NOT NULL AUTO_INCREMENT,
-PRIMARY KEY (`Major_ID`),
-`Major_Name` varchar(100)
-) ENGINE=InnoDB;
 
 
  ALTER TABLE `Participants` ADD
