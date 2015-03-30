@@ -22,7 +22,7 @@ if ($_POST['action']=='edit' && $_POST['subject'] == 'college'){
          Internship_Status =  '" . mysqli_real_escape_string($cnnTRP, $_POST['internship_status']) . "',
          Intern_Hours =   '" . mysqli_real_escape_string($cnnTRP, $_POST['intern_hours']) . "'
              WHERE Term_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
-   echo $edit_college_data_sqlsafe;
+   echo $edit_college_data_sqlsafe; //testing output
    mysqli_query($cnnTRP, $edit_college_data_sqlsafe);
                               
 }

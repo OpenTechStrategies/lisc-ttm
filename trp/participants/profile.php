@@ -2373,7 +2373,16 @@ echo la_casa_edit_data_gen_html($college_year_array, 0, "new_college_year_id", $
                     <td>
 <?php
 echo la_casa_edit_data_gen_html($college_array, 0, "new_college_id", $editable_class);
+// or add a new college
 ?>
+<span class = "<?php echo $editable_class; ?>"><br>
+Or add a new college: <input type = "text" id = "new_college_name>">
+<select id = "new_college_type">
+<option value = "">----</option>
+<option>2-year</option>
+<option>4-year</option>
+</select>
+</span>
                     </td>
                     <td>
 <?php
@@ -2415,11 +2424,13 @@ $.post(
       action: 'new',
             subject: 'college',
             college_id: document.getElementById('new_college_id').value,
+            college_name: document.getElementById('new_college_name').value,
+            college_type: document.getElementById('new_college_type').value,
             term_type: document.getElementById('new_term_type').value,
             term_id: document.getElementById('new_term_id').value,
             school_year: document.getElementById('new_college_year_id').value,
             credits: document.getElementById('new_credits').value,
-            major:  document.getElementById('new_major_id').value,
+            major:  document.getElementById('new_major_name').value,
             gpa:  document.getElementById('new_gpa').value,
             match:  document.getElementById('new_match_id').value,
             internship_status: document.getElementById('new_internship_id').value,
