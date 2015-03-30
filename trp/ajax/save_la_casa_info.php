@@ -1,6 +1,6 @@
 <?php
 include "../include/dbconnopen.php";
-if ($_POST['college_name'] != ''){
+if ( isset($_POST['college_name']) && $_POST['college_name'] != ''){
         $insert_new_college = "INSERT INTO Colleges (College_Name, College_Type) VALUES ('" . mysqli_real_escape_string($cnnTRP, $_POST['college_name']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['college_type']) . "')";
         mysqli_query($cnnTRP, $insert_new_college);
         $college_id_sqlsafe = mysqli_insert_id($cnnTRP);
@@ -22,7 +22,6 @@ if ($_POST['action']=='edit' && $_POST['subject'] == 'college'){
          Internship_Status =  '" . mysqli_real_escape_string($cnnTRP, $_POST['internship_status']) . "',
          Intern_Hours =   '" . mysqli_real_escape_string($cnnTRP, $_POST['intern_hours']) . "'
              WHERE Term_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
-   echo $edit_college_data_sqlsafe; //testing output
    mysqli_query($cnnTRP, $edit_college_data_sqlsafe);
                               
 }
@@ -33,7 +32,6 @@ elseif ($_POST['action']=='edit' && $_POST['subject'] == 'loans'){
          Loan_Volume  = '" . mysqli_real_escape_string($cnnTRP, $_POST['loan_volume']) . "',
          Loans_Received = '" . mysqli_real_escape_string($cnnTRP, $_POST['loans_received']) . "'
 WHERE Term_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
-   echo $edit_college_data_sqlsafe;
    mysqli_query($cnnTRP, $edit_college_data_sqlsafe);
                               
 }
@@ -60,7 +58,6 @@ elseif ($_POST['action'] == 'new' && $_POST['subject'] == 'college'){
 '" . mysqli_real_escape_string($cnnTRP, $_POST['internship_hours']) . "'
 
 )";
-       echo $add_college_data_sqlsafe;
    mysqli_query($cnnTRP, $add_college_data_sqlsafe);
 }
 elseif ($_POST['action'] == 'edit' && $_POST['subject'] == 'constant'){
@@ -69,7 +66,7 @@ elseif ($_POST['action'] == 'edit' && $_POST['subject'] == 'constant'){
     $num_rows = mysqli_num_rows($num_rows_result);
     if ($num_rows < 1){
         $insert_constant_data_sqlsafe = "INSERT INTO La_Casa_Basics (
-Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, ACT_Score, High_School_GPA, Dependency_Status, Father_Highest_Level_Education, Mother_Highest_Level_Education, Student_Aspiration, First_Generation_College_Student, Student_Hometown, Student_High_School, Participant_ID_Students
+Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, ACT_Score, High_School_GPA, Dependency_Status, Father_Highest_Level_Education, Mother_Highest_Level_Education, Student_Aspiration, First_Generation_College_Student, Student_Hometown, Student_High_School, Scholarship_Apps, Scholarship_Num, Scholarship_Volume, Scholarships_Received, Household_Income, AMI, Move_In_Date, Move_Out_Date, Mid_Twenties, Masters_Degree, Married, Has_Children, Homeless, Self_Sustaining, Participant_ID_Students
 ) VALUES (
 '" . mysqli_real_escape_string($cnnTRP, $_POST['household_size']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['parent1agi']) . "',
@@ -84,6 +81,20 @@ Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, ACT_Score, High_School_GP
 '" . mysqli_real_escape_string($cnnTRP, $_POST['first_gen']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['hometown']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['hs']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['scholarship_apps']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['scholarship_num']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['scholarship_volume']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['scholarships_received']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['household_income']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['AMI']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_date']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['move_out_date']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['mid_twenties']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['masters']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['married']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['has_children']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['homeless']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['self_sust']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "');";
         echo $insert_constant_data_sqlsafe; //testing output
         mysqli_query($cnnTRP, $insert_constant_data_sqlsafe);
@@ -102,7 +113,21 @@ Mother_Highest_Level_Education = '" . mysqli_real_escape_string($cnnTRP, $_POST[
 Student_Aspiration = '" . mysqli_real_escape_string($cnnTRP, $_POST['student_ed']) . "',
 First_Generation_College_Student = '" . mysqli_real_escape_string($cnnTRP, $_POST['first_gen']) . "',
 Student_Hometown = '" . mysqli_real_escape_string($cnnTRP, $_POST['hometown']) . "',
-Student_High_School = '" . mysqli_real_escape_string($cnnTRP, $_POST['hs']) . "'
+Student_High_School = '" . mysqli_real_escape_string($cnnTRP, $_POST['hs']) . "',
+Scholarship_Apps =  '" . mysqli_real_escape_string($cnnTRP, $_POST['scholarship_apps']) . "',
+Scholarship_Num =  '" . mysqli_real_escape_string($cnnTRP, $_POST['scholarship_num']) . "',
+Scholarship_Volume =  '" . mysqli_real_escape_string($cnnTRP, $_POST['scholarship_volume']) . "',
+Scholarships_Received =  '" . mysqli_real_escape_string($cnnTRP, $_POST['scholarships_received']) . "',
+Household_Income =  '" . mysqli_real_escape_string($cnnTRP, $_POST['household_income']) . "',
+AMI =  '" . mysqli_real_escape_string($cnnTRP, $_POST['AMI']) . "',
+Move_In_Date =  '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_date']) . "',
+Move_Out_Date =  '" . mysqli_real_escape_string($cnnTRP, $_POST['move_out_date']) . "',
+Mid_Twenties =  '" . mysqli_real_escape_string($cnnTRP, $_POST['mid_twenties']) . "',
+Masters_Degree =  '" . mysqli_real_escape_string($cnnTRP, $_POST['masters']) . "',
+Married =  '" . mysqli_real_escape_string($cnnTRP, $_POST['married']) . "',
+Has_Children =  '" . mysqli_real_escape_string($cnnTRP, $_POST['has_children']) . "',
+Homeless =  '" . mysqli_real_escape_string($cnnTRP, $_POST['homeless']) . "',
+Self_Sustaining =  '" . mysqli_real_escape_string($cnnTRP, $_POST['self_sust']) . "'
 WHERE Participant_ID_Students =  '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
     mysqli_query($cnnTRP, $edit_constant_data_sqlsafe);
     }

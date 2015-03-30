@@ -2089,15 +2089,26 @@ $editable_class = "constant_data_editable";
 $display_class = "constant_data_display";
 $get_education_levels_sqlsafe = "SELECT * FROM Educational_Levels";
 $education_levels = mysqli_query($cnnTRP, $get_education_levels_sqlsafe);
-$selector_start = "<select class = " . $editable_class . " id = '";
-$yn_selector =  "'><option value = 0>----</option>
-    <option value = '1'> Yes </option> 
-    <option value = '2'> No </option>
-    </select>";
-$education_selector = "'><option value = 0>----</option>";
+$education_levels_array = array();
 while ($education = mysqli_fetch_row($education_levels)) {
-    $education_selector .= "<option value = " . $education[0] . ">" . $education[1] . "</option>";
+    $education_levels_array[$education[0]] = $education[1];
 }
+
+
+function construct_yn_selector($id_string, $current_value, $editable_class){
+    $selector_string =  "<select class  = " . $editable_class . " id = '" . $id_string . "'><option value = 0>----</option><option value = '1' " .  ($current_value  == 1 ? 'selected="selected"' : null) .  "> Yes </option><option value = '2'" .  ($current_value  == 2 ? 'selected="selected"' : null) .  "> No </option> </select>";
+return $selector_string;
+}
+function construct_education_selector($id_string, $current_value, $editable_class, $education_levels_array){
+    $selector_string =  "<select class  = " . $editable_class . " id = '" . $id_string . "'><option value = 0>----</option>";
+    foreach ($education_levels_array as $level_id => $level_value){
+        $selector_string .= "<option value = '" . $level_id . "' " . ($current_value  == $level_value ? 'selected="selected"' : null) . ">" . $level_value . "</option>";
+}
+$selector_string .= "</select>";
+    return $selector_string;
+}
+
+
 $education_selector .= "</select>";
 $column_array = array(array("Household Size", 'input', 'household_size_edit'),
  array("Parent1 AGI", 'input', 'parent1agi_edit', 'moneyformat'),
@@ -2156,10 +2167,10 @@ if ($value[1] == 'input') {
     echo "<input type = text id = " . $value[2] . " value = '" . $constant[$key] . "' class = '" . $editable_class . "'>";
 }
 elseif ($value[1] == 'yn') {
-    echo $selector_start . $value[2] . $yn_selector;
+    echo construct_yn_selector($value[2], $constant[$key], $editable_class);
 }
 elseif ($value[1] == 'education') {
-    echo $selector_start . $value[2] . $education_selector;
+    echo construct_education_selector($value[2], $constant[$key], $editable_class, $education_levels_array);
 }
 ?>
                     </td>
@@ -2376,7 +2387,7 @@ echo la_casa_edit_data_gen_html($college_array, 0, "new_college_id", $editable_c
 // or add a new college
 ?>
 <span class = "<?php echo $editable_class; ?>"><br>
-Or add a new college: <input type = "text" id = "new_college_name>">
+Or add a new college: <input type = "text" id = "new_college_name">
 <select id = "new_college_type">
 <option value = "">----</option>
 <option>2-year</option>

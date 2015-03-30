@@ -1143,6 +1143,7 @@ function la_casa_report_list_gen_html($cursor, $val_denominator, $ed_achievement
     $reporting_number = 0;
     $null_count = 0;
     $count_distinct_results = 0;
+    include "../include/dbconnopen.php";
     $hs_diploma_id_sqlsafe = "SELECT Education_ID FROM Educational_Levels WHERE Education_Level_Name = 'High School Diploma'";
     $hs_diploma_id = mysqli_query($cnnTRP, $hs_diploma_id_sqlsafe);
     $diploma_id = mysqli_fetch_row($hs_disploma_id);
@@ -1309,7 +1310,7 @@ echo la_casa_report_high_low_gen_html($college_gpa, "College GPA", $students_den
 <caption> ACT Score </caption>
 <tr><th>Score</th><th>Percent</th><th>Count</th></tr>
 <?php
-$act_score_sqlsafe = "SELECT  Count(*), ACT_Score FROM La_Casa_Basics WHERE School_Year = '" . $year . "' GROUP BY ACT_Score;";
+$act_score_sqlsafe = "SELECT  Count(*), ACT_Score FROM La_Casa_Basics GROUP BY ACT_Score;";
 $act_score = mysqli_query($cnnTRP, $act_score_sqlsafe);
 echo la_casa_report_high_low_gen_html($act_score, "ACT Score", $students_denominator);
 
@@ -1319,7 +1320,7 @@ echo la_casa_report_high_low_gen_html($act_score, "ACT Score", $students_denomin
 <caption> High School GPA </caption>
 <tr><th>High School GPA</th><th>Percent</th><th>Count</th></tr>
 <?php
-$high_school_gpa_sqlsafe = "SELECT Count(*), High_School_GPA FROM La_Casa_Basics WHERE School_Year = '" . $year . "' GROUP BY High_School_GPA;";
+$high_school_gpa_sqlsafe = "SELECT Count(*), High_School_GPA FROM La_Casa_Basics GROUP BY High_School_GPA;";
 $high_school_gpa = mysqli_query($cnnTRP, $high_school_gpa_sqlsafe);
 echo la_casa_report_high_low_gen_html($high_school_gpa, "High School GPA", $students_denominator);
 ?>
