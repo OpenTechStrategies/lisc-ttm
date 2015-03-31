@@ -1,4 +1,8 @@
-<?
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
 /* holds all information about an event (participants, subcampaign, location) */
 	include "../../header.php";
 	include "../header.php";
@@ -79,7 +83,7 @@
                                 },
                             function (response){
                                 window.location='event.php?event=<?echo $event['Campaign_Event_ID'];?>';
-                            })">Save</a><a href="javascript:;" onclick="$('.event_edit').toggle();
+                            }).fail(failAlert);">Save</a><a href="javascript:;" onclick="$('.event_edit').toggle();
                                 $('.event_show').toggle();" class="event_show">Edit</a></td></tr>
 		</table>
 		<br/>
@@ -115,7 +119,7 @@
 //                                    document.getElementById('show_error').innerHTML = response;
 //                                }
                             window.location=response;
-                                });"><?echo $attendee['Name_First']." ".$attendee['Name_Last'];?></a></td>
+                                }).fail(failAlert);"><?echo $attendee['Name_First']." ".$attendee['Name_Last'];?></a></td>
 				<td class="blank"><span class="show <?echo $attendee['Participant_ID'];?>">
                                     <?
                                    /* this should be linked to the roles table, not dependent on these if/elses.  */
@@ -212,7 +216,7 @@
                                                             function(response){
                                                                 //document.write(response);
                                                                     window.location='event.php?event=<?echo $event['Campaign_Event_ID'];?>';
-                                                            })">Save</a>
+                                                            }).fail(failAlert);">Save</a>
 				</td>
 				</tr>
                                 <!-- row if address needs to be added/changed: -->
@@ -246,7 +250,7 @@
                                     document.getElementById('show_swop_results_<?echo $attendee['Participant_ID'];?>').innerHTML = response;
                                     document.getElementById('add_new_prop_<?echo $attendee['Participant_ID'];?>').style.display='block';
                                 }
-                           )"/></td>
+                           ).fail(failAlert);"/></td>
 			</tr>
 		</table>
                             <!-- show search results -->
@@ -265,7 +269,7 @@
                                                                             //document.write(response);
                                                                                 window.location='event.php?event=<?echo $event['Campaign_Event_ID'];?>';
                                                                         }
-                                                                   )">
+                                                                   ).fail(failAlert);">
                             <!-- or create a property here: -->
                             <br>Didn't find the property you were looking for?  Quick add it here:
                             <table class="search_table">
@@ -312,7 +316,7 @@
 							document.getElementById('confirmation_<?echo $attendee['Participants_Events_ID'];?>').innerHTML = response;
                                                         
 						}
-				);"/></td>
+				).fail(failAlert);"/></td>
         </tr>
 </table>
 <div id="confirmation_<?echo $attendee['Participants_Events_ID'];?>"></div>
@@ -376,7 +380,7 @@
                                     //document.write(response);
                                     document.getElementById('show_results_<?echo $event['Participant_ID'];?>').innerHTML = response;
                                 }
-                           )"/><br/>
+                                                           ).fail(failAlert);"/><br/>
                                     <!-- view search results: -->
 					<span id="show_results_<?echo $event['Participant_ID'];?>"></span>
                                         
@@ -393,7 +397,7 @@
                         //document.write(response);
                         window.location='event.php?event=<?echo $event['Campaign_Event_ID'];?>';
                     }
-               )"> 
+                   ).fail(failAlert);"> 
 					</td>
 			</tr>
 		</table>
@@ -458,13 +462,14 @@
                         //document.write(response);
                         window.location='event.php?event=<?echo $event['Campaign_Event_ID'];?>';
                     }
-               );"></div>
+               ).fail(failAlert);"></div>
 
 				</div></td></tr>
 		</table>
 
 </div>
 <br/><br/>
-<?
+<?php
 	include "../../footer.php";
+close_all_dbconn();
 ?>

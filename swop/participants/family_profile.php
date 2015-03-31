@@ -1,4 +1,8 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
 include "../../header.php";
 include "../header.php";
 
@@ -42,7 +46,7 @@ $household_name=$basic_household[1];
             //document.write(response);
             window.location='family_profile.php?household=<?echo $basic_household[0];?>';
         }
-   )">Save</a>
+   ).fail(failAlert);">Save</a>
 </div>
 <hr/><br/>
 
@@ -73,7 +77,7 @@ while ($members=mysqli_fetch_array($household_info)){
 //                                    document.getElementById('show_error').innerHTML = response;
 //                                }
                             window.location=response;
-                                });"><?echo $members['Name_First'] ." ". $members['Name_Last'] ;?></a>
+                                }).fail(failAlert);"><?echo $members['Name_First'] ." ". $members['Name_Last'] ;?></a>
                                     <input type="button" value="Remove person from household" onclick="
                                            $.post(
                                                 '../ajax/new_household.php',
@@ -84,7 +88,7 @@ while ($members=mysqli_fetch_array($household_info)){
                                                 function (response){
                                                    // document.write(response);
                                                    window.location='family_profile.php?household='+<?echo $household_id_sqlsafe;?>;
-                                                });"><br/>
+                                                }).fail(failAlert);"><br/>
                                     <? 
 }
 include "../include/dbconnclose.php";
@@ -174,6 +178,7 @@ I'm not sure how to account for the fact<Br>that these people probably live toge
     ?>
 </table>
 <br/><br/>
-<?
-	include "../../footer.php";
+<?php
+include "../../footer.php";
+close_all_dbconn();
 ?>

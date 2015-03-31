@@ -1,4 +1,9 @@
-<?php include "../../header.php";
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
+include "../../header.php";
 include "../header.php";
 include "../include/datepicker_simple.php";
     if($_GET['history']==1){
@@ -180,7 +185,7 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                     //document.write(response);
                                     document.getElementById('show_results').innerHTML = response;
                                 }
-                           )"/>
+                           ).fail(failAlert);"/>
                                     <!-- organizer results: -->
 					<div id="show_results" style="margin-left:115px;"></div>	   
 					</td>
@@ -206,7 +211,11 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                                 </span><textarea id="next_notes_edit" maxlength="1000"><?php echo $parti['Next_Notes'];?></textarea></td>
                                         </tr>
 					<tr>
-						<td colspan="2"><a href="javascript:;" class="basic_info_show no_view" onclick="
+						<td colspan="2">
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+<a href="javascript:;" class="basic_info_show" onclick="
 								$('.basic_info_show').toggle();
 								$('.basic_info_edit').toggle();
 						" style="margin-left:55px;">Edit...</a>
@@ -248,7 +257,10 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 									//document.write(response);
                                                                         window.location = 'participant_profile.php';
                                                                     }
-                                                            )" style="margin-left:55px;">Save!</a>
+                                                            ).fail(failAlert);" style="margin-left:55px;">Save!</a>
+<?php
+} //end access check
+?>
 						</td>
                                                 
 					</tr>
@@ -280,7 +292,7 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                             id: '<?php echo $inst['Institution_ID'];?>'
                         },
                         function (response){
-                        window.location='../institutions/inst_profile.php';})"><?php echo $inst['Institution_Name'];?></a></td>
+                        window.location='../institutions/inst_profile.php';}).fail(failAlert);"><?php echo $inst['Institution_Name'];?></a></td>
                         <td class="blank"><?
                         /* This "leader" piece is rather ambiguous. Choice of any primary organizer, determines that this
                          * organizer can pull in this person (the subject of this profile) to an action if necessary.
@@ -297,7 +309,11 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                             <!-- The "reason" is essentially a tiny notes field. -->
 						<td colspan="2"><strong>Reason: </strong><?php echo $inst['Connection_Reason'];?></td>
                                                 <!-- Delete connections here: -->
-						<td><input type="button" class="hide_on_view" value="Delete" onclick="
+						<td>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $AdminAccess){
+?>
+<input type="button"  value="Delete" onclick="
                                                            $.post(
                                                             '../ajax/pool_connections.php',
                                                             {
@@ -308,7 +324,11 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                                                 //document.write(response);
                                                                 window.location='participant_profile.php';
                                                             }
-                                                       )"></td>
+                                                       ).fail(failAlert);">
+<?php
+                                         } //end access check
+?>
+</td>
 					</tr>
                             <?
                     }
@@ -357,7 +377,10 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 					<tr>
 						<td colspan="2"><strong>Reason: </strong> <input type="text" id="reason"></td>
 						<td>
-                                    <input type="button" value="Add" class="no_view" onclick="
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+                                    <input type="button" value="Add" onclick="
                                            $.post(
                                             '../ajax/pool_connections.php',
                                             {
@@ -372,7 +395,10 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                                 //document.write(response);
                                                 window.location='participant_profile.php';
                                             }
-                                       )">
+                                       ).fail(failAlert);">
+<?php
+} //end access check
+?>
                                 </td>
 					</tr>
                 </table>
@@ -459,7 +485,10 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                         ?>
 				</select>
                                 
-				 <input type="button" value="Add to Event" class="no_view" onclick="$.post(
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+				 <input type="button" value="Add to Event" onclick="$.post(
                     '../ajax/add_participant.php',
                     {
                         action: 'link_event',
@@ -471,9 +500,11 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                         //document.write(response);
                         window.location='participant_profile.php';
                     }
-               )
+               ).fail(failAlert);
               ">
-                <br/><br/>
+<?php
+                                                                               } //end access check
+?>                <br/><br/>
                 
                 <!-- Households are mainly useful for pool participants.  They are used in cases where a single person
                 might not be able to own a home, but a household of working adults may be able to. -->
@@ -491,7 +522,10 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                         include "../include/dbconnclose.php";?>
                             
                             <!-- Add this person to a  household: -->
-                        <a href="javascript:;" onclick="$('#household_addition').toggle();" class="no_view">Add this participant to a household:</a>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+                        <a href="javascript:;" onclick="$('#household_addition').toggle();" >Add this participant to a household:</a>
                         <div id="household_addition">
                             <!-- Either choose an existing household... -->
                         Add this person to an existing household: <select id="all_households"><option value="">-----</option>
@@ -517,7 +551,10 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                             <option value="1">Yes</option>
                             <option value="2">No</option>
                         </select>
-                        <input type="button" value="Add to Household" class="no_view" onclick="$.post(
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+                        <input type="button" value="Add to Household" onclick="$.post(
                                 '../ajax/new_household.php',
                                 {
                                     action: 'add',
@@ -528,7 +565,11 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                 function (response){
                                     //document.write(response);
                                     window.location='participant_profile.php';
-                                })"><p>
+                                }).fail(failAlert);">
+<?php
+} //end access check
+?>
+<p>
                             
                             <!-- OR create a brand new household altogether: -->
                         Or, create a new household: <input type="text" id="new_household_name" value="Household Name"><br>
@@ -547,8 +588,12 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                 function (response){
                                     //document.write(response);
                                     window.location='participant_profile.php';
-                                })">
-                        </div><br/><br/>
+                                }).fail(failAlert);">
+                        </div>
+<?php
+} //end access check
+?>
+<br/><br/>
         
 		
          <br/></br> 
@@ -592,7 +637,7 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 											id: '<?php echo $linked['Property_ID'];?>'
 										},
 										function (response){
-										window.location='../properties/profile.php';})"><?php echo $linked['Address_Street_Num'] . " " .$linked['Address_Street_Direction'] ." " . $linked['Address_Street_Name'] . " " . $linked['Address_Street_Type'] . "<br>";?></a>
+                                                                                    window.location='../properties/profile.php';}).fail(failAlert);"><?php echo $linked['Address_Street_Num'] . " " .$linked['Address_Street_Direction'] ." " . $linked['Address_Street_Name'] . " " . $linked['Address_Street_Type'] . "<br>";?></a>
 								</td>
 								<td><input type="text" style="width:25px;" value="<?php echo $linked['Unit_Number'];?>" id="<?php echo $linked['Property_ID'];?>_unit" /></td>
 								<!-- This start and end date refers to the time during which this property was
@@ -620,7 +665,11 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 									</select>
 								</td>
                                                                 <!-- These changes must be saved by clicked save.  Nothing saves onchange. -->
-								<td><a class="helptext no_view" href="javascript:;" onclick="
+								<td>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+<a class="helptext" href="javascript:;" onclick="
                                                                     if (document.getElementById('<?php echo $linked['Property_ID'];?>_primary').checked==true){
                                                                         var primary=1;
                                                                     }
@@ -643,9 +692,13 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 											function (response) {
                                                                                             document.getElementById('save_response_<?php echo $linked['Property_ID'];?>').innerHTML='Thank you for editing the details on this linked property.';
 											}
-										)
+										).fail(failAlert);
                                                                                        ">Save changes...</a>
-                                                                    <div id="save_response_<?php echo $linked['Property_ID'];?>"></div></td>
+                                                                    <div id="save_response_<?php echo $linked['Property_ID'];?>"></div>
+<?php
+} //end access check
+?>
+</td>
 							</tr>
 							<?
                        			 }
@@ -657,7 +710,10 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                         A new property may not be added to the database here.  This search can only add a link
                         between this person and an existing property (in the DB).
                         -->
-                        <a href="javascript:;" onclick="$('#property_search_div').toggle();" class="no_view">Search for a property</a>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+                        <a href="javascript:;" onclick="$('#property_search_div').toggle();" >Search for a property</a>
                         <div id="property_search_div"><table class="search_table">
 			<tr>
 				<td><strong>Street Name:</strong></td>
@@ -680,12 +736,16 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                     //document.write(response);
                                     document.getElementById('show_swop_results').innerHTML = response;
                                 }
-                           )"/></td>
+                                                           ).fail(failAlert);"/></td>
 			</tr>
 			<tr>
 				<td colspan="4">
                                     <!-- Results dropdown shows up here, and then the "Link This Property" button appears. -->
-				<div id="show_swop_results"></div><span>
+				<div id="show_swop_results"></div>
+<?php
+} //end access check
+?>
+<span>
 				<input type="button" value="Link This Property" onclick="
                                                                        $.post(
                                                                         '../ajax/link_property.php',
@@ -696,7 +756,7 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                                                         function (response){
                                                                                 window.location='participant_profile.php';
                                                                         }
-                                                                   )" id="link_button" style="display:none;"></span>
+                                                                       ).fail(failAlert);" id="link_button" style="display:none;"></span>
                        
 				</td>
 			</tr>
@@ -745,22 +805,25 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 											$benchmark = mysqli_query($cnnSWOP, $get_benchmark_sqlsafe);
 											$bm = mysqli_fetch_array($benchmark);
 											echo "<strong>Benchmark: </strong>". $bm['Benchmark_Name'];
-										} else if ($event['Activity_Type']==2) {
-                                                                                    /* then this is a leadership level, and the DB int needs to be shown as text.  */
-											if ($event['Active']==1){?><span class="hide_on_view">Identified as a primary leader</span><?php }
-											elseif ($event['Active']==2){?><span class="hide_on_view">Identified as a secondary leader</span><?php }
-											elseif ($event['Active']==3){?><span class="hide_on_view">Identified as a tertiary leader</span><?php }
-											elseif ($event['Active']==4){?><span class="hide_on_view">Identified as not being part of leadership development</span><?php }
-										} else if ($event['Activity_Type']==3) {
-                                                                                    /* then this is an outcome int, and the corresponding name needs to be pulled from its table. */
-											$get_outcome_sqlsafe = "SELECT * FROM Outcomes_for_Pool WHERE Outcome_ID='" . $event['Active'] . "'";
-											$outcome = mysqli_query($cnnSWOP, $get_outcome_sqlsafe);
-											$oc = mysqli_fetch_array($outcome);
-											echo $oc['Outcome_Name'];
-										} else if ($event['Activity_Type']==4) {
-                                                                                    /* then this is a status change, and needs to be shown as text: */
-											if ($event['Active']==1) {echo "Entered the Housing Pool";}
-											else if ($event['Active']==0) {echo "Left the Housing Pool";}
+ } else if ($event['Activity_Type']==2) {
+ /* then this is a leadership level, and the DB int needs to be shown as text, but only to admin users.  */
+if ($USER->site_access_level($SWOP_id) <= $AdminAccess){
+ if ($event['Active']==1){?><span >Identified as a primary leader</span><?php }
+ elseif ($event['Active']==2){?><span>Identified as a secondary leader</span><?php }
+ elseif ($event['Active']==3){?><span>Identified as a tertiary leader</span><?php }
+ elseif ($event['Active']==4){?><span>Identified as not being part of leadership development</span><?php 
+} 
+} //end access check
+ } else if ($event['Activity_Type']==3) {
+ /* then this is an outcome int, and the corresponding name needs to be pulled from its table. */
+ $get_outcome_sqlsafe = "SELECT * FROM Outcomes_for_Pool WHERE Outcome_ID='" . $event['Active'] . "'";
+ $outcome = mysqli_query($cnnSWOP, $get_outcome_sqlsafe);
+ $oc = mysqli_fetch_array($outcome);
+ echo $oc['Outcome_Name'];
+ } else if ($event['Activity_Type']==4) {
+ /* then this is a status change, and needs to be shown as text: */
+ if ($event['Active']==1) {echo "Entered the Housing Pool";}
+ else if ($event['Active']==0) {echo "Left the Housing Pool";}
 										}else if ($event['Activity_Type']==6) {
                                                                                     /* then this is an institution link, and the name should be pulled and shown: */
 											$get_institution_sqlsafe = "SELECT Institution_Name FROM Institutions WHERE Institution_ID='" . $event['Active'] . "'";
@@ -775,7 +838,10 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                                                                 $activity_id=$event['Pool_Status_Change_ID'];
 									//echo $event['Active'];?></td>
                                                                  <td>
-                                                                    <input type="button" class="hide_on_view" value="Delete" onclick="
+<?php
+if ($USER->site_access_level($SWOP_id) <= $AdminAccess){
+?>
+                                                                    <input type="button" value="Delete" onclick="
                                                                            $.post(
                                                                             '../ajax/benchmark_changes.php',
                                                                             {
@@ -787,7 +853,10 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                                                                 //document.write(response);
                                                                                 window.location='participant_profile.php?history=1';
                                                                             }
-                                                                       )">
+                                                                           ).fail(failAlert);">
+<?php
+} //end access check
+?>
                                                                 </td>
 							</tr>
 						<?php
@@ -814,7 +883,10 @@ $participant->load_with_participant_id($_COOKIE['participant']);
 						<tr>
 							<td class="blank" width="50%"> <?$participant->get_leadership_development();?>
                         
-        <table class="inner_table hide_on_view" width="100%" id="leadership_table">
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+        <table class="inner_table" width="100%" id="leadership_table">
             <tr><th colspan="2">Add Leadership Development</th></tr>
             <!-- saves rubric additions (and subtractions).  Oncheck of a checkbox, the detail saves with an auto-generated date. -->
             <tr><td class="blank"><a href="javascript:;" onclick="$('.details_rows').toggle();">View Leadership Rubric Details</a></td></tr>
@@ -832,7 +904,7 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                             </td><td><?php echo $participant->detail_5;?></td></tr>
                     <tr class="details_rows"><td><input type="checkbox" value="6" id="org_understand_2" onchange="handleChange(this)">Basic understanding of organizing
                             </td><td><?php echo $participant->detail_6;?></td></tr>
-                    <tr class="details_rows"><td><input type="checkbox" value="7" id="one-ones_2" onchange="handleChange(this)">Does 1-1's
+                    <tr class="details_rows"><td><input type="checkbox" value="7" id="one-ones_2" onchange="handleChange(this)">Does 1-1\'s
                             </td><td><?php echo $participant->detail_7;?></td></tr>
                     <tr class="details_rows"><td><input type="checkbox" value="8" id="plays_role_2" onchange="handleChange(this)">Plays greater role in SWOP
                             </td><td><?php echo $participant->detail_8;?></td></tr>
@@ -877,7 +949,7 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                         <option value="4">Not in Leadership Development</option>
                     </select></td>
                     <td class="blank">
-					<input type="button" value="Add Development" class="no_view" onclick="
+					<input type="button" value="Add Development" onclick="
                         $.post(
                             '../ajax/leadership_dev.php',
                             {
@@ -888,8 +960,11 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                             function (response){
                                 //document.write(response);
                                 window.location='participant_profile.php?history=1';
-                            })"></td></tr>
+                            }).fail(failAlert);"></td></tr>
         </table>
+<?php
+} //end access check
+?>
                             <script text="javascript">
         
         /* governs the saving of checkboxes on check or uncheck. */
@@ -908,7 +983,7 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                         //document.write(response);
                         window.location = "participant_profile.php?history=1";
                     }
-                )
+                ).fail(failAlert);
                 }
                 else if (cb.checked==false){
                     $.post(
@@ -921,7 +996,7 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                         //document.write(response);
                         window.location = "participant_profile.php?history=1";
                     }
-                );
+                ).fail(failAlert);
                 }
             }
     </script></td>
@@ -945,7 +1020,11 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                             ?>
 									</select>
                                             </td>
-                                            <td><input type="button" value="Add" class="no_view" onclick="
+                                            <td>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+<input type="button" value="Add" onclick="
                                                     $.post(
                                                     '../ajax/add_participant.php',
                                                     {
@@ -969,7 +1048,11 @@ $participant->load_with_participant_id($_COOKIE['participant']);
                                                             }
                                                         );
                                                     }
-							)"></td>
+							).fail(failAlert);">
+<?php
+                                     } //end access check
+?>
+</td>
 							</tr>
 						</table>
 					</td>

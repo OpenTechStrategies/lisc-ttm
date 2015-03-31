@@ -1,4 +1,8 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
 include "../../header.php";
 include "../header.php";
 include "../include/dbconnopen.php";
@@ -112,7 +116,11 @@ include "../include/dbconnclose.php";
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2"><input type="button" class="no_view" value="Edit" onclick="
+		<td colspan="2">
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+<input type="button" value="Edit" onclick="
 						$('.edit_info').toggle();
 						$('.show_info').toggle();"/>
 						<input  type="button" class="edit_info" value="Save" onclick="
@@ -133,7 +141,10 @@ include "../include/dbconnclose.php";
                                                                     //document.write(response);
 									window.location='inst_profile.php';
 								}
-							)" />
+							).fail(failAlert);" />
+<?php
+} //end access level
+?>
 	</tr>
 </table>
             <!-- show all campaigns to which this institution is linked, and add more if desired. -->
@@ -151,7 +162,7 @@ while ($person=  mysqli_fetch_array($persons)){
                 id: '<?echo $person['Campaign_ID'];?>'
             },
             function (response){
-            window.location='../campaigns/campaign_profile.php';})"><?echo $person['Campaign_Name'];?></a><br/><?
+            window.location='../campaigns/campaign_profile.php';}).fail(failAlert);"><?echo $person['Campaign_Name'];?></a><br/><?
 }
 include "../include/dbconnclose.php";
 ?>
@@ -169,7 +180,11 @@ include "../include/dbconnclose.php";
                 }
                 
     ?>
-</select><input type="button" value="Add" class="no_view" onclick="$.post(
+</select>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+<input type="button" value="Add"  onclick="$.post(
         '../ajax/link_inst.php',
         {
             type: 'campaign',
@@ -179,7 +194,10 @@ include "../include/dbconnclose.php";
         function (response){
             //document.write(response);
             window.location = 'inst_profile.php';
-        })">
+        }).fail(failAlert);">
+<?php
+                                                     } //end access check
+?>
 		<br/><br/>
                 
                 <!-- List the participants affiliated with this institution.  This is particularly
@@ -215,7 +233,7 @@ while ($person=  mysqli_fetch_array($persons)){
 //                                    document.getElementById('show_error').innerHTML = response;
 //                                }
                             window.location=response;
-                                });"><?echo $person['Name_First'] . " " . $person['Name_Last'];?></a><br/><?
+                                }).fail(failAlert);"><?echo $person['Name_First'] . " " . $person['Name_Last'];?></a><br/><?
                                 
                                 
 }
@@ -266,7 +284,7 @@ include "../include/dbconnclose.php";
                                     //document.write(response);
                                     document.getElementById('show_results_campaign').innerHTML = response;
                                 }
-                           )"/>
+                           ).fail(failAlert);"/>
                                     <!-- People resulting from this search show up here: -->
 					<div id="show_results_campaign" style="margin-left:115px;"></div>	   
 					</td>
@@ -275,6 +293,9 @@ include "../include/dbconnclose.php";
                 
 				</div>
 <!-- Choose a person from the search results and then click add: -->
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
 <input type="button" value="Add" class="no_view" onclick="$.post(
         '../ajax/link_inst.php',
         {
@@ -285,10 +306,15 @@ include "../include/dbconnclose.php";
         function (response){
             //document.write(response);
             window.location = 'inst_profile.php';
-        })">
-		
+        }).fail(failAlert);">
+<?php
+} //end access check
+?>		
 <br/><br/>
 
 </td></tr></table>
 </div><br/><br/>
-<?include "../../footer.php";?>
+<?php
+include "../../footer.php";
+close_all_dbconn();
+?>

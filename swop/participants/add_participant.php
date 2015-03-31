@@ -1,4 +1,9 @@
-<?include "../include/datepicker_simple.php";?>	
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
+include "../include/datepicker_simple.php";?>	
 
 <h3>Participants</h3><hr/><br/>
 <!-- This is a div that shows up under participants.php, when the "Add New Participant" button is clicked. -->
@@ -77,7 +82,7 @@
                                     //document.write(response);
                                     document.getElementById('show_results').innerHTML = response;
                                 }
-                           )"/>
+                           ).fail(failAlert);"/>
 					<div id="show_results" style="margin-left:115px;"></div>	   
 					</td>
 			</tr>
@@ -195,7 +200,7 @@
 				);
                 }
             }
-            );"/></td>
+            ).fail(failAlert);"/></td>
         </tr>
 </table>
 <br/><br/>

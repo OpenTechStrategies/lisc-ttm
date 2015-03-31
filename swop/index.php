@@ -1,34 +1,11 @@
 <?php
-//if action is logout
-if ($_GET['action'] == 'logout') {
-    //kill cookie
-    setcookie('user', '', time() - 3600, '/');
-    setcookie('sites', '', time() - 3600, '/');
-    setcookie('page', '', time() - 3600, '/');
-    setcookie('category', '', time() - 3600, '/');
-    setcookie('participant', '', time() - 3600, '/');
-    setcookie('program', '', time() - 3600, '/');
-    setcookie('prog_page', '', time() - 3600, '/');
-    setcookie('user', '', time()-3600, '/');
-    setcookie('page', '', time()-3600, '/');
-    setcookie('participant', '', time()-3600, '/');
-    setcookie('sites[0]', '', time() - 3600, '/');
-    setcookie('sites[1]', '', time()-3600, '/');
-    setcookie('sites[2]', '', time()-3600, '/');
-    setcookie('sites[3]', '', time() - 3600, '/');
-    setcookie('sites[4]', '', time() - 3600, '/');
-    setcookie('sites[5]', '', time() - 3600, '/');
-    setcookie('sites[6]', '', time() - 3600, '/');
-    setcookie('sites[7]', '', time() - 3600, '/');
-    setcookie('view_restricted', '', time()-3600, '/');
-    setcookie('view_only', '', time()-3600, '/');
-    //redirect
-    header('Location: /index.php');
-}
-?>
-    <?php include "../header.php";
-	include "header.php";
-	include "include/datepicker_simple.php";
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
+include "../header.php";
+include "header.php";
+include "include/datepicker_simple.php";
 ?>
 <!-- Landing page for SWOP -->
 <script type="text/javascript">
@@ -55,7 +32,7 @@ if ($_GET['action'] == 'logout') {
             
             <!-- Alerts for people who have missed their expected dates.  the progress for people in the pool
             is automated, and these alerts are for people who were supposed to have a meeting or something
-            and didn't do it on time.
+            and didn\'t do it on time.
             -->
 		<td><h4>Alerts</h4>
     <table class="inner_table">

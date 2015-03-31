@@ -1,6 +1,10 @@
-<?
-	include "../../header.php";
-	include "../header.php";
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
+include "../../header.php";
+include "../header.php";
  
 ?>
 <!-- Institutions homepage.  Includes a search for institutions and a link to add a new institution: -->
@@ -23,7 +27,13 @@
 		<h3>Institutions</h3><hr/><br/>
 		<div style="text-align:center;font-size:.9em;"><a class="add_new" href="add_institution.php">
                         <!-- Link to add a new institution: -->
-                        <span class="add_new_button no_view">Add New Institution</span></a></div><br/>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+                        <span class="add_new_button">Add New Institution</span></a></div><br/>
+<?php
+} //end access check
+?>
                 
                 
 		<!-- search here: -->
@@ -48,7 +58,7 @@
                                     //document.write(response);
                                     document.getElementById('show_inst_results').innerHTML = response;
                                 }
-                           )"/></td>
+                           ).fail(failAlert);"/></td>
 			</tr>
 		</table>
                 <!-- Returns a list of institutions, with links to their profiles: -->
@@ -74,7 +84,7 @@
                                     document.getElementById('show_error').innerHTML = response;
                                 }
                             window.location='/swop/institutions/institutions.php';
-                                });"><? //echo $institution['Institution_Name'];?></a><br/>
+                                }).fail(failAlert);"><? //echo $institution['Institution_Name'];?></a><br/>
 			<?}
 			include "../include/dbconnclose.php";
 		?>

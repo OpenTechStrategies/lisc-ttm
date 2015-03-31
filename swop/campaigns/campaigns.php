@@ -1,4 +1,8 @@
-<?
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
 	include "../../header.php";
 	include "../header.php";
 
@@ -42,7 +46,7 @@ while ($campaign=mysqli_fetch_array($campaigns)){
                 id: '<?echo $campaign['Campaign_ID'];?>'
             },
             function (response){
-            window.location='campaign_profile.php';})">
+            window.location='campaign_profile.php';}).fail(failAlert);">
             <?echo $campaign['Campaign_Name'];?></a><br>
 	
         <?
@@ -51,7 +55,10 @@ include "../include/dbconnclose.php";?>
                                 </td>
 	
                                 <!-- Add a new campaign. -->
-	<td style="vertical-align:top;" class="no_view">
+	<td style="vertical-align:top;" >
+<?php
+ if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess) {
+?>
 		<h4>Add New Campaign</h3>
 		<table class="campaign_table">
 
@@ -101,7 +108,7 @@ include "../include/dbconnclose.php";?>
                         );
                 }
             }
-          );
+          ).fail(failAlert);
      }"></th></tr>
 </table>
 
@@ -110,7 +117,11 @@ include "../include/dbconnclose.php";?>
 <div id="show_add_participants"></div>
 	
 <br/>
-<div id="show_results_campaign_search"></div></td>
+<div id="show_results_campaign_search"></div>
+<?php
+ } //end access check
+?>
+</td>
 	</tr>
 </table>
 <br/>
@@ -122,5 +133,6 @@ include "../include/dbconnclose.php";?>
 
 <?
 	include "../../footer.php";
+close_all_dbconn();
 ?>
 	

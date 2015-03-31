@@ -1,6 +1,10 @@
-<?
-	include "../../header.php";
-	include "../header.php";
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
+include "../../header.php";
+include "../header.php";
 ?>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -62,7 +66,7 @@
                                     document.getElementById('show_swop_results').innerHTML = response;
                                     document.getElementById('create_participant').style.display='block';
                                 }
-                           )"/></td>
+                                                           ).fail(failAlert);"/></td>
 			</tr>
 		</table>
                         <!-- shows select menu of search results. -->
@@ -124,7 +128,7 @@
 						function (response){
 							document.getElementById('confirmation').innerHTML = response;
 						}
-				)
+				).fail(failAlert);
                                     ;"/></td>
         </tr>
 </table>

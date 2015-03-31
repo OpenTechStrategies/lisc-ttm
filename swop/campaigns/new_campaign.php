@@ -1,4 +1,8 @@
-<?
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
 	include "../../header.php";
 	include "../header.php";
 
@@ -50,7 +54,7 @@
                             function (response){
                                 document.getElementById('show_add_participants').innerHTML = response;
                             }
-                        );
+                        ).fail(failAlert);
                         }
                 }
                 else{
@@ -62,10 +66,10 @@
                             function (response){
                                 document.getElementById('show_add_participants').innerHTML = response;
                             }
-                        );
+                        ).fail(failAlert);
                 }
             }
-          );
+          ).fail(failAlert);
      }"></th></tr>
 </table><br/><br/>
 

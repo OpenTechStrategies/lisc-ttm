@@ -1,4 +1,8 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
 setcookie("new_pool", '', time() - 7200, '/');
 include "../../header.php";
 include "../header.php";
@@ -44,9 +48,18 @@ if ($_GET['new'] == 1) {
         <h3>Participants</h3><hr/><br/>
 
         <!-- Link to show the add new person div: -->
-        <div style="text-align:center;font-size:.9em;"><a class="add_new" onclick="
+        <div style="text-align:center;font-size:.9em;">
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+<a class="add_new" onclick="
                 $('#participant_search').hide();
-                $('#add_participant').show();"><span class="add_new_button no_view">Add New Participant</span></a></div><br/>
+                $('#add_participant').show();">
+<span class="add_new_button">Add New Participant</span></a>
+<?php
+} //end access check
+?>
+</div><br/>
 
 
         <!-- find people: -->
@@ -131,7 +144,7 @@ if ($_GET['new'] == 1) {
                             //document.write(response);
                             document.getElementById('show_trp_results').innerHTML = response;
                         }
-                        )"/></td>
+                        ).fail(failAlert);"/></td>
             </tr>
         </table>
         <!-- Participant search results: -->

@@ -1,4 +1,8 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker_simple.php";
@@ -231,7 +235,7 @@ include "../include/datepicker_simple.php";
                                         //document.write(response);
                                         document.getElementById('show_results').innerHTML = response;
                                     }
-                                    )"/>
+                                    ).fail(failAlert);"/>
                                 <div id="show_results" style="margin-left:115px;"></div>	   
                             </td>
                         </tr>
@@ -256,7 +260,11 @@ include "../include/datepicker_simple.php";
                 </span><textarea id="next_notes_pool_edit" maxlength="1000"><?php echo $parti['Next_Notes']; ?></textarea></td>
         </tr>
         <tr>
-            <td colspan="2"><a href="javascript:;" class="basic_info_show no_view" onclick="
+            <td colspan="2">
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+<a href="javascript:;" class="basic_info_show" onclick="
                     $('.basic_info_show').toggle();
                     $('.basic_info_pool_edit').toggle();
                                " style="margin-left:55px;">Edit...</a>
@@ -318,7 +326,10 @@ include "../include/datepicker_simple.php";
                             // document.write(response);
                             window.location = 'pool_profile.php';
                         }
-                        )" style="margin-left:55px;">Save!</a>
+                        ).fail(failAlert);" style="margin-left:55px;">Save!</a>
+<?php
+} //end access check
+?>
             </td>
         </tr>
     </table>
@@ -349,7 +360,7 @@ include "../include/datepicker_simple.php";
                                     },
                             function(response) {
                                 window.location = '../institutions/inst_profile.php';
-                            })"><?php echo $inst['Institution_Name']; ?></a></td>
+                            }).fail(failAlert);"><?php echo $inst['Institution_Name']; ?></a></td>
                 <td class="blank"><?php
                     if ($inst['Individual_Connection'] != '') {
                         $get_name_sqlsafe = "SELECT Name_First, Name_Last FROM Participants WHERE Participant_ID=" . $inst['Individual_Connection'];
@@ -368,7 +379,11 @@ include "../include/datepicker_simple.php";
             </tr>
             <tr>
                 <td colspan="2"><strong>Reason: </strong><?php echo $inst['Connection_Reason']; ?></td>
-                <td><input type="button" class="hide_on_view" value="Delete" onclick="
+                <td>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $AdminAccess){
+?>
+<input type="button" value="Delete" onclick="
                             $.post(
                                     '../ajax/pool_connections.php',
                                     {
@@ -379,7 +394,11 @@ include "../include/datepicker_simple.php";
                                 //document.write(response);
                                 window.location = 'pool_profile.php';
                             }
-                            )"></td>
+                            ).fail(failAlert);">
+<?php
+                                        } // end access check
+?>
+</td>
             </tr>
             <?php
         }
@@ -433,7 +452,10 @@ include "../include/datepicker_simple.php";
         <tr>
             <td colspan="2"><strong>Reason: </strong> <input type="text" id="reason"></td>
             <td>
-                <input type="button" value="Add" class="no_view" onclick="
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+                <input type="button" value="Add" onclick="
                         $.post(
                                 '../ajax/pool_connections.php',
                                 {
@@ -448,7 +470,10 @@ include "../include/datepicker_simple.php";
                             //document.write(response);
                             window.location = 'pool_profile.php';
                         }
-                        )">
+                        ).fail(failAlert);">
+<?php
+} //end access check
+?>
             </td>
         </tr>
     </table>
@@ -529,7 +554,10 @@ include "../include/datepicker_simple.php";
         include "../include/dbconnclose.php";
         ?>
     </select>
-    <input type="button" value="Add to Event" class="no_view" onclick="$.post(
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+    <input type="button" value="Add to Event" onclick="$.post(
                     '../ajax/add_participant.php',
                     {
                         action: 'link_event',
@@ -541,8 +569,11 @@ include "../include/datepicker_simple.php";
                 //document.write(response);
                 window.location = 'pool_profile.php';
             }
-            )
+            ).fail(failAlert);
            "><br/><br/>
+<?php
+} //end access check
+?>
 
     <!-- Households are important for pool members because the household may well be the 
     entity trying to buy a home, not the individual.
@@ -563,7 +594,10 @@ include "../include/datepicker_simple.php";
     }
     include "../include/dbconnclose.php";
     ?>
-    <a href="javascript:;" onclick="$('#household_addition').toggle();" class="no_view">Add this participant to a household:</a>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+    <a href="javascript:;" onclick="$('#household_addition').toggle();" Add this participant to a household:</a>
     <div id="household_addition">
 
         <!-- Add this person to a  household: -->
@@ -595,7 +629,10 @@ include "../include/datepicker_simple.php";
             <option value="1">Yes</option>
             <option value="2">No</option>
         </select>
-        <input type="button" value="Add to Household" class="no_view" onclick="$.post(
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+        <input type="button" value="Add to Household" onclick="$.post(
                         '../ajax/new_household.php',
                         {
                             action: 'add',
@@ -606,7 +643,10 @@ include "../include/datepicker_simple.php";
                 function(response) {
                     //document.write(response);
                     window.location = 'pool_profile.php';
-                })"><p>
+                }).fail(failAlert);"><p>
+<?php
+} //end access check
+?>
 
             <!-- OR create a brand new household altogether: -->
             Or, create a new household: <input type="text" id="new_household_name" value="Household Name"><br>
@@ -625,8 +665,12 @@ include "../include/datepicker_simple.php";
                     function(response) {
                         //document.write(response);
                         window.location = 'pool_profile.php';
-                    })">
-    </div><br/><br/>
+                    }).fail(failAlert);">
+    </div>
+<?php
+    } //end access check
+?>
+<br/><br/>
 
 </td>
 
@@ -675,7 +719,7 @@ include "../include/datepicker_simple.php";
                                         },
                                 function(response) {
                                     window.location = '../properties/profile.php';
-                                })"><?php echo $linked['Address_Street_Num'] . " " . $linked['Address_Street_Direction'] . " " . $linked['Address_Street_Name'] . " " . $linked['Address_Street_Type'] . "<br>"; ?></a>
+                                }).fail(failAlert);"><?php echo $linked['Address_Street_Num'] . " " . $linked['Address_Street_Direction'] . " " . $linked['Address_Street_Name'] . " " . $linked['Address_Street_Type'] . "<br>"; ?></a>
                     </td>
                     <td><input type="text" style="width:25px;" value="<?php echo $linked['Unit_Number']; ?>" id="<?php echo $linked['Property_ID']; ?>_unit_pool" /></td>
                     <!-- This start and end date refers to the time during which this property was
@@ -703,7 +747,11 @@ include "../include/datepicker_simple.php";
                         </select>
                     </td>
                     <!-- These changes must be saved by clicked save.  Nothing saves onchange. -->
-                    <td><a class="helptext no_view" href="javascript:;" onclick="
+                    <td>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+<a class="helptext" href="javascript:;" onclick="
                                 if (document.getElementById('<?php echo $linked['Property_ID']; ?>_primary_pool').checked == true) {
                                     var primary = 1;
                                 }
@@ -727,8 +775,12 @@ include "../include/datepicker_simple.php";
                                     //document.write(response);
                                     window.location = 'pool_profile.php';
                                 }
-                                );
-                           ">Save changes...</a></td>
+                                ).fail(failAlert);
+                           ">Save changes...</a>
+<?php
+} //end access level
+?>
+</td>
                 </tr>
                 <?php
             }
@@ -739,7 +791,10 @@ include "../include/datepicker_simple.php";
         A new property may not be added to the database here.  This search can only add a link
         between this person and an existing property (in the DB).
         -->
-        <a href="javascript:;" onclick="$('#p_property_search_div').toggle();" class="no_view">Search for a property</a>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+        <a href="javascript:;" onclick="$('#p_property_search_div').toggle();" >Search for a property</a>
         <div id="p_property_search_div"><table class="search_table">
                 <tr>
                     <td><strong>Street Name:</strong></td>
@@ -761,11 +816,14 @@ include "../include/datepicker_simple.php";
                                 //document.write(response);
                                 document.getElementById('show_swop_results_pool').innerHTML = response;
                             }
-                            )"/></td>
+                            ).fail(failAlert);"/></td>
                 </tr>
                 <tr>     <!-- Results dropdown shows up here, and then the "Link This Property" button appears. -->
 
-                    <td colspan="4"><div id="show_swop_results_pool"></div><span><input type="button" value="Link This Property" onclick="
+                    <td colspan="4"><div id="show_swop_results_pool"></div>
+<?php
+        } //end access check
+?><span><input type="button" value="Link This Property" onclick="
                             $.post(
                                     '../ajax/link_property.php',
                                     {
@@ -775,7 +833,7 @@ include "../include/datepicker_simple.php";
                             function(response) {
                                 window.location = 'pool_profile.php';
                             }
-                            )"></span></td>
+                            ).fail(failAlert);"></span></td>
                 </tr>
             </table>
 
@@ -834,7 +892,11 @@ include "../include/datepicker_simple.php";
             ?>
             <!-- Add new financial information: -->
             <tr>
-                <td><input type="button" value="Add" class="no_view" onclick="
+                <td>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+<input type="button" value="Add" onclick="
                         $.post(
                                 '../ajax/add_finance.php',
                                 {
@@ -852,7 +914,10 @@ include "../include/datepicker_simple.php";
                             // document.write(response);
                             window.location = 'pool_profile.php';
                         }
-                        )"/></td>
+                        ).fail(failAlert);"/>
+<?php
+} //end access check
+?></td>
                 <td><input type="text" class="edit_finances" id="credit" style="width:25px;"></td>
                 <td><input type="text" class="edit_finances" id="income" style="width:50px;"></td>
                 <td><select id="housing_situation" class="edit_finances">
@@ -978,7 +1043,7 @@ include "../include/datepicker_simple.php";
                                                        window.location = 'pool_profile.php?history=1';
                                                        // document.write(response);
                                                    }
-                                                   )"/><?php
+                                                   ).fail(failAlert);"/><?php
                                }
                                ?></td>
 
@@ -1011,7 +1076,7 @@ include "../include/datepicker_simple.php";
                                         window.location = 'pool_profile.php?history=1';
                                         // document.write(response);
                                     }
-                                    )"/></td>
+                                    ).fail(failAlert);"/></td>
                     <!-- Actual text of benchmark or whatever it was that was done: -->
                     <td><?php
                         if ($event['Activity_Type'] == 1) {
@@ -1087,7 +1152,7 @@ include "../include/datepicker_simple.php";
                                                                     document.getElementById('show_results_benchmark_<?php echo $event['Pool_Status_Change_ID']; ?>').innerHTML = response;
 
                                                                 }
-                                                                )"/>
+                                                                ).fail(failAlert);"/>
                                                 <!-- organizer search results: -->
                                                 <div id="show_results_benchmark_<?php echo $event['Pool_Status_Change_ID']; ?>" style="margin-left:115px;"></div>	   
                                             </td>
@@ -1106,7 +1171,7 @@ include "../include/datepicker_simple.php";
                                                             // document.write(response);
                                                             window.location = 'pool_profile.php';
                                                         }
-                                                        )" value="Save Organizer" id="benchmark_org_save_<?php echo $event['Pool_Status_Change_ID']; ?>">
+                                                        ).fail(failAlert);" value="Save Organizer" id="benchmark_org_save_<?php echo $event['Pool_Status_Change_ID']; ?>">
                                 </div>
                                 <?php
                             } elseif ($event['Active'] == 5 || $event['Active'] == 15) {
@@ -1124,17 +1189,19 @@ include "../include/datepicker_simple.php";
                                                                // document.write(response);
                                                                window.location = 'pool_profile.php';
                                                            }
-                                                           )" value="<?php echo $event['Barrier']; ?>"></input>
+                                                           ).fail(failAlert);" value="<?php echo $event['Barrier']; ?>"></input>
                                        <?php
                                    }
                                } else if ($event['Activity_Type'] == 2) {
+if ($USER->site_access_level($SWOP_id) <= ){
                                    /* then this is a leadership level, and the DB int needs to be shown as text.  */
                                    if ($event['Active'] == 1) {
-                                       ?><span class="hide_on_view">Identified as a primary leader</span><?php } elseif ($event['Active'] == 2) {
-                                       ?><span class="hide_on_view">Identified as a secondary leader</span><?php } elseif ($event['Active'] == 3) {
-                                       ?><span class="hide_on_view">Identified as a tertiary leader</span><?php } elseif ($event['Active'] == 4) {
-                                       ?><span class="hide_on_view">Identified as not being part of leadership development</span><?php
+                                       ?><span>Identified as a primary leader</span><?php } elseif ($event['Active'] == 2) {
+                                       ?><span>Identified as a secondary leader</span><?php } elseif ($event['Active'] == 3) {
+                                       ?><span>Identified as a tertiary leader</span><?php } elseif ($event['Active'] == 4) {
+                                       ?><span>Identified as not being part of leadership development</span><?php
                             }
+} //end access check
                             $activity_id = $event['Pool_Status_Change_ID'];
                         } else if ($event['Activity_Type'] == 3) {
                             /* then this is an outcome int, and the corresponding name needs to be pulled from its table. */
@@ -1180,7 +1247,10 @@ include "../include/datepicker_simple.php";
                         //echo $event['Active'];
                         ?></td>
                     <td>
-                        <input type="button" value="Delete" class="hide_on_view" onclick="
+<?php
+if ($USER->site_access_level($SWOP_id) <= $AdminAccess){
+?>
+                        <input type="button" value="Delete" onclick="
                                     $.post(
                                             '../ajax/benchmark_changes.php',
                                             {
@@ -1192,7 +1262,10 @@ include "../include/datepicker_simple.php";
                                         //document.write(response);
                                         window.location = 'pool_profile.php?history=1';
                                     }
-                                    )">
+                                    ).fail(failAlert);">
+<?php
+                                                                                     } //end access check
+?>
                     </td>
                 </tr>
                 <?php
@@ -1258,7 +1331,11 @@ include "../include/datepicker_simple.php";
                             <!-- Adding this benchmark will cause it to show up completed, and adds another benchmark
                             with an expected date 30 days from now. -->
 
-                            <td class="blank"><input type="button" value="Add" class="no_view" onclick="$.post(
+                       <td class="blank">
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+     <input type="button" value="Add" onclick="$.post(
                                             '../ajax/benchmark_changes.php',
                                             {
                                                 benchmark: document.getElementById('new_benchmark').value,
@@ -1270,8 +1347,11 @@ include "../include/datepicker_simple.php";
                                         //document.write(response);
                                         window.location = 'pool_profile.php?history=1';
                                     }
-                                    )"></td>
-
+                                    ).fail(failAlert);">
+<?php
+} //end access check
+?>
+</td>
                         </tr>
                     </table></td>
             </tr>
@@ -1323,7 +1403,11 @@ include "../include/datepicker_simple.php";
                             <!-- Adding this benchmark will cause it to show up completed, and adds another benchmark
                             with an expected date 30 days from now. -->
 
-                            <td class="blank"><input type="button" value="Add" class="no_view" onclick="
+                            <td class="blank">
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+<input type="button" value="Add" onclick="
                                         $.post(
                                             '../ajax/benchmark_changes.php',
                                             {
@@ -1336,7 +1420,10 @@ include "../include/datepicker_simple.php";
                                       // document.write(response);
                                        window.location = 'pool_profile.php?history=1';
                                     }
-                                    )"></td>
+                                    ).fail(failAlert);">
+<?php
+} //end access check
+?></td>
                         </tr>
                     </table>
                 </td>
@@ -1358,7 +1445,10 @@ include "../include/datepicker_simple.php";
                 <!--Leadership-->			<td width="50%">
                     <?php $participant->get_leadership_development(); ?>
 
-                    <table class="inner_table hide_on_view" style="width:100%;" id="leadership_table">
+<?php
+if ($USER->site_access_level($SWOP_id) <= $AdminAccess){
+?>
+                    <table class="inner_table" style="width:100%;" id="leadership_table">
                         <!-- holds both leadership levels and rubric details for leaders: -->
                         <tr><th colspan="2">Add Leadership Development</th></tr>
                         <!-- saves rubric additions (and subtractions).  Oncheck of a checkbox, the detail saves with an auto-generated date. -->
@@ -1421,7 +1511,10 @@ include "../include/datepicker_simple.php";
                                     <option value="3">Tertiary</option>
                                     <option value="4">Not in Leadership Development</option>
                                 </select><br/>
-                                <input type="button" value="Add Development" class="no_view" onclick="
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+                                <input type="button" value="Add Development" onclick="
                                         $.post(
                                                 '../ajax/leadership_dev.php',
                                                 {
@@ -1432,11 +1525,16 @@ include "../include/datepicker_simple.php";
                                         function(response) {
                                             //document.write(response);
                                             window.location = 'pool_profile.php?history=1';
-                                        })">
-
+                                        }).fail(failAlert);">
+<?php
+} //end access check
+?>
                             </td>
                             <td class="blank"></td></tr>
                     </table>
+<?php
+} //end access check
+?>
                     <script text="javascript">
 
                         /* governs the saving of checkboxes on check or uncheck. */
@@ -1456,7 +1554,7 @@ include "../include/datepicker_simple.php";
                                     window.location = "pool_profile.php?history=1";
                                     //           $('.details_rows').show();
                                 }
-                                )
+                                ).fail(failAlert);
                             }
                             else if (cb.checked == false) {
                                 $.post(
@@ -1470,7 +1568,7 @@ include "../include/datepicker_simple.php";
                                     window.location = "pool_profile.php?history=1";
                                     //      $('.details_rows').show();
                                 }
-                                );
+                                ).fail(failAlert);
                             }
                         }
                     </script>
@@ -1520,7 +1618,10 @@ include "../include/datepicker_simple.php";
                                 <br/>
                                 <hr> 
                                 <!--- separate from outcomes, a person may be deactivated from the pool here: -->
-                                <input type="button" class="no_view" value="Deactivate from pool" onclick="
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+                                <input type="button" value="Deactivate from pool" onclick="
                                         $.post(
                                                 '../ajax/add_participant.php',
                                                 {
@@ -1542,11 +1643,17 @@ include "../include/datepicker_simple.php";
                                             }
                                             );
                                         }
-                                        )">
-                            </td>
+                                        ).fail(failAlert);">
+<?php
+} //end access check
+?>                            </td>
 
                             <!--- save outcomes (shows up here because of formatting) -->
-                            <td class="blank"><input type="button" class="no_view" value="Save" onclick="
+                            <td class="blank">
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+<input type="button"  value="Save" onclick="
                                     var active_status = document.getElementById('stay_active').checked;
 
                                     $.post(
@@ -1562,8 +1669,10 @@ include "../include/datepicker_simple.php";
                                         //document.write(response);
                                         window.location = 'pool_profile.php?history=1';
                                     }
-                                    )">
-                            </td></tr>
+                                    ).fail(failAlert);">
+<?php
+} //end access check
+?>                            </td></tr>
                     </table></td>
             </tr>
         </table>
@@ -1574,4 +1683,6 @@ include "../include/datepicker_simple.php";
 </div>
 
 <br/><br/>
-<?php include "../../footer.php"; ?>
+<?php include "../../footer.php"; 
+close_all_dbconn();
+?>
