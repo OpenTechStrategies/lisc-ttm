@@ -1,4 +1,8 @@
-<?
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id, $DataEntryAccess);
+
 /* edit the link information for participant-property (dates of link, primary or not, etc.) */
 	include "../include/dbconnopen.php";
 	$edit_link_sqlsafe = "UPDATE Participants_Properties SET 

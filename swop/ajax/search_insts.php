@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id);
+
 /* search institutions by name and type. */
 include "../include/dbconnopen.php";
 if ($_POST['name']==''){$name_sqlsafe='';}else{$name_sqlsafe=' AND Institution_Name LIKE "%' . mysqli_real_escape_string($cnnSWOP, $_POST['name']) . '%"';};

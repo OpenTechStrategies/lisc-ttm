@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id);
+
 /* search query for users. related to the participants homepage, not the user query search.
  * 
  * Same idea.  Those search elements that are filled in are included in the query.  some of them

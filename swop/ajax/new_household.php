@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id, $DataEntryAccess);
+
 /* add, expand, and edit households. */
 
 if ($_POST['action']=='new'){
@@ -31,6 +35,7 @@ elseif($_POST['action']=='edit'){
     include "../include/dbconnclose.php";
 }
 elseif($_POST['action']=='delete'){
+    user_enforce_has_access($SWOP_id, $AdminAccess);
     /* remove a person from a household */
     $remove_household_sqlsafe="DELETE FROM Households_Participants WHERE Households_Participants_ID='".mysqli_real_escape_string($cnnSWOP, $_POST['id'])."'";
     echo $remove_household_sqlsafe;

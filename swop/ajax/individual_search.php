@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id);
+
 //I'm going to follow the same partial search mechanism that I've used before.  If a search term
 //is chosen, then I'll use it for searching.  One thing I may have to change is allowing them to search for the
 //null - that is, find people who /don't have/ a primary institution or something like that.

@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id, $DataEntryAccess);
+
 
 /* comes from property profile.  adds property marker or additional information related to the marker. */
 if ($_POST['action'] == 'get_addtl_info') {
@@ -84,6 +88,7 @@ if ($_POST['action'] == 'get_addtl_info') {
     mysqli_query($cnnSWOP, $save_notes_sqlsafe);
     include "../include/dbconnclose.php";
 } elseif ($_POST['action'] == 'delete') {
+user_enforce_has_access($SWOP_id, $AdminAccess);
     /* delete a marker (progress step) */
     $get_marker_sqlsafe = "SELECT Marker, Property_ID FROM Property_Progress WHERE Property_Progress_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['id']) . "'";
     $delete_step_sqlsafe = "DELETE FROM Property_Progress WHERE Property_Progress_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['id']) . "'";

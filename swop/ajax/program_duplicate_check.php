@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id, $DataEntryAccess);
+
 /* check when adding a new campaign that there isn't already one with that name */
 if ($_POST['action']=='campaign'){
 include "../include/dbconnopen.php";

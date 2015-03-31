@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id, $DataEntryAccess);
+
 include "../include/dbconnopen.php";
 if ($_POST['housing']==''){
     /*5 is n/a, or something of the sort.  Current housing links to another table, so it's

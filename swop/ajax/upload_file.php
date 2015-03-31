@@ -1,4 +1,9 @@
-<?include "../../header.php";
+<?
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id, $DataEntryAccess);
+
+include "../../header.php";
 include "../header.php";?>
 
 <!-- Save a file to the database. -->

@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id, $DataEntryAccess);
+
 if ($_POST['action'] == 'edit') {
     /* edit event name, date, subcampaign, and/or location */
     include "../include/dbconnopen.php";

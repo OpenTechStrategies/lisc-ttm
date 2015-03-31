@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id);
+
 /* search properties.  query search, so includes those search terms that are filled in. */
 
 //these require us to find the most recent status (vacant, condition) and match the search term to that - that is, not 

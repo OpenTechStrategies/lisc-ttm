@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id);
+
 /* search properties.  This is the search backend for the properties home page, not for the query search.
  * Same idea, but fewer moving parts. */
 include "../include/dbconnopen.php";

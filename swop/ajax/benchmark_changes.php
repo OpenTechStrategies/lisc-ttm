@@ -1,5 +1,10 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id, $DataEntryAccess);
+
 if ($_POST['action']=='delete'){
+user_enforce_has_access($SWOP_id, $AdminAccess);
     //figure out what table the activity is saved in, and delete accordingly
     include "../include/dbconnopen.php";
     if ($_POST['activity_type']==1){

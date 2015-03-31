@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id, $DataEntryAccess);
+
 /* edit leadership details (these are pieces from the leadership rubric) and leadership levels (primary, secondary, tertiary) */
 if ($_POST['action']=='details'){
     /* add new rubric checkmarks. */

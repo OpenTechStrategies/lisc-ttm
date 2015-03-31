@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id, $DataEntryAccess);
+
 /* adds and deletes institutional connections from person profile (both participant and pool profile pages). */
 
 if ($_POST['action'] == 'get_list') {
@@ -40,6 +44,7 @@ if ($_POST['action'] == 'get_list') {
     }
     include "../include/dbconnclose.php";
 } elseif ($_POST['action'] == 'delete_conn') {
+    user_enforce_has_access($SWOP_id, $AdminAccess);
     /* delete institutional connection. */
     include "../include/dbconnopen.php";
     $delete_connection_sqlsafe = "DELETE FROM Institutions_Participants WHERE Institutions_Participants_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['link_id']) . "'";

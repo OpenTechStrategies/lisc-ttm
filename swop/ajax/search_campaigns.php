@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id);
+
 /* search campaigns, though really just on name.  Not much to see here. */
 if ($_POST['name']==''){$name_sqlsafe='';}else{$name_sqlsafe='  AND Campaign_Name LIKE "%' . mysqli_real_escape_string($cnnSWOP, $_POST['name']) .'%"';};
 
