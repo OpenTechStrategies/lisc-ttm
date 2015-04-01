@@ -1,3 +1,9 @@
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
+?>
 <div id="add_property">
 <h3>Properties</h3><hr/><br/>        
 <h4>New Property</h4><br/>
@@ -119,7 +125,7 @@ address. -->
 						function (response){
 							document.getElementById('confirmation').innerHTML = response;
 						}
-				); 
+				).fail(failAlert); 
                     }
                 }
                 else{
@@ -141,9 +147,9 @@ address. -->
 						function (response){
 							document.getElementById('confirmation').innerHTML = response;
 						}
-				);
+				).fail(failAlert);
                     }}
-            );"/></td>
+            ).fail(failAlert);"/></td>
         </tr>
 </table>
 <div id="confirmation"></div>

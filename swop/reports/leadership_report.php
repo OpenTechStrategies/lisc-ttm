@@ -1,4 +1,8 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker_simple.php";
@@ -50,7 +54,7 @@ include "../include/datepicker_simple.php";
                                     function (response){
                                         document.getElementById('show_response_here').innerHTML=response;
                                     }
-                                            )"></td></tr>
+                                            ).fail(failAlert);"></td></tr>
         <tr><th>Attended 1 or more events in this date range:</th><td><input type="text" class="hasDatepickers" id="pre_date"><br>
                 <input type="text" class="hasDatepickers" id="post_date"></td><td><input type="button" value="Search" onclick="
                             if (document.getElementById('include_address').checked==true){ var include_address=1; } else{ var include_address=0;}
@@ -77,7 +81,7 @@ include "../include/datepicker_simple.php";
                                 function (response){
                                     document.getElementById('show_response_here').innerHTML=response;
                                 }
-                                        )"></td></tr>
+                                        ).fail(failAlert);"></td></tr>
                     <tr><th>Leader Type:</th><td><select id="leader_type">
                                 <option value="">-----</option>
                                 <option value="1">Primary</option>
@@ -106,7 +110,7 @@ include "../include/datepicker_simple.php";
                                                                                           function (response){
                                                                                               document.getElementById('show_response_here').innerHTML=response;
                                                                                           }
-                                                                                                  )"></td></tr>
+                                                                                                  ).fail(failAlert);"></td></tr>
                                 <tr><th>Institutional  Leaders</th><td><select id="institution_link">
                                             <option value="">-----</option>
                                              <?php
@@ -143,7 +147,7 @@ include "../include/datepicker_simple.php";
                                                                                           function (response){
                                                                                               document.getElementById('show_response_here').innerHTML=response;
                                                                                           }
-                                                                                                  )"></td></tr>
+                                                                                                  ).fail(failAlert);"></td></tr>
         
     </table>
     <h4>Include in Results</h4>
@@ -201,3 +205,6 @@ include "../include/datepicker_simple.php";
     <span id="show_response_here">
         
     </span>
+<?php
+close_all_dbconn();
+?>

@@ -1,4 +1,8 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker_simple.php";
@@ -224,7 +228,7 @@ include "../include/datepicker_simple.php";
                     function(response) {
                         document.getElementById('indiv_response').innerHTML = response;
                     }
-                    )"></td>
+                    ).fail(failAlert);"></td>
         </tr>
     </table> 
     <div id="indiv_response" style="text-align:center;"></div>  
@@ -234,4 +238,7 @@ include "../include/datepicker_simple.php";
     <p></p>
 </div>
 <p></p>
-<?php include "../../footer.php"; ?>
+<?php
+include "../../footer.php"; 
+close_all_dbconn();
+?>

@@ -1,4 +1,9 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
+
 /* queries for people and properties.  Each is first sent to an ajax file (individual_search or property_search) to 
  * choose result columns, then comes here for actual results. */
 if ($_POST['search_type'] == 'pool') {
@@ -741,4 +746,5 @@ ON Property_Progress.Date_Added = sale_progress.latest_date ";
     <?php
     include "../include/dbconnclose.php";
 }
+close_all_dbconn();
 ?>

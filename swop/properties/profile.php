@@ -1,4 +1,8 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker_simple.php";
@@ -164,10 +168,14 @@ if ($prop->home_size == 1) {
                                 <option value="2" <?php echo ($prop->prop_type == 2 ? 'selected="selected"' : null); ?>>Commercial</option>
                                 <option value="3" <?php echo ($prop->prop_type == 3 ? 'selected="selected"' : null); ?>>Mixed Use</option>
                             </select></td></tr>
-                    <tr><td><input type="button" value="Edit" class="display_prop no_view" onclick="$('.edit_property').toggle();
+                    <tr><td>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>                <input type="button" value="Edit" class="display_prop" onclick="$('.edit_property').toggle();
                             $('.display_prop').toggle();
                             $('#edit_address').show();"></td>
-                        <td><input type="button" value="Save Changes" class="edit_property no_view" onclick="
+                        <td>
+<input type="button" value="Save Changes" class="edit_property" onclick="
                                 $.post(
                                         '../ajax/edit_property.php',
                                         {
@@ -191,7 +199,10 @@ if ($prop->home_size == 1) {
                                     // document.write(response);
                                     window.location = 'profile.php';
                                 }
-                                )"</td></tr>
+                                ).fail(failAlert);"
+<?php
+ } //end access check
+?></td></tr>
                     <tr>
 
                         <!-- Add notes or photos here: -->
@@ -239,7 +250,9 @@ include "../include/dbconnclose.php";
                 <!-- Add information to the property activity history here: -->
                 <h4>Property Markers</h4>
                 <span class="helptext">Changes made here will be recorded in the Property Activity History below.</span>
-                <table class="inner_table no_view">
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>                <table class="inner_table">
 
                     <!-- Yes or no to vacant.  Usually comes from the vacant property survey.  If no, save.  If yes, then choose
                     a type of vacancy and save. -->
@@ -263,7 +276,7 @@ include "../include/dbconnclose.php";
                                                 //document.write(response);
                                                 window.location = 'profile.php';
                                             }
-                                            )
+                                            ).fail(failAlert);
                                         }" > No
                             <div id="vacant_options" <?php if ($vacant == 0) {
                                     echo "style='display:none;'";
@@ -283,7 +296,7 @@ include "../include/dbconnclose.php";
                                                             //document.write(response);
                                                             window.location = 'profile.php';
                                                         }
-                                                        )">
+                                                        ).fail(failAlert);">
                                     <option value="">-----------</option>
                                     <option value="2" <?php echo ($secured == 1 ? "selected='selected'" : null); ?>>Secured/Boarded</option>
                                     <option value="3" <?php echo ($unsecured == 1 ? "selected='selected'" : null); ?>>Unsecured</option>
@@ -310,7 +323,7 @@ include "../include/dbconnclose.php";
                                                 //document.write(response);
                                                 window.location = 'profile.php';
                                             }
-                                            );
+                                            ).fail(failAlert);
                                         }" <?php //if($for_sale==0) {echo "checked='checked'";} ?>> No</td>
 
                     </tr>
@@ -328,7 +341,7 @@ include "../include/dbconnclose.php";
                                             //document.write(response);
                                             window.location = 'profile.php';
                                         }
-                                        );
+                                        ).fail(failAlert);
                                    "></td>
                     </tr>
 
@@ -379,7 +392,7 @@ include "../include/dbconnclose.php";
                                                 //document.write(response);
                                                 window.location = 'profile.php';
                                             }
-                                            );
+                                            ).fail(failAlert);
                                         }"
                                    id="nonlandlord">Owner Occupied Non-Landlord<br>
                             <input type="radio" name="ownership" onchange="$('#owner_location').show();" id="investor">Investor</td>
@@ -414,7 +427,7 @@ include "../include/dbconnclose.php";
                                             //document.write(response);
                                             window.location = 'profile.php';
                                         }
-                                        );
+                                        ).fail(failAlert);
                                     }">Absentee<br>
                                                                 <input type="radio" name="locale" onchange="if (this.checked === true) {
                                             //alert(this.checked);
@@ -445,7 +458,7 @@ include "../include/dbconnclose.php";
                                                 //document.write(response);
                                                 window.location = 'profile.php';
                                             }
-                                            );
+                                            ).fail(failAlert);
                                         }"">Living on premises</td></tr>
 
                     <!-- Rubric for condition hasn't been determined yet.  Choose level and save. -->
@@ -463,7 +476,7 @@ include "../include/dbconnclose.php";
                                             //document.write(response);
                                             window.location = 'profile.php';
                                         }
-                                        );
+                                        ).fail(failAlert);
                                     ">
                                 <option value="">-----</option>
                                 <option value="1">1</option>
@@ -476,7 +489,10 @@ include "../include/dbconnclose.php";
                     </tr>
 
 
-                </table><p></p>
+                </table>
+<?php
+} //end access check
+?><p></p>
 
                 <!-- These markers have to do with those properties that have been acquired by SWOP or partners.  They will be rehabbed and sold.
                 These markers are the steps to that eventual sale.
@@ -498,7 +514,7 @@ include "../include/dbconnclose.php";
                                                 function(response) {
                                                     document.getElementById('addtl_info').innerHTML = response;
                                                 }
-                                                )">
+                                                ).fail(failAlert);">
                                 <option value="">----------</option>
                                    <?php
                                    //get marker names, but of course, some of them aren't applicable...
@@ -515,7 +531,9 @@ include "../include/dbconnclose.php";
 ?>
                             </select>
                             <div id="addtl_info"></div>
-                            <input type="button" value="Add Marker" class="no_view" onclick="
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>                            <input type="button" value="Add Marker" onclick="
                                                                 $.post(
                                                                         '../ajax/add_property_marker.php',
                                                                         {
@@ -531,7 +549,10 @@ include "../include/dbconnclose.php";
                                                                     //document.write(response);
                                                                     window.location = 'profile.php?history=1';
                                                                 }
-                                                                )"/>
+                                                                ).fail(failAlert);"/>
+<?php
+} //end access check
+?>
                         </td></tr>
                 </table>
 
@@ -584,7 +605,7 @@ while ($linked = mysqli_fetch_array($linked_props)) {
     //                                    document.getElementById('show_error').innerHTML = response;
     //                                }
                                                                                 window.location = response;
-                                                                            });"><?php echo $linked['Name_First'] . " " . $linked['Name_Last']; ?></a>
+                                                                            }).fail(failAlert);"><?php echo $linked['Name_First'] . " " . $linked['Name_Last']; ?></a>
                             </td>
                             <td><input type="text" style="width:25px;" value="<?php echo $linked['Unit_Number']; ?>" id="<?php echo $linked['Participant_ID']; ?>_unit" /></td>
                             <td><input type="text" style="width:68px;" value="<?php echo $linked['Start_Date']; ?>" id="<?php echo $linked['Participant_ID']; ?>_start" class="hasDatepickers"/></td>
@@ -607,7 +628,10 @@ while ($linked = mysqli_fetch_array($linked_props)) {
                                     <option value="own" <?php echo($linked['Rent_Own'] == "own" ? "selected='selected'" : null); ?>>Owner</option>
                                 </select>
                             </td>
-                            <td><a class="helptext no_view" href="javascript:;" onclick="
+                            <td>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?><a class="helptext" href="javascript:;" onclick="
                                                                             if (document.getElementById('<?php echo $linked['Participant_ID']; ?>_primary').checked == true) {
                                                                                 var primary = 1;
                                                                             }
@@ -631,7 +655,10 @@ while ($linked = mysqli_fetch_array($linked_props)) {
                                                                                 //document.write(response);
                                                                                 window.location = 'profile.php';
                                                                             }
-                                                                            )">Save changes...</a></td>
+                                                                            ).fail(failAlert);">Save changes...</a>
+<?php
+} //end access check
+?></td>
                         </tr>
                         <!----------------
                         <a href="javascript:;" onclick="
@@ -646,7 +673,7 @@ while ($linked = mysqli_fetch_array($linked_props)) {
                       document.getElementById('show_error').innerHTML = response;
                       }
                       window.location='/swop/participants/participants.php';
-                      });"><?php echo $participant['Name_First'] . " " . $participant['Name_Last']; */ ?></a><br>-->
+                      }).fail(failAlert);"><?php echo $participant['Name_First'] . " " . $participant['Name_Last']; */ ?></a><br>-->
                                     <?php
                                 }
                                 include "../include/dbconnclose.php";
@@ -654,7 +681,9 @@ while ($linked = mysqli_fetch_array($linked_props)) {
                 </table>          
 
                 <!-- search to link to a new participant: -->
-                <a href="javascript:;" onclick="$('#search_participants_div').toggle();" class="no_view">Search for a participant</a>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>                <a href="javascript:;" onclick="$('#search_participants_div').toggle();" >Search for a participant</a>
                 <div id="search_participants_div">
                     <table class="search_table" style="margin-left:20px;">
                         <tr>
@@ -695,7 +724,7 @@ while ($linked = mysqli_fetch_array($linked_props)) {
                                             //document.write(response);
                                             document.getElementById('show_trp_results').innerHTML = response;
                                         }
-                                        )"/></td>
+                                        ).fail(failAlert);"/></td>
                         </tr>
                     </table>
                     <div id="show_trp_results"></div>
@@ -709,8 +738,11 @@ while ($linked = mysqli_fetch_array($linked_props)) {
                         function(response) {
                             window.location = 'profile.php';
                         }
-                        )">
+                        ).fail(failAlert);">
                 </div>
+<?php
+} //end access check
+?>
                 <br/><br/>
 
 
@@ -868,7 +900,14 @@ while ($linked = mysqli_fetch_array($linked_props)) {
                         ?>
                             <td width="30%">
                                 <!--- Saving notes here: -->
-    <?php if ($event['Marker'] != '') { ?><a class="helptext no_view" href="javascript:;" onclick="$('#show_notes_<?php echo $event['Property_Progress_ID']; ?>').slideToggle();">Add/edit notes</a><?php } ?>
+    <?php if ($event['Marker'] != '') { ?>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?><a class="helptext" href="javascript:;" onclick="$('#show_notes_<?php echo $event['Property_Progress_ID']; ?>').slideToggle();">Add/edit notes</a><?php } //end access check
+} 
+
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
                                 <div id="show_notes_<?php echo $event['Property_Progress_ID']; ?>" style="display:none;"><textarea id="notes_<?php echo $event['Property_Progress_ID']; ?>" cols="30" rows="5"><?php echo $event['Notes']; ?></textarea>
                                     <a class="helptext" href="javascript:;" onclick="
                                                                             $.post(
@@ -882,12 +921,17 @@ while ($linked = mysqli_fetch_array($linked_props)) {
                                                                                 window.location = 'profile.php?history=1';
                                                                                 //document.write(response);
                                                                             }
-                                                                            )">Save...</a>
+                                                                            ).fail(failAlert);">Save...</a>
                                 </div>
+<?php
+} //end access check
+?>
                             </td>
                             <td>
                                 <!-- delete a progress step: -->
-                                <input type="button" class="hide_on_view" value="Delete" onclick="var check =
+<?php
+if ($USER->site_access_level($SWOP_id) <= $AdminAccess){
+?>                                <input type="button" value="Delete" onclick="var check =
                                                                         confirm('This action cannot be undone. Are you sure you want to delete this activity?');
                                                                 if (check == true) {
                                                                     $.post(
@@ -900,8 +944,11 @@ while ($linked = mysqli_fetch_array($linked_props)) {
                                                                         //document.write(response);
                                                                         window.location = 'profile.php?history=1';
                                                                     }
-                                                                    )
-                                                                }"></td>
+                                                                    ).fail(failAlert);
+                                                                }">
+<?php
+} //end access check
+?></td>
                         </tr>
     <?php
 }
@@ -918,4 +965,7 @@ include "../include/dbconnclose.php";
     </table>
 </div>
 <br/><br/>
-<?php include "../../footer.php"; ?>
+<?php
+include "../../footer.php"; 
+close_all_dbconn();
+?>
