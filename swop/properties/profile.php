@@ -601,10 +601,9 @@ while ($linked = mysqli_fetch_array($linked_props)) {
                                                                                         participant_id: '<?php echo $linked['Participant_ID']; ?>'
                                                                                     },
                                                                             function(response) {
-    //                                if (response!='1'){
-    //                                    document.getElementById('show_error').innerHTML = response;
-    //                                }
-                                                                                window.location = response;
+                                   var url = response;
+                                   var url_array = url.split('script>');
+                                   window.location = url_array[1];
                                                                             }).fail(failAlert);"><?php echo $linked['Name_First'] . " " . $linked['Name_Last']; ?></a>
                             </td>
                             <td><input type="text" style="width:25px;" value="<?php echo $linked['Unit_Number']; ?>" id="<?php echo $linked['Participant_ID']; ?>_unit" /></td>

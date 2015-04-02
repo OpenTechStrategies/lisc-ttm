@@ -229,10 +229,9 @@ while ($person=  mysqli_fetch_array($persons)){
                                 participant_id: '<?echo $person['Participant_ID'];?>'
                             },
                             function (response){
-//                                if (response!='1'){
-//                                    document.getElementById('show_error').innerHTML = response;
-//                                }
-                            window.location=response;
+                                   var url = response;
+                                   var url_array = url.split('script>');
+                                   window.location = url_array[1];
                                 }).fail(failAlert);"><?echo $person['Name_First'] . " " . $person['Name_Last'];?></a><br/><?
                                 
                                 

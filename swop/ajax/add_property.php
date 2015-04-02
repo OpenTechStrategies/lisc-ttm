@@ -99,8 +99,9 @@ if ($id != '') {
                                 participant_id:'<?echo $_POST['person'];?>'
                             },
                             function(response) {
-                                window.location = response;
-
+                                   var url = response;
+                                   var url_array = url.split('script>');
+                                   window.location = url_array[1];
                             }
                     );
                    ">view participant profile</a>.

@@ -73,10 +73,9 @@ while ($members=mysqli_fetch_array($household_info)){
                                 participant_id: '<?echo $members['Participant_ID'];?>'
                             },
                             function (response){
-//                                if (response!='1'){
-//                                    document.getElementById('show_error').innerHTML = response;
-//                                }
-                            window.location=response;
+                                   var url = response;
+                                   var url_array = url.split('script>');
+                                   window.location = url_array[1];
                                 }).fail(failAlert);"><?echo $members['Name_First'] ." ". $members['Name_Last'] ;?></a>
                                     <input type="button" value="Remove person from household" onclick="
                                            $.post(

@@ -1043,8 +1043,9 @@ if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
                                                                 participant_id: '<?php echo $parti['Participant_ID'];?>'
                                                             },
                                                             function (response){
-                                                                //document.write(response);
-                                                                window.location='pool_profile.php';
+                                   var url = response;
+                                   var url_array = url.split('script>');
+                                   window.location = url_array[1];
                                                             }
                                                         );
                                                     }

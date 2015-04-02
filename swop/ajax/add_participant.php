@@ -174,7 +174,9 @@ if ($_POST['action'] == 'add_to_pool') {
                         participant_id: '<?php echo $id; ?>'
                     },
             function(response) {
-                window.location = response;
+                                   var url = response;
+                                   var url_array = url.split('script>');
+                                   window.location = url_array[1];
 
             }
             );

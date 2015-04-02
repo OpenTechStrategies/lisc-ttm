@@ -1193,7 +1193,7 @@ if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
                                        <?php
                                    }
                                } else if ($event['Activity_Type'] == 2) {
-if ($USER->site_access_level($SWOP_id) <= ){
+if ($USER->site_access_level($SWOP_id) <= $AdminAccess){
                                    /* then this is a leadership level, and the DB int needs to be shown as text.  */
                                    if ($event['Active'] == 1) {
                                        ?><span>Identified as a primary leader</span><?php } elseif ($event['Active'] == 2) {
@@ -1638,8 +1638,9 @@ if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
                                                         participant_id: '<?php echo $parti['Participant_ID']; ?>'
                                                     },
                                             function(response) {
-                                                //document.write(response);
-                                                window.location = 'participant_profile.php?history=1';
+                                   var url = response;
+                                   var url_array = url.split('script>');
+                                   window.location = url_array[1];
                                             }
                                             );
                                         }

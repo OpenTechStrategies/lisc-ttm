@@ -115,10 +115,9 @@ user_enforce_has_access($SWOP_id);
                                 participant_id: '<?echo $attendee['Participant_ID'];?>'
                             },
                             function (response){
-//                                if (response!='1'){
-//                                    document.getElementById('show_error').innerHTML = response;
-//                                }
-                            window.location=response;
+                                   var url = response;
+                                   var url_array = url.split('script>');
+                                   window.location = url_array[1];
                                 }).fail(failAlert);"><?echo $attendee['Name_First']." ".$attendee['Name_Last'];?></a></td>
 				<td class="blank"><span class="show <?echo $attendee['Participant_ID'];?>">
                                     <?

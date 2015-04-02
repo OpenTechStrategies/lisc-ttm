@@ -106,11 +106,10 @@ if ($_POST['dropdown'] == 1) {
                                             participant_id: '<?php echo $user['Participant_ID']; ?>'
                                         },
                                 function(response) {
-                                    //                                if (response!='1'){
-                                    //                                    document.getElementById('show_error').innerHTML = response;
-                                    //                                }
-                                    window.location = response;
-                                });"><?php echo $user['Name_First'] . " " . $user['Name_Last']; ?></a></td>      
+                                   var url = response;
+                                   var url_array = url.split('script>');
+                                   window.location = url_array[1];
+                                }).fail(failAlert);"><?php echo $user['Name_First'] . " " . $user['Name_Last']; ?></a></td>      
 
                 <td class="all_projects"><?php
                     if ($user['Date_of_Birth'] != '0000-00-00') {
@@ -143,7 +142,7 @@ if ($_POST['dropdown'] == 1) {
                                 alert('This participant has been deleted. Click Search again for accurate results.');
                                 //document.write(response);
                                 //I want this to return us to the search results page, with the same results (minus deletion), but that seems difficult.
-                            })
+                            }).fail(failAlert);
                         }">Delete</a></td>
             </tr>
         <?php
