@@ -122,6 +122,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   chef.validation_client_name = "ORGNAME-validator"
 
   # Sync src directory
+  config.vm.synced_folder ".", "/vagrant",
+                          owner: "www-data", group: "www-data",
+                          type: "rsync", rsync_auto: true
+
   config.vm.synced_folder "./", "/var/www/ttm",
-                          owner: "www-data", group: "www-data"
+                          owner: "www-data", group: "www-data",
+                          type: "rsync", rsync_auto: true
 end

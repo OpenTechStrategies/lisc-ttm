@@ -6,3 +6,6 @@ swop/include/dbconnopen.php
 trp/include/dbconnopen.php
 liscdata
 /.vagrant
+
+# Allow for local experimental development, for lack of a PHP REPL
+/sandbox
