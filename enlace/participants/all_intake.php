@@ -30,7 +30,7 @@ $caring_id = $assessment_info['Caring_ID'];
 $baseline_id = $assessment_info['Baseline_ID'];
 $future_id = $assessment_info['Future_ID'];
 $violence_id = $assessment_info['Violence_ID'];
-// print_r($assessment_info);
+ print_r($assessment_info);
 // echo $assessment_info['Participant_ID'];
 $person = new Participant();
 $person->load_with_participant_id($assessment_info[1]);
@@ -72,7 +72,9 @@ Show tables of survey questions and response options.  The chosen response is se
 
 <table class="inner_table" style="border: 2px solid #696969;font-size:.85em;" id="baseline_table">
     <?php $person->baseline(); ?>                        
-    <caption>Date completed: <input type="text" id="admin_date" class="addDP" value="<?php echo $assessment_info[18];  //echo $person->baseline_date; ?>">
+    <caption>Date completed: <input type="text" id="admin_date" class="addDP" value="<?php 
+$print_date = explode(" ", $assessment_info[19]);
+echo $print_date[0]; ?>">
         <?php
         $date_reformat = explode('-', $person->baseline_date);
         $day_separate = explode(' ', $date_reformat[2]);
