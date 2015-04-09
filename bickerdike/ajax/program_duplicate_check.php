@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id, $DataEntryAccess);
+
 /*
  * When a program is created, looks for already existing programs with an identical name.
  * If none exists, the new program can be created as is.  If one or more do exist, the 

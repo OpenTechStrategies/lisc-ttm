@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id, $AdminAccess);
+
 //need to first take care of any possible foreign key constraints:
 //activities_users, participant survey responses, program dates users, programs users, user health data
 //

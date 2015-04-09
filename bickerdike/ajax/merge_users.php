@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id, $AdminAccess);
+
 /*
  * The alternative to straight deletion of users.  This allows you to merge the links (events, programs,
  * surveys, attendance, health data) associated with

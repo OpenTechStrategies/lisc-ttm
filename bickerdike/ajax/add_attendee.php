@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id, $DataEntryAccess);
+
 //Check to see if attendee is already associated with date
 include "../include/dbconnopen.php";
 $program_date_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['program_date_id']);

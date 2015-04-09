@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id, $AdminAccess);
+
 /*
  * Deletes a date from a program.  Presumably the attendance is left intact, but with nowhere
  * to be displayed.  Problematic that the attendance isn't deleted, though, for export purposes.

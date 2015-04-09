@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id, $DataEntryAccess);
+
 /*
  * Allows them to save new baseline data from the Community Wellness Survey, 
  * administered by CLOCC.  This has not been used, but it allows them to track

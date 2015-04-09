@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id, $AdminAccess);
+
 /*
  * Deletes program.  In order to do that it needs to remove all the places where it shows
  * up as a foreign key, so we first delete the dates and users that are linked to the program.
