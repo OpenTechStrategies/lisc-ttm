@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
 
 //list all users, make them editable and deletable 
 //add search module
@@ -27,7 +31,14 @@ include "../header.php";
     
 <h3>Participants</h3><hr/><br/>
 
-<div style="text-align:center;"><a href="../users/add_user.php" class="add_new hide_on_view"><span class="add_new_button">Add New Participant</span></a></div><br/>
+<div style="text-align:center;">
+<?php
+    if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<a href="../users/add_user.php" class="add_new "><span class="add_new_button">Add New Participant</span></a></div><br/>
+<?php
+    } //end access check
+?>
 <h4>Search All Participants:</h4>
 <table class="search_table">
     <tr><td class="all_projects"><strong>First Name:</strong></td>
@@ -108,7 +119,7 @@ include "../header.php";
                                     //document.write(response);
                                     document.getElementById('show_results').innerHTML = response;
                                 }
-                           )"></th>
+                           ).fail(failAlert);"></th>
     </tr>
 </table>
 
@@ -149,7 +160,7 @@ or deleting them outright.  The merging is still not available on the live site.
                                     //document.write(response);
                                     document.getElementById('search_results1').innerHTML = response;
                                 }
-                           )"></td>
+                           ).fail(failAlert);"></td>
 			</tr>
 		</table>
 		<div id="search_results1"></div>
@@ -181,7 +192,7 @@ or deleting them outright.  The merging is still not available on the live site.
                                 function (response){
                                     document.getElementById('search_results2').innerHTML = response;
                                 }
-                           )"></td>
+                           ).fail(failAlert);"></td>
 			</tr>
 		</table>
 		<div id="search_results2"></div>

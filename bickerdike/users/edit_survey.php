@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
+
 include "../../header.php";
 include "../header.php";
 
@@ -298,7 +303,7 @@ while ($response = mysqli_fetch_array($answers)) {
                                 function(response) {
                                     window.location = 'edit_survey.php?id=<?php echo $_GET['id']; ?>'
                                 }
-                                );">
+                                ).fail(failAlert);">
                 </td>
             </tr>
         </table>

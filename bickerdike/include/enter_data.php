@@ -1,4 +1,9 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($Bickerdike_id);
+
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker.php";
@@ -70,7 +75,7 @@ $user->load_with_user_id($_GET['user']);
                 alert(response);
             }
         }
-        );
+        ).fail(failAlert);
         $('#parent_survey').show();
         $('#adult_survey').hide();
         $('#youth_survey').hide();
@@ -91,7 +96,7 @@ $user->load_with_user_id($_GET['user']);
                 alert(response);
             }
         }
-        );
+        ).fail(failAlert);
         $('#parent_survey').hide();
         $('#adult_survey').show();
         $('#youth_survey').hide();
@@ -112,7 +117,7 @@ $user->load_with_user_id($_GET['user']);
                 alert(response);
             }
         }
-        );
+        ).fail(failAlert);
         $('#parent_survey').hide();
         $('#adult_survey').hide();
         $('#youth_survey').show();
@@ -213,7 +218,7 @@ $user->load_with_user_id($_GET['user']);
                 function(response) {
                     document.getElementById('show_results').innerHTML = response;
                 }
-                )"></th>
+                ).fail(failAlert);"></th>
                         </tr>
                     </table>
 
@@ -352,7 +357,7 @@ $user->load_with_user_id($_GET['user']);
                         function(response) {
                             document.getElementById('show_survey_response').innerHTML = '<span style=' + 'color:#990000; font-weight:bold;' + '><strong>Thank you for entering this survey! </strong></span>';
                         }
-                        );">
+                        ).fail(failAlert);">
                     <em><a href="../users/user_profile.php?id=<? echo $user->user_id; ?>">Return to participant profile</a></em>
                 </td>
             </tr>
@@ -510,7 +515,7 @@ $user->load_with_user_id($_GET['user']);
                         function(response) {
                             document.getElementById('show_survey_response_adult').innerHTML = '<span style=color:#990000;font-weight:bold;font-size:.9em; padding-left: 25px;>Thank you for entering this survey!</span>';
                         }
-                        );">
+                        ).fail(failAlert);">
                     <em><a href="../users/user_profile.php?id=<? echo $user->user_id; ?>">Return to user profile</a></em>
                 </td>
             </tr>
@@ -646,7 +651,7 @@ $user->load_with_user_id($_GET['user']);
                         function(response) {
                             document.getElementById('show_survey_response_youth').innerHTML = 'Thank you for entering this survey! ';
                         }
-                        );">
+                        ).fail(failAlert);">
                     <em><a href="../users/user_profile.php?id=<? echo $user->user_id; ?>">Return to user profile</a></em>
                 </td>
             </tr>
