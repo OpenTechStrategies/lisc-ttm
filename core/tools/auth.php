@@ -382,43 +382,6 @@ function getAllSiteAccess($user_id) {
     return $access_return;
 }
 
-// TODO: Delete this after the user object stuff works, and refactor
-//   all code that presently uses it
-
-function getPermissionLevel($session_id, $site) {
-    session_start();
-    if (session_id() == $session_id) {
-        if (array_key_exists($site, $_SESSION['site_access'])) {
-            return $_SESSION['site_access'][$site][0];
-        }
-    }
-    else{
-        return false;
-    }
-}
-
-// TODO: Delete this after the user object stuff works, and refactor
-//   all code that presently uses it
-
-function getProgramAccess($session_id, $site) {
-    $program_access_array = array();
-    session_start();
-    if (session_id() == $session_id) {
-        //this needs to be updated to include the possibility of
-        //access to multiple programs.
-        $program_access_array[] = $_SESSION['site_access'][$site][1];
-    }    
-    //note that if 'n' is in array, then the logged-in user has access
-    //to no programs, and we delete the rest of the array.  The 'n'
-    //takes precedence over any other entries.
-
-    if (in_array('n', $program_access_array)) {
-        $program_access_array = array('n');
-    }
-
-    return $program_access_array;
-}
-
 ?>
 <script text="javascript">
     function failAlert(){

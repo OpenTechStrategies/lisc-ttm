@@ -15,24 +15,22 @@ if ($_GET['action'] == 'logout') {
 ?>
 <!DOCTYPE html>
 <html>
-    <?php
-    include "header.php";
+<?php
+include "header.php";
 
-    if (!isLoggedIn()) {
+if (! isLoggedIn()) {
         //if no one is logged in, then send the user to the login page.  This also happens 
         //when the user cookie expires.
 
         include "login_page.php";
 
 
-    } else {
+  } else {
         /*
          * If someone is logged in:
          */
         ?>
         <div class="navigation">
-            <!--                <ul class="navigation">-->
-            <!--<li class="navigation">-->
             <a href="#"><span>Homepage</span></a><!--</li>-->
             <?php if (!in_array($AdminAccess, $USER->site_permissions)) {
 
