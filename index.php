@@ -29,17 +29,18 @@ if ($_GET['action'] == 'logout') {
 ?>
 <!DOCTYPE html>
 <html>
-    <?php
-    include "header.php";
+<?php
+include "header.php";
+include "core/include/setup_user.php";
 
-    if (!isset($_COOKIE['user'])) {
+if (! isLoggedIn()) {
         //if no one is logged in, then send the user to the login page.  This also happens 
         //when the user cookie expires.
 
         include "login_page.php";
 
 
-    } else {
+  } else {
         /*
          * If someone is logged in:
          */
@@ -62,53 +63,35 @@ if ($_GET['action'] == 'logout') {
 
         <?php
         echo "Thank you for logging in.<br>";
-        if (in_array('all_sites', $_COOKIE['sites'])) {
-            /*
-             * Didn't end up using this option.
-             */
-            echo "You have access to all sites.";
-        } else {
             /*
              * Count through the sites where this user has access.
              */
-            $n = 0;
-            while ($n < count($_COOKIE['sites'])) {
-                include "include/dbconnopen.php";
-                $privilege_id_sqlsafe=  mysqli_real_escape_string($cnnLISC, $_COOKIE['sites'][$n]);
-                $get_privilege_name_sqlsafe = "SELECT * FROM Privileges WHERE Privilege_Id='" . $privilege_id_sqlsafe . "'";
-                //echo $get_privilege_name_sqlsafe;
-                $privilege_name = mysqli_query($cnnLISC, $get_privilege_name_sqlsafe);
-                $name = mysqli_fetch_array($privilege_name);
-                if ($name['Privilege_Name'] == 'Bickerdike') {
-                    ?>
-                    You have access to the <a href="/bickerdike/">Bickerdike</a> site information. <br>
-                    <?php
-                } elseif ($name['Privilege_Name'] == 'Logan Square Neighborhood Association') {
-                    ?>
-                    You have access to the <a href="/lsna/">LSNA</a> site information. <br>
-                    <?php
-                } else if ($name['Privilege_Name'] == 'The Resurrection Project') {
-                    ?>
-                    You have access to <a href="/trp/">The Resurrection Project</a> site information. <br/>
-                    <?php
-                } else if ($name['Privilege_Name'] == 'Southwest Organizing Project') {
-                    ?>
-                    You have access to the <a href="/swop/">Southwest Organizing Project</a> site information. <br/>
-                    <?php
-                } else if ($name['Privilege_Name'] == 'Enlace') {
-                    ?>
-                    You have access to the <a href="/enlace/">Enlace</a> site information. <br/>
-                    <?php
-                }
-                ?>
-                <?php
-                include "include/dbconnclose.php";
-                $n = $n + 1;
-            }
+if ($USER->site_access_check($Bickerdike_id)){
+ ?>                   You have access to the <a href="/bickerdike/">Bickerdike</a> site information. <br>
+<?php
+}
+if ($USER->site_access_check($LSNA_id)){
+?>
+    You have access to the <a href="/lsna/">LSNA</a> site information. <br>
+<?php
+}
+if ($USER->site_access_check($TRP_id)){
+?>
+    You have access to <a href="/trp/">The Resurrection Project</a> site information. <br/>
+<?php
         }
-    }
-    ?>
-    <div id="site_notification"></div>
-    <!--<a href="/index.php?action=logout">Logout</a>-->
+if ($USER->site_access_check($SWOP_id)){
+?>
+    You have access to the <a href="/swop/">Southwest Organizing Project</a> site information. <br/>
+<?php
+        }
+if ($USER->site_access_check($Enlace_id)){
+?>
+    You have access to the <a href="/enlace/">Enlace</a> site information. <br/>
+<?php
+        }
+
+}
+?>
 <?php include "footer.php"; ?>
 </html>
