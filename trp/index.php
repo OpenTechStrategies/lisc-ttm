@@ -4,33 +4,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
 user_enforce_has_access($TRP_id);
 
-//if action is logout
-if ($_GET['action'] == 'logout') {
-    //kill cookie
-    setcookie('user', '', time() - 3600, '/');
-    setcookie('sites', '', time() - 3600, '/');
-    setcookie('page', '', time() - 3600, '/');
-    setcookie('category', '', time() - 3600, '/');
-    setcookie('participant', '', time() - 3600, '/');
-    setcookie('program', '', time() - 3600, '/');
-    setcookie('prog_page', '', time() - 3600, '/');
-    setcookie('session_id', '', time() - 3600, '/');
-    setcookie('user', '', time()-3600, '/');
-    setcookie('page', '', time()-3600, '/');
-    setcookie('participant', '', time()-3600, '/');
-    setcookie('sites[0]', '', time() - 3600, '/');
-    setcookie('sites[1]', '', time()-3600, '/');
-    setcookie('sites[2]', '', time()-3600, '/');
-    setcookie('sites[3]', '', time() - 3600, '/');
-    setcookie('sites[4]', '', time() - 3600, '/');
-    setcookie('sites[5]', '', time() - 3600, '/');
-    setcookie('sites[6]', '', time() - 3600, '/');
-    setcookie('sites[7]', '', time() - 3600, '/');
-    setcookie('view_restricted', '', time()-3600, '/');
-    setcookie('view_only', '', time()-3600, '/');
-    //redirect
-    header('Location: /index.php');
-}
 ?>
 <?php
 include "../header.php";

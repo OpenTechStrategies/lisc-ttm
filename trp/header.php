@@ -27,7 +27,7 @@ user_enforce_has_access($TRP_id);
             <td class="menu_item"><a href="/trp/engagement/engagement.php" id="engagement_selector">Community Engagement</a></td>
 
             <td class="menu_item"><a href="/trp/reports/reports.php" id="reports_selector">Reports</a></td>
-            <td class="menu_item"><a href="../index.php?action=logout">Log Out</a>
+            <td class="menu_item"><a href="/index.php?action=logout">Log Out</a>
         </tr>
         <tr>
             <td colspan="6"><hr/></td>

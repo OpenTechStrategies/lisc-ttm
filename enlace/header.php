@@ -22,7 +22,7 @@
             <td class="menu_item"><a href="/enlace/campaigns/campaigns.php" id="campaigns_selector">Campaigns</a></td>
             <td class="menu_item"><a href="/enlace/events/events.php" id="events_selector">Events</a></td>
             <td class="menu_item"><a href="/enlace/reports/reports.php" id="reports_selector">Reports</a></td>
-            <td class="menu_item"><a href="/enlace/index.php?action=logout">Log Out</a>
+            <td class="menu_item"><a href="/index.php?action=logout">Log Out</a>
         </tr>
         <tr>
             <td colspan="8"><hr/></td>

@@ -4,32 +4,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
 user_enforce_has_access($Enlace_id);
 
-//if action is logout, kill various navigation cookies: 
-if ($_GET['action'] == 'logout') {
-    $loggingout = pleaseLogOut($_COOKIE['PHPSESSID']);
-    if ($loggingout){
-        session_unset();
-        session_destroy();
-        //kill cookie
-        setcookie('PHPSESSID', '', time() - 3600, '/');
-
-    //kill cookie
-    setcookie('user', '', time() - 3600, '/');
-    setcookie('sites', '', time() - 3600, '/');
-    setcookie('page', '', time() - 3600, '/');
-    setcookie('category', '', time() - 3600, '/');
-    setcookie('participant', '', time() - 3600, '/');
-    setcookie('program', '', time() - 3600, '/');
-    setcookie('prog_page', '', time() - 3600, '/');
-    //setcookie('session_id', '', time() - 3600, '/');
-    //redirect
-    header('Location: /index.php');    
-    }
-    else{
-        echo "An error occurred.  Please try again.  If this problem persists, contact your system administrator.";
-        } 
-
-}
 
 include "../header.php";
 include "header.php";
