@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
+
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker.php";
@@ -121,7 +126,7 @@ bicycling. (time in minutes)</td>
                                     //document.write(response);
                                     window.location = '../include/reports.php';
                                 }
-                           )"></th>
+                           ).fail(failAlert);"></th>
     </tr>
 </table>
 </div>

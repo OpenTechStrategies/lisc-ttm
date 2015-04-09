@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
+
 include "../../header.php";
 include "../header.php";
 
@@ -69,7 +74,7 @@ $title_array_postable=serialize($title_array);
 
     
     
-        <!--All bike trail records.  Store IDs only in the de-id'd version.-->
+        <!--All bike trail records.  Store IDs only in the de-id\'d version.-->
     
 <tr><td>
         <a href="/include/generalized_download_script.php?download_name=corner_stores">Download the CSV file of Corner Store Assessments.</a><br></td>

@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
+
 include "../../header.php";
 include "../../bickerdike/header.php";
 
@@ -102,7 +107,7 @@ if ($_GET['origin'] != ''){
                                             $('#show_next_parts').show();
                                             document.getElementById('response_repository').innerHTML = response;
                                         }
-                                    );
+                                    ).fail(failAlert);
                                  }
                             }
                             else{
@@ -120,10 +125,10 @@ if ($_GET['origin'] != ''){
                                             $('#show_next_parts').show();
                                             document.getElementById('response_repository').innerHTML = response;
                                         }
-                                    );
+                                    ).fail(failAlert);
                             }
                         }
-                        );
+                        ).fail(failAlert);
                         }
    "><br/><br/>
 
@@ -137,6 +142,6 @@ if ($_GET['origin'] != ''){
 
 </div>
 
-<? 
+<?php 
 
 include "../../footer.php"; ?>

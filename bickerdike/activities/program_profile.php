@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
+
 include "../../header.php";
 include "../header.php";
 
@@ -59,7 +64,6 @@ if ($_GET['schedule'] == 1) {
         $('.prog_30').hide();
         $('.attendance_list').hide();
 
-        //$('.hide_on_view').hide();
     });
 </script>
 
@@ -150,7 +154,11 @@ if ($_GET['schedule'] == 1) {
                         <!--Attn: notes save onchange, not when the save button is clicked.  -->
 
                         <td><strong>Notes:</strong><p class="helptext">(only 400 characters will be saved in the database)</p></td>
-                        <td><textarea class="hide_on_view" id="program_notes" onchange="
+                        <td>
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<textarea id="program_notes" onchange="
                                 $.post(
                                         '../ajax/save_notes.php',
                                         {
@@ -162,13 +170,25 @@ if ($_GET['schedule'] == 1) {
                                     //document.write(response);
                                     window.location = 'program_profile.php?program=<?php echo $_GET['program']; ?>';
                                 }
-                                )"><?php echo $program->notes; ?></textarea></td>
+                                ).fail(failAlert);"><?php echo $program->notes; ?></textarea>
+<?php
+} //end access check
+?>
+</td>
                     </tr>
                     <tr>
-                        <td><input class="hide_on_view" type="button" value="Edit Program Information" onclick="
+                        <td>
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<input type="button" value="Edit Program Information" onclick="
                                 $('.displayed_info').toggle();
                                 $('.show_edit_space').toggle();
-                                   "></td>
+                                   ">
+<?php
+ } //end access check
+?>
+</td>
                         <td><input type="button" value="Save Changes" class="show_edit_space" onclick="
                                 $.post(
                                         '../ajax/edit_program.php',
@@ -182,7 +202,7 @@ if ($_GET['schedule'] == 1) {
                                     //document.write(response);
                                     window.location = 'program_profile.php?program=<?php echo $program->program_id; ?>';
                                 }
-                                )"></td>
+                                ).fail(failAlert);"></td>
                     </tr>
                 </table>
             </td>
@@ -245,7 +265,7 @@ if ($_GET['schedule'] == 1) {
                                             function(response) {
                                                 window.location = 'program_profile.php?program=<?php echo $program->program_id; ?>';
                                             }
-                                            )"></td>
+                                            ).fail(failAlert);"></td>
                         </tr>
                         <?php
                     }
@@ -256,10 +276,16 @@ if ($_GET['schedule'] == 1) {
                 <!--This is the slightly hidden link where you can actually add a person to this program.  Remember, people must be added to the 
                 database, then added as participants, THEN added as attendees (still below, still haven't gotten there).  Yeah, I don't know why we 
                 set it up this way either.-->
-                <a class="search_toggle hide_on_view" onclick="
+                
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<a class="search_toggle " onclick="
                         $('#user_search').toggle();
                    "><em>Add Participant: Search</em></a>
-
+<?php
+} //end access check
+?>
                 <!--As you can see, this is just a search.  You can't add a brand-new person here.  You have to go back to the 
                 participants or home screen and click "Add New Participant."
                 This area that shows up after you click "Add Participant: Search" will simply search through the people
@@ -345,7 +371,7 @@ if ($_GET['schedule'] == 1) {
                                     //document.write(response);
                                     document.getElementById('show_results').innerHTML = response;
                                 }
-                                )">&nbsp;&nbsp;&nbsp;
+                                ).fail(failAlert);">&nbsp;&nbsp;&nbsp;
                             <!--This button refreshes the page, showing all the participants you added.  Originally the page
                             refreshed after each participant was added, but users decided that was slow and cumbersome.  They did,
                             however, want to see the fruits of their labor, and so the "Done Adding Participants" button was
@@ -373,7 +399,11 @@ if ($_GET['schedule'] == 1) {
         <tr>
             <!--Add new program dates here.  A pop-up calendar will appear.  Dates must be in YYYY-MM-DD format to comply 
             with MySQL-->
-            <td colspan="5" class="hide_on_view">  Add Date: <input class="hide_on_view" type="text" id="new_date">      <?include "../include/datepicker.php";?><input type="button" value="Save" onclick="
+            
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<td colspan="5" >  Add Date: <input type="text" id="new_date">      <?include "../include/datepicker.php";?><input type="button" value="Save" onclick="
                     $.post(
                             '../ajax/add_new_program_date.php',
                             {
@@ -383,8 +413,11 @@ if ($_GET['schedule'] == 1) {
                     function(response) {
                         window.location = 'program_profile.php?program=<?php echo $program->program_id ?>';
                     }
-                    )
+                    ).fail(failAlert);
                                                                                                                                                                         ">&nbsp;&nbsp;<span class="helptext">Dates must be entered in the format YYYY-MM-DD (or use the pop-up calendar).</span></td>
+<?php
+} //end access check
+?>
         </tr>
         <tr>
             <th></th><th>Date</th><th>Participants</th><th>Add/Remove Participants</th>
@@ -400,7 +433,11 @@ if ($_GET['schedule'] == 1) {
             ?>
             <tr>
                 <td> <!--Remove date (deletes date and all attendance for that date) -->
-                    <input class="hide_on_view" type="button" value="Remove Date" onclick="
+                    
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<input type="button" value="Remove Date" onclick="
                                 $.post(
                                         '../ajax/remove_date.php',
                                         {
@@ -410,9 +447,12 @@ if ($_GET['schedule'] == 1) {
                                     //document.write(response);
                                     window.location = 'program_profile.php?program=<?php echo $program->program_id; ?>&schedule=1';
                                 }
-                                )
+                                ).fail(failAlert);
 
                            "/>
+<?php
+} //end access check
+?>
                 </td>
                 <td> <!--Date-->
                     <?php
@@ -469,10 +509,12 @@ if ($_GET['schedule'] == 1) {
                         ?>
                     </select>
 
-                    <!--The "hide_on_view" class is a permissions class.  View-only users cannot add or remove attendees, and so
-                    cannot even see these items.-->
-
-                    <input type="button" class="hide_on_view" value="Add Attendee" onclick="
+                    
+                    
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<input type="button" value="Add Attendee" onclick="
                                 //window.location = '#schedule';
                                 //alert(document.getElementById('choose_from_current_participants').options[document.getElementById('choose_from_current_participants').selectedIndex].value);
                                 $.post(
@@ -487,7 +529,14 @@ if ($_GET['schedule'] == 1) {
 
                                 }
 
-                                );">     <input type="button" class="hide_on_view" value="Remove Attendee" onclick="
+                                ).fail(failAlert);">     
+<?php
+} //end access check
+?>
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<input type="button"  value="Remove Attendee" onclick="
                                         //alert(document.getElementById('choose_from_current_participants').options[document.getElementById('choose_from_current_participants').selectedIndex].value);
                                         $.post(
                                                 '../ajax/remove_attendee.php',
@@ -499,7 +548,10 @@ if ($_GET['schedule'] == 1) {
                                             //document.write(response);
                                             window.location = 'program_profile.php?program=<?php echo $program->program_id; ?>&schedule=1';
                                         }
-                                        )">
+                                        ).fail(failAlert);">
+<?php
+} //end access check
+?>
                 </td>
             </tr>
             <?php

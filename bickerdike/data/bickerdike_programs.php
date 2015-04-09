@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
+
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker.php";
@@ -62,11 +67,22 @@ aldermanic funds for environmental improvements, and healthy item sales data.
     
     <!--Add new bike lane information here.  -->
     
-    <tr class="hide_on_view">
+    
+<?php
+        if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<tr>
         <td class="all_projects"><input type="text" id="bike_miles"></td>
         <td class="all_projects"><input type="text" id="bike_date"></td>
     </tr>
-    <tr class="hide_on_view">
+<?php
+        } //end access check
+?>
+    
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<tr>
         <td class="all_projects" colspan="2"><input type="button" value="Save New" onclick="
                                                     $.post(
                                                         '../ajax/add_bike_info.php',
@@ -77,8 +93,11 @@ aldermanic funds for environmental improvements, and healthy item sales data.
                                                         function (response){
                                                            window.location = 'bickerdike_programs.php';
                                                         }
-                                                )"></td>
+                                                ).fail(failAlert);"></td>
     </tr>
+<?php
+} //end access check
+?>
 </table><br/><br/></td>
                 
                 <!--Pulls information on Aldermanic funding over time from the Aldermanic_Records table.
@@ -106,14 +125,25 @@ aldermanic funds for environmental improvements, and healthy item sales data.
         }
     include "../include/dbconnclose.php";
     ?>
-    <tr class="hide_on_view">
+    
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<tr>
         <td class="all_projects"><input type="text" id="env_money"></td>
         <td class="all_projects"><input type="text" id="env_date"></td>
     </tr>
+<?php
+} //end access check
+?>
     
     <!--Add new aldermanic info here.-->
     
-    <tr class="hide_on_view">
+    
+<?php
+        if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<tr>
         <td class="all_projects" colspan="2"><input type="button" value="Save New" onclick="
                                                     $.post(
                                                         '../ajax/add_alderman_info.php',
@@ -125,8 +155,11 @@ aldermanic funds for environmental improvements, and healthy item sales data.
                                                            // document.write(response);
                                                            window.location = 'bickerdike_programs.php';
                                                         }
-                                                )"></td>
+                                                ).fail(failAlert);"></td>
     </tr>
+<?php
+        } //end access check
+?>
 </table><br/><br/></td></tr>
         
         <!--Shows all information about sales of healthy items. -->
@@ -159,7 +192,11 @@ aldermanic funds for environmental improvements, and healthy item sales data.
     store assessment page. -->
     
     
-    <tr class="hide_on_view">
+    
+<?php
+        if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<tr>
         <td class="all_projects"><input type="text" id="sales_money"></td>
         <td>
             <select id="store">
@@ -177,7 +214,14 @@ aldermanic funds for environmental improvements, and healthy item sales data.
         ?></select></td>
         <td class="all_projects"><input type="text" id="sales_date"></td>
     </tr>
-    <tr class="hide_on_view">
+<?php
+        } //end access check
+?>
+    
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<tr>
         <td class="all_projects" colspan="3"><input type="button" value="Save New" onclick="
                                                     $.post(
                                                         '../ajax/add_sales_info.php',
@@ -190,8 +234,11 @@ aldermanic funds for environmental improvements, and healthy item sales data.
                                                            // document.write(response);
                                                            window.location = 'bickerdike_programs.php';
                                                         }
-                                                )"></td>
+                                                ).fail(failAlert);"></td>
     </tr>
+<?php
+} //end access check
+?>
     
 </table></td>
 	</tr>

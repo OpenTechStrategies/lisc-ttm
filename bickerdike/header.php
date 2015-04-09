@@ -1,3 +1,9 @@
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($Bickerdike_id);
+?>
 <div id="bickerdike_header">
     <script>
         $(document).ready(function() {
@@ -7,13 +13,6 @@
                 $(this).removeClass("select");
             });
         });
-<?php
-if (!isset($_COOKIE['user'])) {
-    ?>
-            window.location = '/index.php';
-    <?php
-}
-?>
         $(document).ready(function() {
             $('#ajax_loader').hide();
         });
@@ -41,54 +40,3 @@ if (!isset($_COOKIE['user'])) {
         </tr>
     </table>	
 </div>
-<?php
-if ($_COOKIE['sites']) {
-    if (in_array('3', $_COOKIE['sites'])) {
-//then they have permission to view the bickerdike stuff
-//now we check to see if they have editing privileges or not:
-        if ($_COOKIE['view_restricted']) {
-            ?>
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    $('.hide_on_view').hide();
-                });</script>
-            <?php
-        }
-    } else {
-        ?>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                //$('#main_wrapper').hide();
-                window.location = '/index.php';
-            });
-            $(document).ready(function() {
-                $('#ajax_loader').hide();
-            });
-            $(document).ajaxStart(function() {
-                $('#ajax_loader').fadeIn('slow');
-            });
-            $(document).ajaxStop(function() {
-                $('#ajax_loader').fadeOut('slow');
-            });</script>
-        <?php
-    }
-} else {
-    ?>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#main_wrapper').hide();
-            window.location = '/index.php';
-        });
-        $(document).ready(function() {
-            $('#ajax_loader').hide();
-        });
-        $(document).ajaxStart(function() {
-            $('#ajax_loader').fadeIn('slow');
-        });
-        $(document).ajaxStop(function() {
-            $('#ajax_loader').fadeOut('slow');
-        });
-    </script>
-    <?php
-}
-?>

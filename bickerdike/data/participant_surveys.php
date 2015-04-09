@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
 
 include "../../header.php";
 include "../header.php";
@@ -49,7 +53,7 @@ It simply reports on the survey responses.
            function (response){
                document.getElementById('show_search_results').innerHTML = response;
            }
-       )">
+       ).fail(failAlert);">
 </p>
 <div id="show_search_results"></div>
 <p>

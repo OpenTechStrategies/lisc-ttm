@@ -83,12 +83,20 @@ when the mouse hovers over it.-->
                                     function(response) {
                                         document.getElementById('show_results').innerHTML = response;
                                     }
-                                    )"></th></tr>
+                                    ).fail(failAlert);"></th></tr>
                 </table><br/>
                 <div id="show_results"></div>
             </td>
             <!--Link here to new_program.php-->
-            <td style="padding-left: 100px;"><a href="new_program.php"class="add_new hide_on_view"><span class="add_new_button">Create New Program</span></a><br/><br/>
+            <td style="padding-left: 100px;">
+<?php
+                                    if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<a href="new_program.php"class="add_new "><span class="add_new_button">Create New Program</span></a>
+<?php
+                                    } //end access check
+?>
+<br/><br/>
                 <strong><em>Click on a category to see programs / details:</em></strong><br />
                 <br />
                     <?php

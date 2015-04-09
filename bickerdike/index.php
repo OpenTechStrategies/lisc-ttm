@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
+
 include "../header.php";
 include "../bickerdike/header.php";
 /*
@@ -14,7 +19,7 @@ include "../bickerdike/header.php";
 			}, function() {
 				$(this).removeClass("selected");
 			});
-                        //$('.hide_on_view').hide();
+
 		});
 </script>
 
@@ -24,7 +29,14 @@ include "../bickerdike/header.php";
 <br/>
 <table class="homescreen_table">
 	<tr>
-		<td width="50%"><a href="users/add_user.php" class="add_new hide_on_view" style="text-align:center;"><span class="add_new_button">Create New Participant</span></a><br/><br/>
+		<td width="50%">
+<?php
+    if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<a href="users/add_user.php" class="add_new " style="text-align:center;"><span class="add_new_button">Create New Participant</span></a><br/><br/>
+<?php
+    } //end access check
+?>
 				<h4>Search All Participants:</h4>
 				<table class="search_table">
 				    <tr><td class="all_projects"><strong>First Name:</strong></td>
@@ -104,13 +116,20 @@ include "../bickerdike/header.php";
                                     //document.write(response);
                                     document.getElementById('show_results').innerHTML = response;
                                 }
-                           )"></th>
+                           ).fail(failAlert);"></th>
     				</tr>
 				</table>
 
 				<div id="show_results"></div>
 		</td>
-		<td ><a href="activities/new_program.php"class="add_new hide_on_view"><span class="add_new_button">Create New Program</span></a><br/><br/>
+		<td >
+<?php
+                                                    if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<a href="activities/new_program.php"class="add_new "><span class="add_new_button">Create New Program</span></a><br/><br/>
+<?php
+                                                    } //end access check
+?>
 				<h4>Search All Programs:</h4>
 				<table class="program_table">
  				   <tr><td class="all_projects"><strong>Program Name (or part of name):</strong></td>
@@ -157,7 +176,7 @@ include "../bickerdike/header.php";
                                 function (response){
                                     document.getElementById('show_program_results').innerHTML = response;
                                 }
-                           )"></th></tr>
+                           ).fail(failAlert);"></th></tr>
 				</table><br/>
 				<div id="show_program_results"></div>
 		</td>

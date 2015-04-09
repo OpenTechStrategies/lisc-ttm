@@ -1,4 +1,8 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
 
 include "../../header.php";
 include "../header.php";
@@ -58,7 +62,7 @@ going on the live site.
            function (response){
                document.getElementById('show_search_results').innerHTML = response;
            }
-       )">
+       ).fail(failAlert);">
 </p><!--Shows the table of averages here.  The table of averages over all time
     still shows up below.-->
 <div id="show_search_results"></div>

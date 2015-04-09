@@ -1,4 +1,9 @@
 <?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
+
 include "../../header.php";
 include "../header.php";
 /*
@@ -77,7 +82,7 @@ Creates a new walkability assessment.  This will be changed and expanded in Bick
                     },
                     function (response){
                         window.location = 'walkability_report.php';                    }
-               )
+               ).fail(failAlert);
                "></td>
     </tr>
 </table>

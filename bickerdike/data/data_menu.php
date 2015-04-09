@@ -1,3 +1,9 @@
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
+?>
 <!--
 Menu that shows up at the top of "Participant Survey, aggregate."  (links to reports
 sorted by participant type)
