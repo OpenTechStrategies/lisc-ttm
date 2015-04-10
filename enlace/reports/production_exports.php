@@ -242,6 +242,17 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
         </td>
     </tr>
 
+    <tr bgcolor="#cccccc">
+        <td class="all_projects">Total dosage hours by participant</td>
+        <td class="all_projects">
+            <a href="/include/generalized_download_script.php?download_name=enlace_total_dosage">
+                Download.</a> 
+        </td>
+        <td class="all_projects">
+              <a href="/include/generalized_download_script.php?download_name=enlace_total_dosage_deid">
+                Download.</a> 
+        </td>
+    </tr>
 
     <tr>
         <td class="all_projects">New survey exports</td>

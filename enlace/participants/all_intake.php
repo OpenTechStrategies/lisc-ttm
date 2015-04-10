@@ -95,7 +95,9 @@ Show tables of survey questions and response options.  The chosen response is se
 
 <table class="inner_table" style="border: 2px solid #696969;font-size:.85em;" id="baseline_table">
     <?php $person->baseline(); ?>                        
-    <caption>Date completed: <input type="text" id="admin_date" class="addDP" value="<?php echo $assessment_info[18];  //echo $person->baseline_date; ?>">
+    <caption>Date completed: <input type="text" id="admin_date" class="addDP" value="<?php 
+$print_date = explode(" ", $assessment_info[19]);
+echo $print_date[0]; ?>">
         <?php
         $date_reformat = explode('-', $person->baseline_date);
         $day_separate = explode(' ', $date_reformat[2]);
@@ -709,6 +711,7 @@ if (isset($_GET['assessment'])) {
                     awareness: document.getElementById('self_awareness').value,
                     care: document.getElementById('self_care').value,
                     violence_id: '<?php echo $violence_id; ?>',
+                    assessment_id: '<?php echo $id_sqlsafe; ?>',
                     edited: '<?php echo $edit; ?>'
                 },
         function(response) {

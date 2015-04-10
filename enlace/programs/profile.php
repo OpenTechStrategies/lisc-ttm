@@ -7,6 +7,7 @@ user_enforce_has_access($Enlace_id, $ReadOnlyAccess, $_COOKIE['program']);
 include "../../header.php";
 include "../header.php";
 include "../classes/program.php";
+require_once("../classes/assessment.php");
 $program = new Program();
 $program->load_with_program_id($_COOKIE['program']);
 
@@ -411,15 +412,11 @@ Shows all program information.
                 <!--List of participants in this program, sorted by session:-->
                 <h4>Participants</h4>
                 <?php
-                $get_all_participants = "SELECT *
-                FROM Participants_Programs INNER JOIN Participants
-                    ON Participants.Participant_ID=Participants_Programs.Participant_ID 
-                    INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_ID
-                    WHERE Session_Names.Program_ID='" . $program->program_id . "' ORDER BY Session_ID, Participants.Last_Name";
+                $get_all_participants = "SELECT Session_Names.Session_ID, Session_Names.Session_Name, Participants.Participant_ID, Participants_Programs.Date_Dropped, Participant_Program_ID, Participants.First_Name, Participants.Last_Name, COUNT(Assessments.Assessment_ID) FROM Participants_Programs INNER JOIN Participants ON Participants.Participant_ID=Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_ID LEFT JOIN Assessments ON (Participants.Participant_ID = Assessments.Participant_ID AND Session_Names.Session_ID = Assessments.Session_ID) WHERE Session_Names.Program_ID='$program->program_id' GROUP BY Session_Names.Session_ID, Participants.Participant_ID ORDER BY Session_Names.Session_ID, Participants.Last_Name";
 
-                //echo $get_all_participants;
                 include "../include/dbconnopen.php";
                 $all_participants = mysqli_query($cnnEnlace, $get_all_participants);
+                $all_surveys = mysqli_query($cnnEnlace, $get_intake_surveys);
                 $current_session = "";
                 ?><table class="inner_table">
 
@@ -431,6 +428,7 @@ Shows all program information.
                         <th>Dosage Percentage</th>
                         <th>Total hours in this program</th>
                         <th>Total hours across funded programs</th>
+                        <th>Intake survey completed</th>
                         <?php
                         //if an administrator
                         if ($access == 'a') {
@@ -545,6 +543,7 @@ Shows all program information.
     echo $all_hours;
     ?>
                             </td>
+                            <td><?php echo ($all_p['COUNT(Assessments.Assessment_ID)'] > 0) ? 'Yes' : 'No'; ?></td>
                                 <?php
                                 //if an administrator
                                 if ($access == 'a') {
@@ -649,7 +648,6 @@ while ($sess = mysqli_fetch_row($sessions)) {
                                                 participant: document.getElementById('relative_search').value
                                             },
                                     function(response) {
-                                        //document.write(response);
                                         window.location = 'profile.php';
                                     }
                                     ).fail(failAlert);" id="add_participant_button">

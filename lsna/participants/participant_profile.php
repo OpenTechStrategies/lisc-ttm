@@ -1297,6 +1297,16 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                             ?>
                                 <!--Edit school and year right here!-->
                                 <a href="javascript:;" onclick="$('#edit_pm_year_<?php echo $yr[2] ?>').toggle();">Edit</a>
+<a href="javascript:;" class = "no_view" onclick="                           $.post(
+                                   '../ajax/delete_elements.php',
+                                   {
+                                       action: 'pm_year',
+                                       id: '<?php echo $yr[2]; ?>'
+                                   },
+                           function(response) {
+                               window.location='participant_profile.php';
+                           }
+                           )">Delete School and Year</a>
                         <div id="edit_pm_year_<?php echo $yr[2] ?>" class="edit_pm_affiliation" style="font-weight: normal;">
                             <select id="edit_school_<?php echo $yr[2] ?>"><option value="">------</option>
                         <?php
@@ -1356,7 +1366,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                 if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
 ?>
 <th >
-                    <input type="button" value="Delete" onclick="
+                    <input type="button" value="Delete Program" onclick="
                            $.post(
                                    '../ajax/delete_elements.php',
                                    {
@@ -1364,8 +1374,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                        id: '<?php echo $program['Participant_Subcategory_ID']; ?>'
                                    },
                            function(response) {
-                               document.write(response);
-                               //window.location='participant_profile.php';
+                               window.location='participant_profile.php';
                            }
                            ).fail(failAlert);">
                 </th>

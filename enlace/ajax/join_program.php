@@ -5,6 +5,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 user_enforce_has_access($Enlace_id, $DataEntryAccess);
 
 /* participant_program changes */
+require_once("../classes/assessment.php");
+require_once("../classes/participant.php");
 
 // delete session and all corresponding data
 if ($_POST['action'] == 'delete_session') {
@@ -174,15 +176,37 @@ elseif ($_POST['action'] == 'drop') {
     mysqli_query($cnnEnlace, $drop_from_program);
     include "../include/dbconnclose.php";
 }
-/* or, add someone to a program!  which I believe is actually adding them to a session. */ 
+/* or, add someone to a program!  which I believe is actually adding them to a session. */
 else {
     include "../include/dbconnopen.php";
     $participant_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['participant']);
     $program_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['program_id']);
-    $add_person_to_program = "INSERT INTO Participants_Programs (Participant_ID, Program_ID) VALUES (
-    '" . $participant_sqlsafe . "', '" . $program_id_sqlsafe . "')";
-    echo $add_person_to_program;
+
+    $add_person_to_program = "INSERT INTO Participants_Programs (Participant_ID, Program_ID) VALUES ('$participant_sqlsafe', '$program_id_sqlsafe')";
     mysqli_query($cnnEnlace, $add_person_to_program);
     include "../include/dbconnclose.php";
+    
+    // Construct a participant object
+    $participant = new Participant();
+    $participant->load_with_participant_id($participant_sqlsafe);
+
+    // Find the participants surveys are impact surveys from the last 6 months. 
+    $assessments = $participant->find_previous_surveys(6, Assessment::IMPACT_TYPE);
+    print_r($assessments);
+    if ($assessments) {
+        // A survey exists, we should now duplicate the newest (first in array)
+        $assessment = $assessments[0];
+        
+        // Removing the primary key will cause Assessment to create a new one on Assessment->save()
+        $assessment->assessment_id = null;
+        
+        // Change the type and session
+        $assessment->pre_post = Assessment::INTAKE_TYPE;
+        $assessment->session_id = $program_id_sqlsafe;
+        
+        // Save this back to the database
+        $assessment->save();
+
+    }
 }
 ?>

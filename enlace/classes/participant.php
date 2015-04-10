@@ -4,6 +4,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
 //user_enforce_has_access($Enlace_id);
 
+require_once("assessment.php");
 
 class Participant {
 
@@ -272,6 +273,38 @@ class Participant {
         $this->post_self_care = $violence['Self_Care'];
         $this->post_violence_date = $violence['Date_Logged'];
         $this->post_violence_program = $violence['Program'];
+    }
+    
+    /*
+     * Looks up a previous survey that the user has done. If no survey has been found void will be returned.
+     *
+     * @param int scrope Number of months to search for previous surveys
+     * @param int survey_type Either $INTAKE_SURVEY_TYPE or $IMPACT_SURVEY_TYPE
+     * @return Array of Assessment objects
+     */
+    public function find_previous_surveys($scope, $survey_type) {
+        include "../include/dbconnopen.php";
+        
+        // Ensure parameters are safe to be in a query (although they should be)
+        $scope_sqlsafe = mysqli_real_escape_string($cnnEnlace, $scope);
+        $survey_type_sqlsafe = mysqli_real_escape_string($cnnEnlace, $survey_type);
+        
+        $impact_assessment_search = "SELECT * FROM Assessments WHERE Date_Logged >= DATE_SUB(now(), INTERVAL " . $scope_sqlsafe . " MONTH) AND Participant_ID='" . $this->participant_id . "' ORDER BY Date_Logged DESC";
+        $impact_assessments = mysqli_query($cnnEnlace, $impact_assessment_search);
+        
+        if (!$impact_assessments) {
+            return array(); // Bail out, we've not found any
+        }
+        
+        
+        // Build an array of all the results
+        $assessments = array();
+        while ($assessment = mysqli_fetch_array($impact_assessments)) {
+            $assessments[] = Assessment::createFromDatabase($assessment);
+        }
+        
+        return $assessments;
+        
     }
 
 }

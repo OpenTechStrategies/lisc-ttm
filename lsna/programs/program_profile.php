@@ -260,7 +260,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                                                     '../ajax/set_institution_id.php',
                                                                     {
                                                                         page: 'profile',
-                                                                        institution_id: '<?php echo $institution['Institution_ID']; ?>'
+                                                                        id: '<?php echo $institution['Institution_ID']; ?>'
                                                                     },
                                                             function(response) {
                                                                 //alert(response);
