@@ -9,7 +9,7 @@ Footer, including a link to the helpdesk email.
 <div id="footer">
 <span><a href="http://opentechstrategies.com"
       ><img src="/images/ots-logo-name.png" id="ots_logo" /></a></span>
-      <?php if (isset($_COOKIE['user'])){ ?>
+<?php if ( isLoggedIn()){ ?>
        <span id="helplink" class="helptext" ><a href="<?php echo '/include/contact.php';?>">Questions? Comments? Click here.</a></span>
       <?php } ?>
 <span><a href="http://chapinhall.org/"

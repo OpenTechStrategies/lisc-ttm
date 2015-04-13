@@ -1,5 +1,7 @@
 <?php
-if (!isset($_COOKIE['user'])) {
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+if (! isLoggedIn()) {
     if (function_exists(http_response_code)){
         http_response_code(401);
         include "error.html";

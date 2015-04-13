@@ -25,7 +25,7 @@ elseif ($_POST['action']=='attendance'){
 /* add a note to this program.  Not sure why this is in this file. */
 elseif($_POST['action']=='note_text'){
     include "../include/dbconnopen.php";
-    $create_note_sqlsafe="INSERT INTO Blog_Notes (Author, Note_Text, Program_ID, School) VALUES ('" . mysqli_real_escape_string($cnnTRP, $_COOKIE['user']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['note']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['program']) . "',
+    $create_note_sqlsafe="INSERT INTO Blog_Notes (Author, Note_Text, Program_ID, School) VALUES ('" . $USER->username . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['note']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['program']) . "',
         '" . mysqli_real_escape_string($cnnTRP, $_POST['school']) . "')";
     echo $create_note_sqlsafe;
     mysqli_query($cnnTRP, $create_note_sqlsafe);

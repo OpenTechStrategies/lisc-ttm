@@ -1,13 +1,15 @@
 <?php
+ob_start();
 include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+ob_end_clean();
 //takes as arguments the query, database connection and database connection
 //file, column headers, and file name.
 
 //code drawn from tutorial at:
 // http://code.stephenmorley.org/php/creating-downloadable-csv-files/
 
-function generalized_download($download_name){
+function generalized_download($download_name, $permissions){
     $download_list_array=array(
         'aldermans_records'=>array('db'=>'bickerdike', 'query'=> 
             'SELECT * FROM Aldermanic_Records', 
@@ -1860,21 +1862,14 @@ LEFT JOIN
                  );
     $db_array=array(2=>'LSNA', 3=>'bickerdike', 4=>'TRP', 5=>'SWOP', 6=>'enlace');
     if (array_key_exists($download_name, $download_list_array)){
-        echo $download_name; //testing
         if ( isLoggedIn()){
         //add a couple lines here to check the privileges, so we know whether
         //this person is authorized to view given exports
-
-        include "dbconnopen.php";
-        $get_privileges_sqlsafe="SELECT Privilege_ID, Program_Access FROM Users_Privileges"
-                . " LEFT JOIN Users ON Users_Privileges.User_ID=Users.User_ID WHERE "
-            . "User_Email='" . mysqli_real_escape_string($cnnLISC, $_COOKIE['user']) . "'";
-        $privilege_set=mysqli_query($cnnLISC, $get_privileges_sqlsafe);
         $accesses=array();
         $programs = array();
-        while ($privilege=mysqli_fetch_row($privilege_set)){
-            $accesses[]=$privilege[0];
-            $programs[] = $privilege[1];
+        foreach ($permissions as $site_id => $site_info) {
+            $accesses[] = $site_id;
+            $programs[] = $site_info[1];
         }
         $get_db_id=array_search($download_list_array[$download_name]['db'], $db_array);
         $has_permission=in_array($get_db_id, $accesses);
@@ -1965,8 +1960,8 @@ LEFT JOIN
         
         $rows = mysqli_query($database_conn, $query_sqlsafe);
     if ($download_name == 'enlace_participant_dosage' || $download_name == 'enlace_participant_dosage_deid' || $download_name == 'enlace_total_dosage' || $download_name == 'enlace_total_dosage_deid'){
-        include "../enlace/include/dosage_percentage.php"; //only included for Enlace dosage calculation
-        include "../enlace/include/total_dosage_sum.php"; //only included for Enlace dosage calculation
+        include_once("../enlace/include/dosage_percentage.php");
+        include_once("../enlace/include/total_dosage_sum.php"); //only included for Enlace dosage calculation
     }
         // loop over the rows, outputting them
         while ($row = mysqli_fetch_row($rows)) {
@@ -1978,7 +1973,6 @@ LEFT JOIN
                 array_push($row, $dosage[2]);
             }
             elseif ($download_name == 'enlace_total_dosage' || $download_name == 'enlace_total_dosage_deid'){
-                echo "test total dosage";
                 $dosage_sum = calculate_dosage_sum($row[0]);
                 array_push($row, $dosage_sum);
             }
@@ -2005,6 +1999,6 @@ LEFT JOIN
         //done something nefarious.
     }
 }
-generalized_download($_GET['download_name']);
-//generalized_download('aldermans_records');
+generalized_download($_GET['download_name'], $USER->site_permissions);
+//generalized_download('enlace_total_dosage', $USER->site_permissions);
 ?>
