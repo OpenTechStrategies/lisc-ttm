@@ -38,7 +38,7 @@ $program = mysqli_fetch_array($program_info);
                     <div class="add_participant">
                         <a href="javascript:;" onclick="
                                 $('#search_to_add_participant').slideToggle();
-                           " style="font-size:.8em;" class="no_view" >Add 
+                           " style="font-size:.8em;" >Add 
                             an existing participant to this program...</a>
                         <div id="search_to_add_participant">
 
@@ -86,10 +86,17 @@ $program = mysqli_fetch_array($program_info);
                             <!-- choose person and add to program here. -->
                             <div id="search_results"></div>
                         </div>
-                        <br><a href="javascript:;" onclick="
+                        <br>
+<?php
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
+?>
+<a href="javascript:;" onclick="
                                 $('#create_and_add_participant').slideToggle();
-                           " style="font-size:.8em;" class="no_view" >Create a new 
+                           " style="font-size:.8em;"  >Create a new 
                             participant and add him/her to this program...</a>
+<?php
+} //end access check
+?>
                         <div id="create_and_add_participant">
                             <table class="trp_add_table">
                                 <tr>
@@ -132,7 +139,7 @@ $program = mysqli_fetch_array($program_info);
                                     <td><strong>Mobile Phone </strong></td>
                                     <td><input type="text" id="mobile_add"></td>
                                 </tr>
-                                <tr>
+                                <tr style="background-color:#FF0000">
                                     <td colspan="8"><strong>For La Casa Residents</strong></td>
                                 </tr>    
                                 <tr>
@@ -451,7 +458,6 @@ $program = mysqli_fetch_array($program_info);
 
                                         },
                                     function(response) {
-                                        //document.write(response);
                                         document.getElementById('add_person_results').innerHTML = response;
                                     }
                                     ).fail(failAlert);"/></td>
@@ -510,7 +516,7 @@ $program = mysqli_fetch_array($program_info);
 <?php
 if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
-                    <form id="file_upload_form" class="no_view" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data">
+                    <form id="file_upload_form" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data">
                         <input type="file" name="file" id="file" /> 
                         <input type="hidden" name="event_id" value="<?php echo $_GET['id']; ?>">
                         <br />
@@ -1014,7 +1020,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
                                            $get_members_sqlsafe = "SELECT Participants_Programs.Participant_Id, First_Name, Last_Name FROM Participants_Programs
                                     INNER JOIN Participants ON Participants.Participant_Id=Participants_Programs.Participant_Id WHERE Program_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
                                 //echo $get_members_sqlsafe; 
-        ?><select id="new_attendee_<?php echo $date[0] ?>" class="no_view"  onchange="
+        ?><select id="new_attendee_<?php echo $date[0] ?>"  onchange="
                                             var attendee = this.value;
                                             $.post(
                                                     '../ajax/new_date.php',
@@ -1052,8 +1058,8 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 
 <tr>
                             <!-- add a new program date: -->
-                            <td>Add Date: <input type="text" id="new_early_childhood_date" class="hasDatepickers no_view"></td>
-                            <td><input type="button" value="Save Date" class="no_view" onclick="
+                            <td>Add Date: <input type="text" id="new_early_childhood_date" class="hasDatepickers"></td>
+                            <td><input type="button" value="Save Date" onclick="
                                     $.post(
                                             '../ajax/new_date.php',
                                             {
@@ -1119,7 +1125,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
                         <!-- add a new enrollee here (again, this person must already have a profile in the system): -->
                         <a href="javascript:;" onclick="
                                 $('#search_to_add_participant').slideToggle();
-                           " style="font-size:.8em;" class="no_view">Add a new participant...</a>
+                           " style="font-size:.8em;" >Add a new participant...</a>
                         <div id="search_to_add_participant">
                             <table class="search_table">
                                 <tr>
@@ -1324,7 +1330,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 <?php
  if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
-                        <form id="file_upload_form" class="no_view" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data">
+                        <form id="file_upload_form"  action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data">
                             <input type="file" name="file" id="file" /> 
                             <input type="hidden" name="event_id" value="<?php echo $_GET['id']; ?>">
                             <br />
@@ -1420,7 +1426,7 @@ else if ($program['Program_ID'] == 3) {
                     <div class="add_participant">
                         <a href="javascript:;" onclick="
                                 $('#search_to_add_participant').slideToggle();
-                           " style="font-size:.8em;" class="no_view">Add a new participant...</a>
+                           " style="font-size:.8em;" >Add a new participant...</a>
                         <div id="search_to_add_participant">
                             <table class="search_table">
                                 <tr>
@@ -1557,7 +1563,7 @@ else if ($program['Program_ID'] == 4) {
 <?php
     if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
-                    <input type="button" value="Save"  class="no_view" onclick="
+                    <input type="button" value="Save"  onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
                                     {
@@ -1632,7 +1638,7 @@ else if ($program['Program_ID'] == 4) {
 <?php
  if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
-                    <input type="button" value="Save"  class="no_view" onclick="
+                    <input type="button" value="Save"  onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
                                     {
@@ -1708,7 +1714,7 @@ else if ($program['Program_ID'] == 4) {
 <?php
  if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
-                    <input type="button" value="Save"  class="no_view" onclick="
+                    <input type="button" value="Save"   onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
                                     {
@@ -1783,7 +1789,7 @@ else if ($program['Program_ID'] == 4) {
 <?php
  if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
-                    <input type="button" value="Save"  class="no_view" onclick="
+                    <input type="button" value="Save"   onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
                                     {
@@ -1856,7 +1862,7 @@ else if ($program['Program_ID'] == 4) {
                         <option value="16">2016</option>
                     </select></td>
                 <td><input type="text" id="enrollment_elev8_new_5" style="width:100px;">
-                    <input type="button" value="Save"  class="no_view" onclick="
+                    <input type="button" value="Save"   onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
                                     {
@@ -1927,7 +1933,7 @@ else if ($program['Program_ID'] == 4) {
 <?php
  if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
-                    <input type="button" value="Save"  class="no_view" onclick="
+                    <input type="button" value="Save"   onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
                                     {
@@ -2003,7 +2009,7 @@ else if ($program['Program_ID'] == 4) {
 <?php
  if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
-                    <input type="button" value="Save"  class="no_view" onclick="
+                    <input type="button" value="Save"   onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
                                     {
@@ -2080,7 +2086,7 @@ else if ($program['Program_ID'] == 4) {
 <?php
  if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
-                    <input type="button" value="Save"  class="no_view" onclick="
+                    <input type="button" value="Save"   onclick="
                             $.post(
                                     '../ajax/elev8_save.php',
                                     {
@@ -2118,7 +2124,7 @@ else if ($program['Program_ID'] == 5) {
                     <div class="add_participant">
                         <a href="javascript:;" onclick="
                                 $('#search_to_add_participant').slideToggle();
-                           " style="font-size:.8em;" class="no_view">Add a participant...</a>
+                           " style="font-size:.8em;" >Add a participant...</a>
                         <div id="search_to_add_participant">
                             <table class="search_table">
                                 <tr>
@@ -2208,7 +2214,7 @@ else if ($program['Program_ID'] == 5) {
                                         <span class="helptext">Add attendee: </span><?php $get_members_sqlsafe = "SELECT Participants_Programs.Participant_Id, First_Name, Last_Name FROM Participants_Programs
                                     INNER JOIN Participants ON Participants.Participant_Id=Participants_Programs.Participant_Id WHERE Program_ID='" . mysqli_real_escape_string($cnnTRP, $_GET['id']) . "'";
                                 //echo $get_members_sqlsafe;
-                                        ?><select id="new_attendee_<?php echo $date[0] ?>" class="no_view" onchange="
+                                        ?><select id="new_attendee_<?php echo $date[0] ?>"  onchange="
                                             var attendee = this.value;
                                             $.post(
                                                     '../ajax/new_date.php',
@@ -2244,8 +2250,8 @@ else if ($program['Program_ID'] == 5) {
  if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
  <tr>
-                            <td>Add Date: <input type="text" id="new_early_childhood_date" class="hasDatepickers no_view"></td>
-                            <td><input type="button" value="Save Date" class="no_view" onclick="
+                            <td>Add Date: <input type="text" id="new_early_childhood_date" class="hasDatepickers"></td>
+                            <td><input type="button" value="Save Date"  onclick="
                                     $.post(
                                             '../ajax/new_date.php',
                                             {

@@ -678,8 +678,7 @@ forms as well.-->
                                 form: consent_given
                             },
                     function(response) {
-                        document.write(response);
-                        //window.location='participant_profile.php';
+                        window.location='participant_profile.php?id=<?php echo $person->participant_id ?>';
                     }
                     ).fail(function() {alert('You do not have permission to perform this action.');})"></td>
         </tr>
@@ -1091,7 +1090,6 @@ forms as well.-->
                                     note: this.value
                                 },
                         function(response) {
-                            //document.write(response);
                             window.location = 'participant_profile.php?id=<?php echo $person->participant_id; ?>';
                         }
                         ).fail(function() {alert('You do not have permission to perform this action.');})">Add followup note here.</textarea></td></tr>

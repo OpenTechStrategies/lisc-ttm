@@ -230,8 +230,7 @@ while ($person=  mysqli_fetch_array($persons)){
                             },
                             function (response){
                                    var url = response;
-                                   var url_array = url.split('script>');
-                                   window.location = url_array[1];
+                                   window.location = url;
                                 }).fail(failAlert);"><?echo $person['Name_First'] . " " . $person['Name_Last'];?></a><br/><?
                                 
                                 

@@ -340,7 +340,7 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                             <td><?php echo $health['BMI']; ?>
                                 
 <?php
-                        if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+                        if ($USER->site_access_level($Bickerdike_id) <= $AdminAccess){
 ?>
 <input type="button" value="Remove" onclick="
                                                 $.post(

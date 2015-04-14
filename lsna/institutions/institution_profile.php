@@ -106,7 +106,7 @@ $inst->load_with_institution_id($_COOKIE['institution']);
 		<td></td>
 		<td>
 <?php
-if ($USER->has_site_access($LSNA_id, $DataEntryAccess){
+                                                               if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
 ?>
 <input type="button" class="display" value="Edit" onclick="$('.edit').toggle();$('.display').toggle();" />
 			<input type="button" class="edit" value="Save" onclick="

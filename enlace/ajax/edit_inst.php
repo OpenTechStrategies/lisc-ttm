@@ -9,7 +9,7 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
 
 /*if address has changed, then the block group must change too*/
 include ($_SERVER['DOCUMENT_ROOT']."/include/block_group_finder.php");
-include "../include/dbconnclose.php";
+include "../include/dbconnopen.php";
 $inst_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['inst_id']);        
 $get_existing_address="SELECT Address_Num, Address_Dir, Address_Street, Address_Street_Type, Block_Group
             FROM Institutions

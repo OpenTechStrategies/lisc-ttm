@@ -1,6 +1,6 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 user_enforce_has_access($SWOP_id, $DataEntryAccess);
 
 if ($_POST['action'] == 'add_to_pool') {
@@ -121,7 +121,7 @@ if ($_POST['action'] == 'add_to_pool') {
                                     Activity_Type
                                 ) VALUES (
                                     '" . mysqli_real_escape_string($cnnSWOP, $_POST['first_name']) . "',
-                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['last_name'] . "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['last_name']) . "',
                                     '" . mysqli_real_escape_string($cnnSWOP, $_POST['day_phone']) . "',
                                     '" . mysqli_real_escape_string($cnnSWOP, $_POST['email']) . "',
                                     '" . mysqli_real_escape_string($cnnSWOP, $_POST['gender']) . "',
@@ -147,16 +147,12 @@ if ($_POST['action'] == 'add_to_pool') {
             '" . mysqli_real_escape_string($cnnSWOP, $_POST['city']) . "',
             '" . mysqli_real_escape_string($cnnSWOP, $_POST['state']) . "',
             '" . mysqli_real_escape_string($cnnSWOP, $_POST['zip']) . "')";
-
-//echo $create_new_participant_query;
     mysqli_query($cnnSWOP, $create_new_participant_query_sqlsafe);
-//mysqli_query($cnnSWOP, $add_property);
     $id = mysqli_insert_id($cnnSWOP);
-    $add_pool_status_sqlsafe = "INSERT INTO Pool_Status_Changes (Active, Participant_ID, Activity_Type, Member_Type) VALUES ('" . $mysqli_real_escape_string($cnnSWOP, $_POST['pool']) . "', '" . $id . "', 4, '" . mysqli_real_escape_string($cnnSWOP, $_POST['pool_type']) . "')";
+    $add_pool_status_sqlsafe = "INSERT INTO Pool_Status_Changes (Active, Participant_ID, Activity_Type, Member_Type) VALUES ('" . mysqli_real_escape_string($cnnSWOP, $_POST['pool']) . "', '" . $id . "', 4, '" . mysqli_real_escape_string($cnnSWOP, $_POST['pool_type']) . "')";
     mysqli_query($cnnSWOP, $add_pool_status_sqlsafe);
     if ($_POST['primary_inst'] != '') {
         $link_to_inst_sqlsafe = "INSERT INTO Institutions_Participants (Institution_ID, Participant_ID, Is_Primary, Activity_Type) VALUES ('" . mysqli_real_escape_string($cnnSWOP, $_POST['primary_inst']) . "', $id, 1, 6)";
-        //echo $link_to_inst;
         mysqli_query($cnnSWOP, $link_to_inst_sqlsafe);
     }
 
@@ -175,8 +171,7 @@ if ($_POST['action'] == 'add_to_pool') {
                     },
             function(response) {
                                    var url = response;
-                                   var url_array = url.split('script>');
-                                   window.location = url_array[1];
+                                   window.location = url;
 
             }
             );

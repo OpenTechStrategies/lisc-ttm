@@ -34,7 +34,7 @@ include "../include/datepicker_simple.php";
 		});
 </script>
 
-<?
+<?php
 include "../classes/participant.php";
 $participant=new Participant();
 $participant->load_with_participant_id($_COOKIE['participant']);
@@ -510,12 +510,12 @@ if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
                 might not be able to own a home, but a household of working adults may be able to. -->
 		 <h4>Household</h4>
                  <!-- Link to household (or households, but almost certainly just one) that this person belongs to: -->
-                        <?$find_household_sqlsafe="SELECT * FROM Households_Participants INNER JOIN Households ON Household_ID=New_Household_ID
+<?php $find_household_sqlsafe="SELECT * FROM Households_Participants INNER JOIN Households ON Household_ID=New_Household_ID
                             WHERE Participant_ID='".$parti['Participant_ID']."'";
                         include "../include/dbconnopen.php";
                         $this_household=mysqli_query($cnnSWOP, $find_household_sqlsafe);
                         while ($house=mysqli_fetch_array($this_household)){
-                            ?><a href='family_profile.php?household=<?php echo $house['New_Household_ID']?>'><?php echo $house['Household_Name'];?></a><?
+                            ?><a href='family_profile.php?household=<?php echo $house['New_Household_ID']?>'><?php echo $house['Household_Name'];?></a><?php
                             if ($house['Head_of_Household']=='1'){echo ' (Head) ';}
                                 echo "<br>";
                         }
@@ -529,7 +529,7 @@ if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
                         <div id="household_addition">
                             <!-- Either choose an existing household... -->
                         Add this person to an existing household: <select id="all_households"><option value="">-----</option>
-                            <?$get_households_sqlsafe = "SELECT * FROM Households;";
+                            <?php $get_households_sqlsafe = "SELECT * FROM Households;";
                             include "../include/dbconnopen.php";
                             $all_households=mysqli_query($cnnSWOP, $get_households_sqlsafe);
                             while ($household=mysqli_fetch_row($all_households)){
@@ -542,7 +542,7 @@ if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
                                 $primary_address=mysqli_query($cnnSWOP, $get_primary_address_sqlsafe);
                                 $address=mysqli_fetch_row($primary_address);
                                 ?><option value="<?php echo $household[0]?>"><?php echo $household[0] . ": " . $household[1] . '--' . $address[0] . " " . $address[1] . " " .
-                                        $address[2] . " " . $address[3];?></option><?
+                                        $address[2] . " " . $address[3];?></option><?php
                             }
                             include "../include/dbconnclose.php";?>
                         </select><br>
@@ -1044,8 +1044,7 @@ if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
                                                             },
                                                             function (response){
                                    var url = response;
-                                   var url_array = url.split('script>');
-                                   window.location = url_array[1];
+                                   window.location = url;
                                                             }
                                                         );
                                                     }

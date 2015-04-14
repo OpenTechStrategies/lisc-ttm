@@ -100,8 +100,7 @@ if ($id != '') {
                             },
                             function(response) {
                                    var url = response;
-                                   var url_array = url.split('script>');
-                                   window.location = url_array[1];
+                                   window.location = url;
                             }
                     );
                    ">view participant profile</a>.

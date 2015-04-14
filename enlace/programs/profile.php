@@ -347,7 +347,6 @@ Shows all program information.
                                         program: '<?php echo $program->program_id; ?>'
                                     },
                             function(response) {
-                                // alert(response);
                                 if (response != 0) {
                                     alert('This program already has a session with this name.  Please choose a different name.');
                                     return false;

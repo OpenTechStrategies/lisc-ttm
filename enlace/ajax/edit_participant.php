@@ -6,10 +6,10 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
 
 /*when editing participant, if the address changes then the block group must change too*/
         include ($_SERVER['DOCUMENT_ROOT']."/include/block_group_finder.php");
+        include "../include/dbconnopen.php";
         $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['id']);
         
 	$format_dob = explode('/', $_POST['dob']);
-        include "../include/dbconnopen.php";
         if ($format_dob[1]!='' && $format_dob[2]!=''){
 	$dob_sqlsafe = $format_dob[2] . '-' . $format_dob[0] . '-' . $format_dob[1];}
         else{$dob_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['dob']);}
@@ -26,9 +26,8 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
         $this_address=$_POST['address_num'] . " " .$_POST['address_dir'] . " " .$_POST['address_name'] . " " .$_POST['address_type'] . 
                 " " .$_POST['city'] . " " .$_POST['state'] . " " .$_POST['zip'];
         $block_group=do_it_all($this_address, $map);
-        echo $block_group;
         }
-        else{$block_group=$address_now[7]; echo "Same block group";}
+        else{$block_group=$address_now[7]; }
         	
 	include "../include/dbconnopen.php";
         $_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['name']);

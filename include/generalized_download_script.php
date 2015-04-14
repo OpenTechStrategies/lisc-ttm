@@ -1,8 +1,6 @@
 <?php
-ob_start();
 include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
-ob_end_clean();
 //takes as arguments the query, database connection and database connection
 //file, column headers, and file name.
 

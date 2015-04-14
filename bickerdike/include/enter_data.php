@@ -35,7 +35,7 @@ $user->load_with_user_id($_GET['user']);
     ?>
     Program in which survey was filled out: 
 
-    <!--Selects from all programs, though in other systems we've selected only from those
+    <!--Selects from all programs, though in other systems we\'ve selected only from those
     programs that the given participant is already linked to.-->
     <select id="program_id">
         <option value="">-----</option>
@@ -74,8 +74,7 @@ $user->load_with_user_id($_GET['user']);
             if (response != '') {
                 alert(response);
             }
-        }
-        ).fail(failAlert);
+        });
         $('#parent_survey').show();
         $('#adult_survey').hide();
         $('#youth_survey').hide();
@@ -96,7 +95,7 @@ $user->load_with_user_id($_GET['user']);
                 alert(response);
             }
         }
-        ).fail(failAlert);
+        );
         $('#parent_survey').hide();
         $('#adult_survey').show();
         $('#youth_survey').hide();
@@ -116,8 +115,7 @@ $user->load_with_user_id($_GET['user']);
             if (response != '') {
                 alert(response);
             }
-        }
-        ).fail(failAlert);
+        });
         $('#parent_survey').hide();
         $('#adult_survey').hide();
         $('#youth_survey').show();

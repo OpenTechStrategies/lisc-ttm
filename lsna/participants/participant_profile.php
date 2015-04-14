@@ -46,7 +46,7 @@ include "../include/datepicker.php";
 
     include "../classes/participants.php";
     $parti = new Participant();
-    $parti->load_with_participant_id($_GET['participant']);
+    $parti->load_with_participant_id($_COOKIE['participant']);
 
     if ($_GET['inst'] == 1) {
         /* loads the page at the institutional affiliations area. */

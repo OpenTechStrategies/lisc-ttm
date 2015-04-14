@@ -10,7 +10,7 @@ user_enforce_has_access($Bickerdike_id, $DataEntryAccess);
 
 include "../include/dbconnopen.php";
 $program_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['program_id']);
-$user_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $user_id_sqlsafe);
+$user_id_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $_POST['user_id']);
 $add_participant_to_program_sqlsafe = "INSERT INTO Programs_Users (
                                 Program_ID,
                                 User_ID) VALUES (

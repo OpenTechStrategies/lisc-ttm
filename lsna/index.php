@@ -98,8 +98,6 @@ include "include/datepicker.php";
                 type: document.getElementById('new_event_type').options[document.getElementById('new_event_type').selectedIndex].value
 			},
 			function (response){
-                            //document.write(response);
-				//window.location = 'program_profile.php?schedule=1';
 				document.getElementById('confirmation').innerHTML = response;
 			}
                         );
@@ -116,8 +114,6 @@ include "include/datepicker.php";
                 type: document.getElementById('new_event_type').options[document.getElementById('new_event_type').selectedIndex].value
 			},
 			function (response){
-                            //document.write(response);
-				//window.location = 'program_profile.php?schedule=1';
 				document.getElementById('confirmation').innerHTML = response;
 			}
                         );

@@ -120,7 +120,6 @@ Shows basic institution information
                             email: document.getElementById('new_email').value
                         },
                 function(response) {
-                    //document.write(response);
                     window.location = 'inst_profile.php?inst=<?php echo $inst['Inst_ID']; ?>';
                 }
                 )">Save</a></td></tr>
