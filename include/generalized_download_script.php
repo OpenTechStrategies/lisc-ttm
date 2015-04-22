@@ -1867,7 +1867,7 @@ LEFT JOIN
         $programs = array();
         foreach ($permissions as $site_id => $site_info) {
             $accesses[] = $site_id;
-            $programs[] = $site_info[1];
+            $programs[$site_id] = $site_info[1];
         }
         $get_db_id=array_search($download_list_array[$download_name]['db'], $db_array);
         $has_permission=in_array($get_db_id, $accesses);
@@ -1931,8 +1931,7 @@ LEFT JOIN
 
 
         //get program access if relevant
-        $db_key = array_search($get_db_id, $accesses);
-        $program_access = $programs[$db_key];
+        $program_access = $programs[$get_db_id];
 
         if ($program_access == 'a'){ //plain query for users with full access
             $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['query2'] . $download_list_array[$download_name]['query3'];
@@ -1955,7 +1954,6 @@ LEFT JOIN
                 }
             }
         }
-        
         $rows = mysqli_query($database_conn, $query_sqlsafe);
     if ($download_name == 'enlace_participant_dosage' || $download_name == 'enlace_participant_dosage_deid' || $download_name == 'enlace_total_dosage' || $download_name == 'enlace_total_dosage_deid'){
         include_once("../enlace/include/dosage_percentage.php");

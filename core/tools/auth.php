@@ -68,6 +68,7 @@ class User {
         $this->id = $user_id;
         $this->username = getUsernameFromId($user_id);
         $this->site_permissions = getAllSiteAccess($user_id);
+        
     }
 
     // Enforce that the user has access to this site.
@@ -168,7 +169,6 @@ class User {
     //    only have one program access per section.
     public function program_access($site) {
         $program_access_array[] = $this->site_permissions[$site][1];
-
         // note that if 'n' is in array, then the logged-in user has access
         // to no programs, and we delete the rest of the array.  The 'n'
         // takes precedence over any other entries.
@@ -193,13 +193,12 @@ class User {
             global $die_unauthorized;
             $failure_func = $die_unauthorized;
         }
-
-        if ( in_array('a', $this->program_access($site))){
+        if ( 'a' == $this->site_permissions[$site][1] ) {
             return true;
             
         }
         foreach ($program_array as $program){
-            if ( in_array($program, $this->program_access)){
+            if ( $program == $this->site_permissions[$site][1] ) {
                 return true;
             }
         }
