@@ -1194,19 +1194,35 @@ function generalized_download($download_name, $permissions){
 
         'enlace_session_attendance'=>array('db'=>'enlace', 'query'=> 
         'SELECT Participants_Programs.Participant_ID, First_Name, Last_Name, Date_Listed, Session_Name, Name, Absence_ID FROM Participants_Programs INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID= Absences.Participant_ID)',
+        'non_admin_string' => '  ',
+        'non_admin_string2' => ' AND Session_Names.Program_ID = ',
+        'query2' => ' WHERE Participants_Programs.Participant_Program_ID IS NOT NULL ',
+        'add_access' => 1,
         'titles' => array("Participant ID", "First_Name", "Last_Name", "Date_Listed", "Session_Name", "Program", "Present (NULL) or Absent (some number)")),
 
         'enlace_session_attendance_deid'=>array('db'=>'enlace', 'query'=> 
         'SELECT Participants_Programs.Participant_ID, Date_Listed, Session_Name, Name, Absence_ID FROM Participants_Programs INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID= Absences.Participant_ID)', 
+        'non_admin_string' => '  ',
+        'non_admin_string2' => ' AND Session_Names.Program_ID = ',
+        'query2' => ' WHERE Participants_Programs.Participant_Program_ID IS NOT NULL ',
+        'add_access' => 1,
         'titles' => array("Participant ID", "Date_Listed", "Session_Name", "Program", "Present (NULL) or Absent (some number)")), 
 
         'enlace_session_surveys'=>array('db'=>'enlace', 'query'=> 
 'SELECT Program_Surveys.*, Session_Name, Name FROM Program_Surveys inner join Session_Names ON Program_Surveys.Session_ID=Session_Names.Session_ID INNER JOIN Programs ON Programs.Program_ID=Session_Names.Program_ID', 
+        'non_admin_string' => '  ',
+        'non_admin_string2' => ' AND Session_Names.Program_ID = ',
+        'query2' => ' WHERE Program_Surveys.Program_Survey_ID IS NOT NULL ',
+        'add_access' => 1,
         'titles' => array("Participant_Program Link ID", "Program ID", "Question 1", "Question 2", "Question 3", "Question 4", "Question 5", "Question 6", "Question 7", "Question 8", "Question 9", "Question 10", "Question 11", "Question 12", "Question 13", "Question 14", "Question 15", "Question 16", "Date Added", "Session ID", "Session", "Program")),
 
         'enlace_sessions'=>array('db'=>'enlace', 'query'=> 
 'SELECT Session_Names.*, Name FROM Session_Names
 INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
+        'non_admin_string' => '  ',
+        'non_admin_string2' => ' AND Session_Names.Program_ID = ',
+        'query2' => ' WHERE Program_Surveys.Program_Survey_ID IS NOT NULL ',
+        'add_access' => 1,
         'titles' => array("Session ID", "Session Name", "Program  ID", "Start Date", "End Date", "Survey Due Date", "Program")),
         
         'enlace_referrals'=>array('db'=>'enlace', 'query'=> 
@@ -1232,9 +1248,17 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         "Sum of hours for this session", "Dosage percentage for this session")),
 
         'enlace_total_dosage' => array('db' => 'enlace', 'query' => 'SELECT Participant_ID, First_Name, Last_Name FROM Participants', 
+        'non_admin_string' => ' LEFT JOIN Participants_Programs on Participants.Participant_ID = Participants_Programs.Participant_ID INNER JOIN Session_Names on Participants_Programs.Program_ID = Session_Names.Session_ID ',
+        'non_admin_string2' => ' AND Session_Names.Program_ID = ',
+        'query2' => ' WHERE Participants.Participant_ID IS NOT NULL ',
+        'add_access' => 1,
         'titles' => array("Participant ID", "First Name", "Last Name", "Total Dosage Hours")),
 
         'enlace_total_dosage_deid' => array('db' => 'enlace', 'query' => 'SELECT Participant_ID FROM Participants', 
+        'non_admin_string' => ' LEFT JOIN Participants_Programs on Participants.Participant_ID = Participants_Programs.Participant_ID INNER JOIN Session_Names on Participants_Programs.Program_ID = Session_Names.Session_ID ',
+        'non_admin_string2' => ' AND Session_Names.Program_ID = ',
+        'query2' => ' WHERE Participants.Participant_ID IS NOT NULL ',
+        'add_access' => 1,
         'titles' => array("Participant ID", "Total Dosage Hours")),
 
 
@@ -1954,6 +1978,7 @@ LEFT JOIN
                 }
             }
         }
+
         $rows = mysqli_query($database_conn, $query_sqlsafe);
     if ($download_name == 'enlace_participant_dosage' || $download_name == 'enlace_participant_dosage_deid' || $download_name == 'enlace_total_dosage' || $download_name == 'enlace_total_dosage_deid'){
         include_once("../enlace/include/dosage_percentage.php");
