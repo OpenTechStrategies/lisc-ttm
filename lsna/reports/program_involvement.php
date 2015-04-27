@@ -85,28 +85,41 @@ function count_participant_types($query, $i, $index){
     include "../include/dbconnopen.php";
     $ct = mysqli_query($cnnLSNA, $query);
     while ($count = mysqli_fetch_row($ct)) {
-        //echo $count_partis[1];
-        if ($count_partis[$index] == $i) {
+        if ($count[$index] == $i) {
             $counter++;
         }
     }
     return $counter;
 }
 
+function count_participant_totals($query){
+    include "../include/dbconnopen.php";
+    $rows = mysqli_query($cnnLSNA, $query);
+    $total_number = mysqli_num_rows($rows);
+    return $total_number;
+}
+
+    function show_counted_participants($query, $counter_num, $span_id_name){
+        include "../include/dbconnopen.php";
+        $name_query = "SELECT Participants.Participant_ID, Participants.Name_First, Participants.Name_Last FROM Participants INNER JOIN ($query) AS Counter on Counter.Participant_ID = Participants.Participant_ID";
+        $result_string = "";
+        $query_result = mysqli_query($cnnLSNA, $name_query);
+        while ($result_row = mysqli_fetch_array($query_result)) {
+            $result_string .= "<br>" . $result_row['Participant_ID'] . ": " . $result_row['Name_First'] . " " . $result_row['Name_Last'];
+        }
+        $result_span = '<a href = "javascript:;" onclick = \'$("#' . $span_id_name . '_span_' . $count_programs . '").toggle();\'>' . $counter_num . '</a> <span id = "' . $span_id_name . '_span_' . $count_programs . '" class = "list_of_names">' . $result_string . '</span>';
+
+        return $result_span;
+    }
 
 
 //so here we count up the number of programs and campaigns in a while loop
 //first I'm going to get the highest number of programs/campaigns that anyone is involved in.
-$count_participants = "SELECT Participant_ID, COUNT(*) FROM Participants_Subcategories WHERE Participant_ID IS NOT NULL " . $date_query_substring . " GROUP BY Participant_ID ORDER BY COUNT(*) DESC;";
+$count_participants = "SELECT Participant_ID, COUNT(*) FROM Participants_Subcategories WHERE Participant_ID IS NOT NULL " . $date_query_substring . " GROUP BY Participant_ID ORDER BY COUNT(*) DESC";
 include "../include/dbconnopen.php";
 $ct_participants = mysqli_query($cnnLSNA, $count_participants);
 $top_num = mysqli_fetch_row($ct_participants);
 $most_programs = $top_num[1];
-$participants_array = array();
-$adults_array = array();
-$pm_array = array();
-$youth_array = array();
-$pm_children_array = array();
     for ($i = 1; $i < $most_programs + 1; $i++) {
     ?>
     <tr>
@@ -115,21 +128,11 @@ $pm_children_array = array();
         </td>
         <td>
 <?php
-    $counter_num = 0;
     $count_participants = "SELECT Participants_Subcategories.Participant_ID, Name_First, Name_Last, COUNT(*) AS Number_Involved FROM Participants_Subcategories LEFT JOIN Participants ON Participants.Participant_ID = Participants_Subcategories.Participant_ID WHERE Participant_Subcategory_ID IS NOT NULL " . $date_query_substring . " GROUP BY Participant_ID ORDER BY Number_Involved DESC";
-    include "../include/dbconnopen.php";
-    $ct_participants = mysqli_query($cnnLSNA, $count_participants);
-    while ($count_partis = mysqli_fetch_row($ct_participants)) {
-        //echo $count_partis[1];
-        if ($count_partis[3] == $i) {
-            $counter_num++;
-        }
-
-    }
+    $counter_num = count_participant_types($count_participants, $i, 3);
     /* number of people who participated in this number of programs and campaigns */
     echo show_involved_people($count_participants, $i, $counter_num, "participant");
-    $participants_array[$i] = $counter_num;
-    include "../include/dbconnclose.php";
+
 ?>
     </td>
     <td>
@@ -141,18 +144,9 @@ $pm_children_array = array();
                     ON Participants.Participant_Id=Participants_Subcategories.Participant_ID
                     WHERE (Is_Child IS NULL OR Is_Child=3 OR Is_Child=0) " . $date_query_substring .  " 
                     GROUP BY Participant_ID ORDER BY COUNT(*) DESC";
-    include "../include/dbconnopen.php";
-    $ct_adults = mysqli_query($cnnLSNA, $count_adults);
-    while ($count_partis = mysqli_fetch_row($ct_adults)) {
-        //echo $count_partis[1];
-        if ($count_partis[1] == $i) {
-            $counter_num++;
-        }
-    }
+    $counter_num = count_participant_types($count_adults, $i, 1);
     echo show_involved_people($count_adults, $i, $counter_num, "adult");
                     
-    $adults_array[$i] = $counter_num;
-    include "../include/dbconnclose.php";
 ?>
     </td>
     <td>
@@ -160,20 +154,9 @@ $pm_children_array = array();
     /* number of parent mentors who participated in this number of programs and campaigns */
     $counter_num = 0;
     $count_pms = "SELECT Participants_Subcategories.Participant_ID, COUNT(*) AS Number_Involved  FROM Participants_Subcategories INNER JOIN Participants ON Participants.Participant_Id=Participants_Subcategories.Participant_ID INNER JOIN (SELECT DISTINCT Participant_ID FROM Participants_Subcategories WHERE Subcategory_ID=19) as check_pm ON check_pm.Participant_ID=Participants_Subcategories.Participant_ID WHERE Participant_Subcategory_ID IS NOT NULL  " . $date_query_substring .  " GROUP BY check_pm.Participant_ID ORDER BY COUNT(*) DESC";
-    // echo $count_pms;
-    include "../include/dbconnopen.php";
-    $ct_pms = mysqli_query($cnnLSNA, $count_pms);
-    while ($count_partis = mysqli_fetch_row($ct_pms)) {
-        //echo $count_partis[1];
-        //$true_count=$count_partis[1]/2;
-        if ($count_partis[1] == $i) {
-            $counter_num++;
-        }
-    }
+    $counter_num = count_participant_types($count_pms, $i, 1);
     echo show_involved_people($count_pms, $i, $counter_num, "parent_mentor");
 
-    $pm_array[$i] = $counter_num;
-    include "../include/dbconnclose.php";
 ?>
     </td>
     <td>
@@ -181,17 +164,8 @@ $pm_children_array = array();
     /* number of children who participated in this number of programs and campaigns */
     $counter_num = 0;
     $count_youth = "SELECT Participants_Subcategories.Participant_ID, COUNT(*) AS Number_Involved FROM Participants_Subcategories INNER JOIN Participants ON Participants.Participant_Id=Participants_Subcategories.Participant_ID WHERE (Is_Child IS NOT NULL AND Is_Child=2) " . $date_query_substring .  " GROUP BY Participant_ID ORDER BY COUNT(*) DESC";
-    include "../include/dbconnopen.php";
-    $ct_youth = mysqli_query($cnnLSNA, $count_youth);
-    while ($count_partis = mysqli_fetch_row($ct_youth)) {
-        //echo $count_partis[1];
-        if ($count_partis[1] == $i) {
-            $counter_num++;
-        }
-    }
+    $counter_num = count_participant_types($count_youth, $i, 1);
     echo show_involved_people($count_youth, $i, $counter_num, "youth");
-    $youth_array[$i] = $counter_num;
-    include "../include/dbconnclose.php";
 ?>
     </td>
     <td>
@@ -199,73 +173,52 @@ $pm_children_array = array();
     /* number of parent mentor children who participated in this number of programs and campaigns */
     $counter_num = 0;
     //this takes account of children who might have more than one parent in the PM program
-    $count_children = "SELECT DISTINCT(Participants_Subcategories.Participant_ID), COUNT(Subcategory_ID) AS Number_Involved
-                    FROM Participants_Subcategories INNER JOIN Parent_Mentor_Children
-                    ON Parent_Mentor_Children.Child_Id=Participants_Subcategories.Participant_ID
-WHERE  " . $date_query_substring .  "
-                    GROUP BY Parent_Mentor_Children_Link_ID";
-    include "../include/dbconnopen.php";
-    $ct_youth = mysqli_query($cnnLSNA, $count_children);
-    while ($count_partis = mysqli_fetch_row($ct_youth)) {
-        //echo $count_partis[1];
-        if ($count_partis[1] == $i) {
-            $counter_num++;
-        }
-    }
+    $count_children = "SELECT DISTINCT(Participants_Subcategories.Participant_ID), COUNT(Subcategory_ID) AS Number_Involved FROM Participants_Subcategories INNER JOIN Parent_Mentor_Children ON Parent_Mentor_Children.Child_Id=Participants_Subcategories.Participant_ID WHERE  " . $date_query_substring .  " GROUP BY Parent_Mentor_Children_Link_ID";
+    $counter_num = count_participant_types($count_children, $i, 1);
     echo show_involved_people($count_children, $i, $counter_num, "pm_child");
-    $pm_children_array[$i] = $counter_num;
-    include "../include/dbconnclose.php";
 ?>
     </td>
     </tr>
 <?php
 }
+
+if ( ! isset($_POST['submit']) || isset($_POST['clear'])){
 ?>
-
-
 <tr>
 <td><span class="helptext">Total participants in the system:</span></td>
     <td>
 <?php
     $get_participants = "SELECT * FROM Participants";
-include "../include/dbconnopen.php";
-$participants = mysqli_query($cnnLSNA, $get_participants);
-$num_parti = mysqli_num_rows($participants);
-echo $num_parti;
+    echo count_participant_totals($get_participants);
 ?>
 </td>
 <td>
 <?php
-$get_adults = "SELECT * FROM Participants WHERE (Is_Child IS NULL OR Is_Child=3 OR Is_Child=0)";
-$adults = mysqli_query($cnnLSNA, $get_adults);
-$num_adults = mysqli_num_rows($adults);
-echo $num_adults;
+    $get_adults = "SELECT * FROM Participants WHERE (Is_Child IS NULL OR Is_Child=3 OR Is_Child=0)";
+    echo count_participant_totals($get_adults);
 ?>
 </td>
 <td>
 <?php
-$get_pms = "SELECT DISTINCT Participant_ID FROM Participants_Subcategories WHERE Subcategory_ID='19' " . $date_query_substring;
-$pms = mysqli_query($cnnLSNA, $get_pms);
-$num_pms = mysqli_num_rows($pms);
-echo $num_pms;
+    $get_pms = "SELECT DISTINCT Participant_ID FROM Participants_Subcategories WHERE Subcategory_ID='19' " . $date_query_substring;
+    echo count_participant_totals($get_pms);
 ?></td>
 <td>
 <?php
-$get_youth = "SELECT * FROM Participants WHERE Is_Child=2";
-$youth = mysqli_query($cnnLSNA, $get_youth);
-$num_youth = mysqli_num_rows($youth);
-echo $num_youth;
+    $get_youth = "SELECT * FROM Participants WHERE Is_Child=2";
+    echo count_participant_totals($get_youth);
 ?>
 </td>
 <td>
 <?php
-$get_pm_children = "SELECT DISTINCT Child_ID FROM Parent_Mentor_Children;";
-$pm_children = mysqli_query($cnnLSNA, $get_pm_children);
-$num_pm_children = mysqli_num_rows($pm_children);
-echo $num_pm_children;
+    $get_pm_children = "SELECT DISTINCT Child_ID FROM Parent_Mentor_Children;";
+    echo count_participant_totals($get_pm_children);
 ?>
 </td>
 </tr>
+<?php
+}
+?>
 </table>
 <br/><br/>
 
@@ -280,93 +233,66 @@ echo $num_pm_children;
 <th>Number of Youth</th>
 <th>Number of Parent Mentor's Children</th>
 </tr>
-<?php
-$get_programs = "SELECT * FROM Subcategories ORDER BY Subcategory_Name";
-include "../include/dbconnopen.php";
-$programs = mysqli_query($cnnLSNA, $get_programs);
-while ($program = mysqli_fetch_array($programs)) {
-?>
+    <?php
+        $get_programs = "SELECT * FROM Subcategories ORDER BY Subcategory_Name";
+        include "../include/dbconnopen.php";
+        $programs = mysqli_query($cnnLSNA, $get_programs);
+        while ($program = mysqli_fetch_array($programs)) {
+    ?>
 <tr>
 <!--For each subcategory (program or campaign), count the total number of people involved and then
 split them up by type of person.
 -->
-<td style="text-align:left;"><strong><?php echo $program['Subcategory_Name']; ?><strong></td>
-<td>
-<?php
-$counter_num = 0;
-$count_participants = "SELECT DISTINCT Participant_ID
-FROM Participants_Subcategories
-WHERE Subcategory_ID='" . $program['Subcategory_ID'] . "';";
-$ct_participants = mysqli_query($cnnLSNA, $count_participants);
-$count_partis = mysqli_num_rows($ct_participants);
-echo $count_partis;
-//$participants_array[$i]=$counter_num;
-?>
-</td>
-<td>
-<?php
-$counter_num = 0;
-$count_adults = "SELECT DISTINCT Participants_Subcategories.Participant_ID FROM Participants_Subcategories INNER JOIN Participants
-ON Participants.Participant_Id=Participants_Subcategories.Participant_ID
-WHERE (Is_Child IS NULL OR Is_Child=3 OR Is_Child=0)
-AND Participants_Subcategories.Subcategory_ID='" . $program['Subcategory_ID'] . "';";
-$ct_adults = mysqli_query($cnnLSNA, $count_adults);
-$count_partis = mysqli_num_rows($ct_adults);
-echo $count_partis;
-$adults_array[$i] = $counter_num;
-?>
-</td>
-<td>
-<?php
-$counter_num = 0;
-$count_pms = "SELECT COUNT(DISTINCT Participants_Subcategories.Participant_ID) FROM Participants_Subcategories
-INNER JOIN Participants ON Participants.Participant_Id=Participants_Subcategories.Participant_ID
-INNER JOIN (SELECT * FROM Participants_Subcategories WHERE Subcategory_ID=19) as check_pm ON check_pm.Participant_ID=Participants_Subcategories.Participant_ID
-WHERE Participants_Subcategories.Subcategory_ID='" . $program['Subcategory_ID'] . "';";
-// echo $count_pms;
-$ct_pms = mysqli_query($cnnLSNA, $count_pms);
-$count_partis = mysqli_fetch_row($ct_pms);
-echo $count_partis[0];
-$pm_array[$i] = $counter_num;
-?>
-</td>
-<td>
-<?php
-$counter_num = 0;
-$count_youth = "SELECT COUNT(*)
-FROM Participants_Subcategories INNER JOIN Participants
-ON Participants.Participant_Id=Participants_Subcategories.Participant_ID
-WHERE (Is_Child IS NOT NULL AND Is_Child=2)
-AND Participants_Subcategories.Subcategory_ID='" . $program['Subcategory_ID'] . "';";
-$ct_youth = mysqli_query($cnnLSNA, $count_youth);
-$count_partis = mysqli_fetch_row($ct_youth);
-echo $count_partis[0];
-$youth_array[$i] = $counter_num;
-?>
-</td>
-<td>
-<?php
-$counter_num = 0;
-//this takes account of children who might have more than one parent in the PM program
-$count_children = "SELECT COUNT(*) FROM
-Participants_Subcategories INNER JOIN Parent_Mentor_Children
-ON Parent_Mentor_Children.Child_Id=Participants_Subcategories.Participant_ID
-WHERE Participants_Subcategories.Subcategory_Id='" . $program['Subcategory_ID'] . "'";
-$ct_youth = mysqli_query($cnnLSNA, $count_children);
-$count_partis = mysqli_fetch_row($ct_youth);
-echo $count_partis[0];
-$pm_children_array[$i] = $counter_num;
-?>
-</td>
+    <td style="text-align:left;"><strong><?php echo $program['Subcategory_Name']; ?><strong></td>
+    <td>
+    <?php
+            $count_participants = "SELECT DISTINCT Participant_ID FROM Participants_Subcategories WHERE Subcategory_ID='" . $program['Subcategory_ID'] . "'" . $date_query_substring;
+            $counter_num = count_participant_totals($count_participants);
+            $span_id = "participants_" . $program['Subcategory_ID'];
+            echo show_counted_participants($count_participants, $counter_num, $span_id);
+    ?>
+    </td>
+    <td>
+    <?php
+            $count_adults = "SELECT DISTINCT Participants_Subcategories.Participant_ID FROM Participants_Subcategories INNER JOIN Participants ON Participants.Participant_Id=Participants_Subcategories.Participant_ID WHERE (Is_Child IS NULL OR Is_Child=3 OR Is_Child=0) AND Participants_Subcategories.Subcategory_ID='" . $program['Subcategory_ID'] . "'" . $date_query_substring;
+            $counter_num = count_participant_totals($count_adults);
+            $span_id = "adults_" . $program['Subcategory_ID'];
+            echo show_counted_participants($count_adults, $counter_num, $span_id);
+    ?>
+    </td>
+    <td>
+    <?php
+            $count_pms = "SELECT DISTINCT Participants_Subcategories.Participant_ID FROM Participants_Subcategories INNER JOIN Participants ON Participants.Participant_Id=Participants_Subcategories.Participant_ID INNER JOIN (SELECT * FROM Participants_Subcategories WHERE Subcategory_ID=19) as check_pm ON check_pm.Participant_ID=Participants_Subcategories.Participant_ID WHERE Participants_Subcategories.Subcategory_ID='" . $program['Subcategory_ID'] . "'" . $date_query_substring;
+            $counter_num = count_participant_totals($count_pms);
+            $span_id = "pms_" . $program['Subcategory_ID'];
+            echo show_counted_participants($count_pms, $counter_num, $span_id);
+    ?>
+    </td>
+    <td>
+    <?php
+            $count_youth = "SELECT * FROM Participants_Subcategories INNER JOIN Participants ON Participants.Participant_Id=Participants_Subcategories.Participant_ID WHERE (Is_Child IS NOT NULL AND Is_Child=2) AND Participants_Subcategories.Subcategory_ID='" . $program['Subcategory_ID'] . "'" . $date_query_substring;
+            $counter_num = count_participant_totals($count_youth);
+            $span_id = "youth_" . $program['Subcategory_ID'];
+            echo show_counted_participants($count_youth, $counter_num, $span_id);
+    ?>
+    </td>
+    <td>
+    <?php
+            $count_children = "SELECT * FROM Participants_Subcategories INNER JOIN Parent_Mentor_Children ON Parent_Mentor_Children.Child_Id=Participants_Subcategories.Participant_ID WHERE Participants_Subcategories.Subcategory_Id='" . $program['Subcategory_ID'] . "'" . $date_query_substring;
+            $counter_num = count_participant_totals($count_children);
+            $span_id = "children_" . $program['Subcategory_ID'];
+            echo show_counted_participants($count_children, $counter_num, $span_id);
+    ?>
+    </td>
 </tr>
-<?php
-}
-include "../include/dbconnclose.php";
-?>
+    <?php
+        }
+        include "../include/dbconnclose.php";
+    ?>
 </table>
 </div>
 
 
 <?php
-include "../../footer.php";
+    include "../../footer.php";
 ?>
