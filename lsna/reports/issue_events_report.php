@@ -44,7 +44,7 @@ while ($area=mysqli_fetch_row($areas)){
     echo $number_nonparticipants = mysqli_fetch_array($ytd_num_nonpart)[0];
 
 ?></b>
-<br><a href = "javascript:;" onclick = "$('#save_form_<?php echo $area[0]; ?>').toggle()">Add non-participants</a>
+<br><a href = "javascript:;" onclick = "$('#save_form_<?php echo $area[0]; ?>').toggle()">Add number of non-participants</a>
 <form method = "post" action = "add_issue_attendance.php" id = "save_form_<?php echo $area[0]; ?>" class = "save_form"">
 <input type="text" name="num_served" size = "5">
 <input type = "hidden" name = "save_number">

@@ -112,13 +112,12 @@ $get_programs_with_participation="SELECT DISTINCT(Subcategory_ID) FROM Subcatego
         <tr>
             <td class="all_projects" style="text-align:right;"><strong>All projects:</strong></td>
         <?php
-        /*probably foolish, but this assumes that some program will have someone in each type of role, so doesn't bother
-         * with adding blank tds.
+        /*probably foolish, but this assumes that some program will have someone
+         * in each type of role, so doesn't bother with adding blank tds.
          */
         $get_types_count = "SELECT Type_of_Participation, COUNT(*) FROM Subcategory_Attendance INNER JOIN Subcategory_Dates
             ON Subcategory_Attendance.Subcategory_Date=Subcategory_Dates.Wright_College_Program_Date_Id
-            WHERE Type_of_Participation IS NOT NULL AND Subcategory_Dates.Date >= '$start_date' AND Subcategory_Dates.Date <= '$end_date' GROUP BY Type_of_Participation;";
-        //echo $get_types_count;
+            WHERE Type_of_Participation IS NOT NULL " . $date_string . " GROUP BY Type_of_Participation;";
         include "../include/dbconnopen.php";
         $types_count=mysqli_query($cnnLSNA, $get_types_count);
         while ($types=mysqli_fetch_row($types_count)){
@@ -136,15 +135,15 @@ $get_programs_with_participation="SELECT DISTINCT(Subcategory_ID) FROM Subcatego
         <tr>
             <td class="all_projects" style="text-align:right;"><strong>Parent mentors in each role:</strong></td>
             <?php 
-        /*probably foolish, but this assumes that some program will have a parent mentor in each type of role, so doesn't bother
-         * with adding blank tds.
+        /*probably foolish, but this assumes that some program will have a
+         * parent mentor in each type of role, so doesn't bother with adding
+         * blank tds.
          */
         $get_types_count = "SELECT Type_of_Participation, COUNT(*) FROM Subcategory_Attendance 
 INNER JOIN (Subcategory_Dates, Participants ) ON (Subcategory_Attendance.Subcategory_Date=Subcategory_Dates.Wright_College_Program_Date_Id 
 	AND Subcategory_Attendance.Participant_ID=Participants.Participant_ID) 
 INNER JOIN Participants_Subcategories ON Participants.Participant_ID=Participants_Subcategories.Participant_ID
-WHERE Type_of_Participation IS NOT NULL AND Participants_Subcategories.Subcategory_ID=19 AND Subcategory_Dates.Date >= '$start_date' AND Subcategory_Dates.Date <= '$end_date' GROUP BY Type_of_Participation;";
-       // echo $get_types_count;
+WHERE Type_of_Participation IS NOT NULL AND Participants_Subcategories.Subcategory_ID=19  " . $date_string . " GROUP BY Type_of_Participation;";
         include "../include/dbconnopen.php";
         $types_count=mysqli_query($cnnLSNA, $get_types_count);
         while ($types=mysqli_fetch_row($types_count)){
