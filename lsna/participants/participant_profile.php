@@ -1881,7 +1881,94 @@ while ($go = mysqli_fetch_row($goals)) {
     </table>
 </td>
 </tr>
+<tr>
+ <td>
+ <h4>Services Rendered</h4>
+ <table>
 
+ <tr><th>Issue Area</th><th>Month</th><th>Year</th></tr>
+ <!-- get existing attendance -->
+ <?php
+ $get_issue_attendance="SELECT Issue_Area, Month, Year FROM Issue_Attendance LEFT JOIN Issue_Areas ON Issue_Attendance.Issue_ID=Issue_Areas.Issue_ID "
+ . "WHERE Participant_ID=$parti->participant_id";
+ //echo $get_issue_attendance;
+ include "../include/dbconnopen.php";
+ $issues=mysqli_query($cnnLSNA, $get_issue_attendance);
+ while ($iss=mysqli_fetch_row($issues)){
+ ?>
+ <tr><td><?php echo $iss[0]; ?></td>
+ <td><?php if ($iss[1]==1){ echo "January"; }
+ if ($iss[1]==2){ echo "February"; }
+ if ($iss[1]==3){ echo "March"; }
+ if ($iss[1]==4){ echo "April"; }
+ if ($iss[1]==5){ echo "May"; }
+ if ($iss[1]==6){ echo "June"; }
+ if ($iss[1]==7){ echo "July"; }
+ if ($iss[1]==8){ echo "August"; }
+ if ($iss[1]==9){ echo "September"; }
+ if ($iss[1]==10){ echo "October"; }
+ if ($iss[1]==11){ echo "November"; }
+ if ($iss[1]==12){ echo "December"; }
+
+ ?></td>
+ <td><?php echo $iss[2]; ?></td>
+ </tr>
+ <?php
+ }
+ include "../include/dbconnclose.php";
+
+ ?>
+ <tr><td><select id="issue_area">
+ <option value="">-----</option>
+ <?php
+ $get_areas="SELECT * FROM Issue_Areas";
+ include "../include/dbconnopen.php";
+ $areas=mysqli_query($cnnLSNA, $get_areas);
+while ($area=mysqli_fetch_row($areas)){
+ ?>
+ <option value="<?php echo $area[0];?>"><?php echo $area[1];?></option>
+ <?php
+ }
+ include "../include/dbconnclose.php";
+ ?>
+ </select>
+ </td><td><select id="issue_month">
+ <option value="1">January</option>
+ <option value="2">February</option>
+ <option value="3">March</option>
+ <option value="4">April</option>
+ <option value="5">May</option>
+ <option value="6">June</option>
+ <option value="7">July</option>
+ <option value="8">August</option>
+ <option value="9">September</option>
+ <option value="10">October</option>
+ <option value="11">November</option>
+ <option value="12">December</option>
+
+ </select></td> <td><select id="issue_year">
+ <option>2012</option>
+ <option>2013</option>
+ <option>2014</option>
+ <option>2015</option>
+ <option>2016</option>
+ </select></td>
+ <td><input type="button" value="Save" onclick="$.post(
+     '../reports/add_issue_attendance.php',
+        {
+          issue: document.getElementById('issue_area').value,
+                issue_month: document.getElementById('issue_month').value,
+                issue_year: document.getElementById('issue_year').value,
+                issue_person: '<?php echo $parti->participant_id; ?>'
+                },
+     function (response){
+         //document.write(response);
+         window.location='participant_profile.php';
+     })"</td></tr>
+ </table>
+ </td>
+
+</tr>
     <?php
 /* if this person is a parent mentor, create a graph that shows change over time in the surveys they have completed: */
 
