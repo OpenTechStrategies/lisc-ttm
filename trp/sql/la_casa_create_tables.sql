@@ -22,7 +22,8 @@ CREATE TABLE `Colleges`
 `College_ID` int(11) NOT NULL AUTO_INCREMENT,
 PRIMARY KEY (`College_ID`),
 `College_Name` varchar(100),
-`College_Type` varchar(100)
+`College_Type` varchar(100),
+`Selectivity` varchar(100)
 ) ENGINE=InnoDB;
 
 
@@ -51,10 +52,9 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `First_Generation_College_Student` varchar(30),
 `Persistence_Graduation` varchar(30),
 `Student_High_School` varchar(100),
-`Scholarship_Apps` int(11),
-`Scholarship_Num` int(11),
-`Scholarship_Volume` int(11),
-`Scholarships_Received` int(11),
+`Pell_Grant` int(11),
+`MAP_Grant` int(11),
+`University_Scholarship` int(11),
 `AMI` int(11),
 `Move_In_Date` date,
 `Move_Out_Date` date,
@@ -85,9 +85,8 @@ FOREIGN KEY (`Participant_ID`) REFERENCES `Participants`
 `Term` varchar(45),
 `School_Year` int(4),
 `Credits` varchar(45),
-`Loan_Applications` int(3),
-`Loan_Volume` varchar(45),
-`Loans_Received` varchar(45),
+`Subsidized_Loan` int(11),
+`Unsubsidized_Loan` int(11),
 `Major` varchar(100),
 `College_Match` varchar(30),
 `College_GPA` varchar(30),
