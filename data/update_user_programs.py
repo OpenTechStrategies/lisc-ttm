@@ -4,6 +4,8 @@ import MySQLdb as mdb
 import sys
 import csv
 
+#### @@: Should we rename Privilege_Id to Site_ID?  What's clearer?
+
 CREATE_TABLE_SQL = """
   CREATE TABLE `Users_Program_Access`(
          `Program_Access_Id` int(11) NOT NULL AUTO_INCREMENT,
@@ -11,6 +13,10 @@ CREATE_TABLE_SQL = """
          `Users_Privileges_Id` int(11),
          FOREIGN KEY (`Users_Privileges_Id`) REFERENCES `Users_Privileges`
                  (`Users_Privileges_Id`)
+                 ON DELETE CASCADE
+                 ON UPDATE CASCADE,
+         FOREIGN KEY (`Privilege_Id`) REFERENCES `Privileges`
+                 (`Privilege_Id`)
                  ON DELETE CASCADE
                  ON UPDATE CASCADE,
          `Program_Access` int(1)
@@ -28,16 +34,20 @@ def create_table(conn):
 
 
 INSERT_DATA_TEMPLATE = """
-INSERT INTO Users_Program_Access (Users_Privileges_Id, Program_Access)
-VALUES (%s, %s)"""
+INSERT INTO Users_Program_Access (Users_Privileges_Id,
+                                  Program_Access, Privilege_Id)
+VALUES (%s, %s, %s)"""
 
-# TODO
+
 def copy_over_access_data(core_conn, enlace_conn, bickerdike_conn,
                           lsna_conn, swop_conn, trp_conn):
     print("Copying over data...")
     cur = core_conn.cursor()
-    cur.execute("SELECT Users_Privileges_Id, Program_Access FROM Users_Privileges")
-    for user_priv_id, program_access in cur.fetchall():
+    cur.execute("SELECT Users_Privileges_Id, Program_Access, Privilege_Id "
+                "FROM Users_Privileges")
+    # Privilege_Id really probably should be called "site id"?
+    # Anyway, hence the mismatch with above.
+    for user_priv_id, program_access, site_id in cur.fetchall():
         if program_access == "a":
             # TODO: Finish this!
             #  ... I need to find out what "all" the values are
@@ -47,10 +57,12 @@ def copy_over_access_data(core_conn, enlace_conn, bickerdike_conn,
             # Nothing to do!
             pass
         else:
+            # TODO: This won't work if site_id == "1" (ie, all)
             cur.execute(
                 INSERT_DATA_TEMPLATE % (
                     core_conn.escape_string(user_priv_id),
-                    core_conn.escape_string(program_access)))
+                    core_conn.escape_string(program_access),
+                    core_conn.escape_string(site_id)))
         
     print("...done.")
 
