@@ -2,6 +2,7 @@
 
 import MySQLdb as mdb
 import sys
+import csv
 
 CREATE_TABLE_SQL = """
   CREATE TABLE `Users_Program_Access`(
@@ -31,9 +32,10 @@ INSERT INTO Users_Program_Access (Users_Privileges_Id, Program_Access)
 VALUES (%s, %s)"""
 
 # TODO
-def copy_over_access_data(conn):
+def copy_over_access_data(core_conn, enlace_conn, bickerdike_conn,
+                          lsna_conn, swop_conn, trp_conn):
     print("Copying over data...")
-    cur = conn.cursor()
+    cur = core_conn.cursor()
     cur.execute("SELECT Users_Privileges_Id, Program_Access FROM Users_Privileges")
     for user_priv_id, program_access in cur.fetchall():
         if program_access == "a":
@@ -47,8 +49,8 @@ def copy_over_access_data(conn):
         else:
             cur.execute(
                 INSERT_DATA_TEMPLATE % (
-                    conn.escape_string(user_priv_id),
-                    conn.escape_string(program_access)))
+                    core_conn.escape_string(user_priv_id),
+                    core_conn.escape_string(program_access)))
         
     print("...done.")
 
@@ -60,18 +62,30 @@ def drop_old_column(conn):
     print("...done.")
 
 
+def load_connection(server, user, passwd, dbname, **kwargs):
+    return mdb.connect(server, user, passwd, dbname)
+
+
 def main():
-    if len(sys.argv) != 5:
+    if len(sys.argv) != 1:
         print("Call this like:\n"
-              "  ./update_user_programs.py SERVER USERNAME PASSWD DBNAME")
+              "  ./update_user_programs.py CONNECTIONS_CSV")
         sys.exit(1)
 
-    server, user, passwd, dbname = sys.argv[1:5]
+    connections_csv = sys.argv[1]
+    dr = csv.DictReader(file(connections_csv, "r"))
+    auth_info = dict([(row['servername'], row) for row in dr])
 
-    with mdb.connect(server, user, passwd, dbname) as conn:
-        create_table(conn)
-        copy_over_access_data(conn)
-        drop_old_column(conn)
+    with load_connection(auth_info['core']) as core_conn, \
+         load_connection(auth_info['enlace']) as enlace_conn, \
+         load_connection(auth_info['bickerdike']) as bickerdike_conn, \
+         load_connection(auth_info['lsna']) as lsna_conn, \
+         load_connection(auth_info['swop']) as swop_conn, \
+         load_connection(auth_info['trp']) as trp_conn:
+        create_table(core_conn)
+        copy_over_access_data(core_conn, enlace_conn, bickerdike_conn,
+                              lsna_conn, swop_conn, trp_conn)
+        drop_old_column(core_conn)
 
 
 if __name__ == "__main__":
