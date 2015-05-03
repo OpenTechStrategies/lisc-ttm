@@ -70,11 +70,32 @@ def copy_over_access_data(core_conn, enlace_conn, bickerdike_conn,
     # Privilege_Id really probably should be called "site id"?
     # Anyway, hence the mismatch with above.
     for user_priv_id, program_access, site_id in cur.fetchall():
+        # Not great code, overly nesty, but it's a one-off script :p
         if program_access == "a":
-            # TODO: Finish this!
-            #  ... I need to find out what "all" the values are
-            pass
-        # TODO: cdonnelly, is this right?
+            if site_id == "1":
+                for this_site_id in SITES_WITH_PROGRAMS:
+                    # LSNA calls theirs
+                    if this_site_id == SITE_LSNA_ID:
+                        table_name = "Subcategories"
+                    else:
+                        table_name = "Programs"
+
+                    programs = get_all_programs_on_site(
+                        this_site_id, table_name)
+                    for program in programs:
+                        cur.execute(
+                            INSERT_DATA_TEMPLATE % (
+                                core_conn.escape_string(user_priv_id),
+                                core_conn.escape_string(program),
+                                core_conn.escape_string(this_site_id)))
+            else:
+                programs = get_all_programs_on_site(site_id)
+                for program in programs:
+                    cur.execute(
+                        INSERT_DATA_TEMPLATE % (
+                            core_conn.escape_string(user_priv_id),
+                            core_conn.escape_string(program),
+                            core_conn.escape_string(site_id)))
         elif program_access in ("n", None, ""):
             # Nothing to do!
             pass
