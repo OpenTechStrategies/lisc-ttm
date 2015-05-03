@@ -39,6 +39,18 @@ INSERT INTO Users_Program_Access (Users_Privileges_Id,
 VALUES (%s, %s, %s)"""
 
 
+def get_all_programs_on_site(conn, table_name="Programs"):
+    """
+    For users with "all" access, we need all the program ids for a site
+
+    This is stored in usually the "Programs" table, unless you're
+    LSNA, in which case it's "Subcategories"
+    """
+    cur = conn.cursor()
+    cur.execute("select Program_ID from %s" % conn.escape_string(table_name))
+    return [row[0] for row in cur.fetchall()]
+
+
 def copy_over_access_data(core_conn, enlace_conn, bickerdike_conn,
                           lsna_conn, swop_conn, trp_conn):
     print("Copying over data...")
