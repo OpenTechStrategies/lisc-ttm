@@ -51,6 +51,16 @@ def get_all_programs_on_site(conn, table_name="Programs"):
     return [row[0] for row in cur.fetchall()]
 
 
+SITE_ALL_ID = 1
+SITE_LSNA_ID = 2
+SITE_BICKERDIKE_ID = 3
+SITE_TRP_ID = 4
+SITE_SWOP_ID = 5
+SITE_ENLACE_ID = 6
+
+SITES_WITH_PROGRAMS = (SITE_LSNA_ID, SITE_BICKERDIKE_ID,
+                       SITE_TRP_ID, SITE_ENLACE_ID)
+
 def copy_over_access_data(core_conn, enlace_conn, bickerdike_conn,
                           lsna_conn, swop_conn, trp_conn):
     print("Copying over data...")
@@ -69,12 +79,23 @@ def copy_over_access_data(core_conn, enlace_conn, bickerdike_conn,
             # Nothing to do!
             pass
         else:
-            # TODO: This won't work if site_id == "1" (ie, all)
-            cur.execute(
-                INSERT_DATA_TEMPLATE % (
-                    core_conn.escape_string(user_priv_id),
-                    core_conn.escape_string(program_access),
-                    core_conn.escape_string(site_id)))
+            if site_id == "1":
+                # Gotta insert this for all relevant sites...
+                # We'll just have to assume that such a program id
+                # exists in each.  Better hope that's true!
+                for this_site_id in SITES_WITH_PROGRAMS:
+                    cur.execute(
+                        INSERT_DATA_TEMPLATE % (
+                            core_conn.escape_string(user_priv_id),
+                            core_conn.escape_string(program_access),
+                            core_conn.escape_string(this_site_id)))
+
+            else:
+                cur.execute(
+                    INSERT_DATA_TEMPLATE % (
+                        core_conn.escape_string(user_priv_id),
+                        core_conn.escape_string(program_access),
+                        core_conn.escape_string(site_id)))
         
     print("...done.")
 
