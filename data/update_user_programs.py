@@ -23,6 +23,7 @@ CREATE_TABLE_SQL = """
   ) ENGINE=InnoDB;
 """
 
+# @@: Should we also drop Privilege_Id?  I think so?
 DROP_COLUMN_SQL = "ALTER TABLE Users_Privileges DROP COLUMN Program_Access;"
 
 
