@@ -989,10 +989,13 @@ Or add a new college: <input type = "text" id = "new_college_name">
         $high_schools = mysqli_query($cnnTRP, $high_schools_id_sqlsafe);
         $high_school = mysqli_fetch_row($high_schools);
         $high_school_id = $high_school[0];
-        $la_casa_count_sqlsafe = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID = 6;";
+        $la_casa_count_sqlsafe = "SELECT * FROM Participants_Programs WHERE Program_ID = 6;";
         include "../include/dbconnopen.php";
         $lc_count = mysqli_query($cnnTRP, $la_casa_count_sqlsafe);
         $students_denominator = mysqli_num_rows($lc_count);
+        $lc_terms_count_sqlsafe = "SELECT * FROM LC_Terms";
+        $lc_terms_count = mysqli_query($cnnTRP, $lc_terms_count_sqlsafe);
+        $lc_terms_denominator = mysqli_num_rows($lc_terms_count);
 /*
 Inputs: CURSOR = result of mysqli_query() 
         REPORT_SUBJECT is the string that will be printed in the
@@ -1095,7 +1098,7 @@ Other than Race/Ethnicity, all of these reports also include an average row.
     . " </strong></td>
     <td> " . $highest_val . "</td></tr>";
     $result .= "<tr><td colspan = 2><strong> Average " . $report_subject . " </strong></td>
-<td> " . $avg_numerator/$val_denominator . " </td></tr>";
+<td> " . round($avg_numerator/$val_denominator, 2) . " </td></tr>";
     if ($is_income){
         $result .= "<tr>
         <td colspan = 2><strong> Below $50,000 Annual Income 
@@ -1246,7 +1249,7 @@ function la_casa_report_list_gen_html($cursor, $val_denominator, $ed_achievement
 <p></p>
 <table class = "inner_table">
 <caption> Household Size </caption>
-<tr><th>Household Size</th><th>Count</th><th>Percent</th></tr>
+<tr><th>Household Size</th><th>Percent</th><th>Count</th></tr>
 <?php 
         $get_household_sizes_sqlsafe = "SELECT Count(*), Household_Size FROM La_Casa_Basics GROUP BY Household_Size;";
         $household_sizes = mysqli_query($cnnTRP, $get_household_sizes_sqlsafe);
@@ -1274,7 +1277,7 @@ echo la_casa_report_high_low_gen_html($income_counts, "Household Income", $stude
 <?php 
 $get_majors_sqlsafe = "SELECT Count(*), Major FROM LC_Terms GROUP BY Major;";
 $majors = mysqli_query($cnnTRP, $get_majors_sqlsafe);
-echo la_casa_report_list_gen_html($majors, $students_denominator);
+echo la_casa_report_list_gen_html($majors, $lc_terms_denominator);
 ?>
 </table>
 <p></p>
@@ -1284,7 +1287,7 @@ echo la_casa_report_list_gen_html($majors, $students_denominator);
 <?php
 $num_linked_colleges_sqlsafe = "SELECT COUNT(*), College_Name FROM LC_Terms LEFT JOIN Colleges ON Colleges.College_ID = LC_Terms.College_ID GROUP BY College_Name;";
 $num_colleges = mysqli_query($cnnTRP, $num_linked_colleges_sqlsafe);
-echo la_casa_report_list_gen_html($num_colleges, $students_denominator);
+echo la_casa_report_list_gen_html($num_colleges, $lc_terms_denominator);
 ?>
 </table>
 <p></p>
@@ -1294,7 +1297,7 @@ echo la_casa_report_list_gen_html($num_colleges, $students_denominator);
 <?php
 $sum_of_credits_sqlsafe = "SELECT Count(*), Credit_Range FROM LC_Terms INNER JOIN (SELECT  Participant_ID, SUM(Credits) AS Credit_Range FROM LC_Terms GROUP BY Participant_ID) Result_Table ON Result_Table.Participant_ID = LC_Terms.Participant_ID GROUP BY Credit_Range;";
 $sum_credits = mysqli_query($cnnTRP, $sum_of_credits_sqlsafe);
-echo la_casa_report_high_low_gen_html($sum_credits, "Credit Accrual", $students_denominator);
+echo la_casa_report_high_low_gen_html($sum_credits, "Credit Accrual", $lc_terms_denominator);
 ?>
 </table>
 <table class = "inner_table">
@@ -1303,7 +1306,7 @@ echo la_casa_report_high_low_gen_html($sum_credits, "Credit Accrual", $students_
 <?php
 $college_gpa_sqlsafe = "SELECT Count(*), College_GPA FROM LC_Terms GROUP BY College_GPA;";
 $college_gpa = mysqli_query($cnnTRP, $college_gpa_sqlsafe);
-echo la_casa_report_high_low_gen_html($college_gpa, "College GPA", $students_denominator);
+echo la_casa_report_high_low_gen_html($college_gpa, "College GPA", $lc_terms_denominator);
 ?>
 </table>
 <table class = "inner_table">
@@ -1389,7 +1392,7 @@ echo la_casa_report_list_gen_html($first_gen, $students_denominator);
 <?php
 $college_match_list_sqlsafe = "SELECT COUNT(*), College_Match FROM LC_Terms GROUP BY College_Match";
 $college_match = mysqli_query($cnnTRP, $college_match_list_sqlsafe);
-echo la_casa_report_list_gen_html($college_match, $students_denominator);
+echo la_casa_report_list_gen_html($college_match, $lc_terms_denominator);
 ?>
 
 </table>
@@ -1400,7 +1403,7 @@ echo la_casa_report_list_gen_html($college_match, $students_denominator);
 <caption> Student Hometowns </caption>
 <tr><th> Hometown </th><th>Percent</th><th>Count</th></tr>
 <?php 
-$get_hometowns_sqlsafe = "SELECT Count(*), Student_Hometown FROM La_Casa_Basics GROUP BY Student_Hometown;";
+$get_hometowns_sqlsafe = "SELECT COUNT(*), Address_City FROM Participants INNER JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID WHERE Program_ID = 6 GROUP BY Address_City";
 $hometowns = mysqli_query($cnnTRP, $get_hometowns_sqlsafe);
 echo la_casa_report_list_gen_html($hometowns, $students_denominator);
 ?>
