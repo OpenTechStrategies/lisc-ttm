@@ -16,6 +16,7 @@ $program = mysqli_fetch_array($program_info);
         $('.attendee_list').hide();
         $('#create_and_add_participant').hide();
         $('#intern_hours').hide();
+        $('#enrollee_list').hide();
     });
 </script>
 
@@ -381,8 +382,8 @@ Or add a new college: <input type = "text" id = "new_college_name">
                         </div>
                     </div>
                     <hr>
-                    <h4>Current Program Enrollment</h4>
-                    <ul style="list-style-type:none;">
+                    <h4><a href="javascript:;" onclick = "$('#enrollee_list').toggle()">Current Program Enrollment</a></h4>
+                    <ul style="list-style-type:none;" id = "enrollee_list">
                         <?php
                         $get_participants_sqlsafe = "SELECT * FROM Participants_Programs INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID WHERE Program_ID='" . $program['Program_ID'] . "' ORDER BY Participants.Last_Name";
                         $participants = mysqli_query($cnnTRP, $get_participants_sqlsafe);
@@ -979,6 +980,36 @@ Or add a new college: <input type = "text" id = "new_college_name">
         <?php
     }
     else if ($program['Program_ID'] == 6){
+
+//handle filtering
+if ( isset($_POST['filter_submit']) ) {
+    include "../include/dbconnopen.php";
+    $term_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['term_filter']);
+    $year_filter_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['year_filter']);
+    if ($term_sqlsafe = 'Fall'){
+        $move_in_date = $_POST['year_filter'] . '-08-01';
+        $move_out_date = $_POST['year_filter'] . '-12-31';
+    }
+    elseif ($term_sqlsafe = 'Winter'){
+        $move_in_date = $_POST['year_filter'] . '-01-01';
+        $move_out_date = $_POST['year_filter'] . '-03-31';
+    }
+    elseif ($term_sqlsafe = 'Spring'){
+        $move_in_date = $_POST['year_filter'] . '-04-01';
+        $move_out_date = $_POST['year_filter'] . '-06-30';
+    }
+    elseif ($term_sqlsafe = 'Summer'){
+        $move_in_date =  $_POST['year_filter'] . '-07-01';
+        $move_out_date =  $_POST['year_filter'] . '-07-31';
+    }
+    
+    $lc_terms_string = " WHERE Term = '$term_sqlsafe' AND School_Year = '" . $_POST['year_filter'] . "'";
+    $basics_string = " WHERE Move_In_Date <= $move_in_date AND Move_Out_Date >= $move_out_date ";
+    echo "<h3> Results for " . $term_sqlsafe . " " . $_POST['year_filter'] . "</h3>";
+}
+
+
+
 //choose a year for reports:
         $year = '2014';
         $bachelors_id_sqlsafe = "SELECT Education_ID FROM Educational_Levels WHERE Education_Level_Name = 'Bachelors'";
@@ -993,7 +1024,7 @@ Or add a new college: <input type = "text" id = "new_college_name">
         include "../include/dbconnopen.php";
         $lc_count = mysqli_query($cnnTRP, $la_casa_count_sqlsafe);
         $students_denominator = mysqli_num_rows($lc_count);
-        $lc_terms_count_sqlsafe = "SELECT * FROM LC_Terms";
+        $lc_terms_count_sqlsafe = "SELECT * FROM LC_Terms " . $lc_terms_string;
         $lc_terms_count = mysqli_query($cnnTRP, $lc_terms_count_sqlsafe);
         $lc_terms_denominator = mysqli_num_rows($lc_terms_count);
 /*
@@ -1232,7 +1263,66 @@ function la_casa_report_list_gen_html($cursor, $val_denominator, $ed_achievement
         
     ?>
         <tr><td>
+<table align = "left">
+        <form action="<?php echo $_SERVER['PHP_SELF'] . "?id=6"; ?>" method="post" name="termFilter">
+<tr><th>Term: 
+        <select name = "term_filter">
+            <option value = "">-----</option>
+            <option > Fall</option>
+            <option > Winter</option>
+            <option > Spring</option>
+            <option > Summer</option>
+        </select>
+</tr>
+<tr>
+    </th><th>Year: 
+        <select name = "year_filter">
+            <option value = "">-----</option>
+            <option> 2013</option>
+            <option> 2014</option>
+            <option> 2015</option>
+            <option> 2016</option>
+            <option> 2017</option>
+        </select>
+    </th>
+</tr>
+<tr>
+    <th>
+        <input type = "submit" value = "Filter" name="filter_submit">
+    </th>
+        </form>
+</tr>
+</table>
+<p></p>
+<?php
+if ( isset($_POST['filter_submit']) ) {
+    include "../include/dbconnopen.php";
+    $term_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['term_filter']);
+    $year_filter_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['year_filter']);
+    if ($term_sqlsafe = 'Fall'){
+        $move_in_date = $_POST['year_filter'] . '-08-01';
+        $move_out_date = $_POST['year_filter'] . '-12-31';
+    }
+    elseif ($term_sqlsafe = 'Winter'){
+        $move_in_date = $_POST['year_filter'] . '-01-01';
+        $move_out_date = $_POST['year_filter'] . '-03-31';
+    }
+    elseif ($term_sqlsafe = 'Spring'){
+        $move_in_date = $_POST['year_filter'] . '-04-01';
+        $move_out_date = $_POST['year_filter'] . '-06-30';
+    }
+    elseif ($term_sqlsafe = 'Summer'){
+        $move_in_date =  $_POST['year_filter'] . '-07-01';
+        $move_out_date =  $_POST['year_filter'] . '-07-31';
+    }
+    
+    $lc_terms_string = " WHERE Term = '$term_sqlsafe' AND School_Year = '" . $_POST['year_filter'] . "'";
+    $basics_string = " WHERE Move_In_Date <= $move_in_date AND Move_Out_Date >= $move_out_date ";
+    echo "<h3> Results for " . $term_sqlsafe . " " . $_POST['year_filter'] . "</h3>";
+}
 
+?>
+ 
 <table class = "inner_table">
         <caption> Race and Ethnicity </caption>
 <tr><th>Description</th><th>Percent</th><th>Count</th></tr>
@@ -1251,7 +1341,7 @@ function la_casa_report_list_gen_html($cursor, $val_denominator, $ed_achievement
 <caption> Household Size </caption>
 <tr><th>Household Size</th><th>Percent</th><th>Count</th></tr>
 <?php 
-        $get_household_sizes_sqlsafe = "SELECT Count(*), Household_Size FROM La_Casa_Basics GROUP BY Household_Size;";
+        $get_household_sizes_sqlsafe = "SELECT Count(*), Household_Size FROM La_Casa_Basics  $basics_string GROUP BY Household_Size;";
         $household_sizes = mysqli_query($cnnTRP, $get_household_sizes_sqlsafe);
         echo la_casa_report_high_low_gen_html($household_sizes, "Household Size", $students_denominator);
 ?>
@@ -1264,7 +1354,7 @@ function la_casa_report_list_gen_html($cursor, $val_denominator, $ed_achievement
 <tr><th>Income</th><th>Percent</th><th>Count</th></tr>
 
 <?php 
-$income_sum_sqlsafe = "SELECT COUNT(*), Parent1_AGI + Parent2_AGI +  Student_AGI AS Sum_AGI FROM La_Casa_Basics GROUP BY Sum_AGI;";
+$income_sum_sqlsafe = "SELECT COUNT(*), Parent1_AGI + Parent2_AGI +  Student_AGI AS Sum_AGI FROM La_Casa_Basics $basics_string GROUP BY Sum_AGI;";
 $income_counts = mysqli_query($cnnTRP, $income_sum_sqlsafe);
 $incomeflag = true;
 echo la_casa_report_high_low_gen_html($income_counts, "Household Income", $students_denominator, $incomeflag);
@@ -1275,7 +1365,7 @@ echo la_casa_report_high_low_gen_html($income_counts, "Household Income", $stude
 <caption> Major/Program of Study </caption>
 <tr><th> Major </th><th>Percent</th><th>Count</th></tr>
 <?php 
-$get_majors_sqlsafe = "SELECT Count(*), Major FROM LC_Terms GROUP BY Major;";
+$get_majors_sqlsafe = "SELECT Count(*), Major FROM LC_Terms $lc_terms_string GROUP BY Major;";
 $majors = mysqli_query($cnnTRP, $get_majors_sqlsafe);
 echo la_casa_report_list_gen_html($majors, $lc_terms_denominator);
 ?>
@@ -1285,7 +1375,7 @@ echo la_casa_report_list_gen_html($majors, $lc_terms_denominator);
 <caption> College </caption>
 <tr><th> College Name </th><th>Percent</th><th>Count</th></tr>
 <?php
-$num_linked_colleges_sqlsafe = "SELECT COUNT(*), College_Name FROM LC_Terms LEFT JOIN Colleges ON Colleges.College_ID = LC_Terms.College_ID GROUP BY College_Name;";
+$num_linked_colleges_sqlsafe = "SELECT COUNT(*), College_Name FROM LC_Terms LEFT JOIN Colleges ON Colleges.College_ID = LC_Terms.College_ID $lc_terms_string GROUP BY College_Name;";
 $num_colleges = mysqli_query($cnnTRP, $num_linked_colleges_sqlsafe);
 echo la_casa_report_list_gen_html($num_colleges, $lc_terms_denominator);
 ?>
@@ -1295,7 +1385,7 @@ echo la_casa_report_list_gen_html($num_colleges, $lc_terms_denominator);
 <caption> Total Credit Accrual To Date </caption>
 <tr><th> Credits Completed </th><th>Percent</th><th>Count</th></tr>
 <?php
-$sum_of_credits_sqlsafe = "SELECT Count(*), Credit_Range FROM LC_Terms INNER JOIN (SELECT  Participant_ID, SUM(Credits) AS Credit_Range FROM LC_Terms GROUP BY Participant_ID) Result_Table ON Result_Table.Participant_ID = LC_Terms.Participant_ID GROUP BY Credit_Range;";
+$sum_of_credits_sqlsafe = "SELECT Count(*), Credit_Range FROM LC_Terms INNER JOIN (SELECT  Participant_ID, SUM(Credits) AS Credit_Range FROM LC_Terms GROUP BY Participant_ID) Result_Table ON Result_Table.Participant_ID = LC_Terms.Participant_ID $lc_terms_string GROUP BY Credit_Range;";
 $sum_credits = mysqli_query($cnnTRP, $sum_of_credits_sqlsafe);
 echo la_casa_report_high_low_gen_html($sum_credits, "Credit Accrual", $lc_terms_denominator);
 ?>
@@ -1304,7 +1394,7 @@ echo la_casa_report_high_low_gen_html($sum_credits, "Credit Accrual", $lc_terms_
 <caption> College GPA </caption>
 <tr><th>College GPA</th><th>Percent</th><th>Count</th></tr>
 <?php
-$college_gpa_sqlsafe = "SELECT Count(*), College_GPA FROM LC_Terms GROUP BY College_GPA;";
+$college_gpa_sqlsafe = "SELECT Count(*), College_GPA FROM LC_Terms $lc_terms_string GROUP BY College_GPA;";
 $college_gpa = mysqli_query($cnnTRP, $college_gpa_sqlsafe);
 echo la_casa_report_high_low_gen_html($college_gpa, "College GPA", $lc_terms_denominator);
 ?>
@@ -1313,7 +1403,7 @@ echo la_casa_report_high_low_gen_html($college_gpa, "College GPA", $lc_terms_den
 <caption> ACT Score </caption>
 <tr><th>Score</th><th>Percent</th><th>Count</th></tr>
 <?php
-$act_score_sqlsafe = "SELECT  Count(*), ACT_Score FROM La_Casa_Basics GROUP BY ACT_Score;";
+$act_score_sqlsafe = "SELECT  Count(*), ACT_Score FROM La_Casa_Basics $basics_string GROUP BY ACT_Score;";
 $act_score = mysqli_query($cnnTRP, $act_score_sqlsafe);
 echo la_casa_report_high_low_gen_html($act_score, "ACT Score", $students_denominator);
 
@@ -1323,7 +1413,7 @@ echo la_casa_report_high_low_gen_html($act_score, "ACT Score", $students_denomin
 <caption> High School GPA </caption>
 <tr><th>High School GPA</th><th>Percent</th><th>Count</th></tr>
 <?php
-$high_school_gpa_sqlsafe = "SELECT Count(*), High_School_GPA FROM La_Casa_Basics GROUP BY High_School_GPA;";
+$high_school_gpa_sqlsafe = "SELECT Count(*), High_School_GPA FROM La_Casa_Basics $basics_string GROUP BY High_School_GPA;";
 $high_school_gpa = mysqli_query($cnnTRP, $high_school_gpa_sqlsafe);
 echo la_casa_report_high_low_gen_html($high_school_gpa, "High School GPA", $students_denominator);
 ?>
@@ -1332,7 +1422,7 @@ echo la_casa_report_high_low_gen_html($high_school_gpa, "High School GPA", $stud
 <caption> Dependency Status </caption>
 <tr><th>Status</th><th>Percent</th><th>Count</th></tr>
 <?php
-$dependency_status_sqlsafe = "SELECT Count(*), Dependency_Status FROM La_Casa_Basics GROUP BY Dependency_Status;";
+$dependency_status_sqlsafe = "SELECT Count(*), Dependency_Status FROM La_Casa_Basics $basics_string GROUP BY Dependency_Status;";
 $dependency_status = mysqli_query($cnnTRP, $dependency_status_sqlsafe);
 echo la_casa_report_list_gen_html($dependency_status, $students_denominator);
 ?>
@@ -1381,7 +1471,7 @@ echo la_casa_report_list_gen_html($student_aspiration_counts, $students_denomina
 <caption> First Generation College Student </caption>
 <tr><th>Yes/No</th><th>Percent</th><th>Count</th></tr>
 <?php
-$first_generation_check_sqlsafe = "SELECT COUNT(*), First_Generation_College_Student FROM La_Casa_Basics GROUP BY First_Generation_College_Student";
+$first_generation_check_sqlsafe = "SELECT COUNT(*), First_Generation_College_Student FROM La_Casa_Basics $basics_string GROUP BY First_Generation_College_Student";
 $first_gen = mysqli_query($cnnTRP, $first_generation_check_sqlsafe);
 echo la_casa_report_list_gen_html($first_gen, $students_denominator);
 ?>
@@ -1390,7 +1480,7 @@ echo la_casa_report_list_gen_html($first_gen, $students_denominator);
 <caption> College Match </caption>
 <tr><th> College Match  </th><th>Percent</th><th>Count</th></tr>
 <?php
-$college_match_list_sqlsafe = "SELECT COUNT(*), College_Match FROM LC_Terms GROUP BY College_Match";
+$college_match_list_sqlsafe = "SELECT COUNT(*), College_Match FROM LC_Terms $lc_terms_string GROUP BY College_Match";
 $college_match = mysqli_query($cnnTRP, $college_match_list_sqlsafe);
 echo la_casa_report_list_gen_html($college_match, $lc_terms_denominator);
 ?>
@@ -1412,7 +1502,7 @@ echo la_casa_report_list_gen_html($hometowns, $students_denominator);
 <caption> Student High Schools </caption>
 <tr><th> High School </th><th>Percent</th><th>Count</th></tr>
 <?php 
-$get_high_schools_sqlsafe = "SELECT Count(*), Student_High_School FROM La_Casa_Basics GROUP BY Student_High_School;";
+$get_high_schools_sqlsafe = "SELECT Count(*), Student_High_School FROM La_Casa_Basics $basics_string GROUP BY Student_High_School;";
 $high_schools = mysqli_query($cnnTRP, $get_high_schools_sqlsafe);
 echo la_casa_report_list_gen_html($high_schools, $students_denominator);
 ?>

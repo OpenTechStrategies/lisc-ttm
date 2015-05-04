@@ -151,10 +151,10 @@ for row in reader:
     # these may belong in a different table, given the repetition
     term_row_begin = "( @participant_id, @college_id, '"  + row[16] + "', '" + row[19] + "', NULL, "
     term_row_end =  "', '" + row[46] + "', '" + row [47] + "')"
-    term_1 = term_row_begin + " 'Fall', '2013', '" + row[20] + "', '" + row[24] + term_row_end + ", "
-    term_2 = term_row_begin + " 'Spring', '2014', '" + row[21] + "', '" + row[25] + term_row_end + ", "
-    term_3 = term_row_begin + " 'Spring', '2013', " + " NULL, '" + row[22] + term_row_end + ", "
-    term_4 = term_row_begin + " 'Summer', '2013', " + " NULL, '" + row[23] + term_row_end + "; "
+    term_1 = term_row_begin + " 'Spring', '2013', " + " NULL, '" + row[22] + term_row_end + ", "
+    term_2 = term_row_begin + " 'Summer', '2013', " + " NULL, '" + row[23] + term_row_end + ", "
+    term_3 = term_row_begin + " 'Fall', '2013', '" + row[20] + "', '" + row[24] + term_row_end + ", "
+    term_4 = term_row_begin + " 'Spring', '2014', '" + row[21] + "', '" + row[25] + term_row_end + "; "
     term_query = term_prefix + term_1 + term_2 + term_3 + term_4
     # note that mailing address will need to be managed
     for cell in row:
