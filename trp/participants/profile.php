@@ -112,7 +112,7 @@ if ($parti['Gender'] == 'm') {
     if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
         <tr>
-            <td colspan="2"><a href="javascript:;" class="basic_info_show no_view" onclick="
+            <td colspan="2"><a href="javascript:;" class="basic_info_show" onclick="
                     $('.basic_info_show').toggle();
                     $('.basic_info_edit').toggle();
                                " style="margin-left:55px;">Edit...</a>
@@ -173,7 +173,7 @@ if ($parti['Gender'] == 'm') {
             if ($USER->has_site_access($TRP_id, $AdminAccess)){
 ?>
                 <!-- Clicking "remove" here means deleting this person's attendance at this event: -->
-                <td><a href="javascript:;" class="helptext hide_on_view" onclick="
+                <td><a href="javascript:;" class="helptext" onclick="
                         $.post(
                                 '../ajax/add_attendee.php',
                                 {
@@ -196,7 +196,7 @@ if ($parti['Gender'] == 'm') {
 if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
         <!--- add to a new event: -->
-        <tr class="no_view"><td><span class="helptext">Add to event:</span></td>
+        <tr><td><span class="helptext">Add to event:</span></td>
             <td><select id="add_to_event">
                     <option value="">-----------</option>
                     <?php
@@ -273,7 +273,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
 
         <!-- add a parent or child: -->
-        <a class="helptext no_view" href="javascript:;" onclick="
+        <a class="helptext" href="javascript:;" onclick="
                 $('.add_family').slideToggle();
            ">Add family member...</a>
         <div class="add_family">
@@ -355,7 +355,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
 
                         <!-- once a consent year has been added, we can also upload and save the form itself: -->
-                        <form id="file_upload_form" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data" class="no_view">
+                        <form id="file_upload_form" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data">
                             <input type="file" name="file" id="file" style="font-size:.7em; padding-top:4px;"/> 
                             <input type="hidden" name="person_id" value="<?php echo $parti['Participant_ID']; ?>">
                             <input type="hidden" name="year" value="<?php echo $consent[2]; ?>">
@@ -375,7 +375,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
 
-            <tr class="no_view"><!--Add new record-->
+            <tr><!--Add new record-->
                 <td><select id="school_year_consent_new">
                         <option value="">-----</option>
                         <option value="1213">2012-2013</option>
@@ -2274,7 +2274,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 
         <!-- and a dropdown menu of all programs that this participant might join. -->
         <br/><strong>Add to a new program:</strong>
-        <select id="all_programs" class="no_view">
+        <select id="all_programs">
             <option value="">-----</option>
 <?php
 $get_programs_sqlsafe = "SELECT * FROM Programs";
@@ -2287,7 +2287,7 @@ while ($prog = mysqli_fetch_row($programs)) {
 }
 include "../include/dbconnopen.php";
 ?>
-        </select><input type="button" value="Add to Program" class="no_view" onclick="$.post(
+        </select><input type="button" value="Add to Program" onclick="$.post(
                         '../ajax/add_participant_to_program.php',
                         {
                             program_id: document.getElementById('all_programs').value,

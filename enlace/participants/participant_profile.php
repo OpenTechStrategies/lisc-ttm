@@ -465,7 +465,10 @@ include "../include/dbconnclose.php";
                 <td><a href="participant_profile.php?id=<?php echo $child['Participant_ID']; ?>"><?php echo $child['First_Name'] . " " . $child['Last_Name']; ?></a></td></tr><?php
         }
         ?>
-        <tr class="no_view"><td colspan="2"><a class="search_toggle" onclick="
+<?php
+                     if ($USER->has_site_access($Enlace_id, $DataEntryAccess)){
+?>
+        <tr><td colspan="2"><a class="search_toggle" onclick="
                 $('#find_relative').toggle();
                                                "><em>Search to add a parent or child:</em></a></td></tr>
         <tr><td colspan="2"><table class="search_table" id="find_relative">
@@ -623,6 +626,9 @@ include "../include/dbconnclose.php";
                                                 }
                                                 ).fail(function() {alert('You do not have permission to perform this action.');})">
                             </table>
+<?php
+} //end access check
+?>
                     </td></tr></table></td></tr></table>
 <br/><br/>
 

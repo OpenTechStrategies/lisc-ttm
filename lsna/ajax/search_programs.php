@@ -142,8 +142,11 @@ if ($_POST['result'] == 'dropdown') {
 
                 <!--delete program or campaign: -->
 
-                <td class="all_projects hide_on_view">
-                    <input type="button" value="Delete" class="hide_on_view" onclick="
+<?php
+                     if ($USER->has_site_access($LSNA_id, $AdminAccess)){
+?>
+                <td class="all_projects">
+                    <input type="button" value="Delete" onclick="
                             var double_check = confirm('Are you sure you want to delete this element from the database?  This action cannot be undone.');
                             if (double_check) {
                                 $.post(
@@ -160,6 +163,9 @@ if ($_POST['result'] == 'dropdown') {
                             }
                            ">
                 </td>
+<?php
+                     } //end access check
+?>
             </tr>
             <?php
         }

@@ -14,10 +14,10 @@ user_enforce_has_access($TRP_id);
 <?php
     if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
-       <span class="trp_report no_view"> <a href="/trp/reports/import_event_attendance.php">Import Event Attendance</a> ||</span>
-      <span class="trp_report no_view">  <a href="/trp/reports/import_cps.php">Import CPS File</a> ||</span>
+       <span class="trp_report"> <a href="/trp/reports/import_event_attendance.php">Import Event Attendance</a> ||</span>
+      <span class="trp_report">  <a href="/trp/reports/import_cps.php">Import CPS File</a> ||</span>
 
-      <span class="trp_report no_view">  <a href="export_all.php">Export everything</a></span>
+      <span class="trp_report">  <a href="export_all.php">Export everything</a></span>
 <?php
 } // end access level check
 ?>        

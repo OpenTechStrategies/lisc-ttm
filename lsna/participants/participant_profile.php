@@ -1297,7 +1297,10 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                             ?>
                                 <!--Edit school and year right here!-->
                                 <a href="javascript:;" onclick="$('#edit_pm_year_<?php echo $yr[2] ?>').toggle();">Edit</a>
-<a href="javascript:;" class = "no_view" onclick="                           $.post(
+<?php
+                        if ($USER->has_site_access($LSNA_id, $AdminAccess)){
+?>
+<a href="javascript:;" onclick="                           $.post(
                                    '../ajax/delete_elements.php',
                                    {
                                        action: 'pm_year',
@@ -1307,6 +1310,9 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                window.location='participant_profile.php';
                            }
                            )">Delete School and Year</a>
+<?php
+                        } //end access check
+?>
                         <div id="edit_pm_year_<?php echo $yr[2] ?>" class="edit_pm_affiliation" style="font-weight: normal;">
                             <select id="edit_school_<?php echo $yr[2] ?>"><option value="">------</option>
                         <?php
@@ -1839,7 +1845,7 @@ if ($parti->child == '1') {
 <?php
                 if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
 ?>
-<a href="new_parent_mentor_survey.php"  class="no_view">Add New Parent Mentor Survey</a>
+<a href="new_parent_mentor_survey.php">Add New Parent Mentor Survey</a>
 <?php
 }
 ?>

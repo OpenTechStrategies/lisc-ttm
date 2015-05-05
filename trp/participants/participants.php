@@ -35,7 +35,7 @@ include "../include/datepicker_simple.php";
             $('#participant_search').hide();
             $('#add_participant').show();
                                                       ">
-<span class="add_new_button no_view">Add New Participant</span></a></div><br/>
+<span class="add_new_button">Add New Participant</span></a></div><br/>
 <?php
 } // end access level check
 ?>
@@ -72,8 +72,11 @@ include "../include/datepicker_simple.php";
         <!-- CPS ID is only for CPS students -->
         <tr><td><strong>CPS ID:</strong></td>
             <td><input type="text" id="cps_id_search" /></td>
+<?php
+    if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
+?>
             <td><strong>Program:</strong></td>
-            <td><select id="person_program_search" class="no_view">
+            <td><select id="person_program_search">
             <option value="">-----</option>
 <?php
 $get_programs = "SELECT * FROM Programs";
@@ -87,7 +90,9 @@ while ($prog = mysqli_fetch_row($programs)) {
 include "../include/dbconnopen.php";
 ?>
         </select></td>
-
+<?php
+    } //end access check
+?>
         </tr>
         <tr>
             <td colspan="4" style="text-align:center;"><input type="button" value="Search" onclick="

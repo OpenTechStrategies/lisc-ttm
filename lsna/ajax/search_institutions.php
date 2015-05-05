@@ -53,9 +53,12 @@ include "../include/dbconnclose.php";
                                }
                                );"
                    ><?php echo $inst['Institution_Name']; ?></a></td>
-            <td class="hide_on_view">
+<?php
+                     if ($USER->has_site_access($LSNA_id, $AdminAccess)){
+?>
+            <td >
                 <!--option to delete institutions if necessary: -->
-                <input type="button" value="Delete This Institution" class="hide_on_view" onclick="
+                <input type="button" value="Delete This Institution" onclick="
                         var double_check = confirm('Are you sure you want to delete this institution from the database?  This action cannot be undone.');
                         if (double_check) {
                             $.post(
@@ -71,7 +74,10 @@ include "../include/dbconnclose.php";
                             );
                         }
                        ">
-            </td></tr><?php
+            </td>
+<?php
+                     } //end access check
+?></tr><?php
                }
                ?>
 </table><br/>

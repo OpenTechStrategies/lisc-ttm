@@ -33,7 +33,6 @@ elseif ($_POST['action'] == 'pm_year'){
     $delete_query="DELETE FROM PM_Years WHERE PM_Year_ID='".$id_sqlsafe."'";
 }
 
-echo $delete_query;
 mysqli_query($cnnLSNA, $delete_query);
 include "../include/dbconnopen.php";
 ?>

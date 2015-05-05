@@ -23,7 +23,7 @@ include "include/datepicker_simple.php";
 <h4>Create a New Event</h4>
 	<br/>
 				
-				<table id="add_new_table"  style="margin-left:auto;margin-right:auto;font-size:.9em;" class="no_view">
+				<table id="add_new_table"  style="margin-left:auto;margin-right:auto;font-size:.9em;">
 					<tr>
 						<td><strong>Event Name:</strong></td>
 						<td><input type="text" id="event_name" /></td>

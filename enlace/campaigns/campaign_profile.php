@@ -213,7 +213,11 @@ $campaign->load_with_id($_COOKIE['campaign']);
                                     <!--
                                     Can edit or add role here too.  Saves onchange.
                                     -->
-                                    <select class="attendee_role_edit role_<?php echo $attendee['Participants_Events_ID']; ?> no_view"
+<?php
+                     if ($USER->has_site_access($Enlace_id, $DataEntryAccess)){
+?>
+
+                                    <select class="attendee_role_edit role_<?php echo $attendee['Participants_Events_ID']; ?>"
                                             id="attendee_role" onchange="$.post(
                                                                     '../ajax/add_participant.php',
                                                                     {
@@ -233,16 +237,20 @@ $campaign->load_with_id($_COOKIE['campaign']);
                                         <option value="4" <?php echo ($attendee['Role_Type'] == '4' ? 'selected="selected"' : null); ?>>Prep work</option>
                                         <option value="5" <?php echo ($attendee['Role_Type'] == '5' ? 'selected="selected"' : null); ?>>Staff</option>
                                         <option value="6" <?php echo ($attendee['Role_Type'] == '6' ? 'selected="selected"' : null); ?>>Point Person</option>
-                                    </select><a class="helptext" href="javascript:;" onclick="
+                                    </select>
+<a class="helptext" href="javascript:;" onclick="
                                                     $('.role_<?php echo $attendee['Participants_Events_ID']; ?>').toggle();
 
-                                                "><em class="no_view" >add role...</em></a><br>
+                                                "><em >add role...</em></a>
+<?php
+                     } //end access check
+?><br>
                                                 <?php
                                             }
                                             ?>
                                 <br/>
                                 <!--
-                                At some point they'll probably want a search here, instead of a dropdown of all participants.
+                                At some point they\'ll probably want a search here, instead of a dropdown of all participants.
                                 Add attendees:
                                 -->
 

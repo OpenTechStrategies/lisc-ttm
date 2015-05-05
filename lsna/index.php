@@ -23,8 +23,11 @@ include "include/datepicker.php";
 </div>
 <br/><br/>
 <!--Link to quickly add a new campaign event.-->
-<h4  class="no_view">Quick Add New Campaign Event</h4>
-<table style="margin-left:auto;margin-right:auto;font-size:.9em;" class="no_view">
+<?php
+                     if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<h4 >Quick Add New Campaign Event</h4>
+<table style="margin-left:auto;margin-right:auto;font-size:.9em;" >
 	<tr>
 		<td><strong>Event Name: </strong></td>
 		<td><input type="text" id="new_event_name" /></td>
@@ -125,6 +128,9 @@ include "include/datepicker.php";
 			</td>
 	</tr>
 </table>
+<?php
+                     } //end access check
+?>
 
 <br/><br/>
 </div>
