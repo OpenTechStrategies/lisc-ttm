@@ -35,22 +35,16 @@ $user_row = mysqli_fetch_row($query_result);
 $user_id=$user_row[0];
 $password_in_db=$user_row[1];
 $locked_value = $user_row[2];
-if ($locked_value == 1){
-    $locked = true;
-}
-// the only values should be 1 or NULL, but just in case, we unlock all users
-// that have not been explicitly locked
-else{ 
-    $locked = false;
-}
 $hash_match = $hasher->CheckPassword($password_received, $password_in_db);
+include "locked_response.php";
+$locked = lock_response($locked_value);
 
 if ($hash_match) {
-    if ($locked) {
+    if ($locked[0]) {
         $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Locked user login attempt'))";
         mysqli_query($cnnLISC, $log_call);
         // They gave the correct password, so we inform them that they've been locked out.
-        echo "This account has been locked due to lack of activity.  Please contact OTS at ttmhelp {at} opentechstrategies {dot} com or by calling (312) 857-6361 to unlock your account.";
+        echo $locked[1];
     }
     else {
         //record this login in the Log

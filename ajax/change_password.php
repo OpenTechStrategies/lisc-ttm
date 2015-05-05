@@ -17,14 +17,9 @@ $is_user = mysqli_num_rows($user);
 $user_id = $user_row[0];
 $found_pw = $user_row[1];
 $locked_value = $user_row[2];
-if ($locked_value == 1){
-    $locked = true;
-}
-// the only values should be 1 or NULL, but just in case, we unlock all users
-// that have not been explicitly locked
-else{ 
-    $locked = false;
-}
+include "locked_response.php";
+$locked = lock_response($locked_value);
+
 $cur_pw_hashed_match=$hasher->CheckPassword($current_pw, $found_pw);
 
 /*
@@ -33,8 +28,8 @@ $cur_pw_hashed_match=$hasher->CheckPassword($current_pw, $found_pw);
 if ($is_user > 0 && $cur_pw_hashed_match)
     {
         //if the user is locked, stop here
-        if ($locked) {
-            echo "This account has been locked due to lack of activity.  Please contact OTS at ttmhelp {at} opentechstrategies {dot} com or by calling (312) 857-6361 to unlock your account.";
+        if ($locked[0]) {
+            echo $locked[1];
         }
         else {
             /*if they match, then reset the password to the new password:
