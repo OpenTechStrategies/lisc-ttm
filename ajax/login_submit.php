@@ -30,40 +30,40 @@ if (! $user_exists) {
     mysqli_query($cnnLISC, $log_call);
     echo 'Please enter a valid username and password.'; // signal to caller that something here failed
 }
+else {
+    $user_row = mysqli_fetch_row($query_result);
+    $user_id=$user_row[0];
+    $password_in_db=$user_row[1];
+    $locked_value = $user_row[2];
+    $hash_match = $hasher->CheckPassword($password_received, $password_in_db);
+    include "locked_response.php";
+    $locked = lock_response($locked_value);
 
-$user_row = mysqli_fetch_row($query_result);
-$user_id=$user_row[0];
-$password_in_db=$user_row[1];
-$locked_value = $user_row[2];
-$hash_match = $hasher->CheckPassword($password_received, $password_in_db);
-include "locked_response.php";
-$locked = lock_response($locked_value);
+    if ($hash_match) {
+        if ($locked[0]) {
+            $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Locked user login attempt'))";
+            mysqli_query($cnnLISC, $log_call);
+            // They gave the correct password, so we inform them that they've been locked out.
+            echo $locked[1];
+        }
+        else {
+            //record this login in the Log
+            $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Logged In'))";
+    
+            mysqli_query($cnnLISC, $log_call);
+    
+            session_start();
+            session_regenerate_id();
 
-if ($hash_match) {
-    if ($locked[0]) {
-        $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Locked user login attempt'))";
-        mysqli_query($cnnLISC, $log_call);
-        // They gave the correct password, so we inform them that they've been locked out.
-        echo $locked[1];
+            $_SESSION['user_id'] = $user_id;
+            echo "0"; //signal to caller that log in was successful
+        }
     }
     else {
-        //record this login in the Log
-        $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Logged In'))";
-    
+        $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Failed login'))";
         mysqli_query($cnnLISC, $log_call);
-    
-        session_start();
-        session_regenerate_id();
-
-        $_SESSION['user_id'] = $user_id;
-        echo "0"; //signal to caller that log in was successful
+        echo 'Please enter a valid username and password.';
     }
 }
-else {
-    $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Failed login'))";
-    mysqli_query($cnnLISC, $log_call);
-    echo 'Please enter a valid username and password.';
-}
-
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
 ?>
