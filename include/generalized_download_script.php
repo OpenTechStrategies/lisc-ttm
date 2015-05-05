@@ -1984,6 +1984,7 @@ LEFT JOIN
         include_once("../enlace/include/dosage_percentage.php");
         include_once("../enlace/include/total_dosage_sum.php"); //only included for Enlace dosage calculation
     }
+
         // loop over the rows, outputting them
         while ($row = mysqli_fetch_row($rows)) {
             // if this is the Enlace dosage export, we need to calculate dosage
