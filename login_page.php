@@ -60,13 +60,13 @@
                             password: $('#password').val()
                         },
                         function(response) {
-                            if (response != '0') {
+                            if (response == '0') {
                                 window.location.href = '/';
                             } else {
                                 $('#ajax_loader').fadeOut('slow');
                                 $('#password').val('');
-                                $('#login_error').html('Invalid username / password');
-                                $('#login_error').slideDown('slow').delay(2000).slideUp('slow');
+                                $('#login_error').html(response);
+                                $('#login_error').slideDown('slow').delay(2000);
                                 $('#login_submit_button').fadeIn('slow');
                             }
                         }

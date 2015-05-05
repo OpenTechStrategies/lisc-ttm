@@ -1,4 +1,4 @@
-<? include "header.php"; ?>
+<?php include "header.php"; ?>
 
 <!--
 Give username and password, then enter new password twice (to prevent typos).  Sends
@@ -41,7 +41,6 @@ to another file to update the users table with the new password.
     <tr>
         <td colspan="2">
             <input type="submit" value="Submit" onclick="
-                //document.write('hii');
                    $.post(
                        '/ajax/change_password.php',
                        {
@@ -51,7 +50,6 @@ to another file to update the users table with the new password.
                            new_pw_2: document.getElementById('confirm').value
                        },
                        function (response){
-                           //document.write(response);
                            document.getElementById('show_response').innerHTML = response;
                        }
                 );
@@ -61,4 +59,4 @@ to another file to update the users table with the new password.
 </table>
           <!--  </form>-->
           <div id="show_response"></div>
-<? include "footer.php" ?>
+<?php include "footer.php" ?>
