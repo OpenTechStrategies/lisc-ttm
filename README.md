@@ -1,4 +1,4 @@
-"Test The Model" (TTM)
+"Testing The Model" (TTM)
 ======================
 
 TTM is an open source web application for managing data collected by
@@ -7,7 +7,7 @@ community organizations.
 Background
 ----------
 
-"Test The Model" (TTM) is a collaboration between five neighborhood
+"Testing The Model" (TTM) is a collaboration between five neighborhood
 organizations in Chicago and the Local Initiatives Support Corporation
 ([lisc-chicago.org](http://lisc-chicago.org)).
 
