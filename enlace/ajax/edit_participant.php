@@ -49,7 +49,7 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
         else{$block_group=$address_now[7]; }
         	
 	include "../include/dbconnopen.php";
-        $_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['name']);
+        $name_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['name']);
         $surname_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['surname']);
         $address_num_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['address_num']);
         $address_dir_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['address_dir']);
