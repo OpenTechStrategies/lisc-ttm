@@ -1826,18 +1826,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                            "><h4 style="text-align:left;margin-left:20px;background-color:#f2f2f2;padding:2px 5px;border:1px solid #696969;"><?php echo $school['Institution_Name']; ?></h4></a>
                         <div id="school_<?php echo $school['Institution_ID']; ?>_details" class="detail_expand" style="margin-left:25px;">
                             <?php
-                            $get_PMs = "SELECT * FROM Participants INNER JOIN Institutions_Participants ON Institutions_Participants.Participant_ID=Participants.Participant_ID
-                                                            INNER JOIN PM_Years ON Participant=Participant_ID AND School='" . $school['Institution_ID'] . "'
-                                                            WHERE Institutions_Participants.Institution_ID='" . $school['Institution_ID'] . "' AND Institutions_Participants.Is_PM='1'";
-                            $get_PMs = "SELECT * FROM Participants 
-                                                            INNER JOIN Institutions_Participants 
-                                                                    ON Institutions_Participants.Participant_ID=Participants.Participant_ID
-                                                            LEFT JOIN PM_Years ON (Participant=Participants.Participant_ID AND School=Institutions_Participants.Institution_ID)
-                                                                WHERE Institutions_Participants.Institution_ID='" . $school['Institution_ID'] . "'
-                                                                    AND Institutions_Participants.Is_PM='1'
-                                                                    GROUP BY Participants.Participant_ID, Year";
-                            // echo $get_PMs;
-                            // $get_PMs="SELECT * FROM Participants INNER JOIN PM_Years ON Participant=Participant_ID AND School='" . $school['Institution_ID'] . "'";
+                            $get_PMs = "SELECT * FROM Participants INNER JOIN Institutions_Participants ON Institutions_Participants.Participant_ID=Participants.Participant_ID LEFT JOIN PM_Years ON (Participant=Participants.Participant_ID AND School=Institutions_Participants.Institution_ID) WHERE Institutions_Participants.Institution_ID='" . $school['Institution_ID'] . "' AND Institutions_Participants.Is_PM='1' GROUP BY Participants.Participant_ID, Year";
                             $PMs = mysqli_query($cnnLSNA, $get_PMs);
                             while ($PM = mysqli_fetch_array($PMs)) {
                                 /* creates the list of parent mentors for this school, with links to their profiles: */

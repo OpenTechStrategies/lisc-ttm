@@ -1305,11 +1305,18 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                         ?><br>
 
                         <?php
-                        $get_years_schools = "SELECT Institution_Name, Year, PM_Year_ID, School FROM PM_Years
-                    INNER JOIN Institutions ON School=Institution_ID WHERE Participant=$parti->participant_id ORDER BY Year;";
+                        $get_years_schools = "SELECT Institution_Name, Year, PM_Year_ID, School FROM PM_Years INNER JOIN Institutions ON School=Institution_ID WHERE Participant=$parti->participant_id ORDER BY Year;";
                         include "../include/dbconnopen.php";
                         $years_schools = mysqli_query($cnnLSNA, $get_years_schools);
-                        while ($yr = mysqli_fetch_row($years_schools)) {
+                        $has_pm_years = mysqli_num_rows($years_schools);
+                        if ($has_pm_years > 0){
+                            $pm_schools_list = $years_schools;
+                        }
+                        else{
+                            $get_pm_school = "SELECT Institution_Name FROM Institutions INNER JOIN Institutions_Participants ON Institutions.Institution_ID = Institutions_Participants.Institution_ID WHERE Institutions_Participants.Is_PM = 1 AND Participant_ID = $parti->participant_id GROUP BY Institutions_Participants.Institution_ID";
+                            $pm_schools_list = mysqli_query($cnnLSNA, $get_pm_school);
+                        }
+                        while ($yr = mysqli_fetch_row($pm_schools_list)) {
                             $show_year = str_split($yr[1], 2);
                             /* school  |  school year */
                             echo $yr[0] . ' &nbsp;&nbsp;|&nbsp;&nbsp; 20', $show_year[0] . '-20' . $show_year[1];
@@ -1350,7 +1357,6 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                             <?php
                             ?>
                             <select id="edit_year_<?php echo $yr[2] ?>"><option value="">------</option>
-
                                 <option value="1011" <?php echo ($yr[1] == 1011 ? 'selected=="selected"' : null) ?>>2010-11</option>
                                 <option value="1112" <?php echo ($yr[1] == 1112 ? 'selected=="selected"' : null) ?>>2011-12</option>
                                 <option value="1213" <?php echo ($yr[1] == 1213 ? 'selected=="selected"' : null) ?>>2012-13</option>
@@ -1365,7 +1371,8 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                 {
                                     school: document.getElementById('edit_school_<?php echo $yr[2] ?>').value,
                                     year: document.getElementById('edit_year_<?php echo $yr[2] ?>').value,
-                                    id: '<?php echo $yr[2]; ?>'
+                                    id: '<?php echo $yr[2]; ?>',
+                                    person: '<?php echo $parti->participant_id; ?>',
                                 },
                         function(response) {
                             //document.write(response);
