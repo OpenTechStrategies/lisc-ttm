@@ -47,10 +47,20 @@ $ward_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['ward']);
 $phone_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['phone']);
 $school_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['school']);
 $grade_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['grade']);
-$program_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['program']);
-$campaign_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['campaign']);
+// program and campaign will now be arrays of values
+$program_sqlsafe = array();
+foreach ($_POST['program'] as $prog){
+    $program_sqlsafe[] = mysqli_real_escape_string($cnnLSNA, $prog);
+}
+$campaign_sqlsafe = array();
+foreach ($_POST['campaign'] as $camp){
+    $campaign_sqlsafe[] = mysqli_real_escape_string($cnnLSNA, $camp);
+}
+$event_sqlsafe = array();
+foreach ($_POST['event'] as $ev){
+    $event_sqlsafe[] = mysqli_real_escape_string($cnnLSNA, $ev);
+}
 $institution_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['institution']);
-$event_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['event']);
 $year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['year']);
 $consent_2013_14_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['consent_2013_14']);
 $consent_2014_15_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['consent_2014_15']);
@@ -124,20 +134,43 @@ if ($_POST['grade'] == '') {
 if ($_POST['program'] == '' && $_POST['campaign'] == '') {
     $subcategory_join = "";
 }
-if ($_POST['program'] == '') {
+if (!$_POST['program']) { // need to check for an empty array, not empty string
     $program = "";
 } else {
     $subcategory_join = " INNER JOIN Participants_Subcategories ON Participants.Participant_ID=
     Participants_Subcategories.Participant_ID ";
-    $program = " AND Participants_Subcategories.Subcategory_ID='" . $program_sqlsafe . "'";
+    $program = " AND ( ";
+    $first_item = 0;
+    foreach ($program_sqlsafe as $progr){
+        if ($first_item == 0){
+            $program .= "  Participants_Subcategories.Subcategory_ID='" . $progr . "' ";
+        }
+        else{
+         $program .= " OR Participants_Subcategories.Subcategory_ID='" . $progr . "' ";
+        }
+        $first_item++;
+    }
+    $program .= " ) ";
 }
-if ($_POST['campaign'] == '') {
+if (!$_POST['campaign']) {
     $campaign = "";
 } else {
     $subcategory_join = " INNER JOIN Participants_Subcategories ON Participants.Participant_ID=
-    Participants_Subcategories.Participant_ID ";
-    $campaign = " AND Participants_Subcategories.Subcategory_ID='" . $campaign_sqlsafe . "'";
-}
+Participants_Subcategories.Participant_ID ";
+    $campaign = " AND ( ";
+    $first_campaign = 0;
+    foreach ($campaign_sqlsafe as $campa){
+        if ($first_campaign == 0){
+         $campaign .= " Participants_Subcategories.Subcategory_ID='" . $campa . "' ";
+        }
+        else{
+         $campaign .= " OR Participants_Subcategories.Subcategory_ID='" . $campa . "' ";
+        }
+        $first_campaign++;
+    }
+    $campaign .= " ) ";
+
+    }
 if ($_POST['institution'] == '') {
     $institution_join = "";
     $institution = "";
@@ -146,14 +179,26 @@ if ($_POST['institution'] == '') {
     Institutions_Participants.Participant_ID ";
     $institution = " AND Institution_ID='" . $institution_sqlsafe . "'";
 }
-if ($_POST['event'] == '') {
+if (!$_POST['event']) {
     $event_join = "";
     $event = "";
 } else {
     $event_join = " INNER JOIN Subcategory_Attendance ON Participants.Participant_ID=
     Subcategory_Attendance.Participant_ID LEFT JOIN Subcategory_Dates
 ON Subcategory_Date=Wright_College_Program_Date_ID ";
-    $event = " AND Wright_College_Program_Date_ID='" . $event_sqlsafe . "'";
+    $event = " AND ( ";
+    $first_event = 0;
+    foreach ($event_sqlsafe as $evn){
+        if ($first_event == 0){
+         $event .= " Wright_College_Program_Date_ID = '" . $evn . "' ";
+        }
+        else{
+         $event .= " OR Wright_College_Program_Date_ID = '" . $evn . "' ";
+        }
+        $first_event++;
+    }
+    $event .= " ) ";
+
 }
 if ($_POST['pm'] == 1) {
     $pm_join = " LEFT JOIN Participants_Subcategories AS PS_left ON Participants.Participant_ID=PS_left.Participant_ID ";
@@ -209,8 +254,6 @@ $uncertain_search_query = "SELECT * FROM Participants " . $role_join . $pm_join 
   Participants_Subcategories
   ON (Participants.Participant_Id=Participants_Subcategories.Participant_ID AND Subcategory_ID='19')
   WHERE Participant_Subcategory_ID IS NULL;"; */
-
-//echo $uncertain_search_query;
 
 include "../include/dbconnopen.php";
 $results = mysqli_query($cnnLSNA, $uncertain_search_query);

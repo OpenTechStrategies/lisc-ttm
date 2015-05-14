@@ -33,9 +33,10 @@ $person_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['person']);
 if ($_POST['add_to_parent'] == 1) {
     /* adding a parent/child link where the initializing participant is the parent and the child needs to be added
      * to the database.
+     * Give the child the parent's contact information.
      */
     
-    $insert_person = "INSERT INTO Participants (Name_First, Name_Last) VALUES ('" . $first_name_sqlsafe . "', '" . $last_name_sqlsafe . "')";
+    $insert_person = "INSERT INTO Participants (Name_First, Name_Last,  Address_Street_Name, Address_Street_Num, Address_Street_Direction, Address_Street_Type, Address_City, Address_State, Address_Zip, Block_Group, Ward, Phone_Day, Phone_Evening )  SELECT '" . $first_name_sqlsafe . "', '" . $last_name_sqlsafe . "', Address_Street_Name, Address_Street_Num, Address_Street_Direction, Address_Street_Type, Address_City, Address_State, Address_Zip, Block_Group, Ward, Phone_Day, Phone_Evening FROM Participants WHERE Participant_ID = $parent_sqlsafe";
     echo $insert_person;
     mysqli_query($cnnLSNA, $insert_person);
     $id = mysqli_insert_id($cnnLSNA);

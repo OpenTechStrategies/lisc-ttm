@@ -594,6 +594,8 @@ a.report_tab {
 
 table.program_involvement_table {
 	border-collapse:collapse;
+        margin-left: auto;
+        margin-right: auto;
 }
 
 table.program_involvement_table th{
@@ -604,6 +606,7 @@ table.program_involvement_table th{
 table.program_involvement_table td {
 	border: 1px solid gray;
 	text-align:right;
+        padding: 3px 5px;
 }
 
 table.program_involvement_table td strong{

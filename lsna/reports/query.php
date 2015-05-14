@@ -26,6 +26,22 @@ user_enforce_has_access($LSNA_id);
 include "../../header.php";
 include "../header.php";
 ?>
+<script type="text/javascript">
+        $(document).ready(function() {
+            $('#show_campaign_checkboxes').hide();
+            $('#show_program_checkboxes').hide();
+            $('#show_event_checkboxes').hide();
+            $('#program_select_all').click(function () {
+                $('.program_checkbox').prop('checked', this.checked);
+            });
+            $('#campaign_select_all').click(function () {
+                $('.campaign_checkbox').prop('checked', this.checked);
+            });
+            $('#event_select_all').click(function () {
+                $('.event_checkbox').prop('checked', this.checked);
+            });
+        });
+</script>
 <!--Query search for participants, modeled on SWOP's query report. -->
 <h4>Search All Participants</h4>
 <table class="search_table">
@@ -145,35 +161,69 @@ include "../header.php";
 	</tr>
         <tr>
             <td class="all_projects"><strong>Program Involved In:</strong></td>
-            <td class="all_projects"><select id="program_chosen"><option value="">------</option>
+            <td class="all_projects">
     <?php
     $get_schools = "SELECT * FROM Subcategories WHERE Campaign_or_Program='Program' ORDER BY Subcategory_Name";
     include "../include/dbconnopen.php";
     $programs = mysqli_query($cnnLSNA, $get_schools);
+?>
+<a href="javascript:;" onclick = "$('#show_program_checkboxes').toggle();">Show programs</a>
+<table id = "show_program_checkboxes">
+<tr>
+<td>
+<label for="program_list">Select all:</label>
+</td>
+<td>
+<input type="checkbox"  id="program_select_all"  />
+</td>
+</tr>
+<?php
     while ($program = mysqli_fetch_array($programs)){
         ?>
-    <option value="<?php echo $program['Subcategory_ID'];?>"><?php echo $program['Subcategory_Name'];?></option>
-            <?php
-    }
-    include "../include/dbconnclose.php";
-    ?>
-    
-</select></td>
+<tr>
+<td>
+<label for="program_list"><?php echo $program['Subcategory_Name'];?>:</label>
+</td>
+<td>
+<input type="checkbox" name = "programs[]"  id="program_list" class = "program_checkbox" value="<?php echo $program['Subcategory_ID'];?>" />
+</td>
+</tr>
+<?php
+}
+?>
+</table>
+</td>
             <td class="all_projects"><strong>Campaign Involved In:</strong></td>
-            <td class="all_projects"><select id="campaign_chosen"><option value="">------</option>
+            <td class="all_projects">
+<a href="javascript:;" onclick = "$('#show_campaign_checkboxes').toggle();">Show campaigns</a>
+<table id = "show_campaign_checkboxes">
+<tr>
+<td>
+<label for="campaign_list">Select all:</label>
+</td>
+<td>
+<input type="checkbox"  id="campaign_select_all"  />
+</td>
+</tr>
     <?php
     $get_schools = "SELECT * FROM Subcategories WHERE Campaign_or_Program='Campaign' ORDER BY Subcategory_Name";
     include "../include/dbconnopen.php";
     $programs = mysqli_query($cnnLSNA, $get_schools);
     while ($program = mysqli_fetch_array($programs)){
-        ?>
-    <option value="<?php echo $program['Subcategory_ID'];?>"><?php echo $program['Subcategory_Name'];?></option>
-            <?php
-    }
-    include "../include/dbconnclose.php";
-    ?>
-    
-</select></td>
+?>
+<tr>
+<td>
+<label for="campaign_list"><?php echo $program['Subcategory_Name'];?>:</label>
+</td>
+<td>
+<input type="checkbox" name = "campaigns[]"  id="campaign_list" class = "campaign_checkbox" value="<?php echo $program['Subcategory_ID'];?>" />
+</td>
+</tr>
+<?php
+}
+?>
+</table>
+</td>
         </tr>
         <tr>
             <td class="all_projects"><strong>Affiliated Institution:</strong></td>
@@ -189,25 +239,44 @@ include "../header.php";
     }
     include "../include/dbconnclose.php";
     ?>
-</select></td>
+</td>
             <td class="all_projects"><strong>Event Attended:</strong></td>
-            <td class="all_projects"><select id="event_search"><option value="">------</option>
+            <td class="all_projects">
     <?php
     $get_schools = "SELECT * FROM Subcategory_Dates INNER JOIN Subcategories ON Subcategory_Dates.Subcategory_ID=
 Subcategories.Subcategory_ID
 WHERE Subcategories.Campaign_or_Program='Campaign';";
     include "../include/dbconnopen.php";
     $programs = mysqli_query($cnnLSNA, $get_schools);
+?>
+<a href="javascript:;" onclick = "$('#show_event_checkboxes').toggle();">Show events</a>
+<table id = "show_event_checkboxes">
+<tr>
+<td>
+<label for="event_list">Select all:</label>
+</td>
+<td>
+<input type="checkbox"  id="event_select_all"  />
+</td>
+</tr>
+<?php
     while ($program = mysqli_fetch_array($programs)){
         ?>
-    <option value="<?php echo $program['Wright_College_Program_Date_ID'];?>"><?php echo $program['Date'] . ": " . $program['Activity_Name'] . " (" . 
-        $program['Subcategory_Name'] . ")";?></option>
+<tr>
+<td>
+<label for="event_list"><?php echo $program['Date'] . ": " . $program['Activity_Name'] . " (" .
+$program['Subcategory_Name'] . ")";?></label>
+</td>
+<td>
+<input type="checkbox" name = "events[]"  id="event_list" class = "event_checkbox" value="<?php echo $program['Wright_College_Program_Date_ID']?>" />
+</td>
+</tr>
             <?php
     }
     include "../include/dbconnclose.php";
     ?>
-    
-</select></td>
+    </table>
+</td>
         </tr>
         <tr><td class="all_projects"><strong>Is Parent Mentor:</strong></td><td class="all_projects"><select id="pm_check"><option value="">-----</option>
                     <option value="1">Yes</option>
@@ -320,8 +389,34 @@ WHERE Subcategories.Campaign_or_Program='Campaign';";
                             if (document.getElementById('include_evening_phone').checked==true){ var include_evening_phone=1; } else{ var include_evening_phone=0;}
                             if (document.getElementById('include_languages_spoken').checked==true){ var include_languages_spoken=1; } else{ var include_languages_spoken=0;}
                             if (document.getElementById('include_email').checked==true){ var include_email=1; } else{ var include_email=0;}
-        
-                            $.post(
+var programs = document.getElementsByName('programs[]');
+var program_array = new Array();
+var program_array_key = 0;
+for (var k = 0; k < programs.length; k++) {
+    if (programs[k].checked == true) {
+        program_array[program_array_key] = programs[k].value;
+        program_array_key++;
+    }
+}
+var campaigns = document.getElementsByName('campaigns[]');
+var campaign_array = new Array();
+var campaign_array_key = 0;
+for (var k = 0; k < campaigns.length; k++) {
+if (campaigns[k].checked == true) {
+campaign_array[campaign_array_key] = campaigns[k].value;
+campaign_array_key++;
+}
+}
+var events = document.getElementsByName('events[]');
+var event_array = new Array();
+var event_array_key = 0;
+for (var k = 0; k < events.length; k++) {
+if (events[k].checked == true) {
+event_array[event_array_key] = events[k].value;
+event_array_key++;
+}
+}
+                          $.post(
                                 '/lsna/reports/individual_search.php',
                                 {
                                     first: document.getElementById('first_name').value,
@@ -335,10 +430,10 @@ WHERE Subcategories.Campaign_or_Program='Campaign';";
                                     school: document.getElementById('school_search').value,
                                     dob: document.getElementById('dob').value,
                                     grade: document.getElementById('grade').value,
-                                    program: document.getElementById('program_chosen').value,
-                                    campaign: document.getElementById('campaign_chosen').value,
+                                    program: program_array,
+                                    campaign: campaign_array,
                                     institution: document.getElementById('inst_search').value,
-                                    event: document.getElementById('event_search').value,
+                                    event: event_array,
                                     pm: document.getElementById('pm_check').value,
                                     year: document.getElementById('search_year').value,
                                     consent_2013_14: document.getElementById('consent_2013_14').value,
