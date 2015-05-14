@@ -1309,17 +1309,29 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                         include "../include/dbconnopen.php";
                         $years_schools = mysqli_query($cnnLSNA, $get_years_schools);
                         $has_pm_years = mysqli_num_rows($years_schools);
-                        if ($has_pm_years > 0){
-                            $pm_schools_list = $years_schools;
+                        $get_pm_school = "SELECT Institution_Name, NULL, NULL, Institutions_Participants.Institution_ID FROM Institutions INNER JOIN Institutions_Participants ON Institutions.Institution_ID = Institutions_Participants.Institution_ID WHERE Institutions_Participants.Is_PM = 1 AND Participant_ID = $parti->participant_id GROUP BY Institutions_Participants.Institution_ID";
+                        $pm_schools_list = mysqli_query($cnnLSNA, $get_pm_school);
+                        $total_school_list = array();
+                        $school_ids = array();
+                        while ($pm_schools = mysqli_fetch_row($years_schools)){
+                            $school_ids[] = $pm_schools[3];
+                            $total_school_list[] = $pm_schools;
                         }
-                        else{
-                            $get_pm_school = "SELECT Institution_Name FROM Institutions INNER JOIN Institutions_Participants ON Institutions.Institution_ID = Institutions_Participants.Institution_ID WHERE Institutions_Participants.Is_PM = 1 AND Participant_ID = $parti->participant_id GROUP BY Institutions_Participants.Institution_ID";
-                            $pm_schools_list = mysqli_query($cnnLSNA, $get_pm_school);
+                        while ($pm_schools = mysqli_fetch_row($pm_schools_list)){
+                            if (! in_array($pm_schools[3], $school_ids)){
+                                $school_ids[] = $pm_schools[3];
+                                $total_school_list[] = $pm_schools;
+                            }
                         }
-                        while ($yr = mysqli_fetch_row($pm_schools_list)) {
+                        foreach ( $total_school_list as $yr) {
                             $show_year = str_split($yr[1], 2);
                             /* school  |  school year */
-                            echo $yr[0] . ' &nbsp;&nbsp;|&nbsp;&nbsp; 20', $show_year[0] . '-20' . $show_year[1];
+                            if ($show_year[1]) {
+                                echo $yr[0] . ' &nbsp;&nbsp;|&nbsp;&nbsp; 20', $show_year[0] . '-20' . $show_year[1];
+                            }
+                            else {
+                                echo $yr[0];
+                            }
                             ?>
                                 <!--Edit school and year right here!-->
                                 <a href="javascript:;" onclick="$('#edit_pm_year_<?php echo $yr[2] ?>').toggle();">Edit</a>
