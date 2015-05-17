@@ -86,7 +86,7 @@ def load_connection(server, user, passwd, dbname, **kwargs):
 
 
 def main():
-    if len(sys.argv) != 1:
+    if len(sys.argv) != 2:
         print("Call this like:\n"
               "  ./update_user_programs.py CONNECTIONS_CSV")
         sys.exit(1)
