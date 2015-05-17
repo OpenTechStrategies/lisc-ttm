@@ -4,8 +4,6 @@ import MySQLdb as mdb
 import sys
 import csv
 
-#### @@: Should we rename Privilege_Id to Site_ID?  What's clearer?
-
 CREATE_TABLE_SQL = """
   CREATE TABLE `Users_Program_Access`(
          `Program_Access_Id` int(11) NOT NULL AUTO_INCREMENT,
@@ -13,10 +11,6 @@ CREATE_TABLE_SQL = """
          `Users_Privileges_Id` int(11),
          FOREIGN KEY (`Users_Privileges_Id`) REFERENCES `Users_Privileges`
                  (`Users_Privileges_Id`)
-                 ON DELETE CASCADE
-                 ON UPDATE CASCADE,
-         FOREIGN KEY (`Privilege_Id`) REFERENCES `Privileges`
-                 (`Privilege_Id`)
                  ON DELETE CASCADE
                  ON UPDATE CASCADE,
          `Program_Access` int(1)
@@ -35,9 +29,8 @@ def create_table(conn):
 
 
 INSERT_DATA_TEMPLATE = """
-INSERT INTO Users_Program_Access (Users_Privileges_Id,
-                                  Program_Access, Privilege_Id)
-VALUES (%s, %s, %s)"""
+INSERT INTO Users_Program_Access (Users_Privileges_Id, Program_Access)
+VALUES (%s, %s)"""
 
 
 def get_all_programs_on_site(conn, table_name="Programs"):
@@ -52,16 +45,6 @@ def get_all_programs_on_site(conn, table_name="Programs"):
     return [row[0] for row in cur.fetchall()]
 
 
-SITE_ALL_ID = 1
-SITE_LSNA_ID = 2
-SITE_BICKERDIKE_ID = 3
-SITE_TRP_ID = 4
-SITE_SWOP_ID = 5
-SITE_ENLACE_ID = 6
-
-SITES_WITH_PROGRAMS = (SITE_LSNA_ID, SITE_BICKERDIKE_ID,
-                       SITE_TRP_ID, SITE_ENLACE_ID)
-
 def copy_over_access_data(core_conn, enlace_conn, bickerdike_conn,
                           lsna_conn, swop_conn, trp_conn):
     print("Copying over data...")
@@ -73,51 +56,20 @@ def copy_over_access_data(core_conn, enlace_conn, bickerdike_conn,
     for user_priv_id, program_access, site_id in cur.fetchall():
         # Not great code, overly nesty, but it's a one-off script :p
         if program_access == "a":
-            if site_id == "1":
-                for this_site_id in SITES_WITH_PROGRAMS:
-                    # LSNA calls theirs
-                    if this_site_id == SITE_LSNA_ID:
-                        table_name = "Subcategories"
-                    else:
-                        table_name = "Programs"
-
-                    programs = get_all_programs_on_site(
-                        this_site_id, table_name)
-                    for program in programs:
-                        cur.execute(
-                            INSERT_DATA_TEMPLATE % (
-                                core_conn.escape_string(user_priv_id),
-                                core_conn.escape_string(program),
-                                core_conn.escape_string(this_site_id)))
-            else:
-                programs = get_all_programs_on_site(site_id)
-                for program in programs:
-                    cur.execute(
-                        INSERT_DATA_TEMPLATE % (
-                            core_conn.escape_string(user_priv_id),
-                            core_conn.escape_string(program),
-                            core_conn.escape_string(site_id)))
+            programs = get_all_programs_on_site(site_id)
+            for program in programs:
+                cur.execute(
+                    INSERT_DATA_TEMPLATE % (
+                        core_conn.escape_string(user_priv_id),
+                        core_conn.escape_string(program)))
         elif program_access in ("n", None, ""):
             # Nothing to do!
             pass
         else:
-            if site_id == "1":
-                # Gotta insert this for all relevant sites...
-                # We'll just have to assume that such a program id
-                # exists in each.  Better hope that's true!
-                for this_site_id in SITES_WITH_PROGRAMS:
-                    cur.execute(
-                        INSERT_DATA_TEMPLATE % (
-                            core_conn.escape_string(user_priv_id),
-                            core_conn.escape_string(program_access),
-                            core_conn.escape_string(this_site_id)))
-
-            else:
-                cur.execute(
-                    INSERT_DATA_TEMPLATE % (
-                        core_conn.escape_string(user_priv_id),
-                        core_conn.escape_string(program_access),
-                        core_conn.escape_string(site_id)))
+            cur.execute(
+                INSERT_DATA_TEMPLATE % (
+                    core_conn.escape_string(user_priv_id),
+                    core_conn.escape_string(program_access)))
         
     print("...done.")
 
