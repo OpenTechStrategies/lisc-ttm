@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import MySQLdb as mdb
 import sys
 import csv
@@ -21,9 +23,8 @@ CREATE_TABLE_SQL = """
 DROP_COLUMN_SQL = "ALTER TABLE Users_Privileges DROP COLUMN Program_Access;"
 
 
-def create_table(conn):
+def create_table(cur):
     print("Creating new table...")
-    cur = conn.cursor()
     cur.execute(CREATE_TABLE_SQL)
     print("...done.")
 
@@ -33,50 +34,64 @@ INSERT INTO Users_Program_Access (Users_Privileges_Id, Program_Access)
 VALUES (%s, %s)"""
 
 
-def get_all_programs_on_site(conn, table_name="Programs"):
+def get_all_programs_on_site(cur, table_name="Programs"):
     """
     For users with "all" access, we need all the program ids for a site
 
     This is stored in usually the "Programs" table, unless you're
     LSNA, in which case it's "Subcategories"
     """
-    cur = conn.cursor()
-    cur.execute("select Program_ID from %s" % conn.escape_string(table_name))
+    import pdb
+    pdb.set_trace()
+    cur.execute("select Program_ID from %s" % table_name)
     return [row[0] for row in cur.fetchall()]
 
 
-def copy_over_access_data(core_conn, enlace_conn, bickerdike_conn,
-                          lsna_conn, swop_conn, trp_conn):
+def copy_over_access_data(core_cur, enlace_cur, bickerdike_cur,
+                          lsna_cur, swop_cur, trp_cur):
+    conn_map = {
+        2: lsna_cur,
+        3: bickerdike_cur,
+        4: trp_cur,
+        5: swop_cur,
+        6: enlace_cur,
+    }
+
     print("Copying over data...")
-    cur = core_conn.cursor()
-    cur.execute("SELECT Users_Privileges_Id, Program_Access, Privilege_Id "
+    # cur = core_cur.cursor()
+    core_cur.execute("SELECT Users_Privileges_Id, Program_Access, Privilege_Id "
                 "FROM Users_Privileges")
     # Privilege_Id really probably should be called "site id"?
     # Anyway, hence the mismatch with above.
-    for user_priv_id, program_access, site_id in cur.fetchall():
+    for user_priv_id, program_access, site_id in core_cur.fetchall():
         # Not great code, overly nesty, but it's a one-off script :p
         if program_access == "a":
-            programs = get_all_programs_on_site(site_id)
+            table_name = "Programs"
+            # LSNA has a different name for that table...
+            if site_id == 2:
+                table_name = "Subcategories"
+            programs = get_all_programs_on_site(
+                conn_map[int(site_id)], table_name)
             for program in programs:
-                cur.execute(
-                    INSERT_DATA_TEMPLATE % (
-                        core_conn.escape_string(user_priv_id),
-                        core_conn.escape_string(program)))
+                core_cur.execute(
+                    INSERT_DATA_TEMPLATE, (
+                        user_priv_id,
+                        program))
         elif program_access in ("n", None, ""):
             # Nothing to do!
             pass
         else:
-            cur.execute(
-                INSERT_DATA_TEMPLATE % (
-                    core_conn.escape_string(user_priv_id),
-                    core_conn.escape_string(program_access)))
+            core_cur.execute(
+                INSERT_DATA_TEMPLATE,
+                (user_priv_id,
+                 program_access))
         
     print("...done.")
 
 
-def drop_old_column(conn):
+def drop_old_column(cur):
     print("Dropping column from the old table...")
-    cur = conn.cursor()
+    # cur = cur.cursor()
     cur.execute(DROP_COLUMN_SQL)
     print("...done.")
 
@@ -95,12 +110,12 @@ def main():
     dr = csv.DictReader(file(connections_csv, "r"))
     auth_info = dict([(row['servername'], row) for row in dr])
 
-    with load_connection(auth_info['core']) as core_conn, \
-         load_connection(auth_info['enlace']) as enlace_conn, \
-         load_connection(auth_info['bickerdike']) as bickerdike_conn, \
-         load_connection(auth_info['lsna']) as lsna_conn, \
-         load_connection(auth_info['swop']) as swop_conn, \
-         load_connection(auth_info['trp']) as trp_conn:
+    with load_connection(**auth_info['core']) as core_conn, \
+         load_connection(**auth_info['enlace']) as enlace_conn, \
+         load_connection(**auth_info['bickerdike']) as bickerdike_conn, \
+         load_connection(**auth_info['lsna']) as lsna_conn, \
+         load_connection(**auth_info['swop']) as swop_conn, \
+         load_connection(**auth_info['trp']) as trp_conn:
         create_table(core_conn)
         copy_over_access_data(core_conn, enlace_conn, bickerdike_conn,
                               lsna_conn, swop_conn, trp_conn)
