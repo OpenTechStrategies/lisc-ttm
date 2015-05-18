@@ -190,7 +190,7 @@ elseif ($_POST['action'] == 'drop') {
     include "../include/dbconnopen.php";
     $link_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['link_id']);
 
-    $drop_from_program = "UPDATE Participants_Programs SET Date_Dropped='" . date('Y-m-d') . "' WHERE Participant_Program_ID='" . $link_id . "'";
+    $drop_from_program = "UPDATE Participants_Programs SET Date_Dropped='" . date('Y-m-d') . "' WHERE Participant_Program_ID='" . $link_id_sqlsafe . "'";
     echo $drop_from_program;
     mysqli_query($cnnEnlace, $drop_from_program);
     include "../include/dbconnclose.php";
