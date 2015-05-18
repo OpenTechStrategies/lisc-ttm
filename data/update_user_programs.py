@@ -42,8 +42,6 @@ def get_all_programs_on_site(cur, table_name="Programs",
     This is stored in usually the "Programs" table, unless you're
     LSNA, in which case it's "Subcategories"
     """
-    import pdb
-    pdb.set_trace()
     cur.execute("select %s from %s" % (column_name, table_name))
     return [row[0] for row in cur.fetchall()]
 
