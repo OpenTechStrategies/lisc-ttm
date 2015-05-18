@@ -65,8 +65,11 @@ def copy_over_access_data(core_cur, enlace_cur, bickerdike_cur,
     # Privilege_Id really probably should be called "site id"?
     # Anyway, hence the mismatch with above.
     for user_priv_id, program_access, site_id in core_cur.fetchall():
-        # Not great code, overly nesty, but it's a one-off script :p
         if program_access == "a":
+            # SWOP doesn't have a program table, so skip them
+            if site_id == 5:
+                continue
+
             table_name = "Programs"
             column_name = "Program_ID"
             # LSNA has a different name for that table...
