@@ -34,7 +34,8 @@ INSERT INTO Users_Program_Access (Users_Privileges_Id, Program_Access)
 VALUES (%s, %s)"""
 
 
-def get_all_programs_on_site(cur, table_name="Programs"):
+def get_all_programs_on_site(cur, table_name="Programs",
+                             column_name="Program_ID"):
     """
     For users with "all" access, we need all the program ids for a site
 
@@ -43,7 +44,7 @@ def get_all_programs_on_site(cur, table_name="Programs"):
     """
     import pdb
     pdb.set_trace()
-    cur.execute("select Program_ID from %s" % table_name)
+    cur.execute("select %s from %s" % (column_name, table_name))
     return [row[0] for row in cur.fetchall()]
 
 
@@ -67,11 +68,14 @@ def copy_over_access_data(core_cur, enlace_cur, bickerdike_cur,
         # Not great code, overly nesty, but it's a one-off script :p
         if program_access == "a":
             table_name = "Programs"
+            column_name = "Program_ID"
             # LSNA has a different name for that table...
             if site_id == 2:
                 table_name = "Subcategories"
+                column_name = "Subcategory_ID"
+
             programs = get_all_programs_on_site(
-                conn_map[int(site_id)], table_name)
+                conn_map[int(site_id)], table_name, column_name)
             for program in programs:
                 core_cur.execute(
                     INSERT_DATA_TEMPLATE, (
