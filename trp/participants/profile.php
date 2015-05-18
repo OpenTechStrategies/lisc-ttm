@@ -2108,6 +2108,9 @@ $selector_string .= "</select>";
     return $selector_string;
 }
 
+function construct_cohort_selector(){
+}
+
 
 $education_selector .= "</select>";
 $column_array = array(array("Household Size", 'input', 'household_size_edit'),
@@ -2130,11 +2133,12 @@ array("Self Sustaining?", 'yn', 'self_sust_edit'),
  array("High School", 'input', 'hs_edit'),
 array("AMI", 'input', 'AMI_edit'),
 array("Move in date", 'input', 'move_in_date_edit'),
-array("Move out date", 'input', 'move_out_date_edit')
+array("Move out date", 'input', 'move_out_date_edit'),
+array("Cohort", 'cohort', 'cohort_edit')
 );
 
 
-$find_constant_la_casa_sqlsafe = "SELECT Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, ACT_Score, High_School_GPA, Mid_Twenties, Masters_Degree, Married, Has_Children, Homeless, Self_Sustaining, Dependency_Status, Father_Education.Education_Level_Name, Mother_Education.Education_Level_Name, Student_Education.Education_Level_Name, First_Generation_College_Student, Student_High_School, AMI, Move_In_Date, Move_Out_Date, Student_ID FROM La_Casa_Basics LEFT JOIN Educational_Levels AS Student_Education ON Student_Aspiration = Student_Education.Education_ID LEFT JOIN Educational_Levels AS Father_Education ON Father_Highest_Level_Education = Father_Education.Education_ID LEFT JOIN Educational_Levels AS Mother_Education ON Mother_Highest_Level_Education = Mother_Education.Education_ID WHERE Participant_ID_Students = " . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']);
+$find_constant_la_casa_sqlsafe = "SELECT Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, ACT_Score, High_School_GPA, Mid_Twenties, Masters_Degree, Married, Has_Children, Homeless, Self_Sustaining, Dependency_Status, Father_Education.Education_Level_Name, Mother_Education.Education_Level_Name, Student_Education.Education_Level_Name, First_Generation_College_Student, Student_High_School, AMI, Move_In_Date, Move_Out_Date, Student_ID FROM LC_Basics LEFT JOIN Educational_Levels AS Student_Education ON Student_Aspiration = Student_Education.Education_ID LEFT JOIN Educational_Levels AS Father_Education ON Father_Highest_Level_Education = Father_Education.Education_ID LEFT JOIN Educational_Levels AS Mother_Education ON Mother_Highest_Level_Education = Mother_Education.Education_ID WHERE Participant_ID_Students = " . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']);
 $constant_data=mysqli_query($cnnTRP, $find_constant_la_casa_sqlsafe);
 $constant=mysqli_fetch_row($constant_data);
 foreach ($column_array as $key => $value){

@@ -10,8 +10,12 @@
 
 import csv
 
-# this still needs a full path
-reader = csv.reader(open('/input_file.csv', "r"))
+#input file should be a csv file with no header row and with cells enclosed in
+#quotations. Columns should appear in exactly this order:
+
+input_file = ""
+
+reader = csv.reader(open(input_file, "r"))
 participant_prefix = """    
 INSERT INTO Participants (First_Name,
     Last_Name,
@@ -32,11 +36,31 @@ INSERT INTO Participants (First_Name,
     """
 
 basic_prefix = """ 
-INSERT INTO La_Casa_Basics (
+INSERT INTO LC_Basics (
  Participant_ID_Students,
+Group,
+Status,
+Handbook,
+Floor,
+Pod,
+Room_Number,
+Key_Card_Number,
+Transcript_Submitted,
+Service_Hours_Submitted,
+LCRC_Username,
+LCRC_Password,
+LCRC_Print_Code,
+Roommate,
+Application_Received,
+Application_Completed,
  Student_High_School,
  ACT_Score,
  High_School_GPA,
+HS_GPA_Weighted,
+Expected_Graduation_Year,
+College_Grade_Level,
+Reason_Leave,
+Reason_Stay,
  Student_Aspiration,
  Father_Highest_Level_Education,
  Mother_Highest_Level_Education,
@@ -50,17 +74,52 @@ INSERT INTO La_Casa_Basics (
  Self_Sustaining,
  Dependency_Status,
  Household_Size,
+ Tax_Exemptions,
+Household_Size_TRP,
  Parent1_AGI,
  Parent2_AGI,
  Student_AGI,
  AMI,
+Tuition,
+Mandatory_Fees,
+College_Cost,
  Pell_Grant,
-MAP_Grant,
-University_Scholarship,
+ MAP_Grant,
+ University_Scholarship,
  Move_In_Date,
- Move_Out_Date
+ Move_Out_Date,
+Savings,
+Family_Help,
+LC_Scholarship,
+Application_Source,
+Notes,
+Email_Pack,
+Email_Orientation,
+Email_Roommate,
+Move_In_Time,
+Move_In_Registration,
+Move_In_Address,
+Move_In_Note,
+Orientation_Date,
+Orientation_Time
 ) VALUES (
   @participant_id,
+"""
+
+emergency_contacts_prefix = """
+INSERT INTO Emergency_Contacts ( 
+    Participant_ID,
+    First_Name,
+    Last_Name,
+    Phone,
+    Relationship)
+VALUES (
+    @participant_id,
+"""
+
+
+internship = """
+Internship for 2014-2015?,If so, where and how many hours per term?,
 """
 
 college_prefix = """ 
@@ -73,14 +132,19 @@ INSERT INTO LC_Terms (
  Participant_ID,
  College_ID,
  Major,
+Minor
  College_Match,
+ Expected_Match,
+Actual_Match,
  Term_Type,
  Term,
  School_Year,
  Credits,
  College_GPA,
 Subsidized_Loan,
-Unsubsidized_Loan
+Unsubsidized_Loan,
+Dropped classes during Fall 2014?,
+If dropped classes, how many credits?
 )
 VALUES 
 
@@ -103,7 +167,6 @@ set_college_id = """
 SET @college_id = LAST_INSERT_ID(); """
 
 def handle_address(address_cell):
-    print(address_cell)
     address_array = address_cell.split()
     if len(address_array) == 4:
         new_address = "'" + address_array[0] + "', '" + address_array[1] + "', '" + address_array[2] + "', '" + address_array[3] + "', "
@@ -136,14 +199,11 @@ def handle_date(date_cell):
         date = 'NULL'
     return date
 
-print(handle_address('4229 Custer Ave'))
-print(handle_address('4600 W. 101 Street'))
-print(handle_address("2706 W. 37th Plave, Floor 3"))
-print(handle_address("None"))
-
 # need to manage strings v. ints (quoting or not)
 j = 0
 for row in reader:
+    if (j > 2):
+        break
     i = 0
     participant_query = participant_prefix
     basic_query = basic_prefix
@@ -158,15 +218,16 @@ for row in reader:
     term_query = term_prefix + term_1 + term_2 + term_3 + term_4
     # note that mailing address will need to be managed
     for cell in row:
-        if i == 2:
-            # is dob
-            participant_query = participant_query + "'" + handle_date(cell) + "', "
-        if i == 7:
-            participant_query = participant_query + handle_address(cell)
-        if i != 2 and i != 7 and i < 12:
+#        print(i)
+#        print(row[i])
+        if  (i > 9 and i < 12) or i == 15 or (i > 20 and i < 29):
             participant_query = participant_query + '"' + cell + '"' + ", " 
-        elif (i > 12 and i < 16) or (i > 25 and i < 46) or i == 48:
+        elif (i < 9) or (i > 11 and i < 21) or (i > 28 and i < 35) or (i > 51 and i < 59) or (i > 60 and i < 110):
             basic_query = basic_query + "'" + cell + "', " 
+        elif (i == 111 or i == 115):
+            emergency_contacts_query = emergency_contacts_prefix  + "'" + cell + "', " 
+        elif (i > 111 and i < 115) or (i > 115 and i < 118):
+            emergency_contacts_query = emergency_contacts_query + "'" + cell + "', " 
         i += 1
     participant_query = participant_query + '"' + row[12]  + '"' + ");"
     basic_query = basic_query + handle_date(row[49]) + ");"
@@ -177,3 +238,4 @@ for row in reader:
     f_out.write(set_college_id + "\n")
     f_out.write(term_query + "\n")
     j = j+1
+

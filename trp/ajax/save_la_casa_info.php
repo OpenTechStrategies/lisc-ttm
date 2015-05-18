@@ -61,11 +61,11 @@ elseif ($_POST['action'] == 'new' && $_POST['subject'] == 'college'){
    mysqli_query($cnnTRP, $add_college_data_sqlsafe);
 }
 elseif ($_POST['action'] == 'edit' && $_POST['subject'] == 'constant'){
-    $check_for_existing_row_sqlsafe = "SELECT * FROM La_Casa_Basics WHERE Participant_ID_Students =  '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
+    $check_for_existing_row_sqlsafe = "SELECT * FROM LC_Basics WHERE Participant_ID_Students =  '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
     $num_rows_result = mysqli_query($cnnTRP, $check_for_existing_row_sqlsafe);
     $num_rows = mysqli_num_rows($num_rows_result);
     if ($num_rows < 1){
-        $insert_constant_data_sqlsafe = "INSERT INTO La_Casa_Basics (
+        $insert_constant_data_sqlsafe = "INSERT INTO LC_Basics (
 Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, ACT_Score, High_School_GPA, Dependency_Status, Father_Highest_Level_Education, Mother_Highest_Level_Education, Student_Aspiration, First_Generation_College_Student, Student_Hometown, Student_High_School, Scholarship_Apps, Scholarship_Num, Scholarship_Volume, Scholarships_Received, Household_Income, AMI, Move_In_Date, Move_Out_Date, Mid_Twenties, Masters_Degree, Married, Has_Children, Homeless, Self_Sustaining, Participant_ID_Students
 ) VALUES (
 '" . mysqli_real_escape_string($cnnTRP, $_POST['household_size']) . "',
@@ -100,7 +100,7 @@ Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, ACT_Score, High_School_GP
         mysqli_query($cnnTRP, $insert_constant_data_sqlsafe);
     }
     else{
-        $edit_constant_data_sqlsafe = "UPDATE La_Casa_Basics SET 
+        $edit_constant_data_sqlsafe = "UPDATE LC_Basics SET 
 Household_Size = '" . mysqli_real_escape_string($cnnTRP, $_POST['household_size']) . "',
 Parent1_AGI = '" . mysqli_real_escape_string($cnnTRP, $_POST['parent1agi']) . "',
 Parent2_AGI = '" . mysqli_real_escape_string($cnnTRP, $_POST['parent2agi']) . "',

@@ -64,7 +64,7 @@ $movein_format = $reformat_date[2] . '-' . $reformat_date[0] . '-' . $reformat_d
     $reformat_date = explode('/', $_POST['move_out_date']);
 $moveout_format = $reformat_date[2] . '-' . $reformat_date[0] . '-' . $reformat_date[1];    
 
-    $insert_la_casa_basics = "INSERT INTO La_Casa_Basics (Participant_ID_Students,
+    $insert_la_casa_basics = "INSERT INTO LC_Basics (Participant_ID_Students,
 Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, Scholarship_Apps, Scholarship_Num, Scholarship_Volume, Scholarships_Received, Household_Income, AMI, Move_In_Date, Move_Out_Date, Mid_Twenties, Masters_Degree, Married, Has_Children, Homeless, Self_Sustaining, Dependency_Status)
        VALUES
        ( '" . $new_id . "',

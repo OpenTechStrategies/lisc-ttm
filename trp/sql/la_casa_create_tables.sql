@@ -26,26 +26,58 @@ PRIMARY KEY (`College_ID`),
 `Selectivity` varchar(100)
 ) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS `Cohorts`;
 
-DROP TABLE IF EXISTS `La_Casa_Basics`;
+CREATE TABLE `Cohorts`
+(
+`Cohort_ID` int(11) NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (`Cohort_ID`),
+`Cohort_Name` varchar(100)
+) ENGINE=InnoDB;
 
-CREATE TABLE `La_Casa_Basics`
+DROP TABLE IF EXISTS `La_Casa_Basics`; -- old name, ensure that it doesn't exist
+DROP TABLE IF EXISTS `LC_Basics`;
+
+CREATE TABLE `LC_Basics`
 (
 `Student_ID` int(11) NOT NULL AUTO_INCREMENT,
 PRIMARY KEY (`Student_ID`),
-`Participant_ID_Students` int(11),
-INDEX `par_ind_stu` (`Participant_ID_Students`),
-FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
+`Participant_ID` int(11),
+FOREIGN KEY (`Participant_ID`) REFERENCES `Participants`
     (`Participant_ID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
+`Group` varchar(100),
+`Status` varchar(3),
+`Handbook` tinyint(1),
+`Floor` int(1),
+`Pod` int(5),
+`Room_Number` varchar(5),
+`Key_Card_Number` varchar(10),
+`Transcript_Submitted` tinyint(1),
+`Service_Hours_Submitted` tinyint(1),
+`LCRC_Username` varchar(100),
+`LCRC_Password` varchar(100), 
+`LCRC_Print_Code` int(10),
+`Roommate` int(11),
+FOREIGN KEY (`Roommate`) REFERENCES `Participants`
+        (`Participant_ID`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+`Application_Received` date,
+`Application_Completed` date,
 `Household_Size` int(3),
 `Parent1_AGI` int(11),
 `Parent2_AGI` int(11),
 `Student_AGI` int(11),
 `ACT_Score` int(5),
-`High_School_GPA` varchar(30),
+`High_School_GPA` varchar(5),
 `Dependency_Status` varchar(10),
+`HS_GPA_Weighted` varchar(5),
+`Expected_Graduation_Year` int(4),
+`College_Grade_Level` varchar(100),
+`Reason_Leave` varchar(250),
+`Reason_Stay` varchar(250),
 `Father_Highest_Level_Education` int(11),
 `Mother_Highest_Level_Education` int(11),
 `Student_Aspiration` int(11),
@@ -64,7 +96,26 @@ FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
 `Military` int(11),
 `Has_Children` int(11),
 `Homeless` int(11),
-`Self_Sustaining` int(11)
+`Self_Sustaining` int(11),
+`Tax_Exemptions` int(3),
+`Household_Size_TRP` int(2),
+`Tuition` int(10),
+`Mandatory_Fees` int(10),
+`College_Cost` int(10),
+`Savings` int(10),
+`Family_Help` int(10),
+`LC_Scholarship` int(10),
+`Application_Source` varchar(250),
+`Notes` varchar(1000),
+`Email_Pack` tinyint(1),
+`Email_Orientation` tinyint(1),
+`Email_Roommate` tinyint(1),
+`Move_In_Time` varchar(10),
+`Move_In_Registration` tinyint(1),
+`Move_In_Address` varchar(10),
+`Move_In_Note` varchar(1000),
+`Orientation_Date` date,
+`Orientation_Time` varchar(10)
 
 ) ENGINE=InnoDB;
 
@@ -113,3 +164,20 @@ PRIMARY KEY (`Education_ID`),
 ) ENGINE = InnoDB;
 
 INSERT INTO `Educational_Levels` (Education_Level_Name) VALUES ('Elementary'), ('Middle School'), ('Some HS'), ('GED'), ('High School Diploma'), ('Some College'), ('Trade School'), ('Associates Degree'), ('Bachelors Degree'), ('Masters Degree'), ('MD'), ('PhD'), ('Unknown');
+
+
+DROP TABLE IF EXISTS `Emergency_Contacts`; 
+
+CREATE TABLE `Emergency_Contacts` 
+(
+ `Emergency_Contact_ID` int(11) NOT NULL AUTO_INCREMENT,
+ PRIMARY KEY (`Emergency_Contact_ID`),
+ `Participant_ID` int(11),
+  FOREIGN KEY (`Participant_ID`) REFERENCES `Participants` (`Participant_ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+ `First_Name` varchar(45),
+ `Last_Name` varchar(45),
+ `Phone` varchar(15),
+ `Relationship` varchar(45)
+) ENGINE = InnoDB;
