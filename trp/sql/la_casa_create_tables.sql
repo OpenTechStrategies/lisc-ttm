@@ -47,7 +47,7 @@ FOREIGN KEY (`Participant_ID`) REFERENCES `Participants`
     (`Participant_ID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-`Group` varchar(100),
+`Cohort` varchar(100),
 `Status` varchar(3),
 `Handbook` tinyint(1),
 `Floor` int(1),
@@ -139,10 +139,14 @@ FOREIGN KEY (`Participant_ID`) REFERENCES `Participants`
 `Subsidized_Loan` int(11),
 `Unsubsidized_Loan` int(11),
 `Major` varchar(100),
-`College_Match` varchar(30),
+`Minor` varchar(100),
+`Expected_Match` varchar(30),
+`Actual_Match` varchar(30),
 `College_GPA` varchar(30),
 `Internship_Status` int(11),
-`Intern_Hours` int(11)
+`Intern_Hours` int(11),
+`Dropped_Classes` tinyint(1),
+`Dropped_Credits` int(11)
 ) ENGINE=InnoDB;
 
 
