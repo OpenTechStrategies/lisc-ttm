@@ -1,4 +1,30 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
+?>
+<?php
 include "../../header.php";
 include "../header.php";
 include "../include/dbconnopen.php";
@@ -8,6 +34,7 @@ include "../participants/construction_functions.php";
 <script type="text/javascript">
     $(document).ready(function() {
         $('#new_la_casa_table').hide();
+        $('#residents_div').toggle();
     });
 </script>
 </head>
@@ -593,7 +620,22 @@ document.write(response);
         <a href="/include/generalized_download_script.php?download_name=trp_lc_xls_emulator">  
         <h5> Export All </h5>
         </a>
-
+        <a href="javascript:;" onclick="$('#residents_div').toggle();">
+        <h5> View Current Residents and Applicants </h5>
+        </a>
+<div id="residents_div">
+<?php
+        $find_current_residents_and_applicants = "SELECT Participants.Participant_ID, First_Name, Last_Name FROM Participants_Programs LEFT JOIN Participants ON Participants.Participant_ID = Participants_Programs.Participant_ID WHERE Program_ID = 6";
+$current_residents = mysqli_query($cnnTRP, $find_current_residents_and_applicants);
+while ($resident = mysqli_fetch_row($current_residents)){
+    ?>
+    <a href="../participants/lc_profile.php?id=<?php echo $resident[0]; ?>">
+<?php echo $resident[1] . " " . $resident[2]; ?>
+    </a><br />
+<?php
+}
+?>
+</div>
 </td>
 </tr>
 <?php

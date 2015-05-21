@@ -13,8 +13,15 @@ input_file = sys.argv[1]
 la_casa_id = '6'
 
 
+def escape_this(any_cell):
+    dollar_cell = any_cell.replace ("'", "")
+    money_cell = dollar_cell.replace("$", "")
+    money = money_cell.replace(",", "")
+    return money
+
 def handle_address(address_cell):
-    address_array = address_cell.split()
+    escaped_address = escape_this(address_cell)
+    address_array = escaped_address.split()
     if len(address_array) == 4:
         new_address = "'" + address_array[0] + "', '" + address_array[1] + """',
         '""" + address_array[2] + "', '" + address_array[3] + "', " 
@@ -41,8 +48,8 @@ def handle_address(address_cell):
     return new_address
 
 def handle_date(date_cell):
-    if len(cell.split("/")) > 1:
-        date = "'" + cell.split("/")[2] + '-' + cell.split("/")[0] + '-' + cell.split("/")[1] + "'"
+    if len(date_cell.split("/")) > 1:
+        date = date_cell.split("/")[2] + '-' + date_cell.split("/")[0] + '-' + date_cell.split("/")[1]
     else:
         date = 'NULL'
     return date
@@ -69,7 +76,10 @@ INSERT INTO Participants (First_Name,
     Phone,
     Mobile_Phone) VALUES (
     """
-    participant_query = participant_prefix + "'" + first_name + "', '" + last_name + "', '" + dob + "', '" + gender + "', '" + email_1 + "', '" + email_2 + "', " + handle_address(address) + "'" + city + "', '" + state + "', '" + zipcode + "', '" + home_phone + "', '" + mobile_phone  + "');"
+    if (first_name != "" or last_name != ""):
+        participant_query = participant_prefix + "'" + escape_this(first_name) + "', '" + escape_this(last_name) + "', '" + escape_this(handle_date(dob)) + "', '" + escape_this(gender) + "', '" + escape_this(email_1) + "', '" + escape_this(email_2) + "', " + handle_address(address) + "'" + escape_this(city) + "', '" + escape_this(state) + "', '" + escape_this(zipcode) + "', '" + escape_this(home_phone) + "', '" + escape_this(mobile_phone ) + "');"
+    else:
+        participant_query = ""
     f_out.write(participant_query + "\n")
     add_to_program = """
         SET @participant_id = LAST_INSERT_ID();
@@ -152,9 +162,12 @@ Orientation_Time
     counter = 0
     for cell in array_of_cells:
         if counter == (len(array_of_cells) - 1):
-            basic_query = basic_query + "'" + cell + "');"
+            basic_query = basic_query + "'" + escape_this(cell) + "');"
         else:
-            basic_query = basic_query + "'" + cell + "', "
+            if counter == 12 or counter == 13 or counter == (len(array_of_cells) - 7) or counter == (len(array_of_cells) - 2):
+                basic_query = basic_query + "'" + handle_date(cell) + "', "                
+            else:
+                basic_query = basic_query + "'" + escape_this(cell) + "', "
         counter = counter + 1
     f_out.write(basic_query + "\n")
 
@@ -169,7 +182,7 @@ INSERT INTO Emergency_Contacts (
 VALUES (
     @participant_id,
 """
-    emergency_contact_query = emergency_contacts_prefix + "'" + first + "', '" + last + "', '"  + phone + "', '"  + relation + "');"
+    emergency_contact_query = emergency_contacts_prefix + "'" + escape_this(first) + "', '" + escape_this(last) + "', '"  + escape_this(phone) + "', '"  + escape_this(relation) + "');"
     f_out.write(emergency_contact_query + "\n")
 
 
@@ -179,8 +192,14 @@ def make_college_query(f_out, community_college, four_yr_college, selectivity):
 INSERT INTO Colleges (College_Name, College_Type,
 Selectivity) VALUES (
 """
-    college_fouryr_query = college_prefix + "'" + four_yr_college + "', '4-year', '" + selectivity + "');"
-    college_comm_query = college_prefix + "'" + community_college + "', 'Community College', '" + selectivity + "');"
+    if four_yr_college != '' and four_yr_college != 'None':
+        college_fouryr_query = college_prefix + "'" + escape_this(four_yr_college) + "', '4-year', '" + escape_this(selectivity) + "');"
+    else:
+        college_fouryr_query = ""
+    if community_college != '' and community_college != 'None':
+        college_comm_query = college_prefix + "'" + escape_this(community_college) + "', 'Community College', '" + escape_this(selectivity) + "');"
+    else:
+        college_comm_query = ""
     college_query = college_fouryr_query + college_comm_query
     f_out.write(college_query + "\n")
     set_college_id = """ 
@@ -218,22 +237,22 @@ def make_lc_terms_query(f_out, major, minor, exp_match, actual_match,
         VALUES 
         
         """
-    term_row_begin = "( @participant_id, @college_id, '"  + major + """', 
-        '""" + minor +  "', '" + exp_match + "', '" + actual_match + "', NULL, "
-    term_row_end =  "', '" + subsidized_loan + "', '" + unsubsidized_loan + """',
+    term_row_begin = "( @participant_id, @college_id, '"  + escape_this(major) + """', 
+        '""" + escape_this(minor) +  "', '" + escape_this(exp_match) + "', '" + escape_this(actual_match) + "', NULL, "
+    term_row_end =  "', '" + escape_this(subsidized_loan) + "', '" + escape_this(unsubsidized_loan) + """',
         NULL, NULL, NULL, NULL )""" 
     term_1 = term_row_begin + " 'Spring', '2013', " + """ NULL, 
-        '""" + gpa_spring_2013 + term_row_end + ", "
+        '""" + escape_this(gpa_spring_2013) + term_row_end + ", "
     term_2 = term_row_begin + " 'Summer', '2013', " + """ NULL,
-        '""" + gpa_summer_2013 + term_row_end + ", "
-    term_3 = term_row_begin + " 'Fall', '2013', '" + credits_fall_2013 + """', 
-        '""" + gpa_fall_2013 + term_row_end + ", "
-    term_4 = term_row_begin + " 'Spring', '2014', '" + credits_spring_2014 + """',
-        '""" + gpa_spring_2014 + term_row_end + ", "
-    term_5 = term_row_begin + " 'Fall', '2014', '" + credits_fall_2014 + """', 
-        '""" + gpa_fall_2014 + "', '" +  subsidized_loan +  "', '" + unsubsidized_loan +  """',
-        '""" + dropped_classes +  "', '" + dropped_credits + """', 
-        '""" + internship_status + "', '" + internship_hours + "'); "
+        '""" + escape_this(gpa_summer_2013) + term_row_end + ", "
+    term_3 = term_row_begin + " 'Fall', '2013', '" + escape_this(credits_fall_2013) + """', 
+        '""" + escape_this(gpa_fall_2013) + term_row_end + ", "
+    term_4 = term_row_begin + " 'Spring', '2014', '" + escape_this(credits_spring_2014) + """',
+        '""" + escape_this(gpa_spring_2014) + term_row_end + ", "
+    term_5 = term_row_begin + " 'Fall', '2014', '" + escape_this(credits_fall_2014) + """', 
+        '""" + escape_this(gpa_fall_2014) + "', '" + escape_this( subsidized_loan) +  "', '" + escape_this(unsubsidized_loan) +  """',
+        '""" + escape_this(dropped_classes) +  "', '" + escape_this(dropped_credits) + """', 
+        '""" + escape_this(internship_status) + "', '" + escape_this(internship_hours) + "'); "
     term_query = term_prefix + term_1 + term_2 + term_3 + term_4 + term_5
     f_out.write(term_query + "\n")
 
