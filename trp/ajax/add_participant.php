@@ -11,8 +11,7 @@ $this_address = $_POST['address_num'] . " " . $_POST['address_dir'] . " " . $_PO
 $block_group_sqlsafe = do_it_all($this_address, $map);
 
 include "../include/dbconnopen.php";
-
-if ($_POST['action']=='add_to_program'){
+if ($_POST['action']=='new' && $_POST['subject'] == 'la_casa'){
     $reformat_date = explode('/', $_POST['dob_add']);
 $dob_format = $reformat_date[2] . '-' . $reformat_date[0] . '-' . $reformat_date[1];
     include "../include/dbconnopen.php";

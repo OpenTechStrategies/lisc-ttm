@@ -144,15 +144,35 @@ if ($_POST['family_search'] == '1') {
             }
             ?>
         </tr>
-        <?php
+<?php
+//get LC users for profile link below
+            $la_casa_id = 6; //should be set globally
+            $select_distinct_LC_users = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Program_ID = $la_casa_id;";
+$lc_people = array();
+$LC_users = mysqli_query($cnnTRP, $select_distinct_LC_users);
+while ($user_id = mysqli_fetch_row($LC_users)){
+    $lc_people[] = $user_id[0];
+}
         while ($user = mysqli_fetch_array($results)) {
             $date_formatted = explode('-', $user['DOB']);
             $DOB = $date_formatted[1] . "/" . $date_formatted[2] . "/" . $date_formatted[0];
             ?>
             <tr>
+<?php
+            if ( in_array($user['Participant_ID'], $lc_people)) {
+?>
+                <td class="all_projects"><a href="lc_profile.php?id=<?php echo $user['Participant_ID']; ?>"><?php echo $user['CPS_ID']; ?></a></td>
+                <td class="all_projects" style="text-align:left;"><a href="lc_profile.php?id=<?php echo $user['Participant_ID']; ?>"><?php echo $user['First_Name'] . " " . $user['Last_Name']; ?></a></td>
+
+<?php
+            }
+            else {
+?>
                 <td class="all_projects"><a href="profile.php?id=<?php echo $user['Participant_ID']; ?>"><?php echo $user['CPS_ID']; ?></a></td>
                 <td class="all_projects" style="text-align:left;"><a href="profile.php?id=<?php echo $user['Participant_ID']; ?>"><?php echo $user['First_Name'] . " " . $user['Last_Name']; ?></a></td>
-
+<?php
+            } //end profile differentiation
+?>
                 <td class="all_projects"><?php echo $DOB; ?></td>
                 <td class="all_projects"><?php
                     if ($user['Gender'] == 'm') {
@@ -161,9 +181,6 @@ if ($_POST['family_search'] == '1') {
                         echo "Female";
                     }
                     ?></td>
-        <!--        <td class="all_projects">
-                    <a href="/bickerdike/include/enter_data.php?user=<?php echo $user['User_ID']; ?>" style="font-size:12px;">Add a Survey for this participant</a>
-                </td>-->
                 <?php
                 //if an administrator
                 if ($access == 'a') {

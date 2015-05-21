@@ -22,7 +22,8 @@ if (!isset($_COOKIE['user'])) {
             <td colspan="5"><h2>Pilsen: The Resurrection Project</h2></td>
         </tr>
         <tr>
-            <td class="menu_item"><a href="/trp/participants/participants.php" id="participants_selector">Participants</a></td>
+            <td class="menu_item"><a href="/trp/participants/participants.php" id="participants_selector">Participants</a></td>            
+            <td class="menu_item"><a href="/trp/programs/lc_dashboard.php" id="dashboard_selector">La Casa Dashboard</a></td>
             <td class="menu_item"><a href="/trp/programs/programs.php" id="programs_selector">Programs</a></td>
             <td class="menu_item"><a href="/trp/engagement/engagement.php" id="engagement_selector">Community Engagement</a></td>
 

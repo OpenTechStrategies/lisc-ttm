@@ -125,8 +125,7 @@ if ($participant->gender == 'm') {
                                     phone: document.getElementById('phone_edit').value,
                                     email: document.getElementById('email_edit').value,
                                     dob: document.getElementById('dob_edit').value,
-                                    gender: document.getElementById('gender_edit').value,
-                                    cps_id: document.getElementById('cps_id_edit').value
+                                    gender: document.getElementById('gender_edit').value
                                 },
                         function(response) {
                             window.location = 'lc_profile.php?id=<?php echo $participant->participant_id ?>';
