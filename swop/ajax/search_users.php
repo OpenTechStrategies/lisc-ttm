@@ -1,10 +1,31 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id);
+
 /* search query for users. related to the participants homepage, not the user query search.
  * 
  * Same idea.  Those search elements that are filled in are included in the query.  some of them
  * require joins. */
-
-//print_r($_POST);
 include "../include/dbconnopen.php";
 if ($_POST['first'] == '') {
     $first_sqlsafe = '';
@@ -104,11 +125,9 @@ if ($_POST['dropdown'] == 1) {
                                             participant_id: '<?php echo $user['Participant_ID']; ?>'
                                         },
                                 function(response) {
-                                    //                                if (response!='1'){
-                                    //                                    document.getElementById('show_error').innerHTML = response;
-                                    //                                }
-                                    window.location = response;
-                                });"><?php echo $user['Name_First'] . " " . $user['Name_Last']; ?></a></td>      
+                                   var url = response;
+                                   window.location = url;
+                                }).fail(failAlert);"><?php echo $user['Name_First'] . " " . $user['Name_Last']; ?></a></td>      
 
                 <td class="all_projects"><?php
                     if ($user['Date_of_Birth'] != '0000-00-00') {
@@ -141,7 +160,7 @@ if ($_POST['dropdown'] == 1) {
                                 alert('This participant has been deleted. Click Search again for accurate results.');
                                 //document.write(response);
                                 //I want this to return us to the search results page, with the same results (minus deletion), but that seems difficult.
-                            })
+                            }).fail(failAlert);
                         }">Delete</a></td>
             </tr>
         <?php

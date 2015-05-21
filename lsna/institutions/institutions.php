@@ -1,7 +1,31 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id);
+
 include "../../header.php";
 include "../header.php";
-//print_r($_COOKIE);
 ?>
 
 <script type="text/javascript">
@@ -17,33 +41,7 @@ include "../header.php";
         $('#ajax_loader').fadeOut('slow');
     });
 </script>
-
-<?php
-/* these ifs are left over from when the institution pages were divs that were hidden or shown depending
- * on the cookie of the moment.  This is now always the institutions home page, so the second
- * script is correct:
- */
-if ($_COOKIE['inst_page'] == 'profile') {
-    ?>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#institutions_selector').addClass('selected');
-            $("a.add_new").hover(function() {
-                $(this).addClass("selected");
-            }, function() {
-                $(this).removeClass("selected");
-            });
-            $('#search_all_institutions').hide();
-            $('#add_new_institution').hide();
-            $('#institution_profile_div').show();
-            $('.show_edit_space').hide();
-            $('.edit').hide();
-        });
-    </script>
-    <?php
-} elseif ($_COOKIE['inst_page'] == 'search' || !isset($_COOKIE['inst_page'])) {
-    ?>
-    <script type="text/javascript">
+<script type="text/javascript">
         $(document).ready(function() {
             $('#institutions_selector').addClass('selected');
             $("a.add_new").hover(function() {
@@ -56,17 +54,19 @@ if ($_COOKIE['inst_page'] == 'profile') {
             $('#institution_profile_div').hide();
             $('.show_edit_space').hide();
         });
-    </script>
-    <?php
-}
-//      print_r($_COOKIE);
-?>
+</script>
 
 <div class="content" id="search_all_institutions">
     <h3>Search All Institutions</h3><hr/><br/>
     <!--Link to add a new institution: -->
-    <div style="text-align:center;"  class="no_view" ><a class="add_new" href="new_institution.php">
+<?php
+        if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+    <div style="text-align:center;"  ><a class="add_new" href="new_institution.php">
             <span class="add_new_button">Add New Institution</span></a></div><br>
+<?php
+}
+?>
     <!-- Search institutions by name and/or type: -->
     <table class="search_table">
         <tr><td><strong>Name:</strong></td><td><input type="text" id="search_inst_name"></td>
@@ -96,7 +96,7 @@ if ($_COOKIE['inst_page'] == 'profile') {
             function(response) {
                 document.getElementById('show_inst_search_results').innerHTML = response;
             }
-            )
+            ).fail(failAlert);
                        "></td></tr>
     </table>
     <div id="show_inst_search_results"></div>

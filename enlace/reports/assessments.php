@@ -1,21 +1,36 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($Enlace_id);
+
 //get user's access
-//
-// *First determine the program that the logged-in user has access to.  Usually this will be a program ID number,
-// *but sometimes it will be 'a' (all) or 'n' (none).
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
-$user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['user']);
-$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = '" .$user_sqlsafe . "'";
-$program_access = mysqli_query($cnnLISC, $get_program_access);
-$prog_access = mysqli_fetch_row($program_access);
-$access = $prog_access[0];
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
+$access_array = $USER->program_access($Enlace_id);
+
+$has_all_programs = in_array('a', $access_array);
 ?>
 
 <!--Div on reports page that shows the assessment responses:  -->
 <h3>Assessments Report</h3>
-<?php //print_r($_POST);?>
 <!--First choose a program (or all programs) and a question (or all questions) from the intake and impact surveys: -->
 
 <span class="helptext">Choose the program you would like to report on, then either export all results or see results by question:</span><br>
@@ -26,11 +41,11 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
     <a href="javascript:;" onclick="$('#program_list').toggle();">Show/hide programs</a>
     <div id="program_list"><?php
         //if not an administrator
-        if ($access != 'a') {
+    if ( ! $has_all_programs) {
             //get user's programs
             $get_all_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names INNER JOIN Programs 
                             ON Session_Names.Program_ID=Programs.Program_ID
-                            WHERE Programs.Program_ID = " . $access . " ORDER BY Name";
+                            WHERE Programs.Program_ID = " . $access_array[0] . " ORDER BY Name";
         } else {
             $get_all_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names INNER JOIN Programs 
                             ON Session_Names.Program_ID=Programs.Program_ID ORDER BY Name";
@@ -83,7 +98,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
     <input type="submit" value="Show Results" name="submit_btn_assessments"
     <?php
     //if not an administrator
-    if ($access != 'a') {
+            if ( ! $has_all_programs) {
         //make sure a checkbox is checked
         ?>
                onclick="return test_program_select();"
@@ -92,7 +107,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
            ?>>
            <?php
            //if not an administrator
-           if ($access != 'a') {
+if ( ! $has_all_programs) {
                //make sure a checkbox is checked
                ?>
         <script>
@@ -112,7 +127,6 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
 <?php
 /* See results (after program and question have been chosen) */
 if (isset($_POST['submit_btn_assessments'])) {
-    // print_r($_POST);
     //remember we have to account for the "show all questions" possibility
     //here it is:
     if ($_POST['question_select'] == '0') {

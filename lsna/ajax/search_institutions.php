@@ -1,4 +1,28 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id);
+
 /* searching institutions: */
 
 include "../include/dbconnopen.php";
@@ -48,9 +72,12 @@ include "../include/dbconnclose.php";
                                }
                                );"
                    ><?php echo $inst['Institution_Name']; ?></a></td>
-            <td class="hide_on_view">
+<?php
+                     if ($USER->has_site_access($LSNA_id, $AdminAccess)){
+?>
+            <td >
                 <!--option to delete institutions if necessary: -->
-                <input type="button" value="Delete This Institution" class="hide_on_view" onclick="
+                <input type="button" value="Delete This Institution" onclick="
                         var double_check = confirm('Are you sure you want to delete this institution from the database?  This action cannot be undone.');
                         if (double_check) {
                             $.post(
@@ -66,7 +93,10 @@ include "../include/dbconnclose.php";
                             );
                         }
                        ">
-            </td></tr><?php
+            </td>
+<?php
+                     } //end access check
+?></tr><?php
                }
                ?>
 </table><br/>

@@ -1,4 +1,27 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id);
 
 include "../../header.php";
 include "../header.php";
@@ -94,7 +117,7 @@ Select parent mentor from search results:<br><span class="helptext">You must sel
                                     document.getElementById('show_results_profile').innerHTML = response;
                                     $('#add_buttons').show();
                                 }
-                                );
+                                ).fail(failAlert);
                      "/>
 		</td></tr></table>
         <div id="show_results_profile"></div>
@@ -113,7 +136,7 @@ Or, <a href="javascript:;" onclick="
                             }
                             window.location='participants.php';
                        }
-           );
+           ).fail(failAlert);
 		">add new parent mentor profile</a> (and then return here).
 <? } ?>
 
@@ -575,17 +598,7 @@ Or, <a href="javascript:;" onclick="
                 }?>
 	
 	<tr><th colspan="2"><input type="button" id="save_btn" value="Save Survey" onclick="
-            
-            
-        /* gets the person.  if cookie is set, then that's the value.  otherwise, looks for 
-         * the relative_search select.  That's the result from the participant search.
-         * If they didn't search, then this select won't exist from the perspective of this script
-         * and they'll be alerted to choose a participant.
-         * 
-         * see http://stackoverflow.com/questions/2635652/how-can-i-prevent-a-double-submit-with-jquery-or-javascript/2635666#2635666
-         * and http://stackoverflow.com/questions/5944254/preventing-double-click-of-submit-button
-         * */
-        var participant = '<?echo $_COOKIE['participant'];?>';
+                    var participant = '<?echo $_COOKIE['participant'];?>';
         if (participant==''){
             var select_dropdown=document.getElementById('relative_search');
             if(select_dropdown != null){
@@ -667,7 +680,7 @@ Or, <a href="javascript:;" onclick="
                    document.getElementById('show_survey_response').innerHTML = 
                        '<span style=color:#990000;font-weight:bold;font-size:.9em; padding-left: 25px;>Thank you for entering this survey!</span>';
                }
-               );
+               ).fail(failAlert);
                    //survey_status='2';
                   // $('input[type=submit]', this).attr('disabled', 'disabled');
                 "></th></tr>

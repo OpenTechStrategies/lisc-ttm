@@ -1,9 +1,31 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
 
 include "../../header.php";
 include "../header.php";
 include "data_menu.php";
-//include "../include/datepicker.php";
 ?>
 <!--This reports on parent surveys. It shows average responses, then includes pie charts for the results.
 
@@ -31,7 +53,7 @@ going on the live site.
 		$('#chart11_parent').slideUp();
 		$('#chart12_parent').slideUp();
 		$('#chart13_parent').slideUp();
-                $('#chart14_parent').slideUp();
+        $('#chart14_parent').slideUp();
 		$('#chart15_parent').slideUp();
 		$('#parents_selector').addClass('selected');
 		$('#data_selector').addClass('selected');
@@ -59,7 +81,7 @@ going on the live site.
            function (response){
                document.getElementById('show_search_results').innerHTML = response;
            }
-       )">
+       ).fail(failAlert);">
 </p><!--Shows the table of averages here.  The table of averages over all time
     still shows up below.-->
 <div id="show_search_results"></div>
@@ -90,10 +112,7 @@ going on the live site.
     $laters = mysqli_query($cnnBickerdike, $count_laters_sqlsafe);
     $num_laters = mysqli_num_rows($laters);
     include "../include/dbconnclose.php";
-    
-    //$limit=0;
     ?>
-<!--        <a href="">Reset Aggregates</a>-->
     <tr>
         
         <th width="65%">Question</th>
@@ -330,10 +349,7 @@ $chart_id_array=array('chart1', 'chart1_b', 'chart1_c', 'chart2', 'chart2_b', 'c
 
         $chart_counter=0;
 foreach($question_array as $question_sqlsafe){
-   // echo $question_sqlsafe . "<br>";
-   // foreach ($type_array as $type){
         for ($i=1; $i<4; $i++){
-            //echo "right after the i's " . $question_sqlsafe . " " . $i . "<br>";
             $script_str='';
             /*
              * this routine gets the number of times each response to the question was made.
@@ -344,11 +360,8 @@ foreach($question_array as $question_sqlsafe){
              */
                
                 $call_for_arrays_sqlsafe="CALL pie_chart_arrays('parent', " . $i . ", '" .$question_sqlsafe . "')";
-                //echo $call_for_arrays_sqlsafe ;
-                //echo $chart_id_array[$chart_counter];
             include "../include/dbconnopen.php";
           $questions=mysqli_query($cnnBickerdike, $call_for_arrays_sqlsafe);
-          //print_r($questions);
            /*
            * Now we have to go through some gymnastics to get the returned information into an acceptable
            * form for the jqplot creation.
@@ -414,7 +427,6 @@ foreach($question_array as $question_sqlsafe){
                     }
                 }
             }
-          //print_r($assignment_arr);
              $count_check=0;
              /*
               * we use the assignment array we just created to make strings for the creation of charts.
@@ -483,7 +495,6 @@ foreach($question_array as $question_sqlsafe){
                 }
                 
                 ${$question_sqlsafe.$type.$i}=$script_str;
-               // echo $script_str. "<br>";
             $assignment_arr=array();?>
     
 <!--Now, the string(s) created by the if/elses above are used to build a chart.
@@ -510,8 +521,6 @@ go on the chart.
         ],
         legend: {
             show: true
-            //placement: 'outsideGrid',
-            //labels: labels
         }
   });
     })
@@ -519,8 +528,8 @@ go on the chart.
     <?$chart_counter++;
                 }
         
-                else{$chart_counter++;
-                   // echo 'didnt happen <br>';
+                else{
+                    $chart_counter++;
                 }
                  
     }

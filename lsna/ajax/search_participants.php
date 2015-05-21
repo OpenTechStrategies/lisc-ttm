@@ -1,4 +1,28 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($LSNA_id);
+
 /*search participants: */
 include "../include/dbconnopen.php";
 $first_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['first']);
@@ -57,29 +81,29 @@ $results =mysqli_query($cnnLSNA, $uncertain_search_query);
 <br/>
 
 <!--show results as dropdown: -->
-<?if ($_POST['result']=='dropdown'){
+<?php if ($_POST['result']=='dropdown'){
     /*results for surveys: */
     if ($_POST['action']=='teacher'){
         ?>
         <span class="helptext">Select the name of the teacher: </span><select id="new_teacher_name">
             <option value="">-----</option>
-            <?while ($user=mysqli_fetch_array($results)){
-                ?><option value="<?echo $user['Participant_ID']?>"><?echo $user['Name_First'] . " " . $user['Name_Last'];?></option><?
+            <?php while ($user=mysqli_fetch_array($results)){
+                ?><option value="<?php echo $user['Participant_ID']?>"><?php echo $user['Name_First'] . " " . $user['Name_Last'];?></option><?php 
             }
             ?>
         </select>
-        <?
+        <?php
     }
     else{
     ?>
         <span class="helptext">Select the name of the person you would like to add: </span><select id="relative_search">
             <option value="">-----</option>
-            <?while ($user=mysqli_fetch_array($results)){
-                ?><option value="<?echo $user['Participant_ID']?>"><?echo $user['Name_First'] . " " . $user['Name_Last'];?></option><?
+            <?php while ($user=mysqli_fetch_array($results)){
+                ?><option value="<?php echo $user['Participant_ID']?>"><?php echo $user['Name_First'] . " " . $user['Name_Last'];?></option><?php
             }
             ?>
         </select>
-        <?
+        <?php
     }
 }
 else{?>
@@ -95,13 +119,13 @@ else{?>
         <th>Role(s)</th>
 		<th></th>
     </tr>
-    <?
+    <?php
 while ($user=mysqli_fetch_array($results)){
 	$date_formatted = explode('-', $user['Date_of_Birth']);
 	$date = $date_formatted[1] . '-'. $date_formatted[2] . '-'. $date_formatted[0];
     ?>
     <tr>
-        <td class="all_projects" ><?echo $user['Participant_ID'];?></td>
+        <td class="all_projects" ><?php echo $user['Participant_ID'];?></td>
 		<td class="all_projects" style="text-align:left;"><a href="javascript:;" onclick="
 		$('#participant_search_div').hide();
 		$('#new_participant_div').hide();
@@ -110,7 +134,7 @@ while ($user=mysqli_fetch_array($results)){
                         '/lsna/ajax/set_participant_id.php',
                         {
                             page: 'profile',
-                            participant_id:'<?echo $user['Participant_ID'];?>'
+                            participant_id:'<?php echo $user['Participant_ID'];?>'
                         },
                         function (response){
                             if (response!='1'){
@@ -119,40 +143,47 @@ while ($user=mysqli_fetch_array($results)){
                             document.write(response);
                             window.location='/lsna/participants/participant_profile.php';
                        }
-           );
-		"><?echo $user['Name_First'] . " " . $user['Name_Last'];?></a></td>
-        <td class="all_projects"><?if ($user['Gender']=='m'){echo 'Male';}else if ($user['Gender']=='f'){echo 'Female';}?></td>
-        <td class="all_projects"><?echo $date;?></td>
-        <td class="all_projects"><?echo $user['Grade_Level'];?></td>
-        <td class="all_projects"><?$get_roles = "SELECT * FROM Participants_Roles INNER JOIN Roles ON Participants_Roles.Role_ID=
+           ).fail(failAlert);
+		"><?php echo $user['Name_First'] . " " . $user['Name_Last'];?></a></td>
+        <td class="all_projects"><?php if ($user['Gender']=='m'){echo 'Male';}else if ($user['Gender']=='f'){echo 'Female';}?></td>
+        <td class="all_projects"><?php echo $date;?></td>
+        <td class="all_projects"><?php echo $user['Grade_Level'];?></td>
+        <td class="all_projects"><?php $get_roles = "SELECT * FROM Participants_Roles INNER JOIN Roles ON Participants_Roles.Role_ID=
             Roles.Role_ID WHERE Participants_Roles.Participant_ID='" . $user['Participant_ID'] . "'";
             $roles = mysqli_query($cnnLSNA, $get_roles);
             while ($role = mysqli_fetch_array($roles)){
                 echo $role['Role_Title'] . "<br>";
             }
-        ?></td><td class="all_projects hide_on_view">
-            <input type="button" value="Delete..." class="hide_on_view" onclick="
+        ?></td>
+<?php
+if ($USER->has_site_access($LSNA_id, $AdminAccess)){
+?>
+<td class="all_projects">
+            <input type="button" value="Delete..." onclick="
                    var double_check=confirm('Are you sure you want to delete this participant from the database?  This action cannot be undone.');
                    if (double_check){
                        $.post(
                         '../ajax/delete_elements.php',
                         {
                             action: 'participant',
-                            id: '<?echo $user['Participant_ID'];?>'
+                            id: '<?php echo $user['Participant_ID'];?>'
                         },
                         function (response){
                             //document.write(response);
                             alert('This participant has been successfully deleted.');
                         }
-                   );
+                   ).fail(failAlert);
                    }
                                   ">
         </td>
+<?php
+} //end access check
+?>
     </tr>
-        <?
+        <?php
 }
 include "../include/dbconnclose.php";
 ?>
     </table>
 <div id="show_error"></div>
-<?}?>
+<?php }?>

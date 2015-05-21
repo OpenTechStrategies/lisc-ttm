@@ -1,7 +1,31 @@
-<?
-	include "../../header.php";
-	include "../header.php";
-	include "../include/datepicker_wtw.php";
+<?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Enlace_id);
+
+include "../../header.php";
+include "../header.php";
+include "../include/datepicker_wtw.php";
 ?>
 
 <!--
@@ -89,7 +113,7 @@ Page that shows Little Village events that aren't connected to a campaign.
                     //document.write(response);
                     window.location='events.php';
                 }
-            );">&nbsp;&nbsp;&nbsp;<span class="helptext">Dates must be entered in the format YYYY-MM-DD.</span></td></tr>
+            ).fail(failAlert);">&nbsp;&nbsp;&nbsp;<span class="helptext">Dates must be entered in the format YYYY-MM-DD.</span></td></tr>
 		</table>
 	</td>
 	<td>
@@ -169,7 +193,7 @@ Page that shows Little Village events that aren't connected to a campaign.
             			                    },
              			                   function (response){
                			                     document.getElementById('show_results').innerHTML = response;
-               			                 });"/><div id="show_results"></div>
+               			                 }).fail(failAlert);"/><div id="show_results"></div>
 						<input type="button" value="Add Participant" onclick="$.post(
 									'../ajax/add_participant.php',
 									{
@@ -181,7 +205,7 @@ Page that shows Little Village events that aren't connected to a campaign.
 										//document.write(response);
 										window.location='events.php?event=<?echo $event['Campaign_Event_ID'];?>';
 									}
-								)" id="add_participant_button" />
+								).fail(failAlert);" id="add_participant_button" />
 					</td>
 				</tr>
 			</table>

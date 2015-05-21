@@ -1,9 +1,31 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($Bickerdike_id);
 
 include "../../header.php";
 include "../header.php";
 include "data_menu.php";
-//include "../include/datepicker.php";
 ?>
 <!--This reports on all surveys. It shows average responses, then includes pie charts for the results.
 
@@ -57,7 +79,7 @@ going on the live site.
            function (response){
                document.getElementById('show_search_results').innerHTML = response;
            }
-       )">
+       ).fail(failAlert);">
 </p><!--Shows the table of averages here.  The table of averages over all time
     still shows up below.-->
 <div id="show_search_results"></div>
@@ -88,8 +110,6 @@ going on the live site.
     $laters = mysqli_query($cnnBickerdike, $count_laters_sqlsafe);
     $num_laters = mysqli_num_rows($laters);
     include "../include/dbconnclose.php";
-    
-    //$limit=0;
     ?>
 <!--        <a href="">Reset Aggregates</a>-->
     <tr>
@@ -328,10 +348,7 @@ $chart_id_array=array('chart1', 'chart1_b', 'chart1_c', 'chart2', 'chart2_b', 'c
 
         $chart_counter=0;
 foreach($question_array as $question_sqlsafe){
-   // echo $question_sqlsafe . "<br>";
-   // foreach ($type_array as $type){
         for ($i=1; $i<4; $i++){
-            //echo "right after the i's " . $question_sqlsafe . " " . $i . "<br>";
             $script_str='';/*
              * this routine gets the number of times each response to the question was made.
              * The $question_sqlsafe variable refers to the column of the question being called (so each question
@@ -345,7 +362,6 @@ foreach($question_array as $question_sqlsafe){
                 $call_for_arrays_sqlsafe="CALL pie_chart_arrays_all(" . $i . ", '" .$question_sqlsafe . "')";
             include "../include/dbconnopen.php";
             $questions=mysqli_query($cnnBickerdike, $call_for_arrays_sqlsafe);
-            //echo "after questions: " . $question_sqlsafe . " " . $i . "<br>";
              /*
            * Now we have to go through some gymnastics to get the returned information into an acceptable
            * form for the jqplot creation.
@@ -494,8 +510,6 @@ go on the chart.
         ],
         legend: {
             show: true
-            //placement: 'outsideGrid',
-            //labels: labels
         }
   });
     })
@@ -528,13 +542,6 @@ go on the chart.
 <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.pieRenderer.min.js"></script>
 <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.categoryAxisRenderer.min.js"></script>
 <script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.pointLabels.min.js"></script>
-
-
-
-
-<!--<a onclick="
-	$('#chart0_parent').slideToggle('slow');
-"><h4>Change in Reported Importance of Diet and Nutrition</h4></a>-->
 <div id="chart0_parent"><div id="chart0" class="jqplot-target" style="height: 300px; width: 800px; position: relative;"></div><br/></div>
 
 <a onclick="
@@ -641,4 +648,4 @@ go on the chart.
 
 
 
-<? include "../../footer.php"; ?>
+<?php include "../../footer.php"; ?>

@@ -1,15 +1,29 @@
+<?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id);
+?>
 <div id="teacher_surveys">
-    <!--This jqplot stuff is actually irrelevant, since we didn't end up making a chart for the teacher surveys: -->
-    
-        <!--[if IE]>
-<script src="/include/excanvas_r3/excanvas.js"></script>
-<![endif]-->
-<!--<script language="javascript" type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/jquery.min.js"></script>-->
-<script language="javascript" type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/jquery.jqplot.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/include/jquery.jqplot.1.0.4r1121/jquery.jqplot.css" />
-<script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.barRenderer.min.js"></script>
-<script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.categoryAxisRenderer.min.js"></script>
-<script type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/plugins/jqplot.pointLabels.min.js"></script>
 
 <!--Since the pre and post surveys ask some different questions, the responses are separated here. -->
 <h4>Pre-Program Surveys</h4>
@@ -194,7 +208,6 @@ foreach($percent_questions_arr as $question){
             $num_options = mysqli_num_rows($questions);
             $total_post_responses=0;
           while ($survey = mysqli_fetch_row($questions)){
-             // print_r($survey);
            foreach($survey as $key => $value)
                 {
                //creates the correct arrays for results, below
@@ -523,10 +536,8 @@ foreach($task_questions_arr as $question){
                     echo 'mean: ' . number_format($survey[0]/$total_responses, 2) . "<br>";
                     $get_median = "SELECT Teacher_Involvement_A FROM PM_Teacher_Survey 
                         ORDER BY Teacher_Involvement_A LIMIT ".floor($total_responses/2).", 1;";
-                    //echo $get_median;
                     include "../include/dbconnopen.php";
                     $median=mysqli_query($cnnLSNA, $get_median);
-                    //print_r($median);
                     $med=mysqli_fetch_row($median);
                     echo 'median: ' . $med[0] . "<br>";
                 }
@@ -575,10 +586,8 @@ foreach($task_questions_arr as $question){
                 if ($question!='Teacher_Parent_Network_K' && $question!='Teacher_Parent_Network_L'){
                     echo 'mean: ' . $survey[0]/$total_post_responses . "<br>";
                     $get_median = "SELECT Teacher_Involvement_A FROM PM_Teacher_Survey ORDER BY Teacher_Involvement_A LIMIT ".floor($total_post_responses/2).", 1;";
-                    //echo $get_median;
                     include "../include/dbconnopen.php";
                     $median=mysqli_query($cnnLSNA, $get_median);
-                    //print_r($median);
                     $med=mysqli_fetch_row($median);
                     echo 'median: ' . $med[0] . "<br>";
                 }

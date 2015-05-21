@@ -1,4 +1,28 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
+
 include "../header.php";
 include "../bickerdike/header.php";
 /*
@@ -14,7 +38,7 @@ include "../bickerdike/header.php";
 			}, function() {
 				$(this).removeClass("selected");
 			});
-                        //$('.hide_on_view').hide();
+
 		});
 </script>
 
@@ -24,7 +48,14 @@ include "../bickerdike/header.php";
 <br/>
 <table class="homescreen_table">
 	<tr>
-		<td width="50%"><a href="users/add_user.php" class="add_new hide_on_view" style="text-align:center;"><span class="add_new_button">Create New Participant</span></a><br/><br/>
+		<td width="50%">
+<?php
+    if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<a href="users/add_user.php" class="add_new " style="text-align:center;"><span class="add_new_button">Create New Participant</span></a><br/><br/>
+<?php
+    } //end access check
+?>
 				<h4>Search All Participants:</h4>
 				<table class="search_table">
 				    <tr><td class="all_projects"><strong>First Name:</strong></td>
@@ -104,13 +135,20 @@ include "../bickerdike/header.php";
                                     //document.write(response);
                                     document.getElementById('show_results').innerHTML = response;
                                 }
-                           )"></th>
+                           ).fail(failAlert);"></th>
     				</tr>
 				</table>
 
 				<div id="show_results"></div>
 		</td>
-		<td ><a href="activities/new_program.php"class="add_new hide_on_view"><span class="add_new_button">Create New Program</span></a><br/><br/>
+		<td >
+<?php
+                                                    if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<a href="activities/new_program.php"class="add_new "><span class="add_new_button">Create New Program</span></a><br/><br/>
+<?php
+                                                    } //end access check
+?>
 				<h4>Search All Programs:</h4>
 				<table class="program_table">
  				   <tr><td class="all_projects"><strong>Program Name (or part of name):</strong></td>
@@ -157,26 +195,12 @@ include "../bickerdike/header.php";
                                 function (response){
                                     document.getElementById('show_program_results').innerHTML = response;
                                 }
-                           )"></th></tr>
+                           ).fail(failAlert);"></th></tr>
 				</table><br/>
 				<div id="show_program_results"></div>
 		</td>
-		<!--<td><a href="activities/new_activity.php"class="add_new"><span class="add_new_button">Create New Event</span></a></td>-->
 	</tr>
 </table>
-
-<!--<a href="include/reports.php">View Reports</a><br>
-<a href="include/data.php">View Survey Data</a>
-<br>
-if admin:<br>
-<a href="">Create New Report</a><br>
-<a href="activities/new_activity.php">Add New Activity or Event</a><br>
-<a href="users/add_user.php">Add New User</a><br>
-<a href="">Add New Program</a>
-<p></p>
-<a href="activities/view_search_activities.php">View All Activities</a><br>
-<a href="activities/view_all_programs.php">View All Programs</a><br>
-<a href="users/all_users.php">Search/Edit Users</a><br>-->
 
 <br/><br/><br/>
 

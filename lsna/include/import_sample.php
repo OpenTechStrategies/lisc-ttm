@@ -1,4 +1,23 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 /* file that allows LSNA to import Cityspan info (only very specific): 
  * used the CDD import file as a template.
  */
@@ -205,12 +224,9 @@ else {
         echo "</pre>";
 
         fclose($handle);
-//print_r($exploded_line);
         //summary
         echo "Lines: <br /><pre>";
         foreach ($dbs as $key => $val) {
-            //print "$key = $val\n";
-
             //open DB
             include 'dbconnopen.php';
             $val_sqlsafe=mysqli_real_escape_string($cnnLSNA, $val);
@@ -218,7 +234,7 @@ else {
             //echo $import_query . "<br>";
             $imported_record = mysqli_query($cnnLSNA, $import_query);
 
-            if (is_object($imported_record)) { //->num_rows > 0) {
+            if (is_object($imported_record)) {
                 echo "IMPORTED!\r\n";
             } else {
                 echo "NOT IMPORTED... this line: ".$val.".\r\n";

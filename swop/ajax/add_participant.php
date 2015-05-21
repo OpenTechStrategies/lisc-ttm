@@ -1,4 +1,27 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id, $DataEntryAccess);
+
 if ($_POST['action'] == 'add_to_pool') {
     /* add an existing person to the housing pool */
     include "../include/dbconnopen.php";
@@ -117,7 +140,7 @@ if ($_POST['action'] == 'add_to_pool') {
                                     Activity_Type
                                 ) VALUES (
                                     '" . mysqli_real_escape_string($cnnSWOP, $_POST['first_name']) . "',
-                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['last_name'] . "',
+                                    '" . mysqli_real_escape_string($cnnSWOP, $_POST['last_name']) . "',
                                     '" . mysqli_real_escape_string($cnnSWOP, $_POST['day_phone']) . "',
                                     '" . mysqli_real_escape_string($cnnSWOP, $_POST['email']) . "',
                                     '" . mysqli_real_escape_string($cnnSWOP, $_POST['gender']) . "',
@@ -143,16 +166,12 @@ if ($_POST['action'] == 'add_to_pool') {
             '" . mysqli_real_escape_string($cnnSWOP, $_POST['city']) . "',
             '" . mysqli_real_escape_string($cnnSWOP, $_POST['state']) . "',
             '" . mysqli_real_escape_string($cnnSWOP, $_POST['zip']) . "')";
-
-//echo $create_new_participant_query;
     mysqli_query($cnnSWOP, $create_new_participant_query_sqlsafe);
-//mysqli_query($cnnSWOP, $add_property);
     $id = mysqli_insert_id($cnnSWOP);
-    $add_pool_status_sqlsafe = "INSERT INTO Pool_Status_Changes (Active, Participant_ID, Activity_Type, Member_Type) VALUES ('" . $mysqli_real_escape_string($cnnSWOP, $_POST['pool']) . "', '" . $id . "', 4, '" . mysqli_real_escape_string($cnnSWOP, $_POST['pool_type']) . "')";
+    $add_pool_status_sqlsafe = "INSERT INTO Pool_Status_Changes (Active, Participant_ID, Activity_Type, Member_Type) VALUES ('" . mysqli_real_escape_string($cnnSWOP, $_POST['pool']) . "', '" . $id . "', 4, '" . mysqli_real_escape_string($cnnSWOP, $_POST['pool_type']) . "')";
     mysqli_query($cnnSWOP, $add_pool_status_sqlsafe);
     if ($_POST['primary_inst'] != '') {
         $link_to_inst_sqlsafe = "INSERT INTO Institutions_Participants (Institution_ID, Participant_ID, Is_Primary, Activity_Type) VALUES ('" . mysqli_real_escape_string($cnnSWOP, $_POST['primary_inst']) . "', $id, 1, 6)";
-        //echo $link_to_inst;
         mysqli_query($cnnSWOP, $link_to_inst_sqlsafe);
     }
 
@@ -170,7 +189,8 @@ if ($_POST['action'] == 'add_to_pool') {
                         participant_id: '<?php echo $id; ?>'
                     },
             function(response) {
-                window.location = response;
+                                   var url = response;
+                                   window.location = url;
 
             }
             );

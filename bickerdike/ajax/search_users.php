@@ -1,5 +1,29 @@
 <?php
 /*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id, $DataEntryAccess);
+
+/*
  * Query-type search for users, too.
  */
 
@@ -66,7 +90,6 @@ if ($_POST['id'] != '') {
     }
 
     $uncertain_search_query_sqlsafe = "SELECT * FROM Users WHERE User_ID!='' " . $first_sqlsafe . $last_sqlsafe . $zip_sqlsafe . $age_sqlsafe . $gender_sqlsafe . $race_sqlsafe . $type_sqlsafe . "ORDER BY Last_Name";
-//echo $uncertain_search_query_sqlsafe;
 
     include "../include/dbconnopen.php";
     $results = mysqli_query($cnnBickerdike, $uncertain_search_query_sqlsafe);
@@ -142,7 +165,6 @@ if ($_POST['dropdown'] == 'yes') {
                                     new_id: document.getElementById('choose_for_merge').value
                                 },
                         function(response) {
-                            //document.write(response);
                             document.getElementById('thanks_merge').innerHTML = 'Thank you for merging these two profiles.';
                         }
                         )"><div id="thanks_merge"></div>

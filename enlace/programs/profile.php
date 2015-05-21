@@ -1,38 +1,36 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($Enlace_id, $ReadOnlyAccess, $_COOKIE['program']);
+
 include "../../header.php";
 include "../header.php";
 include "../classes/program.php";
+require_once("../classes/assessment.php");
 $program = new Program();
 $program->load_with_program_id($_COOKIE['program']);
 
-//make sure the user has access to the program
-//
-// *First determine the program that the logged-in user has access to.  Usually this will be a program ID number,
-// *but sometimes it will be 'a' (all) or 'n' (none).
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
-$user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['user']);
-$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = '" . $user_sqlsafe . "'";
-//echo $get_program_access;
-$program_access = mysqli_query($cnnLISC, $get_program_access);
-$prog_access = mysqli_fetch_row($program_access);
-$access = $prog_access[0];
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
 
-//if not an administrator
-if ($access != 'a') {
-    //if user doesn't have access
-    if ($access != $_COOKIE['program']) {
-        //deny access
-        ?>
-        <h2>Access Denied</h2>
-        <p>Access: <?php echo $access; ?><br>You do not have permission to view this participant.
-            If you believe you have reached this page in error, please contact a system administrator.</p>
-        <?php
-        include "../../footer.php";
-        return;
-    }
-}
 ?>
 <!--
 Shows all program information.
@@ -288,44 +286,12 @@ Shows all program information.
                                     //document.write(response);
                                     window.location = 'profile.php';
                                 }
-                                )" class="edit_program">
+                                ).fail(failAlert);" class="edit_program">
 
                         </td></tr>
                 </table><br/><br/>
                 <h4>Surveys</h4>
-              <!--  <table class="inner_table">
-                    <tr style="font-size:.9em;"><th>Session</th><th>Survey Date</th><th></th><th></th></tr>
-                    <?//get a list of surveys that have already been entered
-                    $get_surveys="SELECT Date_Logged,  Program_Survey_ID, Session_Name, Session_Names.Session_ID FROM Program_Surveys
-                    INNER JOIN Session_Names ON Program_Surveys.Session_ID=Session_Names.Session_ID 
-                    WHERE Program_Surveys.Program_ID='$program->program_id'";
-                   // echo $get_surveys;
-                    include "../include/dbconnopen.php";
-                    $surveys=mysqli_query($cnnEnlace, $get_surveys);
-                    while($surv=mysqli_fetch_row($surveys)){
-                        ?><tr><td><?php echo $surv[3] . ": " . $surv[2]; ?></td>
-                            <td><?$this_date=explode('-', $surv[0]);
-                                date_default_timezone_set('America/Chicago');
-                                $show_date=mktime(0,0,0, $this_date[1], $this_date[2], $this_date[0]);
-                                $display_date=date('n/j/Y', $show_date);
-                                echo $display_date;
-                                ?></td><td><a href="view_survey.php?surv=<?php echo $surv[1] ?>">View/Edit</a></td>
-                            <td><a href="javascript:;" class="no_view" onclick="
-                                   $.post(
-                                   '../ajax/delete_survey.php',
-                                   {
-                                       id: '<?php echo $surv[1] ?>'
-                                   },
-                                   function(response){
-                                     //  document.write(response);
-                                       window.location='profile.php';
-                                   }
-                               )">Delete</a></td>
-                        </tr><?
-                    }
-                    include "../include/dbconnclose.php";
-                    ?>
-                </table>-->
+
 
                 <!--Originally this section showed a list of surveys.  Users requested instead a 
                 percentage completed per session.
@@ -400,7 +366,6 @@ Shows all program information.
                                         program: '<?php echo $program->program_id; ?>'
                                     },
                             function(response) {
-                                // alert(response);
                                 if (response != 0) {
                                     alert('This program already has a session with this name.  Please choose a different name.');
                                     return false;
@@ -418,9 +383,9 @@ Shows all program information.
                                     function(response) {
                                         // document.write(response);
                                         document.getElementById('save_new_session').innerHTML = 'Thank you for adding this session (refresh to view).';
-                                    });
+                                    }).fail(failAlert);
                                 }
-                            });
+                            }).fail(failAlert);
                                                              " value="Save Session">
                             <div id="save_new_session" style="font-weight: bold;"></div></td></tr>
                 </table>
@@ -458,22 +423,18 @@ Shows all program information.
                             // document.write(response);
                             window.location = 'profile.php';
                         }
-                        )">
+                        ).fail(failAlert);">
 
                 <br/><br/>
 
                 <!--List of participants in this program, sorted by session:-->
                 <h4>Participants</h4>
                 <?php
-                $get_all_participants = "SELECT *
-                FROM Participants_Programs INNER JOIN Participants
-                    ON Participants.Participant_ID=Participants_Programs.Participant_ID 
-                    INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_ID
-                    WHERE Session_Names.Program_ID='" . $program->program_id . "' ORDER BY Session_ID, Participants.Last_Name";
+                $get_all_participants = "SELECT Session_Names.Session_ID, Session_Names.Session_Name, Participants.Participant_ID, Participants_Programs.Date_Dropped, Participant_Program_ID, Participants.First_Name, Participants.Last_Name, COUNT(Assessments.Assessment_ID) FROM Participants_Programs INNER JOIN Participants ON Participants.Participant_ID=Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_ID LEFT JOIN Assessments ON (Participants.Participant_ID = Assessments.Participant_ID AND Session_Names.Session_ID = Assessments.Session_ID) WHERE Session_Names.Program_ID='$program->program_id' GROUP BY Session_Names.Session_ID, Participants.Participant_ID ORDER BY Session_Names.Session_ID, Participants.Last_Name";
 
-                //echo $get_all_participants;
                 include "../include/dbconnopen.php";
                 $all_participants = mysqli_query($cnnEnlace, $get_all_participants);
+                $all_surveys = mysqli_query($cnnEnlace, $get_intake_surveys);
                 $current_session = "";
                 ?><table class="inner_table">
 
@@ -485,6 +446,7 @@ Shows all program information.
                         <th>Dosage Percentage</th>
                         <th>Total hours in this program</th>
                         <th>Total hours across funded programs</th>
+                        <th>Intake survey completed</th>
                         <?php
                         //if an administrator
                         if ($access == 'a') {
@@ -517,8 +479,7 @@ Shows all program information.
                                                                         //document.write(response);
                                                                         window.location = 'profile.php';
                                                                     }
-                                                                    )
-                                                                }
+                                                                    ).fail(failAlert);}
                                                             }" style="font-size: .8em; color: #f00; font-weight: bold;">X</a>
                                                <?php
                                            }
@@ -542,7 +503,7 @@ Shows all program information.
                                                        // document.write(response);
                                                        window.location='profile.php';
                                                     }
-                                                    )" style="font-size:.8em;">Drop from program</a>)
+                                                    ).fail(failAlert);" style="font-size:.8em;">Drop from program</a>)
                                         <?php
                                     } else {
                                         echo 'Dropped: ' . $all_p['Date_Dropped'];
@@ -600,6 +561,7 @@ Shows all program information.
     echo $all_hours;
     ?>
                             </td>
+                            <td><?php echo ($all_p['COUNT(Assessments.Assessment_ID)'] > 0) ? 'Yes' : 'No'; ?></td>
                                 <?php
                                 //if an administrator
                                 if ($access == 'a') {
@@ -618,7 +580,7 @@ Shows all program information.
                                                             //document.write(response);
                                                             window.location = 'profile.php';
                                                         }
-                                                        )
+                                                        ).fail(failAlert);
                                                     }" style="font-size:.8em; color: #f00; font-weight: bold;">X</a>
                                 </td>
                                        <?php
@@ -669,7 +631,7 @@ Shows all program information.
                                     function(response) {
                                         document.getElementById('show_results').innerHTML = response;
                                         $('.add_new_person_to_session').show();
-                                    });"/>
+                                    }).fail(failAlert);"/>
                             <div id="show_results"></div>
                             <div id="session_selector"><span class="helptext">Select the name of the session this person participated in: </span>
                                    <?php
@@ -704,10 +666,9 @@ while ($sess = mysqli_fetch_row($sessions)) {
                                                 participant: document.getElementById('relative_search').value
                                             },
                                     function(response) {
-                                        //document.write(response);
                                         window.location = 'profile.php';
                                     }
-                                    )" id="add_participant_button">
+                                    ).fail(failAlert);" id="add_participant_button">
                             <div id="session_alert" style="font-weight:bold;color:#990000;"></div>
                         </td>
                     </tr>
@@ -829,7 +790,7 @@ while ($sess = mysqli_fetch_row($sessions)) {
                             function(response) {
                                 document.getElementById('confirmation').innerHTML = response;
                             }
-                            );" value="Save" /></td>
+                            ).fail(failAlert);" value="Save" /></td>
                 </tr>
             </table>
             <div id="confirmation" style="text-align:center;"></div>
@@ -885,7 +846,7 @@ while ($sess = mysqli_fetch_row($sessions)) {
                                                         //document.write(response);
                                                         window.location = 'profile.php';
                                                     }
-                                                    )">Delete this date</a>
+                                                    ).fail(failAlert);">Delete this date</a>
                                 </td>
                                 <td class="all_projects"><?php
                             $get_all_participants = "SELECT * FROM Participants_Programs INNER JOIN Participants
@@ -950,7 +911,7 @@ while ($sess = mysqli_fetch_row($sessions)) {
                                     //document.write(response);
                                     window.location = 'profile.php';
                                 }
-                                )"></td></tr>
+                                ).fail(failAlert)"></td></tr>
                 </table>
 
                 <!--Function for adding and removing absences: -->
@@ -969,7 +930,7 @@ while ($sess = mysqli_fetch_row($sessions)) {
                                 //document.write(response);
                                 //window.location = "profile.php";
                             }
-                            )
+                            ).fail(failAlert);
                         }
                         else if (cb.checked == false) {
                             $.post(
@@ -983,7 +944,7 @@ while ($sess = mysqli_fetch_row($sessions)) {
                                 // document.write(response);
                                 // window.location = "profile.php";
                             }
-                            );
+                            ).fail(failAlert);
                         }
                     }
                 </script>

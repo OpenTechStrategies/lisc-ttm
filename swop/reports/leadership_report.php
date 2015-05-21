@@ -1,4 +1,27 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker_simple.php";
@@ -50,7 +73,7 @@ include "../include/datepicker_simple.php";
                                     function (response){
                                         document.getElementById('show_response_here').innerHTML=response;
                                     }
-                                            )"></td></tr>
+                                            ).fail(failAlert);"></td></tr>
         <tr><th>Attended 1 or more events in this date range:</th><td><input type="text" class="hasDatepickers" id="pre_date"><br>
                 <input type="text" class="hasDatepickers" id="post_date"></td><td><input type="button" value="Search" onclick="
                             if (document.getElementById('include_address').checked==true){ var include_address=1; } else{ var include_address=0;}
@@ -77,7 +100,7 @@ include "../include/datepicker_simple.php";
                                 function (response){
                                     document.getElementById('show_response_here').innerHTML=response;
                                 }
-                                        )"></td></tr>
+                                        ).fail(failAlert);"></td></tr>
                     <tr><th>Leader Type:</th><td><select id="leader_type">
                                 <option value="">-----</option>
                                 <option value="1">Primary</option>
@@ -106,7 +129,7 @@ include "../include/datepicker_simple.php";
                                                                                           function (response){
                                                                                               document.getElementById('show_response_here').innerHTML=response;
                                                                                           }
-                                                                                                  )"></td></tr>
+                                                                                                  ).fail(failAlert);"></td></tr>
                                 <tr><th>Institutional  Leaders</th><td><select id="institution_link">
                                             <option value="">-----</option>
                                              <?php
@@ -143,7 +166,7 @@ include "../include/datepicker_simple.php";
                                                                                           function (response){
                                                                                               document.getElementById('show_response_here').innerHTML=response;
                                                                                           }
-                                                                                                  )"></td></tr>
+                                                                                                  ).fail(failAlert);"></td></tr>
         
     </table>
     <h4>Include in Results</h4>
@@ -201,3 +224,6 @@ include "../include/datepicker_simple.php";
     <span id="show_response_here">
         
     </span>
+<?php
+close_all_dbconn();
+?>

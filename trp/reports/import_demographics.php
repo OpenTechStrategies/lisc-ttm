@@ -1,4 +1,27 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
 
 /* not being used for TRP right now (obsolete). */
 
@@ -124,14 +147,13 @@ if (!isset($_POST['posted'])) {
                     else{
                         //I'm going to assume (yikes!) that they'll write names as last name comma first name.  We shall see.
                         //
-                        //print_r($exploded_line);
                         //
                         //split up names (in case they just enter them as first space last)
 //                        $names=explode(' ',$exploded_line[1]);
 //                        $name_first=$names[0];
 //                        $surname=$names[1];
                         include "../include/dbconnopen.php";
-                        $get_program_name_sqlsafe = "SELECT * FROM Participants WHERE First_Name='" . mysqli_real_escape_string($cnnTRP, $exploded_line[2]) "' AND Last_Name='" . mysqli_real_escape_string($cnnTRP, $exploded_line[1]) . "'";
+                        $get_program_name_sqlsafe = "SELECT * FROM Participants WHERE First_Name='" . mysqli_real_escape_string($cnnTRP, $exploded_line[2]) . "' AND Last_Name='" . mysqli_real_escape_string($cnnTRP, $exploded_line[1]) . "'";
                         $program_name=mysqli_query($cnnTRP, $get_program_name_sqlsafe);
                         //test whether the program already exists or not
                         if (mysqli_num_rows($program_name)>0){

@@ -1,4 +1,28 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
 function convert_string($string) {
     //converts smart quotes / dashes to normal quotes / dashes.
     $search = array(chr(145), chr(146), chr(147), chr(148), chr(150), chr(151), chr(152));
@@ -75,7 +99,6 @@ else{
         include "../include/dbconnopen.php";
         foreach ($line as $cell){
             $break=explode("\t", $cell);
-           // print_r($break);
             echo "<br>";
             //now, here we enter the student as a participant and save their information in the MS_to_HS_over_time table
             //check first whether they are already a participant

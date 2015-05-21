@@ -1,4 +1,28 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Enlace_id);
+
 /* profile for campaign.  Campaign class is loaded with the campaign cookie that was set after the click on whatever link brought
  * the user here.
  */
@@ -69,7 +93,7 @@ $campaign->load_with_id($_COOKIE['campaign']);
                                 //document.getElementById('show_ok').innerHTML += 'Thank you for adding '+document.getElementById('event').value + ' <br>';
                                 window.location = 'campaign_profile.php';
                             }
-                            );">&nbsp;&nbsp;&nbsp;<span class="helptext">Dates must be entered in the format YYYY-MM-DD.</span>
+                            ).fail(failAlert);">&nbsp;&nbsp;&nbsp;<span class="helptext">Dates must be entered in the format YYYY-MM-DD.</span>
                             <div id="show_ok"></div></td></tr>
                 </table>
 
@@ -120,7 +144,7 @@ $campaign->load_with_id($_COOKIE['campaign']);
                             //document.write(response);
                             window.location = 'campaign_profile.php';
                         }
-                        )"></td>
+                        ).fail(failAlert)"></td>
         </tr>	
         <tr>
             <!--List of events associated with this campaign:
@@ -208,7 +232,11 @@ $campaign->load_with_id($_COOKIE['campaign']);
                                     <!--
                                     Can edit or add role here too.  Saves onchange.
                                     -->
-                                    <select class="attendee_role_edit role_<?php echo $attendee['Participants_Events_ID']; ?> no_view"
+<?php
+                     if ($USER->has_site_access($Enlace_id, $DataEntryAccess)){
+?>
+
+                                    <select class="attendee_role_edit role_<?php echo $attendee['Participants_Events_ID']; ?>"
                                             id="attendee_role" onchange="$.post(
                                                                     '../ajax/add_participant.php',
                                                                     {
@@ -220,7 +248,7 @@ $campaign->load_with_id($_COOKIE['campaign']);
                                                                 //document.write(response);
                                                                 window.location = 'campaign_profile.php';
                                                             }
-                                                            )" style="margin:0;">
+                                                            ).fail(failAlert);" style="margin:0;">
                                         <option value="">----------</option>
                                         <option value="1" <?php echo ($attendee['Role_Type'] == '1' ? 'selected="selected"' : null); ?>>Attendee</option>
                                         <option value="2" <?php echo ($attendee['Role_Type'] == '2' ? 'selected="selected"' : null); ?>>Speaker</option>
@@ -228,16 +256,20 @@ $campaign->load_with_id($_COOKIE['campaign']);
                                         <option value="4" <?php echo ($attendee['Role_Type'] == '4' ? 'selected="selected"' : null); ?>>Prep work</option>
                                         <option value="5" <?php echo ($attendee['Role_Type'] == '5' ? 'selected="selected"' : null); ?>>Staff</option>
                                         <option value="6" <?php echo ($attendee['Role_Type'] == '6' ? 'selected="selected"' : null); ?>>Point Person</option>
-                                    </select><a class="helptext" href="javascript:;" onclick="
+                                    </select>
+<a class="helptext" href="javascript:;" onclick="
                                                     $('.role_<?php echo $attendee['Participants_Events_ID']; ?>').toggle();
 
-                                                "><em class="no_view" >add role...</em></a><br>
+                                                "><em >add role...</em></a>
+<?php
+                     } //end access check
+?><br>
                                                 <?php
                                             }
                                             ?>
                                 <br/>
                                 <!--
-                                At some point they'll probably want a search here, instead of a dropdown of all participants.
+                                At some point they\'ll probably want a search here, instead of a dropdown of all participants.
                                 Add attendees:
                                 -->
 
@@ -265,7 +297,7 @@ $campaign->load_with_id($_COOKIE['campaign']);
                                                 //document.write(response);
                                                 window.location = 'campaign_profile.php';
                                             }
-                                            )">
+                                            ).fail(failAlert);">
                             </td>
                             <td class="all_projects"><?php echo $event[Address_Num] . " " . $event['Address_Dir'] . " " . $event['Address_Street'] . " " . $event['Address_Suffix']; ?></td>
                             <td class="all_projects"><?php

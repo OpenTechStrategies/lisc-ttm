@@ -1,4 +1,28 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($Bickerdike_id);
+
 class Program
 {
     
@@ -61,7 +85,6 @@ class Program
         $program_dates_query_sqlsafe = "SELECT * FROM Program_Dates LEFT JOIN (Programs)
                                 ON (Programs.Program_ID=Program_Dates.Program_ID) WHERE Program_Dates.Program_ID='" . $this->program_id . "'
                                     ORDER BY Program_Date";
-        //echo $program_dates_query;
         $dates = mysqli_query($cnnBickerdike, $program_dates_query_sqlsafe);
         include "../include/dbconnclose.php";
         
@@ -77,7 +100,6 @@ class Program
         $program_users_query_sqlsafe = "SELECT * FROM Users LEFT JOIN (Programs_Users, Programs)
                                 ON (Programs.Program_ID=Programs_Users.Program_ID AND Users.User_ID=Programs_Users.User_ID)
                                 WHERE Programs_Users.Program_ID='" . $this->program_id . "'";
-        //echo $program_users_query;
         $users = mysqli_query($cnnBickerdike, $program_users_query_sqlsafe);
         include "../include/dbconnclose.php";
         

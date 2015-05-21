@@ -1,19 +1,30 @@
 <?php
 /*
- * First determine if the user is an admin. Usually this will be a program ID number,
- * but sometimes it will be 'a' (all) or 'n' (none).
- */
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
-$user_sqlsafe=mysqli_real_escape_string($cnnLISC, $_COOKIE['user']);
-$get_program_access = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id = Users_Privileges.User_ID
-    WHERE User_Email = '" . $user_sqlsafe . "'";
+user_enforce_has_access($Enlace_id);
 
-$program_access = mysqli_query($cnnLISC, $get_program_access);
-$prog_access = mysqli_fetch_row($program_access);
-$access = $prog_access[0];
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
-
+$access_array = $USER->program_access($Enlace_id);
+$access = $access_array[0];
 
 /* search from the participants homepage. */
 /* if a search term is filled in, then it is included in the query.  otherwise it isn't. */
@@ -94,7 +105,7 @@ if ($_POST['result'] == 'dropdown') {
     <span class="helptext">Select the name of the person you would like to add: </span><select id="relative_search">
         <option value="">-----</option>
         <?php while ($user = mysqli_fetch_array($results)) {
-            ?><option value="<?echo $user['Participant_ID']?>"><?php echo $user['First_Name'] . " " . $user['Last_Name']; ?></option><?php
+            ?><option value="<?php echo $user['Participant_ID']?>"><?php echo $user['First_Name'] . " " . $user['Last_Name']; ?></option><?php
         }
         ?>
     </select>
@@ -122,7 +133,7 @@ if ($_POST['result'] == 'dropdown') {
                                 },
                         function(response) {
                             document.getElementById('show_results').innerHTML = response;
-                        });">ID</a></th>
+                        }).fail(function() {alert('You do not have permission to perform this action.');});">ID</a></th>
             <th><a href="javascript:;" onclick="$.post(
                                 '/enlace/ajax/search_participants.php',
                                 {
@@ -139,7 +150,7 @@ if ($_POST['result'] == 'dropdown') {
                                 },
                         function(response) {
                             document.getElementById('show_results').innerHTML = response;
-                        });">Name</a></th>
+                        }).fail(function() {alert('You do not have permission to perform this action.');});">Name</a></th>
             <th><a href="javascript:;" onclick="$.post(
                                 '/enlace/ajax/search_participants.php',
                                 {
@@ -156,10 +167,10 @@ if ($_POST['result'] == 'dropdown') {
                                 },
                         function(response) {
                             document.getElementById('show_results').innerHTML = response;
-                        });">DOB</a></th>
+                        }).fail(function() {alert('You do not have permission to perform this action.');});">DOB</a></th>
                 <?php
                 //if an administrator
-                if ($access == 'a') {
+    if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
                     //show delete area
                     ?>
                     <th>
@@ -172,8 +183,6 @@ if ($_POST['result'] == 'dropdown') {
         <?php
         while ($user = mysqli_fetch_array($results)) {
             $this_date = explode('-', $user['DOB']);
-            //  print_r($this_date);echo "<br>";
-            //  echo $user['Participant_ID']."<br>";
             if ($this_date[1]) {
                 date_default_timezone_set('America/Chicago');
                 $show_date = mktime(0, 0, 0, $this_date[1], $this_date[2], $this_date[0]);
@@ -192,7 +201,8 @@ if ($_POST['result'] == 'dropdown') {
                     ?></td>
                 <?php
                 //if an administrator
-                if ($access == 'a') {
+
+                    if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
                     //show delete area
                     ?>
                 <td class="all_projects" style="text-align: center;">
@@ -212,7 +222,7 @@ if ($_POST['result'] == 'dropdown') {
                                                     }
                                                     )
                                                 }
-                                            }" style="font-size:.8em; color: #f00; font-weight: bold;">X</a>
+                                            }.fail(function() {alert('You do not have permission to perform this action.');})" style="font-size:.8em; color: #f00; font-weight: bold;">X</a>
                     </td>
                     <?php
                 }

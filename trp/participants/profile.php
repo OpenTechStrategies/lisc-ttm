@@ -1,7 +1,35 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
+$program_access_list = $USER->program_access($TRP_id);
+
+$has_all_programs =  in_array('a', $program_access_list);
+
 include "../../header.php";
 include "../header.php";
-include "../include/datepicker_simple.php";
+//include "../include/datepicker_simple.php";
 /* all information about the given participant */
 ?>
 <script type="text/javascript">
@@ -23,15 +51,7 @@ $parti = mysqli_fetch_array($get_participant);
 $date_formatted = explode('-', $parti['DOB']);
 $DOB = $date_formatted[1] . "/" . $date_formatted[2] . "/" . $date_formatted[0];
 
-/* program access determines whether the logged-in user can see program-specific information about this person.
- * The Gads Hill users may not be able to see results from museum surveys, for example. */
-include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
-$get_program_access_sqlsafe = "SELECT Program_Access FROM Users_Privileges INNER JOIN Users ON Users.User_Id=Users_Privileges.User_ID
-            WHERE User_Email=" . mysqli_real_escape_string($cnnLISC, $_COOKIE['user']) . " AND Privilege_ID=4";
-// echo $get_program_access_sqlsafe;
-$program_access = mysqli_query($cnnLISC, $get_program_access_sqlsafe);
-$prog_access = mysqli_fetch_row($program_access);
-$access = $prog_access[0];
+
 ?>
 <div class="content_block" id="participant_profile">
     <h3>Participant Profile - <?php echo $parti['First_Name'] . " " . $parti['Last_Name']; ?>
@@ -110,8 +130,11 @@ if ($parti['Gender'] == 'm') {
                 <input type="text" class="basic_info_edit" value="<?php echo $parti['CPS_ID']; ?>" id="cps_id_edit" />
             </td>
         </tr>
+<?php
+    if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
+?>
         <tr>
-            <td colspan="2"><a href="javascript:;" class="basic_info_show no_view" onclick="
+            <td colspan="2"><a href="javascript:;" class="basic_info_show" onclick="
                     $('.basic_info_show').toggle();
                     $('.basic_info_edit').toggle();
                                " style="margin-left:55px;">Edit...</a>
@@ -138,9 +161,12 @@ if ($parti['Gender'] == 'm') {
                         function(response) {
                             window.location = 'profile.php?id=<?php echo $parti['Participant_ID'] ?>';
                         }
-                        )" style="margin-left:55px;">Save!</a>
+                        ).fail(failAlert);" style="margin-left:55px;">Save!</a>
 
         </tr>
+<?php
+} // end access level check
+?>
     </table>
 </td>
 <td colspan="2">
@@ -164,8 +190,12 @@ if ($parti['Gender'] == 'm') {
                 <td><?php echo $date; ?></td>
                 <td><a href="../engagement/engagement.php?event=<?php echo $event['Event_ID']; ?>"><?php echo $event['Event_Name']; ?></a></td>
 
+<?php
+            //the removal option is only available to admin users:
+            if ($USER->has_site_access($TRP_id, $AdminAccess)){
+?>
                 <!-- Clicking "remove" here means deleting this person's attendance at this event: -->
-                <td><a href="javascript:;" class="helptext hide_on_view" onclick="
+                <td><a href="javascript:;" class="helptext" onclick="
                         $.post(
                                 '../ajax/add_attendee.php',
                                 {
@@ -176,13 +206,19 @@ if ($parti['Gender'] == 'm') {
                             //document.write(response);
                             window.location = 'profile.php?id=<?php echo $parti['Participant_ID'] ?>';
                         }
-                        )">Remove...</a></td>
+                        ).fail(failAlert);">Remove...</a></td>
             </tr>
-            <?php
+<?php
+} // end access level check
+
         }
         ?>
+<?php
+
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
+?>
         <!--- add to a new event: -->
-        <tr class="no_view"><td><span class="helptext">Add to event:</span></td>
+        <tr><td><span class="helptext">Add to event:</span></td>
             <td><select id="add_to_event">
                     <option value="">-----------</option>
                     <?php
@@ -210,8 +246,11 @@ if ($parti['Gender'] == 'm') {
                         //document.write(response);
                         window.location = 'profile.php?id=<?php echo $parti['Participant_ID'] ?>';
                     }
-                    )">Add...</a></td>
+                    ).fail(failAlert);">Add...</a></td>
         </tr>
+<?php
+} //end access level check
+?>
     </table>
 </td>
 </tr>
@@ -250,8 +289,13 @@ if ($parti['Gender'] == 'm') {
             }
             ?>
         </table>
+<?php
+
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
+?>
+
         <!-- add a parent or child: -->
-        <a class="helptext no_view" href="javascript:;" onclick="
+        <a class="helptext" href="javascript:;" onclick="
                 $('.add_family').slideToggle();
            ">Add family member...</a>
         <div class="add_family">
@@ -277,7 +321,7 @@ if ($parti['Gender'] == 'm') {
                                 //document.write(response);
                                 document.getElementById('find_fam_results').innerHTML = response;
                             }
-                            )"/>
+                            ).fail(failAlert);"/>
                 </tr>
             </table>
 
@@ -286,6 +330,9 @@ if ($parti['Gender'] == 'm') {
             <div id="find_fam_results"></div>
             <br/>
         </div>
+<?php 
+} // end access level check
+?>
     </td>
     <td>
 
@@ -324,21 +371,33 @@ if ($parti['Gender'] == 'm') {
         }
     }
     ?>
+<?php
+
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
+?>
+
                         <!-- once a consent year has been added, we can also upload and save the form itself: -->
-                        <form id="file_upload_form" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data" class="no_view">
+                        <form id="file_upload_form" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data">
                             <input type="file" name="file" id="file" style="font-size:.7em; padding-top:4px;"/> 
                             <input type="hidden" name="person_id" value="<?php echo $parti['Participant_ID']; ?>">
                             <input type="hidden" name="year" value="<?php echo $consent[2]; ?>">
                             <br />
                             <input type="submit" name="submit" value="Upload" style="font-size:.7em; padding-top:4px;"/>
                         </form>
-
+<?php
+} // end access level check
+?>
                     </td></tr>
     <?php
 }
 // include "../include/dbconnclose.php";
 ?>
-            <tr class="no_view"><!--Add new record-->
+<?php
+
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
+?>
+
+            <tr><!--Add new record-->
                 <td><select id="school_year_consent_new">
                         <option value="">-----</option>
                         <option value="1213">2012-2013</option>
@@ -365,7 +424,7 @@ if ($parti['Gender'] == 'm') {
                             //document.write(response);
                             window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                         }
-                        )"></td>
+                        ).fail(failAlert);"></td>
                 <td>
 
 
@@ -373,6 +432,9 @@ if ($parti['Gender'] == 'm') {
 
                 </td>
             </tr>
+<?php
+} // end access level check
+?>
         </table>
     </td>
 </tr>
@@ -399,7 +461,7 @@ if ($parti['Gender'] == 'm') {
             <h4><?php echo $program['Program_Name']; ?></h4>
                             <?php
                             //Early Childhood Education
-                            if ($program['Program_ID'] == 1 && ($access == 'a' || $access == 1)) {
+                            if ($program['Program_ID'] == 1 && ($has_all_programs || in_array(1, $program_access_list))) {
                                 ?>
                 <div class="program_details">
                     <table width="100%">
@@ -451,7 +513,7 @@ if ($parti['Gender'] == 'm') {
                                    function(response){
                                       // document.write(response);
                                       window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
-                                   });">
+                                   }).fail(failAlert);">
                                     <?php 
                                 //get class avgs based on classroom above
                                 $avg_query_sqlsafe="SELECT * FROM Class_Avg_Gold_Scores WHERE Classroom_ID='$class_chosen[0]'";
@@ -1440,7 +1502,7 @@ if ($parti['Gender'] == 'm') {
                                                     //alert('test');
                                                     window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                                                 }
-                                                )
+                                                ).fail(failAlert);
                                                                                           "/></td>
                                     </tr>
                                 </table></td></tr>
@@ -1456,7 +1518,7 @@ if ($parti['Gender'] == 'm') {
                                         function(response) {
                                             // document.write(response);
                                             window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
-                                        })"><?php echo $program['Notes'] ?></textarea>
+                                        }).fail(failAlert);"><?php echo $program['Notes'] ?></textarea>
                             </td></tr>
                     </table>
 
@@ -1465,7 +1527,7 @@ if ($parti['Gender'] == 'm') {
                 </div>
         <?php
         //Middle School to High School teacher exchange
-    } else if (($program['Program_ID'] == 2 || $program['Program_ID'] == 4) && ($access == 'a' || $access == 2 || $access == 4)) {
+            } else if (($program['Program_ID'] == 2 || $program['Program_ID'] == 4) && ($has_all_programs || in_array(2, $program_access_list) || in_array(4, $program_access_list))) {
         $get_transition_info_sqlsafe = "SELECT * FROM Explore_Scores WHERE Participant_ID=" . $parti['Participant_ID'] .
                 " AND Program_ID='" . $program['Program_ID'] . "'";
         include "../include/dbconnopen.php";
@@ -1574,7 +1636,7 @@ if ($parti['Gender'] == 'm') {
                                         //document.write(response);
                                         window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                                     }
-                                    )">Save...</a></td>
+                            ).fail(failAlert);">Save...</a></td>
                         </tr>
                     </table>
                     <br/><br/>
@@ -1610,7 +1672,7 @@ if ($parti['Gender'] == 'm') {
                                         window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                                     }
                                                         
-                                                        )"></td></tr>
+                                                   ).fail(failAlert);"></td></tr>
                     </table>
                     
                     <?php }?>
@@ -1704,7 +1766,7 @@ if ($parti['Gender'] == 'm') {
                                     //  document.write(response);
                                     window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                                 }
-                                )">Add new...</td>
+                                ).fail(failAlert);">Add new...</td>
                         </tr>
                     </table>
                     <br/><br/>
@@ -1796,14 +1858,14 @@ if ($parti['Gender'] == 'm') {
                                         //    document.write(response);
                                         window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                                     }
-                                    )">Add new...</td>
+                                    ).fail(failAlert);">Add new...</td>
                         </tr>
                     </table>
                     <br/><br/>
                 </div>
         <?php
         //New Horizons/Gads Hill tutoring
-    } else if ($program['Program_ID'] == 3 && ($access == 'a' || $access == 3)) {
+    } else if ($program['Program_ID'] == 3 && ($has_all_programs || in_array(3, $program_access_list))) {
         ?>
                 <div class="program_details">
                     <h5>Attendance</h5>
@@ -1891,7 +1953,7 @@ if ($parti['Gender'] == 'm') {
                                         document.write(response);
                                         //window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                                     }
-                                    )
+                                    ).fail(failAlert);
                                    ">Add new...</td>
                         </tr>
                     </table>
@@ -1916,10 +1978,10 @@ if ($parti['Gender'] == 'm') {
         <?php
         //Elev8 shows the same information as the middle school to high school transition, so this 
         //option for the if is no longer relevant.
-    } else if ($program['Program_ID'] == 4 && ($access == 'a' || $access == 4)) {
+    } else if ($program['Program_ID'] == 4 && ($has_all_programs || in_array(4, $program_access_list))) {
 
         //NMMA Artist in Residency
-    } else if ($program['Program_ID'] == 5 && ($access == 'a' || $access == 5)) {
+    } else if ($program['Program_ID'] == 5 && ( $has_all_programs || in_array(5, $program_access_list))) {
         ?>
                 <div class="program_details">
                     <h5>Attendance</h5>
@@ -2049,7 +2111,7 @@ if ($parti['Gender'] == 'm') {
                                         // document.write(response);
                                         window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                                     }
-                                    )
+                                    ).fail(failAlert);
                                    ">Add new...</td>
                         </tr>
                     </table>
@@ -2079,6 +2141,7 @@ function la_casa_edit_data_gen_html($array_of_options, $existing_value, $id_stri
     $result .= "</select>";
     return $result;
 }
+
                ?> 
             <div class="program_details">
             <h4>La Casa Information</h4>
@@ -2588,10 +2651,14 @@ $('.hide_loans_data_<?php echo $loandata[4]; ?>').toggle();">
                             <?php
                         }
                         ?>
+<?php
+
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
+?>
 
         <!-- and a dropdown menu of all programs that this participant might join. -->
         <br/><strong>Add to a new program:</strong>
-        <select id="all_programs_add" class="no_view">
+        <select id="all_programs">
             <option value="">-----</option>
 <?php
 $get_programs_sqlsafe = "SELECT * FROM Programs";
@@ -2604,8 +2671,7 @@ while ($prog = mysqli_fetch_row($programs)) {
 }
 include "../include/dbconnopen.php";
 ?>
-        </select><input type="button" value="Add to Program" class="no_view" onclick="
-                    $.post(
+        </select><input type="button" value="Add to Program" onclick="$.post(
                         '../ajax/add_participant_to_program.php',
                         {
                             program_id: document.getElementById('all_programs_add').value,
@@ -2614,8 +2680,11 @@ include "../include/dbconnopen.php";
                 function(response) {
                     window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                 }
-                    );">
-    </td>
+        ).fail(failAlert);">
+<?php
+} // end access level check
+?>
+ </td>
 </tr>
 
 </table>

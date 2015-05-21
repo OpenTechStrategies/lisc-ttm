@@ -1,6 +1,28 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 
-$cnnLISC = mysqli_connect("DB_SERVER", "CORE_DB_USER", "CORE_DB_PASS", "CORE_DB_NAME")
-or die ("Error Connecting To The Database Because: " . mysqli_connect_error());
+include_once $_SERVER['DOCUMENT_ROOT'] . "/core/tools/db.php";
+
+$cnnLISC = get_or_setup_db_conn(
+    "core",  // maybe cnnLISC?
+    new ConnectionMaker("DB_SERVER", "CORE_DB_USER", "CORE_DB_PASS", "CORE_DB_NAME"));
 
 ?>

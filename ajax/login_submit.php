@@ -1,7 +1,28 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 require("../include/phpass-0.3/PasswordHash.php");
 $hasher=new PasswordHash(8, false);
-
+ob_start();
+include_once $_SERVER['DOCUMENT_ROOT'] . "/core/tools/auth.php";
+ob_end_clean();
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 if (isset($_POST['username'])){
     $username = $_POST["username"];
@@ -13,7 +34,7 @@ if (isset($_POST['username'])){
 $password_in_db="*";
 $username_sqlsafe=mysqli_real_escape_string($cnnLISC, $username);
 
-$user_query = "SELECT User_ID, User_Password FROM Users WHERE User_Email = '$username_sqlsafe'";
+$user_query = "SELECT User_ID, User_Password, Locked FROM Users WHERE User_Email = '$username_sqlsafe'";
 $query_result = mysqli_query($cnnLISC, $user_query);
 
 // Will be > 0 iff $username is in the database.
@@ -26,72 +47,42 @@ $user_exists = mysqli_num_rows($query_result);
 if (! $user_exists) {
     $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username . "', ' - Unknown username'))";
     mysqli_query($cnnLISC, $log_call);
-    echo '0'; // signal to caller that something here failed
-    return 0;
-}
-
-$user_row = mysqli_fetch_row($query_result);
-$user_id=$user_row[0];
-$password_in_db=$user_row[1];
-$hash_match = $hasher->CheckPassword($password_received, $password_in_db);
-
-if ($hash_match) {
-    //record this login in the Log
-    $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Logged In'))";
-    
-    mysqli_query($cnnLISC, $log_call);
-    
-    //set the user cookie
-       // FIXME: see issue #33 re the single-quotes around $username here
-       setcookie("user", "$username", time() + 10800, '/');
-      
-       //now find which, if any, privileges they have and set an appropriate cookie
-       $privileges_query = "CALL User__Find_Privileges('$username_sqlsafe')";
-       $privileges = mysqli_query($cnnLISC, $privileges_query);
-       
-       $i=0;
-       while ($privilege = mysqli_fetch_array($privileges)){
-           if ($privilege['Privilege_Id'] == '1'){
-               /*we don't really use this one*/
-               setcookie('sites[]', 'all_sites', time() + 10800, '/');
-               echo "Congrats!  You have access to all the sites.";
-               break;
-           }
-           else{
-               /*set a site cookie for each of the sites this person has access to.*/
-               setcookie('sites['.$i.']', $privilege['Privilege_Id'], time() + 10800, '/');
-               $get_level_of_access = "SELECT Site_Privilege_ID FROM Users_Privileges WHERE User_ID=$user_id";
-               $access_level = mysqli_query($cnnLISC, $get_level_of_access);
-               $level = mysqli_fetch_row($access_level);
-               if ($level[0] !=1){
-                   /*all non-admin users have the view_restricted cookie, which stops them from seeing admin-only
-                    * options (e.g. Alter Privileges, delete buttons)
-                    */
-                   setcookie('view_restricted', $level[0], time()+10800, '/');
-                   if ($level[0]==3){
-                       /*View-only users have the view_only cookie, which is used to hide
-                        * anything that edits or changes information.
-                        */
-                       setcookie('view_only', $level[0], time()+10800, '/');
-                   }
-               }
-               else{
-                   /* If user is an admin, unset the view_only and
-                      view_restricted cookies. */
-                   setcookie('view_only', $level[0], time()-10800, '/');
-                   setcookie('view_restricted', $level[0], time()-10800, '/');
-               }
-           }
-           //echo $i . "<br>";
-           $i=$i+1;
-           
-       }
+    echo 'Please enter a valid username and password.'; // signal to caller that something here failed
 }
 else {
-    $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Failed login'))";
-    mysqli_query($cnnLISC, $log_call);
-    echo '0';
-}
+    $user_row = mysqli_fetch_row($query_result);
+    $user_id=$user_row[0];
+    $password_in_db=$user_row[1];
+    $locked_value = $user_row[2];
+    $hash_match = $hasher->CheckPassword($password_received, $password_in_db);
+    include "locked_response.php";
+    $locked = lock_response($locked_value);
 
+    if ($hash_match) {
+        if ($locked[0]) {
+            $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Locked user login attempt'))";
+            mysqli_query($cnnLISC, $log_call);
+            // They gave the correct password, so we inform them that they've been locked out.
+            echo $locked[1];
+        }
+        else {
+            //record this login in the Log
+            $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Logged In'))";
+    
+            mysqli_query($cnnLISC, $log_call);
+    
+            session_start();
+            session_regenerate_id();
+
+            $_SESSION['user_id'] = $user_id;
+            echo "0"; //signal to caller that log in was successful
+        }
+    }
+    else {
+        $log_call = "INSERT INTO Log (Log_Event) VALUES (CONCAT('" . $username_sqlsafe . "', ' - Failed login'))";
+        mysqli_query($cnnLISC, $log_call);
+        echo 'Please enter a valid username and password.';
+    }
+}
 include ($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnclose.php");
 ?>

@@ -1,17 +1,27 @@
 <?php
-//echo 'test <br>';
-//header('Content-type: application/xml');
-//print_r($_GET);
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 $api_result="";
 $get_url='http://data.fcc.gov/api/block/find?format=json&latitude='.$_GET['lat'].'&longitude='.$_GET['lon'].'&showall=true';
-//echo $get_url ."<br>";
-//echo file_get_contents($get_url);
-//echo "<br>";
 $handle=fopen($get_url, "r");
-//print_r($handle);
-//echo "<br>";
 if ($handle){
-   // echo "Handle opened <br>";
     while (!feof($handle)){
         $buffer=fgets($handle, 4096);
         $api_result.=$buffer;
@@ -23,9 +33,5 @@ else{
 }
 
 $result_array=json_decode($api_result, true);
-//print_r($result_array);
 echo $result_array[Block][FIPS];
-//$_COOKIE['block']=setcookie('block', 0, time()-3600, '/');
-//$_COOKIE['block']=setcookie('block', $result_array[Block][FIPS], time()+3600, '/');
-        
-        ?>
+?>

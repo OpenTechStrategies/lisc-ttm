@@ -1,3 +1,28 @@
+<?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($Bickerdike_id);
+?>
 <div id="bickerdike_header">
     <script>
         $(document).ready(function() {
@@ -7,13 +32,6 @@
                 $(this).removeClass("select");
             });
         });
-<?php
-if (!isset($_COOKIE['user'])) {
-    ?>
-            window.location = '/index.php';
-    <?php
-}
-?>
         $(document).ready(function() {
             $('#ajax_loader').hide();
         });
@@ -41,57 +59,3 @@ if (!isset($_COOKIE['user'])) {
         </tr>
     </table>	
 </div>
-<?php
-if ($_COOKIE['sites']) {
-//print_r($_COOKIE);
-    if (in_array('3', $_COOKIE['sites'])) {
-//then they have permission to view the bickerdike stuff
-//now we check to see if they have editing privileges or not:
-        if ($_COOKIE['view_restricted']) {
-//print_r($_COOKIE);
-            ?>
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    $('.hide_on_view').hide();
-                });</script>
-            <?php
-        }
-    } else {
-        ?>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                //$('#main_wrapper').hide();
-                window.location = '/index.php';
-            });
-            $(document).ready(function() {
-                $('#ajax_loader').hide();
-            });
-            $(document).ajaxStart(function() {
-                $('#ajax_loader').fadeIn('slow');
-            });
-            $(document).ajaxStop(function() {
-                $('#ajax_loader').fadeOut('slow');
-            });</script>
-        <?php
-    }
-} else {
-    ?>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#main_wrapper').hide();
-            window.location = '/index.php';
-        });
-        $(document).ready(function() {
-            $('#ajax_loader').hide();
-        });
-        $(document).ajaxStart(function() {
-            $('#ajax_loader').fadeIn('slow');
-        });
-        $(document).ajaxStop(function() {
-            $('#ajax_loader').fadeOut('slow');
-        });
-    </script>
-    <?php
-}
-?>
-<!-- <img src="/images/ajax-loader.gif" width="40" height="40" alt="Loading..." id="ajax_loader" style="position: fixed; top: 0; left: 0;" /> -->

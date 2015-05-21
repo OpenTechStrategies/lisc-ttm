@@ -1,4 +1,27 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+user_enforce_has_access($SWOP_id, $DataEntryAccess);
+
 /* adds and deletes institutional connections from person profile (both participant and pool profile pages). */
 
 if ($_POST['action'] == 'get_list') {
@@ -40,6 +63,7 @@ if ($_POST['action'] == 'get_list') {
     }
     include "../include/dbconnclose.php";
 } elseif ($_POST['action'] == 'delete_conn') {
+    user_enforce_has_access($SWOP_id, $AdminAccess);
     /* delete institutional connection. */
     include "../include/dbconnopen.php";
     $delete_connection_sqlsafe = "DELETE FROM Institutions_Participants WHERE Institutions_Participants_ID='" . mysqli_real_escape_string($cnnSWOP, $_POST['link_id']) . "'";

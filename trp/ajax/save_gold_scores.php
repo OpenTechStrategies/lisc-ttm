@@ -1,20 +1,41 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id, $DataEntryAccess);
+
 /* Save gold scores, which are administered three times.  The reformat_dates below refer
  * to those survey dates. */
 
 $reformat_date1_a=explode('/', $_POST['date1_a']);
 include "../include/dbconnopen.php";
-//print_r($reformat_date1_a);
 if ($reformat_date1_a[1]){
 $date1_a_sqlsafe=mysqli_real_escape_string($cnnTRP, $reformat_date1_a[2]) . '-' . mysqli_real_escape_string($cnnTRP, $reformat_date1_a[0]) . '-' . mysqli_real_escape_string($cnnTRP, $reformat_date1_a[1]);}
 else{$date1_a_sqlsafe=mysqli_real_escape_string($cnnTRP, $_POST['date1_a']);}
 $reformat_date1_b=explode('/', $_POST['date1_b']);
-//print_r($reformat_date1_b);
 if ($reformat_date1_b[1]){
 $date1_b_sqlsafe=mysqli_real_escape_string($cnnTRP, $reformat_date1_b[2]) . '-' . mysqli_real_escape_string($cnnTRP, $reformat_date1_b[0]) . '-' . mysqli_real_escape_string($cnnTRP, $reformat_date1_b[1]);}
 else{$date1_b_sqlsafe=mysqli_real_escape_string($cnnTRP, $_POST['date1_b']);}
 $reformat_date1_c=explode('/', $_POST['date1_c']);
-//print_r($reformat_date1_c);
 if ($reformat_date1_c[1]){
 $date1_c_sqlsafe=mysqli_real_escape_string($cnnTRP, $reformat_date1_c[2]) . '-' . mysqli_real_escape_string($cnnTRP, $reformat_date1_c[0]) . '-' . mysqli_real_escape_string($cnnTRP, $reformat_date1_c[1]);}
 else{$date1_c_sqlsafe=mysqli_real_escape_string($cnnTRP, $_POST['date1_c']);}

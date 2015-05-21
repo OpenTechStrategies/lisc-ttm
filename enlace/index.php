@@ -1,18 +1,28 @@
 <?php
-//if action is logout, kill various navigation cookies: 
-if ($_GET['action'] == 'logout') {
-    //kill cookie
-    setcookie('user', '', time() - 3600, '/');
-    setcookie('sites', '', time() - 3600, '/');
-    setcookie('page', '', time() - 3600, '/');
-    setcookie('category', '', time() - 3600, '/');
-    setcookie('participant', '', time() - 3600, '/');
-    setcookie('program', '', time() - 3600, '/');
-    setcookie('prog_page', '', time() - 3600, '/');
-    //setcookie('session_id', '', time() - 3600, '/');
-    //redirect
-    header('Location: /index.php');
-}
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Enlace_id);
+
 
 include "../header.php";
 include "header.php";
@@ -78,7 +88,7 @@ WHERE Date_Entered <= '$month_ago' AND Date_Logged IS NULL AND Role=1";
                                 function(response) {
                                     window.location = '/enlace/programs/profile.php';
                                 }
-                                )"><?php echo $program[6] . ' - ' . $program[1]; ?></a><br><?php
+                                ).fail(failAlert);"><?php echo $program[6] . ' - ' . $program[1]; ?></a><br><?php
                    }
                    include "include/dbconnclose.php";
                    ?>

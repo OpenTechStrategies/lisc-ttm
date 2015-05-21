@@ -1,4 +1,28 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker_simple.php";
@@ -11,7 +35,6 @@ if ($_GET['type'] == 'identity') {
 }
 $get_info = mysqli_query($cnnTRP, $query_sqlsafe);
 $info = mysqli_fetch_array($get_info);
-//print_r($info);
 include "../include/dbconnclose.php";
 
 /* show mexican museum of art surveys, one at a time.  These surveys are linked from the participant profile. */
@@ -147,7 +170,7 @@ include "../include/dbconnclose.php";
                         function(response) {
                             document.getElementById('traditions_survey_saved').innerHTML = response;
                         }
-                        )"/>
+                        ).fail(failAlert);"/>
                     <div id="traditions_survey_saved"></div>
                 </td>
             </tr>

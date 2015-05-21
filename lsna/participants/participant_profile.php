@@ -1,8 +1,31 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id, $DataEntryAccess);
+
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker.php";
-//print_r($_COOKIE);
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -39,7 +62,6 @@ include "../include/datepicker.php";
 
 <div id="participant_profile_div">
     <?php
-    //print_r($_COOKIE);
 
     include "../classes/participants.php";
     $parti = new Participant();
@@ -163,7 +185,7 @@ include "../include/dbconnclose.php";
                                                 //document.write(response);
                                                 //window.location = "participants.php";
                                             }
-                                            )
+                                            ).fail(failAlert);
                                         }
                                         else if (cb.checked == false) {
                                             $.post(
@@ -177,7 +199,7 @@ include "../include/dbconnclose.php";
                                                 //document.write(response);
                                                 //window.location = "participants.php";
                                             }
-                                            );
+                                            ).fail(failAlert);
                                         }
                                     }
                                 </script></div>
@@ -411,7 +433,11 @@ if ($langues = $parti->get_languages()) {
 
         <tr><td><strong>Notes:</strong></td>
             <!--Notes save onchange, not based on clicking the save button (just as a reminder).-->
-            <td><textarea id="participant_notes" class="no_view" onchange="
+            <td>
+<?php
+                     if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<textarea id="participant_notes"  onchange="
                                 $.post(
                                         '../ajax/save_notes.php',
                                         {
@@ -423,40 +449,22 @@ if ($langues = $parti->get_languages()) {
                                     // document.write(response);
                                     //window.location = 'participant_profile.php';
                                 }
-                                )"><?php echo $parti->notes; ?></textarea><br/><p class="helptext">(only 400 characters will be saved in the database)</p></td>
+                                ).fail(failAlert);"><?php echo $parti->notes; ?></textarea>
+<?php
+                     }
+?>
+<br/><p class="helptext">(only 400 characters will be saved in the database)</p></td>
         </tr>
 
         <tr>
-            <td colspan="2"><input type="button" value="Edit" class="no_view" onclick="
+            <td colspan="2">
+<?php
+                     if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<input type="button" value="Edit"  onclick="
                         $('.edit_basic_info').toggle();
                         $('.show_basic_info').toggle();
                                    " /> <input type="button" value="Save Changes" class="edit_basic_info" onclick="
-                /*check phone format (they decided they didn't want this, but I'm leaving it in case they change their minds)*/
-//                            var x=document.getElementById('phone_evening_edit').value;
-//                            if (x!=''){
-//                        var openpos=x.indexOf('(');
-//                        var closepos=x.indexOf(')');
-//                        var dashpos=x.indexOf('-');
-//                        //alert('open: '+openpos+' close: '+closepos+' dash: '+dashpos);
-//                        if (openpos!=0 || closepos!=openpos+4 || dashpos!=closepos+5)
-//                        {
-//                        alert('Not a valid evening phone number');
-//                        return false;
-//                        }
-//                            }
-//                            
-//                        var y=document.getElementById('phone_day_edit').value;
-//                        if (y!=''){
-//                        var openpos=y.indexOf('(');
-//                        var closepos=y.indexOf(')');
-//                        var dashpos=y.indexOf('-');
-//                        //alert('open: '+openpos+' close: '+closepos+' dash: '+dashpos);
-//                        if (openpos!=0 || closepos!=openpos+4 || dashpos!=closepos+5)
-//                        {
-//                        alert('Not a valid day phone number');
-//                        return false;
-//                        }
-//                        }
                 $.post(
                         '../ajax/edit_participant.php',
                         {
@@ -489,7 +497,11 @@ if ($langues = $parti->get_languages()) {
                     document.getElementById('show_edits').innerHTML = response;
                     window.location = 'participant_profile.php';
                 }
-                )" /></td>
+                ).fail(failAlert);" />
+<?php
+                     }
+?>
+</td>
         </tr>
     </table><br/><br/>
     <div id="show_edits"></div>
@@ -517,10 +529,14 @@ if ($langues = $parti->get_languages()) {
                                    }
                                    window.location = 'participant_profile.php';
                                }
-                               );
+                               ).fail(failAlert);
                            "><?php echo $parent['Name_First'] . " " . $parent['Name_Last']; ?></a></td>
                     <!--Button to delete parent.-->
-                    <td class="no_view"><input type="button" value="Delete" onclick="
+<td>                    
+<?php
+if ($USER->has_site_access($LSNA_id, $AdminAccess)){
+?>
+<input type="button" value="Delete" onclick="
                                       $.post(
                                               '../ajax/delete_elements.php',
                                               {
@@ -530,7 +546,11 @@ if ($langues = $parti->get_languages()) {
                                       function(response) {
                                           window.location = 'participant_profile.php';
                                       }
-                                      )"></td></tr><?php
+                                      ).fail(failAlert);">
+<?php
+}
+?>
+</td></tr><?php
                     }
                 }
                 if ($children = $parti->get_children()) {
@@ -551,10 +571,14 @@ if ($langues = $parti->get_languages()) {
                                    }
                                    window.location = 'participant_profile.php';
                                }
-                               );
+                               ).fail(failAlert);
                            "><?php echo $child['Name_First'] . " " . $child['Name_Last']; ?></a></td>
                     <!--Button to delete child.  Won't delete him/her from db, just deletes the relationship.-->
-                    <td class="no_view"><input type="button" value="Delete" onclick="
+<td >                    
+<?php
+if ($USER->has_site_access($LSNA_id, $AdminAccess)){
+?>
+<input type="button" value="Delete" onclick="
                                 $.post(
                                         '../ajax/delete_elements.php',
                                         {
@@ -564,7 +588,11 @@ if ($langues = $parti->get_languages()) {
                                 function(response) {
                                     window.location = 'participant_profile.php';
                                 }
-                                )"></td></tr><?php
+                                ).fail(failAlert);">
+<?php
+}
+?>
+</td></tr><?php
                             }
                         }
                         
@@ -586,20 +614,10 @@ if ($langues = $parti->get_languages()) {
                                    }
                                    window.location = 'participant_profile.php';
                                }
-                               );
+                               ).fail(failAlert);
                            "><?php echo $spouse['Name_First'] . " " . $spouse['Name_Last']; ?></a></td>
                     <!--Button to delete child.  Won't delete him/her from db, just deletes the relationship.-->
-                  <!--  <td class="no_view"><input type="button" value="Delete" onclick="
-                                $.post(
-                                        '../ajax/delete_elements.php',
-                                        {
-                                            action: 'family',
-                                            id: '<?php echo $spouse['Parent_Mentor_Children_Link_ID']; ?>'
-                                        },
-                                function(response) {
-                                    window.location = 'participant_profile.php';
-                                }
-                                )"></td>--></tr><?php
+                  </tr><?php
                             }
                         }
                         if ($spousearr = $parti->get_spouse_of_spouse()) {
@@ -620,27 +638,24 @@ if ($langues = $parti->get_languages()) {
                                    }
                                    window.location = 'participant_profile.php';
                                }
-                               );
+                               ).fail(failAlert);
                            "><?php echo $spouse['Name_First'] . " " . $spouse['Name_Last']; ?></a></td>
                     <!--Button to delete child.  Won't delete him/her from db, just deletes the relationship.-->
-                  <!--  <td class="no_view"><input type="button" value="Delete" onclick="
-                                $.post(
-                                        '../ajax/delete_elements.php',
-                                        {
-                                            action: 'family',
-                                            id: '<?php echo $spouse['Parent_Mentor_Children_Link_ID']; ?>'
-                                        },
-                                function(response) {
-                                    window.location = 'participant_profile.php';
-                                }
-                                )"></td>--></tr><?php
+</tr><?php
                             }
                         }
                 ?>
         <!--search for family member: -->
-        <tr class="no_view"><td colspan="2"><a class="search_toggle" onclick="
+<tr >        
+<?php
+if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<td colspan="2"><a class="search_toggle" onclick="
                 $('#find_relative').toggle();
                                                "><em>Search to add a parent or child:</em></a></td></tr>
+<?php
+}
+?>
         <tr><td colspan="2"><table class="search_table" id="find_relative" style="display:none;">
                     <tr>
                         <td class="all_projects"><strong>First Name: </strong></td>
@@ -709,7 +724,7 @@ include "../include/dbconnclose.php";
                                     $('#show_results_profile').show();
                                     $('#add_buttons').show();
                                 }
-                                );
+                                ).fail(failAlert);
                                    "/>
                         </td>
                         <td>
@@ -738,7 +753,7 @@ include "../include/dbconnclose.php";
                                                             //document.write(response);
                                                             window.location = 'participant_profile.php';
                                                         }
-                                                        )">&nbsp;&nbsp;
+                                                        ).fail(failAlert);">&nbsp;&nbsp;
                                             <!--This adds the person to the database and links them as a parent all in one.-->
                                             <input type="button" value="Add As Parent" onclick="$.post(
                                 '../ajax/add_participant.php',
@@ -752,7 +767,7 @@ include "../include/dbconnclose.php";
                             //document.write(response);
                             window.location = 'participant_profile.php';
                         }
-                        )">
+                                            ).fail(failAlert);">
                                         <input type="button" value="Add As Spouse" onclick="$.post(
                                 '../ajax/add_participant.php',
                                 {
@@ -765,7 +780,7 @@ include "../include/dbconnclose.php";
                             //document.write(response);
                             window.location = 'participant_profile.php';
                         }
-                        )">
+                                        ).fail(failAlert);">
                                 </table>
                             </div>
                         </td>
@@ -782,7 +797,7 @@ include "../include/dbconnclose.php";
                 function(response) {
                     window.location = 'participant_profile.php';
                 }
-                )">&nbsp;&nbsp;
+                ).fail(failAlert);">&nbsp;&nbsp;
                             <input type="button" value="Add As Parent" onclick="$.post(
                                 '../ajax/add_relative.php',
                                 {
@@ -793,7 +808,7 @@ include "../include/dbconnclose.php";
                             //document.write(response);
                             window.location = 'participant_profile.php';
                         }
-                        )">
+                            ).fail(failAlert);">
 <input type="button" value="Add As Spouse" onclick="$.post(
                                 '../ajax/add_relative.php',
                                 {
@@ -804,7 +819,7 @@ include "../include/dbconnclose.php";
                             //document.write(response);
                             window.location = 'participant_profile.php';
                         }
-                        )">
+).fail(failAlert);">
 
                         </td></tr>
                 </table>
@@ -836,12 +851,16 @@ include "../include/dbconnclose.php";
                                         }
                                         window.location = '/lsna/institutions/institution_profile.php';
                                     }
-                                    )"><?php echo $institution['Institution_Name']; ?></a>
+                                    ).fail(failAlert);"><?php echo $institution['Institution_Name']; ?></a>
                             </td>
                             <td>
                             </td>
                             <!--delete institutional connection: -->
-                            <td class="no_view"><input type="button" value="Remove" onclick="
+                            
+<?php
+if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<td ><input type="button" value="Remove" onclick="
                             $.post(
                                     '../ajax/delete_elements.php',
                                     {
@@ -851,7 +870,10 @@ include "../include/dbconnclose.php";
                             function(response) {
                                 window.location = 'participant_profile.php';
                             }
-                            )"></td>
+                            ).fail(failAlert);"></td>
+<?php
+}
+?>
                         </tr>
 
     <?php
@@ -860,7 +882,11 @@ include "../include/dbconnclose.php";
 ?></table><br/>
                 <!--Add a link to a new institution: -->
                 <strong>Add institutional affiliation: </strong>
-                <select id="choose_from_all_institutions" class="no_view">
+                
+<?php
+if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<select id="choose_from_all_institutions" >
                     <option value="">-------------</option>
         <?php
         $get_all_institutions = "SELECT * FROM Institutions ORDER BY Institution_Name";
@@ -873,7 +899,9 @@ include "../include/dbconnclose.php";
             include "../include/dbconnclose.php";
         }
         ?>
-                </select> <input type="button" value="Add" class="no_view" onclick="
+                </select>
+
+<input type="button" value="Add"  onclick="
         $.post(
                 '../ajax/add_participant_to_institution.php',
                 {
@@ -883,8 +911,12 @@ include "../include/dbconnclose.php";
         function(response) {
             window.location = 'participant_profile.php?inst=1';
         }
-        )
-                                 "></td></tr>
+        ).fail(failAlert);
+                                 ">
+<?php
+}
+?>
+</td></tr>
     </table>            
 </td>
 <!--Program Attendance and involvement.  Pay attention to the parent mentor program especially. -->
@@ -896,15 +928,10 @@ include "../include/dbconnclose.php";
     Category_Subcategory_Links.Subcategory_ID=Subcategories.Subcategory_ID
     AND Subcategories.Subcategory_ID=Participants_Subcategories.Subcategory_ID
     WHERE Participant_ID='" . $parti->participant_id . "' ORDER BY Category_Subcategory_Links.Category_ID, Subcategories.Subcategory_Name";
-                //echo $get_program_list;
                 include "../include/dbconnopen.php";
                 $programs = mysqli_query($cnnLSNA, $get_program_list);
-                // print_r($programs);
-                //  echo "<p></p>";
                 $category = 0;
                 while ($program = mysqli_fetch_array($programs)) {
-                    //print_r($program);
-                    //  echo "<br>";
                     if ($category != $program['Category_ID']) {
                         $category = $program['Category_ID'];
                         ?>
@@ -932,11 +959,15 @@ include "../include/dbconnclose.php";
                             }
                             window.location = '/lsna/programs/program_profile.php';
                         }
-                        )"><?php echo $program['Subcategory_Name']; ?></a>
+                        ).fail(failAlert);"><?php echo $program['Subcategory_Name']; ?></a>
                         &nbsp;&nbsp;&nbsp;<a onclick="
                                                                                                           $('.prog_<?php echo $program['Subcategory_ID']; ?>').slideToggle();
                                              " class="helptext">Show/hide program dates</a>
-                    </th><th class="no_view">
+                    </th>
+<?php
+if ($USER->has_site_access($LSNA_id, $AdminAccess)){
+?>
+<th >
                         <!--Delete connection to this program: -->
                         <input type="button" value="Delete" onclick="
                            $.post(
@@ -948,8 +979,12 @@ include "../include/dbconnclose.php";
                            function(response) {
                                window.location = 'participant_profile.php';
                            }
-                           )">
-                    </th></tr>
+                           ).fail(failAlert);">
+                    </th>
+<?php
+}
+?>
+</tr>
                 <tr  class="program_dates prog_<?php echo $program['Subcategory_ID']; ?>">
                     <td><strong>Date</strong></td>
                     <td><strong>Attended?</strong></td>
@@ -976,14 +1011,22 @@ include "../include/dbconnclose.php";
             $did_attend = "SELECT * FROM Subcategory_Attendance WHERE Subcategory_Date='" . $date['Wright_College_Program_Date_ID'] . "' AND Participant_ID='" . $parti->participant_id . "'";
             //   echo $did_attend;
             ?>
-                        <td><input type="checkbox" id="program_date_<?php echo $program['WC_Program_ID'] ?>_<?php echo $i ?>"  class="no_view"
+                        <td>
+<?php
+if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<input type="checkbox" id="program_date_<?php echo $program['WC_Program_ID'] ?>_<?php echo $i ?>"  
             <?php
             $attended = mysqli_query($cnnLSNA, $did_attend);
             $did_attend = mysqli_fetch_array($attended);
             if (mysqli_num_rows($attended) > 0) {
                 echo 'checked';
             }
-            ?> onchange="handleChange(this, '<?php echo $date['Wright_College_Program_Date_ID']; ?>')"></td>
+            ?> onchange="handleChange(this, '<?php echo $date['Wright_College_Program_Date_ID']; ?>')">
+<?php
+}
+?>
+</td>
 
                     </tr>
                     <!--Add or remove attendance by checking and unchecking the checkboxes next to dates.-->
@@ -1003,7 +1046,7 @@ include "../include/dbconnclose.php";
                                     //document.write(response);
                                     window.location = "participant_profile.php";
                                 }
-                                )
+                                ).fail(failAlert);
                             }
                             else if (cb.checked == false) {
                                 $.post(
@@ -1016,7 +1059,7 @@ include "../include/dbconnclose.php";
                                     //document.write(response);
                                     window.location = "participant_profile.php";
                                 }
-                                );
+                                ).fail(failAlert);
                             }
                 //                else{
                 //                    document.write('who knows what cb.checked is?? oh, it\'s this: '+cb.checked);
@@ -1159,7 +1202,7 @@ include "../include/dbconnclose.php";
                                                         //document.write(response);
                                                         window.location = '/lsna/participants/participant_profile.php';
                                                     }
-                                                    )"></td>
+                                                    ).fail(failAlert);"></td>
                                 </tr>
                                         <?php
                                     }
@@ -1208,21 +1251,27 @@ include "../include/dbconnclose.php";
                                             //document.write(response);
                                             window.location = '/lsna/participants/participant_profile.php';
                                         }
-                                )"></td>
+                                ).fail(failAlert);"></td>
                             </tr>
                             <tr class="add_adult_ed">
                                 <td colspan="5" class="add_adult_ed"><span class="helptext">You must choose a year for this information to save correctly.</span></td>
                             </tr>
                         </table>
-                        <input type="button" value="Edit" class="no_view" onclick="
+                        
+<?php
+                        if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<input type="button" value="Edit"  onclick="
                                                 $('.edit_adult_ed').toggle();
                                                 $('.display_adult_ed').toggle();
                                "/>
                         &nbsp;&nbsp;
-                        <input type="button" value="Add New Year"  class="no_view" onclick="
+                        <input type="button" value="Add New Year"   onclick="
                                                 $('.add_adult_ed').toggle();
                                " />
-
+<?php
+                        }
+?>
                     </td>
                 </tr>
                         <?php
@@ -1249,7 +1298,7 @@ include "../include/dbconnclose.php";
                             }
                             window.location = '/lsna/programs/program_profile.php';
                         }
-                        )"><?php echo $program['Subcategory_Name']; ?></a>
+                        ).fail(failAlert);"><?php echo $program['Subcategory_Name']; ?></a>
                     <?php
                     /* if this is the parent mentor program, show the schools and years for which this person has been involved: */
                     if ($program['Subcategory_ID'] == 19) {
@@ -1267,7 +1316,10 @@ include "../include/dbconnclose.php";
                             ?>
                                 <!--Edit school and year right here!-->
                                 <a href="javascript:;" onclick="$('#edit_pm_year_<?php echo $yr[2] ?>').toggle();">Edit</a>
-<a href="javascript:;" class = "no_view" onclick="                           $.post(
+<?php
+                        if ($USER->has_site_access($LSNA_id, $AdminAccess)){
+?>
+<a href="javascript:;" onclick="                           $.post(
                                    '../ajax/delete_elements.php',
                                    {
                                        action: 'pm_year',
@@ -1277,6 +1329,9 @@ include "../include/dbconnclose.php";
                                window.location='participant_profile.php';
                            }
                            )">Delete School and Year</a>
+<?php
+                        } //end access check
+?>
                         <div id="edit_pm_year_<?php echo $yr[2] ?>" class="edit_pm_affiliation" style="font-weight: normal;">
                             <select id="edit_school_<?php echo $yr[2] ?>"><option value="">------</option>
                         <?php
@@ -1316,7 +1371,7 @@ include "../include/dbconnclose.php";
                             //document.write(response);
                             window.location = 'participant_profile.php';
                         }
-                        )">Save Changes</a>
+                        ).fail(failAlert);">Save Changes</a>
                             <!--end edit school and year-->
                         </div>
                                     <?php
@@ -1331,7 +1386,11 @@ include "../include/dbconnclose.php";
                 <!--show/hide program dates and attendance: -->
                 &nbsp;&nbsp;&nbsp;<a onclick="
                                 $('.prog_<?php echo $program['Subcategory_ID']; ?>').slideToggle();
-                                     " class="helptext">Show/hide program dates</a></th><th class="no_view">
+                                     " class="helptext">Show/hide program dates</a></th>
+<?php
+                if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<th >
                     <input type="button" value="Delete Program" onclick="
                            $.post(
                                    '../ajax/delete_elements.php',
@@ -1342,8 +1401,11 @@ include "../include/dbconnclose.php";
                            function(response) {
                                window.location='participant_profile.php';
                            }
-                           )">
+                           ).fail(failAlert);">
                 </th>
+<?php
+                }
+?>
                 </tr>
                                     <?php
                                     //PM program attendance
@@ -1381,8 +1443,12 @@ include "../include/dbconnclose.php";
                                             <input type="text" id="attended_days_<?php echo $month_loop['PM_Possible_Attendance_ID']; ?>" class="edit_attendance" style="width:30px;" value="<?php echo $att[0]; ?>"></td>
                                         <td><?php echo $month_loop['Max_Days_Possible']; ?></td>
                                         <td>
-                                            <input type="button" value="Edit"  class="no_view" onclick="$('.edit_attendance').toggle();
-                                                                                    $('.display_attendance').toggle();">
+                                            
+<?php
+ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<input type="button" value="Edit"   onclick="$('.edit_attendance').toggle();
+ $('.display_attendance').toggle();">
                                             <input type="button" value="Save" class="edit_attendance" onclick="
                                                                                     $.post(
                                                                                             '../ajax/save_pm_attendance.php',
@@ -1394,7 +1460,10 @@ include "../include/dbconnclose.php";
                                                                                     function(response) {
                                                                                         window.location = 'participant_profile.php';
                                                                                     }
-                                                                                    )">
+                                                                                    ).fail(failAlert);">
+<?php
+ }
+?>
                                         </td>
                                     </tr><?php
                                     }
@@ -1430,16 +1499,26 @@ include "../include/dbconnclose.php";
                 $attended = mysqli_query($cnnLSNA, $did_attend);
                 $attend = mysqli_fetch_array($attended);
                 ?>
-                            <td><input type="checkbox"  class="no_view" id="program_date_<?php echo $program['WC_Program_ID'] ?>_<?php echo $i ?>" 
+                            <td>
+<?php
+if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<input type="checkbox"   id="program_date_<?php echo $program['WC_Program_ID'] ?>_<?php echo $i ?>" 
                 <?php
                 if (mysqli_num_rows($attended) > 0) {
                     echo 'checked';
                 }
-                ?> onchange="handleChange(this, '<?php echo $date['Wright_College_Program_Date_ID']; ?>')"></td>
+                ?> onchange="handleChange(this, '<?php echo $date['Wright_College_Program_Date_ID']; ?>')">
+<?php
+}
+?>
+</td>
                 <?php if ($program['Campaign_or_Program'] == 'Campaign') { ?><td>
                                     <!--Can edit the event role here: -->
-                                    <select id="participation_type_<?php echo $date['Wright_College_Program_Date_ID']; ?>"  class="no_view"
-                                            onchange="
+<?php
+if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+                                    <select id="participation_type_<?php echo $date['Wright_College_Program_Date_ID']; ?>" onchange="
                                                         var role = this.value;
                                                         $.post(
                                                                 '../ajax/save_attendee_role.php',
@@ -1451,7 +1530,7 @@ include "../include/dbconnclose.php";
                                                             //document.write(response);
                                                             window.location = 'participant_profile.php';
                                                         }
-                                                        );
+                                                        ).fail(failAlert);
                                             ">
                                         <option value="">----------</option>
                                         <option value="1" <?php echo ($attend['Type_of_Participation'] == '1' ? 'selected="selected"' : null); ?>>Attendee</option>
@@ -1459,6 +1538,9 @@ include "../include/dbconnclose.php";
                                         <option value="3" <?php echo ($attend['Type_of_Participation'] == '3' ? 'selected="selected"' : null); ?>>Chairperson</option>
                                         <option value="4" <?php echo ($attend['Type_of_Participation'] == '4' ? 'selected="selected"' : null); ?>>Prep work</option>
                                     </select>
+<?php
+} //end access check
+?>
                                 </td><?php } ?>
                         </tr>
                         <!--Add or remove attendance function: -->
@@ -1477,7 +1559,7 @@ include "../include/dbconnclose.php";
                                         //document.write(response);
                                         window.location = "participant_profile.php";
                                     }
-                                    )
+                                    ).fail(failAlert);
                                 }
                                 else if (cb.checked == false) {
                                     $.post(
@@ -1490,7 +1572,7 @@ include "../include/dbconnclose.php";
                                         //document.write(response);
                                         window.location = "participant_profile.php";
                                     }
-                                    );
+                                    ).fail(failAlert);
                                 }
                             }
                         </script>
@@ -1509,14 +1591,18 @@ include "../include/dbconnclose.php";
         ?>
     </table>
     <!--Add person to new program or campaign -->
-    <strong  class="no_view">Add to Program:</strong>
+    
+<?php
+if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<strong  >Add to Program:</strong>
     <select id="choose_from_all_programs"  onchange="
         var prog = this.value;
         /*special case for the parent mentor program (see below)*/
         if (prog == 19) {
             $('#all_schools').show();
         }
-            " class="no_view">
+            " >
         <option value="">------</option>
     <?php
     $get_all_programs = "SELECT * FROM Subcategories ORDER BY Subcategory_Name";
@@ -1529,7 +1615,11 @@ include "../include/dbconnclose.php";
     }
     include "../include/dbconnclose.php";
     ?>
-    </select><br/>
+    </select>
+<?php
+}
+?>
+<br/>
     <!--special parent mentor program case.  Users must assign PMs to a school and year by using these dropdowns: -->
     <div id="all_schools">
         <span class="helptext">You must choose a school when adding someone to the parent mentor program.</span><br>
@@ -1572,7 +1662,11 @@ include "../include/dbconnclose.php";
     </div>
 
     <!--Add to program here.  -->
-    <input type="button" value="Add to Program"  class="no_view" onclick="
+    
+<?php
+if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<input type="button" value="Add to Program"   onclick="
         var program = document.getElementById('choose_from_all_programs').options[document.getElementById('choose_from_all_programs').selectedIndex].value;
         if (program == 19) {
             var school = document.getElementById('school_chosen').value;
@@ -1593,19 +1687,13 @@ include "../include/dbconnclose.php";
         function(response) {
             window.location = 'participant_profile.php';
         }
-        )">
+        ).fail(failAlert);">
 
     <!--Quick link to add a new program to the DB: -->
-    <p class="helptext no_view">Can't find the program you're looking for?  <a href="javascript:;" onclick="
-        $.post(
-                '../ajax/set_program_id.php',
-                {
-                    page: 'new'
-                },
-        function(response) {
-            window.location = '../programs/new_program.php';
-        }
-        )" >Create a new one!</a></p>
+    <p class="helptext">Can't find the program you're looking for?  <a href="../programs/new_program.php" >Create a new one!</a></p>
+<?php
+}
+?>
     <br/>
 <?php
 //if this participant is a child, show this table (shows academic records)
@@ -1687,7 +1775,7 @@ if ($parti->child == '1') {
                             function(response) {
                                 window.location = 'participant_profile.php';
                             }
-                            )">Add...</a></td>
+                            ).fail(failAlert);">Add...</a></td>
             </tr>
 
         </table><br/><br/>
@@ -1736,7 +1824,7 @@ if ($parti->child == '1') {
                                 function (response){
                                     window.location = 'participants.php';
                                 }
-                           )"></td>
+                               ).fail(failAlert);"></td>
                 </tr><?
             }
             include "../include/dbconnclose.php";
@@ -1761,13 +1849,26 @@ if ($parti->child == '1') {
             $date_reformat = explode('-', $surveys['Date']);
             $use_date = $date_reformat[1] . '-' . $date_reformat[2] . '-' . $date_reformat[0];
             ?>
-            <tr><td><?php echo $surveys['Institution_Name'] . ": " . $use_date; ?></td><td><a href="new_parent_mentor_survey.php?survey=<?php echo $surveys['Parent_Mentor_Survey_ID']; ?>"  class="no_view">Edit</a></td></tr>
+            <tr><td><?php echo $surveys['Institution_Name'] . ": " . $use_date; ?></td><td>
+<?php
+                if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<a href="new_parent_mentor_survey.php?survey=<?php echo $surveys['Parent_Mentor_Survey_ID']; ?>"  >Edit</a></td></tr>
             <?php
+} //end of access check
         }
         include "../include/dbconnopen.php";
         ?>
         <!--Add a new parent mentor survey: -->
-        <tr><td colspan="2"><a href="new_parent_mentor_survey.php"  class="no_view">Add New Parent Mentor Survey</a><br/><br/></td></tr>
+        <tr><td colspan="2">
+<?php
+                if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<a href="new_parent_mentor_survey.php">Add New Parent Mentor Survey</a>
+<?php
+}
+?>
+<br/><br/></td></tr>
         <tr><th colspan="2">Teacher Surveys (About This Parent Mentor):</th></tr>
         <?php
         /* show all existing teacher surveys: */
@@ -1780,8 +1881,15 @@ if ($parti->child == '1') {
             $display_date = date('n-j-Y', $show_date);
             ?>
             <tr><td><?php echo $surveys['Institution_Name'] . ": " . $display_date; ?></td>
-
-                <td><a href="new_pm_teacher_survey.php?survey=<?php echo $surveys['PM_Teacher_Survey_ID']; ?>"  class="no_view">Edit</a></td></tr>
+<?php
+                if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+                <td>
+<a href="new_pm_teacher_survey.php?survey=<?php echo $surveys['PM_Teacher_Survey_ID']; ?>"  >Edit</a></td>
+<?php
+}
+?>
+</tr>
             <?php
         }
         include "../include/dbconnopen.php";
@@ -1799,15 +1907,30 @@ if ($parti->child == '1') {
                     $show_date = mktime(0, 0, 0, $this_date[1], $this_date[2], $this_date[0]);
                     $display_date = date('n-j-Y', $show_date);
                     ?>
-            <tr><td><?php echo $surveys['Institution_Name'] . ": " . $display_date; ?></td><td><a href="pm_teacher_survey_post.php?survey=<?php echo $surveys['Post_Teacher_Survey_ID']; ?>"  class="no_view">Edit</a></td></tr>
+            <tr><td><?php echo $surveys['Institution_Name'] . ": " . $display_date; ?></td>
+<?php
+                if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<td><a href="pm_teacher_survey_post.php?survey=<?php echo $surveys['Post_Teacher_Survey_ID']; ?>"  >Edit</a></td>
+<?php
+}
+?>
+</tr>
             <?php
         }
         include "../include/dbconnopen.php";
         ?>
         <!--Add new teacher surveys about this person.-->
-        <tr><td colspan="2" class="no_view">Add New Teacher Survey: <a href="new_pm_teacher_survey.php">Pre</a>
-                or <a href="pm_teacher_survey_post.php">Post</a></td></tr>
-<?php //}  ?>
+        <tr>
+<?php
+if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<td colspan="2" >Add New Teacher Survey: <a href="new_pm_teacher_survey.php">Pre</a>
+                or <a href="pm_teacher_survey_post.php">Post</a></td>
+<?php
+}
+?>
+</tr>
         <tr><th colspan="2">Satisfaction Surveys:</th></tr>
                 <?php
                 /* view and edit all satisfaction surveys: */
@@ -1820,13 +1943,27 @@ if ($parti->child == '1') {
                     $date_reformat = explode('-', $surveys['Date']);
                     $use_date = $date_reformat[1] . '-' . $date_reformat[2] . '-' . $date_reformat[0];
                     ?>
-            <tr><td><?php echo $surveys['Subcategory_Name'] . ": " . $use_date; ?></td><td><a  class="no_view" href="/lsna/programs/new_satisfaction_survey.php?survey=<?php echo $surveys['Satisfaction_Survey_ID']; ?>">View/Edit</a></td></tr>
+            <tr><td><?php echo $surveys['Subcategory_Name'] . ": " . $use_date; ?></td><td>
+<?php
+if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<a   href="/lsna/programs/new_satisfaction_survey.php?survey=<?php echo $surveys['Satisfaction_Survey_ID']; ?>">View/Edit</a>
+<?php
+}
+?></td></tr>
     <?php
 }
 include "../include/dbconnopen.php";
 ?>
         <!--Add new satisfaction survey: -->
-        <tr><td colspan="2" class="no_view"><a href="/lsna/programs/new_satisfaction_survey.php">Add New Satisfaction Survey</a></td></tr>
+        <tr>
+<?php
+if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<td colspan="2" ><a href="/lsna/programs/new_satisfaction_survey.php">Add New Satisfaction Survey</a></td>
+<?php
+}
+?></tr>
     </table>
     <br/><br/>
     <!--These are short notes that can be entered over time to show participant progress: -->
@@ -1842,7 +1979,11 @@ $goals = mysqli_query($cnnLSNA, $get_goals);
 while ($go = mysqli_fetch_row($goals)) {
     ?>
             <tr><td><?php echo $go[0] ?>-<?php echo $go[1] ?>-<?php echo $go[2] ?></td><td><?php echo $go[3]; ?></td>
-                <td><input type="button" class="no_view" value="Delete Session" onclick="
+                <td>
+<?php
+if ($USER->has_site_access($LSNA_id, $AdminAccess)){
+?>
+<input type="button"  value="Delete Session" onclick="
                                     $.post(
                                             '../ajax/save_goal_dev.php',
                                             {
@@ -1852,7 +1993,10 @@ while ($go = mysqli_fetch_row($goals)) {
                                     function(response) {
                                         window.location = 'participant_profile.php';
                                     }
-                                    )">
+                                    ).fail(failAlert);">
+<?php
+}
+?>
                 </td></tr>
             <?php
         }
@@ -1875,7 +2019,7 @@ while ($go = mysqli_fetch_row($goals)) {
                                     window.location = 'participant_profile.php';
                                     //document.getElementById('dev_date_resp').innerHTML=response;
                                 }
-                                )">
+                ).fail(failAlert);">
                 <br><span id="dev_date_resp"></span></td><td></td>
         </tr>
     </table>

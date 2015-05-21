@@ -1,6 +1,51 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
 include "../../header.php";
 include "../header.php";
+
+user_enforce_has_access($Enlace_id);
+
+/* so allow them in if it's a new survey OR if they have access to all
+ * programs ('a') or if they have access to a program that is linked
+ * to this...person? or this survey?: */
+
+$access_array = $USER->program_access($Enlace_id);
+$has_all_programs = in_array('a', $access_array);
+
+include "../include/dbconnopen.php";
+$person_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['person']);
+$get_program_list = "SELECT Session_Names.Program_ID FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_ID WHERE Participant_ID = '" . $person_sqlsafe . "'";
+$program_connected = mysqli_query($cnnEnlace, $get_program_list);
+$access_granted = false;
+while ($program_id = mysqli_fetch_row($program_connected)){
+    if (in_array($program_id, $access_array)){
+        $access_granted = true;
+    }
+}
+
+if (!isset($_GET['assessment']) || $has_all_programs || $access_granted){
+
 ?>
 <div style="display:none;"><?php include "../include/datepicker_wtw.php"; ?></div>
 <?php
@@ -13,9 +58,9 @@ include "../header.php";
 include "../classes/participant.php";
 
 include "../include/dbconnopen.php";
-$id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['id']);
+$id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['assessment']);
 $person_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['person']);
-/* if the assessment is not new, then Get['id'] exists, and this query returns the entered responses. */
+/* if the assessment is not new, then Get['assessment'] exists, and this query returns the entered responses. */
 $get_assessment_info = "SELECT * FROM Assessments 
             LEFT JOIN Participants_Caring_Adults ON Caring_Id=Caring_Adults_ID
             LEFT JOIN Participants_Future_Expectations ON Future_Id=Future_Expectations_ID
@@ -23,20 +68,17 @@ $get_assessment_info = "SELECT * FROM Assessments
             LEFT JOIN Participants_Baseline_Assessments ON Baseline_Id=Baseline_Assessment_ID
             LEFT JOIN Programs ON Participants_Future_Expectations.Program=Programs.Program_ID
             WHERE Assessment_ID = '" . $id_sqlsafe . "'";
-//  echo $get_assessment_info;
 $get_assessment = mysqli_query($cnnEnlace, $get_assessment_info);
 $assessment_info = mysqli_fetch_array($get_assessment);
 $caring_id = $assessment_info['Caring_ID'];
 $baseline_id = $assessment_info['Baseline_ID'];
 $future_id = $assessment_info['Future_ID'];
 $violence_id = $assessment_info['Violence_ID'];
-// print_r($assessment_info);
-// echo $assessment_info['Participant_ID'];
 $person = new Participant();
 $person->load_with_participant_id($assessment_info[1]);
 
 /* if it IS a new assessment, then we get the person from the get[person]: */
-if (!isset($_GET['id'])) {
+if (!isset($_GET['assessment'])) {
     $person = new Participant();
     $person->load_with_participant_id($person_sqlsafe);
 }
@@ -72,7 +114,9 @@ Show tables of survey questions and response options.  The chosen response is se
 
 <table class="inner_table" style="border: 2px solid #696969;font-size:.85em;" id="baseline_table">
     <?php $person->baseline(); ?>                        
-    <caption>Date completed: <input type="text" id="admin_date" class="addDP" value="<?php echo $assessment_info[18];  //echo $person->baseline_date; ?>">
+    <caption>Date completed: <input type="text" id="admin_date" class="addDP" value="<?php 
+$print_date = explode(" ", $assessment_info[19]);
+echo $print_date[0]; ?>">
         <?php
         $date_reformat = explode('-', $person->baseline_date);
         $day_separate = explode(' ', $date_reformat[2]);
@@ -534,7 +578,7 @@ Show tables of survey questions and response options.  The chosen response is se
 <?php
 //determine whether this is new or edited
 //this information is used in the /ajax/ file.
-if (isset($_GET['id'])) {
+if (isset($_GET['assessment'])) {
     $edit = 1;
 } else {
     $edit = 0;
@@ -686,13 +730,16 @@ if (isset($_GET['id'])) {
                     awareness: document.getElementById('self_awareness').value,
                     care: document.getElementById('self_care').value,
                     violence_id: '<?php echo $violence_id; ?>',
+                    assessment_id: '<?php echo $id_sqlsafe; ?>',
                     edited: '<?php echo $edit; ?>'
                 },
         function(response) {
             document.getElementById('show_intake_response').innerHTML += response;
-        });">
+        }).fail(function() {alert('You do not have permission to perform this action.');});">
 
 <div id="show_intake_response"></div>
 <br />
 <br />
-<?php include "../../footer.php"; ?>
+<?php
+} //ends access check if condition
+ include "../../footer.php"; ?>

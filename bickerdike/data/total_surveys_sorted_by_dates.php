@@ -1,5 +1,28 @@
-<?
-//$type=$_POST['type'];
+<?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
+
 $start=$_POST['start'];
 $end=$_POST['end'];
 $start_sqlsafe=mysqli_real_escape_string($cnnBickerdike, $start);
@@ -19,7 +42,6 @@ Returns a table of average responses for each question.
     $count_pres_sqlsafe ="SELECT * FROM Participant_Survey_Responses WHERE  Pre_Post_Late='1'
     AND Date_Survey_Administered >= '$start_sqlsafe'
     AND Date_Survey_Administered <= '$end_sqlsafe'";
-    //echo $count_pres_sqlsafe;
     include "../include/dbconnopen.php";
     $pres = mysqli_query($cnnBickerdike, $count_pres_sqlsafe);
     $num_pres = mysqli_num_rows($pres);
@@ -51,7 +73,6 @@ Returns a table of average responses for each question.
     
     //call the routine for pre, post, and later
     include "../include/dbconnopen.php";
-    //echo "CALL get_full_aggregate_survey_results_with_dates('1', '" . $start_sqlsafe ."', '" . $end_sqlsafe . "')";
     if ($get_pre_averages = mysqli_query($cnnBickerdike, "CALL get_full_aggregate_survey_results_with_dates('1', '" . $start_sqlsafe ."', '" . $end_sqlsafe . "')")){
     $pre = array();
     while ($pre_averages = mysqli_fetch_array($get_pre_averages)){
@@ -77,7 +98,6 @@ Returns a table of average responses for each question.
     include "../include/dbconnclose.php";
     }
     include "../include/dbconnopen.php";
-    //echo "CALL get_full_aggregate_survey_results_with_dates('2', '" . $start_sqlsafe ."', '" . $end_sqlsafe . "')";
     if($get_post_averages = mysqli_query($cnnBickerdike, "CALL get_full_aggregate_survey_results_with_dates('2', '" . $start_sqlsafe ."', '" . $end_sqlsafe . "')")){
     $post = array();
     while ($post_averages = mysqli_fetch_array($get_post_averages)){
@@ -102,7 +122,6 @@ Returns a table of average responses for each question.
     }
     }
     include "../include/dbconnopen.php";
-    //echo "CALL get_full_aggregate_survey_results_with_dates('3', '" . $start_sqlsafe ."', '" . $end_sqlsafe . "')";
     if ($get_later_averages = mysqli_query($cnnBickerdike, "CALL get_full_aggregate_survey_results_with_dates('3', '" . $start_sqlsafe ."', '" . $end_sqlsafe . "')")){
     $later = array();
     while ($later_averages = mysqli_fetch_array($get_later_averages)){

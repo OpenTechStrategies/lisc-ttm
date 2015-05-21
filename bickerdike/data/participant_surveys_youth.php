@@ -1,5 +1,27 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
+user_enforce_has_access($Bickerdike_id);
 
 include "../../header.php";
 include "../header.php";
@@ -58,7 +80,7 @@ going on the live site.
            function (response){
                document.getElementById('show_search_results').innerHTML = response;
            }
-       )">
+       ).fail(failAlert);">
 </p><!--Shows the table of averages here.  The table of averages over all time
     still shows up below.-->
 <div id="show_search_results"></div>
@@ -341,8 +363,7 @@ foreach($question_array as $question_sqlsafe){
            * Now we have to go through some gymnastics to get the returned information into an acceptable
            * form for the jqplot creation.
            */
-          
-          //print_r($questions);
+
             if (mysqli_num_rows($questions)>0){
             while ($two = mysqli_fetch_row($questions)){
                 if($question_sqlsafe!='Question_4_B'&&$question_sqlsafe!='Question_5_B'){
@@ -403,7 +424,6 @@ foreach($question_array as $question_sqlsafe){
                     }
                 }
             }
-          //print_r($assignment_arr);
              $count_check=0;
              /*
               * we use the assignment array we just created to make strings for the creation of charts.

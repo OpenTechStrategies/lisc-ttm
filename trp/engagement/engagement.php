@@ -1,4 +1,28 @@
-<?
+<?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
 	include "../../header.php";
 	include "../header.php";
         include "../include/datepicker_simple.php";
@@ -40,13 +64,18 @@
                     <!-- List of events that are not affiliated with a specific campaign: -->
 			<td width="60%"><h2>TRP Events</h2><br/>
                             <!-- add a noncampaign event: -->
+<?php
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
+?>
 				<div style="text-align:center;font-size:.9em;"><a class="add_new" onclick="
 							$('#engagement_home').hide();
 							$('#new_trp_event').show();
 							$('#trp_event_details').hide();
 							$('#outcomes').hide();
-						"><span class="add_new_button no_view">Add New Event</span></a></div>
-				
+						"><span class="add_new_button">Add New Event</span></a></div>
+<?php
+} // end access level check
+?>				
 				<ul id="events_list">
                                     <!-- list of active events.  Events are set as active or inactive by users.  So, all events could be
                                     active or inactive at the same time: -->
@@ -92,8 +121,11 @@
 								<td><span class="display event_<?echo $event['Event_ID'];?>_display"><?echo $event['Event_Actual'];?></span>
 									<input class="edit event_<?echo $event['Event_ID'];?>_edit" id="<?echo $event['Event_ID'];?>_edit_actual" value="<?echo $event['Event_Actual'];?>" style="width:70px;"/></td>
 							</tr>
+<?php
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
+?>
 							<tr>
-								<td colspan="2"><a href="javascript:;" class="display helptext event_<?echo $event['Event_ID'];?>_edit_click no_view" onclick="
+								<td colspan="2"><a href="javascript:;" class="display helptext event_<?echo $event['Event_ID'];?>_edit_click" onclick="
 											$('.event_<?echo $event['Event_ID'];?>_edit_click').hide();
 											$('.event_<?echo $event['Event_ID'];?>_save_click').show();
 											$('.event_<?echo $event['Event_ID'];?>_display').hide();
@@ -111,15 +143,18 @@
                                                                                             function (response){
                                                                                                 window.location = 'engagement.php?event=<?echo $event['Event_ID'];?>';
                                                                                             }
-                                                                                    )
+                                                                                    ).fail(failAlert);
 								" style="margin-left:30px;">Save changes</a><br/></td>
 								<td>
-									<a href="javascript:;" class="helptext no_view" onclick="
+									<a href="javascript:;" class="helptext" onclick="
 										$('#add_attendee_<?echo $event['Event_ID'];?>').toggle();
 									"
                                                                          >Add attendee...</a>
 								</td>
 							</tr>
+<?php
+} // end access level check
+?>
                                                         <!-- search for a new attendee: -->
 							<tr class="add_attendee" id="add_attendee_<?echo $event['Event_ID'];?>">
 								<td></td>
@@ -146,7 +181,7 @@
 													function (response){
 														document.getElementById('attendee_search_results_<?echo $event['Event_ID'];?>').innerHTML = response;
 													}
-												)"/></td>
+												).fail(failAlert);"/></td>
 											</tr>
 										</table>
 										<div id="attendee_search_results_<?echo $event['Event_ID'];?>"></div>
@@ -154,9 +189,15 @@
 							</tr>
 							<tr>
                                                             <!-- set event to active or inactive: -->
+<?php
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
+?>
 								<td>
-									<br/><input type="checkbox" id="<?echo $event['Event_ID'];?>_active" class="no_view" <?if ($event['Active']==1) { echo "checked";}?> 
+									<br/><input type="checkbox" id="<?echo $event['Event_ID'];?>_active" <?if ($event['Active']==1) { echo "checked";}?> 
                                                                                     onchange="StatusChange(this, '<?echo $event['Event_ID'];?>')"/><span style="font-size:.9em;font-style:italic;">Active?</span></td>
+<?php
+} // end access level check
+?>
 								<td></td>
 								<td>
 								</td>
@@ -176,7 +217,7 @@
 										function (response){
 											window.location = "engagement.php?event=<?echo $event['Event_ID'];?>";
 										}
-									)
+									).fail(failAlert);
 								}
 								else if (cb.checked== false) {
 									$.post(
@@ -189,7 +230,7 @@
 										function (response){
 											window.location = "engagement.php";
 										}
-									)
+									).fail(failAlert);
 								}
 							}
 						</script>
@@ -244,8 +285,11 @@
 								<td><span class="display event_<?echo $event['Event_ID'];?>_display"><?echo $event['Event_Actual'];?></span>
 									<input class="edit event_<?echo $event['Event_ID'];?>_edit" id="<?echo $event['Event_ID'];?>_edit_actual" value="<?echo $event['Event_Actual'];?>" style="width:70px;"/></td>
 							</tr>
+<?php
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
+?>
 							<tr>
-								<td colspan="2"><a href="javascript:;" class="display helptext event_<?echo $event['Event_ID'];?>_edit_click no_view" onclick="
+								<td colspan="2"><a href="javascript:;" class="display helptext event_<?echo $event['Event_ID'];?>_edit_click" onclick="
 											$('.event_<?echo $event['Event_ID'];?>_edit_click').hide();
 											$('.event_<?echo $event['Event_ID'];?>_save_click').show();
 											$('.event_<?echo $event['Event_ID'];?>_display').hide();
@@ -264,14 +308,17 @@
                                                                                                 //document.write(response);
                                                                                                 window.location = 'engagement.php?event=<?echo $event['Event_ID'];?>';
                                                                                             }
-                                                                                    )
+                                                                                    ).fail(failAlert);
 								" style="margin-left:30px;">Save changes</a><br/></td>
 								<td>
-									<a href="javascript:;" class="helptext no_view" onclick="
+									<a href="javascript:;" class="helptext" onclick="
 										$('#add_attendee_<?echo $event['Event_ID'];?>').toggle();
 									">Add attendee...</a>
 								</td>
 							</tr>
+<?php
+} // end access level check
+?>
 							<tr class="add_attendee" id="add_attendee_<?echo $event['Event_ID'];?>">
 								<td></td>
 								<td colspan="2" style="padding-left:50px;">
@@ -300,20 +347,26 @@
                                                                                                         //    alert('and got a response!');
 														document.getElementById('attendee_search_results_<?echo $event['Event_ID'];?>').innerHTML = response;
 													}
-												)"/></td>
+												).fail(failAlert);"/></td>
 											</tr>
 										</table>
 										<div id="attendee_search_results_<?echo $event['Event_ID'];?>"></div>
 								</td>
 							</tr>
+<?php
+if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
+?>
 							<tr>
 								<td>
-									<br/><input type="checkbox" id="<?echo $event['Event_ID'];?>_active"  class="no_view" <?if ($event['Active']==1) { echo "checked";}?> 
+									<br/><input type="checkbox" id="<?echo $event['Event_ID'];?>_active"  <?if ($event['Active']==1) { echo "checked";}?> 
                                                                                     onchange="StatusChange(this, '<?echo $event['Event_ID'];?>')"/><span style="font-size:.9em;font-style:italic;">Active?</span></td>
 								<td></td>
 								<td>
 								</td>
 							</tr>
+<?php
+} // end access level check
+?>
 						</table>
 						
 						<script type="text/javascript">
@@ -329,7 +382,7 @@
 										function (response){
 											window.location = "engagement.php?event=<?echo $event['Event_ID'];?>";
 										}
-									)
+									).fail(failAlert);
 								}
 								else if (cb.checked== false) {
 									$.post(
@@ -342,7 +395,7 @@
 										function (response){
 											window.location = "engagement.php?event=<?echo $event['Event_ID'];?>";
 										}
-									)
+									).fail(failAlert);
 								}
 							}
 						</script>
@@ -440,7 +493,11 @@
 									</td>
 									<td><input type="text" id="<?echo $outcome['Outcome_ID'];?>_goal" style="width:40px;"/></td>
 									<td><input type="text" id="<?echo $outcome['Outcome_ID'];?>_actual" style="width:40px;"/></td>
-									<td><input type="button" class="no_view" value="Add" onclick="
+<?php
+    if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
+?>
+
+									<td><input type="button" value="Add" onclick="
 										$.post(
 											'../ajax/save_outcomes_data.php',
 											{
@@ -454,7 +511,11 @@
 												//alert(response);
 												window.location='engagement.php';
 											}
-										)"/>
+										).fail(failAlert);"/>
+</td>
+<?php
+} // end access level check
+?>
 								</tr>
 							</table>
 						</div>

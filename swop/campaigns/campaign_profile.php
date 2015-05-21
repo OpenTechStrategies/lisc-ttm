@@ -1,4 +1,27 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
 /* shows associated institutions and events; provides space to add a new event: */
 
 include "../../header.php";
@@ -23,7 +46,10 @@ $campaign->load_with_id($_COOKIE['campaign']);
     <table class="profile_table">
         <tr>
             <!--Add a new event here: -->
-            <td class="no_view"><strong><em>Add event:</em></strong><br/>
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+            <td ><strong><em>Add event:</em></strong><br/>
                 <table class="inner_table">
                     <tr><td><strong>Name: </strong></td><td><input type="text" id="new_event" ></td></tr>
                     <tr><td><strong>Date: </strong></td><td><input type="text" id="new_date" class="hasDatepickers" /></td></tr>
@@ -114,10 +140,13 @@ $campaign->load_with_id($_COOKIE['campaign']);
                                 //document.getElementById('show_ok11').innerHTML = response;
                                 window.location = 'campaign_profile.php';
                             }
-                            );"><br/><span class="helptext">Dates must be entered in the format YYYY-MM-DD.</span>
+                            ).fail(failAlert);"><br/><span class="helptext">Dates must be entered in the format YYYY-MM-DD.</span>
                             <div id="show_ok"></div></td></tr>
                 </table>
             </td>
+<?php
+} //end access check
+?>
             
             <!-- List of associated institutions. -->
             <td><h4>Associated Institutions</h4>
@@ -137,7 +166,7 @@ $campaign->load_with_id($_COOKIE['campaign']);
                                             },
                                     function(response) {
                                         window.location = '../institutions/inst_profile.php';
-                                    })"><?php echo $institution['Institution_Name']; ?></a></td></tr><?php
+                                    }).fail(failAlert);"><?php echo $institution['Institution_Name']; ?></a></td></tr><?php
                         }
                         include "../include/dbconnclose.php";
                         ?>
@@ -156,7 +185,9 @@ $campaign->load_with_id($_COOKIE['campaign']);
                     include "../include/dbconnclose.php";
                     ?>
                 </select>
-                <input type="button" class="no_view" value="Add Institution" onclick="
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>                <input type="button" value="Add Institution" onclick="
                         $.post(
                                 '../ajax/link_inst.php',
                                 {
@@ -168,7 +199,10 @@ $campaign->load_with_id($_COOKIE['campaign']);
                             //document.write(response);
                             window.location = 'campaign_profile.php';
                         }
-                        )">
+                        ).fail(failAlert);">
+<?php
+        } //end access check
+?>
             </td>
         </tr>
         <tr>
@@ -203,4 +237,6 @@ $campaign->load_with_id($_COOKIE['campaign']);
     </table>
 </div>
 <br/><br/>
-<?php include "../../footer.php"; ?>
+<?php include "../../footer.php"; 
+close_all_dbconn();
+?>

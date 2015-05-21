@@ -1,14 +1,33 @@
+<?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
+?>
 <div id="trp_header">
     <script>
         $(document).ready(function() {
-<?php
-if (!isset($_COOKIE['user'])) {
-    /* if this person isn't signed in or their login information has expired, send them back to the homepage. */
-    ?>
-                window.location = '/index.php';
-    <?php
-}
-?>
+
             $("td.menu_item").hover(function() {
                 $(this).addClass("select");
             }, function() {
@@ -28,51 +47,10 @@ if (!isset($_COOKIE['user'])) {
             <td class="menu_item"><a href="/trp/engagement/engagement.php" id="engagement_selector">Community Engagement</a></td>
 
             <td class="menu_item"><a href="/trp/reports/reports.php" id="reports_selector">Reports</a></td>
-            <td class="menu_item"><a href="/trp/index.php?action=logout">Log Out</a>
+            <td class="menu_item"><a href="/index.php?action=logout">Log Out</a>
         </tr>
         <tr>
             <td colspan="6"><hr/></td>
         </tr>
     </table>
-    <?php
-    if ($_COOKIE['sites']) {
-        if (in_array('4', $_COOKIE['sites'])) {
-            /* then the logged in user has access to TRP */
-            if (isset($_COOKIE['view_restricted'])) {
-                /* then the user isn't an administrator and some buttons should be hidden (often delete buttons) */
-                ?>
-                <script type="text/javascript">
-                    $(document).ready(function() {
-                        $('.hide_on_view').hide();
-                    });
-                </script>
-                <?php
-            }
-            if (isset($_COOKIE['view_only'])) {
-                /* then the user is not allowed to edit any information. */
-                ?> 
-                <style type="text/css">.no_view {display:none}</style><?php
-            }
-        } else {
-            ?>
-
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    //$('#main_wrapper').hide();
-                    window.location = '/index.php';
-                });
-            </script>
-        <?php
-    }
-} else {
-    ?>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('#main_wrapper').hide();
-                window.location = '/index.php';
-            });
-        </script>
-    <?php
-}
-?>
 </div>

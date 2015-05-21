@@ -1,4 +1,23 @@
-<? include "header.php"; ?>
+<?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php include "header.php"; ?>
 
 <!--
 Give username and password, then enter new password twice (to prevent typos).  Sends
@@ -41,7 +60,6 @@ to another file to update the users table with the new password.
     <tr>
         <td colspan="2">
             <input type="submit" value="Submit" onclick="
-                //document.write('hii');
                    $.post(
                        '/ajax/change_password.php',
                        {
@@ -51,7 +69,6 @@ to another file to update the users table with the new password.
                            new_pw_2: document.getElementById('confirm').value
                        },
                        function (response){
-                           //document.write(response);
                            document.getElementById('show_response').innerHTML = response;
                        }
                 );
@@ -61,4 +78,4 @@ to another file to update the users table with the new password.
 </table>
           <!--  </form>-->
           <div id="show_response"></div>
-<? include "footer.php" ?>
+<?php include "footer.php" ?>

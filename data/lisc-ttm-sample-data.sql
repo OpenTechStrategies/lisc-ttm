@@ -1470,6 +1470,7 @@ CREATE TABLE `Users` (
   `User_Id` int(11) NOT NULL AUTO_INCREMENT,
   `User_Email` varchar(45) DEFAULT NULL,
   `User_Password` varchar(64) DEFAULT NULL,
+  `Locked` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`User_Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1480,7 +1481,7 @@ CREATE TABLE `Users` (
 
 LOCK TABLES `Users` WRITE;
 /*!40000 ALTER TABLE `Users` DISABLE KEYS */;
-INSERT INTO `Users` VALUES (1,'admin','$2a$08$LLrRVBmQk.ot7MDm26B1sOIV5lBOYvTqYNDOczxb8mBrKYzz5WM9W'),(2,'mwilson@chapinhall.org','$2a$08$X1DWv3/x1SzfASq/K8cUUu6fCoBXBwB3h1sIek7cJbzaQRBf5pSTO'),(3,'HumboldtParkUser','$2a$08$qyXwWsf5kCZUoTQtWKV7UOO3OesQDU3fRM5EAlSOVxAksjjmnxWNO'),(4,'LoganSquareUser','$2a$08$WO21lwNS69lFvXsdjl5R2eN2AKOIisJBHHkPrONkWePTtAAcMb4AS'),(11,'TESTviewONLY','$2a$08$eF9diBrIAcJPvngiZ2Vj0eN2gj/GnXmvro5LlGF7WT1wnPEn2.PCG'),(12,'HPDataEntry','$2a$08$UMYWiP3Y0visZ4NYeLBHk.vKfn1bEgeKcAI.LmRfzzkzMS0V/Yc3G'),(13,'HPAdmin','$2a$08$aQvZFRMTHRQLMyxcaoTfheq/AdxeLJ0ugfYqM6JJWprfG7xiHWzLi'),(14,'NewUser','$2a$08$aQjFo0XFyS15uUsC3ejWdebA7NcDLuGJQRMkuQMP01Is4GF5RtwJq'),(15,'testPartnerAcct','$2a$08$vGAM7eJGGWmljF.tkQNCpuYumdb3BnUUMhgyMGOLU74NoTI/H8KXW'),(16,'PilsenUser','$2a$08$31agB8ClX8dQDCaYdwpezusH0IqdPGhMGGG0xB2iMULiM5u/26aGa'),(17,'ChicagoLawnUser','$2a$08$l6zyRa0NKMnrDgwVCCZB2equcqXDUMluGw6fE0MOFKeq7BY5E0yam'),(18,'LittleVillageUser','$2a$08$.WEtXQwfNyAXr605KCxPg.yq8PBPgvJQrbviMh41zMzY82JEEbfd2'),(19,'troch@lisc.org','$2a$08$2eSB75liPtJIi4SEi1ePxepY6Q9i2EHXa1hrlHBbAx3PlyOXmsRGa'),(20,'LSNADataEntry','$2a$08$wEdWUDHAIQYNgpFcOSf4te1c/pieQ/IbVN7WpjSWqKhFiXmAcJSBC'),(21,'LSNAViewer','$2a$08$KCWgKMk1EgvgyNUetjYvQOuNvmIb5abcJR6KumFnyntXIhrlhDsQy'),(22,'jpcirre@aol.com','$2a$08$LBOQOEM5SPZm8MTSpYUJmOcw6RBEWIGbHb1QcXnjlbx26YXada55.'),(23,'kbocanegra','$2a$08$s6vMKEQMo/gJRrJcyN3cAOoRRk.6EOe0Iq.Tq0mbg4EoiTfWdGqE6'),(25,'dcooper','$2a$08$KfdPD3lCd8NZkPJeaKKsFOYbMXTEKMH9NiSHT9W4yzzR2ZnjwmlZm'),(26,'mrodriguez','$2a$08$Zkz2at5EPyc6mU0FubulG./J7EFMzup03HAKSBQ7OncrMNdHcGQZm'),(27,'uzatarain','$2a$08$DjGMSNlJQMvi/L9.jMUzCOVqR10m4yaGHo1ZoqduV21AEGuJYXKEO'),(28,'SWOPDataEntry','$2a$08$8h1zP1KGEOKLK6AmeNDatOvA35w9iFIfDjN4kvb87Fr/1.XMsXQBq'),(29,'SWOPFinances','$2a$08$J7HPx1bFbQlgLrzgHSi7BO4f98.HclUbn5.tKxWQa9Y8WECjBPUU.'),(30,'jalcazar','$2a$08$IDuyI4t3n9nqy.8OTVwlxunggchzf/uRXm7GM4lvjqGwX.WukKH2C'),(31,'hachanzar','$2a$08$6jLir8gfsMuZKmZw/V4qM.Ob0iJ7Hp4rhvLo.vdUHJURp7wUEcU3C'),(32,'EnlaceDataEntry','$2a$08$MFmohwcxzna4lFQCw40bXupg7/qaMQ4nK2S7In0ZeFV.gC1Djzw/i'),(33,'paguilar','$2a$08$IZ3J894/mEYMnAi8GCCn9.NIFMfkoyqAq53GPrTF4BwTgGvwOO2ru'),(34,'pbarry','$2a$08$gZG0Q7GQfJEKEOfUsSxE4.VfPwJGuggg6PkGW2UPCAsj4uvLqRfPC'),(35,'jgawel','$2a$08$c4/TL8GYy.9tyUFiqNHEtOgVRmKiyws/suRdLRe33rDyipgffJbMG'),(36,'vrizzi','$2a$08$sD/n5eGt.xfONYvzWN9Olu4hVY9dFas5MmOAEN4x6U32Ls3E4SJta'),(37,'kfogel','$2a$08$1DdKxHaJuA9i6e3FYkBgm.MTwULJ6MBWw7H41tvhEpzIPE20GmM/i'),(38,'slynjones','$2a$08$AH1F8Gnrm6x/dDtg.Qbpauu9Sn0qm6drtrlVTI0/pkbafGu6AutvG');
+INSERT INTO `Users` VALUES (1,'admin','$2a$08$LLrRVBmQk.ot7MDm26B1sOIV5lBOYvTqYNDOczxb8mBrKYzz5WM9W', NULL),(2,'mwilson@chapinhall.org','$2a$08$X1DWv3/x1SzfASq/K8cUUu6fCoBXBwB3h1sIek7cJbzaQRBf5pSTO', 1),(3,'HumboldtParkUser','$2a$08$qyXwWsf5kCZUoTQtWKV7UOO3OesQDU3fRM5EAlSOVxAksjjmnxWNO', 1),(4,'LoganSquareUser','$2a$08$WO21lwNS69lFvXsdjl5R2eN2AKOIisJBHHkPrONkWePTtAAcMb4AS', 1),(11,'TESTviewONLY','$2a$08$eF9diBrIAcJPvngiZ2Vj0eN2gj/GnXmvro5LlGF7WT1wnPEn2.PCG', 1),(12,'HPDataEntry','$2a$08$UMYWiP3Y0visZ4NYeLBHk.vKfn1bEgeKcAI.LmRfzzkzMS0V/Yc3G', 1),(13,'HPAdmin','$2a$08$aQvZFRMTHRQLMyxcaoTfheq/AdxeLJ0ugfYqM6JJWprfG7xiHWzLi', 1),(14,'NewUser','$2a$08$aQjFo0XFyS15uUsC3ejWdebA7NcDLuGJQRMkuQMP01Is4GF5RtwJq', 1),(15,'testPartnerAcct','$2a$08$vGAM7eJGGWmljF.tkQNCpuYumdb3BnUUMhgyMGOLU74NoTI/H8KXW', 1),(16,'PilsenUser','$2a$08$31agB8ClX8dQDCaYdwpezusH0IqdPGhMGGG0xB2iMULiM5u/26aGa', 1),(17,'ChicagoLawnUser','$2a$08$l6zyRa0NKMnrDgwVCCZB2equcqXDUMluGw6fE0MOFKeq7BY5E0yam', 1),(18,'LittleVillageUser','$2a$08$.WEtXQwfNyAXr605KCxPg.yq8PBPgvJQrbviMh41zMzY82JEEbfd2', 1),(19,'troch@lisc.org','$2a$08$2eSB75liPtJIi4SEi1ePxepY6Q9i2EHXa1hrlHBbAx3PlyOXmsRGa', 1),(20,'LSNADataEntry','$2a$08$wEdWUDHAIQYNgpFcOSf4te1c/pieQ/IbVN7WpjSWqKhFiXmAcJSBC', 1),(21,'LSNAViewer','$2a$08$KCWgKMk1EgvgyNUetjYvQOuNvmIb5abcJR6KumFnyntXIhrlhDsQy', 1),(22,'jpcirre@aol.com','$2a$08$LBOQOEM5SPZm8MTSpYUJmOcw6RBEWIGbHb1QcXnjlbx26YXada55.', 1),(23,'kbocanegra','$2a$08$s6vMKEQMo/gJRrJcyN3cAOoRRk.6EOe0Iq.Tq0mbg4EoiTfWdGqE6', 1),(25,'dcooper','$2a$08$KfdPD3lCd8NZkPJeaKKsFOYbMXTEKMH9NiSHT9W4yzzR2ZnjwmlZm', 1),(26,'mrodriguez','$2a$08$Zkz2at5EPyc6mU0FubulG./J7EFMzup03HAKSBQ7OncrMNdHcGQZm', 1),(27,'uzatarain','$2a$08$DjGMSNlJQMvi/L9.jMUzCOVqR10m4yaGHo1ZoqduV21AEGuJYXKEO', 1),(28,'SWOPDataEntry','$2a$08$8h1zP1KGEOKLK6AmeNDatOvA35w9iFIfDjN4kvb87Fr/1.XMsXQBq', 1),(29,'SWOPFinances','$2a$08$J7HPx1bFbQlgLrzgHSi7BO4f98.HclUbn5.tKxWQa9Y8WECjBPUU.', 1),(30,'jalcazar','$2a$08$IDuyI4t3n9nqy.8OTVwlxunggchzf/uRXm7GM4lvjqGwX.WukKH2C', 1),(31,'hachanzar','$2a$08$6jLir8gfsMuZKmZw/V4qM.Ob0iJ7Hp4rhvLo.vdUHJURp7wUEcU3C', 1),(32,'EnlaceDataEntry','$2a$08$MFmohwcxzna4lFQCw40bXupg7/qaMQ4nK2S7In0ZeFV.gC1Djzw/i', 1),(33,'paguilar','$2a$08$IZ3J894/mEYMnAi8GCCn9.NIFMfkoyqAq53GPrTF4BwTgGvwOO2ru', 1),(34,'pbarry','$2a$08$gZG0Q7GQfJEKEOfUsSxE4.VfPwJGuggg6PkGW2UPCAsj4uvLqRfPC', 1),(35,'jgawel','$2a$08$c4/TL8GYy.9tyUFiqNHEtOgVRmKiyws/suRdLRe33rDyipgffJbMG', 1),(36,'vrizzi','$2a$08$sD/n5eGt.xfONYvzWN9Olu4hVY9dFas5MmOAEN4x6U32Ls3E4SJta', 1),(37,'kfogel','$2a$08$1DdKxHaJuA9i6e3FYkBgm.MTwULJ6MBWw7H41tvhEpzIPE20GmM/i', 1),(38,'slynjones','$2a$08$AH1F8Gnrm6x/dDtg.Qbpauu9Sn0qm6drtrlVTI0/pkbafGu6AutvG', 1);
 /*!40000 ALTER TABLE `Users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3248,8 +3249,11 @@ CREATE TABLE `Assessments` (
   `Violence_ID` int(11) DEFAULT NULL,
   `Pre_Post` int(11) DEFAULT NULL,
   `Date_Logged` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `Session_ID` int(11) DEFAULT NULL,
   PRIMARY KEY (`Assessment_ID`),
-  KEY `FK_Assessments__Participants__Participant_ID_idx` (`Participant_ID`)
+  KEY `FK_Assessments__Participants__Participant_ID_idx` (`Participant_ID`),
+  KEY `Session_ID` (`Session_ID`),
+  CONSTRAINT `Assessments_ibfk_1` FOREIGN KEY (`Session_ID`) REFERENCES `Session_Names` (`Session_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3259,9 +3263,10 @@ CREATE TABLE `Assessments` (
 
 LOCK TABLES `Assessments` WRITE;
 /*!40000 ALTER TABLE `Assessments` DISABLE KEYS */;
-INSERT INTO `Assessments` VALUES (1,5,29,28,24,29,1,'2013-08-15 20:49:30'),(2,5,0,30,26,31,2,'2013-08-15 21:10:50'),(3,0,30,31,27,32,1,'2013-08-19 18:59:38'),(4,0,31,32,28,33,1,'2013-08-19 19:00:33'),(5,15,32,33,29,34,1,'2013-08-19 19:01:40'),(6,31,33,34,30,35,1,'2013-08-28 13:21:46'),(7,3,34,35,31,36,1,'2013-08-28 20:05:43'),(8,16,35,36,32,37,1,'2013-08-28 20:34:16'),(9,16,0,37,33,38,2,'2013-08-28 20:35:26'),(15,25,0,43,39,44,2,'2013-08-28 20:40:13'),(16,25,0,44,40,45,2,'2013-08-28 20:40:13'),(17,15,0,45,41,46,2,'2013-08-28 20:42:04'),(27,4,45,55,51,56,1,'2013-09-10 20:10:38'),(28,4,46,403,52,57,1,'2013-10-02 21:29:40'),(29,4,0,404,53,58,2,'2013-10-02 21:30:53'),(30,27,47,405,54,59,1,'2013-11-18 21:36:26'),(31,33,48,406,55,60,1,'2013-11-18 22:21:12');
+INSERT INTO `Assessments` VALUES (1,5,29,28,24,29,1,'2013-08-15 20:49:30',8),(2,5,0,30,26,31,2,'2013-08-15 21:10:50',8),(3,0,30,31,27,32,1,'2013-08-19 18:59:38',8),(4,0,31,32,28,33,1,'2013-08-19 19:00:33',8),(5,15,32,33,29,34,1,'2013-08-19 19:01:40',6),(6,31,33,34,30,35,1,'2013-08-28 13:21:46',8),(7,3,34,35,31,36,1,'2013-08-28 20:05:43',8),(8,16,35,36,32,37,1,'2013-08-28 20:34:16',8),(9,16,0,37,33,38,2,'2013-08-28 20:35:26',8),(15,25,0,43,39,44,2,'2013-08-28 20:40:13',8),(16,25,0,44,40,45,2,'2013-08-28 20:40:13',8),(17,15,0,45,41,46,2,'2013-08-28 20:42:04',6),(27,4,45,55,51,56,1,'2013-09-10 20:10:38',7),(28,4,46,403,52,57,1,'2013-10-02 21:29:40',7),(29,4,0,404,53,58,2,'2013-10-02 21:30:53',8),(30,27,47,405,54,59,1,'2013-11-18 21:36:26',1),(31,33,48,406,55,60,1,'2013-11-18 22:21:12',11);
 /*!40000 ALTER TABLE `Assessments` ENABLE KEYS */;
 UNLOCK TABLES;
+
 
 --
 -- Table structure for table `Baseline_Assessment_Questions`

@@ -1,4 +1,28 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
+
 include "../../header.php";
 include "../header.php";
 ?>
@@ -11,7 +35,6 @@ Menu of all reports and some data entry too (corner store and walkability assess
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#data_selector').addClass('selected');
-               // $('.hide_on_view').hide();
 	});
 </script>
 
@@ -24,13 +47,35 @@ Menu of all reports and some data entry too (corner store and walkability assess
 <ul>
     <li><a href="../data/participant_surveys_total.php">Participant Survey, Aggregate</a></li>
     <li><a href="../data/participant_surveys_individual_total.php">Participant (Individual) Survey, Aggregate</a></li>
-<!--    <li>Partner Program Attendance Rates</li>-->
-<!--    <li><a href="../data/partner_programs.php">Partner Program Records</a></li>-->
     <li><a href="../data/bickerdike_programs.php">Bickerdike Records: Contextual Data</a></li>
     <li><a href="../data/health_calendar.php">Health Calendar</a></li>
-    <li>Corner Store Assessment -- <a href="../reports/add_corner_store.php" class="hide_on_view">Add Data</a> -- <a href="../reports/corner_store_report.php">View Cumulative Report</a></li>
-    <li>Walkability Assessment -- <a href="../reports/add_walkability.php" class="hide_on_view">Add Data</a> -- <a href="../reports/walkability_report.php">View Cumulative Report</a></li>
-    <li><a href="../data/new_cws.php" class="hide_on_view">Add Community Wellness Survey Results</a></li>
+    <li>Corner Store Assessment -- 
+<?php
+                                                                                   if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<a href="../reports/add_corner_store.php" class="">Add Data</a> -- <a href="../reports/corner_store_report.php">View Cumulative Report</a>
+<?php
+                                                                                   } //end access check
+?>
+</li>
+    <li>Walkability Assessment -- 
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<a href="../reports/add_walkability.php"> Add Data</a>
+<?php
+} //end access check
+?>
+ -- <a href="../reports/walkability_report.php">View Cumulative Report</a></li>
+    <li>
+<?php
+                                                                                   if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<a href="../data/new_cws.php">Add Community Wellness Survey Results</a>
+<?php
+                                                                                   } //end access check
+?>
+</li>
     <li><a href="../data/export.php">Export All Data</a></li>
 </ul></td>
 		<td><h2>Reports</h2>
@@ -43,8 +88,6 @@ Menu of all reports and some data entry too (corner store and walkability assess
         <li><a href="../reports/health_report.php">Physical Change Over Time</a></li>
         <li><a href="../data/survey_sort.php">Sort and export surveys</a></li>
         <li><a href="../reports/custom_query.php">Custom Query</a></li>
-<!--        <li>Attendance Over Time</li>
-        <li>Physical Environment Measures</li>-->
     </ul></td>
 	</tr>
 </table>

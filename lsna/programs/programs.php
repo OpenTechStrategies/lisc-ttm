@@ -1,6 +1,30 @@
-<? include "../../header.php";
-	include "../header.php";
-        //print_r($_COOKIE);
+<?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id);
+
+include "../../header.php";
+include "../header.php";
 ?>
 <!--Home/search page for programs: -->
     <script type="text/javascript">
@@ -22,35 +46,6 @@
                 $('#ajax_loader').fadeOut('slow');
             });
 </script>
-    <?
-if ($_COOKIE['prog_page']=='profile'){
-            ?>
-
-                <script type="text/javascript">
-	$(document).ready(function() {
-		$('#programs_selector').addClass('selected');
-		$("a.add_new").hover(function(){
-				$(this).addClass("selected");
-			}, function() {
-				$(this).removeClass("selected");
-			});
-		$('#search_all_programs').hide();
-		$('#add_new_program').hide();
-		$('#program_profile_div').show();
-                $('.show_edit_space').hide();
-				$('.attendee_role_edit').hide();
-                $('#user_search').hide();
-
-				$('#add_participant').hide();
-                $('#show_next_parts_new').hide();
-				$('#show_next_parts').hide();
-	});
-
-</script>
-                <?
-        }
-        elseif ($_COOKIE['prog_page']=='search'){
-        ?>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -70,36 +65,6 @@ if ($_COOKIE['prog_page']=='profile'){
 	});
 
 </script>
-
-<?
-        }
-        elseif($_COOKIE['prog_page']=='new'){
-                  ?>
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('#programs_selector').addClass('selected');
-                $("a.add_new").hover(function(){
-				$(this).addClass("selected");
-			}, function() {
-				$(this).removeClass("selected");
-			});
-		$('#search_all_programs').hide();
-		$('#add_new_program').show();
-		$('#program_profile_div').hide();
-                $('.show_edit_space').hide();
-                $('#user_search').hide();
-				$('#show_next_parts').hide();
-                $('#show_next_parts_new').hide();
-                
-	});
-
-</script>
-
-<?
-        }
-?>
-
 
 <div class="content" id="search_all_programs">
 <h3>Issue Areas</h3><hr/><br/>
@@ -153,7 +118,7 @@ while ($sub = mysqli_fetch_array($related_subcategories)){
                                                         }
                                                         window.location='program_profile.php';
                                                     }
-                                              )"><?echo $sub['Subcategory_Name'] . "<br>";?></a><?
+                                              ).fail(failAlert);"><?echo $sub['Subcategory_Name'] . "<br>";?></a><?
 }
 ?></div><br/>
 <!--List of all programs linked to this issue area: -->
@@ -186,7 +151,7 @@ while ($sub = mysqli_fetch_array($related_subcategories)){
                                                         }
                                                         window.location='program_profile.php';
                                                     }
-                                              )"><?echo $sub['Subcategory_Name'] . "<br>";?></a><?
+                                              ).fail(failAlert);"><?echo $sub['Subcategory_Name'] . "<br>";?></a><?
 }
     include "../include/dbconnclose.php";
 ?></div>
@@ -215,7 +180,15 @@ while ($sub = mysqli_fetch_array($related_subcategories)){
 	
         <!--Search programs and campaigns by name and category here: -->
 	
-	<td><div style="text-align:center;"><a class="add_new" href="new_program.php"><span class="add_new_button no_view">Add New Program or Campaign</span></a></div><br/><br/>
+	<td>
+<?php
+if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<div style="text-align:center;"><a class="add_new" href="new_program.php"><span class="add_new_button">Add New Program or Campaign</span></a></div>
+<?php
+} //end access check
+?>
+<br/><br/>
 <h4>Search Programs and Campaigns</h4>
 <table class="program_table">
     <tr><td class="all_projects"><strong>Program/Campaign Name (or part of name):</strong></td>
@@ -260,7 +233,7 @@ include "../include/dbconnclose.php";
                                 function (response){
                                     document.getElementById('show_results_program_search').innerHTML = response;
                                 }
-                           )"></th></tr>
+                           ).fail(failAlert);"></th></tr>
 </table><br/>
 <div id="show_results_program_search"></div></td>
 	</tr>
@@ -270,6 +243,6 @@ include "../include/dbconnclose.php";
 
 </div>
 
-<? //include "new_program.php";
-//include "program_profile.php";
-include "../../footer.php"; ?>
+<?php
+include "../../footer.php";
+?>

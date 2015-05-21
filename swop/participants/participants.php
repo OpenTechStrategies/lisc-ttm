@@ -1,4 +1,27 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+user_enforce_has_access($SWOP_id);
+
 setcookie("new_pool", '', time() - 7200, '/');
 include "../../header.php";
 include "../header.php";
@@ -44,9 +67,18 @@ if ($_GET['new'] == 1) {
         <h3>Participants</h3><hr/><br/>
 
         <!-- Link to show the add new person div: -->
-        <div style="text-align:center;font-size:.9em;"><a class="add_new" onclick="
+        <div style="text-align:center;font-size:.9em;">
+<?php
+if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
+?>
+<a class="add_new" onclick="
                 $('#participant_search').hide();
-                $('#add_participant').show();"><span class="add_new_button no_view">Add New Participant</span></a></div><br/>
+                $('#add_participant').show();">
+<span class="add_new_button">Add New Participant</span></a>
+<?php
+} //end access check
+?>
+</div><br/>
 
 
         <!-- find people: -->
@@ -131,7 +163,7 @@ if ($_GET['new'] == 1) {
                             //document.write(response);
                             document.getElementById('show_trp_results').innerHTML = response;
                         }
-                        )"/></td>
+                        ).fail(failAlert);"/></td>
             </tr>
         </table>
         <!-- Participant search results: -->

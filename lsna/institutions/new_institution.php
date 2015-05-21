@@ -1,5 +1,31 @@
-<? include "../../header.php";
-	include "../header.php";
+<?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id);
+
+include "../../header.php";
+include "../header.php";
 ?>
 <!--Add a new institution: -->
 <script type="text/javascript">
@@ -16,30 +42,6 @@
             });
 </script>
 
-<?
-if ($_COOKIE['inst_page']=='profile'){
-            ?>
-
-                <script type="text/javascript">
-	$(document).ready(function() {
-	$('#institutions_selector').addClass('selected');
-	$("a.add_new").hover(function(){
-				$(this).addClass("selected");
-			}, function() {
-				$(this).removeClass("selected");
-			});
-		$('#search_all_institutions').hide();
-		$('#add_new_institution').hide();
-		$('#institution_profile_div').show();
-        $('.show_edit_space').hide();
-		$('.edit').hide();
-	});
-
-</script>
-                <?
-        }
-        elseif ($_COOKIE['inst_page']=='search' || !isset($_COOKIE['inst_page'])){
-        ?>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#institutions_selector').addClass('selected');
@@ -53,11 +55,6 @@ if ($_COOKIE['inst_page']=='profile'){
 	});
 
 </script>
-
-<?
-        }
-  //      print_r($_COOKIE);
-?>
 
 <div class="content" id="add_new_institution">
 
@@ -114,7 +111,7 @@ if ($_COOKIE['inst_page']=='profile'){
                     function (response){
                         document.getElementById('institution_response_bucket').innerHTML = response;
                     }
-               )"></td>
+               ).fail(failAlert);"></td>
     </tr>
 </table>
 

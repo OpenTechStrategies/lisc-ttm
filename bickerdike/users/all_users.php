@@ -1,4 +1,27 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
 
 //list all users, make them editable and deletable 
 //add search module
@@ -27,7 +50,14 @@ include "../header.php";
     
 <h3>Participants</h3><hr/><br/>
 
-<div style="text-align:center;"><a href="../users/add_user.php" class="add_new hide_on_view"><span class="add_new_button">Add New Participant</span></a></div><br/>
+<div style="text-align:center;">
+<?php
+    if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<a href="../users/add_user.php" class="add_new "><span class="add_new_button">Add New Participant</span></a></div><br/>
+<?php
+    } //end access check
+?>
 <h4>Search All Participants:</h4>
 <table class="search_table">
     <tr><td class="all_projects"><strong>First Name:</strong></td>
@@ -108,7 +138,7 @@ include "../header.php";
                                     //document.write(response);
                                     document.getElementById('show_results').innerHTML = response;
                                 }
-                           )"></th>
+                           ).fail(failAlert);"></th>
     </tr>
 </table>
 
@@ -149,7 +179,7 @@ or deleting them outright.  The merging is still not available on the live site.
                                     //document.write(response);
                                     document.getElementById('search_results1').innerHTML = response;
                                 }
-                           )"></td>
+                           ).fail(failAlert);"></td>
 			</tr>
 		</table>
 		<div id="search_results1"></div>
@@ -179,10 +209,9 @@ or deleting them outright.  The merging is still not available on the live site.
 									remove: '2'
                                 },
                                 function (response){
-                                    //document.write(response);
                                     document.getElementById('search_results2').innerHTML = response;
                                 }
-                           )"></td>
+                           ).fail(failAlert);"></td>
 			</tr>
 		</table>
 		<div id="search_results2"></div>
@@ -193,73 +222,10 @@ or deleting them outright.  The merging is still not available on the live site.
 </div>
 
 <!-------------------------------->
-
-<!--<table class="all_participants">
     <tr>
-        <th style="text-align:left;">Name</th>
-        <th>Zipcode</th>
-        <th>Main Program</th>
-        <th></th>
-    </tr>
-    <?
-    //include "../include/dbconnopen.php";
-    //$get_all_users_query_sqlsafe = "SELECT * FROM Users ORDER BY Last_Name";
-    //$all_users = mysqli_query($cnnBickerdike, $get_all_users_query_sqlsafe);
-    //$count=0;
-    //while ($user=mysqli_fetch_array($all_users)){
-    
-    ?>
-    <tr>
-        <td class="all_projects" style="text-align:left;"><a href="user_profile.php?id=<?//echo $user['User_ID'];?>"><?//echo $user['First_Name'] ." " . $user['Last_Name']?></a><br>
+        <td class="all_projects" style="text-align:left;"><a href="user_profile.php?id="></a><br>
                         <div class="edit_hide">First Name: <input type="text" id="edit_first_<?//echo $count;?>"><br>
                         Last Name: <input type="text" id="edit_last_<?//echo $count;?>"></div></td>
-                        <td class="all_projects"><?//echo $user['Zipcode'];?><br><div class="edit_hide">Zipcode: <input type="text" id="edit_zip_<?//echo $count;?>"></div></td>
-<!--        <td class="all_projects"></td>-->
-       <!-- <td class="all_projects"><!--<input type="button" value="Edit" onclick="
-                                        $('.edit_hide').toggle();
-                                        ">-->
-            <!--<input type="button" class="edit_hide" value="Save Changes" onclick="
-                                        $.post(
-                                            '../ajax/edit_user.php',
-                                            {
-                                                first_name: document.getElementById('edit_first_<?//echo $count;?>').value,
-                                                last_name: document.getElementById('edit_last_<?//echo $count;?>').value,
-                                                user_id: '<?//echo $user['User_ID'];?>',
-                                                zip: document.getElementById('edit_zip_<?//echo $count;?>').value
-                                            },
-                                            function (response){
-                                                //document.write(response);
-                                                window.location='all_users.php';
-                                            }
-                                    )
-                                    "><input type="button" value="Delete" onclick="
-                                                var first='<?//echo $user['First_Name']?>';
-                                                var last='<?//echo $user['Last_Name']?>';
-                                                var answer = confirm('Are you sure you want to delete '+first+' '+last+' from the database?');
-                                                if (answer){
-                                                    $.post(
-                                                        '../ajax/delete_user.php',
-                                                        {
-                                                            user_id: '<?//echo $user['User_ID'];?>'
-                                                        },
-                                                        function (response){
-                                                            //document.write(response);
-                                                            window.location = 'all_users.php';
-                                                        }
-                                                    );
-                                                }
-                                                else{
-                                                   // alert('guess you weren\'t sure');
-                                                }
-                                "></td>
-    </tr>
-    <?
-    //$count=$count+1;
-    //}
-    //include "../include/dbconnclose.php";?>
-</table>-->
-
-
-</div>
+                        <td class="all_projects"><?//echo $user['Zipcode'];?><br><div class="edit_hide">Zipcode: <input type="text" id="edit_zip_"></div></td>
 
 <? include "../../footer.php"; ?>

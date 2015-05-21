@@ -1,9 +1,32 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($Bickerdike_id);
+
 include "../../header.php";
 include "../header.php";
-//echo $_GET['id'];
 include "../classes/user.php";
-$user = new User();
+$user = new Bickerdike_User();
 $user->load_with_user_id($_GET['id']);
 ?>
 
@@ -26,7 +49,6 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
         $('.prog_3').hide();
         $('.prog_4').hide();
         $('.prog_5').hide();
-        //$('.hide_on_view').hide();
     });
 </script>
 
@@ -108,12 +130,28 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                     <tr><td><strong>Database ID</strong></td><td><?php echo $_GET['id']; ?></td></tr>
                     <tr>
                         <td><strong>Notes:</strong><p class="helptext">(only 400 characters will be saved in the database)</p></td>
-                        <td><textarea id="user_notes" class="hide_on_view"><?php echo $user->notes; ?></textarea></td>
+                        <td>
+<?php
+    if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<textarea id="user_notes"><?php echo $user->notes; ?></textarea>
+<?php
+    } //end access check
+?>
+</td>
                     </tr>
-                    <tr><td class="blank"><input type="button" class="hide_on_view" value="Edit" onclick="
+                    <tr><td class="blank">
+<?php
+    if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<input type="button" value="Edit" onclick="
                             $('.edit_space').toggle();
                             $('.displayed_info').toggle();
-                                                 "><input type="button" class="edit_space" value="Save" onclick="
+                                                 ">
+<?php
+    } //end access check
+?>
+<input type="button" class="edit_space" value="Save" onclick="
                                                          $.post(
                                                                  '../ajax/edit_user.php',
                                                                  {
@@ -135,7 +173,7 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                                                          function(response) {
                                                              window.location = 'user_profile.php?id=<?php echo $_GET['id']; ?>';
                                                          }
-                                                         );
+                                                         ).fail(failAlert);
                                                  "></td><td class="blank"></td></tr>
                 </table>	
             </td>	
@@ -178,7 +216,6 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                                 <td><?php
                                     date_default_timezone_set('America/Chicago');
                                     $datetime = new DateTime($date['Program_Date']);
-                                    //echo $date . "<br>";
                                     echo date_format($datetime, 'M d, Y');
                                     ?></td>
                                 <!--Show existing attendance and add or remove attendance as necessary (with onchange)-->
@@ -194,9 +231,7 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                             <script text="javascript">
 
                                 function handleChange(cb, date) {
-                                    // alert("Changed, new value = " + cb.checked);
                                     if (cb.checked == true) {
-                                        //document.write('true/false works');
                                         $.post(
                                                 '../ajax/add_attendee.php',
                                                 {
@@ -204,10 +239,9 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                                                     program_date_id: date
                                                 },
                                         function(response) {
-                                            //document.write(response);
                                             window.location = "user_profile.php?id=<?php echo $user->user_id; ?>";
                                         }
-                                        )
+                                        ).fail(failAlert);
                                     }
                                     else if (cb.checked == false) {
                                         $.post(
@@ -217,14 +251,10 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                                                     program_date_id: date
                                                 },
                                         function(response) {
-                                            //document.write(response);
                                             window.location = "user_profile.php?id=<?php echo $user->user_id; ?>";
                                         }
-                                        );
+                                        ).fail(failAlert);
                                     }
-                                    //                else{
-                                    //                    document.write('who knows what cb.checked is?? oh, it\'s this: '+cb.checked);
-                                    //                }
                                 }
                             </script>
 
@@ -240,14 +270,9 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                     <!--Create file for downloading attendance-->
 
                     <?php
-//if (!file_exists("/attendance_" .$user->user_id .".csv")){
-//    makefile("/attendance_" .$user->user_id .".csv");
-//}
                     $infile = "../data/downloads/attendance_" . $user->user_id . ".csv";
-//echo $infile;
                     $fp = fopen($infile, "w") or die('can\'t open file');
                     $query_sqlsafe = "Call User__Download_Attendance('" . $user->user_id . "')";
-//echo $query;
                     include "../include/dbconnopen.php";
                     if ($result = mysqli_query($cnnBickerdike, $query_sqlsafe)) {
                         while ($row = mysqli_fetch_array($result)) {
@@ -262,7 +287,11 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                 <br/>
                 <!--Add to new program.-->
 
-                <span class="hide_on_view"><strong>Add to Program:</strong>
+                
+<?php
+                    if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<span><strong>Add to Program:</strong>
                     <select id="choose_from_all_programs">
                         <option value="">------</option>
                         <?php
@@ -288,11 +317,22 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                                 function(response) {
                                     window.location = 'user_profile.php?id=<?php echo $_GET['id']; ?>';
                                 }
-                                )"></span>
+                                ).fail(failAlert);"></span>
+<?php
+                    } //end access check
+?>
 
                 <!--Link to creating a new program entirely-->
 
-                <p class="helptext hide_on_view">Can't find the program you're looking for?  <a href="../activities/new_program.php?origin=<?php echo $user->user_id; ?>">Create a new one!</a></p>
+                
+<?php
+                    if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<p class="helptext ">Can't find the program you're looking for?  <a href="../activities/new_program.php?origin=<?php echo $user->user_id; ?>">Create a new one!</a>
+<?php
+                    } //end access check
+?>
+</p>
                 <br/><br/>
 
                 <!--The actual link to download the file that was created above.-->
@@ -317,7 +357,11 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                             <td><?php echo $health['Height_Feet'] . "' " . $health['Height_Inches'] . "''"; ?></td>
                             <td><?php echo $health['Weight']; ?></td>
                             <td><?php echo $health['BMI']; ?>
-                                <input type="button" class="hide_on_view" value="Remove" onclick="
+                                
+<?php
+                        if ($USER->site_access_level($Bickerdike_id) <= $AdminAccess){
+?>
+<input type="button" value="Remove" onclick="
                                                 $.post(
                                                         '../ajax/remove_health_data.php',
                                                         {
@@ -326,13 +370,21 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                                                 function(response) {
                                                     window.location = 'user_profile.php?id=<?php echo $_GET['id']; ?>';
                                                 }
-                                                )"></td>
+                                                ).fail(failAlert);">
+<?php
+                                        } //end access check
+?>
+</td>
                         </tr>
                         <?php
                     }
                     ?>
 
-                    <tr class="hide_on_view">
+                    
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<tr>
                         <td><?php
                             date_default_timezone_set('America/Chicago');
                             $today = time();
@@ -353,14 +405,23 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                                                     bmi: document.getElementById('bmi').value
                                                 },
                                         function(response) {
-                                            //document.write(response);
                                             window.location = 'user_profile.php?id=<?php echo $user->user_id; ?>';
                                         }
-                                        )"></td>
+                                        ).fail(failAlert);"></td>
                     </tr>
-                    <tr class="hide_on_view">
+<?php
+} //end access check
+?>
+                    
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<tr>
                         <td colspan="4" class="blank"><p class="helptext">Enter height in inches and weight in pounds.  You may add height and weight or BMI.</p><br/></td>
                     </tr>
+<?php
+} //end access check
+?>
                 </table>
             </td>
         </tr>
@@ -395,7 +456,15 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
                         echo "3 months later";
                     }
                         ?></td>
-                <td> <?php echo $survey['Program_Name']; ?>  </td><td>    (<a href="edit_survey.php?id=<?php echo $survey['Participant_Survey_ID']; ?>" class="hide_on_view">Edit</a>)</td></tr>
+                <td> <?php echo $survey['Program_Name']; ?>  </td><td>    
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>(<a href="edit_survey.php?id=
+<?php echo $survey['Participant_Survey_ID']; ?>" class="">Edit</a>)
+<?php
+} //end access check
+?>
+</td></tr>
 
             <?php
             if ($count == 1) {
@@ -453,11 +522,6 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
 
     </table>
     <?php
-//print_r($survey_responses_1);
-//echo "<br>";
-//print_r($survey_responses_2);
-//echo "<br>";
-//print_r($survey_responses_3);
     //Encoding the survey response arrays as json for their use in the bar graph
 
     $answers_to_json_1 = json_encode((array) $survey_responses_1);
@@ -466,7 +530,13 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
     ?>
 
     <br/>
-    <a href="../include/enter_data.php?user=<?php echo $user->user_id; ?>" class="add_new hide_on_view"><span class="add_new_button">Add a survey for this user</span></a><br/><br/>
+<?php
+if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+   <a href="../include/enter_data.php?user=<?php echo $user->user_id; ?>" class="add_new "><span class="add_new_button">Add a survey for this user</span></a><br/><br/>
+<?php
+} //end access check
+?>
 
 
     <!--
@@ -492,10 +562,8 @@ Shows basic info, programs participated in, health data, surveys, and a graph of
     );
     $infile2 = "../data/downloads/surveys_for_" . $user->user_id . ".csv";
     $fp = fopen($infile2, "w") or die('can\'t open file');
-//fputcsv($fp, array('Question', 'Pre', 'Post', 'Later'));
     for ($i = 0; $i < count($survey_responses_1); $i++) {
         $put_array = array($questions[$i], $survey_responses_1[$i], $survey_responses_2[$i], $survey_responses_3[$i]);
-        //fputcsv ($fp, $put_array);
     }
     fputcsv($fp, $questions);
     fputcsv($fp, $survey_responses_1);

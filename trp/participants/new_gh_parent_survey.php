@@ -1,3 +1,29 @@
+<?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($TRP_id);
+
+?>
 <?
 	include "../../header.php";
 	include "../header.php";
@@ -163,26 +189,10 @@
         <td class="pm_survey response"></td></tr>
     
     <tr><th colspan="2"><input type="button" value="Save Survey" onclick="
-        //var participant = document.getElementById('relative_search').options[document.getElementById('relative_search').selectedIndex].value;
-//        var participant = '<?//echo $_COOKIE['participant'];?>';
-//        if (participant==''){
-//            var select_dropdown=document.getElementById('relative_search');
-//            if(select_dropdown != null){
-//               // alert('yes!');
-//                var participant = document.getElementById('relative_search').options[document.getElementById('relative_search').selectedIndex].value;
-//            }
-//            else{
-//                alert('Please choose a participant.');
-//                return false;
-//            }
-            //var participant = document.getElementById('relative_search').options[document.getElementById('relative_search').selectedIndex].value;
-        //}
   
         $.post(
                '../ajax/save_new_survey.php',
                {
-                   //participant: participant,
-                   //child: document.getElementById('new_child').options[document.getElementById('new_child').selectedIndex].value,
                    child: '<?echo $_GET['origin'];?>',
                     date: document.getElementById('new_survey_date').value,
                    grade:  document.getElementById('new_grade').value,
@@ -202,10 +212,9 @@
                    second_4:  document.getElementById('second_4').options[document.getElementById('second_4').selectedIndex].value
                },
                function (response){
-                   //document.write(response);
                    document.getElementById('show_survey_response').innerHTML = '<span style=color:#990000;font-weight:bold;font-size:.9em; padding-left: 25px;>Thank you for entering this survey!</span>';
                }
-               )"></th></tr>
+               ).fail(failAlert);"></th></tr>
 </table>
 <div id="show_survey_response"></div>
 </div>

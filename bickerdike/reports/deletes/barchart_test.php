@@ -1,4 +1,22 @@
-
+<?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
 <script language="javascript" type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/jquery.min.js"></script>
 <script language="javascript" type="text/javascript" src="/include/jquery.jqplot.1.0.4r1121/jquery.jqplot.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/include/jquery.jqplot.1.0.4r1121/jquery.jqplot.css" />
@@ -10,11 +28,7 @@
 $(document).ready(function(){
     var s2 = [[1,4], [5,5], [3,4], [4,90], [5,7], [6,60], [7,1], [8,5], [9,60], [10,3], [11,1], [12,0], [13,1], [14,1], [15,1]];
     var s3 = [4, 5, 4, 90, 7, 60, 1, 5, 60, 3, 1, 0, 1, 1, 1];
-   // var answers3 = [{"1":"2","2":"6","3":"2","4":"2","5":"5","6":"4","7":"3","8":"1","9":"1","10":"3","11":"6"}];
     var answers2=[[1, 1],[2, 4],[3, 2],[4, 2],[5, 0],[6, 1],[7, 0],[8, 1]];
-//    var ticks = ['How important is diet and nutrition to you personally?', 'How many servings of fruits and vegetables do you eat in an average day?',
-//    'How many days per week do you do strenuous physical activity for at least 10 minutes at a time?', 'How many hours on those days?',
-//    'How many days per week do you do light to moderate physical activity for at least 10 minutes at a time?'];
     var ticks = ['May', 'June', 'July']
     // For horizontal bar charts, x an y values must will be "flipped"
     // from their vertical bar counterpart.

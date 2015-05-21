@@ -1,6 +1,30 @@
-<?
-	include "../../header.php";
-	include "../header.php";
+<?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Enlace_id);
+
+include "../../header.php";
+include "../header.php";
 ?>
 
 <script type="text/javascript">
@@ -28,27 +52,34 @@ List of institutions that have been added to the database.
 
    <table class="inner_table" style="font-size:.9em;width:50%;margin-left:auto;margin-right:auto;">
 	<tr><th>Name</th><th>Type</th><th></th></tr>
-<?//show all institutions
+<?php
+//show all institutions
 $get_insts="SELECT * FROM Institutions LEFT JOIN Institution_Types ON Institutions.Institution_Type=Institution_Types.Inst_Type_ID ORDER BY Institutions.Institution_Name";
 include "../include/dbconnopen.php";
 $insts=mysqli_query($cnnEnlace, $get_insts);
 while($inst=mysqli_fetch_array($insts)){
     ?>
         <tr>
-        	<td><a href="inst_profile.php?inst=<?echo $inst['Inst_ID'];?>"><?echo $inst['Institution_Name'];?></a></td>
-        	<td><?echo $inst['Type'];?></td>
-        	<td><? 
-                /*Delete button only available to admin users: */
-                if (!isset($_COOKIE['view_restricted'])){?><a href="javascript:;" onclick="
+        	<td><a href="inst_profile.php?inst=<?php echo $inst['Inst_ID'];?>"><?php echo $inst['Institution_Name'];?></a></td>
+        	<td><?php echo $inst['Type'];?></td>
+        	<td>
+<?php
+    /*Delete button only available to admin users: */
+    if ($USER->has_site_access($Enlace_id, $AdminAccess)){
+?>
+<a href="javascript:;" onclick="
         		$.post(
         			'/enlace/ajax/delete_inst.php',
         			{
-        				inst: '<?echo $inst['Inst_ID'];?>'
+        				inst: '<?php echo $inst['Inst_ID'];?>'
         			},
         			function(response){
         				window.location='institutions.php';
-        			});">Delete</a><?}?></td>
-        </tr><?
+        			}).fail(failAlert);">Delete</a>
+<?php
+                } ?>
+</td>
+        </tr><?php
 }
 include "../include/dbconnclose.php";
 ?>
@@ -108,7 +139,7 @@ include "../include/dbconnclose.php";
                         },
                         function (response){
                             document.getElementById('show_results').innerHTML = response;
-                        });"/><div id="show_results"></div>
+                        }).fail(failAlert);"/><div id="show_results"></div>
 					</td>
 				</tr>
 			</table>
@@ -137,7 +168,7 @@ include "../include/dbconnclose.php";
                             //window.location='inst_profile.php?inst='+response;
 							document.getElementById('new_inst_confirm').innerHTML = response;
                         }
-                )">
+                ).fail(failAlert);">
 				<div id="new_inst_confirm"></div>
 				</td></tr>
             </table></div>

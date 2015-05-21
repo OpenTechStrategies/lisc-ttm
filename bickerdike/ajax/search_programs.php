@@ -1,5 +1,29 @@
 <?php
 /*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id, $DataEntryAccess);
+
+/*
  * Even this simple search uses the query format.  They can search on all or none
  * of the offered fields.
  */
@@ -18,7 +42,6 @@ if ($_POST['type']==''){$zip_sqlsafe='';}else{$zip_sqlsafe=" AND Program_Type='"
 
 
 $uncertain_search_query_sqlsafe = "SELECT * FROM Programs WHERE Program_ID!='' " . $first_sqlsafe . $last_sqlsafe .  $zip_sqlsafe . "ORDER BY Program_Name";
-//echo $uncertain_search_query_sqlsafe;
 
 $results =mysqli_query($cnnBickerdike, $uncertain_search_query_sqlsafe);
 ?>
@@ -45,7 +68,7 @@ while ($program=mysqli_fetch_array($results)){
 							if ($partner = mysqli_fetch_array($org)) {
 							echo $partner['Partner_Name'];
 							}
-							//include "../include/dbconnclose.php";?></td>
+							?></td>
         <td class="all_projects">
             <!--Get the type text-->
             <?$find_org_sqlsafe = "SELECT * FROM Program_Types WHERE Program_Type_ID='" . $program['Program_Type'] . "'";
@@ -54,7 +77,7 @@ while ($program=mysqli_fetch_array($results)){
                                 if ($partner = mysqli_fetch_array($org)) {
                                     echo $partner['Program_Type_Name'];
                                 }
-                                //include "../include/dbconnclose.php";?></td>
+                                ?></td>
         <td class="all_projects hide_on_view">
             <!--See /ajax/delete_program for more this.  Deletes program.-->
             <input type="button" value="Delete Program" onclick="
