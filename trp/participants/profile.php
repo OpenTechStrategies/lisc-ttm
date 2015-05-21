@@ -2072,7 +2072,7 @@ function la_casa_display_data_gen_html($result_row_item, $class_string, $array_o
 }
 
 function la_casa_edit_data_gen_html($array_of_options, $existing_value, $id_string, $class_string){
-    $result = "<select id = " . $id_string . " class = " . $class_string . "><option value = 0>----</option>";
+    $result = "<select id = " . $id_string . " style = 'width:100px' class = " . $class_string . "><option value = 0>----</option>";
     foreach ($array_of_options as $val => $display){
         $result .= "<option value = " . $val . " " . ($existing_value == $val ? 'selected="selected"' : null) . ">" . $display . " </option>";
     }
@@ -2138,7 +2138,7 @@ array("Cohort", 'cohort', 'cohort_edit')
 );
 
 
-$find_constant_la_casa_sqlsafe = "SELECT Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, ACT_Score, High_School_GPA, Mid_Twenties, Masters_Degree, Married, Has_Children, Homeless, Self_Sustaining, Dependency_Status, Father_Education.Education_Level_Name, Mother_Education.Education_Level_Name, Student_Education.Education_Level_Name, First_Generation_College_Student, Student_High_School, AMI, Move_In_Date, Move_Out_Date, Student_ID FROM LC_Basics LEFT JOIN Educational_Levels AS Student_Education ON Student_Aspiration = Student_Education.Education_ID LEFT JOIN Educational_Levels AS Father_Education ON Father_Highest_Level_Education = Father_Education.Education_ID LEFT JOIN Educational_Levels AS Mother_Education ON Mother_Highest_Level_Education = Mother_Education.Education_ID WHERE Participant_ID_Students = " . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']);
+$find_constant_la_casa_sqlsafe = "SELECT Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, ACT_Score, High_School_GPA, Mid_Twenties, Masters_Degree, Married, Has_Children, Homeless, Self_Sustaining, Dependency_Status, Father_Education.Education_Level_Name, Mother_Education.Education_Level_Name, Student_Education.Education_Level_Name, First_Generation_College_Student, Student_High_School, AMI, Move_In_Date, Move_Out_Date, Student_ID FROM LC_Basics LEFT JOIN Educational_Levels AS Student_Education ON Student_Aspiration = Student_Education.Education_ID LEFT JOIN Educational_Levels AS Father_Education ON Father_Highest_Level_Education = Father_Education.Education_ID LEFT JOIN Educational_Levels AS Mother_Education ON Mother_Highest_Level_Education = Mother_Education.Education_ID WHERE Participant_ID = " . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']);
 $constant_data=mysqli_query($cnnTRP, $find_constant_la_casa_sqlsafe);
 $constant=mysqli_fetch_row($constant_data);
 foreach ($column_array as $key => $value){
@@ -2225,20 +2225,25 @@ function(response){
 <p></p>
             <table class="inner_table">
                 <caption>College Data</caption>
-                <tr><th>Year</th><th>School Name</th><th>Term Type (Semester or Quarter)</th>
-                    <th>Term (Fall, Winter, Spring, Summer)</th>
-                    <th>Credits Earned</th><th>Major</th><th>GPA</th><th>Match Level</th>
-<th>Internship Status</th>
+                <tr><th>Term/Year</th>
+                    <th>School Name</th>
+                    <th>College Selectivity</th>
+                    <th>Credits Earned</th>
+                    <th>Dropped Classes</th>
+                    <th>Major/Minor</th>
+                    <th>GPA</th>
+                    <th>Match Level (Actual/Expected)</th>
+                    <th>Internship Status</th>
                 </tr>
                 <?php
 
                 include "../include/dbconnopen.php";
-                $find_college_data_sqlsafe="SELECT College_Name, Term_Type, Term, School_Year, Credits, Term_ID, Major, College_GPA, College_Match, Internship_Status, Intern_Hours, Colleges.College_ID FROM LC_Terms LEFT JOIN Colleges ON LC_Terms.College_ID=Colleges.College_ID WHERE Participant_ID = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+                $find_college_data_sqlsafe="SELECT College_Name, Selectivity, Term_Type, Term, School_Year, Credits, Term_ID, Major, Minor, College_GPA, Actual_Match, Expected_Match, Internship_Status, Intern_Hours, Dropped_Classes, Dropped_Credits, Colleges.College_ID FROM LC_Terms LEFT JOIN Colleges ON LC_Terms.College_ID=Colleges.College_ID WHERE Participant_ID = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
                 $college_data=mysqli_query($cnnTRP, $find_college_data_sqlsafe);
                 $total_credits = 0;
 //setting these arrays outside the loop so that they are available to the "new" row after the loop
 $college_year_array = array(2014 => '2014', 2015 => '2015', 2016 => '2016', 2017 => '2017'); 
-$get_college_list_sqlsafe = "SELECT * FROM Colleges";
+$get_college_list_sqlsafe = "SELECT * FROM Colleges ORDER BY College_Name";
 $college_list = mysqli_query($cnnTRP, $get_college_list_sqlsafe);
 $college_array = array();
 while ($college = mysqli_fetch_row($college_list)){
@@ -2252,10 +2257,16 @@ $major_array = array();
 while ($major = mysqli_fetch_row($major_list)){
     $major_array[] = $major[0];
 }
+$get_selectivity_list_sqlsafe = "SELECT DISTINCT Selectivity FROM Colleges";
+$selectivity_list = mysqli_query($cnnTRP, $get_selectivity_list_sqlsafe);
+$selectivity_array = array();
+while ($selectivity = mysqli_fetch_row($selectivity_list)){
+    $selectivity_array[] = $selectivity[0];
+}
 $match_array = array(1 => 'Above Match', 2 => 'Match', 3 => 'Below Match');
 $internship_yn = array(1 => 'Yes', 2 => 'No');
 
-                while ($coldat=mysqli_fetch_row($college_data)){
+                while ($coldat=mysqli_fetch_array($college_data)){
 $editable_class = "hide_non_loan_data college_data_editable_" . $coldat[5];
 $display_class = "college_data_display_" . $coldat[5];
                     $total_credits += $coldat[4];
@@ -2263,21 +2274,24 @@ $display_class = "college_data_display_" . $coldat[5];
                     <tr>
                     <td>
 <?php
-echo la_casa_display_data_gen_html($coldat[3], $display_class, $college_year_array);
-$id_string = "college_year_id_" . $coldat[5];
-echo la_casa_edit_data_gen_html($college_year_array, $coldat[3], $id_string, $editable_class);
+echo la_casa_display_data_gen_html($coldat['Term'], $display_class, $season_array);
+echo " ";
+echo la_casa_display_data_gen_html($coldat['School_Year'], $display_class, $college_year_array);
+$id_string = "college_year_id_" . $coldat['Term_ID'];
+echo la_casa_edit_data_gen_html($season_array, $coldat['Term'], $id_string, $editable_class);
+echo la_casa_edit_data_gen_html($college_year_array, $coldat['School_Year'], $id_string, $editable_class);
 ?>
                     </td>
                     <td>
 <?php
 
-echo la_casa_display_data_gen_html($coldat[0], $display_class, $college_array);
-$id_string = "college_id_" . $coldat[5];
+echo la_casa_display_data_gen_html($coldat['College_Name'], $display_class, $college_array);
+$id_string = "college_id_" . $coldat['Term_ID'];
 echo la_casa_edit_data_gen_html($college_array, $coldat[11], $id_string, $editable_class);
 // or add a new college
 ?>
 <span class = "<?php echo $editable_class; ?>"><br>
-Or add a new college: <input type = "text" id = "college_name_<?php echo $coldat[5]; ?>">
+Or add a new college: <input type = "text" id = "college_name_<?php echo $coldat[5]; ?>" size = "10">
 <select id = "college_type_<?php echo $coldat[5]; ?>">
 <option value = "">----</option>
 <option>2-year</option>
@@ -2287,54 +2301,63 @@ Or add a new college: <input type = "text" id = "college_name_<?php echo $coldat
                     </td>
                     <td>
 <?php
-echo la_casa_display_data_gen_html($coldat[1], $display_class, $term_array);
-$id_string = "term_type_" . $coldat[5];
-echo la_casa_edit_data_gen_html($term_array, $coldat[1], $id_string, $editable_class);
+echo la_casa_display_data_gen_html($coldat['Selectivity'], $display_class, $selectivity_array);
+$id_string = "selectivity_" . $coldat['Term_ID'];
+echo la_casa_edit_data_gen_html($selectivity_array, $coldat['Selectivity'], $id_string, $editable_class);
 ?>
                     </td>
                     <td>
 <?php
-echo la_casa_display_data_gen_html($coldat[2], $display_class, $season_array);
-$id_string = "term_id_" . $coldat[5];
-echo la_casa_edit_data_gen_html($season_array, $coldat[2], $id_string, $editable_class);
+echo la_casa_display_data_gen_html($coldat['Credits'], $display_class);
 ?>
+<input id = "credits_<?php echo $coldat['Term_ID']; ?>" class = "<?php echo $editable_class; ?>" value = "<?php echo $coldat['Credits']; ?>" size = "5">
                     </td>
+<td>
+<?php
+echo la_casa_display_data_gen_html($coldat['Dropped_Classes'], $display_class);
+?>
+<input id = "dropped_<?php echo $coldat['Term_ID']; ?>" class = "<?php echo $editable_class; ?>" value = "<?php echo $coldat['Dropped_Classes']; ?>" size = "5">
+
+</td>
                     <td>
 <?php
-echo la_casa_display_data_gen_html($coldat[4], $display_class);
-?>
-<input id = "credits_<?php echo $coldat[5]; ?>" class = "<?php echo $editable_class; ?>" value = "<?php echo $coldat[4]; ?>" size = "5">
-                    </td>
-                    <td>
-<?php
-echo la_casa_display_data_gen_html($coldat[6], $display_class, $major_array);
+echo la_casa_display_data_gen_html($coldat['Major'], $display_class, $major_array);
 ?>
 <span class = "<?php echo $editable_class; ?>">
-<input type = "text" value = "<?php echo $coldat[6]; ?>" id = "major_name_<?php echo $coldat[5]; ?>">
+<input type = "text" value = "<?php echo $coldat['Major']; ?>" id = "major_name_<?php echo $coldat['Term_ID']; ?>">
+</span> /<br /> 
+<?php
+echo la_casa_display_data_gen_html($coldat['Minor'], $display_class, _array);
+?>
+<span class = "<?php echo $editable_class; ?>">
+<input type = "text" value = "<?php echo $coldat['Minor']; ?>" id = "minor_name_<?php echo $coldat['Term_ID']; ?>">
 </span>
                     </td>
                     <td>
 <?php
-echo la_casa_display_data_gen_html($coldat[7], $display_class);
+echo la_casa_display_data_gen_html($coldat['College_GPA'], $display_class);
 ?>
-<input id = "gpa_id_<?php echo $coldat[5]; ?>" class = "<?php echo $editable_class; ?>" value = "<?php echo $coldat[7]; ?>" size = "5">
+<input id = "gpa_id_<?php echo $coldat['Term_ID']; ?>" class = "<?php echo $editable_class; ?>" value = "<?php echo $coldat['College_GPA']; ?>" size = "5">
                     </td>
                     <td>
 <?php
-echo la_casa_display_data_gen_html($coldat[8], $display_class, $match_array);
-$id_string = "match_id_" . $coldat[5];
-echo la_casa_edit_data_gen_html($match_array, $coldat[8], $id_string, $editable_class);
+echo la_casa_display_data_gen_html($coldat['Actual_Match'], $display_class, $match_array);
+$id_string = "actual_match_id_" . $coldat['Term_ID'];
+echo la_casa_edit_data_gen_html($match_array, $coldat['Actual_Match'], $id_string, $editable_class);
+echo la_casa_display_data_gen_html($coldat['Expected_Match'], $display_class, $match_array);
+$id_string = "expected_match_id_" . $coldat['Term_ID'];
+echo la_casa_edit_data_gen_html($match_array, $coldat['Expected_Match'], $id_string, $editable_class);
 ?>
                     </td>
 
 <td>
 <?php
-echo la_casa_display_data_gen_html($coldat[9], $display_class, $internship_yn);
-if ($coldat[10] != null) { echo "<br>Hours: " . $coldat[10];}
-$id_string = "internship_id_" . $coldat[5];
-echo la_casa_edit_data_gen_html($internship_yn, $coldat[9], $id_string, $editable_class);
+echo la_casa_display_data_gen_html($coldat['Internship_Status'], $display_class, $internship_yn);
+if ($coldat['Intern_Hours'] != null) { echo "<br>Hours: " . $coldat['Intern_Hours'];}
+$id_string = "internship_id_" . $coldat['Term_ID'];
+echo la_casa_edit_data_gen_html($internship_yn, $coldat['Internship_Status'], $id_string, $editable_class);
 ?>
-<br><span class = "<?php echo $editable_class; ?>"><strong>Hours: </strong><input type = "text" value = "<?php echo $coldat[10]; ?>"id = "internship_hours_id_<?php echo $coldat[5]; ?>" size = "5px"><span>
+<br><span class = "<?php echo $editable_class; ?>"><strong>Hours: </strong><input type = "text" value = "<?php echo $coldat['Intern_Hours']; ?>"id = "internship_hours_id_<?php echo $coldat['Term_ID']; ?>" size = "5px"><span>
 </td>
 
                     <td>
@@ -2348,19 +2371,19 @@ $('.hide_non_loan_data').toggle();">
                         {
                           action: 'edit',
                                 subject: 'college',
-                                college_id: document.getElementById('college_id_<?php echo $coldat[5]; ?>').value,
-                                college_name: document.getElementById('college_name_<?php echo $coldat[5]; ?>').value,
-                                college_type: document.getElementById('college_type_<?php echo $coldat[5]; ?>').value,
-                                term_type: document.getElementById('term_type_<?php echo $coldat[5]; ?>').value,
-                                term_id: document.getElementById('term_id_<?php echo $coldat[5]; ?>').value,
-                                school_year: document.getElementById('college_year_id_<?php echo $coldat[5]; ?>').value,
-                                credits: document.getElementById('credits_<?php echo $coldat[5]; ?>').value,
-                                major_name:  document.getElementById('major_name_<?php echo $coldat[5]; ?>').value,
-                                match:  document.getElementById('match_id_<?php echo $coldat[5]; ?>').value,
-                                gpa:  document.getElementById('gpa_id_<?php echo $coldat[5]; ?>').value,
-                                internship_status: document.getElementById('internship_id_<?php echo $coldat[5]; ?>').value,
-                                intern_hours: document.getElementById('internship_hours_id_<?php echo $coldat[5]; ?>').value,
-                                id: '<?php echo $coldat[5]; ?>' 
+                                college_id: document.getElementById('college_id_<?php echo $coldat['Term_ID']; ?>').value,
+                                college_name: document.getElementById('college_name_<?php echo $coldat['Term_ID']; ?>').value,
+                                college_type: document.getElementById('college_type_<?php echo $coldat['Term_ID']; ?>').value,
+                                term_type: document.getElementById('term_type_<?php echo $coldat['Term_ID']; ?>').value,
+                                term_id: document.getElementById('term_id_<?php echo $coldat['Term_ID']; ?>').value,
+                                school_year: document.getElementById('college_year_id_<?php echo $coldat['Term_ID']; ?>').value,
+                                credits: document.getElementById('credits_<?php echo $coldat['Term_ID']; ?>').value,
+                                major_name:  document.getElementById('major_name_<?php echo $coldat['Term_ID']; ?>').value,
+                                match:  document.getElementById('match_id_<?php echo $coldat['Term_ID']; ?>').value,
+                                gpa:  document.getElementById('gpa_id_<?php echo $coldat['Term_ID']; ?>').value,
+                                internship_status: document.getElementById('internship_id_<?php echo $coldat['Term_ID']; ?>').value,
+                                intern_hours: document.getElementById('internship_hours_id_<?php echo $coldat['Term_ID']; ?>').value,
+                                id: '<?php echo $coldat['Term_ID']; ?>' 
                                 }, 
                 function(response) {
                     window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';

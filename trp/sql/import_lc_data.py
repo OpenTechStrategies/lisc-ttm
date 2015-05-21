@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 
 import csv
+import sys
 
-#input file should be a csv file with no header row and with cells enclosed in
-#quotations. Columns should appear in exactly this order: 
+# input file should be a csv file with no header row and with cells enclosed in
+# quotations. Columns should appear in exactly this order: 
 #
-# define each cell as a variable (this is what will be altered if the csv appears
-# in a different order) then write functions using those variables to construct
-# the queries
+# To Dos:
+# remember to escape all inputs!
 
-input_file = ""
+input_file = sys.argv[1]
 la_casa_id = '6'
 
 
@@ -240,17 +240,21 @@ def make_lc_terms_query(f_out, major, minor, exp_match, actual_match,
 
 
 def construct_sql_file(input_file, la_casa_id):
+    if len(sys.argv) != 2:
+        print("Call this like:\n"
+              " ./import_lc_data.py DATA_CSV")
+        sys.exit(1)
+    input_file = sys.argv[1]
     # this function depends on the order of columns in the input file 
     reader = csv.reader(open(input_file, "r"))
-    j = 0
     output_file = 'output_file.sql'
     f_out = open(output_file, 'w')
+    j = 0
     for row in reader:
+        #skip header row
         if (j == 0):
             j = j+1
             continue
-        if (j > 2):
-            break
         i = 0
         # each function creates the query and writes it to the output file
         make_participant_query(f_out, row[9], row[10], row[11], row[15],
@@ -275,8 +279,7 @@ def construct_sql_file(input_file, la_casa_id):
                             row[60], row[87], row[88])  
         make_ec_query(f_out, row[111], row[112], row[113], row[114])
         make_ec_query(f_out, row[115], row[116], row[117], row[118])
-
-        j = j+1
+        j = j + 1
 
 construct_sql_file(input_file, la_casa_id)
 print("done")
