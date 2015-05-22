@@ -72,7 +72,7 @@ $participant_array = array();
 while ($participant = mysqli_fetch_row($participant_list)){
     $participant_array[$participant[0]] = $participant[1] . " " . $participant[2];
 }
-$grade_array = array('Freshman', 'Sophomore', 'Junior', 'Senior');
+$grade_array = array(1 => 'Freshman', 2 => 'Sophomore', 3 => 'Junior', 4 => 'Senior');
 $get_education_levels_sqlsafe = "SELECT * FROM Educational_Levels";
 $education_levels = mysqli_query($cnnTRP, $get_education_levels_sqlsafe);
 $education_levels_array = array();

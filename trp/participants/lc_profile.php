@@ -660,7 +660,7 @@ echo la_casa_edit_data_gen_selector($education_levels_array, $participant->fathe
 echo la_casa_edit_data_gen_selector($yn_array, $participant->first_generation_college_student, 'first_generation_college_student_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Student_high_school </strong></td>
+    <td><strong>Student High School </strong></td>
     <td> <?php echo  $participant->student_high_school;
     echo la_casa_edit_data_gen_input($participant->student_high_school, 'student_high_school_edit', 'edit_term constant'); ?></td>
     </tr>
@@ -670,22 +670,22 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->first_generation_co
     echo la_casa_edit_data_gen_input($participant->ami, 'ami_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Move_in_date </strong></td>
+    <td><strong>Move In Date </strong></td>
     <td> <?php echo  $participant->move_in_date;
     echo la_casa_edit_data_gen_input($participant->move_in_date, 'move_in_date_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Move_out_date </strong></td>
+    <td><strong>Move Out Date </strong></td>
     <td> <?php echo  $participant->move_out_date;
     echo la_casa_edit_data_gen_input($participant->move_out_date, 'move_out_date_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Mid_twenties </strong></td>
+    <td><strong>Mid Twenties </strong></td>
     <td> <?php echo  $participant->mid_twenties;
 echo la_casa_edit_data_gen_selector($yn_array, $participant->mid_twenties, 'mid_twenties_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Masters_degree </strong></td>
+    <td><strong>Masters Degree </strong></td>
     <td> <?php echo  $participant->masters_degree;
 echo la_casa_edit_data_gen_selector($yn_array, $participant->masters_degree, 'masters_degree_edit', 'edit_term constant'); ?></td>
     </tr>
@@ -700,7 +700,7 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->married, 'married_e
 echo la_casa_edit_data_gen_selector($yn_array, $participant->military, 'military_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Has_children </strong></td>
+    <td><strong>Has Children </strong></td>
     <td> <?php echo  $participant->has_children;
 echo la_casa_edit_data_gen_selector($yn_array, $participant->has_children, 'has_children_edit', 'edit_term constant'); ?></td>
     </tr>
@@ -710,17 +710,17 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->has_children, 'has_
 echo la_casa_edit_data_gen_selector($yn_array, $participant->homeless, 'homeless_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Self_sustaining </strong></td>
+    <td><strong>Self Sustaining </strong></td>
     <td> <?php echo  $participant->self_sustaining;
 echo la_casa_edit_data_gen_selector($yn_array, $participant->self_sustaining, 'self_sustaining_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Tax_exemptions </strong></td>
+    <td><strong>Tax Exemptions </strong></td>
     <td> <?php echo  $participant->tax_exemptions;
     echo la_casa_edit_data_gen_input($participant->tax_exemptions, 'tax_exemptions_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Household_size_trp </strong></td>
+    <td><strong>Household Size Trp </strong></td>
     <td> <?php echo  $participant->household_size_trp;
     echo la_casa_edit_data_gen_input($participant->household_size_trp, 'household_size_trp_edit', 'edit_term constant'); ?></td>
     </tr>
@@ -730,12 +730,12 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->self_sustaining, 's
     echo la_casa_edit_data_gen_input($participant->tuition, 'tuition_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Mandatory_fees </strong></td>
+    <td><strong>Mandatory Fees </strong></td>
     <td> <?php echo  $participant->mandatory_fees;
     echo la_casa_edit_data_gen_input($participant->mandatory_fees, 'mandatory_fees_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>College_cost </strong></td>
+    <td><strong>College Cost </strong></td>
     <td> <?php echo  $participant->college_cost;
     echo la_casa_edit_data_gen_input($participant->college_cost, 'college_cost_edit', 'edit_term constant'); ?></td>
     </tr>
@@ -745,17 +745,17 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->self_sustaining, 's
     echo la_casa_edit_data_gen_input($participant->savings, 'savings_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Family_help </strong></td>
+    <td><strong>Family Help </strong></td>
     <td> <?php echo  $participant->family_help;
     echo la_casa_edit_data_gen_input($participant->family_help, 'family_help_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Lc_scholarship </strong></td>
+    <td><strong>La Casa Scholarship </strong></td>
     <td> <?php echo  $participant->lc_scholarship;
     echo la_casa_edit_data_gen_input($participant->lc_scholarship, 'lc_scholarship_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Application_source </strong></td>
+    <td><strong>Application Source </strong></td>
     <td> <?php echo  $participant->application_source;
     echo la_casa_edit_data_gen_input($participant->application_source, 'application_source_edit', 'edit_term constant'); ?></td>
     </tr>
@@ -765,47 +765,47 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->self_sustaining, 's
     echo la_casa_edit_data_gen_input($participant->notes, 'notes_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Email_pack </strong></td>
+    <td><strong>Email Pack </strong></td>
     <td> <?php echo  $participant->email_pack;
 echo la_casa_edit_data_gen_selector($yn_array, $participant->email_pack, 'email_pack_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Email_orientation </strong></td>
+    <td><strong>Email Orientation </strong></td>
     <td> <?php echo  $participant->email_orientation;
 echo la_casa_edit_data_gen_selector($yn_array, $participant->email_orientation, 'email_orientation_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Email_roommate </strong></td>
+    <td><strong>Email Roommate </strong></td>
     <td> <?php echo  $participant->email_roommate;
 echo la_casa_edit_data_gen_selector($yn_array, $participant->email_roommate, 'email_roommate_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Move_in_time </strong></td>
+    <td><strong>Move In Time </strong></td>
     <td> <?php echo  $participant->move_in_time;
     echo la_casa_edit_data_gen_input($participant->move_in_time, 'move_in_time_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Move_in_registration </strong></td>
+    <td><strong>Move In Registration </strong></td>
     <td> <?php echo  $participant->move_in_registration;
     echo la_casa_edit_data_gen_input($participant->move_in_registration, 'move_in_registration_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Move_in_address </strong></td>
+    <td><strong>Move In Address </strong></td>
     <td> <?php echo  $participant->move_in_address;
     echo la_casa_edit_data_gen_input($participant->move_in_address, 'move_in_address_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Move_in_note </strong></td>
+    <td><strong>Move In Note </strong></td>
     <td> <?php echo  $participant->move_in_note;
     echo la_casa_edit_data_gen_input($participant->move_in_note, 'move_in_note_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Orientation_date </strong></td>
+    <td><strong>Orientation Date </strong></td>
     <td> <?php echo  $participant->orientation_date;
     echo la_casa_edit_data_gen_input($participant->orientation_date, 'orientation_date_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Orientation_time </strong></td>
+    <td><strong>Orientation Time </strong></td>
     <td> <?php echo  $participant->orientation_time;
     echo la_casa_edit_data_gen_input($participant->orientation_time, 'orientation_time_edit', 'edit_term constant'); ?></td>
     </tr>
