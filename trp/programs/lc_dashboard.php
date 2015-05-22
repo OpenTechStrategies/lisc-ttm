@@ -258,7 +258,7 @@ echo la_casa_edit_data_gen_selector($status_array, $participant->status, 'status
     <tr>
     <td><strong>Handbook </strong></td>
     <td> <?php echo  $participant->handbook;
-    echo la_casa_edit_data_gen_input($participant->handbook, 'handbook_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->handbook, 'handbook_edit', 'edit_term'); ?></td>
     <td><strong>Floor </strong></td>
     <td> <?php echo  $participant->floor;
     echo la_casa_edit_data_gen_input($participant->floor, 'floor_edit', 'edit_term'); ?></td>
@@ -277,7 +277,7 @@ echo la_casa_edit_data_gen_selector($status_array, $participant->status, 'status
     echo la_casa_edit_data_gen_input($participant->key_card_number, 'key_card_number_edit', 'edit_term'); ?></td>
     <td><strong>Transcript Submitted </strong></td>
     <td> <?php echo  $participant->transcript_submitted;
-    echo la_casa_edit_data_gen_input($participant->transcript_submitted, 'transcript_submitted_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->transcript_submitted, 'transcript_submitted_edit', 'edit_term'); ?></td>
     </tr>
     <tr>
     <td><strong>Service Hours Submitted </strong></td>
@@ -296,17 +296,14 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->service_hours_submi
     echo la_casa_edit_data_gen_input($participant->lcrc_print_code, 'lcrc_print_code_edit', 'edit_term'); ?></td>
     </tr>
     <tr>
-    <td><strong>Roommate </strong></td>
-    <td> <?php echo  $participant->roommate;
-echo la_casa_edit_data_gen_selector($participant_array, $participant->roommate, 'roommate_edit', 'edit_term'); ?></td>
     <td><strong>Application Received </strong></td>
     <td> <?php echo  $participant->application_received;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->application_received, 'application_received_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_input($participant->application_received, 'application_received_edit', 'edit_term'); ?></td>
     </tr>
     <tr>
     <td><strong>Application Completed </strong></td>
     <td> <?php echo  $participant->application_completed;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->application_completed, 'application_completed_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_input($participant->application_completed, 'application_completed_edit', 'edit_term'); ?></td>
     <td><strong>Household Size </strong></td>
     <td> <?php echo  $participant->household_size;
     echo la_casa_edit_data_gen_input($participant->household_size, 'household_size_edit', 'edit_term'); ?></td>
@@ -336,7 +333,7 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->application_complet
     <tr>
     <td><strong>Dependency Status </strong></td>
     <td> <?php echo  $participant->dependency_status;
-echo la_casa_edit_data_gen_selector($yn_status, $participant->dependency_status, 'dependency_status_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->dependency_status, 'dependency_status_edit', 'edit_term'); ?></td>
     </tr>
     <tr>
     <td><strong>HS GPA Weighted </strong></td>
@@ -380,9 +377,6 @@ echo la_casa_edit_data_gen_selector($education_levels_array, $participant->fathe
     <td> <?php echo  $participant->first_generation_college_student;
 echo la_casa_edit_data_gen_selector($yn_array, $participant->first_generation_college_student, 'first_generation_college_student_edit', 'edit_term'); ?></td>
 
-    <td><strong>Persistence_graduation </strong></td>
-    <td> <?php echo  $participant->persistence_graduation;
-    echo la_casa_edit_data_gen_input($participant->persistence_graduation, 'persistence_graduation_edit', 'edit_term'); ?></td>
     </tr>
     <tr>
     <td><strong>Student_high_school </strong></td>
@@ -556,7 +550,6 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->email_roommate, 'em
                 lcrc_username: document.getElementById('lcrc_username_edit').value,
                 lcrc_password: document.getElementById('lcrc_password_edit').value,
                 lcrc_print_code: document.getElementById('lcrc_print_code_edit').value,
-                roommate: document.getElementById('roommate_edit').value,
                 application_received: document.getElementById('application_received_edit').value,
                 application_completed: document.getElementById('application_completed_edit').value,
                 household_size: document.getElementById('household_size_edit').value,
@@ -575,7 +568,6 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->email_roommate, 'em
                 mother_highest_level_education: document.getElementById('mother_highest_level_education_edit').value,
                 student_aspiration: document.getElementById('student_aspiration_edit').value,
                 first_generation_college_student: document.getElementById('first_generation_college_student_edit').value,
-                persistence_graduation: document.getElementById('persistence_graduation_edit').value,
                 student_high_school: document.getElementById('student_high_school_edit').value,
                 ami: document.getElementById('ami_edit').value,
                 move_in_date: document.getElementById('move_in_date_edit').value,
@@ -604,12 +596,30 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->email_roommate, 'em
                 move_in_registration: document.getElementById('move_in_registration_edit').value,
                 move_in_address: document.getElementById('move_in_address_edit').value,
                 move_in_note: document.getElementById('move_in_note_edit').value,
+                ec_first_name: document.getElementById('ec_first_name_edit_').value,
+                ec_last_name: document.getElementById('ec_last_name_edit_').value,
+                ec_phone: document.getElementById('ec_phone_edit_' ).value,
+                ec_relationship: document.getElementById('ec_relationship_edit_' ).value,
                 orientation_date: document.getElementById('orientation_date_edit').value,
-                orientation_time: document.getElementById('orientation_time_edit').value
+                orientation_time: document.getElementById('orientation_time_edit').value,
+                college_id: document.getElementById('edit_college_new').value,
+                term_type: document.getElementById('edit_season_new').value,
+                term_id: document.getElementById('edit_term_new').value,
+                school_year: document.getElementById('edit_year_new').value,
+                credits: document.getElementById('edit_credits_new').value,
+                major: document.getElementById('edit_major_new').value,
+                minor: document.getElementById('edit_minor_new').value,
+                expected_match: '',
+                actual_match: '',
+                gpa: document.getElementById('edit_gpa_new').value,
+                internship_status: document.getElementById('edit_internship_new').value,
+                intern_hours: document.getElementById('edit_intern_hours_new').value,
+                dropped_classes: document.getElementById('edit_dropped_new').value,
+                dropped_credits: document.getElementById('edit_dropped_credits_new').value
+
             },
             function (response){
-document.write(response);
-//                window.location = 'lc_dashboard.php';
+                document.getElementById('show_response').innerHTML = response;
             }
 );
 ">
@@ -617,6 +627,7 @@ document.write(response);
     </tr>
         
     </table>
+<div id="show_response"></div>
         <a href="/include/generalized_download_script.php?download_name=trp_lc_xls_emulator">  
         <h5> Export All </h5>
         </a>

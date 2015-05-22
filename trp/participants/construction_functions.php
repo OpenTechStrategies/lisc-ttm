@@ -59,12 +59,12 @@ while ($selectivity = mysqli_fetch_row($selectivity_list)){
 }
 $match_array = array(1 => 'Above Match', 2 => 'Match', 3 => 'Below Match');
 $yn_array = array(1 => 'Yes', 2 => 'No');
-$get_cohort_list_sqlsafe = "SELECT DISTINCT Cohort FROM LC_Basics";
-$cohort_list = mysqli_query($cnnTRP, $get_cohort_list_sqlsafe);
+
+// when they start adding new cohorts, we'll use this:
+//$get_cohort_list_sqlsafe = "SELECT DISTINCT Cohort FROM LC_Basics";
+//$cohort_list = mysqli_query($cnnTRP, $get_cohort_list_sqlsafe);
 $cohort_array = array( 'ChiSem' => 'Chicago Semester', 'CM' => 'Casa Norte', 'ACM' => 'Associated Colleges of the Midwest', 'NONE' => 'Does not have one', 'Blank' => 'Missing/Not reported', 'ARCH' => 'ARCHEWORKS');
-while ($cohort = mysqli_fetch_row($cohort_list)){
-    $cohort_array[] = $cohort[0];
-}
+
 $status_array = array('S' => 'Signed', 'S*' => 'Scheduled to Sign', 'MS' => 'May Sign', 'OUT' => 'Moved Out', 'HOLD' => 'Pending App', 'DENIED' => 'Not Admitted', 'N' => 'Not Interested');
 $get_participant_list_sqlsafe = "SELECT Participant_ID, First_Name, Last_Name FROM Participants INNER JOIN Participants_Programs WHERE Program_ID = 6";
 $participant_list = mysqli_query($cnnTRP, $get_participant_list_sqlsafe);
@@ -85,7 +85,7 @@ while ($education = mysqli_fetch_row($education_levels)) {
 
 function la_casa_edit_data_gen_selector($array_of_options, $existing_value, $id_string, $class_string){
     $result = "<select id = " . $id_string;
-    $result .= " style = 'width:100px' class = " . $class_string . ">";
+    $result .= " style = 'width:100px' class = '" . $class_string . "'>";
     $result .= "<option value = 0>----</option>"; 
     foreach ($array_of_options as $val => $display){
         $result .= "<option value = " . $val . " ";
@@ -101,8 +101,8 @@ function la_casa_edit_data_gen_input($existing_value, $id_string, $class_string)
     $result = "<input type=text id=" . $id_string;
     $result .= " class='" . $class_string . "'";
     $result .= " size=5px ";
-    $result .= " value=" . $existing_value;
-    $result .= ">";
+    $result .= " value='" . $existing_value;
+    $result .= "'>";
     return $result;
 }
 

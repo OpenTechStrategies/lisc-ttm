@@ -246,14 +246,6 @@ if ($participant->gender == 'm') {
         <span class="<?php echo edit_class; ?>">
         <?php echo la_casa_edit_data_gen_selector($college_array, $term_array['college_id'], 'edit_college_' . $term_array['term_id'], $edit_class); ?>
         </span>
-        <span class="<?php echo $edit_class;?>">
-        <?php
-        echo la_casa_edit_data_gen_selector($college_array, 
-            $term_array['college_id'], 
-            'edit_college_' . $term_array['term_id'], 
-            $this_row_class); 
-        ?>
-        </span>
         </td>
         <td><span class="<?php echo $display_class; ?>"><?php echo $term_array['school_year'] . "/ " . $term_array['term_type'] . "/ " . $term_array['term']; ?></span>
         <span class="<?php echo $edit_class;?>">
@@ -515,317 +507,311 @@ document.write(response); //testing
     <tr>
     <td><strong>Cohort </strong></td>
     <td> <?php echo $participant->cohort; 
-    echo la_casa_edit_data_gen_selector($cohort_array, $participant->cohort, 'edit_cohort', 'edit_term');
+    echo la_casa_edit_data_gen_selector($cohort_array, $participant->cohort, 'edit_cohort', 'edit_term constant');
     ?>
     </td>
     <tr>
     <td><strong>Status </strong></td>
     <td> <?php echo $participant->status;
-echo la_casa_edit_data_gen_selector($status_array, $participant->status, 'status_edit', 'edit_term'); ?> </td>
+echo la_casa_edit_data_gen_selector($status_array, $participant->status, 'status_edit', 'edit_term constant'); ?> </td>
     </tr>
     <tr>
     <td><strong>Handbook </strong></td>
     <td> <?php echo  $participant->handbook;
-    echo la_casa_edit_data_gen_input($participant->handbook, 'handbook_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->handbook, 'handbook_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Floor </strong></td>
     <td> <?php echo  $participant->floor;
-    echo la_casa_edit_data_gen_input($participant->floor, 'floor_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->floor, 'floor_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Pod </strong></td>
     <td> <?php echo  $participant->pod;
-    echo la_casa_edit_data_gen_input($participant->pod, 'pod_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->pod, 'pod_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Room Number </strong></td>
     <td> <?php echo  $participant->room_number;
-    echo la_casa_edit_data_gen_input($participant->room_number, 'room_number_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->room_number, 'room_number_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Key Card Number </strong></td>
     <td> <?php echo  $participant->key_card_number;
-    echo la_casa_edit_data_gen_input($participant->key_card_number, 'key_card_number_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->key_card_number, 'key_card_number_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Transcript Submitted </strong></td>
     <td> <?php echo  $participant->transcript_submitted;
-    echo la_casa_edit_data_gen_input($participant->transcript_submitted, 'transcript_submitted_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->transcript_submitted, 'transcript_submitted_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Service Hours Submitted </strong></td>
     <td> <?php echo  $participant->service_hours_submitted;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->service_hours_submitted, 'service_hours_submitted_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->service_hours_submitted, 'service_hours_submitted_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Lcrc Username </strong></td>
     <td> <?php echo  $participant->lcrc_username;
-    echo la_casa_edit_data_gen_input($participant->lcrc_username, 'lcrc_username_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->lcrc_username, 'lcrc_username_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Lcrc Password </strong></td>
     <td> <?php echo  $participant->lcrc_password;
-    echo la_casa_edit_data_gen_input($participant->lcrc_password, 'lcrc_password_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->lcrc_password, 'lcrc_password_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Lcrc Print Code </strong></td>
     <td> <?php echo  $participant->lcrc_print_code;
-    echo la_casa_edit_data_gen_input($participant->lcrc_print_code, 'lcrc_print_code_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->lcrc_print_code, 'lcrc_print_code_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Roommate </strong></td>
-    <td> <?php echo  $participant->roommate;
-echo la_casa_edit_data_gen_selector($participant_array, $participant->roommate, 'roommate_edit', 'edit_term'); ?></td>
+    <td> <?php echo  $participant->roommate; ?></td>
     </tr>
     <tr>
     <td><strong>Application Received </strong></td>
     <td> <?php echo  $participant->application_received;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->application_received, 'application_received_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_input($participant->application_received, 'application_received_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Application Completed </strong></td>
     <td> <?php echo  $participant->application_completed;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->application_completed, 'application_completed_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_input($participant->application_completed, 'application_completed_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Household Size </strong></td>
     <td> <?php echo  $participant->household_size;
-    echo la_casa_edit_data_gen_input($participant->household_size, 'household_size_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->household_size, 'household_size_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Parent1 AGI </strong></td>
     <td> <?php echo  $participant->parent1_agi;
-    echo la_casa_edit_data_gen_input($participant->parent1_agi, 'parent1_agi_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->parent1_agi, 'parent1_agi_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Parent2 AGI </strong></td>
     <td> <?php echo  $participant->parent2_agi;
-    echo la_casa_edit_data_gen_input($participant->parent2_agi, 'parent2_agi_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->parent2_agi, 'parent2_agi_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Student AGI </strong></td>
     <td> <?php echo  $participant->student_agi;
-    echo la_casa_edit_data_gen_input($participant->student_agi, 'student_agi_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->student_agi, 'student_agi_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Act Score </strong></td>
     <td> <?php echo  $participant->act_score;
-    echo la_casa_edit_data_gen_input($participant->act_score, 'act_score_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->act_score, 'act_score_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>High School GPA </strong></td>
     <td> <?php echo  $participant->high_school_gpa;
-    echo la_casa_edit_data_gen_input($participant->high_school_gpa, 'high_school_gpa_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->high_school_gpa, 'high_school_gpa_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Dependency Status </strong></td>
     <td> <?php echo  $participant->dependency_status;
-echo la_casa_edit_data_gen_selector($yn_status, $participant->dependency_status, 'dependency_status_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_status, $participant->dependency_status, 'dependency_status_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>HS GPA Weighted </strong></td>
     <td> <?php echo  $participant->hs_gpa_weighted;
-    echo la_casa_edit_data_gen_input($participant->hs_gpa_weighted, 'hs_gpa_weighted_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->hs_gpa_weighted, 'hs_gpa_weighted_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Expected Graduation Year </strong></td>
     <td> <?php echo  $participant->expected_graduation_year;
-    echo la_casa_edit_data_gen_input($participant->expected_graduation_year, 'expected_graduation_year_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->expected_graduation_year, 'expected_graduation_year_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>College Grade Level </strong></td>
     <td> <?php echo  $participant->college_grade_level;
-echo la_casa_edit_data_gen_selector($grade_array, $participant->college_grade_level, 'college_grade_level_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($grade_array, $participant->college_grade_level, 'college_grade_level_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Reason Leave </strong></td>
     <td> <?php echo  $participant->reason_leave;
-    echo la_casa_edit_data_gen_input($participant->reason_leave, 'reason_leave_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->reason_leave, 'reason_leave_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Reason Stay </strong></td>
     <td> <?php echo  $participant->reason_stay;
-    echo la_casa_edit_data_gen_input($participant->reason_stay, 'reason_stay_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->reason_stay, 'reason_stay_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Father Highest Level Education </strong></td>
     <td> <?php echo  $participant->father_highest_level_education;
-echo la_casa_edit_data_gen_selector($education_levels_array, $participant->father_highest_level_education, 'father_highest_level_education_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($education_levels_array, $participant->father_highest_level_education, 'father_highest_level_education_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Mother Highest Level Education </strong></td>
     <td> <?php echo  $participant->mother_highest_level_education;
-    echo la_casa_edit_data_gen_selector($education_levels_array, $participant->mother_highest_level_education, 'mother_highest_level_education_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_selector($education_levels_array, $participant->mother_highest_level_education, 'mother_highest_level_education_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Student Aspiration </strong></td>
     <td> <?php echo  $participant->student_aspiration;
-    echo la_casa_edit_data_gen_selector($education_levels_array, $participant->student_aspiration, 'student_aspiration_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_selector($education_levels_array, $participant->student_aspiration, 'student_aspiration_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>First Generation College Student </strong></td>
     <td> <?php echo  $participant->first_generation_college_student;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->first_generation_college_student, 'first_generation_college_student_edit', 'edit_term'); ?></td>
-    </tr>
-    <tr>
-    <td><strong>Persistence_graduation </strong></td>
-    <td> <?php echo  $participant->persistence_graduation;
-    echo la_casa_edit_data_gen_input($participant->persistence_graduation, 'persistence_graduation_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->first_generation_college_student, 'first_generation_college_student_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Student_high_school </strong></td>
     <td> <?php echo  $participant->student_high_school;
-    echo la_casa_edit_data_gen_input($participant->student_high_school, 'student_high_school_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->student_high_school, 'student_high_school_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>AMI </strong></td>
     <td> <?php echo  $participant->ami;
-    echo la_casa_edit_data_gen_input($participant->ami, 'ami_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->ami, 'ami_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Move_in_date </strong></td>
     <td> <?php echo  $participant->move_in_date;
-    echo la_casa_edit_data_gen_input($participant->move_in_date, 'move_in_date_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->move_in_date, 'move_in_date_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Move_out_date </strong></td>
     <td> <?php echo  $participant->move_out_date;
-    echo la_casa_edit_data_gen_input($participant->move_out_date, 'move_out_date_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->move_out_date, 'move_out_date_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Mid_twenties </strong></td>
     <td> <?php echo  $participant->mid_twenties;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->mid_twenties, 'mid_twenties_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->mid_twenties, 'mid_twenties_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Masters_degree </strong></td>
     <td> <?php echo  $participant->masters_degree;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->masters_degree, 'masters_degree_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->masters_degree, 'masters_degree_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Married </strong></td>
     <td> <?php echo  $participant->married;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->married, 'married_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->married, 'married_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Military </strong></td>
     <td> <?php echo  $participant->military;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->military, 'military_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->military, 'military_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Has_children </strong></td>
     <td> <?php echo  $participant->has_children;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->has_children, 'has_children_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->has_children, 'has_children_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Homeless </strong></td>
     <td> <?php echo  $participant->homeless;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->homeless, 'homeless_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->homeless, 'homeless_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Self_sustaining </strong></td>
     <td> <?php echo  $participant->self_sustaining;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->self_sustaining, 'self_sustaining_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->self_sustaining, 'self_sustaining_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Tax_exemptions </strong></td>
     <td> <?php echo  $participant->tax_exemptions;
-    echo la_casa_edit_data_gen_input($participant->tax_exemptions, 'tax_exemptions_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->tax_exemptions, 'tax_exemptions_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Household_size_trp </strong></td>
     <td> <?php echo  $participant->household_size_trp;
-    echo la_casa_edit_data_gen_input($participant->household_size_trp, 'household_size_trp_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->household_size_trp, 'household_size_trp_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Tuition </strong></td>
     <td> <?php echo  $participant->tuition;
-    echo la_casa_edit_data_gen_input($participant->tuition, 'tuition_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->tuition, 'tuition_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Mandatory_fees </strong></td>
     <td> <?php echo  $participant->mandatory_fees;
-    echo la_casa_edit_data_gen_input($participant->mandatory_fees, 'mandatory_fees_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->mandatory_fees, 'mandatory_fees_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>College_cost </strong></td>
     <td> <?php echo  $participant->college_cost;
-    echo la_casa_edit_data_gen_input($participant->college_cost, 'college_cost_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->college_cost, 'college_cost_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Savings </strong></td>
     <td> <?php echo  $participant->savings;
-    echo la_casa_edit_data_gen_input($participant->savings, 'savings_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->savings, 'savings_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Family_help </strong></td>
     <td> <?php echo  $participant->family_help;
-    echo la_casa_edit_data_gen_input($participant->family_help, 'family_help_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->family_help, 'family_help_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Lc_scholarship </strong></td>
     <td> <?php echo  $participant->lc_scholarship;
-    echo la_casa_edit_data_gen_input($participant->lc_scholarship, 'lc_scholarship_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->lc_scholarship, 'lc_scholarship_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Application_source </strong></td>
     <td> <?php echo  $participant->application_source;
-    echo la_casa_edit_data_gen_input($participant->application_source, 'application_source_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->application_source, 'application_source_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Notes </strong></td>
     <td> <?php echo  $participant->notes;
-    echo la_casa_edit_data_gen_input($participant->notes, 'notes_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->notes, 'notes_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Email_pack </strong></td>
     <td> <?php echo  $participant->email_pack;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->email_pack, 'email_pack_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->email_pack, 'email_pack_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Email_orientation </strong></td>
     <td> <?php echo  $participant->email_orientation;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->email_orientation, 'email_orientation_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->email_orientation, 'email_orientation_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Email_roommate </strong></td>
     <td> <?php echo  $participant->email_roommate;
-echo la_casa_edit_data_gen_selector($yn_array, $participant->email_roommate, 'email_roommate_edit', 'edit_term'); ?></td>
+echo la_casa_edit_data_gen_selector($yn_array, $participant->email_roommate, 'email_roommate_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Move_in_time </strong></td>
     <td> <?php echo  $participant->move_in_time;
-    echo la_casa_edit_data_gen_input($participant->move_in_time, 'move_in_time_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->move_in_time, 'move_in_time_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Move_in_registration </strong></td>
     <td> <?php echo  $participant->move_in_registration;
-    echo la_casa_edit_data_gen_input($participant->move_in_registration, 'move_in_registration_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->move_in_registration, 'move_in_registration_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Move_in_address </strong></td>
     <td> <?php echo  $participant->move_in_address;
-    echo la_casa_edit_data_gen_input($participant->move_in_address, 'move_in_address_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->move_in_address, 'move_in_address_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Move_in_note </strong></td>
     <td> <?php echo  $participant->move_in_note;
-    echo la_casa_edit_data_gen_input($participant->move_in_note, 'move_in_note_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->move_in_note, 'move_in_note_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Orientation_date </strong></td>
     <td> <?php echo  $participant->orientation_date;
-    echo la_casa_edit_data_gen_input($participant->orientation_date, 'orientation_date_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->orientation_date, 'orientation_date_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Orientation_time </strong></td>
     <td> <?php echo  $participant->orientation_time;
-    echo la_casa_edit_data_gen_input($participant->orientation_time, 'orientation_time_edit', 'edit_term'); ?></td>
+    echo la_casa_edit_data_gen_input($participant->orientation_time, 'orientation_time_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td>
-    <input type="button" value="Edit" onclick="$('.edit_term').toggle()">
+    <input type="button" value="Edit" onclick="$('.edit_term.constant').toggle()">
     <input type="button" value="Save" onclick="
         $.post(
             '../ajax/save_la_casa_info.php',
@@ -845,7 +831,6 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->email_roommate, 'em
                 lcrc_username: document.getElementById('lcrc_username_edit').value,
                 lcrc_password: document.getElementById('lcrc_password_edit').value,
                 lcrc_print_code: document.getElementById('lcrc_print_code_edit').value,
-                roommate: document.getElementById('roommate_edit').value,
                 application_received: document.getElementById('application_received_edit').value,
                 application_completed: document.getElementById('application_completed_edit').value,
                 household_size: document.getElementById('household_size_edit').value,
@@ -864,7 +849,6 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->email_roommate, 'em
                 mother_highest_level_education: document.getElementById('mother_highest_level_education_edit').value,
                 student_aspiration: document.getElementById('student_aspiration_edit').value,
                 first_generation_college_student: document.getElementById('first_generation_college_student_edit').value,
-                persistence_graduation: document.getElementById('persistence_graduation_edit').value,
                 student_high_school: document.getElementById('student_high_school_edit').value,
                 ami: document.getElementById('ami_edit').value,
                 move_in_date: document.getElementById('move_in_date_edit').value,
