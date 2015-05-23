@@ -165,12 +165,10 @@ class User {
             $failure_func = $die_unauthorized;
         }
 
-        if ( in_array('a', $this->program_access($site))){
-            return true;
-            
-        }
+        $program_access = $this->program_access($site);
+
         foreach ($program_array as $program){
-            if ( in_array($program, $this->program_access)){
+            if (in_array($program, $program_access) {
                 return true;
             }
         }
