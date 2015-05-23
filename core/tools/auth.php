@@ -150,35 +150,8 @@ class User {
     //
     // Args:
     //  - site: The site ID we are checking this user's program access for
-    //
-    // Returns:
-    //  An array of all program ids that user has access to.
-    //  These correspond to programs within each subsite.
-    //
-    // NOTES:
-    //  - "n" is None, a special case.  The reason for this rather than
-    //    an empty array is that there are some duplicate rows (:\) in
-    //    the db, and "none" takes precedence in case of duplication there.
-    //  - Another special case is 'a', which really means "all access for
-    //    programs on this site".  If we see 'a' we thusly return "just a".
-    //    So if you see 'a' returned from this function, you know the
-    //    user has access to whatever program to some degree.
-    //  - In the future, this code, and the database needs to be updated
-    //    for a many to many relationship.  As it stands, a user can really
-    //    only have one program access per section.
     public function program_access($site) {
-        $program_access_array[] = $this->site_permissions[$site][1];
-
-        // note that if 'n' is in array, then the logged-in user has access
-        // to no programs, and we delete the rest of the array.  The 'n'
-        // takes precedence over any other entries.
-        if (in_array('n', $program_access_array)) {
-            $program_access_array = array();
-        } else if (in_array('a', $program_access_array)) {
-            $program_access_array = array('a');
-        }
-
-        return $program_access_array;
+        return $this->site_permissions[$site][1];
     }
 
     // Find whether a user has access to any one of an array of programs
