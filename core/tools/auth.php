@@ -370,11 +370,28 @@ function getAllSiteAccess($user_id) {
     $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
     include $path; //connection to core db
     $user_id_sqlsafe = mysqli_real_escape_string($cnnLISC, $user_id);
-    $find_site_access_sqlsafe = "SELECT Privilege_ID, Site_Privilege_ID, Program_Access FROM Users_Privileges WHERE User_ID =" . $user_id;
+
+    $find_site_access_sqlsafe = "SELECT Privilege_ID, Site_Privilege_ID, Users_Privileges_Id FROM Users_Privileges WHERE User_ID =" . $user_id;
     $access_result = mysqli_query($cnnLISC, $find_site_access_sqlsafe);
     $access_return = array();
     while ($access = mysqli_fetch_row($access_result)) {
-        $access_return[$access[0]] = array($access[1], $access[2]);
+        // site_id is called privilege_id in the database, confusingly
+        $site_id = $access[0];
+        // site_privilege_id is really the permission level
+        $permission_level = $access[1];
+        // id for this row!
+        $users_privileges_id = $access[2];
+
+        // Build up a new list of programs we have access to
+        $program_access = array();
+
+        $find_program_access_sqlsafe = "SELECT Program_Access FROM Users_Program_Access WHERE Users_Privileges_Id =" . mysqli_real_escape_string($cnnLISC, $users_privileges_id);
+        $program_access_result = mysqli_query($cnnLISC, $find_program_access_sqlsafe);
+        while ($program_access_row = mysqli_fetch_row($program_access_result)) {
+            $program_access->append($program_access_row[0]);
+        }
+
+        $access_return[$site_id] = array($permission_level, $program_access);
     }
     return $access_return;
 }
