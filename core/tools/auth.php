@@ -167,8 +167,8 @@ class User {
 
         $program_access = $this->program_access($site);
 
-        foreach ($program_array as $program){
-            if (in_array($program, $program_access) {
+        foreach ($program_array as $program) {
+            if (in_array($program, $program_access)) {
                 return true;
             }
         }
