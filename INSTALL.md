@@ -7,6 +7,11 @@ Table of contents:
  * Requirements
  * Installation
  
+Note: You should consider looking in ansible/README.org for a more
+"automated" deployment-for-hacking setup.  The more manual steps (also
+usable for deploying to a server, since we aren't *yet* using ansible
+for that) below.
+
 Introduction
 ------------
 
