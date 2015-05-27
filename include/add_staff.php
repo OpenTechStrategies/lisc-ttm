@@ -2,7 +2,6 @@
 //include "../../header.php";
 include "../header.php";
 include_once $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
-include_once $_SERVER['DOCUMENT_ROOT'] . "/core/tools/auth.php";
 ?>
 
 <?php
@@ -11,32 +10,29 @@ if (!isLoggedIn()) {
 }
 
 
-$subsite_access = NULL;
-// Find a site that this user has admin access for
+$subsite_admin_access = array();
+// Find the sites that this user has admin access for
 foreach ($USER->site_permissions as $site_id => $site_info) {
     if ($USER->has_site_access($site_id, $AdminAccess)) {
-        $subsite_access = $site_id;
-        break;
+        $subsite_admin_access[] = $site_id;
     }
 }
 
 $show_programs = false;
-
-if ($subsite_access == $Enlace_id) {
+if ( in_array($Enlace_id, $subsite_admin_access) && (($_POST['choose_site'] == $Enlace_id) || ! isset($_POST['choose_site']) ) ) {
     include "../enlace/include/dbconnopen.php";
     $get_all_programs_sqlsafe="SELECT Programs.Program_ID, Name FROM Programs ORDER BY Name";
     $all_programs=mysqli_query($cnnEnlace, $get_all_programs_sqlsafe);
     include "../enlace/include/dbconnclose.php";
     $show_programs = true;
-} else if ($subsite_access == $TRP_id) {
+} elseif ( in_array($TRP_id, $subsite_admin_access) && ($_POST['choose_site'] == $TRP_id || ! isset($_POST['choose_site']) ) ) {
     include "../trp/include/dbconnopen.php";
     $get_all_programs_sqlsafe="SELECT Programs.Program_ID, Program_Name FROM Programs ORDER BY Program_Name";
     $all_programs=mysqli_query($cnnTRP, $get_all_programs_sqlsafe);
     include "../trp/include/dbconnclose.php";
     $show_programs = true;
 }
-
-if (is_null($subsite_access)) {
+if ( empty($subsite_admin_access)) {
     $die_unauthorized("You don't seem to be an administrator for any subsite!");
 }
 
@@ -53,6 +49,61 @@ file for adding new users, editing user privileges, and resetting user passwords
                         <a href="/index.php?action=logout">Log Out</a>
             </div>
 <div id="manage_privileges">
+
+<?php
+//if they have admin access to more than one subsite:
+    if (count($subsite_admin_access) > 1 ) {
+?>
+
+<h3>Current site: <?php
+if (isset($_POST['choose_site'])) {echo $_POST['choose_site']; }
+elseif (count($subsite_admin_access) == 1) {echo $subsite_admin_access[0];}
+else {echo "Select a site";}
+?>
+</h3><hr/><br/><!-- really needs to be the set of sites they have access to -->
+<form action="" method="post">
+               <select name="choose_site">
+                    <option value = "">----</option>
+<?php
+if ( in_array($LSNA_id, $subsite_admin_access)) {
+?>
+    <option value = "<?php echo $LSNA_id; ?>">LSNA</option>        
+<?php
+}
+if ( in_array($Bickerdike_id, $subsite_admin_access)) {
+?>
+    <option value = "<?php echo $Bickerdike_id; ?>">Bickerdike</option>
+<?php
+}
+if ( in_array($TRP_id, $subsite_admin_access)) {
+?>
+    <option value = "<?php echo $TRP_id; ?>">TRP</option>
+<?php
+}
+if ( in_array($SWOP_id, $subsite_admin_access)) {
+?>
+    <option value = "<?php echo $SWOP_id; ?>">SWOP</option>
+<?php
+}
+if ( in_array($Enlace_id, $subsite_admin_access)) {
+?>
+    <option value = "<?php echo $Enlace_id; ?>">Enlace</option>
+<?php
+}
+?>
+                    </select>
+<input type="submit" name="site_submit" value="Select Site">
+</form>
+
+<?php
+    } //end multiple-site check
+
+if (count($subsite_admin_access) > 1 && ! isset($_POST['choose_site']) ) {
+    echo "Please select a site for user administration.";
+}
+else{
+?>
+
 <h3>Add User</h3><hr/><br/>
 
 
@@ -90,11 +141,11 @@ Add a new user to the system.
               <select id="affiliated_program">
                 <option value="n">No Program Access</option>
                 <option value="a">Access to all program information</option>
-                <?while ($program=mysqli_fetch_row($all_programs)) { ?>
-                  <option value="<?echo $program[0];?>">
-                    <?echo $program[1];?>
+                <?php while ($program=mysqli_fetch_row($all_programs)) { ?>
+                  <option value="<?php echo $program[0];?>">
+                    <?php echo $program[1];?>
                   </option>
-                <?}?>
+                <?php }?>
               </select>
             </td>
         </tr>
@@ -104,12 +155,22 @@ Add a new user to the system.
                     in that program.
                 </span></td>
         </tr>
-        <? } ?>
+        <?php  } 
 
-        <!--
-        The site of the user is drawn from the site of the logged-in user.  This is a problem for admin users, 
-        for whom the first site available will be used, regardless of whether that is the intended site.
-        -->
+
+// determine which site we're adding a user to
+                    if ( isset($_POST['choose_site'])) {
+                        $site = $_POST['choose_site'];
+                    }
+                    else{
+                        if ( count($subsite_admin_access) == 1) {
+                            $site = $subsite_admin_access[0];
+                        }
+                        else{
+                            echo "An error has occurred.  Please choose a site.";
+                        }
+                    }
+?>
 	<tr>
 		<td colspan="2"><input type="button" value="Save" onclick="
                     if (<?php if ($show_programs) { echo("true"); } else { echo("false"); } ?>){var set_program=document.getElementById('affiliated_program').value;}
@@ -120,13 +181,11 @@ Add a new user to the system.
             username: document.getElementById('username').value,
             password: document.getElementById('password').value,
             level: document.getElementById('privilege_level').options[document.getElementById('privilege_level').selectedIndex].value,
-            site: '<?echo $subsite_access?>',
+            site: '<?php echo $site;?>',
             program: set_program
         },
         function (response){
-           // document.write(response);
-			//window.location='/include/add_staff.php';
-			document.getElementById('confirm_add_user').innerHTML = response;
+            document.getElementById('confirm_add_user').innerHTML = response;
         }
    ).fail(failAlert);">
 <div id="confirm_add_user"></div></td>
@@ -143,7 +202,7 @@ Add a new user to the system.
 		<td width="25%">User: </td>
 		<td><select id="staff_list">
     <option>-----</option>
-    <?
+    <?php
     /*
      * Draws list of existing users that are linked to this site (again, for admin users, it will
      * be the first site that they are linked to)
@@ -160,8 +219,8 @@ Add a new user to the system.
         echo $staff['User_Email'];
         ?>
 
-    <option value="<?echo $staff['User_ID']?>"><?echo $staff['User_Email'];?></option>
-            <?
+    <option value="<?php echo $staff['User_ID']?>"><?php echo $staff['User_Email'];?></option>
+            <?php 
     }
     include "../include/dbconnclose.php";
     ?>
@@ -185,16 +244,16 @@ Add a new user to the system.
               <select id="edit_affiliated_program">
                 <option value="n">No Program Access</option>
                 <option value="a">Access to all program information</option>
-                <?
+                <?php 
                 while ($program=mysqli_fetch_row($all_programs)){
                 ?>
-                  <option value="<?echo $program[1];?>">
-                    <?echo $program[0];?>
-                  </option><?}?>
+                  <option value="<?php echo $program[1];?>">
+                    <?php echo $program[0];?>
+                  </option><?php }?>
               </select>
             </td>
         </tr>
-        <? } ?>
+        <?php  } ?>
 
     <tr>
     	<td></td>
@@ -211,7 +270,7 @@ Add a new user to the system.
         {
             user: document.getElementById('staff_list').options[document.getElementById('staff_list').selectedIndex].value,
             privilege: document.getElementById('privileges').options[document.getElementById('privileges').selectedIndex].value,
-            site: '<? echo $subsite_access; ?>',
+            site: '<?php echo $subsite_access; ?>',
             program: set_program
         },
         function (response){
@@ -235,7 +294,7 @@ Add a new user to the system.
 		<td width="25%">User:</td>
 		<td> <select id="user_id">
 			<option>-----</option>
-  		  <?
+  		  <?php
                   /*List of users at this site.*/
  		   include "../include/dbconnopen.php";
                    $site_id_sqlsafe=mysqli_real_escape_string($cnnLISC, $subsite_access);
@@ -247,8 +306,8 @@ Add a new user to the system.
    		     echo $staff['User_ID'];
    		     echo $staff['User_Email'];
   		      ?>
- 		   <option value="<?echo $staff['User_ID']?>"><?echo $staff['User_Email'];?></option>
- 		           <?
+ 		   <option value="<?php echo $staff['User_ID']?>"><?php echo $staff['User_Email'];?></option>
+ 		           <?php
  		   }
 		    include "../include/dbconnclose.php";
  		   ?>
@@ -288,13 +347,15 @@ Add a new user to the system.
 	</tr>
 </table>
 
-
+<?php
+} //end show user administration for a user that has access to just one site or has selected one
+?>
 
 <br>
 <br>
  
 
 </div>
-<?
+<?php
 include "../footer.php";
 ?>

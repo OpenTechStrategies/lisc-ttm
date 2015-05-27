@@ -357,7 +357,7 @@ function getAllSiteAccess($user_id) {
         $find_program_access_sqlsafe = "SELECT Program_Access FROM Users_Program_Access WHERE Users_Privileges_Id =" . mysqli_real_escape_string($cnnLISC, $users_privileges_id);
         $program_access_result = mysqli_query($cnnLISC, $find_program_access_sqlsafe);
         while ($program_access_row = mysqli_fetch_row($program_access_result)) {
-            $program_access->append($program_access_row[0]);
+            $program_access[] = ($program_access_row[0]);
         }
 
         $access_return[$site_id] = array($permission_level, $program_access);
@@ -400,6 +400,45 @@ function getProgramAccess($session_id, $site) {
     }
 
     return $program_access_array;
+}
+
+//get all programs from a given subsite, so that we can assign program access to
+//all programs to a given user
+//takes a subsite id (as defined in the head of this file)
+//returns an array of program ids from the given subsite
+function findAllPrograms($subsite_id){
+    if ($subsite_id == 2){
+        include "../lsna/include/dbconnopen.php";
+        $connection = $cnnLSNA;
+    }
+    elseif ($subsite_id == 3){
+        include "../bickerdike/include/dbconnopen.php";
+        $connection = $cnnBickerdike;
+    }
+    elseif ($subsite_id == 4){
+        include "../trp/include/dbconnopen.php";
+        $connection = $cnnTRP;
+    }
+    elseif ($subsite_id == 5){
+        //SWOP has no Programs table
+        return false;
+    }
+    elseif ($subsite_id == 6){
+        include "../enlace/include/dbconnopen.php";
+        $connection = $cnnEnlace;
+    }
+    if ($subsite_id == 2) {
+        $get_programs = "SELECT Subcategory_ID FROM Subcategories WHERE Campaign_or_Program = 'Program'";
+    }
+    else {
+        $get_programs = "SELECT Program_ID FROM Programs";
+    }
+    $programs = mysqli_query($connection, $get_programs);
+    $program_array = array();
+    while ($program = mysqli_fetch_array($programs)){
+        $program_array[] = $program[0];
+    }
+    return $program_array;
 }
 
 ?>
