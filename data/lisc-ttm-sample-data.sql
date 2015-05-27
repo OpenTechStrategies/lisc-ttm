@@ -128,6 +128,54 @@ INSERT INTO `Class_Avg_Gold_Scores` VALUES (1,'0',1,1,'25.7',NULL),(2,'D170',1,1
 UNLOCK TABLES;
 
 --
+-- Table structure for table `Cohorts`
+--
+
+DROP TABLE IF EXISTS `Cohorts`;
+
+CREATE TABLE `Cohorts`
+(
+`Cohort_ID` int(11) NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (`Cohort_ID`),
+`Cohort_Name` varchar(100)
+) ENGINE=InnoDB;
+--
+-- Dumping data for table `Colleges`
+--
+
+LOCK TABLES `Cohorts` WRITE;
+/*!40000 ALTER TABLE `Cohorts` DISABLE KEYS */;
+INSERT INTO `Cohorts` VALUES (1,'TestCohort'),(2, 'AnotherCohort');
+/*!40000 ALTER TABLE `Colleges` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Colleges`
+--
+
+DROP TABLE IF EXISTS `Colleges`;
+
+CREATE TABLE `Colleges`
+(
+`College_ID` int(11) NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (`College_ID`),
+`College_Name` varchar(100),
+`College_Type` varchar(100),
+`Selectivity` varchar(100)
+) ENGINE=InnoDB;
+--
+-- Dumping data for table `Colleges`
+--
+
+LOCK TABLES `Colleges` WRITE;
+/*!40000 ALTER TABLE `Colleges` DISABLE KEYS */;
+INSERT INTO `Colleges` VALUES (1,'TestCollege','4 year','Very selective'),(2, 'AnotherCollege', 'community college', 'non-selective');
+/*!40000 ALTER TABLE `Colleges` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+
+--
 -- Table structure for table `DAP_Group_Scoring`
 --
 
@@ -211,6 +259,27 @@ LOCK TABLES `DAP_Group_Scoring` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `Educational_Levels`
+--
+DROP TABLE IF EXISTS `Educational_Levels`;
+CREATE TABLE `Educational_Levels`
+(
+`Education_ID` int(11) NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (`Education_ID`),
+`Education_Level_Name` varchar(45)
+) ENGINE = InnoDB;
+--
+-- Dumping data for table `Educational_Levels`
+--
+
+LOCK TABLES `Educational_Levels` WRITE;
+/*!40000 ALTER TABLE `Educational_Levels` DISABLE KEYS */;
+INSERT INTO `Educational_Levels` (Education_Level_Name) VALUES ('Elementary'), ('Middle School'), ('Some HS'), ('GED'), ('High School Diploma'), ('Some College'), ('Trade School'), ('Associates Degree'), ('Bachelors Degree'), ('Masters Degree'), ('MD'), ('PhD'), ('Unknown');
+/*!40000 ALTER TABLE `Educational_Levels` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+--
 -- Table structure for table `Elev8_Data`
 --
 
@@ -262,6 +331,35 @@ LOCK TABLES `Elev8_Elements` WRITE;
 /*!40000 ALTER TABLE `Elev8_Elements` DISABLE KEYS */;
 INSERT INTO `Elev8_Elements` VALUES (1,'After School Enrollment'),(2,'After School Attendance'),(3,'Adult Programming Enrollment'),(4,'Adult Programming Attendance'),(5,'Total Enrollment'),(6,'Total Attendance'),(7,'Physical/Immunization Compliance'),(8,'Health Center Visits');
 /*!40000 ALTER TABLE `Elev8_Elements` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Emergency_Contacts`
+--
+
+DROP TABLE IF EXISTS `Emergency_Contacts`; 
+
+CREATE TABLE `Emergency_Contacts` 
+(
+ `Emergency_Contact_ID` int(11) NOT NULL AUTO_INCREMENT,
+ PRIMARY KEY (`Emergency_Contact_ID`),
+ `Participant_ID` int(11),
+  FOREIGN KEY (`Participant_ID`) REFERENCES `Participants` (`Participant_ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+ `First_Name` varchar(45),
+ `Last_Name` varchar(45),
+ `Phone` varchar(15),
+ `Relationship` varchar(45)
+) ENGINE = InnoDB;
+--
+-- Dumping data for table `Emergency_Contacts`
+--
+
+LOCK TABLES `Emergency_Contacts` WRITE;
+/*!40000 ALTER TABLE `Emergency_Contacts` DISABLE KEYS */;
+INSERT INTO `Emergency_Contacts` VALUES (1,5,'EC First Name','EC Last Name','4324443333','EC Relationship');
+/*!40000 ALTER TABLE `Emergency_Contacts` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -602,6 +700,148 @@ LOCK TABLES `Gold_Score_Totals` WRITE;
 /*!40000 ALTER TABLE `Gold_Score_Totals` DISABLE KEYS */;
 INSERT INTO `Gold_Score_Totals` VALUES (1,39,'1','4','7','2','5','8','1','2','1','3',1,'0000-00-00','2014-04-08 19:43:31',1),(2,39,'2','5','8','3','6','91','1','2','1','3',1,'0000-00-00','2014-04-08 19:43:31',2),(3,39,'3','6','9','44','7','','2','3','1','3',1,'0000-00-00','2014-04-08 19:43:31',3),(4,39,'','','','','','','','','','2',2,'0000-00-00','2014-04-08 19:43:31',1),(5,39,'','','','','','','','','','2',2,'0000-00-00','2014-04-08 19:43:31',2),(6,39,'','','','','','','','','','2',2,'0000-00-00','2014-04-08 19:43:31',3),(7,39,'','','','','','','1','','','',3,'0000-00-00','2014-04-08 19:43:31',1),(8,39,'','','','','','','1','','','',3,'0000-00-00','2014-04-08 19:43:31',2),(9,39,'','','','','','','3','','','',3,'0000-00-00','2014-04-08 19:43:31',3),(10,14,'45','45','45','45','45','45','2','1','1','',1,'0000-00-00','2014-04-16 19:56:06',1),(11,14,'','','','','','','2','2','','',1,'0000-00-00','2014-04-16 19:56:06',2),(12,14,'','','','','','','2','3','','',1,'0000-00-00','2014-04-16 19:56:06',3),(13,14,'','','','','','','','','','',2,'0000-00-00','2014-04-16 19:56:06',1),(14,14,'','','','','','','','','','',2,'0000-00-00','2014-04-16 19:56:06',2),(15,14,'','','','','','','','','','',2,'0000-00-00','2014-04-16 19:56:06',3),(16,14,'','','','','','','','','','',3,'0000-00-00','2014-04-16 19:56:06',1),(17,14,'','','','','','','','','','',3,'0000-00-00','2014-04-16 19:56:06',2),(18,14,'','','','','','','','','','',3,'0000-00-00','2014-04-16 19:56:06',3),(19,15,'3','4','','','','','','','','',1,'2014-05-01','2014-05-14 19:39:46',1),(20,15,'','','','','','','','','','',1,'0000-00-00','2014-05-14 19:39:46',2),(21,15,'','','','','','','','','','',1,'0000-00-00','2014-05-14 19:39:46',3),(22,15,'','','','','','','2','','','',2,'0000-00-00','2014-05-14 19:39:46',1),(23,15,'','','','','','','','','','',2,'2014-05-08','2014-05-14 19:39:46',2),(24,15,'','','','','','','','','','',2,'0000-00-00','2014-05-14 19:39:46',3),(25,15,'','','','','','','','','','',3,'0000-00-00','2014-05-14 19:39:46',1),(26,15,'','','','','','','','','','',3,'0000-00-00','2014-05-14 19:39:46',2),(27,15,'','','','','','','','','','3',3,'2014-05-29','2014-05-14 19:39:46',3);
 /*!40000 ALTER TABLE `Gold_Score_Totals` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `LC_Basics`
+--
+
+DROP TABLE IF EXISTS `La_Casa_Basics`; -- old name, ensure that it doesn\'t exist
+DROP TABLE IF EXISTS `LC_Basics`;
+
+CREATE TABLE `LC_Basics`
+(
+`Student_ID` int(11) NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (`Student_ID`),
+`Participant_ID` int(11),
+FOREIGN KEY (`Participant_ID`) REFERENCES `Participants`
+    (`Participant_ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+`Cohort` varchar(100),
+`Status` varchar(3),
+`Handbook` tinyint(1),
+`Floor` int(1),
+`Pod` int(5),
+`Room_Number` varchar(5),
+`Key_Card_Number` varchar(10),
+`Transcript_Submitted` tinyint(1),
+`Service_Hours_Submitted` tinyint(1),
+`LCRC_Username` varchar(100),
+`LCRC_Password` varchar(100), 
+`LCRC_Print_Code` int(10),
+`Roommate` int(11),
+FOREIGN KEY (`Roommate`) REFERENCES `Participants`
+        (`Participant_ID`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+`Application_Received` date,
+`Application_Completed` date,
+`Household_Size` int(3),
+`Parent1_AGI` int(11),
+`Parent2_AGI` int(11),
+`Student_AGI` int(11),
+`ACT_Score` int(5),
+`High_School_GPA` varchar(5),
+`Dependency_Status` varchar(10),
+`HS_GPA_Weighted` varchar(5),
+`Expected_Graduation_Year` int(4),
+`College_Grade_Level` varchar(100),
+`Reason_Leave` varchar(250),
+`Reason_Stay` varchar(250),
+`Father_Highest_Level_Education` int(11),
+`Mother_Highest_Level_Education` int(11),
+`Student_Aspiration` int(11),
+`First_Generation_College_Student` varchar(30),
+`Persistence_Graduation` varchar(30),
+`Student_High_School` varchar(100),
+`Pell_Grant` int(11),
+`MAP_Grant` int(11),
+`University_Scholarship` int(11),
+`AMI` int(11),
+`Move_In_Date` date,
+`Move_Out_Date` date,
+`Mid_Twenties` int(11),
+`Masters_Degree` int(11),
+`Married` int(11),
+`Military` int(11),
+`Has_Children` int(11),
+`Homeless` int(11),
+`Self_Sustaining` int(11),
+`Tax_Exemptions` int(3),
+`Household_Size_TRP` int(2),
+`Tuition` int(10),
+`Mandatory_Fees` int(10),
+`College_Cost` int(10),
+`Savings` int(10),
+`Family_Help` int(10),
+`LC_Scholarship` int(10),
+`Application_Source` varchar(250),
+`Notes` varchar(1000),
+`Email_Pack` tinyint(1),
+`Email_Orientation` tinyint(1),
+`Email_Roommate` tinyint(1),
+`Move_In_Time` varchar(10),
+`Move_In_Registration` tinyint(1),
+`Move_In_Address` varchar(10),
+`Move_In_Note` varchar(1000),
+`Orientation_Date` date,
+`Orientation_Time` varchar(10)
+
+) ENGINE=InnoDB;
+
+--
+-- Dumping data for table `LC_Basics`
+--
+
+LOCK TABLES `LC_Basics` WRITE;
+/*!40000 ALTER TABLE `LC_Basics` DISABLE KEYS */;
+INSERT INTO `LC_Basics` VALUES (1, 5, 'Cohort', 'S', 1, 2, 201, '5A', '234-23131', 0, 0, 'Username', 'GenPass', '11236', NULL, '0000-00-00', '0000-00-00', 0, 0, 0, 0, 0,'','Dependent','',0,'','','',0,0,0,NULL,NULL,NULL,0,0,0,0,'0000-00-00',NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'1000',NULL,NULL,0, 0, 0,NULL,0,NULL,NULL,'0000-00-00',NULL);
+/*!40000 ALTER TABLE `LC_Basics` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `LC_Terms`
+--
+DROP TABLE IF EXISTS `LC_Terms`;
+
+CREATE TABLE LC_Terms
+(
+`Term_ID` int(11) NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (`Term_ID`),
+`Participant_ID` int(11),
+INDEX `student_by_term` (`Participant_ID`),
+FOREIGN KEY (`Participant_ID`) REFERENCES `Participants`
+    (`Participant_ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+`College_ID` int(11), 
+`Term_Type` varchar(45),
+`Term` varchar(45),
+`School_Year` int(4),
+`Credits` varchar(45),
+`Subsidized_Loan` int(11),
+`Unsubsidized_Loan` int(11),
+`Major` varchar(100),
+`Minor` varchar(100),
+`Expected_Match` varchar(30),
+`Actual_Match` varchar(30),
+`College_GPA` varchar(30),
+`Internship_Status` int(11),
+`Intern_Hours` int(11),
+`Dropped_Classes` tinyint(1),
+`Dropped_Credits` int(11)
+) ENGINE=InnoDB;
+
+
+--
+-- Dumping data for table `LC_Terms`
+--
+
+LOCK TABLES `LC_Terms` WRITE;
+/*!40000 ALTER TABLE `LC_Terms` DISABLE KEYS */;
+INSERT INTO `LC_Terms` VALUES (1,5,NULL,NULL,'Spring','2013',NULL,'3500',0,'','','','','',NULL,NULL,NULL,NULL);  
+/*!40000 ALTER TABLE `LC_Terms` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1028,7 +1268,7 @@ CREATE TABLE `Participants_Programs` (
 
 LOCK TABLES `Participants_Programs` WRITE;
 /*!40000 ALTER TABLE `Participants_Programs` DISABLE KEYS */;
-INSERT INTO `Participants_Programs` VALUES (1,6,2,NULL),(2,6,4,NULL),(4,5,1,NULL),(5,7,5,NULL),(6,4,3,NULL),(7,8,5,NULL),(8,1,2,NULL),(9,13,5,NULL),(10,39,1,NULL),(11,14,5,NULL),(12,14,1,'Test save\n'),(13,13,4,NULL),(14,41,4,NULL),(15,44,4,NULL),(16,44,2,NULL),(17,44,2,NULL),(18,10,4,NULL),(19,10,2,NULL),(20,15,5,NULL),(21,45,3,NULL),(22,45,5,NULL),(23,1,2,NULL),(24,46,2,NULL),(25,47,4,NULL),(26,43,5,NULL),(27,48,5,NULL),(28,52,5,NULL),(29,7,2,NULL),(30,7,1,'test'),(31,7,3,NULL),(32,7,4,NULL),(33,39,5,NULL),(34,15,1,'so many notes!'),(37,53,3,NULL),(38,53,4,NULL),(39,54,1,'Remember that you can\'t add attendance here.'),(40,51,5,NULL),(41,51,2,NULL),(42,51,3,NULL),(43,10,1,NULL),(44,42,2,NULL),(45,47,3,NULL),(46,61,1,NULL),(47,61,2,NULL),(49,68,1,NULL),(50,68,2,NULL);
+INSERT INTO `Participants_Programs` VALUES (1,6,2,NULL),(2,6,4,NULL),(4,5,1,NULL),(5,7,5,NULL),(6,4,3,NULL),(7,8,5,NULL),(8,1,2,NULL),(9,13,5,NULL),(10,39,1,NULL),(11,14,5,NULL),(12,14,1,'Test save\n'),(13,13,4,NULL),(14,41,4,NULL),(15,44,4,NULL),(16,44,2,NULL),(17,44,2,NULL),(18,10,4,NULL),(19,10,2,NULL),(20,15,5,NULL),(21,45,3,NULL),(22,45,5,NULL),(23,1,2,NULL),(24,46,2,NULL),(25,47,4,NULL),(26,43,5,NULL),(27,48,5,NULL),(28,52,5,NULL),(29,7,2,NULL),(30,7,1,'test'),(31,7,3,NULL),(32,7,4,NULL),(33,39,5,NULL),(34,15,1,'so many notes!'),(37,53,3,NULL),(38,53,4,NULL),(39,54,1,'Remember that you cant add attendance here.'),(40,51,5,NULL),(41,51,2,NULL),(42,51,3,NULL),(43,10,1,NULL),(44,42,2,NULL),(45,47,3,NULL),(46,61,1,NULL),(47,61,2,NULL),(49,68,1,NULL),(50,68,2,NULL);
 /*!40000 ALTER TABLE `Participants_Programs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1282,100 +1522,6 @@ LOCK TABLES `Teachers` WRITE;
 /*!40000 ALTER TABLE `Teachers` DISABLE KEYS */;
 /*!40000 ALTER TABLE `Teachers` ENABLE KEYS */;
 UNLOCK TABLES;
-
-DROP TABLE IF EXISTS `Colleges`;
-
-CREATE TABLE `Colleges`
-(
-`College_ID` int(11) NOT NULL AUTO_INCREMENT,
-PRIMARY KEY (`College_ID`),
-`College_Name` varchar(100),
-`College_Type` varchar(100)
-) ENGINE=InnoDB;
-
-
-DROP TABLE IF EXISTS `La_Casa_Basics`;
-
-CREATE TABLE `La_Casa_Basics`
-(
-`Student_ID` int(11) NOT NULL AUTO_INCREMENT,
-PRIMARY KEY (`Student_ID`),
-`Participant_ID_Students` int(11),
-INDEX `par_ind_stu` (`Participant_ID_Students`),
-FOREIGN KEY (`Participant_ID_Students`) REFERENCES `Participants`
-    (`Participant_ID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-`Household_Size` int(3),
-`Parent1_AGI` int(11),
-`Parent2_AGI` int(11),
-`Student_AGI` int(11),
-`ACT_Score` int(5),
-`High_School_GPA` varchar(30),
-`Dependency_Status` varchar(10),
-`Father_Highest_Level_Education` int(11),
-`Mother_Highest_Level_Education` int(11),
-`Student_Aspiration` int(11),
-`First_Generation_College_Student` varchar(30),
-`Persistence_Graduation` varchar(30),
-`Student_Hometown` varchar(100),
-`Student_High_School` varchar(100),
-`Scholarship_Apps` int(11),
-`Scholarship_Num` int(11),
-`Scholarship_Volume` int(11),
-`Scholarships_Received` int(11),
-`Household_Income` int(11),
-`AMI` int(11),
-`Move_In_Date` date,
-`Move_Out_Date` date,
-`Mid_Twenties` int(11),
-`Masters_Degree` int(11),
-`Married` int(11),
-`Has_Children` int(11),
-`Homeless` int(11),
-`Self_Sustaining` int(11)
-
-) ENGINE=InnoDB;
-
-DROP TABLE IF EXISTS `LC_Terms`;
-
-CREATE TABLE LC_Terms
-(
-`Term_ID` int(11) NOT NULL AUTO_INCREMENT,
-PRIMARY KEY (`Term_ID`),
-`Participant_ID` int(11),
-INDEX `student_by_term` (`Participant_ID`),
-FOREIGN KEY (`Participant_ID`) REFERENCES `Participants`
-    (`Participant_ID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-`College_ID` int(11), 
-`Term_Type` varchar(45),
-`Term` varchar(45),
-`School_Year` int(4),
-`Credits` varchar(45),
-`Loan_Applications` int(3),
-`Loan_Volume` varchar(45),
-`Loans_Received` varchar(45),
-`Major` varchar(100),
-`College_Match` varchar(30),
-`College_GPA` varchar(30),
-`Internship_Status` int(11),
-`Intern_Hours` int(11)
-) ENGINE=InnoDB;
-
-DROP TABLE IF EXISTS `Educational_Levels`;
-
-CREATE TABLE `Educational_Levels`
-(
-`Education_ID` int(11) NOT NULL AUTO_INCREMENT,
-PRIMARY KEY (`Education_ID`),
-`Education_Level_Name` varchar(45)
-) ENGINE = InnoDB;
-
-INSERT INTO `Educational_Levels` (Education_Level_Name) VALUES ('Elementary'), ('Middle School'), ('Some HS'), ('GED'), ('High School Diploma'), ('Some College'), ('Trade School'), ('Associates Degree'), ('Bachelors Degree'), ('Masters Degree'), ('MD'), ('PhD'), ('Unknown');
-
-
 
 
 --
