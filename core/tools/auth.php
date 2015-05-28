@@ -402,43 +402,27 @@ function getProgramAccess($session_id, $site) {
     return $program_access_array;
 }
 
-//get all programs from a given subsite, so that we can assign program access to
-//all programs to a given user
-//takes a subsite id (as defined in the head of this file)
-//returns an array of program ids from the given subsite
-function findAllPrograms($subsite_id){
-    if ($subsite_id == 2){
-        include "../lsna/include/dbconnopen.php";
-        $connection = $cnnLSNA;
+// takes an array of programs
+// returns a query to insert rows with those programs into the
+// Users_Program_Access table
+function createProgramQuery($program_array, $user_privileges_id){
+    $program_access_query_sqlsafe = "INSERT INTO Users_Program_Access
+            (Users_Privileges_ID, Program_Access) VALUES";
+    print_r($program_array);
+    $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+    include $path; //connection to core db
+    foreach ($program_array as $program){
+        $program_sqlsafe = mysqli_real_escape_string($cnnLISC, $program);
+        if ($counter == (count($program_array) - 1)) {
+            $program_access_query_sqlsafe .= "('" . $user_privileges_id . "', '" . $program_sqlsafe . "');";
+        }
+        else{
+            $program_access_query_sqlsafe .= "('" . $user_privileges_id . "', '" . $program_sqlsafe . "'), ";
+        }
+        $counter ++;
     }
-    elseif ($subsite_id == 3){
-        include "../bickerdike/include/dbconnopen.php";
-        $connection = $cnnBickerdike;
-    }
-    elseif ($subsite_id == 4){
-        include "../trp/include/dbconnopen.php";
-        $connection = $cnnTRP;
-    }
-    elseif ($subsite_id == 5){
-        //SWOP has no Programs table
-        return false;
-    }
-    elseif ($subsite_id == 6){
-        include "../enlace/include/dbconnopen.php";
-        $connection = $cnnEnlace;
-    }
-    if ($subsite_id == 2) {
-        $get_programs = "SELECT Subcategory_ID FROM Subcategories WHERE Campaign_or_Program = 'Program'";
-    }
-    else {
-        $get_programs = "SELECT Program_ID FROM Programs";
-    }
-    $programs = mysqli_query($connection, $get_programs);
-    $program_array = array();
-    while ($program = mysqli_fetch_array($programs)){
-        $program_array[] = $program[0];
-    }
-    return $program_array;
+
+    return $program_access_query_sqlsafe;
 }
 
 ?>

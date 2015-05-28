@@ -3,7 +3,33 @@
 include "../header.php";
 include_once $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 ?>
-
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#add_program_select_all').click(function(event) {  //on click
+        if(this.checked) { // check select status
+            $('.add_program_checkbox').each(function() { //loop through each checkbox
+                this.checked = true;  
+            });
+        }else{
+            $('.add_program_checkbox').each(function() { //loop through each checkbox
+                this.checked = false; 
+            });        
+        }
+    });
+    $('#edit_program_select_all').click(function(event) {  //on click
+        if(this.checked) { // check select status
+            $('.edit_program_checkbox').each(function() { //loop through each checkbox
+                this.checked = true;  
+            });
+        }else{
+            $('.edit_program_checkbox').each(function() { //loop through each checkbox
+                this.checked = false; 
+            });        
+        }
+    });
+   
+});
+</script>
 <?php
 if (!isLoggedIn()) {
     $die_unauthorized("Sorry, you must be logged in to access this page!");
@@ -23,12 +49,20 @@ if ( in_array($Enlace_id, $subsite_admin_access) && (($_POST['choose_site'] == $
     include "../enlace/include/dbconnopen.php";
     $get_all_programs_sqlsafe="SELECT Programs.Program_ID, Name FROM Programs ORDER BY Name";
     $all_programs=mysqli_query($cnnEnlace, $get_all_programs_sqlsafe);
+    $all_programs_array = array();
+    while ($program=mysqli_fetch_row($all_programs)) { 
+        $all_programs_array[] = $program;
+    }
     include "../enlace/include/dbconnclose.php";
     $show_programs = true;
 } elseif ( in_array($TRP_id, $subsite_admin_access) && ($_POST['choose_site'] == $TRP_id || ! isset($_POST['choose_site']) ) ) {
     include "../trp/include/dbconnopen.php";
     $get_all_programs_sqlsafe="SELECT Programs.Program_ID, Program_Name FROM Programs ORDER BY Program_Name";
     $all_programs=mysqli_query($cnnTRP, $get_all_programs_sqlsafe);
+    $all_programs_array = array();
+    while ($program=mysqli_fetch_row($all_programs)) { 
+        $all_programs_array[] = $program;
+    }
     include "../trp/include/dbconnclose.php";
     $show_programs = true;
 }
@@ -138,16 +172,30 @@ Add a new user to the system.
         <tr>
             <td>Program Affiliation:</td>
             <td colspan="2">
-              <select id="affiliated_program">
-                <option value="n">No Program Access</option>
-                <option value="a">Access to all program information</option>
-                <?php while ($program=mysqli_fetch_row($all_programs)) { ?>
-                  <option value="<?php echo $program[0];?>">
-                    <?php echo $program[1];?>
-                  </option>
-                <?php }?>
-              </select>
-            </td>
+<table id = "show_program_checkboxes">
+<tr>
+<td>
+<label for="program_list"><strong>Select all:</strong></label>
+</td>
+<td>
+<input type="checkbox" id="add_program_select_all" />
+</td>
+</tr>
+<?php
+foreach ($all_programs_array as $program) { 
+?>
+<tr>
+<td>
+<label for="program_list"><?php echo $program[1];?>:</label>
+</td>
+<td>
+<input type="checkbox" name = "add_programs[]" id="program_list" class = "add_program_checkbox" value="<?php echo $program[0];?>" />
+</td>
+</tr>
+<?php
+}
+?>
+</table>    </td>
         </tr>
         <tr>
         	<td></td>
@@ -173,16 +221,23 @@ Add a new user to the system.
 ?>
 	<tr>
 		<td colspan="2"><input type="button" value="Save" onclick="
-                    if (<?php if ($show_programs) { echo("true"); } else { echo("false"); } ?>){var set_program=document.getElementById('affiliated_program').value;}
-                    else{var set_program='';}
-       $.post(
-        '../ajax/extend_staff_privilege.php',
+        var programs = document.getElementsByName('add_programs[]');
+        var program_array = new Array();
+        var program_array_key = 0;
+        for (var k = 0; k < programs.length; k++) {
+            if (programs[k].checked == true) {
+                program_array[program_array_key] = programs[k].value;
+                program_array_key++;
+            }
+        }
+        $.post(
+            '../ajax/extend_staff_privilege.php',
         {
             username: document.getElementById('username').value,
             password: document.getElementById('password').value,
             level: document.getElementById('privilege_level').options[document.getElementById('privilege_level').selectedIndex].value,
             site: '<?php echo $site;?>',
-            program: set_program
+            program: program_array
         },
         function (response){
             document.getElementById('confirm_add_user').innerHTML = response;
@@ -204,15 +259,13 @@ Add a new user to the system.
     <option>-----</option>
     <?php
     /*
-     * Draws list of existing users that are linked to this site (again, for admin users, it will
-     * be the first site that they are linked to)
+     * Draws list of existing users that are linked to this site
      */
     include "../include/dbconnopen.php";
 
-    $site_id_sqlsafe = mysqli_real_escape_string($cnnLISC, $subsite_access);
+    $site_id_sqlsafe = mysqli_real_escape_string($cnnLISC, $site);
     $staff_list_query_sqlsafe = "SELECT * FROM Users LEFT JOIN Users_Privileges ON 
         (Users_Privileges.User_ID=Users.User_ID) WHERE Users_Privileges.Privilege_ID='" . $site_id_sqlsafe . "'";
-    //echo $staff_list_query_sqlsafe;
     $staff_list = mysqli_query($cnnLISC, $staff_list_query_sqlsafe);
     while ($staff=mysqli_fetch_array($staff_list)){
         echo $staff['User_ID'];
@@ -241,16 +294,30 @@ Add a new user to the system.
      	<tr>  
             <td>Program Affiliation:</td>
             <td>
-              <select id="edit_affiliated_program">
-                <option value="n">No Program Access</option>
-                <option value="a">Access to all program information</option>
-                <?php 
-                while ($program=mysqli_fetch_row($all_programs)){
-                ?>
-                  <option value="<?php echo $program[1];?>">
-                    <?php echo $program[0];?>
-                  </option><?php }?>
-              </select>
+<table id = "show_program_checkboxes">
+<tr>
+<td>
+<label for="program_list"><strong>Select all:</strong></label>
+</td>
+<td>
+<input type="checkbox" id="edit_program_select_all" />
+</td>
+</tr>
+<?php
+foreach ($all_programs_array as $program) { 
+?>
+<tr>
+<td>
+<label for="program_list"><?php echo $program[1];?>:</label>
+</td>
+<td>
+<input type="checkbox" name = "edit_programs[]" id="program_list" class = "edit_program_checkbox" value="<?php echo $program[0];?>" />
+</td>
+</tr>
+<?php
+}
+?>
+</table>    
             </td>
         </tr>
         <?php  } ?>
@@ -262,19 +329,24 @@ Add a new user to the system.
 
 	<tr>
 		<td><input type="button" value="Save" onclick="
-    if (<?php if ($show_programs) { echo("true"); } else { echo("false"); } ?>)
-    {var set_program=document.getElementById('edit_affiliated_program').value;}
-                    else{var set_program='';}
+        var programs = document.getElementsByName('edit_programs[]');
+        var program_array = new Array();
+        var program_array_key = 0;
+        for (var k = 0; k < programs.length; k++) {
+            if (programs[k].checked == true) {
+                program_array[program_array_key] = programs[k].value;
+                program_array_key++;
+            }
+        }
        $.post(
         '../ajax/edit_privileges.php',
         {
             user: document.getElementById('staff_list').options[document.getElementById('staff_list').selectedIndex].value,
             privilege: document.getElementById('privileges').options[document.getElementById('privileges').selectedIndex].value,
-            site: '<?php echo $subsite_access; ?>',
-            program: set_program
+            site: '<?php echo $site; ?>',
+            program: program_array
         },
         function (response){
-            document.write(response);
             document.getElementById('updated_privilege').innerHTML = 'Thanks!  This user\'s privilege setting has been updated.';
         }
    ).fail(failAlert);">
@@ -297,7 +369,7 @@ Add a new user to the system.
   		  <?php
                   /*List of users at this site.*/
  		   include "../include/dbconnopen.php";
-                   $site_id_sqlsafe=mysqli_real_escape_string($cnnLISC, $subsite_access);
+                   $site_id_sqlsafe=mysqli_real_escape_string($cnnLISC, $site);
  		   $staff_list_query_sqlsafe = "SELECT * FROM Users LEFT JOIN Users_Privileges ON 
  		       (Users_Privileges.User_ID=Users.User_ID) WHERE Users_Privileges.Privilege_ID='" . $site_id_sqlsafe . "'";
   		  //echo $staff_list_query_sqlsafe;

@@ -21,36 +21,14 @@ if (strlen($hash)>=20){
     /*
      * Give new user privileges by site.
      */
-
     $site_sqlsafe=mysqli_real_escape_string($cnnLISC, $_POST['site']);
     $level_sqlsafe=mysqli_real_escape_string($cnnLISC, $_POST['level']);
-    $program_sqlsafe=  mysqli_real_escape_string($cnnLISC, $_POST['program']);
     $privileges_query_sqlsafe = "INSERT INTO Users_Privileges (User_ID, Privilege_ID, Site_Privilege_ID) VALUES ('" . $user_id_sqlsafe . "', '" . $site_sqlsafe . "', '" . $level_sqlsafe . "')";
     mysqli_query($cnnLISC, $privileges_query_sqlsafe);
     $user_privileges_id_sqlsafe = mysqli_insert_id($cnnLISC);
-    if ($program_sqlsafe == "n" || $program_sqlsafe == ""){
-        //do nothing
-    }
-    elseif ($program_sqlsafe == "a"){
-        $program_array = findAllPrograms($site_sqlsafe);
-        $program_access_query_sqlsafe = "INSERT INTO Users_Program_Access
-            (Users_Privileges_ID, Program_Access) VALUES";
-        $counter = 0;
-        foreach ($program_array as $program){
-            if ($counter == (count($program_array) - 1)) {
-                $program_access_query_sqlsafe .= "('" . $user_privileges_id_sqlsafe . "', '" . $program . "');";
-            }
-            else{
-                $program_access_query_sqlsafe .= "('" . $user_privileges_id_sqlsafe . "', '" . $program . "'), ";
-            }
-            $counter ++;
-        }
-        mysqli_query($cnnLISC, $program_access_query_sqlsafe);
-    }
-    else{
-        $program_access_query_sqlsafe = "INSERT INTO Users_Program_Access (Users_Privileges_ID, Program_Access) VALUES ('" . $user_privileges_id_sqlsafe . "', '" . $program_sqlsafe . "')";
-        mysqli_query($cnnLISC, $program_access_query_sqlsafe);
-    }
+    $program_access_query_sqlsafe = createProgramQuery($_POST['program'], $user_privileges_id_sqlsafe);
+    mysqli_query($cnnLISC, $program_access_query_sqlsafe);
+
     include "../include/dbconnclose.php";
 }
 else
