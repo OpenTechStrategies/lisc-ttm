@@ -41,15 +41,6 @@ $participant->get_basic_info($_GET['id']);
 ?>
 <head>
 <script type="text/javascript">
-    function saveTerms(row){
-        alert(row);
-        $.post(
-            '../ajax/save_la_casa_info.php',
-    {
-        
-    }
-        )
-    }
     $(document).ready(function() {
         $('.basic_info_edit').hide();
         $('.edit_term').hide();
@@ -247,7 +238,7 @@ if ($participant->gender == 'm') {
         <?php echo la_casa_edit_data_gen_selector($college_array, $term_array['college_id'], 'edit_college_' . $term_array['term_id'], $edit_class); ?>
         </span>
         </td>
-        <td><span class="<?php echo $display_class; ?>"><?php echo $term_array['school_year'] . "/ " . $term_array['term_type'] . "/ " . $term_array['term']; ?></span>
+        <td><span class="<?php echo $display_class; ?>"><?php echo display_selected($school_year_array, $term_array['school_year']) . "/ " . display_selected($term_type_array, $term_array['term_type']) . "/ " . display_selected($season_array, $term_array['term']); ?></span>
         <span class="<?php echo $edit_class;?>">
         <?php
         echo la_casa_edit_data_gen_selector($school_year_array, 
@@ -299,7 +290,7 @@ if ($participant->gender == 'm') {
         ?>
         </span>
         </td>
-        <td><span class="<?php echo $display_class; ?>"><?php echo $term_array['internship_status'] . "/ " . $term_array['intern_hours']; ?></span>
+        <td><span class="<?php echo $display_class; ?>"><?php echo display_selected($yn_array, $term_array['internship_status']) . "/ " . $term_array['intern_hours']; ?></span>
         <span class="<?php echo $edit_class;?>">
         <?php
         echo la_casa_edit_data_gen_selector($yn_array,
@@ -313,7 +304,7 @@ if ($participant->gender == 'm') {
         ?>
         </span>
         </td>
-        <td><span class="<?php echo $display_class; ?>"><?php echo $term_array['dropped_classes'] . "/ " . $term_array['dropped_credits']; ?></span>
+        <td><span class="<?php echo $display_class; ?>"><?php echo display_selected($yn_array, $term_array['dropped_classes']) . "/ " . $term_array['dropped_credits']; ?></span>
         <span class="<?php echo $edit_class;?>">
         <?php
         echo la_casa_edit_data_gen_selector($yn_array,
@@ -506,13 +497,13 @@ document.write(response); //testing
     ?>
     <tr>
     <td><strong>Cohort </strong></td>
-    <td> <?php echo $participant->cohort; 
+<td> <?php echo display_selected($cohort_array, $participant->cohort);
     echo la_casa_edit_data_gen_selector($cohort_array, $participant->cohort, 'edit_cohort', 'edit_term constant');
     ?>
     </td>
     <tr>
     <td><strong>Status </strong></td>
-    <td> <?php echo $participant->status;
+<td> <?php echo display_selected($status_array, $participant->status);
 echo la_casa_edit_data_gen_selector($status_array, $participant->status, 'status_edit', 'edit_term constant'); ?> </td>
     </tr>
     <tr>
@@ -542,12 +533,12 @@ echo la_casa_edit_data_gen_selector($status_array, $participant->status, 'status
     </tr>
     <tr>
     <td><strong>Transcript Submitted </strong></td>
-    <td> <?php echo  $participant->transcript_submitted;
+<td> <?php echo  display_selected($yn_array, $participant->transcript_submitted);
 echo la_casa_edit_data_gen_selector($yn_array, $participant->transcript_submitted, 'transcript_submitted_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Service Hours Submitted </strong></td>
-    <td> <?php echo  $participant->service_hours_submitted;
+<td> <?php echo  display_selected($yn_array, $participant->service_hours_submitted);
 echo la_casa_edit_data_gen_selector($yn_array, $participant->service_hours_submitted, 'service_hours_submitted_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
@@ -611,7 +602,7 @@ echo la_casa_edit_data_gen_input($participant->application_completed, 'applicati
     </tr>
     <tr>
     <td><strong>Dependency Status </strong></td>
-    <td> <?php echo  $participant->dependency_status;
+<td> <?php echo  display_selected($yn_status, $participant->dependency_status);
 echo la_casa_edit_data_gen_selector($yn_status, $participant->dependency_status, 'dependency_status_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
@@ -626,7 +617,7 @@ echo la_casa_edit_data_gen_selector($yn_status, $participant->dependency_status,
     </tr>
     <tr>
     <td><strong>College Grade Level </strong></td>
-    <td> <?php echo  $participant->college_grade_level;
+<td> <?php echo  display_selected($grade_array, $participant->college_grade_level);
 echo la_casa_edit_data_gen_selector($grade_array, $participant->college_grade_level, 'college_grade_level_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
@@ -641,22 +632,22 @@ echo la_casa_edit_data_gen_selector($grade_array, $participant->college_grade_le
     </tr>
     <tr>
     <td><strong>Father Highest Level Education </strong></td>
-    <td> <?php echo  $participant->father_highest_level_education;
+<td> <?php echo  display_selected($education_levels_array, $participant->father_highest_level_education);
 echo la_casa_edit_data_gen_selector($education_levels_array, $participant->father_highest_level_education, 'father_highest_level_education_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Mother Highest Level Education </strong></td>
-    <td> <?php echo  $participant->mother_highest_level_education;
+<td> <?php echo  display_selected($education_levels_array, $participant->mother_highest_level_education);
     echo la_casa_edit_data_gen_selector($education_levels_array, $participant->mother_highest_level_education, 'mother_highest_level_education_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Student Aspiration </strong></td>
-    <td> <?php echo  $participant->student_aspiration;
+<td> <?php echo  display_selected($education_levels_array, $participant->student_aspiration);
     echo la_casa_edit_data_gen_selector($education_levels_array, $participant->student_aspiration, 'student_aspiration_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>First Generation College Student </strong></td>
-    <td> <?php echo  $participant->first_generation_college_student;
+<td> <?php echo  display_selected($yn_array, $participant->first_generation_college_student);
 echo la_casa_edit_data_gen_selector($yn_array, $participant->first_generation_college_student, 'first_generation_college_student_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
@@ -681,37 +672,37 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->first_generation_co
     </tr>
     <tr>
     <td><strong>Mid Twenties </strong></td>
-    <td> <?php echo  $participant->mid_twenties;
+<td> <?php echo  display_selected($yn_array, $participant->mid_twenties);
 echo la_casa_edit_data_gen_selector($yn_array, $participant->mid_twenties, 'mid_twenties_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Masters Degree </strong></td>
-    <td> <?php echo  $participant->masters_degree;
+<td> <?php echo  display_selected($yn_array, $participant->masters_degree);
 echo la_casa_edit_data_gen_selector($yn_array, $participant->masters_degree, 'masters_degree_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Married </strong></td>
-    <td> <?php echo  $participant->married;
+<td> <?php echo  display_selected($yn_array, $participant->married);
 echo la_casa_edit_data_gen_selector($yn_array, $participant->married, 'married_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Military </strong></td>
-    <td> <?php echo  $participant->military;
+<td> <?php echo  display_selected($yn_array, $participant->military);
 echo la_casa_edit_data_gen_selector($yn_array, $participant->military, 'military_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Has Children </strong></td>
-    <td> <?php echo  $participant->has_children;
+<td> <?php echo  display_selected($yn_array, $participant->has_children);
 echo la_casa_edit_data_gen_selector($yn_array, $participant->has_children, 'has_children_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Homeless </strong></td>
-    <td> <?php echo  $participant->homeless;
+<td> <?php echo  display_selected($yn_array, $participant->homeless);
 echo la_casa_edit_data_gen_selector($yn_array, $participant->homeless, 'homeless_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Self Sustaining </strong></td>
-    <td> <?php echo  $participant->self_sustaining;
+<td> <?php echo  display_selected($yn_array, $participant->self_sustaining);
 echo la_casa_edit_data_gen_selector($yn_array, $participant->self_sustaining, 'self_sustaining_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
@@ -766,17 +757,17 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->self_sustaining, 's
     </tr>
     <tr>
     <td><strong>Email Pack </strong></td>
-    <td> <?php echo  $participant->email_pack;
+<td> <?php echo  display_selected($yn_array, $participant->email_pack);
 echo la_casa_edit_data_gen_selector($yn_array, $participant->email_pack, 'email_pack_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Email Orientation </strong></td>
-    <td> <?php echo  $participant->email_orientation;
+<td> <?php echo  display_selected($yn_array, $participant->email_orientation);
 echo la_casa_edit_data_gen_selector($yn_array, $participant->email_orientation, 'email_orientation_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Email Roommate </strong></td>
-    <td> <?php echo  $participant->email_roommate;
+<td> <?php echo  display_selected($yn_array, $participant->email_roommate);
 echo la_casa_edit_data_gen_selector($yn_array, $participant->email_roommate, 'email_roommate_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>

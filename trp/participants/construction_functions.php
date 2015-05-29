@@ -39,17 +39,17 @@ while ($college = mysqli_fetch_row($college_list)){
 }
 $term_type_array = array(1 => 'Semester', 2 => 'Quarter', 3 => 'Trimester');
 $season_array = array(1 => 'Fall', 2 => 'Winter', 3 => 'Spring', 4 => 'Summer');
-$get_major_list_sqlsafe = "SELECT DISTINCT Major FROM LC_Terms";
+$get_major_list_sqlsafe = "SELECT DISTINCT Major FROM LC_Terms ORDER BY Major";
 $major_list = mysqli_query($cnnTRP, $get_major_list_sqlsafe);
 $major_array = array();
 while ($major = mysqli_fetch_row($major_list)){
-    $major_array[] = $major[0];
+    $major_array[$major[0]] = $major[0];
 }
-$get_minor_list_sqlsafe = "SELECT DISTINCT Minor FROM LC_Terms";
+$get_minor_list_sqlsafe = "SELECT DISTINCT Minor FROM LC_Terms ORDER BY Minor";
 $minor_list = mysqli_query($cnnTRP, $get_minor_list_sqlsafe);
 $minor_array = array();
 while ($minor = mysqli_fetch_row($minor_list)){
-    $minor_array[] = $minor[0];
+    $minor_array[$minor[0]] = $minor[0];
 }
 $get_selectivity_list_sqlsafe = "SELECT DISTINCT Selectivity FROM Colleges";
 $selectivity_list = mysqli_query($cnnTRP, $get_selectivity_list_sqlsafe);
@@ -82,13 +82,22 @@ while ($education = mysqli_fetch_row($education_levels)) {
 
 
 
-
+/* Creates a select object for data entry
+ * Takes:
+ * $array_of_options: the array of possible values represented in this select
+ * $existing_value: the stored value for this field, if any
+ * $id_string: the desired id for this select object
+ * $class_string: the class(es) to be attached to this select object
+ *
+ * Returns:
+ * A string that can be inserted as html.
+*/
 function la_casa_edit_data_gen_selector($array_of_options, $existing_value, $id_string, $class_string){
     $result = "<select id = " . $id_string;
     $result .= " style = 'width:100px' class = '" . $class_string . "'>";
     $result .= "<option value = 0>----</option>"; 
     foreach ($array_of_options as $val => $display){
-        $result .= "<option value = " . $val . " ";
+        $result .= "<option value = '" . $val . "' ";
         $result .= ($existing_value == $val ? 'selected="selected"' : null) . ">";
         $result .= $display . " </option>"; 
     }
@@ -97,6 +106,15 @@ function la_casa_edit_data_gen_selector($array_of_options, $existing_value, $id_
     return $result;
 }
 
+/* Creates an input object for data entry
+ * Takes:
+ * $existing_value: the stored value for this field, if any
+ * $id_string: the desired id for this input object
+ * $class_string: the class(es) to be attached to this input object
+ *
+ * Returns:
+ * A string that can be inserted as html.
+*/
 function la_casa_edit_data_gen_input($existing_value, $id_string, $class_string){
     $result = "<input type=text id=" . $id_string;
     $result .= " class='" . $class_string . "'";
@@ -106,5 +124,18 @@ function la_casa_edit_data_gen_input($existing_value, $id_string, $class_string)
     return $result;
 }
 
+/* Creates an html object for data display
+ * Takes:
+ * $array_of_options: the array of possible values for this field
+ * $stored_value: the stored value for this field, if any
+ *
+ * Returns:
+ * A string that displays the value of the field in human-readable format
+*/
+function display_selected($select_array, $stored_value){
+    if ( array_key_exists($stored_value, $select_array)) {
+        return $select_array[$stored_value];
+    }
+}
 
 ?>
