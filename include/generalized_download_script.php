@@ -1,11 +1,32 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 //takes as arguments the query, database connection and database connection
 //file, column headers, and file name.
 
 //code drawn from tutorial at:
 // http://code.stephenmorley.org/php/creating-downloadable-csv-files/
 
-function generalized_download($download_name){
+function generalized_download($download_name, $permissions){
     $download_list_array=array(
         'aldermans_records'=>array('db'=>'bickerdike', 'query'=> 
             'SELECT * FROM Aldermanic_Records', 
@@ -1192,19 +1213,35 @@ function generalized_download($download_name){
 
         'enlace_session_attendance'=>array('db'=>'enlace', 'query'=> 
         'SELECT Participants_Programs.Participant_ID, First_Name, Last_Name, Date_Listed, Session_Name, Name, Absence_ID FROM Participants_Programs INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID= Absences.Participant_ID)',
+        'non_admin_string' => '  ',
+        'non_admin_string2' => ' AND Session_Names.Program_ID = ',
+        'query2' => ' WHERE Participants_Programs.Participant_Program_ID IS NOT NULL ',
+        'add_access' => 1,
         'titles' => array("Participant ID", "First_Name", "Last_Name", "Date_Listed", "Session_Name", "Program", "Present (NULL) or Absent (some number)")),
 
         'enlace_session_attendance_deid'=>array('db'=>'enlace', 'query'=> 
         'SELECT Participants_Programs.Participant_ID, Date_Listed, Session_Name, Name, Absence_ID FROM Participants_Programs INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID= Absences.Participant_ID)', 
+        'non_admin_string' => '  ',
+        'non_admin_string2' => ' AND Session_Names.Program_ID = ',
+        'query2' => ' WHERE Participants_Programs.Participant_Program_ID IS NOT NULL ',
+        'add_access' => 1,
         'titles' => array("Participant ID", "Date_Listed", "Session_Name", "Program", "Present (NULL) or Absent (some number)")), 
 
         'enlace_session_surveys'=>array('db'=>'enlace', 'query'=> 
 'SELECT Program_Surveys.*, Session_Name, Name FROM Program_Surveys inner join Session_Names ON Program_Surveys.Session_ID=Session_Names.Session_ID INNER JOIN Programs ON Programs.Program_ID=Session_Names.Program_ID', 
+        'non_admin_string' => '  ',
+        'non_admin_string2' => ' AND Session_Names.Program_ID = ',
+        'query2' => ' WHERE Program_Surveys.Program_Survey_ID IS NOT NULL ',
+        'add_access' => 1,
         'titles' => array("Participant_Program Link ID", "Program ID", "Question 1", "Question 2", "Question 3", "Question 4", "Question 5", "Question 6", "Question 7", "Question 8", "Question 9", "Question 10", "Question 11", "Question 12", "Question 13", "Question 14", "Question 15", "Question 16", "Date Added", "Session ID", "Session", "Program")),
 
         'enlace_sessions'=>array('db'=>'enlace', 'query'=> 
 'SELECT Session_Names.*, Name FROM Session_Names
 INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
+        'non_admin_string' => '  ',
+        'non_admin_string2' => ' AND Session_Names.Program_ID = ',
+        'query2' => ' WHERE Program_Surveys.Program_Survey_ID IS NOT NULL ',
+        'add_access' => 1,
         'titles' => array("Session ID", "Session Name", "Program  ID", "Start Date", "End Date", "Survey Due Date", "Program")),
         
         'enlace_referrals'=>array('db'=>'enlace', 'query'=> 
@@ -1229,25 +1266,40 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
                 "Number of days attended",
         "Sum of hours for this session", "Dosage percentage for this session")),
 
+        'enlace_total_dosage' => array('db' => 'enlace', 'query' => 'SELECT Participant_ID, First_Name, Last_Name FROM Participants', 
+        'non_admin_string' => ' LEFT JOIN Participants_Programs on Participants.Participant_ID = Participants_Programs.Participant_ID INNER JOIN Session_Names on Participants_Programs.Program_ID = Session_Names.Session_ID ',
+        'non_admin_string2' => ' AND Session_Names.Program_ID = ',
+        'query2' => ' WHERE Participants.Participant_ID IS NOT NULL ',
+        'add_access' => 1,
+        'titles' => array("Participant ID", "First Name", "Last Name", "Total Dosage Hours")),
+
+        'enlace_total_dosage_deid' => array('db' => 'enlace', 'query' => 'SELECT Participant_ID FROM Participants', 
+        'non_admin_string' => ' LEFT JOIN Participants_Programs on Participants.Participant_ID = Participants_Programs.Participant_ID INNER JOIN Session_Names on Participants_Programs.Program_ID = Session_Names.Session_ID ',
+        'non_admin_string2' => ' AND Session_Names.Program_ID = ',
+        'query2' => ' WHERE Participants.Participant_ID IS NOT NULL ',
+        'add_access' => 1,
+        'titles' => array("Participant ID", "Total Dosage Hours")),
+
+
         'enlace_new_surveys' => array('db'=>'enlace', 'query'=> 
-        'SELECT  Pre_Assessments.Participant_ID, First_Name, Last_Name, Pre_Caring.Program, Session_Name, Name, Home_Language, Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_E, BYS_T, JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, JVQ_12, US_Born, Pre_Caring.Check_In, Pre_Caring.Know_You, Pre_Caring.Compliment, Pre_Caring.Crisis_Help, Pre_Caring.Pay_Attention, Pre_Caring.KnowImportance, Pre_Caring.Personal_Advice, Pre_Caring.Upset_Discussion, Pre_Future.Friends, Pre_Future.Finish_HS, Pre_Future.Stay_Safe,  Pre_Future.Alive_Well, Pre_Future.Happy_Life, Pre_Future.Manage_Work, Pre_Future.Proud_Parents, Pre_Future.Solve_Problems, Pre_Future.Interesting_Life, Pre_Violence.Coping, Pre_Violence.Cowardice, Pre_Violence.Self_Care, Pre_Violence.Anger_Mgmt, Pre_Violence.Negotiation, Pre_Violence.Self_Defense, Pre_Violence.Handle_Others, Pre_Violence.Self_Awareness, Pre_Violence.Parent_Approval, Pre_Violence.Parent_Disapproval, Pre_Violence.Teasing_Prevention, Post_Caring.Check_In, Post_Caring.Know_You, Post_Caring.Compliment, Post_Caring.Crisis_Help, Post_Caring.Pay_Attention, Post_Caring.KnowImportance, Post_Caring.Personal_Advice, Post_Caring.Upset_Discussion, Post_Future.Friends, Post_Future.Finish_HS, Post_Future.Stay_Safe, Post_Future.Alive_Well, Post_Future.Happy_Life, Post_Future.Manage_Work, Post_Future.Proud_Parents, Post_Future.Solve_Problems, Post_Future.Interesting_Life, Post_Violence.Coping, Post_Violence.Cowardice, Post_Violence.Self_Care, Post_Violence.Anger_Mgmt, Post_Violence.Negotiation, Post_Violence.Self_Defense, Post_Violence.Handle_Others, Post_Violence.Self_Awareness, Post_Violence.Parent_Approval, Post_Violence.Parent_Disapproval, Post_Violence.Teasing_Prevention FROM Assessments AS Pre_Assessments LEFT JOIN Assessments as Post_Assessments ON (Pre_Assessments.Participant_ID=Post_Assessments.Participant_ID AND Pre_Assessments.Assessment_ID!=Post_Assessments.Assessment_ID) LEFT JOIN Participants_Baseline_Assessments ON (Pre_Assessments.Baseline_ID=Baseline_Assessment_ID) LEFT JOIN Participants_Caring_Adults AS Pre_Caring ON (Pre_Caring.Caring_Adults_ID=Pre_Assessments.Caring_ID) LEFT JOIN Participants_Caring_Adults AS Post_Caring ON (Post_Caring.Caring_Adults_ID=Post_Assessments.Caring_ID) LEFT JOIN Participants_Future_Expectations AS Pre_Future ON (Pre_Future.Future_Expectations_ID=Pre_Assessments.Future_ID) LEFT JOIN Participants_Future_Expectations AS Post_Future ON (Post_Future.Future_Expectations_ID=Post_Assessments.Future_ID) LEFT JOIN Participants_Interpersonal_Violence AS Pre_Violence ON (Pre_Violence.Interpersonal_Violence_ID=Pre_Assessments.Violence_ID) LEFT JOIN Participants_Interpersonal_Violence AS Post_Violence ON (Post_Violence.Interpersonal_Violence_ID=Post_Assessments.Violence_ID) LEFT JOIN Participants ON Pre_Assessments.Participant_ID=Participants.Participant_ID LEFT JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID ',
+        'SELECT  Pre_Assessments.Participant_ID, First_Name, Last_Name, Pre_Caring.Program, Session_Names.Session_Name, Programs.Name, Pre_Assessments.Date_Logged, Post_Assessments.Date_Logged, Home_Language, Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_E, BYS_T, JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, JVQ_12, US_Born, Pre_Caring.Check_In, Pre_Caring.Know_You, Pre_Caring.Compliment, Pre_Caring.Crisis_Help, Pre_Caring.Pay_Attention, Pre_Caring.KnowImportance, Pre_Caring.Personal_Advice, Pre_Caring.Upset_Discussion, Pre_Future.Friends, Pre_Future.Finish_HS, Pre_Future.Stay_Safe,  Pre_Future.Alive_Well, Pre_Future.Happy_Life, Pre_Future.Manage_Work, Pre_Future.Proud_Parents, Pre_Future.Solve_Problems, Pre_Future.Interesting_Life, Pre_Violence.Coping, Pre_Violence.Cowardice, Pre_Violence.Self_Care, Pre_Violence.Anger_Mgmt, Pre_Violence.Negotiation, Pre_Violence.Self_Defense, Pre_Violence.Handle_Others, Pre_Violence.Self_Awareness, Pre_Violence.Parent_Approval, Pre_Violence.Parent_Disapproval, Pre_Violence.Teasing_Prevention, Post_Caring.Check_In, Post_Caring.Know_You, Post_Caring.Compliment, Post_Caring.Crisis_Help, Post_Caring.Pay_Attention, Post_Caring.KnowImportance, Post_Caring.Personal_Advice, Post_Caring.Upset_Discussion, Post_Future.Friends, Post_Future.Finish_HS, Post_Future.Stay_Safe, Post_Future.Alive_Well, Post_Future.Happy_Life, Post_Future.Manage_Work, Post_Future.Proud_Parents, Post_Future.Solve_Problems, Post_Future.Interesting_Life, Post_Violence.Coping, Post_Violence.Cowardice, Post_Violence.Self_Care, Post_Violence.Anger_Mgmt, Post_Violence.Negotiation, Post_Violence.Self_Defense, Post_Violence.Handle_Others, Post_Violence.Self_Awareness, Post_Violence.Parent_Approval, Post_Violence.Parent_Disapproval, Post_Violence.Teasing_Prevention FROM Assessments AS Pre_Assessments LEFT JOIN Assessments as Post_Assessments ON (Pre_Assessments.Participant_ID=Post_Assessments.Participant_ID AND Pre_Assessments.Assessment_ID!=Post_Assessments.Assessment_ID AND Post_Assessments.Session_ID = Pre_Assessments.Session_ID) LEFT JOIN Participants_Baseline_Assessments ON (Pre_Assessments.Baseline_ID=Baseline_Assessment_ID) LEFT JOIN Participants_Caring_Adults AS Pre_Caring ON (Pre_Caring.Caring_Adults_ID=Pre_Assessments.Caring_ID) LEFT JOIN Participants_Caring_Adults AS Post_Caring ON (Post_Caring.Caring_Adults_ID=Post_Assessments.Caring_ID) LEFT JOIN Participants_Future_Expectations AS Pre_Future ON (Pre_Future.Future_Expectations_ID=Pre_Assessments.Future_ID) LEFT JOIN Participants_Future_Expectations AS Post_Future ON (Post_Future.Future_Expectations_ID=Post_Assessments.Future_ID) LEFT JOIN Participants_Interpersonal_Violence AS Pre_Violence ON (Pre_Violence.Interpersonal_Violence_ID=Pre_Assessments.Violence_ID) LEFT JOIN Participants_Interpersonal_Violence AS Post_Violence ON (Post_Violence.Interpersonal_Violence_ID=Post_Assessments.Violence_ID) LEFT JOIN Participants ON Pre_Assessments.Participant_ID=Participants.Participant_ID  LEFT JOIN Session_Names ON Pre_Assessments.Session_ID = Session_Names.Session_ID LEFT JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID ',
         'non_admin_string' => ' ',
         'non_admin_string2' => ' AND Session_Names.Program_ID = ',
         'add_access' => '1',
-        'query2' => ' WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL AND Post_Assessments.Pre_Post=2 ',
+        'query2' => ' WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL AND Post_Assessments.Pre_Post=2 AND Pre_Assessments.Date_Logged IN ( SELECT  MAX(Date_Logged) FROM Assessments WHERE Pre_Post =1 GROUP BY Session_ID, Participant_ID) AND  Post_Assessments.Date_Logged IN ( SELECT  MAX(Date_Logged) FROM Assessments WHERE Pre_Post =2 GROUP BY Session_ID, Participant_ID)  ',
         'query3' => ' GROUP BY Pre_Assessments.Assessment_ID ',
-        'titles' => array("Participant ID", "First Name", "Last Name", "Session ID (of program)", "Session Name", "Program Name", "Home Language", "Ethnicity", "Race"),
-        'legend' => array("(id)", "(name)", "(name)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
+        'titles' => array("Participant ID", "First Name", "Last Name", "Session ID (of program)", "Session Name",  "Program Name", "Date Entered, Pre Survey", "Date Entered, Post Survey", "Home Language", "Ethnicity", "Race"),
+        'legend' => array("(id)", "(name)", "(name)", "(id)", "session", "(program)", "date entered, pre survey", "date entered, post survey", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
 
         'enlace_new_surveys_deid' => array('db'=>'enlace', 'query'=> 
-        'SELECT  Pre_Assessments.Participant_ID, Pre_Caring.Program, Session_Name, Name, Home_Language, Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_E, BYS_T, JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, JVQ_12, US_Born, Pre_Caring.Check_In, Pre_Caring.Know_You, Pre_Caring.Compliment, Pre_Caring.Crisis_Help, Pre_Caring.Pay_Attention, Pre_Caring.KnowImportance, Pre_Caring.Personal_Advice, Pre_Caring.Upset_Discussion, Pre_Future.Friends, Pre_Future.Finish_HS, Pre_Future.Stay_Safe,  Pre_Future.Alive_Well, Pre_Future.Happy_Life, Pre_Future.Manage_Work, Pre_Future.Proud_Parents, Pre_Future.Solve_Problems, Pre_Future.Interesting_Life, Pre_Violence.Coping, Pre_Violence.Cowardice, Pre_Violence.Self_Care, Pre_Violence.Anger_Mgmt, Pre_Violence.Negotiation, Pre_Violence.Self_Defense, Pre_Violence.Handle_Others, Pre_Violence.Self_Awareness, Pre_Violence.Parent_Approval, Pre_Violence.Parent_Disapproval, Pre_Violence.Teasing_Prevention, Post_Caring.Check_In, Post_Caring.Know_You, Post_Caring.Compliment, Post_Caring.Crisis_Help, Post_Caring.Pay_Attention, Post_Caring.KnowImportance, Post_Caring.Personal_Advice, Post_Caring.Upset_Discussion, Post_Future.Friends, Post_Future.Finish_HS, Post_Future.Stay_Safe, Post_Future.Alive_Well, Post_Future.Happy_Life, Post_Future.Manage_Work, Post_Future.Proud_Parents, Post_Future.Solve_Problems, Post_Future.Interesting_Life, Post_Violence.Coping, Post_Violence.Cowardice, Post_Violence.Self_Care, Post_Violence.Anger_Mgmt, Post_Violence.Negotiation, Post_Violence.Self_Defense, Post_Violence.Handle_Others, Post_Violence.Self_Awareness, Post_Violence.Parent_Approval, Post_Violence.Parent_Disapproval, Post_Violence.Teasing_Prevention FROM Assessments AS Pre_Assessments LEFT JOIN Assessments as Post_Assessments ON (Pre_Assessments.Participant_ID=Post_Assessments.Participant_ID AND Pre_Assessments.Assessment_ID!=Post_Assessments.Assessment_ID) LEFT JOIN Participants_Baseline_Assessments ON (Pre_Assessments.Baseline_ID=Baseline_Assessment_ID) LEFT JOIN Participants_Caring_Adults AS Pre_Caring ON (Pre_Caring.Caring_Adults_ID=Pre_Assessments.Caring_ID) LEFT JOIN Participants_Caring_Adults AS Post_Caring ON (Post_Caring.Caring_Adults_ID=Post_Assessments.Caring_ID) LEFT JOIN Participants_Future_Expectations AS Pre_Future ON (Pre_Future.Future_Expectations_ID=Pre_Assessments.Future_ID) LEFT JOIN Participants_Future_Expectations AS Post_Future ON (Post_Future.Future_Expectations_ID=Post_Assessments.Future_ID) LEFT JOIN Participants_Interpersonal_Violence AS Pre_Violence ON (Pre_Violence.Interpersonal_Violence_ID=Pre_Assessments.Violence_ID) LEFT JOIN Participants_Interpersonal_Violence AS Post_Violence ON (Post_Violence.Interpersonal_Violence_ID=Post_Assessments.Violence_ID) LEFT JOIN Participants ON Pre_Assessments.Participant_ID=Participants.Participant_ID LEFT JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID  ',
+        'SELECT  Pre_Assessments.Participant_ID, Pre_Caring.Program, Session_Name, Name, Pre_Assessments.Date_Logged, Post_Assessments.Date_Logged, Home_Language, Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_E, BYS_T, JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, JVQ_12, US_Born, Pre_Caring.Check_In, Pre_Caring.Know_You, Pre_Caring.Compliment, Pre_Caring.Crisis_Help, Pre_Caring.Pay_Attention, Pre_Caring.KnowImportance, Pre_Caring.Personal_Advice, Pre_Caring.Upset_Discussion, Pre_Future.Friends, Pre_Future.Finish_HS, Pre_Future.Stay_Safe,  Pre_Future.Alive_Well, Pre_Future.Happy_Life, Pre_Future.Manage_Work, Pre_Future.Proud_Parents, Pre_Future.Solve_Problems, Pre_Future.Interesting_Life, Pre_Violence.Coping, Pre_Violence.Cowardice, Pre_Violence.Self_Care, Pre_Violence.Anger_Mgmt, Pre_Violence.Negotiation, Pre_Violence.Self_Defense, Pre_Violence.Handle_Others, Pre_Violence.Self_Awareness, Pre_Violence.Parent_Approval, Pre_Violence.Parent_Disapproval, Pre_Violence.Teasing_Prevention, Post_Caring.Check_In, Post_Caring.Know_You, Post_Caring.Compliment, Post_Caring.Crisis_Help, Post_Caring.Pay_Attention, Post_Caring.KnowImportance, Post_Caring.Personal_Advice, Post_Caring.Upset_Discussion, Post_Future.Friends, Post_Future.Finish_HS, Post_Future.Stay_Safe, Post_Future.Alive_Well, Post_Future.Happy_Life, Post_Future.Manage_Work, Post_Future.Proud_Parents, Post_Future.Solve_Problems, Post_Future.Interesting_Life, Post_Violence.Coping, Post_Violence.Cowardice, Post_Violence.Self_Care, Post_Violence.Anger_Mgmt, Post_Violence.Negotiation, Post_Violence.Self_Defense, Post_Violence.Handle_Others, Post_Violence.Self_Awareness, Post_Violence.Parent_Approval, Post_Violence.Parent_Disapproval, Post_Violence.Teasing_Prevention FROM Assessments AS Pre_Assessments LEFT JOIN Assessments as Post_Assessments ON (Pre_Assessments.Participant_ID=Post_Assessments.Participant_ID AND Pre_Assessments.Assessment_ID!=Post_Assessments.Assessment_ID AND Pre_Assessments.Session_ID = Post_Assessments.Session_ID) LEFT JOIN Participants_Baseline_Assessments ON (Pre_Assessments.Baseline_ID=Baseline_Assessment_ID) LEFT JOIN Participants_Caring_Adults AS Pre_Caring ON (Pre_Caring.Caring_Adults_ID=Pre_Assessments.Caring_ID) LEFT JOIN Participants_Caring_Adults AS Post_Caring ON (Post_Caring.Caring_Adults_ID=Post_Assessments.Caring_ID) LEFT JOIN Participants_Future_Expectations AS Pre_Future ON (Pre_Future.Future_Expectations_ID=Pre_Assessments.Future_ID) LEFT JOIN Participants_Future_Expectations AS Post_Future ON (Post_Future.Future_Expectations_ID=Post_Assessments.Future_ID) LEFT JOIN Participants_Interpersonal_Violence AS Pre_Violence ON (Pre_Violence.Interpersonal_Violence_ID=Pre_Assessments.Violence_ID) LEFT JOIN Participants_Interpersonal_Violence AS Post_Violence ON (Post_Violence.Interpersonal_Violence_ID=Post_Assessments.Violence_ID) LEFT JOIN Participants ON Pre_Assessments.Participant_ID=Participants.Participant_ID  LEFT JOIN Session_Names ON Pre_Assessments.Session_ID = Session_Names.Session_ID LEFT JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID ',
         'non_admin_string' => ' ',
         'non_admin_string2' => ' AND Session_Names.Program_ID = ',
         'add_access' => '1',
-        'query2' => ' WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL AND Post_Assessments.Pre_Post=2 ',
+        'query2' => ' WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL AND Post_Assessments.Pre_Post=2 AND Pre_Assessments.Date_Logged IN ( SELECT  MAX(Date_Logged) FROM Assessments WHERE Pre_Post =1 GROUP BY Session_ID, Participant_ID) AND  Post_Assessments.Date_Logged IN ( SELECT  MAX(Date_Logged) FROM Assessments WHERE Pre_Post =2 GROUP BY Session_ID, Participant_ID) ',
         'query3' => ' GROUP BY Pre_Assessments.Assessment_ID ',
-        'titles' => array("Participant ID", "Session ID (of program)", "Session Name", "Program Name", "Home Language", "Ethnicity", "Race"),
-        'legend' => array("(id)", "(id)", "session", "(program)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
+        'titles' => array("Participant ID", "Session ID (of program)", "Session Name", "Program Name", "Date Entered, Pre Survey", "Date Entered, Post Survey", "Home Language", "Ethnicity", "Race"),
+        'legend' => array("(id)", "(id)", "session", "(program)", "date entered, pre survey", "date entered, post survey", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race")), 
 
         
         'swop_campaigns_deid'=>array('db'=>'SWOP', 'query'=>
@@ -1846,25 +1898,41 @@ LEFT JOIN
              'titles' => array("Teacher Exchange ID", "Participant ID", "Classroom", 
                  "Home Teacher", "Exchange Teacher")),
 
+        'trp_lc_constant_data' => array('db' => 'TRP', 'query' =>
+        'SELECT Participants.First_Name, Participants.Last_Name, LC_Basics.* FROM LC_Basics LEFT JOIN Participants ON LC_Basics.Participant_ID = Participants.Participant_ID',
+        'titles' => array("First Name", "Last Name", "Unique ID", "Participant ID", "Household Size", "Parent1 AGI", "Parent2 AGI", "Student AGI", "ACT Score", "High School GPA", "Dependency Status", "Father's Highest Level of Education", "Mother's Highest Level of Education", "Student Aspiration", "First Generation College Student", "Persistence/Graduation", "Student Hometown", "Student High School", "Number of Scholarship Applications", "Number of Scholarships Received", "Scholarship Volume Offered", "Scholarships Volume Received", "Household Income", "AMI", "Move In Date", "Move Out Date", "24 or older?", "Masters Degree?", "Married?", "Has Children?", "Homeless?", "Self Sustaining?")),
 
+        'trp_lc_constant_data_deid' => array('db' => 'TRP', 'query' =>
+        'SELECT * FROM LC_Basics LEFT JOIN Participants ON LC_Basics.Participant_ID = Participants.Participant_ID',
+        'titles' => array("Unique ID", "Participant ID", "Household Size", "Parent1 AGI", "Parent2 AGI", "Student AGI", "ACT Score", "High School GPA", "Dependency Status", "Father's Highest Level of Education", "Mother's Highest Level of Education", "Student Aspiration", "First Generation College Student", "Persistence/Graduation", "Student Hometown", "Student High School", "Number of Scholarship Applications", "Number of Scholarships Received", "Scholarship Volume Offered", "Scholarships Volume Received", "Household Income", "AMI", "Move In Date", "Move Out Date", "24 or older?", "Masters Degree?", "Married?", "Has Children?", "Homeless?", "Self Sustaining?")),
+
+        'trp_lc_by_term' => array('db' => 'TRP', 'query' =>
+        'SELECT First_Name, Last_Name, LC_Terms.*, College_Name FROM LC_Terms LEFT JOIN Participants ON LC_Terms.Participant_ID = Participants.Participant_ID LEFT JOIN Colleges ON LC_Terms.College_ID = Colleges.College_ID',
+        'titles' => array("First Name", "Last Name", "Term_ID", "Participant_ID", "College_ID", "Term_Type", "Term", "School_Year", "Credits", "Subsidized_Loan", "Unsubsidized_Loan", "Major", "Minor", "Expected_Match", "Actual_Match", "College_GPA", "Internship_Status", "Intern_Hours", "Dropped_Classes", "Dropped_Credits", "College_Name")),
+
+        'trp_lc_by_term_deid' => array('db' => 'TRP', 'query' =>
+        'SELECT LC_Terms.*, College_Name FROM LC_Terms  LEFT JOIN Colleges ON LC_Terms.College_ID = Colleges.College_ID',
+        'titles' => array("Term_ID", "Participant_ID", "College_ID", "Term_Type", "Term", "School_Year", "Credits", "Subsidized_Loan", "Unsubsidized_Loan", "Major", "Minor", "Expected_Match", "Actual_Match", "College_GPA", "Internship_Status", "Intern_Hours", "Dropped_Classes", "Dropped_Credits", "College_Name")),
+
+        'trp_lc_colleges' => array('db' => 'TRP', 'query' =>
+        'SELECT * FROM Colleges',
+        'titles' => array("College ID", "College Name", "College Type (2-year or 4-year)", "Selectivity")),
+
+        'trp_lc_xls_emulator' => array('db' => 'TRP', 'query' =>
+        'SELECT LC_Basics.Participant_ID, Cohort, Status, Handbook, Floor, Pod, Room_Number, Key_Card_Number, Transcript_Submitted, Service_Hours_Submitted, Participants.First_Name, Participants.Last_Name, DOB,  LCRC_Username, LCRC_Password, LCRC_Print_Code, Gender, Roommate, Application_Received, Application_Completed, Email, Email_2, Address_Street_Num, Address_Street_Direction, Address_Street_Name, Address_Street_Type, Address_City, Address_State, Address_Zipcode, Participants.Phone, Mobile_Phone, Student_High_School, ACT_Score, High_School_GPA, HS_GPA_Weighted, Expected_Graduation_Year, College_Grade_Level, Major, Minor, College_Name, College_Type, Selectivity, Expected_Match, Actual_Match, Credits, College_GPA, School_Year, Term_Type, Dropped_Classes, Dropped_Credits,  Reason_Leave, Reason_Stay, Student_Aspiration, Mother_Highest_Level_Education, Father_Highest_Level_Education, First_Generation_College_Student, Internship_Status, Intern_Hours,  Mid_Twenties, Masters_Degree, Married, Military, Has_Children, Homeless, Self_Sustaining, Dependency_Status, Tax_Exemptions, Household_Size, Household_Size_TRP, Parent1_AGI, Parent2_AGI, Student_AGI, AMI,  Tuition, Mandatory_Fees, College_Cost, Pell_Grant, MAP_Grant, University_Scholarship, Subsidized_Loan, Unsubsidized_Loan, Savings, Family_Help, LC_Scholarship, Application_Source, Notes, Email_Pack, Email_Orientation, Email_Roommate, Move_In_Date, Move_In_Time, Move_In_Registration, Move_In_Address, Move_In_Note, Orientation_Date, Orientation_Time,  Emergency_Contacts.First_Name, Emergency_Contacts.Last_Name, Emergency_Contacts.Phone, Emergency_Contacts.Relationship  FROM LC_Basics LEFT JOIN Participants on Participants.Participant_ID = LC_Basics.Participant_ID LEFT JOIN LC_Terms ON LC_Basics.Participant_ID = LC_Terms.Participant_ID LEFT JOIN Emergency_Contacts ON LC_Basics.Participant_ID = Emergency_Contacts.Participant_ID LEFT JOIN Colleges on LC_Terms.College_ID = Colleges.College_ID GROUP BY LC_Basics.Participant_ID ',
+        'titles' => array("Database ID", "Group", "Status", "Hndbk", "Floor", "Pod", "Room #", "Key Card #", "Transcript Submitted (Fall)", "20 Service Hours Submitted", "First", "Last", "Date of Birth", "LCRC Username", "LCRC Password", "LCRC Print Code", "Gender", "Roommate", "Application Received (date)", "Application Completed (date)", "Email", "e-Mail 2", "Mailing Address", "", "", "", "Mailing City", "Mailing State", "Zip Code", "Home Phone", "Mobile", "High School", "ACT Score", "HS GPA (Unweighted)", "HS GPA (Weighted)", "Expected Graduation Date", "College Gade Level", "Major", "Minor", "College Name", "College Type", "Selectivity      (of Current College)", "Student's Expected Match Level", "Student's Actual Match Level", "Credits acrrued", "GPA", "Term Year", "Term Season", "Dropped classes", "If dropped classes,  how many credits?",  "Why did you leave La Casa?", "Why did you stay at La Casa?", "Highest Level of Ed (GOAL)", "Highest level of Ed completed by Mother", "Highest level of Ed completed by Father", "First Generation", "Internship for 2014-2105? -- fall 2014", "If so,  where and how many hours per term?", "Age 24 or older? (No=0  | Yes=1)", "Master or Above? (No=0  | Yes=1)", "Married?  (No=0  | Yes=1)", "Military?     (No=0  | Yes=1)", "Has children? (No=0  | Yes=1)", "Homeless?  (No=0  | Yes=1)", "Self Sutaining (If Stdt income = $12, 510)                    (No=0  | Yes=1)", "Dependency Status", "Tax Exemptions", "Household size (per La Casa Application)", "Household Size for TRP", "Parent 1 AGI", "Parent2 AGI", "Student's AGI",  "Actual AMI", "Tuition", "Mandatory Fees (Do not include Loan fees)", "Actual COST OF ATTENDENCE (According to College)", "Pell Grant", "MAP Grant", "University Scholarships", "Federal Direct Subsidized Loan (enter $3, 500 for 4-year or $0 for CC)", "Federal Direct Unsubsidized Loan               (Enter $0 for all)", "Savings", "Family Assistance/Sponsor/Other", "La Casa Scholarship (Annual Award)", "Application Source", "Notes", "e-Mail: Pack This!", "e-Mail: Move-in & Orientation", "e-Mail: Roommate", "Move-In", "Move in time", "Move-In Registrtion", "Move in Address", "Move-in Note", "Orientation Date", "Orientation Time", "Emergency Contact  (First Name)", "Emergency Contact (Last Name)", "Emergency Contact (Phone)", "Emergency Contact (Relationship)"))
 
                  );
     $db_array=array(2=>'LSNA', 3=>'bickerdike', 4=>'TRP', 5=>'SWOP', 6=>'enlace');
     if (array_key_exists($download_name, $download_list_array)){
-    if (isset($_COOKIE['user'])){
+        if ( isLoggedIn()){
         //add a couple lines here to check the privileges, so we know whether
         //this person is authorized to view given exports
-
-        include "dbconnopen.php";
-        $get_privileges_sqlsafe="SELECT Privilege_ID, Program_Access FROM Users_Privileges"
-                . " LEFT JOIN Users ON Users_Privileges.User_ID=Users.User_ID WHERE "
-            . "User_Email='" . mysqli_real_escape_string($cnnLISC, $_COOKIE['user']) . "'";
-        $privilege_set=mysqli_query($cnnLISC, $get_privileges_sqlsafe);
         $accesses=array();
         $programs = array();
-        while ($privilege=mysqli_fetch_row($privilege_set)){
-            $accesses[]=$privilege[0];
-            $programs[] = $privilege[1];
+        foreach ($permissions as $site_id => $site_info) {
+            $accesses[] = $site_id;
+            $programs[$site_id] = $site_info[1];
         }
         $get_db_id=array_search($download_list_array[$download_name]['db'], $db_array);
         $has_permission=in_array($get_db_id, $accesses);
@@ -1928,8 +1996,7 @@ LEFT JOIN
 
 
         //get program access if relevant
-        $db_key = array_search($get_db_id, $accesses);
-        $program_access = $programs[$db_key];
+        $program_access = $programs[$get_db_id];
 
         if ($program_access == 'a'){ //plain query for users with full access
             $query_sqlsafe = $download_list_array[$download_name]['query'] . $download_list_array[$download_name]['query2'] . $download_list_array[$download_name]['query3'];
@@ -1952,11 +2019,13 @@ LEFT JOIN
                 }
             }
         }
-        
+
         $rows = mysqli_query($database_conn, $query_sqlsafe);
-    if ($download_name == 'enlace_participant_dosage' || $download_name == 'enlace_participant_dosage_deid'){
-        include "../enlace/include/dosage_percentage.php"; //only included for Enlace dosage calculation
+    if ($download_name == 'enlace_participant_dosage' || $download_name == 'enlace_participant_dosage_deid' || $download_name == 'enlace_total_dosage' || $download_name == 'enlace_total_dosage_deid'){
+        include_once("../enlace/include/dosage_percentage.php");
+        include_once("../enlace/include/total_dosage_sum.php"); //only included for Enlace dosage calculation
     }
+
         // loop over the rows, outputting them
         while ($row = mysqli_fetch_row($rows)) {
             // if this is the Enlace dosage export, we need to calculate dosage
@@ -1965,6 +2034,10 @@ LEFT JOIN
                 array_push($row, $dosage[0]);
                 array_push($row, $dosage[1]);
                 array_push($row, $dosage[2]);
+            }
+            elseif ($download_name == 'enlace_total_dosage' || $download_name == 'enlace_total_dosage_deid'){
+                $dosage_sum = calculate_dosage_sum($row[0]);
+                array_push($row, $dosage_sum);
             }
             fputcsv($output, $row);
             
@@ -1989,6 +2062,6 @@ LEFT JOIN
         //done something nefarious.
     }
 }
-generalized_download($_GET['download_name']);
-//generalized_download('aldermans_records');
+generalized_download($_GET['download_name'], $USER->site_permissions);
+//generalized_download('enlace_total_dosage', $USER->site_permissions);
 ?>

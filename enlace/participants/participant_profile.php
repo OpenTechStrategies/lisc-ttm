@@ -1,4 +1,23 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
@@ -298,11 +317,11 @@ include "../include/dbconnclose.php";
                     <?php
                     //get assessments:
                     $query = "SELECT MONTH(Participants_Caring_Adults.Date_Logged), DAY(Participants_Caring_Adults.Date_Logged), YEAR(Participants_Caring_Adults.Date_Logged), 
-                Assessments.Pre_Post, Name, Assessment_ID FROM Assessments
+                Assessments.Pre_Post, Programs.Name, Assessment_ID FROM Assessments
                 LEFT JOIN Participants_Caring_Adults ON Caring_Id=Caring_Adults_ID
                 LEFT JOIN Participants_Future_Expectations ON Future_Id=Future_Expectations_ID
                 LEFT JOIN Participants_Interpersonal_Violence ON Violence_Id=Interpersonal_Violence_ID
-                LEFT JOIN Session_Names ON Participants_Future_Expectations.Program=Session_Names.Session_ID
+                LEFT JOIN Session_Names ON Assessments.Session_ID=Session_Names.Session_ID
                 LEFT JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID
                 WHERE Assessments.Participant_ID=$person->participant_id";
                     //  echo $query;
@@ -465,7 +484,10 @@ include "../include/dbconnclose.php";
                 <td><a href="participant_profile.php?id=<?php echo $child['Participant_ID']; ?>"><?php echo $child['First_Name'] . " " . $child['Last_Name']; ?></a></td></tr><?php
         }
         ?>
-        <tr class="no_view"><td colspan="2"><a class="search_toggle" onclick="
+<?php
+                     if ($USER->has_site_access($Enlace_id, $DataEntryAccess)){
+?>
+        <tr><td colspan="2"><a class="search_toggle" onclick="
                 $('#find_relative').toggle();
                                                "><em>Search to add a parent or child:</em></a></td></tr>
         <tr><td colspan="2"><table class="search_table" id="find_relative">
@@ -623,6 +645,9 @@ include "../include/dbconnclose.php";
                                                 }
                                                 ).fail(function() {alert('You do not have permission to perform this action.');})">
                             </table>
+<?php
+} //end access check
+?>
                     </td></tr></table></td></tr></table>
 <br/><br/>
 
@@ -678,8 +703,7 @@ forms as well.-->
                                 form: consent_given
                             },
                     function(response) {
-                        document.write(response);
-                        //window.location='participant_profile.php';
+                        window.location='participant_profile.php?id=<?php echo $person->participant_id ?>';
                     }
                     ).fail(function() {alert('You do not have permission to perform this action.');})"></td>
         </tr>
@@ -1091,7 +1115,6 @@ forms as well.-->
                                     note: this.value
                                 },
                         function(response) {
-                            //document.write(response);
                             window.location = 'participant_profile.php?id=<?php echo $person->participant_id; ?>';
                         }
                         ).fail(function() {alert('You do not have permission to perform this action.');})">Add followup note here.</textarea></td></tr>

@@ -1,4 +1,23 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
@@ -53,7 +72,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 							$('#new_trp_event').show();
 							$('#trp_event_details').hide();
 							$('#outcomes').hide();
-						"><span class="add_new_button no_view">Add New Event</span></a></div>
+						"><span class="add_new_button">Add New Event</span></a></div>
 <?php
 } // end access level check
 ?>				
@@ -106,7 +125,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
 							<tr>
-								<td colspan="2"><a href="javascript:;" class="display helptext event_<?echo $event['Event_ID'];?>_edit_click no_view" onclick="
+								<td colspan="2"><a href="javascript:;" class="display helptext event_<?echo $event['Event_ID'];?>_edit_click" onclick="
 											$('.event_<?echo $event['Event_ID'];?>_edit_click').hide();
 											$('.event_<?echo $event['Event_ID'];?>_save_click').show();
 											$('.event_<?echo $event['Event_ID'];?>_display').hide();
@@ -127,7 +146,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
                                                                                     ).fail(failAlert);
 								" style="margin-left:30px;">Save changes</a><br/></td>
 								<td>
-									<a href="javascript:;" class="helptext no_view" onclick="
+									<a href="javascript:;" class="helptext" onclick="
 										$('#add_attendee_<?echo $event['Event_ID'];?>').toggle();
 									"
                                                                          >Add attendee...</a>
@@ -174,7 +193,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
 								<td>
-									<br/><input type="checkbox" id="<?echo $event['Event_ID'];?>_active" class="no_view" <?if ($event['Active']==1) { echo "checked";}?> 
+									<br/><input type="checkbox" id="<?echo $event['Event_ID'];?>_active" <?if ($event['Active']==1) { echo "checked";}?> 
                                                                                     onchange="StatusChange(this, '<?echo $event['Event_ID'];?>')"/><span style="font-size:.9em;font-style:italic;">Active?</span></td>
 <?php
 } // end access level check
@@ -270,7 +289,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
 							<tr>
-								<td colspan="2"><a href="javascript:;" class="display helptext event_<?echo $event['Event_ID'];?>_edit_click no_view" onclick="
+								<td colspan="2"><a href="javascript:;" class="display helptext event_<?echo $event['Event_ID'];?>_edit_click" onclick="
 											$('.event_<?echo $event['Event_ID'];?>_edit_click').hide();
 											$('.event_<?echo $event['Event_ID'];?>_save_click').show();
 											$('.event_<?echo $event['Event_ID'];?>_display').hide();
@@ -292,7 +311,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
                                                                                     ).fail(failAlert);
 								" style="margin-left:30px;">Save changes</a><br/></td>
 								<td>
-									<a href="javascript:;" class="helptext no_view" onclick="
+									<a href="javascript:;" class="helptext" onclick="
 										$('#add_attendee_<?echo $event['Event_ID'];?>').toggle();
 									">Add attendee...</a>
 								</td>
@@ -339,7 +358,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
 							<tr>
 								<td>
-									<br/><input type="checkbox" id="<?echo $event['Event_ID'];?>_active"  class="no_view" <?if ($event['Active']==1) { echo "checked";}?> 
+									<br/><input type="checkbox" id="<?echo $event['Event_ID'];?>_active"  <?if ($event['Active']==1) { echo "checked";}?> 
                                                                                     onchange="StatusChange(this, '<?echo $event['Event_ID'];?>')"/><span style="font-size:.9em;font-style:italic;">Active?</span></td>
 								<td></td>
 								<td>
@@ -478,7 +497,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
     if ($USER->has_site_access($TRP_id, $DataEntryAccess)) {
 ?>
 
-									<td><input type="button" class="no_view" value="Add" onclick="
+									<td><input type="button" value="Add" onclick="
 										$.post(
 											'../ajax/save_outcomes_data.php',
 											{

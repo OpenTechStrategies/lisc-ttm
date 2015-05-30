@@ -1,4 +1,23 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
@@ -11,6 +30,7 @@ user_enforce_has_access($Enlace_id);
 $access_array = $USER->program_access($Enlace_id);
 
 $has_all_programs = in_array('a', $access_array);
+
 ?>
 
 <h3>Program Quality Report</h3>
@@ -24,21 +44,17 @@ $has_all_programs = in_array('a', $access_array);
             ?>
             <option value="0">Show results for all programs</option>
             <?php
-        }
-        ?>   
-        <?php
-        //if not an administrator
-if ( ! $has_all_programs) {
+            $get_all_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names
+                        INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID
+                        ORDER BY Name";
+    }
+    else{
             //get user's programs
             $get_all_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names
                         INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID
-                        AND Programs.Program_ID = " . $access[0] . "
+                        AND Programs.Program_ID = " . $access_array[0] . "
                         ORDER BY Name";
-        } else {
-            $get_all_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names
-                        INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID
-                        ORDER BY Name";
-        }
+    }
 
         include "../include/dbconnopen.php";
         $all_programs = mysqli_query($cnnEnlace, $get_all_programs);
@@ -99,7 +115,8 @@ if ( ! $has_all_programs) {
 
 <?php
 if (isset($_POST['submit_quality'])) {
-
+    $program_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['program_select']);
+    $question_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['question_select']);
     /* show results with no question selected (i.e. show all questions) */
     if ($_POST['question_select'] == '0') {
         ?>
@@ -109,7 +126,6 @@ if (isset($_POST['submit_quality'])) {
             <?php
             /* get denominator for percentages: */
             $get_denom = "SELECT COUNT(*) FROM Program_Surveys";
-            $program_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['program_select']);
             if ($_POST['program_select'] != 0) {
                 $get_denom = "SELECT COUNT(*) FROM Program_Surveys WHERE Session_ID='" . $program_select_sqlsafe . "'";
             }
@@ -168,7 +184,6 @@ if (isset($_POST['submit_quality'])) {
 
                 <?php
                 /* get answers to the selected question, group count by the answer to the question. */
-                $question_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['question_select']);
                 $get_responses = "SELECT COUNT(*) as count, " . $question_select_sqlsafe . " FROM Program_Surveys 
         GROUP BY " . $question_select_sqlsafe;
                 /* get denominator for percentages: */

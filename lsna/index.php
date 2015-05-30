@@ -1,4 +1,23 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
@@ -23,8 +42,11 @@ include "include/datepicker.php";
 </div>
 <br/><br/>
 <!--Link to quickly add a new campaign event.-->
-<h4  class="no_view">Quick Add New Campaign Event</h4>
-<table style="margin-left:auto;margin-right:auto;font-size:.9em;" class="no_view">
+<?php
+                     if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
+?>
+<h4 >Quick Add New Campaign Event</h4>
+<table style="margin-left:auto;margin-right:auto;font-size:.9em;" >
 	<tr>
 		<td><strong>Event Name: </strong></td>
 		<td><input type="text" id="new_event_name" /></td>
@@ -98,8 +120,6 @@ include "include/datepicker.php";
                 type: document.getElementById('new_event_type').options[document.getElementById('new_event_type').selectedIndex].value
 			},
 			function (response){
-                            //document.write(response);
-				//window.location = 'program_profile.php?schedule=1';
 				document.getElementById('confirmation').innerHTML = response;
 			}
                         );
@@ -116,8 +136,6 @@ include "include/datepicker.php";
                 type: document.getElementById('new_event_type').options[document.getElementById('new_event_type').selectedIndex].value
 			},
 			function (response){
-                            //document.write(response);
-				//window.location = 'program_profile.php?schedule=1';
 				document.getElementById('confirmation').innerHTML = response;
 			}
                         );
@@ -129,6 +147,9 @@ include "include/datepicker.php";
 			</td>
 	</tr>
 </table>
+<?php
+                     } //end access check
+?>
 
 <br/><br/>
 </div>

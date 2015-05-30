@@ -1,4 +1,23 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
@@ -6,10 +25,10 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
 
 /*when editing participant, if the address changes then the block group must change too*/
         include ($_SERVER['DOCUMENT_ROOT']."/include/block_group_finder.php");
+        include "../include/dbconnopen.php";
         $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['id']);
         
 	$format_dob = explode('/', $_POST['dob']);
-        include "../include/dbconnopen.php";
         if ($format_dob[1]!='' && $format_dob[2]!=''){
 	$dob_sqlsafe = $format_dob[2] . '-' . $format_dob[0] . '-' . $format_dob[1];}
         else{$dob_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['dob']);}
@@ -26,12 +45,11 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
         $this_address=$_POST['address_num'] . " " .$_POST['address_dir'] . " " .$_POST['address_name'] . " " .$_POST['address_type'] . 
                 " " .$_POST['city'] . " " .$_POST['state'] . " " .$_POST['zip'];
         $block_group=do_it_all($this_address, $map);
-        echo $block_group;
         }
-        else{$block_group=$address_now[7]; echo "Same block group";}
+        else{$block_group=$address_now[7]; }
         	
 	include "../include/dbconnopen.php";
-        $_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['name']);
+        $name_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['name']);
         $surname_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['surname']);
         $address_num_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['address_num']);
         $address_dir_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['address_dir']);

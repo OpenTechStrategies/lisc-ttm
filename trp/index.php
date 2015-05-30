@@ -1,36 +1,28 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
 user_enforce_has_access($TRP_id);
 
-//if action is logout
-if ($_GET['action'] == 'logout') {
-    //kill cookie
-    setcookie('user', '', time() - 3600, '/');
-    setcookie('sites', '', time() - 3600, '/');
-    setcookie('page', '', time() - 3600, '/');
-    setcookie('category', '', time() - 3600, '/');
-    setcookie('participant', '', time() - 3600, '/');
-    setcookie('program', '', time() - 3600, '/');
-    setcookie('prog_page', '', time() - 3600, '/');
-    setcookie('session_id', '', time() - 3600, '/');
-    setcookie('user', '', time()-3600, '/');
-    setcookie('page', '', time()-3600, '/');
-    setcookie('participant', '', time()-3600, '/');
-    setcookie('sites[0]', '', time() - 3600, '/');
-    setcookie('sites[1]', '', time()-3600, '/');
-    setcookie('sites[2]', '', time()-3600, '/');
-    setcookie('sites[3]', '', time() - 3600, '/');
-    setcookie('sites[4]', '', time() - 3600, '/');
-    setcookie('sites[5]', '', time() - 3600, '/');
-    setcookie('sites[6]', '', time() - 3600, '/');
-    setcookie('sites[7]', '', time() - 3600, '/');
-    setcookie('view_restricted', '', time()-3600, '/');
-    setcookie('view_only', '', time()-3600, '/');
-    //redirect
-    header('Location: /index.php');
-}
 ?>
 <?php
 include "../header.php";
@@ -50,7 +42,7 @@ include "include/datepicker_simple.php";
 <h4>Create a New Event</h4>
 	<br/>
 				
-				<table id="add_new_table"  style="margin-left:auto;margin-right:auto;font-size:.9em;" class="no_view">
+				<table id="add_new_table"  style="margin-left:auto;margin-right:auto;font-size:.9em;">
 					<tr>
 						<td><strong>Event Name:</strong></td>
 						<td><input type="text" id="event_name" /></td>

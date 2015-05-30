@@ -1,4 +1,23 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 user_enforce_has_access($SWOP_id);
@@ -34,7 +53,7 @@ include "../include/datepicker_simple.php";
 		});
 </script>
 
-<?
+<?php
 include "../classes/participant.php";
 $participant=new Participant();
 $participant->load_with_participant_id($_COOKIE['participant']);
@@ -510,12 +529,12 @@ if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
                 might not be able to own a home, but a household of working adults may be able to. -->
 		 <h4>Household</h4>
                  <!-- Link to household (or households, but almost certainly just one) that this person belongs to: -->
-                        <?$find_household_sqlsafe="SELECT * FROM Households_Participants INNER JOIN Households ON Household_ID=New_Household_ID
+<?php $find_household_sqlsafe="SELECT * FROM Households_Participants INNER JOIN Households ON Household_ID=New_Household_ID
                             WHERE Participant_ID='".$parti['Participant_ID']."'";
                         include "../include/dbconnopen.php";
                         $this_household=mysqli_query($cnnSWOP, $find_household_sqlsafe);
                         while ($house=mysqli_fetch_array($this_household)){
-                            ?><a href='family_profile.php?household=<?php echo $house['New_Household_ID']?>'><?php echo $house['Household_Name'];?></a><?
+                            ?><a href='family_profile.php?household=<?php echo $house['New_Household_ID']?>'><?php echo $house['Household_Name'];?></a><?php
                             if ($house['Head_of_Household']=='1'){echo ' (Head) ';}
                                 echo "<br>";
                         }
@@ -529,7 +548,7 @@ if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
                         <div id="household_addition">
                             <!-- Either choose an existing household... -->
                         Add this person to an existing household: <select id="all_households"><option value="">-----</option>
-                            <?$get_households_sqlsafe = "SELECT * FROM Households;";
+                            <?php $get_households_sqlsafe = "SELECT * FROM Households;";
                             include "../include/dbconnopen.php";
                             $all_households=mysqli_query($cnnSWOP, $get_households_sqlsafe);
                             while ($household=mysqli_fetch_row($all_households)){
@@ -542,7 +561,7 @@ if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
                                 $primary_address=mysqli_query($cnnSWOP, $get_primary_address_sqlsafe);
                                 $address=mysqli_fetch_row($primary_address);
                                 ?><option value="<?php echo $household[0]?>"><?php echo $household[0] . ": " . $household[1] . '--' . $address[0] . " " . $address[1] . " " .
-                                        $address[2] . " " . $address[3];?></option><?
+                                        $address[2] . " " . $address[3];?></option><?php
                             }
                             include "../include/dbconnclose.php";?>
                         </select><br>
@@ -1044,8 +1063,7 @@ if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
                                                             },
                                                             function (response){
                                    var url = response;
-                                   var url_array = url.split('script>');
-                                   window.location = url_array[1];
+                                   window.location = url;
                                                             }
                                                         );
                                                     }

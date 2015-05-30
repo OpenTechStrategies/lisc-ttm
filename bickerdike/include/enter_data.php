@@ -1,4 +1,28 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($Bickerdike_id);
+
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker.php";
@@ -30,7 +54,7 @@ $user->load_with_user_id($_GET['user']);
     ?>
     Program in which survey was filled out: 
 
-    <!--Selects from all programs, though in other systems we've selected only from those
+    <!--Selects from all programs, though in other systems we\'ve selected only from those
     programs that the given participant is already linked to.-->
     <select id="program_id">
         <option value="">-----</option>
@@ -69,8 +93,7 @@ $user->load_with_user_id($_GET['user']);
             if (response != '') {
                 alert(response);
             }
-        }
-        );
+        });
         $('#parent_survey').show();
         $('#adult_survey').hide();
         $('#youth_survey').hide();
@@ -111,8 +134,7 @@ $user->load_with_user_id($_GET['user']);
             if (response != '') {
                 alert(response);
             }
-        }
-        );
+        });
         $('#parent_survey').hide();
         $('#adult_survey').hide();
         $('#youth_survey').show();
@@ -213,7 +235,7 @@ $user->load_with_user_id($_GET['user']);
                 function(response) {
                     document.getElementById('show_results').innerHTML = response;
                 }
-                )"></th>
+                ).fail(failAlert);"></th>
                         </tr>
                     </table>
 
@@ -352,7 +374,7 @@ $user->load_with_user_id($_GET['user']);
                         function(response) {
                             document.getElementById('show_survey_response').innerHTML = '<span style=' + 'color:#990000; font-weight:bold;' + '><strong>Thank you for entering this survey! </strong></span>';
                         }
-                        );">
+                        ).fail(failAlert);">
                     <em><a href="../users/user_profile.php?id=<? echo $user->user_id; ?>">Return to participant profile</a></em>
                 </td>
             </tr>
@@ -510,7 +532,7 @@ $user->load_with_user_id($_GET['user']);
                         function(response) {
                             document.getElementById('show_survey_response_adult').innerHTML = '<span style=color:#990000;font-weight:bold;font-size:.9em; padding-left: 25px;>Thank you for entering this survey!</span>';
                         }
-                        );">
+                        ).fail(failAlert);">
                     <em><a href="../users/user_profile.php?id=<? echo $user->user_id; ?>">Return to user profile</a></em>
                 </td>
             </tr>
@@ -646,7 +668,7 @@ $user->load_with_user_id($_GET['user']);
                         function(response) {
                             document.getElementById('show_survey_response_youth').innerHTML = 'Thank you for entering this survey! ';
                         }
-                        );">
+                        ).fail(failAlert);">
                     <em><a href="../users/user_profile.php?id=<? echo $user->user_id; ?>">Return to user profile</a></em>
                 </td>
             </tr>

@@ -1,4 +1,23 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
@@ -74,6 +93,7 @@ $baseline_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['baseline_id']
 $caring_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['caring_id']);
 $violence_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['violence_id']);
 $future_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['future_id']);
+$assessment_id_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_POST['assessment_id']);
 
 //find whether this person already has an assessment
 if ($_POST['edited'] != 1) {
@@ -197,7 +217,7 @@ if ($_POST['edited'] != 1) {
     }
 
     $insert_as_assessment = "INSERT INTO Assessments (Participant_ID, Baseline_ID, Caring_ID, Future_ID, Violence_ID, 
-            Pre_Post) VALUES ('" . $person_sqlsafe . "', '$baseline_id', '$caring_id', '$future_id', '$violence_id', '" . $pre_post_sqlsafe . "')";
+            Pre_Post, Session_ID) VALUES ('" . $person_sqlsafe . "', '$baseline_id', '$caring_id', '$future_id', '$violence_id', '" . $pre_post_sqlsafe . "', '" . $program_sqlsafe . "')";
     //echo $insert_as_assessment;
     include "../include/dbconnopen.php";
     mysqli_query($cnnEnlace, $insert_as_assessment);
@@ -258,7 +278,7 @@ Participant_ID='" . $person_sqlsafe . "',
         Pre_Post='" . $pre_post_sqlsafe . "',
         Date_Logged = '" . $base_date_sqlsafe . "'
             WHERE Interpersonal_Violence_ID='" . $violence_id_sqlsafe . "'";
-//echo $update_violence . "<br>";
+
 
     $update_future = "UPDATE Participants_Future_Expectations SET
     Participant_ID= '" . $person_sqlsafe . "',
@@ -275,13 +295,16 @@ Participant_ID='" . $person_sqlsafe . "',
         Pre_Post='" . $pre_post_sqlsafe . "',
         Date_Logged = '" . $base_date_sqlsafe . "'
             WHERE Future_Expectations_ID='" . $future_id_sqlsafe . "'";
-//echo $update_future . "<br>";
+
+    $update_assessments = "UPDATE Assessments SET Date_Logged = '" . $base_date_sqlsafe . "', Session_ID = '" . $program_sqlsafe . "' WHERE Assessment_ID = '" . $assessment_id_sqlsafe . "'";
+
 //EDITED QUERIES
     include "../include/dbconnopen.php";
     mysqli_query($cnnEnlace, $save_these);
     mysqli_query($cnnEnlace, $update_adults);
     mysqli_query($cnnEnlace, $update_violence);
     mysqli_query($cnnEnlace, $update_future);
+    mysqli_query($cnnEnlace, $update_assessments);
     include "../include/dbconnclose.php";
     ?>
     <span style="font-weight:bold;color:#990000;">Thank you for editing this assessment!

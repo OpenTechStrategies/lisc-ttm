@@ -1,4 +1,27 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+
+user_enforce_has_access($Bickerdike_id);
 
 //list all users, make them editable and deletable 
 //add search module
@@ -27,7 +50,14 @@ include "../header.php";
     
 <h3>Participants</h3><hr/><br/>
 
-<div style="text-align:center;"><a href="../users/add_user.php" class="add_new hide_on_view"><span class="add_new_button">Add New Participant</span></a></div><br/>
+<div style="text-align:center;">
+<?php
+    if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<a href="../users/add_user.php" class="add_new "><span class="add_new_button">Add New Participant</span></a></div><br/>
+<?php
+    } //end access check
+?>
 <h4>Search All Participants:</h4>
 <table class="search_table">
     <tr><td class="all_projects"><strong>First Name:</strong></td>
@@ -108,7 +138,7 @@ include "../header.php";
                                     //document.write(response);
                                     document.getElementById('show_results').innerHTML = response;
                                 }
-                           )"></th>
+                           ).fail(failAlert);"></th>
     </tr>
 </table>
 
@@ -149,7 +179,7 @@ or deleting them outright.  The merging is still not available on the live site.
                                     //document.write(response);
                                     document.getElementById('search_results1').innerHTML = response;
                                 }
-                           )"></td>
+                           ).fail(failAlert);"></td>
 			</tr>
 		</table>
 		<div id="search_results1"></div>
@@ -181,7 +211,7 @@ or deleting them outright.  The merging is still not available on the live site.
                                 function (response){
                                     document.getElementById('search_results2').innerHTML = response;
                                 }
-                           )"></td>
+                           ).fail(failAlert);"></td>
 			</tr>
 		</table>
 		<div id="search_results2"></div>

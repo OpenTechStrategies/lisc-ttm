@@ -1,4 +1,23 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
@@ -46,7 +65,7 @@ include "../include/datepicker.php";
 
     include "../classes/participants.php";
     $parti = new Participant();
-    $parti->load_with_participant_id($_GET['participant']);
+    $parti->load_with_participant_id($_COOKIE['participant']);
 
     if ($_GET['inst'] == 1) {
         /* loads the page at the institutional affiliations area. */
@@ -1297,6 +1316,22 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                             ?>
                                 <!--Edit school and year right here!-->
                                 <a href="javascript:;" onclick="$('#edit_pm_year_<?php echo $yr[2] ?>').toggle();">Edit</a>
+<?php
+                        if ($USER->has_site_access($LSNA_id, $AdminAccess)){
+?>
+<a href="javascript:;" onclick="                           $.post(
+                                   '../ajax/delete_elements.php',
+                                   {
+                                       action: 'pm_year',
+                                       id: '<?php echo $yr[2]; ?>'
+                                   },
+                           function(response) {
+                               window.location='participant_profile.php';
+                           }
+                           )">Delete School and Year</a>
+<?php
+                        } //end access check
+?>
                         <div id="edit_pm_year_<?php echo $yr[2] ?>" class="edit_pm_affiliation" style="font-weight: normal;">
                             <select id="edit_school_<?php echo $yr[2] ?>"><option value="">------</option>
                         <?php
@@ -1356,7 +1391,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                 if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
 ?>
 <th >
-                    <input type="button" value="Delete" onclick="
+                    <input type="button" value="Delete Program" onclick="
                            $.post(
                                    '../ajax/delete_elements.php',
                                    {
@@ -1364,8 +1399,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                        id: '<?php echo $program['Participant_Subcategory_ID']; ?>'
                                    },
                            function(response) {
-                               document.write(response);
-                               //window.location='participant_profile.php';
+                               window.location='participant_profile.php';
                            }
                            ).fail(failAlert);">
                 </th>
@@ -1830,7 +1864,7 @@ if ($parti->child == '1') {
 <?php
                 if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
 ?>
-<a href="new_parent_mentor_survey.php"  class="no_view">Add New Parent Mentor Survey</a>
+<a href="new_parent_mentor_survey.php">Add New Parent Mentor Survey</a>
 <?php
 }
 ?>

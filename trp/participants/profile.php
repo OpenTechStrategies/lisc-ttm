@@ -1,4 +1,23 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
@@ -18,6 +37,9 @@ include "../header.php";
         $('#participants_selector').addClass('selected');
         $('.basic_info_edit').hide();
         $('.add_family').hide();
+        $('.hide_college_data').hide();
+        $('.hide_non_loan_data').hide();
+        $('.constant_data_editable').hide();
     });
 </script>
 
@@ -112,7 +134,7 @@ if ($parti['Gender'] == 'm') {
     if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
         <tr>
-            <td colspan="2"><a href="javascript:;" class="basic_info_show no_view" onclick="
+            <td colspan="2"><a href="javascript:;" class="basic_info_show" onclick="
                     $('.basic_info_show').toggle();
                     $('.basic_info_edit').toggle();
                                " style="margin-left:55px;">Edit...</a>
@@ -173,7 +195,7 @@ if ($parti['Gender'] == 'm') {
             if ($USER->has_site_access($TRP_id, $AdminAccess)){
 ?>
                 <!-- Clicking "remove" here means deleting this person's attendance at this event: -->
-                <td><a href="javascript:;" class="helptext hide_on_view" onclick="
+                <td><a href="javascript:;" class="helptext" onclick="
                         $.post(
                                 '../ajax/add_attendee.php',
                                 {
@@ -196,7 +218,7 @@ if ($parti['Gender'] == 'm') {
 if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
         <!--- add to a new event: -->
-        <tr class="no_view"><td><span class="helptext">Add to event:</span></td>
+        <tr><td><span class="helptext">Add to event:</span></td>
             <td><select id="add_to_event">
                     <option value="">-----------</option>
                     <?php
@@ -273,7 +295,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
 
         <!-- add a parent or child: -->
-        <a class="helptext no_view" href="javascript:;" onclick="
+        <a class="helptext" href="javascript:;" onclick="
                 $('.add_family').slideToggle();
            ">Add family member...</a>
         <div class="add_family">
@@ -355,7 +377,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
 
                         <!-- once a consent year has been added, we can also upload and save the form itself: -->
-                        <form id="file_upload_form" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data" class="no_view">
+                        <form id="file_upload_form" action="/trp/ajax/upload_file.php" method="post" enctype="multipart/form-data">
                             <input type="file" name="file" id="file" style="font-size:.7em; padding-top:4px;"/> 
                             <input type="hidden" name="person_id" value="<?php echo $parti['Participant_ID']; ?>">
                             <input type="hidden" name="year" value="<?php echo $consent[2]; ?>">
@@ -375,7 +397,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 ?>
 
-            <tr class="no_view"><!--Add new record-->
+            <tr><!--Add new record-->
                 <td><select id="school_year_consent_new">
                         <option value="">-----</option>
                         <option value="1213">2012-2013</option>
@@ -2097,169 +2119,531 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
                 </div>
                                 <?php
                             }
-            else if ($program['Program_ID'] == 6 && ( $has_all_programs || in_array(6, $program_access_list))) {
+            else if ($program['Program_ID'] == 6){ // && ($access == 'a' || $access == 6)) {
+
+function la_casa_display_data_gen_html($result_row_item, $class_string, $array_of_options){
+    $result = "<span class = " . $class_string . ">";
+    if (array_key_exists( $result_row_item, $array_of_options)){
+        $result .= $array_of_options[$result_row_item];
+    }
+    else{
+        $result .= $result_row_item;
+    }
+    $result .= "</span>";
+    return $result;
+}
+
+function la_casa_edit_data_gen_html($array_of_options, $existing_value, $id_string, $class_string){
+    $result = "<select id = " . $id_string . " style = 'width:100px' class = " . $class_string . "><option value = 0>----</option>";
+    foreach ($array_of_options as $val => $display){
+        $result .= "<option value = " . $val . " " . ($existing_value == $val ? 'selected="selected"' : null) . ">" . $display . " </option>";
+    }
+    $result .= "</select>";
+    return $result;
+}
+
                ?> 
             <div class="program_details">
             <h4>La Casa Information</h4>
+<table class="inner_table">
+<caption>Constant Data</caption>
+<?php
+$editable_class = "constant_data_editable";
+$display_class = "constant_data_display";
+$get_education_levels_sqlsafe = "SELECT * FROM Educational_Levels";
+$education_levels = mysqli_query($cnnTRP, $get_education_levels_sqlsafe);
+$education_levels_array = array();
+while ($education = mysqli_fetch_row($education_levels)) {
+    $education_levels_array[$education[0]] = $education[1];
+}
+
+
+function construct_yn_selector($id_string, $current_value, $editable_class){
+    $selector_string =  "<select class  = " . $editable_class . " id = '" . $id_string . "'><option value = 0>----</option><option value = '1' " .  ($current_value  == 1 ? 'selected="selected"' : null) .  "> Yes </option><option value = '2'" .  ($current_value  == 2 ? 'selected="selected"' : null) .  "> No </option> </select>";
+return $selector_string;
+}
+function construct_education_selector($id_string, $current_value, $editable_class, $education_levels_array){
+    $selector_string =  "<select class  = " . $editable_class . " id = '" . $id_string . "'><option value = 0>----</option>";
+    foreach ($education_levels_array as $level_id => $level_value){
+        $selector_string .= "<option value = '" . $level_id . "' " . ($current_value  == $level_value ? 'selected="selected"' : null) . ">" . $level_value . "</option>";
+}
+$selector_string .= "</select>";
+    return $selector_string;
+}
+
+function construct_cohort_selector(){
+}
+
+
+$education_selector .= "</select>";
+$column_array = array(array("Household Size", 'input', 'household_size_edit'),
+ array("Parent1 AGI", 'input', 'parent1agi_edit', 'moneyformat'),
+ array("Parent2 AGI", 'input', 'parent2agi_edit', 'moneyformat'),
+ array("Student AGI", 'input', 'studentagi_edit', 'moneyformat'),
+ array("ACT Score", 'input', 'actscore_edit'),
+ array("High School GPA", 'input', 'hsgpa_edit'),
+array("24 or older?", 'yn', 'mid_twenties_edit'),
+array("Has Masters degree?", 'yn', 'masters_edit'),
+array("Married?", 'yn', 'married_edit'),
+array("Has Children?", 'yn', 'has_children_edit'),
+array("Homeless?", 'yn', 'homeless_edit'),
+array("Self Sustaining?", 'yn', 'self_sust_edit'),
+ array("Dependency Status", 'yn', 'dependency_edit'),
+ array("Father's Highest Level of Education", 'education', 'father_ed_level_edit'),
+ array("Mother's Highest Level of Education", 'education', 'mother_ed_level_edit'),
+ array("Student's Aspiration", 'education', 'student_ed_level_edit'),
+ array("First Generation College Student?", 'yn', 'firstgen_edit'),
+ array("High School", 'input', 'hs_edit'),
+array("AMI", 'input', 'AMI_edit'),
+array("Move in date", 'input', 'move_in_date_edit'),
+array("Move out date", 'input', 'move_out_date_edit'),
+array("Cohort", 'cohort', 'cohort_edit')
+);
+
+
+$find_constant_la_casa_sqlsafe = "SELECT Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, ACT_Score, High_School_GPA, Mid_Twenties, Masters_Degree, Married, Has_Children, Homeless, Self_Sustaining, Dependency_Status, Father_Education.Education_Level_Name, Mother_Education.Education_Level_Name, Student_Education.Education_Level_Name, First_Generation_College_Student, Student_High_School, AMI, Move_In_Date, Move_Out_Date, Student_ID FROM LC_Basics LEFT JOIN Educational_Levels AS Student_Education ON Student_Aspiration = Student_Education.Education_ID LEFT JOIN Educational_Levels AS Father_Education ON Father_Highest_Level_Education = Father_Education.Education_ID LEFT JOIN Educational_Levels AS Mother_Education ON Mother_Highest_Level_Education = Mother_Education.Education_ID WHERE Participant_ID = " . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']);
+$constant_data=mysqli_query($cnnTRP, $find_constant_la_casa_sqlsafe);
+$constant=mysqli_fetch_row($constant_data);
+foreach ($column_array as $key => $value){
+?>
+                    <tr>
+                    <td><strong>
+<?php echo $value[0]; ?>
+                    </strong></td>
+                    <td>
+<?php
+// display the information
+if (isset($value[3]) && $value[3] == 'moneyformat') {
+    echo "<span class = '" . $display_class . "'> $" . number_format($constant[$key], 2) . "</span>"; 
+    }
+elseif ($value[1] == 'yn'){
+    if ($constant[$key] == 1) {echo "Yes";}
+    elseif ($constant[$key] == '0' || $constant[$key] == '2') {echo "No";}
+    else { echo $constant[$key];}
+}
+else {
+    echo "<span class = '" . $display_class . "'>" . $constant[$key] . "</span>"; 
+}
+// edit the information
+if ($value[1] == 'input') {
+    echo "<input type = text id = " . $value[2] . " value = '" . $constant[$key] . "' class = '" . $editable_class . "'>";
+}
+elseif ($value[1] == 'yn') {
+    echo construct_yn_selector($value[2], $constant[$key], $editable_class);
+}
+elseif ($value[1] == 'education') {
+    echo construct_education_selector($value[2], $constant[$key], $editable_class, $education_levels_array);
+}
+?>
+                    </td>
+                    </tr>
+<?php
+}
+?>
+<tr><td colspan = 2>
+<input type = "button" value = "Edit" onclick = " 
+                                    $('.<?php echo $editable_class; ?>').toggle();
+                                    $('.<?php echo $display_class; ?>').toggle();">
+<input type = "button" class = "<?php echo $editable_class; ?>" value = "Save Constant Data" onclick = "
+$.post(
+    '../ajax/save_la_casa_info.php',
+    {
+      action: 'edit',
+            subject: 'constant',
+            household_size: document.getElementById('household_size_edit').value,
+            parent1agi: document.getElementById('parent1agi_edit').value,
+            parent2agi: document.getElementById('parent2agi_edit').value,
+            studentagi: document.getElementById('studentagi_edit').value,
+            actscore: document.getElementById('actscore_edit').value,
+            hsgpa: document.getElementById('hsgpa_edit').value,
+            dependency: document.getElementById('dependency_edit').value,
+            father_ed: document.getElementById('father_ed_level_edit').value,
+            mother_ed: document.getElementById('mother_ed_level_edit').value,
+            student_ed: document.getElementById('student_ed_level_edit').value,
+            first_gen: document.getElementById('firstgen_edit').value,
+            hometown: document.getElementById('hometown_edit').value,
+            hs: document.getElementById('hs_edit').value,
+            scholarship_apps: document.getElementById('scholarship_apps_edit').value,
+            scholarship_num: document.getElementById('scholarship_num_edit').value,
+            scholarship_volume: document.getElementById('scholarship_volume_edit').value,
+            scholarships_received: document.getElementById('scholarships_received_edit').value,
+            household_income: document.getElementById('household_income_edit').value,
+            AMI: document.getElementById('AMI_edit').value,
+            move_in_date: document.getElementById('move_in_date_edit').value,
+            move_out_date: document.getElementById('move_out_date_edit').value,
+            mid_twenties: document.getElementById('mid_twenties_edit').value,
+            masters: document.getElementById('masters_edit').value,
+            married: document.getElementById('married_edit').value,
+            has_children: document.getElementById('has_children_edit').value,
+            homeless: document.getElementById('homeless_edit').value,
+            self_sust: document.getElementById('self_sust_edit').value,
+            id: <?php echo $parti['Participant_ID']; ?>
+    },
+function(response){
+    window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
+});
+">
+</td></tr>
+</table>
+<p></p>
             <table class="inner_table">
                 <caption>College Data</caption>
-                <tr><th>Grade Level</th><th>Major</th><th>Community College</th>
-                    <th>Four Year College</th><th>Fall Semester Credits</th>
-                    <th>Spring Semester Credits</th>
+                <tr><th>Term/Year</th>
+                    <th>School Name</th>
+                    <th>College Selectivity</th>
+                    <th>Credits Earned</th>
+                    <th>Dropped Classes</th>
+                    <th>Major/Minor</th>
+                    <th>GPA</th>
+                    <th>Match Level (Actual/Expected)</th>
+                    <th>Internship Status</th>
                 </tr>
                 <?php
-                include "../include/dbconnopen.php";
-                $find_college_data_sqlsafe="SELECT College_Grade_Level, Major, "
-                        . "Minor, Comm_College, "
-                        . " Four_yr_College, Selectivity, Expected_Match, "
-                        . "Actual_Match, Credits_Fall, Credits_Spring, "
-                        . "Spring_GPA, Summer_GPA, Fall_GPA, School_Year, "
-                        . "Goal_Ed FROM "
-                        . "La_Casa_Students WHERE Participant_ID_Students='" . 
-                        mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
 
+                include "../include/dbconnopen.php";
+                $find_college_data_sqlsafe="SELECT College_Name, Selectivity, Term_Type, Term, School_Year, Credits, Term_ID, Major, Minor, College_GPA, Actual_Match, Expected_Match, Internship_Status, Intern_Hours, Dropped_Classes, Dropped_Credits, Colleges.College_ID FROM LC_Terms LEFT JOIN Colleges ON LC_Terms.College_ID=Colleges.College_ID WHERE Participant_ID = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
                 $college_data=mysqli_query($cnnTRP, $find_college_data_sqlsafe);
-                while ($coldat=mysqli_fetch_row($college_data)){
+                $total_credits = 0;
+//setting these arrays outside the loop so that they are available to the "new" row after the loop
+$college_year_array = array(2014 => '2014', 2015 => '2015', 2016 => '2016', 2017 => '2017'); 
+$get_college_list_sqlsafe = "SELECT * FROM Colleges ORDER BY College_Name";
+$college_list = mysqli_query($cnnTRP, $get_college_list_sqlsafe);
+$college_array = array();
+while ($college = mysqli_fetch_row($college_list)){
+    $college_array[$college[0]] = $college[1];
+}
+$term_array = array(1 => 'Semester', 2 => 'Quarter');
+$season_array = array(1 => 'Fall', 2 => 'Winter', 3 => 'Spring', 4 => 'Summer');
+$get_major_list_sqlsafe = "SELECT DISTINCT Major FROM LC_Terms";
+$major_list = mysqli_query($cnnTRP, $get_major_list_sqlsafe);
+$major_array = array();
+while ($major = mysqli_fetch_row($major_list)){
+    $major_array[] = $major[0];
+}
+$get_selectivity_list_sqlsafe = "SELECT DISTINCT Selectivity FROM Colleges";
+$selectivity_list = mysqli_query($cnnTRP, $get_selectivity_list_sqlsafe);
+$selectivity_array = array();
+while ($selectivity = mysqli_fetch_row($selectivity_list)){
+    $selectivity_array[] = $selectivity[0];
+}
+$match_array = array(1 => 'Above Match', 2 => 'Match', 3 => 'Below Match');
+$internship_yn = array(1 => 'Yes', 2 => 'No');
+
+                while ($coldat=mysqli_fetch_array($college_data)){
+$editable_class = "hide_non_loan_data college_data_editable_" . $coldat[5];
+$display_class = "college_data_display_" . $coldat[5];
+                    $total_credits += $coldat[4];
                     ?>
-                <tr><td><?php echo $coldat[0]; ?></td>
-                    <td><?php echo $coldat[1]; ?></td>
-                    <td><?php echo $coldat[2]; ?></td>
-                    <td><?php echo $coldat[3]; ?></td>
-                    <td><?php echo $coldat[4]; ?></td>
-                    <td><?php echo $coldat[5]; ?></td>
+                    <tr>
+                    <td>
+<?php
+echo la_casa_display_data_gen_html($coldat['Term'], $display_class, $season_array);
+echo " ";
+echo la_casa_display_data_gen_html($coldat['School_Year'], $display_class, $college_year_array);
+$id_string = "college_year_id_" . $coldat['Term_ID'];
+echo la_casa_edit_data_gen_html($season_array, $coldat['Term'], $id_string, $editable_class);
+echo la_casa_edit_data_gen_html($college_year_array, $coldat['School_Year'], $id_string, $editable_class);
+?>
+                    </td>
+                    <td>
+<?php
+
+echo la_casa_display_data_gen_html($coldat['College_Name'], $display_class, $college_array);
+$id_string = "college_id_" . $coldat['Term_ID'];
+echo la_casa_edit_data_gen_html($college_array, $coldat[11], $id_string, $editable_class);
+// or add a new college
+?>
+<span class = "<?php echo $editable_class; ?>"><br>
+Or add a new college: <input type = "text" id = "college_name_<?php echo $coldat[5]; ?>" size = "10">
+<select id = "college_type_<?php echo $coldat[5]; ?>">
+<option value = "">----</option>
+<option>2-year</option>
+<option>4-year</option>
+</select>
+</span>
+                    </td>
+                    <td>
+<?php
+echo la_casa_display_data_gen_html($coldat['Selectivity'], $display_class, $selectivity_array);
+$id_string = "selectivity_" . $coldat['Term_ID'];
+echo la_casa_edit_data_gen_html($selectivity_array, $coldat['Selectivity'], $id_string, $editable_class);
+?>
+                    </td>
+                    <td>
+<?php
+echo la_casa_display_data_gen_html($coldat['Credits'], $display_class);
+?>
+<input id = "credits_<?php echo $coldat['Term_ID']; ?>" class = "<?php echo $editable_class; ?>" value = "<?php echo $coldat['Credits']; ?>" size = "5">
+                    </td>
+<td>
+<?php
+echo la_casa_display_data_gen_html($coldat['Dropped_Classes'], $display_class);
+?>
+<input id = "dropped_<?php echo $coldat['Term_ID']; ?>" class = "<?php echo $editable_class; ?>" value = "<?php echo $coldat['Dropped_Classes']; ?>" size = "5">
+
+</td>
+                    <td>
+<?php
+echo la_casa_display_data_gen_html($coldat['Major'], $display_class, $major_array);
+?>
+<span class = "<?php echo $editable_class; ?>">
+<input type = "text" value = "<?php echo $coldat['Major']; ?>" id = "major_name_<?php echo $coldat['Term_ID']; ?>">
+</span> /<br /> 
+<?php
+echo la_casa_display_data_gen_html($coldat['Minor'], $display_class, _array);
+?>
+<span class = "<?php echo $editable_class; ?>">
+<input type = "text" value = "<?php echo $coldat['Minor']; ?>" id = "minor_name_<?php echo $coldat['Term_ID']; ?>">
+</span>
+                    </td>
+                    <td>
+<?php
+echo la_casa_display_data_gen_html($coldat['College_GPA'], $display_class);
+?>
+<input id = "gpa_id_<?php echo $coldat['Term_ID']; ?>" class = "<?php echo $editable_class; ?>" value = "<?php echo $coldat['College_GPA']; ?>" size = "5">
+                    </td>
+                    <td>
+<?php
+echo la_casa_display_data_gen_html($coldat['Actual_Match'], $display_class, $match_array);
+$id_string = "actual_match_id_" . $coldat['Term_ID'];
+echo la_casa_edit_data_gen_html($match_array, $coldat['Actual_Match'], $id_string, $editable_class);
+echo la_casa_display_data_gen_html($coldat['Expected_Match'], $display_class, $match_array);
+$id_string = "expected_match_id_" . $coldat['Term_ID'];
+echo la_casa_edit_data_gen_html($match_array, $coldat['Expected_Match'], $id_string, $editable_class);
+?>
+                    </td>
+
+<td>
+<?php
+echo la_casa_display_data_gen_html($coldat['Internship_Status'], $display_class, $internship_yn);
+if ($coldat['Intern_Hours'] != null) { echo "<br>Hours: " . $coldat['Intern_Hours'];}
+$id_string = "internship_id_" . $coldat['Term_ID'];
+echo la_casa_edit_data_gen_html($internship_yn, $coldat['Internship_Status'], $id_string, $editable_class);
+?>
+<br><span class = "<?php echo $editable_class; ?>"><strong>Hours: </strong><input type = "text" value = "<?php echo $coldat['Intern_Hours']; ?>"id = "internship_hours_id_<?php echo $coldat['Term_ID']; ?>" size = "5px"><span>
+</td>
+
+                    <td>
+<input type = "button" value = "Edit" onclick = "$('.<?php echo $display_class ?>').toggle();
+$('.<?php echo $editable_class; ?>').toggle();
+$('.hide_non_loan_data').toggle();">
+                    <input type = "button" class = "<?php echo $editable_class; ?>" value = "Save"
+                    onclick = "
+                     $.post(
+                        '../ajax/save_la_casa_info.php',
+                        {
+                          action: 'edit',
+                                subject: 'college',
+                                college_id: document.getElementById('college_id_<?php echo $coldat['Term_ID']; ?>').value,
+                                college_name: document.getElementById('college_name_<?php echo $coldat['Term_ID']; ?>').value,
+                                college_type: document.getElementById('college_type_<?php echo $coldat['Term_ID']; ?>').value,
+                                term_type: document.getElementById('term_type_<?php echo $coldat['Term_ID']; ?>').value,
+                                term_id: document.getElementById('term_id_<?php echo $coldat['Term_ID']; ?>').value,
+                                school_year: document.getElementById('college_year_id_<?php echo $coldat['Term_ID']; ?>').value,
+                                credits: document.getElementById('credits_<?php echo $coldat['Term_ID']; ?>').value,
+                                major_name:  document.getElementById('major_name_<?php echo $coldat['Term_ID']; ?>').value,
+                                match:  document.getElementById('match_id_<?php echo $coldat['Term_ID']; ?>').value,
+                                gpa:  document.getElementById('gpa_id_<?php echo $coldat['Term_ID']; ?>').value,
+                                internship_status: document.getElementById('internship_id_<?php echo $coldat['Term_ID']; ?>').value,
+                                intern_hours: document.getElementById('internship_hours_id_<?php echo $coldat['Term_ID']; ?>').value,
+                                id: '<?php echo $coldat['Term_ID']; ?>' 
+                                }, 
+                function(response) {
+                    window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
+                }
+                        );">
+                    </td>
                 </tr>
                         <?php
                 }
                 ?>
+                <tr>
+                    <td>
+<?php
+//need to define the class, since the earlier one was defined inside the while loop
+$editable_class ="college_data_editable";
+
+echo la_casa_edit_data_gen_html($college_year_array, 0, "new_college_year_id", $editable_class);
+?>
+                    </td>
+                    <td>
+<?php
+echo la_casa_edit_data_gen_html($college_array, 0, "new_college_id", $editable_class);
+// or add a new college
+?>
+<span class = "<?php echo $editable_class; ?>"><br>
+Or add a new college: <input type = "text" id = "new_college_name">
+<select id = "new_college_type">
+<option value = "">----</option>
+<option>2-year</option>
+<option>4-year</option>
+</select>
+</span>
+                    </td>
+                    <td>
+<?php
+echo la_casa_edit_data_gen_html($term_array, 0, "new_term_type", $editable_class);
+?>
+                    </td>
+                    <td>
+<?php
+echo la_casa_edit_data_gen_html($season_array, 0, "new_term_id", $editable_class);
+?>
+                    </td>
+                    <td>
+<input type="text" id="new_credits" size = "5">
+                    </td>
+                    <td>
+<input type = "text" id = "new_major_name">
+
+                    </td>
+                    <td>
+<input type="text" id="new_gpa" size = "5">
+                    </td>
+                    <td>
+<?php
+echo la_casa_edit_data_gen_html($match_array, 0, "new_match_id", $editable_class);
+?>
+                    </td>
+<td>
+<?php
+echo la_casa_edit_data_gen_html($internship_yn, 0, "new_internship_id", $editable_class);
+?>
+<br><span class = "<?php echo $editable_class; ?>"><strong>Hours: </strong><input type = "text" id = "new_internship_hours_id" size = "5px"><span>
+
+</td>
+                    <td>
+<input type="button" value="Add New" onclick=" 
+$.post(
+    '../ajax/save_la_casa_info.php',
+    {
+      action: 'new',
+            subject: 'college',
+            college_id: document.getElementById('new_college_id').value,
+            college_name: document.getElementById('new_college_name').value,
+            college_type: document.getElementById('new_college_type').value,
+            term_type: document.getElementById('new_term_type').value,
+            term_id: document.getElementById('new_term_id').value,
+            school_year: document.getElementById('new_college_year_id').value,
+            credits: document.getElementById('new_credits').value,
+            major:  document.getElementById('new_major_name').value,
+            gpa:  document.getElementById('new_gpa').value,
+            match:  document.getElementById('new_match_id').value,
+            internship_status: document.getElementById('new_internship_id').value,
+            internship_hours: document.getElementById('new_internship_hours_id').value,
+            person: '<?php echo $parti['Participant_ID']; ?>'
+            }, 
+    function(response) {
+                    window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
+    }
+);">
+                    </td>
+                </tr>
+                <tr>
+                     <td colspan="4">Total Credits earned: </td>
+                     <td><?php echo $total_credits; ?></td>
+                </tr>
             </table>
     
             <p></p>
 
             <table class="inner_table">
-                <caption>Financial Information</caption>
-                <tr><th>Tax Exemptions</th>
-                    <th>Household Size (La Casa)</th>
-                    <th>Household Size (TRP) (calculated)</th>
-                    <th>Parent 1 AGI</th>
-                    <th>Parent 2 AGI</th>
-                    <th>Student AGI</th>
-                    <th>AMI</th>
-                    <th>Household AGI (calculated)</th>
-                </tr>
-                <?php
-                include "../include/dbconnopen.php";
-                $find_residential_financial_sqlsafe = "SELECT Tax_Exemptions, "
-                    . "Household_size, Parent1_AGI, Parent2_AGI, Student_AGI, "
-                    . "AMI FROM La_Casa_Residents WHERE "
-                    . "Participant_ID_Residents = '"
-                    . $parti['Participant_ID'] . "'";
-                
-                $financial_residential_data = mysqli_query($cnnTRP, $find_residential_financial_sqlsafe);
-                
-                while ($finres = mysqli_fetch_row($financial_residential_data)){
-                    ?>
+                <caption>Loans Table</caption>
                 <tr>
-                    <td><?php echo number_format($finres[0]); ?></td>
-                    <td><?php echo number_format($finres[1]); ?></td>
-                    <td><?php if ($finres[0]>$finres[1]){
-                        echo number_format($finres[0]);
-                    }
-                    else{
-                        echo number_format($finres[1]);
-                    }
-                    ?></td>
-                    <td><?php echo number_format($finres[2]); ?></td>
-                    <td><?php echo number_format($finres[3]); ?></td>
-                    <td><?php echo number_format($finres[4]); ?></td>
-                    <td><?php echo number_format($finres[5]); ?></td>
-                    <td><?php $household_agi=$finres[2] + $finres[3] + $finres[4]; 
-                    echo number_format($household_agi); ?></td>
+                    <th>Year</th>
+                    <th>Number of Loan Applications</th>
+                    <th>Application Volume ($)</th>
+                    <th>Loans Received Volume ($)</th>
                 </tr>
-                <?php
-                }
-                
-                ?>
-                <tr><th>Tuition</th><th>Mandatory Fees</th>
-                    <th>Food, Transportation, and Books</th><th>La Casa Official Rent</th>
-                    <th>TRP Calculated Costs</th>
-                    <th>College Reported Costs</th>
-                    <th>Total Tuition and Mandatory Fees (calculated)</th>
-                </tr>
-                <?php
-                
-                $find_financial_data_sqlsafe="SELECT Tuition, Fees, Other_Costs, "
-                        . "La_Casa_Rent, College_Stated_Cost, Pell_Grant, "
-                        . "MAP_Grant, Scholarships, Federal_Sub_Loan, "
-                        . "Federal_Unsub_Loan, Self_Help, Savings, Family_Help,"
-                        . "La_Casa_Scholarship "
-                        . " FROM "
-                        . "La_Casa_Students WHERE Participant_ID_Students='" . 
-                        $parti['Participant_ID'] . "'";
+<?php
+$find_loan_data_sqlsafe = "SELECT School_Year, Loan_Applications, Loan_Volume, Loans_Received, Term_ID FROM LC_Terms WHERE Participant_ID = '" . mysqli_real_escape_string($cnnTRP, $parti['Participant_ID']) . "'";
+                $loan_data=mysqli_query($cnnTRP, $find_loan_data_sqlsafe);
+                $total_loans = 0;
 
-                $financial_data=mysqli_query($cnnTRP, $find_financial_data_sqlsafe);
-                while ($findat=mysqli_fetch_row($financial_data)){
+                while ($loandata=mysqli_fetch_row($loan_data)){
+                    $total_loans += $loandata[3];
                     ?>
-                <tr>
-                    <td><?php echo number_format($findat[0]); ?></td>
-                    <td><?php echo number_format($findat[1]); ?></td>
-                    <td><?php echo number_format($findat[2]); ?></td>
-                    <td><?php echo number_format($findat[3]); ?></td>
-                    <td><?php $costs=$findat[0]+$findat[1]+$findat[2]+$findat[3];
-                    echo number_format($costs); ?></td>
-                    <td><?php echo number_format($findat[4]); ?></td>
-                    <td><?php $fees=$findat[0] + $findat[1]; 
-                    echo number_format($fees); ?></td>
-                </tr>
-                
-                <tr>
-                    <th>Pell Grant</th>
-                    <th>MAP Grant</th>
-                    <th>University Scholarships</th>
-                    <th>Federal Direct Subsidized Loan</th>
-                    <th>Federal Direct Unsubsidized Loan</th>
-                    <th>Total Financial Aid Received (calculated)</th>
-                    <th>Non-School Assistance Needed</th>
-                </tr>
-                
-                <tr>
-                    <td><?php echo number_format($findat[5]); ?></td>
-                    <td><?php echo number_format($findat[6]); ?></td>
-                    <td><?php echo number_format($findat[7]); ?></td>
-                    <td><?php echo number_format($findat[8]); ?></td>
-                    <td><?php echo number_format($findat[9]); ?></td>
-                    <td><?php $aid_received=$findat[5] + $findat[6] + $findat[7]
-                            + $findat[8] + $findat[9];
-                    echo number_format($aid_received); ?></td>
-                    <td><?php $assistance_needed = $costs - $aid_received;
-                    echo number_format($assistance_needed); ?></td>
-                </tr>
-                
-                <tr>
-                    <th>Work-Study or Other Self-Help</th>
-                    <th>Savings</th>
-                    <th>Family Assistance</th>
-                    <th>Total Self-Help</th>
-                    <th>Total Need</th>
-                    <th>La Casa Scholarship</th>
-                    <th>Final Calculated Monthly Rent: </th>
-                </tr>
-                
-                <tr>
-                    <td><?php echo number_format($findat[10]); ?></td>
-                    <td><?php echo number_format($findat[11]); ?></td>
-                    <td><?php echo number_format($findat[12]); ?></td>
-                    <td><?php $self_help=$findat[10] + $findat[11] + $findat[12];
-                    echo number_format($self_help); ?></td>
-                    <td><?php $total_need= $assistance_needed - $self_help;
-                    echo number_format($total_need); ?></td>
-                    <td><?php echo number_format($findat[13]); ?></td>
-                    <td><?php $calc_rent = $findat[3] - $findat[13];
-                    echo number_format($calc_rent); ?></td>
+                <tr><td><span class = "hide_loans_data_<?php echo $loandata[4]; ?>"><?php echo $loandata[0]; ?></span>
+ <select id = "loans_year_id_<?php echo $loandata[4]; ?>" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>">
+                              <option value = "0">-----</option>
+                              <option <?php echo ( $loandata[0] == 2014 ? 'selected="selected"' : null) ?>  value = "2014"> 2014 </option>
+                              <option <?php echo ( $loandata[0] == 2015 ? 'selected="selected"' : null) ?> value = "2015"> 2015 </option>
+                              <option <?php echo ( $loandata[0] == 2016 ? 'selected="selected"' : null) ?> value = "2016"> 2016 </option>
+                              <option <?php echo ( $loandata[0] == 2017 ? 'selected="selected"' : null) ?> value = "2017"> 2017 </option>
+                              </select></td>
+                    <td><span class = "hide_loans_data_<?php echo $loandata[4]; ?>"><?php echo $loandata[1]; ?></span>
+<input type="text" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" value = "<?php echo $loandata[1]; ?>" id="loan_apps_<?php echo $loandata[4]; ?>"></td>
+                    <td><span class = "hide_loans_data_<?php echo $loandata[4]; ?>"><?php echo $loandata[2]; ?></span>
+<input type="text" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" value = "<?php echo $loandata[2]; ?>" id="loan_volume_<?php echo $loandata[4]; ?>"></td>
+                    <td><span class = "hide_loans_data_<?php echo $loandata[4]; ?>"><?php echo $loandata[3]; ?></span>
+<input type="text" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" value = "<?php echo $loandata[3]; ?>" id="loans_received_<?php echo $loandata[4]; ?>"></td>
+                    <td><input type = "button" value = "Edit" onclick = "$('.show_loans_edit_<?php echo $loandata[4]; ?>').toggle();
+$('.hide_loans_data_<?php echo $loandata[4]; ?>').toggle();">
+                    <input type = "button" class = "hide_college_data show_loans_edit_<?php echo $loandata[4]; ?>" value = "Save"
+                    onclick = "
+                    $.post(
+                        '../ajax/save_la_casa_info.php',
+                        {
+                          action: 'edit',
+                                subject: 'loans',
+                                school_year: document.getElementById('loans_year_id_<?php echo $loandata[4]; ?>').value,
+                                loan_apps: document.getElementById('loan_apps_<?php echo $loandata[4]; ?>').value,
+                                loan_volume: document.getElementById('loan_volume_<?php echo $loandata[4]; ?>').value,
+                                loans_received: document.getElementById('loans_received_<?php echo $loandata[4]; ?>').value,
+                                id: '<?php echo $loandata[4]; ?>' 
+                                }, 
+                function(response) {
+                    window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
+                }
+                        );">
+                    </td>
+
                 </tr>
                         <?php
                 }
-                ?>
-            </table>
+?>
+                <tr><td>
+ <select id = "new_school_year" class = "show_college_edit_<?php echo $loandata[4]; ?>">
+                              <option value = "0">-----</option>
+                              <option value = "2014"> 2014 </option>
+                              <option value = "2015"> 2015 </option>
+                              <option value = "2016"> 2016 </option>
+                              <option value = "2017"> 2017 </option>
+                              </select></td>
+                    <td>
+<input type="text" class = "show_loans_edit_<?php echo $loandata[4]; ?>" id="new_loan_apps"></td>
+                    <td>
+<input type="text" class = "show_loans_edit_<?php echo $loandata[4]; ?>" id="new_loan_volume"></td>
+                    <td>
+<input type="text" class = "show_loans_edit_<?php echo $loandata[4]; ?>" id="new_loans_received"></td>
+                 <td>   <input type = "button" value  = "Add New"
+                    onclick = "
+                    $.post(
+                        '../ajax/save_la_casa_info.php',
+                        {
+                          action: 'new',
+                                subject: 'college',
+                                school_year: document.getElementById('new_school_year').value,
+                                loan_apps: document.getElementById('new_loan_apps').value,
+                                loan_volume: document.getElementById('new_loan_volume').value,
+                                loans_received: document.getElementById('new_loans_received').value,
+                                person: '<?php echo $parti['Participant_ID']; ?>'
+                                }, 
+                function(response) {
+                    window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
+                }
+                        );">
+                    </td>
+
+                </tr>
+                <tr>
+                     <td colspan="3">Total Loans received: </td>
+                     <td><?php echo $total_loans; ?></td>
+                </tr>
+
+</table>
+
+
             </div>
             <?php 
             }
@@ -2274,7 +2658,7 @@ if ($USER->has_site_access($TRP_id, $DataEntryAccess)){
 
         <!-- and a dropdown menu of all programs that this participant might join. -->
         <br/><strong>Add to a new program:</strong>
-        <select id="all_programs" class="no_view">
+        <select id="all_programs">
             <option value="">-----</option>
 <?php
 $get_programs_sqlsafe = "SELECT * FROM Programs";
@@ -2287,14 +2671,13 @@ while ($prog = mysqli_fetch_row($programs)) {
 }
 include "../include/dbconnopen.php";
 ?>
-        </select><input type="button" value="Add to Program" class="no_view" onclick="$.post(
+        </select><input type="button" value="Add to Program" onclick="$.post(
                         '../ajax/add_participant_to_program.php',
                         {
-                            program_id: document.getElementById('all_programs').value,
+                            program_id: document.getElementById('all_programs_add').value,
                             participant: '<?php echo $parti['Participant_ID']; ?>'
-                        },
+                            }, 
                 function(response) {
-                    // document.write(response);
                     window.location = 'profile.php?id=<?php echo $parti['Participant_ID']; ?>';
                 }
         ).fail(failAlert);">

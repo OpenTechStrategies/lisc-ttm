@@ -1,4 +1,23 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
@@ -25,14 +44,13 @@ $new_inst_query = "INSERT INTO Institutions (
     Street_Num,
     Street_Direction,
     Street_Name,
-    Street_Type, Block_Group) VALUES (
+    Street_Type) VALUES (
     '" . $name_sqlsafe . "',
 	'" . $inst_type_sqlsafe . "',
     '" . $num_sqlsafe . "',
     '" . $dir_sqlsafe . "',
     '" . $street_name_sqlsafe . "',
-    '" . $type_sqlsafe . "',
-        '$block_group'
+    '" . $type_sqlsafe . "'
     )";
 //echo $new_inst_query;
 mysqli_query($cnnLSNA, $new_inst_query);
@@ -49,13 +67,12 @@ include "../include/dbconnclose.php";
                         '/lsna/ajax/set_institution_id.php',
                         {
                             page: 'profile',
-                            institution_id:'<?echo $id; ?>'
+                            id: '<?php echo $id; ?>'
                         },
                         function (response){
                             if (response!='1'){
                                 document.getElementById('show_error').innerHTML = response;
                             }
-                            document.write(response);
                             window.location='/lsna/institutions/institution_profile.php';
                        }
            );

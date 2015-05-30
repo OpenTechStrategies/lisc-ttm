@@ -1,5 +1,24 @@
 <?php
 /*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+/*
  * This page shows a list of all programs that have been entered in the system.  It also has the ability to search these programs and 
  * a link to create a new program.
  */
@@ -83,12 +102,20 @@ when the mouse hovers over it.-->
                                     function(response) {
                                         document.getElementById('show_results').innerHTML = response;
                                     }
-                                    )"></th></tr>
+                                    ).fail(failAlert);"></th></tr>
                 </table><br/>
                 <div id="show_results"></div>
             </td>
             <!--Link here to new_program.php-->
-            <td style="padding-left: 100px;"><a href="new_program.php"class="add_new hide_on_view"><span class="add_new_button">Create New Program</span></a><br/><br/>
+            <td style="padding-left: 100px;">
+<?php
+                                    if ($USER->site_access_level($Bickerdike_id) <= $DataEntryAccess){
+?>
+<a href="new_program.php"class="add_new "><span class="add_new_button">Create New Program</span></a>
+<?php
+                                    } //end access check
+?>
+<br/><br/>
                 <strong><em>Click on a category to see programs / details:</em></strong><br />
                 <br />
                     <?php

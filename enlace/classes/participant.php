@@ -1,9 +1,29 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
-//user_enforce_has_access($Enlace_id);
+user_enforce_has_access($Enlace_id);
 
+require_once("assessment.php");
 
 class Participant {
 
@@ -272,6 +292,38 @@ class Participant {
         $this->post_self_care = $violence['Self_Care'];
         $this->post_violence_date = $violence['Date_Logged'];
         $this->post_violence_program = $violence['Program'];
+    }
+    
+    /*
+     * Looks up a previous survey that the user has done. If no survey has been found void will be returned.
+     *
+     * @param int scrope Number of months to search for previous surveys
+     * @param int survey_type Either $INTAKE_SURVEY_TYPE or $IMPACT_SURVEY_TYPE
+     * @return Array of Assessment objects
+     */
+    public function find_previous_surveys($scope, $survey_type) {
+        include "../include/dbconnopen.php";
+        
+        // Ensure parameters are safe to be in a query (although they should be)
+        $scope_sqlsafe = mysqli_real_escape_string($cnnEnlace, $scope);
+        $survey_type_sqlsafe = mysqli_real_escape_string($cnnEnlace, $survey_type);
+        
+        $impact_assessment_search = "SELECT * FROM Assessments WHERE Date_Logged >= DATE_SUB(now(), INTERVAL " . $scope_sqlsafe . " MONTH) AND Participant_ID='" . $this->participant_id . "' ORDER BY Date_Logged DESC";
+        $impact_assessments = mysqli_query($cnnEnlace, $impact_assessment_search);
+        
+        if (!$impact_assessments) {
+            return array(); // Bail out, we've not found any
+        }
+        
+        
+        // Build an array of all the results
+        $assessments = array();
+        while ($assessment = mysqli_fetch_array($impact_assessments)) {
+            $assessments[] = Assessment::createFromDatabase($assessment);
+        }
+        
+        return $assessments;
+        
     }
 
 }

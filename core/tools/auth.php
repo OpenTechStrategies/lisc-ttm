@@ -1,4 +1,23 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
 include_once $_SERVER['DOCUMENT_ROOT'] . "/core/tools/db.php";
 
 $LSNA_id = 2;
@@ -68,6 +87,7 @@ class User {
         $this->id = $user_id;
         $this->username = getUsernameFromId($user_id);
         $this->site_permissions = getAllSiteAccess($user_id);
+        
     }
 
     // Enforce that the user has access to this site.
@@ -313,6 +333,9 @@ function pleaseLogOut($session_id = NULL) {
     foreach ($_SESSION as $key => $value) {
         setcookie($key, '', time() - 3600, '/');
     }
+    foreach ($_COOKIE as $key => $value) {
+        setcookie($key, '', time() - 3600, '/');
+    }
     return true;
 }
 
@@ -363,66 +386,6 @@ function getAllSiteAccess($user_id) {
         $access_return[$site_id] = array($permission_level, $program_access);
     }
     return $access_return;
-}
-
-// TODO: Delete this after the user object stuff works, and refactor
-//   all code that presently uses it
-
-function getPermissionLevel($session_id, $site) {
-    session_start();
-    if (session_id() == $session_id) {
-        if (array_key_exists($site, $_SESSION['site_access'])) {
-            return $_SESSION['site_access'][$site][0];
-        }
-    }
-    else{
-        return false;
-    }
-}
-
-// TODO: Delete this after the user object stuff works, and refactor
-//   all code that presently uses it
-
-function getProgramAccess($session_id, $site) {
-    $program_access_array = array();
-    session_start();
-    if (session_id() == $session_id) {
-        //this needs to be updated to include the possibility of
-        //access to multiple programs.
-        $program_access_array[] = $_SESSION['site_access'][$site][1];
-    }    
-    //note that if 'n' is in array, then the logged-in user has access
-    //to no programs, and we delete the rest of the array.  The 'n'
-    //takes precedence over any other entries.
-
-    if (in_array('n', $program_access_array)) {
-        $program_access_array = array('n');
-    }
-
-    return $program_access_array;
-}
-
-// takes an array of programs
-// returns a query to insert rows with those programs into the
-// Users_Program_Access table
-function createProgramQuery($program_array, $user_privileges_id){
-    $program_access_query_sqlsafe = "INSERT INTO Users_Program_Access
-            (Users_Privileges_ID, Program_Access) VALUES";
-    print_r($program_array);
-    $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
-    include $path; //connection to core db
-    foreach ($program_array as $program){
-        $program_sqlsafe = mysqli_real_escape_string($cnnLISC, $program);
-        if ($counter == (count($program_array) - 1)) {
-            $program_access_query_sqlsafe .= "('" . $user_privileges_id . "', '" . $program_sqlsafe . "');";
-        }
-        else{
-            $program_access_query_sqlsafe .= "('" . $user_privileges_id . "', '" . $program_sqlsafe . "'), ";
-        }
-        $counter ++;
-    }
-
-    return $program_access_query_sqlsafe;
 }
 
 ?>
