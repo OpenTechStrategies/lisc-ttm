@@ -26,8 +26,8 @@
  * Privilege_ID refers to the site for which we are editing a user's information.
  */
 include "../include/dbconnopen.php";
-include_once $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
-
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/tools/auth.php");
 // Make sure the user performing this action
 // really is an admin.
 $USER->enforce_has_access($_POST['site'], $AdminAccess);

@@ -387,7 +387,26 @@ function getAllSiteAccess($user_id) {
     }
     return $access_return;
 }
-
+// takes an array of programs
+// returns a query to insert rows with those programs into the
+// Users_Program_Access table
+function createProgramQuery($program_array, $user_privileges_id){
+    $program_access_query_sqlsafe = "INSERT INTO Users_Program_Access
+            (Users_Privileges_ID, Program_Access) VALUES";
+    $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+    include $path; //connection to core db
+    foreach ($program_array as $program){
+        $program_sqlsafe = mysqli_real_escape_string($cnnLISC, $program);
+        if ($counter == (count($program_array) - 1)) {
+            $program_access_query_sqlsafe .= "('" . $user_privileges_id . "', '" . $program_sqlsafe . "');";
+        }
+        else{
+            $program_access_query_sqlsafe .= "('" . $user_privileges_id . "', '" . $program_sqlsafe . "'), ";
+        }
+        $counter ++;
+    }
+    return $program_access_query_sqlsafe;
+}
 ?>
 <script text="javascript">
     function failAlert(){
