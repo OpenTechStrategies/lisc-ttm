@@ -1318,12 +1318,9 @@ if ($USER->has_site_access($LSNA_id, $AdminAccess)){
 } //end access check
 ?>
 </td>
+<td style="padding-bottom:0;"><?php echo $date['Institution_Name']; ?></td>
                                         <td style="padding-bottom:0;"><?php echo $date['Activity_Name']; ?></td>
-<td style="padding-bottom:0;"><?php echo $date['Institution_Name']; 
-?>
 
-
-</td>
                                         <td style="padding-bottom:0;"><?php
                                             $array_of_dates[] = $date['Date'];
                                             $datetime = new DateTime($date['Date']);

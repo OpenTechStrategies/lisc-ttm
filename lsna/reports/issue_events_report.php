@@ -16,7 +16,7 @@ include "../header.php";
 <!--Query search for people who attended some of the Issue Area Events (e.g. signed up for SNAP)-->
     <h3>Services Rendered Report</h3>
 <table class="all_projects">
-    <tr><th class="all_projects">Service Type</th><th class="all_projects">YTD Number of Participants Served</th><th>YTD Number of non-participants served</th><th>YTD Total number served</th><th class="all_projects">Choose Month</th><th class="all_projects">Choose Year</th>
+    <tr><th class="all_projects">Service Type</th><th class="all_projects">YTD Total Participants Served</th><th class="all_projects">YTD Unique Participants Served</th><th>YTD Number of non-participants served</th><th>YTD Total number served</th><th class="all_projects">Choose Month</th><th class="all_projects">Choose Year</th>
     <th class="all_projects"></th></tr>
 <?php
     $get_areas="SELECT * FROM Issue_Areas ORDER BY Issue_Area";
@@ -33,6 +33,15 @@ while ($area=mysqli_fetch_row($areas)){
 // echo $ytd_num;
     $ytd_num_call=mysqli_query($cnnLSNA, $ytd_num);
     echo $num_participants_served = mysqli_num_rows($ytd_num_call);
+?>
+    </td>
+    <td class="all_projects">
+<?php
+    date_default_timezone_set('America/Chicago');
+    $get_year=date('Y');
+    $ytd_num="SELECT DISTINCT Participant_ID FROM Issue_Attendance WHERE Issue_ID=$area[0] AND Year=$get_year";
+    $ytd_num_call=mysqli_query($cnnLSNA, $ytd_num);
+    echo  mysqli_num_rows($ytd_num_call);
 ?>
     </td>
 <td class="all_projects"><b>
