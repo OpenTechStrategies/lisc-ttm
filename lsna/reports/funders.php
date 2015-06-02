@@ -1,4 +1,28 @@
 <?php
+/*
+ *   TTM is a web application to manage data collected by community organizations.
+ *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+?>
+<?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
+
+user_enforce_has_access($LSNA_id);
+
 include "../../header.php";
 include "../header.php";
 include "../include/datepicker.php";
@@ -6,10 +30,11 @@ include "../include/datepicker.php";
 // show table of activities in funding period
 ?>
 
+<h3>Search Events by Funder</h3>
+    <table class="all_projects">
 <form method = "post"  action="<?php echo $_SERVER['PHP_SELF']; ?>" >
-Start date: <input type="text" class="hadDatepicker" name = "start_date"> <br>
-    End date: <input type="text" class="hadDatepicker" name = "end_date"> <br>
-    Funder:
+<tr>
+<th class="all_projects">Funder:</th><td class="all_projects">
 <?php
 $institution_list = "SELECT Institution_ID, Institution_Name FROM Institutions LEFT JOIN Institution_Types on Institution_Type = Institution_Type_ID WHERE Institution_Type_Name = 'Funder'";
 include "../include/dbconnopen.php";
@@ -19,18 +44,26 @@ while ($funder = mysqli_fetch_row($funders_result_sqlsafe)){
     //also make array of funders for reference below
     $funder_array[$funder[0]] = $funder[1];
     ?>
-    <input type="checkbox" id="" name = "funder[]"value = <?php echo $funder[0];?>><label for=""><?php echo $funder[1];?></label><br>
+    <input type="checkbox" id="" name = "funder[]"value = <?php echo $funder[0];?>><label for=""><?php echo $funder[1];?></label><br />
 <?php
 }
 ?>
+</td>
+<th class="all_projects">Start date:</th>
+<td class="all_projects"> <input type="text" class="hadDatepicker" name = "start_date"></td>
+<th class="all_projects">End date:</th>
+<td class="all_projects"> <input type="text" class="hadDatepicker" name = "end_date"> </td>
+</tr>
+<tr>
+<td class="all_projects" colspan="6">
 <input type = "submit" value = "Filter" name = "funder_submit">
+</td>
+</tr>
 </form>
-<br />
-<br />
+
 <?php
-$start_date = '2015-01-01';
-$end_date = '2015-07-01';
-$date_string = "";
+$start_string = "";
+$end_string = "";
 $funder_string = "";
 if (isset($_POST['funder_submit'])){
 ?>
@@ -72,17 +105,17 @@ $funder_schedule_query = "SELECT Activity_Name, Date, Subcategory_Name, Institut
 
 <br />
 <br />
-<table  class="program_involvement_table">
-<tr><th>Activity Name</th><th>Date</th><th>Program/Campaign</th><th>Funder</th></tr>
+
+<tr><th colspan="2">Activity Name</th><th>Date</th><th>Program/Campaign</th><th colspan="2">Funder</th></tr>
 <?php
 include "../include/dbconnopen.php";
 $funder_schedule = mysqli_query($cnnLSNA, $funder_schedule_query);
 while ($row = mysqli_fetch_row($funder_schedule)){
     ?>
-    <tr><td><strong><?php echo $row[0]; ?></strong></td>
-    <td><?php echo $row[1]; ?></td>
-    <td><?php echo $row[2]; ?></td>
-    <td><?php echo $row[3]; ?></td>
+    <tr><td colspan="2" class="all_projects"><?php echo $row[0]; ?></td>
+    <td class="all_projects"><?php echo $row[1]; ?></td>
+    <td class="all_projects"><?php echo $row[2]; ?></td>
+    <td class="all_projects" colspan="2"><?php echo $row[3]; ?></td>
 </tr>
 <?php
 }

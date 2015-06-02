@@ -823,7 +823,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                             <option value="9">Petitions/Postcards</option>
                                             <option value="10">Other</option>
                                         </select>
-                                     <span class="helptext">Funder:</span>  <select id="funder">
+                                     <br /><br /><span class="helptext">Funder:</span>  <select id="funder">
 <option value = "">-----</option>
 <?php
 $institution_list = "SELECT Institution_ID, Institution_Name FROM Institutions LEFT JOIN Institution_Types on Institution_Type = Institution_Type_ID WHERE Institution_Type_Name = 'Funder'";
@@ -1207,7 +1207,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                             <option value="9">Petitions/Postcards</option>
                                             <option value="10">Other</option>
                                         </select>
-                                     <span class="helptext">Funder:</span>  <select id="funder">
+     <br /><br /><span class="helptext">Funder:</span>  <select id="funder">
 <option value = "">-----</option>
 <?php
 $institution_list = "SELECT Institution_ID, Institution_Name FROM Institutions LEFT JOIN Institution_Types on Institution_Type = Institution_Type_ID WHERE Institution_Type_Name = 'Funder'";
