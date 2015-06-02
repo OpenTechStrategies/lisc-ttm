@@ -34,7 +34,7 @@ include "../include/datepicker.php";
     <table class="all_projects">
 <form method = "post"  action="<?php echo $_SERVER['PHP_SELF']; ?>" >
 <tr>
-<th class="all_projects">Funder:</th><td class="all_projects">
+<th class="all_projects">Funder:</th><td>
 <?php
 $institution_list = "SELECT Institution_ID, Institution_Name FROM Institutions LEFT JOIN Institution_Types on Institution_Type = Institution_Type_ID WHERE Institution_Type_Name = 'Funder'";
 include "../include/dbconnopen.php";
