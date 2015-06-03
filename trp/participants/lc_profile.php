@@ -29,6 +29,7 @@ include "../../header.php";
 include "../header.php";
 /* La Casa information about a given participant */
 
+include "../include/datepicker_simple.php";
 include "../classes/lc_participant.php";
 include "construction_functions.php";
 
@@ -757,18 +758,18 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->self_sustaining, 's
     </tr>
     <tr>
     <td><strong>Email Pack </strong></td>
-<td> <?php echo  display_selected($yn_array, $participant->email_pack);
-echo la_casa_edit_data_gen_selector($yn_array, $participant->email_pack, 'email_pack_edit', 'edit_term constant'); ?></td>
+<td> <?php echo  $participant->email_pack;
+echo la_casa_edit_data_gen_input( $participant->email_pack, 'email_pack_edit', 'edit_term constant date_popout'); ?></td>
     </tr>
     <tr>
     <td><strong>Email Orientation </strong></td>
-<td> <?php echo  display_selected($yn_array, $participant->email_orientation);
-echo la_casa_edit_data_gen_selector($yn_array, $participant->email_orientation, 'email_orientation_edit', 'edit_term constant'); ?></td>
+<td> <?php echo $participant->email_orientation;
+echo la_casa_edit_data_gen_input($participant->email_orientation, 'email_orientation_edit', 'edit_term constant date_popout'); ?></td>
     </tr>
     <tr>
     <td><strong>Email Roommate </strong></td>
-<td> <?php echo  display_selected($yn_array, $participant->email_roommate);
-echo la_casa_edit_data_gen_selector($yn_array, $participant->email_roommate, 'email_roommate_edit', 'edit_term constant'); ?></td>
+<td> <?php echo $participant->email_roommate;
+echo la_casa_edit_data_gen_input($participant->email_roommate, 'email_roommate_edit', 'edit_term constant date_popout'); ?></td>
     </tr>
     <tr>
     <td><strong>Move In Time </strong></td>
