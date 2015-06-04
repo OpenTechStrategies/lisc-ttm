@@ -887,6 +887,126 @@ echo la_casa_edit_data_gen_input($participant->email_roommate, 'email_roommate_e
 
     <td width="40%">
         <table class="inner_table" style="border: 2px solid #696969;">
+<?php
+// some fields that are currently constant but will become editable by users
+$lc_rent = 6255;
+$work_study = 3500;
+$food_costs = 2800;
+?>
+        <tr>
+            <th>Calculated Field</th>
+        <th>Value</th>
+        </tr>
+        <tr>
+            <th>Dependency Status</th>
+            <td>
+        <?php
+        if ($participant->mid_twenties == 1 ||
+            $participant->masters_degree == 1 ||
+            $participant->married == 1 ||
+            $participant->military == 1 ||
+            $participant->has_children == 1 ||
+            $participant->homeless == 1 ||
+            $participant->self_sustaining == 1) {
+                echo "Independent";
+        }
+        else {
+                echo "Dependent";
+        }
+        ?>
+            </td>
+        </tr>
+        <tr>
+            <th>TRP Household size</th>
+            <td>
+        <?php
+        if ($participant->household_size > $participant->tax_exemptions) {
+            echo $participant->household_size; 
+        }
+        else {
+            echo $participant->tax_exemptions; 
+        }
+        ?>
+            </td>
+        </tr>
+        <tr>
+            <th>Household AGI</th>
+            <td>
+        <?php
+        $household_agi = ($participant->parent1_agi + $participant->parent2_agi + $participant->student_agi);
+        echo "$" . number_format($household_agi, 2);
+        ?>
+            </td>
+        </tr>
+        <tr>
+            <th>Total costs for the academic year</th>
+            <td>
+        <?php
+        $total_costs = ($participant->tuition + $participant->mandatory_fees + $food_costs + $lc_rent);
+        echo "$" . number_format($total_costs, 2);
+        ?>
+            </td>
+        </tr>
+        <tr>
+            <th>Total tuition and fees</th>
+            <td>
+        <?php
+        $tuition_fees = ($participant->tuition + $participant->mandatory_fees);
+        echo "$" . number_format($tuition_fees, 2);
+        ?>
+            </td>
+        </tr>
+        <tr>
+            <th>Total financial aid received</th>
+            <td>
+        <?php
+        $total_aid = ($participant->pell_grant + 
+            $participant->map_grant +
+            $participant->university_scholarship + 
+            $participant->subsidized_loan +
+            $participant->unsubsidized_loan);
+        echo "$" . number_format($total_aid, 2);
+        ?>
+            </td>
+        </tr>
+        <tr>
+            <th>Non school assistance needed</th>
+            <td> 
+        <?php
+        $assistance_needed = ($total_costs - $total_aid);
+        echo "$" . number_format($assistance_needed, 2);
+        ?>
+            </td>
+        </tr>
+        <tr>
+            <th>Total self help</th>
+            <td> 
+        <?php
+        $self_help = ($work_study + $participant->savings + $participant->family_help);
+        echo "$" . number_format($self_help, 2);
+        ?></tr>
+        <tr>
+            <th>Total need</th>
+             <td> 
+        <?php
+        $total_need = ($assistance_needed - $self_help);
+        echo "$" . number_format($total_need, 2);
+        ?>
+            </td>
+        </tr>
+        <tr>
+            <th>La Casa rent</th>
+            <td> 
+        <?php
+        $rent_charged = (($lc_rent - $participant->lc_scholarship)/9);
+        echo "$" . number_format($rent_charged, 2);
+        ?>
+            </td>
+        </tr>
+        </table>        
+<br />
+<br />
+        <table class="inner_table" style="border: 2px solid #696969;">
         <tr>
             <th>Loan Type</th>
         <th>Loan Amount</th>

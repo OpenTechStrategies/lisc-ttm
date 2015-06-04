@@ -106,6 +106,9 @@ class Participant {
         $this->first_generation_college_student = $temp_participant['First_Generation_College_Student'];
         $this->persistence_graduation = $temp_participant['Persistence_Graduation'];
         $this->student_high_school = $temp_participant['Student_High_School'];
+        $this->pell_grant = $temp_participant['Pell_Grant'];
+        $this->map_grant = $temp_participant['MAP_Grant'];
+        $this->university_scholarship = $temp_participant['University_Scholarship'];
         $this->ami = $temp_participant['AMI'];
         $this->move_in_date = $temp_participant['Move_In_Date'];
         $this->move_out_date = $temp_participant['Move_Out_Date'];
@@ -136,6 +139,12 @@ class Participant {
         $this->orientation_date = $temp_participant['Orientation_Date'];
         $this->orientation_time = $temp_participant['Orientation_Time'];
 
+        $get_participant_info = "SELECT Subsidized_Loan, Unsubsidized_Loan FROM LC_Terms WHERE Participant_ID='$participant_id_sqlsafe' ORDER BY School_Year DESC";
+        $participant_info = mysqli_query($cnnTRP, $get_participant_info);
+        $temp_participant = mysqli_fetch_array($participant_info);
+
+        $this->subsidized_loan = $temp_participant['Subsidized_Loan'];
+        $this->unsubsidized_loan = $temp_participant['Unsubsidized_Loan'];
     }
 
     public function get_college_info($participant_id) {
