@@ -112,7 +112,6 @@ include "../header.php";
                                     $find_org = "SELECT * FROM Categories INNER JOIN (Category_Subcategory_Links)
                                     ON Categories.Category_ID=Category_Subcategory_Links.Category_ID
                                     WHERE Subcategory_ID='" . $program->program_id . "'";
-                                    //echo $find_org;
                                     include "../include/dbconnopen.php";
                                     $org = mysqli_query($cnnLSNA, $find_org);
                                     $partner = mysqli_fetch_array($org);
@@ -222,11 +221,9 @@ include "../header.php";
                             <?php
                             /* Show existing surveys: */
                             $get_linked_surveys = "SELECT * FROM Satisfaction_Surveys INNER JOIN Participants ON Satisfaction_Surveys.Participant_ID=Participants.Participant_ID WHERE Program_ID='" . $program->program_id . "'";
-                            //echo $get_linked_surveys;
                             include "../include/dbconnopen.php";
                             $linked_surveys = mysqli_query($cnnLSNA, $get_linked_surveys);
                             $num_surveys = mysqli_num_rows($linked_surveys);
-                            //echo $num_surveys;
                             while ($survey = mysqli_fetch_array($linked_surveys)) {
                                 $date_formatted = explode('-', $survey['Date']);
                                 $date = $date_formatted[1] . '-' . $date_formatted[2] . '-' . $date_formatted[0];
@@ -379,7 +376,6 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                                     Subcategory_Dates ON (Subcategory_Attendance.Subcategory_Date=Subcategory_Dates.Wright_College_Program_Date_ID)
                                                 WHERE Subcategory_Dates.Subcategory_ID='" . $program->program_id . "'
                                                 AND Subcategory_Attendance.Participant_ID='" . $user['Participant_ID'] . "'";
-                                        //echo $times_attended;
                                         include "../include/dbconnopen.php";
                                         $num = mysqli_query($cnnLSNA, $times_attended);
                                         echo mysqli_num_rows($num);
@@ -394,9 +390,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                             date_default_timezone_set('America/Chicago');
                                             while ($date = mysqli_fetch_array($num)) {
                                                 $datetime = new DateTime($date['Date']);
-                                                //echo $date . "<br>";
-                                                echo date_format($datetime, 'M d, Y') . "<br>";
-                                                //echo $date['Program_Date'] 
+                                                echo date_format($datetime, 'M d, Y') . "<br>"; 
                                             }
                                             ?>
                                         </div>
@@ -407,10 +401,8 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                         -->
                                         <?php
                                         $get_linked_surveys = "SELECT * FROM Satisfaction_Surveys WHERE Program_ID='" . $program->program_id . "' AND Participant_ID='" . $user['Participant_ID'] . "'";
-                                        //echo $get_linked_surveys;
                                         include "../include/dbconnopen.php";
                                         $linked_surveys = mysqli_query($cnnLSNA, $get_linked_surveys);
-                                        //echo $num_surveys;
                                         while ($survey = mysqli_fetch_array($linked_surveys)) {
                                             $date_formatted = explode('-', $survey['Date']);
                                             $date = $date_formatted[1] . '-' . $date_formatted[2] . '-' . $date_formatted[0];

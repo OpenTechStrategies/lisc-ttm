@@ -51,7 +51,6 @@ else{
     $save_new_attendance="UPDATE PM_Actual_Attendance SET Num_Days_Attended='" . $days_sqlsafe . "' WHERE
         Parent_Mentor_ID='" . $pm_id_sqlsafe . "' AND Possible_Attendance_ID='" . $possible_id_sqlsafe ."'";
 }
-echo $save_new_attendance;
 
 mysqli_query($cnnLSNA, $save_new_attendance);
 include "../include/dbconnclose.php";

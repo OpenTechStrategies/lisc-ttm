@@ -55,7 +55,6 @@ if ($_POST['subcategory']==19) {
             Subcategory_ID) VALUES (
             '" . $participant_sqlsafe . "',
             '53')";
-        echo $add_to_pm_workshops;
 	mysqli_query($cnnLSNA, $add_to_pm_workshops);
     }
         //this is probably already set if they are already a PM, but no harm done in redoing:
@@ -73,7 +72,6 @@ if ($_POST['subcategory']==19) {
         if ($school_exists<1){
 	$add_pm_school ="INSERT INTO Institutions_Participants (Participant_ID, Institution_ID, Is_PM) 
             VALUES ('" . $participant_sqlsafe . "', '" . $school_sqlsafe . "', '1')";
-	echo $add_pm_school;
 	mysqli_query($cnnLSNA, $add_pm_school);
         }
         $add_pm_year="INSERT INTO PM_Years (Participant, School, Year) VALUES ('" . $participant_sqlsafe . "', '" . $school_sqlsafe . "', '".$year_sqlsafe."')";
@@ -85,7 +83,6 @@ if ($_POST['subcategory']==53) {
 	//add school affiliation PM Friday workshops.
         //can go to friday workshops without being a parent mentor, so no requirement to add them to #19
 	$add_pm_school ="INSERT INTO Institutions_Participants (Participant_ID, Institution_ID, Is_PM) VALUES ('" . $participant_sqlsafe . "', '" . $school_sqlsafe . "', '1')";
-	echo $add_pm_school;
 	include "../include/dbconnopen.php";
 	mysqli_query($cnnLSNA, $add_pm_school);
 	include "../include/dbconnclose.php";

@@ -64,7 +64,6 @@ $edit_participant_query_sqlsafe = "UPDATE Participants SET
                                     DOB='" . $DOB_sqlsafe . "',
 									CPS_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['cps_id']) . "'
                                         WHERE Participant_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
-echo $edit_participant_query_sqlsafe;
 mysqli_query($cnnTRP, $edit_participant_query_sqlsafe);
 //$id = mysqli_insert_id($cnnTRP);
 include "../include/dbconnclose.php";

@@ -37,7 +37,6 @@ $save_date=$date_reformat[2] . '-'. $date_reformat[0] . '-'. $date_reformat[1];
     $add_dev="INSERT INTO Goals_Development (Participant_ID, Development_Date, Notes) VALUES ('".$person_sqlsafe."',
         '".$save_date."',
             '".$notes_sqlsafe."')";
-    //echo $add_dev;
     include "../include/dbconnopen.php";
     mysqli_query($cnnLSNA, $add_dev);
     include "../include/dbconnclose.php";

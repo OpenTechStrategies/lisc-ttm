@@ -107,22 +107,16 @@ else {
 
             //get the line
             $line = fgets($handle);
-            //echo  $line . "<br />";
-            
-           // echo "1";
 
             //open table info
             if ($line == "(\r\n") {
-                //echo "1aaa";
                 $parentheses++;
                 //$parentheses
                 continue;
             }
 
-            //echo "2";
             //close table info
             if ($line == ")\r\n") {
-                //echo "2aaa";
                 $parentheses--;
                 continue;
             }
@@ -203,16 +197,13 @@ else {
                                 $new_line.="', '";
                             }
                         }
-                       // echo $new_line . "<br>";
                         //then I would add the month and school to $new_line here
                         $new_line.=$month . "', '";
                         $new_line.=$school;
                         
-                       // echo "6";
                         if (!in_array(ltrim($new_line), $dbs)) {
                             array_push($dbs, ltrim($new_line));
                         }
-                      //  echo "8";
                         //set parent
                         $parent = str_replace("\r\n", "", $line);
                         
@@ -231,7 +222,6 @@ else {
             include 'dbconnopen.php';
             $val_sqlsafe=mysqli_real_escape_string($cnnLSNA, $val);
             $import_query= "Call Import__Activity_Status_Report('" . $val_sqlsafe . "')";
-            //echo $import_query . "<br>";
             $imported_record = mysqli_query($cnnLSNA, $import_query);
 
             if (is_object($imported_record)) {

@@ -29,7 +29,6 @@ if ($_POST['action'] == 'save_note') {
     $note_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['note']);
     $event_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['event']);
     $update_query = "UPDATE Subcategory_Dates SET Meeting_Note='" . $_POST['note'] . "' WHERE Wright_College_Program_Date_ID='" . $_POST['event'] . "'";
-    echo $update_query;
     mysqli_query($cnnLSNA, $update_query);
     include "../include/dbconnclose.php";
 } else {
@@ -53,7 +52,6 @@ if ($_POST['action'] == 'save_note') {
                             '" . $type_sqlsafe . "',
                             '" . $note_sqlsafe . "'
                             )";
-//echo $add_date_to_program;
     mysqli_query($cnnLSNA, $add_date_to_program);
     include "../include/dbconnclose.php";
 }

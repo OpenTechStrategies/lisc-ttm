@@ -141,7 +141,6 @@ if (isset($_POST['submit_quality'])) {
                     $get_responses = "SELECT COUNT(*) as count, " . $key . " FROM Program_Surveys 
                     WHERE Session_ID='" . $program_select_sqlsafe . "' GROUP BY " . $key;
                 }
-                // echo $get_responses . "<br>";
                 $responses = mysqli_query($cnnEnlace, $get_responses);
                 while ($resp = mysqli_fetch_row($responses)) {
                     ?>

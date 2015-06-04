@@ -31,7 +31,6 @@ $inst_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['inst']);
 $get_inst_info = "SELECT Institutions.*, First_Name, Last_Name, Type FROM Institutions LEFT JOIN Institution_Types ON Institution_Type=Inst_Type_ID
     LEFT JOIN Participants ON Point_Person=Participant_ID
     WHERE Inst_ID='" . $inst_sqlsafe . "'";
-//echo $get_inst_info;
 $inst_info = mysqli_query($cnnEnlace, $get_inst_info);
 $inst = mysqli_fetch_array($inst_info);
 include "../include/dbconnclose.php";

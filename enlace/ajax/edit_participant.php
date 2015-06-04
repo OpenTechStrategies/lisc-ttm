@@ -97,8 +97,7 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
                                             Early_Warning_Failed='" . $warning_failed_sqlsafe . "',
                                             Early_Warning_Discipline='" . $warning_discipline_sqlsafe . "',
                                             Referring_Teacher='" . $teacher_sqlsafe . "'
-					WHERE Participant_ID='" . $id_sqlsafe . "'";
-	echo $edit_info;			
+					WHERE Participant_ID='" . $id_sqlsafe . "'";			
 	mysqli_query($cnnEnlace, $edit_info);
 	include "../include/dbconnclose.php";
 ?>

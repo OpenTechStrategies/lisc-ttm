@@ -37,7 +37,6 @@ if ($_POST['adult_ed_year'] != ''){
     $add_growth = "INSERT INTO Participants_Growth (Participant_ID, Year, Start_Level, End_Level, GED_Completed) 
         VALUES ('" . $id_sqlsafe . "', '" . $adult_ed_year_sqlsafe . "', '" . $start_level_sqlsafe . "',
             '" . $end_level_sqlsafe . "', '" . $ged_completion_sqlsafe . "')";
-    echo $add_growth;
     mysqli_query($cnnLSNA, $add_growth);
     include "../include/dbconnclose.php";
 }

@@ -103,7 +103,6 @@ else{
             //now, here we enter the student as a participant and save their information in the MS_to_HS_over_time table
             //check first whether they are already a participant
                 $check_existing_sqlsafe="SELECT * FROM Participants WHERE CPS_ID='" . mysqli_real_escape_string($cnnTRP, $break[0]) . "'";
-             //   echo $check_existing . "<br>";
                 $exists=mysqli_query($cnnTRP, $check_existing_sqlsafe);
                 if (mysqli_num_rows($exists)>0){
                     //participant already exists
@@ -123,11 +122,9 @@ else{
                     . "'" . mysqli_real_escape_string($cnnTRP, $break[2]) . "', "
                     . "'" . mysqli_real_escape_string($cnnTRP, $break[7]) . "', "
                     . "'" . mysqli_real_escape_string($cnnTRP, $break[6]) . "')";
-               // echo $insert_info . "<br>";
                 $insert_grade_sqlsafe="INSERT INTO Academic_Info (Participant_ID, Lang_Grade) VALUES ($id, '"
                               . mysqli_reql_escape_string($break[5]) . "')";
                 $add_to_program_sqlsafe="INSERT INTO Participants_Programs (Participant_ID, Program_ID) VALUES ($id, 2)";
-               // echo $insert_grade . "<br>";
                 mysqli_query($cnnTRP, $insert_info_sqlsafe);
                 echo "Attendance and discipline data entered. <br>";
                 mysqli_query($cnnTRP, $insert_grade_sqlsafe);

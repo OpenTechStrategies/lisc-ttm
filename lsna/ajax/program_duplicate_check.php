@@ -37,7 +37,6 @@ if (isset($_POST['date'])){
     $new_date_format=$reformat_date[2] . '-' . $reformat_date[0] . '-' . $reformat_date[1];
     $get_duplicate_dates = "SELECT COUNT(Wright_College_Program_Date_ID) FROM Subcategory_Dates 
         WHERE Subcategory_ID='".$subcategory_sqlsafe."' AND Date='".$new_date_format."'";
-    //echo $get_duplicate_dates;
     include "../include/dbconnopen.php";
 $is_duplicate = mysqli_query($cnnLSNA, $get_duplicate_dates);
 $duplicate = mysqli_fetch_row($is_duplicate);
@@ -63,7 +62,6 @@ include "../include/dbconnclose.php";
 else{
 $get_duplicate_programs = "SELECT COUNT(Subcategory_Name) FROM Subcategories
     WHERE Subcategory_Name='" . $name_sqlsafe . "'";
-//echo $get_duplicate_programs;
 include "../include/dbconnopen.php";
 $is_duplicate = mysqli_query($cnnLSNA, $get_duplicate_programs);
 $duplicate = mysqli_fetch_row($is_duplicate);

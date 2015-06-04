@@ -23,7 +23,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
 user_enforce_has_access($LSNA_id, $DataEntryAccess);
 
-    <?//echo $_POST['program_id'];
+    <?php
     include "../include/dbconnopen.php";
     $program_id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['program_id']);
     $get_sub_info = "SELECT * FROM Subcategories WHERE Subcategory_ID='" . $program_id_sqlsafe . "'";
@@ -84,7 +84,6 @@ user_enforce_has_access($LSNA_id, $DataEntryAccess);
                     ON Participants.Participant_Id=Participants_Subcategories.Participant_ID
                     WHERE (Is_PM IS NOT NULL AND Is_PM=1)
                     AND Participants_Subcategories.Subcategory_ID='" . $program_id_sqlsafe . "';";
-                //echo $count_pms;
                 include "../include/dbconnopen.php";
                 $ct_pms=mysqli_query($cnnLSNA, $count_pms);
                 $count_partis = mysqli_fetch_row($ct_pms);

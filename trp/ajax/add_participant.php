@@ -111,7 +111,6 @@ Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, Scholarship_Apps, Scholar
 '" . mysqli_real_escape_string($cnnTRP, $_POST['self_sustaining']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['dependency_status']) . "'
 )";
-    echo $insert_la_casa_basics; //testing output
     mysqli_query($cnnTRP, $insert_la_casa_basics);
 
     $insert_lc_by_term = "INSERT INTO LC_Terms (Participant_ID, College_ID, Term_Type, Term, School_Year, Credits, Loan_Applications, Loan_Volume, Loans_Received, Internship_Status, Intern_Hours) VALUES ('" 
@@ -127,7 +126,6 @@ Household_Size, Parent1_AGI, Parent2_AGI, Student_AGI, Scholarship_Apps, Scholar
 '" . mysqli_real_escape_string($cnnTRP, $_POST['internship_status']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['intern_hours']) . "'
 )";
-    echo $insert_lc_by_term; //testing output
     mysqli_query($cnnTRP, $insert_lc_by_term);
 
 }
@@ -175,7 +173,6 @@ $create_new_participant_query_sqlsafe = "INSERT INTO Participants (
                                     '" . mysqli_real_escape_string($cnnTRP, $_POST['classroom']) . "',
                                     '" . mysqli_real_escape_string($cnnTRP, $_POST['lunch']) . "')";
 
-//echo $create_new_participant_query_sqlsafe;
 mysqli_query($cnnTRP, $create_new_participant_query_sqlsafe);
 $id = mysqli_insert_id($cnnTRP);
 include "../include/dbconnclose.php";

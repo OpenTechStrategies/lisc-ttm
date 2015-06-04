@@ -74,8 +74,6 @@ else{
 ON (Participants.Participant_Id=Participants_Subcategories.Participant_ID AND Subcategory_ID='19')
 WHERE Participant_Subcategory_ID IS NULL;";*/
 
-//echo $uncertain_search_query;
-
 $results =mysqli_query($cnnLSNA, $uncertain_search_query);
 ?>
 <br/>

@@ -66,7 +66,6 @@ $save_survey_answers_sqlsafe = "INSERT INTO Gads_Hill_Parent_Survey (
                    '" . mysqli_real_escape_string($cnnTRP, $_POST['second_2']) . "',
                    '" . mysqli_real_escape_string($cnnTRP, $_POST['second_3']) . "',
                    '" . mysqli_real_escape_string($cnnTRP, $_POST['second_4']) . "')";
-echo $save_survey_answers_sqlsafe;
 mysqli_query($cnnTRP, $save_survey_answers_sqlsafe);
 include "../include/dbconnclose.php";
 ?>

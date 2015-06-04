@@ -34,7 +34,6 @@ if ($_POST['action'] == 'link_event') {
     $role_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['role']);
     $new_event = "INSERT INTO Participants_Events (Participant_ID, Event_ID, Role_Type)
         VALUES ('" . $participant_sqlsafe . "', '" . $event_sqlsafe . "', '" . $role_sqlsafe . "')";
-    echo $new_event;
     mysqli_query($cnnEnlace, $new_event);
     include "../include/dbconnclose.php";
 
@@ -86,7 +85,6 @@ if ($_POST['action'] == 'link_event') {
 		'" . $school_sqlsafe . "',
 		'" . $role_sqlsafe . "'	
 	)";
-    //echo $add_participant;
     mysqli_query($cnnEnlace, $add_participant);
     $id = mysqli_insert_id($cnnEnlace);
     include "../include/dbconnclose.php";
@@ -94,7 +92,6 @@ if ($_POST['action'] == 'link_event') {
         $parent_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['parent']);
         $add_relative = "INSERT INTO Child_Parent (Parent_ID, Child_ID)
                 VALUES ('" . $parent_sqlsafe . "', '" . $id . "')";
-        echo $add_relative;
         include "../include/dbconnopen.php";
         mysqli_query($cnnEnlace, $add_relative);
         include "../include/dbconnclose.php";
@@ -103,7 +100,6 @@ if ($_POST['action'] == 'link_event') {
         $child_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['child']);
         $add_relative = "INSERT INTO Child_Parent (Parent_ID, Child_ID)
                 VALUES ('" . $id . "', '" . $child_sqlsafe . "')";
-        echo $add_relative;
         include "../include/dbconnopen.php";
         mysqli_query($cnnEnlace, $add_relative);
         include "../include/dbconnclose.php";
@@ -113,7 +109,6 @@ if ($_POST['action'] == 'link_event') {
             include "../include/dbconnopen.php";
             $program_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['program_id']);
             $add_person_to_program = "INSERT INTO Participants_Programs (Participant_ID, Program_ID) VALUES ('$id', '$program_id_sqlsafe')";
-           // echo $add_person_to_program;
             mysqli_query($cnnEnlace, $add_person_to_program);
             include "../include/dbconnclose.php";
             

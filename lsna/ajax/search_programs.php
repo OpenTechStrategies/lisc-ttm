@@ -52,8 +52,6 @@ if ($_POST['type'] != '') {
 }
 
 
-//echo $uncertain_search_query;
-
 $results = mysqli_query($cnnLSNA, $uncertain_search_query);
 
 if ($_POST['result'] == 'dropdown') {

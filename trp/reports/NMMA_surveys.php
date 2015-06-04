@@ -100,7 +100,6 @@ include "report_menu.php";
             include "../include/dbconnopen.php";
             $call_for_arrays_sqlsafe = "CALL Survey__Cultural_Identity('" . $question . "', '" . mysqli_real_escape_string($cnnTRP, $start_date) . "', '" . mysqli_real_escape_string($cnnTRP, $end_date) . "', 'pre')";
 
-            //echo $call_for_arrays;
             $questions = mysqli_query($cnnTRP, $call_for_arrays_sqlsafe);
             ?><td class="all_projects" style="text-align:left;"><?php
             $num_options = mysqli_num_rows($questions);
@@ -165,7 +164,6 @@ include "report_menu.php";
                 include "../include/dbconnopen.php";
                 $call_for_arrays_sqlsafe = "CALL Survey__Cultural_Identity('" . $question . "', '" . mysqli_real_escape_string($cnnTRP, $start_date) . "', '" . mysqli_real_escape_string($cnnTRP, $end_date) . "', 'post')";
 
-                //echo $call_for_arrays;
                 $questions = mysqli_query($cnnTRP, $call_for_arrays_sqlsafe);
                 ?><?php
                 $num_options = mysqli_num_rows($questions);

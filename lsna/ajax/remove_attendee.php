@@ -32,7 +32,6 @@ $remove_attendee_from_date = "DELETE FROM Subcategory_Attendance WHERE
                             Subcategory_Date='". $program_date_id_sqlsafe."'
                                 AND
                             Participant_ID='". $user_id_sqlsafe."'";
-echo $remove_attendee_from_date;
 mysqli_query($cnnLSNA, $remove_attendee_from_date);
 include "../include/dbconnclose.php";
 

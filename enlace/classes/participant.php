@@ -167,7 +167,6 @@ class Participant {
     public function pre_surveys() {
         $get_caring_adults = "SELECT * FROM Participants_Caring_Adults WHERE Participant_ID='$this->participant_id' AND Pre_Post=1
                 ORDER BY Date_Logged DESC LIMIT 1";
-        //echo $get_caring_adults;
         include "../include/dbconnopen.php";
         $caring_adults = mysqli_query($cnnEnlace, $get_caring_adults);
         $care_adult = mysqli_fetch_array($caring_adults);
@@ -186,7 +185,6 @@ class Participant {
 
         $get_future = "SELECT * FROM Participants_Future_Expectations WHERE Participant_ID='$this->participant_id' AND Pre_Post=1
                 ORDER BY Date_Logged DESC LIMIT 1";
-        //echo $get_future;
         include "../include/dbconnopen.php";
         $future_ex = mysqli_query($cnnEnlace, $get_future);
         $future = mysqli_fetch_array($future_ex);
@@ -206,7 +204,6 @@ class Participant {
 
         $get_violence = "SELECT * FROM Participants_Interpersonal_Violence WHERE Participant_ID='$this->participant_id' AND Pre_Post=1
                 ORDER BY Date_Logged DESC LIMIT 1";
-        //echo $get_violence;
         include "../include/dbconnopen.php";
         $violence_ex = mysqli_query($cnnEnlace, $get_violence);
         $violence = mysqli_fetch_array($violence_ex);
@@ -234,7 +231,6 @@ class Participant {
     public function post_surveys() {
         $get_caring_adults = "SELECT * FROM Participants_Caring_Adults WHERE Participant_ID='$this->participant_id' AND Pre_Post=2
                 ORDER BY Date_Logged DESC LIMIT 1";
-        //echo $get_caring_adults;
         include "../include/dbconnopen.php";
         $caring_adults = mysqli_query($cnnEnlace, $get_caring_adults);
         $care_adult = mysqli_fetch_array($caring_adults);
@@ -253,7 +249,6 @@ class Participant {
 
         $get_future = "SELECT * FROM Participants_Future_Expectations WHERE Participant_ID='$this->participant_id' AND Pre_Post=2
                 ORDER BY Date_Logged DESC LIMIT 1";
-        //echo $get_future;
         include "../include/dbconnopen.php";
         $future_ex = mysqli_query($cnnEnlace, $get_future);
         $future = mysqli_fetch_array($future_ex);
@@ -273,7 +268,6 @@ class Participant {
 
         $get_violence = "SELECT * FROM Participants_Interpersonal_Violence WHERE Participant_ID='$this->participant_id' AND Pre_Post=2
                 ORDER BY Date_Logged DESC LIMIT 1";
-        //echo $get_violence;
         include "../include/dbconnopen.php";
         $violence_ex = mysqli_query($cnnEnlace, $get_violence);
         $violence = mysqli_fetch_array($violence_ex);

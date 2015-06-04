@@ -60,7 +60,6 @@ $edit_inst = "UPDATE Institutions SET
 				Street_Type = '" . $str_type_sqlsafe . "',
                                     Block_Group='$block_group'
                 WHERE Institution_ID='" . $inst_id_sqlsafe . "'";
-echo $edit_inst;
 include "../include/dbconnopen.php";
 mysqli_query($cnnLSNA, $edit_inst);
 include "../include/dbconnclose.php";

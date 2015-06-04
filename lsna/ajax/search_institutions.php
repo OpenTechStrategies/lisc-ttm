@@ -41,8 +41,6 @@ if ($_POST['type'] == '') {
 
 $inst_search_query = "SELECT * FROM Institutions WHERE Institution_ID!='' " . $name . $type
                     . " ORDER BY Institution_Name";
-//echo $uncertain_search_query;
-//echo $inst_search_query;
 $inst_results = mysqli_query($cnnLSNA, $inst_search_query);
 include "../include/dbconnclose.php";
 ?>
