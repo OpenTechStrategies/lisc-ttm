@@ -154,6 +154,9 @@ Move_In_Address,
 Move_In_Note,
 Orientation_Date,
 Orientation_Time,
+Work_Study,
+Other_Costs,
+LC_Rent,
 Participant_ID
 ) VALUES (
 '" . mysqli_real_escape_string($cnnTRP, $_POST['cohort']) . "',
@@ -217,6 +220,9 @@ Participant_ID
 '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_note']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['orientation_date']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['orientation_time']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['work_study']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['other_costs']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $_POST['lc_rent']) . "',
 '" . $participant_id_sqlsafe . "')";
 
 
@@ -335,7 +341,10 @@ Move_In_Registration = '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_r
 Move_In_Address = '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_address']) . "',
 Move_In_Note = '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_note']) . "',
 Orientation_Date = '" . mysqli_real_escape_string($cnnTRP, $_POST['orientation_date']) . "',
-Orientation_Time = '" . mysqli_real_escape_string($cnnTRP, $_POST['orientation_time']) . "'
+Orientation_Time = '" . mysqli_real_escape_string($cnnTRP, $_POST['orientation_time']) . "',
+Work_Study = '" . mysqli_real_escape_string($cnnTRP, $_POST['work_study']) . "',
+Other_Costs = '" . mysqli_real_escape_string($cnnTRP, $_POST['other_costs']) . "',
+LC_Rent = '" . mysqli_real_escape_string($cnnTRP, $_POST['lc_rent']) . "'
 WHERE Participant_ID = '" . $participant_id_sqlsafe . "'";
         mysqli_query($cnnTRP, $edit_constant_data_sqlsafe);
     }

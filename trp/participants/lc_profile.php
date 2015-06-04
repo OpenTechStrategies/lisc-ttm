@@ -543,17 +543,17 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->transcript_submitte
 echo la_casa_edit_data_gen_selector($yn_array, $participant->service_hours_submitted, 'service_hours_submitted_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Lcrc Username </strong></td>
+    <td><strong>LCRC Username </strong></td>
     <td> <?php echo  $participant->lcrc_username;
     echo la_casa_edit_data_gen_input($participant->lcrc_username, 'lcrc_username_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Lcrc Password </strong></td>
+    <td><strong>LCRC Password </strong></td>
     <td> <?php echo  $participant->lcrc_password;
     echo la_casa_edit_data_gen_input($participant->lcrc_password, 'lcrc_password_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Lcrc Print Code </strong></td>
+    <td><strong>LCRC Print Code </strong></td>
     <td> <?php echo  $participant->lcrc_print_code;
     echo la_casa_edit_data_gen_input($participant->lcrc_print_code, 'lcrc_print_code_edit', 'edit_term constant'); ?></td>
     </tr>
@@ -592,7 +592,7 @@ echo la_casa_edit_data_gen_input($participant->application_completed, 'applicati
     echo la_casa_edit_data_gen_input($participant->student_agi, 'student_agi_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Act Score </strong></td>
+    <td><strong>ACT Score </strong></td>
     <td> <?php echo  $participant->act_score;
     echo la_casa_edit_data_gen_input($participant->act_score, 'act_score_edit', 'edit_term constant'); ?></td>
     </tr>
@@ -615,6 +615,11 @@ echo la_casa_edit_data_gen_selector($yn_status, $participant->dependency_status,
     <td><strong>Expected Graduation Year </strong></td>
     <td> <?php echo  $participant->expected_graduation_year;
     echo la_casa_edit_data_gen_input($participant->expected_graduation_year, 'expected_graduation_year_edit', 'edit_term constant'); ?></td>
+    </tr>
+    <tr>
+    <td><strong>Expected Graduation Month </strong></td>
+    <td> <?php echo  $participant->graduation_month;
+    echo la_casa_edit_data_gen_input($participant->graduation_month, 'graduation_month_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>College Grade Level </strong></td>
@@ -712,9 +717,24 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->self_sustaining, 's
     echo la_casa_edit_data_gen_input($participant->tax_exemptions, 'tax_exemptions_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Household Size Trp </strong></td>
+    <td><strong>Household Size TRP </strong></td>
     <td> <?php echo  $participant->household_size_trp;
     echo la_casa_edit_data_gen_input($participant->household_size_trp, 'household_size_trp_edit', 'edit_term constant'); ?></td>
+    </tr>
+    <tr>
+    <td><strong>Work Study/Self Help</strong></td>
+    <td> <?php echo $participant->work_study;
+    echo la_casa_edit_data_gen_input($participant->work_study, 'work_study_edit', 'edit_term constant'); ?></td>
+    </tr>
+    <tr>
+    <td><strong>Food, Transportation, and Other Costs</strong></td>
+    <td> <?php echo $participant->other_costs;
+    echo la_casa_edit_data_gen_input($participant->other_costs, 'other_costs_edit', 'edit_term constant'); ?></td>
+    </tr>
+    <tr>
+    <td><strong>La Casa Rent</strong></td>
+    <td> <?php echo $participant->lc_rent;
+    echo la_casa_edit_data_gen_input($participant->lc_rent, 'lc_rent_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Tuition </strong></td>
@@ -833,6 +853,7 @@ echo la_casa_edit_data_gen_input($participant->email_roommate, 'email_roommate_e
                 high_school_gpa: document.getElementById('high_school_gpa_edit').value,
                 dependency_status: document.getElementById('dependency_status_edit').value,
                 hs_gpa_weighted: document.getElementById('hs_gpa_weighted_edit').value,
+                graduation_month: document.getElementById('graduation_month_edit').value,
                 expected_graduation_year: document.getElementById('expected_graduation_year_edit').value,
                 college_grade_level: document.getElementById('college_grade_level_edit').value,
                 reason_leave: document.getElementById('reason_leave_edit').value,
@@ -870,7 +891,11 @@ echo la_casa_edit_data_gen_input($participant->email_roommate, 'email_roommate_e
                 move_in_address: document.getElementById('move_in_address_edit').value,
                 move_in_note: document.getElementById('move_in_note_edit').value,
                 orientation_date: document.getElementById('orientation_date_edit').value,
-                orientation_time: document.getElementById('orientation_time_edit').value
+                orientation_time: document.getElementById('orientation_time_edit').value,
+                work_study: document.getElementById('work_study_edit').value,
+                other_costs: document.getElementById('other_costs_edit').value,
+                lc_rent: document.getElementById('lc_rent_edit').value
+
             },
             function (response){
                 window.location = 'lc_profile.php?id=<?php echo $participant->participant_id ?>';
@@ -889,9 +914,9 @@ echo la_casa_edit_data_gen_input($participant->email_roommate, 'email_roommate_e
         <table class="inner_table" style="border: 2px solid #696969;">
 <?php
 // some fields that are currently constant but will become editable by users
-$lc_rent = 6255;
-$work_study = 3500;
-$food_costs = 2800;
+$lc_rent = $participant->lc_rent;
+$work_study = $participant->work_study;
+$food_costs = $participant->other_costs;
 ?>
         <tr>
             <th>Calculated Field</th>
@@ -998,7 +1023,13 @@ $food_costs = 2800;
             <th>La Casa rent</th>
             <td> 
         <?php
-        $rent_charged = (($lc_rent - $participant->lc_scholarship)/9);
+        $nonzero_rent = ($lc_rent - $participant->lc_scholarship);
+        if ($nonzero_rent > 0){
+            $rent_charged = ($nonzero_rent/9);
+        }
+        else{
+            $rent_charged = 0;
+        }
         echo "$" . number_format($rent_charged, 2);
         ?>
             </td>

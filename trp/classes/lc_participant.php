@@ -138,6 +138,10 @@ class Participant {
         $this->move_in_note = $temp_participant['Move_In_Note'];
         $this->orientation_date = $temp_participant['Orientation_Date'];
         $this->orientation_time = $temp_participant['Orientation_Time'];
+        $this->work_study = $temp_participant['Work_Study'];
+        $this->other_costs = $temp_participant['Other_Costs'];
+        $this->lc_rent = $temp_participant['LC_Rent'];
+        $this->graduation_month = $temp_participant['Graduation_Month'];
 
         $get_participant_info = "SELECT Subsidized_Loan, Unsubsidized_Loan FROM LC_Terms WHERE Participant_ID='$participant_id_sqlsafe' ORDER BY School_Year DESC";
         $participant_info = mysqli_query($cnnTRP, $get_participant_info);

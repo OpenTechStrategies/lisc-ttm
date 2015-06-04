@@ -284,15 +284,15 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->transcript_submitte
     <td><strong>Service Hours Submitted </strong></td>
     <td> <?php echo  $participant->service_hours_submitted;
 echo la_casa_edit_data_gen_selector($yn_array, $participant->service_hours_submitted, 'service_hours_submitted_edit', 'edit_term'); ?></td>
-    <td><strong>Lcrc Username </strong></td>
+    <td><strong>LCRC Username </strong></td>
     <td> <?php echo  $participant->lcrc_username;
     echo la_casa_edit_data_gen_input($participant->lcrc_username, 'lcrc_username_edit', 'edit_term'); ?></td>
     </tr>
     <tr>
-    <td><strong>Lcrc Password </strong></td>
+    <td><strong>LCRC Password </strong></td>
     <td> <?php echo  $participant->lcrc_password;
     echo la_casa_edit_data_gen_input($participant->lcrc_password, 'lcrc_password_edit', 'edit_term'); ?></td>
-    <td><strong>Lcrc Print Code </strong></td>
+    <td><strong>LCRC Print Code </strong></td>
     <td> <?php echo  $participant->lcrc_print_code;
     echo la_casa_edit_data_gen_input($participant->lcrc_print_code, 'lcrc_print_code_edit', 'edit_term'); ?></td>
     </tr>
@@ -346,7 +346,11 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->dependency_status, 
     echo la_casa_edit_data_gen_input($participant->expected_graduation_year, 'expected_graduation_year_edit', 'edit_term'); ?></td>
     </tr>
     <tr>
-
+    <td><strong>Expected Graduation Month </strong></td>
+    <td> <?php echo  $participant->graduation_month;
+    echo la_casa_edit_data_gen_input($participant->graduation_month, 'graduation_month_edit', 'edit_term constant'); ?></td>
+    </tr>
+    <tr>
     <td><strong>College Grade Level </strong></td>
     <td> <?php echo  $participant->college_grade_level;
 echo la_casa_edit_data_gen_selector($grade_array, $participant->college_grade_level, 'college_grade_level_edit', 'edit_term'); ?></td>
@@ -439,6 +443,17 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->self_sustaining, 's
     <td> <?php echo  $participant->household_size_trp;
     echo la_casa_edit_data_gen_input($participant->household_size_trp, 'household_size_trp_edit', 'edit_term'); ?></td>
 
+    </tr>
+    <td><strong>Work Study/Self Help</strong></td>
+    <td> <?php
+    echo la_casa_edit_data_gen_input(null, 'work_study_edit', 'edit_term'); ?></td>
+    <td><strong>Food, Transportation, and Other Costs</strong></td>
+    <td><?php echo la_casa_edit_data_gen_input(null, 'other_costs_edit', 'edit_term'); ?></td>
+    </tr>
+    <tr>
+    <td><strong>La Casa Rent</strong></td>
+    <td> <?php
+    echo la_casa_edit_data_gen_input(null, 'lc_rent_edit', 'edit_term'); ?></td>
     </tr>
     <tr>
     <td><strong>Tuition </strong></td>
@@ -561,6 +576,7 @@ echo la_casa_edit_data_gen_input($participant->email_roommate, 'email_roommate_e
                 high_school_gpa: document.getElementById('high_school_gpa_edit').value,
                 dependency_status: document.getElementById('dependency_status_edit').value,
                 hs_gpa_weighted: document.getElementById('hs_gpa_weighted_edit').value,
+                graduation_month: document.getElementById('graduation_month_edit').value,
                 expected_graduation_year: document.getElementById('expected_graduation_year_edit').value,
                 college_grade_level: document.getElementById('college_grade_level_edit').value,
                 reason_leave: document.getElementById('reason_leave_edit').value,
@@ -616,7 +632,10 @@ echo la_casa_edit_data_gen_input($participant->email_roommate, 'email_roommate_e
                 internship_status: document.getElementById('edit_internship_new').value,
                 intern_hours: document.getElementById('edit_intern_hours_new').value,
                 dropped_classes: document.getElementById('edit_dropped_new').value,
-                dropped_credits: document.getElementById('edit_dropped_credits_new').value
+                dropped_credits: document.getElementById('edit_dropped_credits_new').value,
+                work_study: document.getElementById('work_study_edit').value,
+                other_costs: document.getElementById('other_costs_edit').value,
+                lc_rent: document.getElementById('lc_rent_edit').value
 
             },
             function (response){

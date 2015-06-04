@@ -27,3 +27,8 @@ USE ttm-trp;
 ALTER TABLE LC_Basics MODIFY Email_Pack date;
 ALTER TABLE LC_Basics MODIFY Email_Orientation date;
 ALTER TABLE LC_Basics MODIFY Email_Roommate date;
+
+ALTER TABLE LC_Basics ADD COLUMN Work_Study int(11);
+ALTER TABLE LC_Basics ADD COLUMN Other_Costs int(11);
+ALTER TABLE LC_Basics ADD COLUMN LC_Rent int(11);
+ALTER TABLE LC_Basics ADD COLUMN Graduation_Month varchar(45);
