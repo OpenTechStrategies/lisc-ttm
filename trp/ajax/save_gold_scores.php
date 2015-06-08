@@ -69,7 +69,6 @@ else{$date3_c_sqlsafe=mysqli_real_escape_string($cnnTRP, $_POST['date3_c']);}
 /* I'm going to change the saving so that it updates on duplicate person, year, and test edition (pre, mid, or post) */
 
 $get_existing_1_a_sqlsafe="SELECT * FROM Gold_Score_Totals WHERE Participant='" . mysqli_real_escape_string($cnnTRP, $_POST['person']) . "' AND Year=1 AND Test_Time=1";
-echo $get_existing_1_a_sqlsafe;
 $exists_1a=mysqli_query($cnnTRP, $get_existing_1_a_sqlsafe);
 $numrows_1a=  mysqli_num_rows($exists_1a);
 if ($numrows_1a>0){    $update_1a=1;}
@@ -136,7 +135,6 @@ else{
     . "English='" . mysqli_real_escape_string($cnnTRP, $_POST['english1_a']) . "', Survey_Date='".$date1_a_sqlsafe."'
              WHERE Participant='" . mysqli_real_escape_string($cnnTRP, $_POST['person']) . "' AND Year=1 AND Test_Time=1";
 }
-echo $query_1_a_sqlsafe . "<br>";
 if ($update_1b==0){
 $query_1_b_sqlsafe="INSERT INTO Gold_Score_Totals (Participant, Social_Emotional, Physical, Language,
     Cognitive, Literacy, Mathematics, Science_Tech, Social_Studies, Creative_Arts, English, Survey_Date, Year, Test_Time) VALUES (
@@ -152,7 +150,6 @@ else{
     . "English='" . mysqli_real_escape_string($cnnTRP, $_POST['english1_b']) . "', Survey_Date='".$date1_b_sqlsafe."'
              WHERE Participant='" . mysqli_real_escape_string($cnnTRP, $_POST['person']) . "' AND Year=1 AND Test_Time=2";
 }
-echo $query_1_b_sqlsafe . "<br>";
 if ($update_1c==0){
 $query_1_c_sqlsafe="INSERT INTO Gold_Score_Totals (Participant, Social_Emotional, Physical, Language,
     Cognitive, Literacy, Mathematics, Science_Tech, Social_Studies, Creative_Arts, English, Survey_Date, Year, Test_Time) VALUES (
@@ -168,8 +165,6 @@ else{
     . "English='" . mysqli_real_escape_string($cnnTRP, $_POST['english1_c']) . "', Survey_Date='".$date1_c_sqlsafe."'
              WHERE Participant='" . mysqli_real_escape_string($cnnTRP, $_POST['person']) . "' AND Year=1 AND Test_Time=3";
 }
-echo $query_1_c_sqlsafe . "<br>";
-
 
 if ($update_2a==0){
 $query_2_a_sqlsafe="INSERT INTO Gold_Score_Totals (Participant, Social_Emotional, Physical, Language,
@@ -186,7 +181,7 @@ else{
     . "English='" . mysqli_real_escape_string($cnnTRP, $_POST['english2_a']) . "', Survey_Date='".$date2_a_sqlsafe."'
              WHERE Participant='" . mysqli_real_escape_string($cnnTRP, $_POST['person']) . "' AND Year=2 AND Test_Time=1";
 }
-echo $query_2_a_sqlsafe . "<br>";
+
 if ($update_2b==0){
 $query_2_b_sqlsafe="INSERT INTO Gold_Score_Totals (Participant, Social_Emotional, Physical, Language,
     Cognitive, Literacy, Mathematics, Science_Tech, Social_Studies, Creative_Arts, English, Survey_Date, Year, Test_Time) VALUES (
@@ -202,7 +197,7 @@ else{
     . "English='" . mysqli_real_escape_string($cnnTRP, $_POST['english2_b']) . "', Survey_Date='".$date2_b_sqlsafe."'
              WHERE Participant='" . mysqli_real_escape_string($cnnTRP, $_POST['person']) . "' AND Year=2 AND Test_Time=2";
 }
-echo $query_2_b_sqlsafe . "<br>";
+
 if ($update_2c==0){
 $query_2_c_sqlsafe="INSERT INTO Gold_Score_Totals (Participant, Social_Emotional, Physical, Language,
     Cognitive, Literacy, Mathematics, Science_Tech, Social_Studies, Creative_Arts, English, Survey_Date, Year, Test_Time) VALUES (
@@ -218,8 +213,6 @@ else{
     . "English='" . mysqli_real_escape_string($cnnTRP, $_POST['english2_c']) . "', Survey_Date='".$date2_c_sqlsafe."'
              WHERE Participant='" . mysqli_real_escape_string($cnnTRP, $_POST['person']) . "' AND Year=2 AND Test_Time=3";
 }
-echo $query_2_c_sqlsafe . "<br>";
-
 
 if ($update_3a==0){
 $query_3_a_sqlsafe="INSERT INTO Gold_Score_Totals (Participant, Social_Emotional, Physical, Language,
@@ -236,7 +229,7 @@ else{
     . "English='" . mysqli_real_escape_string($cnnTRP, $_POST['english3_a']) . "', Survey_Date='".$date3_a_sqlsafe."'
              WHERE Participant='" . mysqli_real_escape_string($cnnTRP, $_POST['person']) . "' AND Year=3 AND Test_Time=1";
 }
-echo $query_3_a_sqlsafe . "<br>";
+
 if ($update_3b==0){
 $query_3_b_sqlsafe="INSERT INTO Gold_Score_Totals (Participant, Social_Emotional, Physical, Language,
     Cognitive, Literacy, Mathematics, Science_Tech, Social_Studies, Creative_Arts, English, Survey_Date, Year, Test_Time) VALUES (
@@ -252,7 +245,7 @@ else{
     . "English='" . mysqli_real_escape_string($cnnTRP, $_POST['english3_b']) . "', Survey_Date='".$date3_b_sqlsafe."'
              WHERE Participant='" . mysqli_real_escape_string($cnnTRP, $_POST['person']) . "' AND Year=3 AND Test_Time=2";
 }
-echo $query_3_b_sqlsafe . "<br>";
+
 if ($update_3c==0){
 $query_3_c_sqlsafe="INSERT INTO Gold_Score_Totals (Participant, Social_Emotional, Physical, Language,
     Cognitive, Literacy, Mathematics, Science_Tech, Social_Studies, Creative_Arts, English, Survey_Date, Year, Test_Time) VALUES (
@@ -268,7 +261,6 @@ else{
     . "English='" . mysqli_real_escape_string($cnnTRP, $_POST['english3_c']) . "', Survey_Date='".$date3_c_sqlsafe."'
              WHERE Participant='" . mysqli_real_escape_string($cnnTRP, $_POST['person']) . "' AND Year=3 AND Test_Time=3";
 }
-echo $query_3_c_sqlsafe . "<br>";
 
 
 
@@ -280,14 +272,12 @@ $query_2_sqlsafe="INSERT INTO Gold_Score_Totals (Participant, Social_Emotional, 
     '" . mysqli_real_escape_string($cnnTRP, $_POST['person']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['social2']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['physical2']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['language2']) . "', 
         '" . mysqli_real_escape_string($cnnTRP, $_POST['cognitive2']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['literacy2']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['math2']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['science2']) . "', 
         '" . mysqli_real_escape_string($cnnTRP, $_POST['socstud2']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['creative2']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['english2']) . "', '".$date2."',  2)";
-echo $query_2_sqlsafe. "<br>";
 
 $query_3_sqlsafe="INSERT INTO Gold_Score_Totals (Participant, Social_Emotional, Physical, Language,
     Cognitive, Literacy, Mathematics, Science_Tech, Social_Studies, Creative_Arts, English, Survey_Date, Year) VALUES (
     '" . mysqli_real_escape_string($cnnTRP, $_POST['person']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['social3']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['physical3']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['language3']) . "', 
         '" . mysqli_real_escape_string($cnnTRP, $_POST['cognitive3']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['literacy3']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['math3']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['science3']) . "', 
-        '" . mysqli_real_escape_string($cnnTRP, $_POST['socstud3']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['creative3']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['english3']) . "', '".$date3."',  3)";
-echo $query_3_sqlsafe. "<br>";*/
+        '" . mysqli_real_escape_string($cnnTRP, $_POST['socstud3']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['creative3']) . "', '" . mysqli_real_escape_string($cnnTRP, $_POST['english3']) . "', '".$date3."',  3)";*/
 
 
 mysqli_query($cnnTRP, $query_1_a_sqlsafe);

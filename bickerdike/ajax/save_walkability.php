@@ -48,7 +48,6 @@ $walk_query_sqlsafe = "INSERT INTO Walkability_Assessment
       '" . $sidewalk_sqlsafe ."',
       '" . $intersection_sqlsafe . "',
       '" . $crosswalks_sqlsafe ."')";
-echo $walk_query_sqlsafe;
 mysqli_query($cnnBickerdike, $walk_query_sqlsafe);
 include "../include/dbconnclose.php";
 ?>

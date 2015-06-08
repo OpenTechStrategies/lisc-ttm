@@ -79,7 +79,6 @@ $cws_query_sqlsafe = "INSERT INTO Community_Wellness_Survey_Aggregates(
                 '" . $forty_one_a_sqlsafe ."',
                 '" . $forty_one_b_sqlsafe ."',
                 '" . $forty_four_sqlsafe ."')";
-echo $cws_query_sqlsafe;
 mysqli_query($cnnBickerdike, $cws_query_sqlsafe);
 include "../include/dbconnclose.php";
 ?>

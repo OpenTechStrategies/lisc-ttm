@@ -33,7 +33,6 @@ $id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['id']);
 $reset_affiliation="UPDATE PM_Years SET School='".$school_sqlsafe."',
     Year='".$year_sqlsafe."'
         WHERE PM_Year_ID='".$id_sqlsafe."'";
-echo $reset_affiliation;
 mysqli_query($cnnLSNA, $reset_affiliation);
 include "../include/dbconnclose.php";
 

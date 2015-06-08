@@ -170,7 +170,6 @@ $save_survey_answers = "INSERT INTO Parent_Mentor_Survey (
 				   '" . $V_sqlsafe . "',
 				   '" . $W_sqlsafe . "',
 				   '" . $X_sqlsafe . "')";
-echo $save_survey_answers;
 include "../include/dbconnopen.php";
 mysqli_query($cnnLSNA, $save_survey_answers);
 include "../include/dbconnclose.php";
@@ -226,7 +225,6 @@ else {
 	WHERE Parent_Mentor_Survey_ID='" . $survey_id_sqlsafe . "'";
 	
 	include "../include/dbconnopen.php";
-	echo $edit_survey;
 	mysqli_query($cnnLSNA, $edit_survey);
 	include "../include/dbconnclose.php";
 }

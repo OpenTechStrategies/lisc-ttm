@@ -221,7 +221,6 @@ if ($USER->site_access_level($SWOP_id) <= $DataEntryAccess){
                         ?><tr> <td class="all_projects" width="15%">
                                             <?php
                                             echo $event['Event_Date'];
-                                            //echo " (" . $event['Activity_Type'] . ")";
                                             ?></td>
                             <td class="all_projects"><a href="event.php?event=<?php echo $event['Campaign_Event_ID']; ?>"><?php echo $event['Event_Name']; ?></a></td>
                             <td class="all_projects"><?php echo $event['Subcampaign']; ?></td>

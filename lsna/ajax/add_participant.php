@@ -36,11 +36,9 @@ if ($_POST['add_to_parent'] == 1) {
      */
     
     $insert_person = "INSERT INTO Participants (Name_First, Name_Last) VALUES ('" . $first_name_sqlsafe . "', '" . $last_name_sqlsafe . "')";
-    echo $insert_person;
     mysqli_query($cnnLSNA, $insert_person);
     $id = mysqli_insert_id($cnnLSNA);
     $add_family = "INSERT INTO Parent_Mentor_Children (Parent_ID, Child_ID) VALUES ('" . $parent_sqlsafe . "', '" . $id . "')";
-    echo $add_family;
     mysqli_query($cnnLSNA, $add_family);
     include "../include/dbconnclose.php";
 } else if ($_POST['add_to_child'] == 1) {
@@ -63,7 +61,6 @@ if ($_POST['add_to_parent'] == 1) {
     mysqli_query($cnnLSNA, $insert_person);
     $id = mysqli_insert_id($cnnLSNA);
     $add_family = "INSERT INTO Parent_Mentor_Children (Parent_ID, Spouse_ID) VALUES ('" .$person_sqlsafe  . "', '" . $id . "')";
-    echo $add_family;
     mysqli_query($cnnLSNA, $add_family);
     include "../include/dbconnclose.php";
 } else {
@@ -85,14 +82,13 @@ if ($_POST['add_to_parent'] == 1) {
                 $birthdate = new DateTime($save_date);
                 $today = new DateTime('today');
                 $age_in_years = date_diff($birthdate, $today);
-                // echo $age_in_years->format('%y years');
                 $age = $age_in_years->format('%y');
             } else {
                 $age = '';
             }
         }
     }
-    //echo $age;
+
     /* get block group from the person's address:  
 
     include ($_SERVER['DOCUMENT_ROOT'] . "/include/block_group_finder.php");
@@ -201,7 +197,6 @@ $lang_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['lang']);
         if ($_POST['insts'][$i] != 'undefined') {
             $insts_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['insts'][$i]);
             $add_role = "INSERT INTO Institutions_Participants (Institution_ID, Participant_ID) VALUES ('" . $insts_sqlsafe . "', '" . $id . "')";
-            //echo $add_role . "<br>";
             mysqli_query($cnnLSNA, $add_role);
         }
     }

@@ -28,7 +28,6 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
     $make_campaign="INSERT INTO Campaigns (
                 Campaign_Name) VALUES(
                 '" . $name_sqlsafe ."')";
-    //echo $make_campaign;
     mysqli_query($cnnEnlace, $make_campaign);
     $id= mysqli_insert_id($cnnEnlace);
     include "../include/dbconnclose.php";

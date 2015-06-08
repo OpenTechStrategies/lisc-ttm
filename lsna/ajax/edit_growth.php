@@ -39,8 +39,7 @@ if ($_POST['adult_ed_year'] != ''){
           End_Level='" . $end_level_sqlsafe . "',
           GED_Completed='" . $ged_completion_sqlsafe . "'
          WHERE Participant_Growth_ID='" . $id_sqlsafe ."'";
-    
-    echo $edit_growth;
+
     mysqli_query($cnnLSNA, $edit_growth);
     include "../include/dbconnclose.php";
 }

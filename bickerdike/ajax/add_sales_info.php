@@ -37,7 +37,6 @@ $add_sales_data = "INSERT INTO Funded_Organization_Records_Stores (Store_ID, Dat
                     ('" . $store_sqlsafe ."',
                      '" . $date_sqlsafe . "',
                      '" . $money_sqlsafe . "')";
-echo $add_sales_data;
 include "../include/dbconnopen.php";
 mysqli_query($cnnBickerdike, $add_sales_data);
 include "../include/dbconnclose.php";

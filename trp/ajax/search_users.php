@@ -60,7 +60,6 @@ if ($_POST['program'] == '') {
     $program_sqlsafe = " AND Program_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['program']) . "'";
 }
 $uncertain_search_query_sqlsafe = "SELECT * FROM Participants" . $program_join_sqlsafe . " WHERE Participants.Participant_ID!='' " . $first_sqlsafe . $last_sqlsafe . $dob_sqlsafe . $gender_sqlsafe . $cps_sqlsafe . $program_sqlsafe . " ORDER BY Last_Name";
-//echo $uncertain_search_query_sqlsafe;
 
 $results = mysqli_query($cnnTRP, $uncertain_search_query_sqlsafe);
 

@@ -35,7 +35,6 @@ $edit_event_sqlsafe="UPDATE Events SET
                     Event_Date='" . $save_date_sqlsafe ."'
                         
                         WHERE Event_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
-echo $edit_event_sqlsafe;
 mysqli_query($cnnTRP, $edit_event_sqlsafe);
 $id=mysqli_insert_id($cnnTRP);
 include "../include/dbconnclose.php";

@@ -114,7 +114,6 @@ user_enforce_has_access($LSNA_id);
             ON Subcategory_Attendance.Subcategory_Date=Subcategory_Dates.Wright_College_Program_Date_Id
             WHERE Type_of_Participation IS NOT NULL
             GROUP BY Type_of_Participation;";
-        //echo $get_types_count;
         include "../include/dbconnopen.php";
         $types_count=mysqli_query($cnnLSNA, $get_types_count);
         while ($types=mysqli_fetch_row($types_count)){
@@ -140,7 +139,6 @@ INNER JOIN (Subcategory_Dates, Participants ) ON (Subcategory_Attendance.Subcate
 	AND Subcategory_Attendance.Participant_ID=Participants.Participant_ID) 
 INNER JOIN Participants_Subcategories ON Participants.Participant_ID=Participants_Subcategories.Participant_ID
 WHERE Type_of_Participation IS NOT NULL AND Participants_Subcategories.Subcategory_ID=19 GROUP BY Type_of_Participation;";
-       // echo $get_types_count;
         include "../include/dbconnopen.php";
         $types_count=mysqli_query($cnnLSNA, $get_types_count);
         while ($types=mysqli_fetch_row($types_count)){

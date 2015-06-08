@@ -30,7 +30,6 @@ require_once("../classes/assessment.php");
 $program = new Program();
 $program->load_with_program_id($_COOKIE['program']);
 
-
 ?>
 <!--
 Shows all program information.
@@ -851,7 +850,6 @@ while ($sess = mysqli_fetch_row($sessions)) {
                                 <td class="all_projects"><?php
                             $get_all_participants = "SELECT * FROM Participants_Programs INNER JOIN Participants
                     ON Participants.Participant_ID=Participants_Programs.Participant_ID WHERE Program_ID='" . $sess[0] . "' ORDER BY Last_Name";
-                            //echo $get_all_participants;
                             $all_participants = mysqli_query($cnnEnlace, $get_all_participants);
                             while ($all_p = mysqli_fetch_array($all_participants)) {
                                 $find_absence = "SELECT COUNT(*) FROM Absences WHERE Participant_ID='" . $all_p['Participant_ID'] . "'

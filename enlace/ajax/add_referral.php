@@ -39,7 +39,6 @@ $new_referral="INSERT INTO Referrals (Participant_ID, Referrer_Person, Referrer_
     '".$inst_referrer_sqlsafe."',
     '".$program_referred_sqlsafe."'
         )";
-echo $new_referral;
 mysqli_query($cnnEnlace, $new_referral);
 include "../include/dbconnclose.php";
 }

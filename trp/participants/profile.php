@@ -51,7 +51,6 @@ $parti = mysqli_fetch_array($get_participant);
 $date_formatted = explode('-', $parti['DOB']);
 $DOB = $date_formatted[1] . "/" . $date_formatted[2] . "/" . $date_formatted[0];
 
-
 ?>
 <div class="content_block" id="participant_profile">
     <h3>Participant Profile - <?php echo $parti['First_Name'] . " " . $parti['Last_Name']; ?>

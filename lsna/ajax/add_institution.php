@@ -52,7 +52,6 @@ $new_inst_query = "INSERT INTO Institutions (
     '" . $street_name_sqlsafe . "',
     '" . $type_sqlsafe . "'
     )";
-//echo $new_inst_query;
 mysqli_query($cnnLSNA, $new_inst_query);
 $id = mysqli_insert_id($cnnLSNA);
 include "../include/dbconnclose.php";

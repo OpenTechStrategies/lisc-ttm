@@ -28,9 +28,7 @@ if ($_POST['action']=='delete'){
     $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['id']);
     /* delete a session date: */
     $delete_attendance="DELETE FROM Absences WHERE Program_Date='" .$id_sqlsafe. "'";
-    echo $delete_attendance . "<Br>";
     $delete_date="DELETE FROM Program_Dates WHERE Program_Date_ID='" .$id_sqlsafe. "'";
-    echo $delete_date;
     mysqli_query($cnnEnlace, $delete_attendance);
     mysqli_query($cnnEnlace, $delete_date);
     include "../include/dbconnclose.php";

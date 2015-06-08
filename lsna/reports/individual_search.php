@@ -210,7 +210,6 @@ $uncertain_search_query = "SELECT * FROM Participants " . $role_join . $pm_join 
   ON (Participants.Participant_Id=Participants_Subcategories.Participant_ID AND Subcategory_ID='19')
   WHERE Participant_Subcategory_ID IS NULL;"; */
 
-//echo $uncertain_search_query;
 
 include "../include/dbconnopen.php";
 $results = mysqli_query($cnnLSNA, $uncertain_search_query);
@@ -218,7 +217,6 @@ $results = mysqli_query($cnnLSNA, $uncertain_search_query);
 /* create file for export of results: */
 date_default_timezone_set('America/Chicago');
 $infile = "export_data/search_individuals_" . date('M-d-Y') . ".csv";
-//echo $infile;
 $fp = fopen($infile, "w") or die('can\'t open file');
 $columns = array('Database ID', 'First Name', 'Last Name', 'Gender', 'Date of Birth', 'Grade Level', 'Role(s)');
 

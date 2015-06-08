@@ -121,7 +121,6 @@ echo $print_date[0]; ?>">
         $date_reformat = explode('-', $person->baseline_date);
         $day_separate = explode(' ', $date_reformat[2]);
         $new_date = $date_reformat[1] . '/' . $day_separate[0] . '/' . $date_reformat[0];
-        // echo $new_date;
         ?></caption>
     <tr><td width="20%">Do you speak languages other than English at home?</td><td width="20%"><select id="language_home">
                 <option value="0" <?php echo($assessment_info['Home_Language'] == 0 ? 'selected=="selected"' : null); ?>>N/A</option>
@@ -743,3 +742,4 @@ if (isset($_GET['assessment'])) {
 <?php
 } //ends access check if condition
  include "../../footer.php"; ?>
+

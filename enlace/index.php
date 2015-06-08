@@ -41,10 +41,8 @@ include "header.php";
 
                     date_default_timezone_set('America/Chicago');
                     $next_week = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') + 7, date('Y')));
-//echo $next_week;
                     $get_sessions = "SELECT Session_Name, Name, MONTH(Survey_Due), DAY(Survey_Due), YEAR(Survey_Due) FROM Session_Names INNER JOIN Programs ON Programs.Program_ID=Session_Names.Program_ID
         WHERE Survey_Due >= '" . date('Y-m-d') . "' AND Survey_Due <= '$next_week'";
-//echo $get_sessions;
                     include "include/dbconnopen.php";
                     $sessions = mysqli_query($cnnEnlace, $get_sessions);
                     while ($sesh = mysqli_fetch_row($sessions)) {
@@ -55,12 +53,10 @@ include "header.php";
                 <td style="vertical-align:top;"><strong><u>Intake Surveys Due:</u></strong><br>
                     <?php
                     $month_ago = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') - 30, date('Y')));
-//echo $month_ago;
                     $get_missing_intakes = "SELECT First_Name, Last_Name, MONTH(Date_Entered), DAY(Date_Entered), YEAR(Date_Entered), Participants.Participant_ID FROM Participants 
 LEFT JOIN Participants_Baseline_Assessments ON Participants.Participant_ID =
 Participants_Baseline_Assessments.Participant_ID
 WHERE Date_Entered <= '$month_ago' AND Date_Logged IS NULL AND Role=1";
-//echo $get_missing_intakes;
                     include "include/dbconnopen.php";
                     $missing_intakes = mysqli_query($cnnEnlace, $get_missing_intakes);
                     ?>
@@ -75,8 +71,7 @@ WHERE Date_Entered <= '$month_ago' AND Date_Logged IS NULL AND Role=1";
                 Session_Names.Session_ID=Participants_Programs.Program_ID 
                 INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID
                 WHERE Participant_Id='$intake[5]' ORDER BY Name";
-                //echo $get_all_programs;
-                include "include/dbconnopen.php";
+                include "../include/dbconnopen.php";
                 $all_programs = mysqli_query($cnnEnlace, $get_all_programs);
                 while ($program = mysqli_fetch_row($all_programs)) {
                     ?><a href="javascript:;" onclick="$.post(
@@ -112,7 +107,6 @@ WHERE Date_Entered <= '$month_ago' AND Date_Logged IS NULL AND Role=1";
                     //get participants added in the last 72 hours
                     $get_new_people = "SELECT Participant_ID, First_Name, Last_Name FROM Participants WHERE Date_Entered>='" . $three_days_ago->format('Y-m-d')
                             . "' ORDER BY Last_Name";
-                    //echo $get_new_people;
                     include "include/dbconnopen.php";
                     $new_people = mysqli_query($cnnEnlace, $get_new_people);
                     while ($new_p = mysqli_fetch_row($new_people)) {
@@ -128,7 +122,6 @@ WHERE Date_Entered <= '$month_ago' AND Date_Logged IS NULL AND Role=1";
                         INNER JOIN Programs ON Participants_Programs.Program_Id=Programs.Program_ID 
                         WHERE Date_Added>='" . $three_days_ago->format('Y-m-d')
                                 . "' ORDER BY Last_Name";
-                        //echo $get_new_links;
                         include "include/dbconnopen.php";
                         $new_links = mysqli_query($cnnEnlace, $get_new_links);
                         while ($link = mysqli_fetch_row($new_links)) {

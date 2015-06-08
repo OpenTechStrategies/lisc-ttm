@@ -46,7 +46,6 @@ if ($_POST['action'] == 'merge') {
     $update_programs_query_sqlsafe = "UPDATE Programs_Users SET User_ID='" . $new_id_sqlsafe . "' WHERE User_ID='" . $origin_id_sqlsafe . "'";
     $update_health_query_sqlsafe = "UPDATE User_Health_Data SET User_ID='" . $new_id_sqlsafe . "' WHERE User_ID='" . $origin_id_sqlsafe . "'";
     $delete_user_query_sqlsafe = "DELETE FROM Users WHERE User_ID='" . $origin_id_sqlsafe . "'";
-    echo $delete_user_query_sqlsafe;
     mysqli_query($cnnBickerdike, $update_activities_query_sqlsafe);
     mysqli_query($cnnBickerdike, $update_surveys_query_sqlsafe);
     mysqli_query($cnnBickerdike, $update_attendance_query_sqlsafe);

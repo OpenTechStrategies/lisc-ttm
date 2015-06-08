@@ -34,7 +34,6 @@ if ($_POST['action']=='add'){
                         '" . mysqli_real_escape_string($cnnTRP, $_POST['event']) ."',
                         '" . mysqli_real_escape_string($cnnTRP, $_POST['person']) ."'
                         )";
-    //echo $make_event_sqlsafe;
     mysqli_query($cnnTRP, $make_event_sqlsafe);
     $id=mysqli_insert_id($cnnTRP);
     include "../include/dbconnclose.php";
@@ -46,7 +45,6 @@ user_enforce_has_access($TRP_id, $AdminAccess);
     $make_event_sqlsafe="DELETE FROM Events_Participants WHERE
                     Events_Participants_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['id']) ."'
                     ";
-    //echo $make_event_sqlsafe;
     mysqli_query($cnnTRP, $make_event_sqlsafe);
     $id=mysqli_insert_id($cnnTRP);
     include "../include/dbconnclose.php";

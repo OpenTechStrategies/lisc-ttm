@@ -35,7 +35,6 @@ $clc_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['clc']);
                 Subcategory_Name, Campaign_or_Program) VALUES(
                 '" . $name_sqlsafe ."',
                 '" . $issue_area_sqlsafe . "')";
-    //echo $make_program;
     include "../include/dbconnopen.php";
     mysqli_query($cnnLSNA, $make_program);
     $id= mysqli_insert_id($cnnLSNA);
@@ -53,7 +52,6 @@ $clc_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['clc']);
     /*obsolete.  CLCs aren't used this way. */
         $link_to_clc="INSERT INTO CLC_Subcategory (CLC_ID, Subcategory_ID)
                         VALUES ('" . $clc_sqlsafe . "', '" . $id ."')";
-       // echo $link_to_clc;
      include "../include/dbconnopen.php";
     mysqli_query($cnnLSNA, $link_to_clc);
     include "../include/dbconnclose.php";

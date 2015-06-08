@@ -57,7 +57,6 @@ if (isset($_POST['store_id']) && $_POST['store_id'] != ''){
         '" . $promotions_sqlsafe . "',
         '" . $stock_sqlsafe . "',
         '" . $date_sqlsafe . "')";
-    echo $corner_query_sqlsafe;
     mysqli_query($cnnBickerdike, $corner_query_sqlsafe);
     $this_id = mysqli_insert_id($cnnBickerdike);
     include "../include/dbconnclose.php";
@@ -92,7 +91,6 @@ $corner_query_sqlsafe = "INSERT INTO Corner_Store_Assessment
       '" . $promotions_sqlsafe . "',
       '" . $stock_sqlsafe . "',
       '" . $date_sqlsafe . "')";
-echo $corner_query_sqlsafe;
 mysqli_query($cnnBickerdike, $corner_query_sqlsafe);
 include "../include/dbconnclose.php";
 }

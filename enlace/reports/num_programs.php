@@ -141,7 +141,6 @@ $has_all_programs =  in_array('a', $access_array);
                 } else {
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs;";
                 }
-                // echo $distinct_people;
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
                 $num_people = mysqli_num_rows($distinct);
@@ -158,7 +157,6 @@ $has_all_programs =  in_array('a', $access_array);
                 } else {
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE Date_Dropped IS NOT NULL;";
                 }
-                // echo $distinct_people;
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
                 $num_people = mysqli_num_rows($distinct);
@@ -176,7 +174,6 @@ $has_all_programs =  in_array('a', $access_array);
                 } else {
                     $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs WHERE  Date_Dropped IS NULL;";
                 }
-                // echo $distinct_people;
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
                 $num_people = mysqli_num_rows($distinct);

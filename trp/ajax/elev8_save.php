@@ -31,7 +31,6 @@ if ($_POST['action']=='delete'){
     user_enforce_has_access($TRP_id, $AdminAccess);
     include "../include/dbconnopen.php";
     $query_sqlsafe="DELETE FROM Elev8_Data WHERE Elev8_ID='" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
-    echo $query_sqlsafe;
     mysqli_query($cnnTRP, $query_sqlsafe);
     include "../include/dbconnclose.php";
 }
@@ -41,7 +40,6 @@ else{
     '" . mysqli_real_escape_string($cnnTRP, $_POST['year']) . "',
         '" . mysqli_real_escape_string($cnnTRP, $_POST['element']) . "',
             '" . mysqli_real_escape_string($cnnTRP, $_POST['value']) . "' )";
-    echo $query_sqlsafe;
     mysqli_query($cnnTRP, $query_sqlsafe);
     include "../include/dbconnclose.php";
 }
