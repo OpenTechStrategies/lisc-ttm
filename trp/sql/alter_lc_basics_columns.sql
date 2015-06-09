@@ -32,3 +32,15 @@ ALTER TABLE LC_Basics ADD COLUMN Work_Study int(11);
 ALTER TABLE LC_Basics ADD COLUMN Other_Costs int(11);
 ALTER TABLE LC_Basics ADD COLUMN LC_Rent int(11);
 ALTER TABLE LC_Basics ADD COLUMN Graduation_Month varchar(45);
+
+
+/*
+ This line is only for the initial data load, which was simplified such that
+ these values were the same for all LC residents.
+*/
+
+
+ UPDATE LC_Basics SET 
+ Work_Study = 3500,
+ Other_Costs = 2800, 
+ LC_Rent = 6255;
