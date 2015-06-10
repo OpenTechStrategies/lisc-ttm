@@ -112,6 +112,7 @@ include "../header.php";
                                     $find_org = "SELECT * FROM Categories INNER JOIN (Category_Subcategory_Links)
                                     ON Categories.Category_ID=Category_Subcategory_Links.Category_ID
                                     WHERE Subcategory_ID='" . $program->program_id . "'";
+                                    //echo $find_org;
                                     include "../include/dbconnopen.php";
                                     $org = mysqli_query($cnnLSNA, $find_org);
                                     $partner = mysqli_fetch_array($org);
@@ -221,9 +222,11 @@ include "../header.php";
                             <?php
                             /* Show existing surveys: */
                             $get_linked_surveys = "SELECT * FROM Satisfaction_Surveys INNER JOIN Participants ON Satisfaction_Surveys.Participant_ID=Participants.Participant_ID WHERE Program_ID='" . $program->program_id . "'";
+                            //echo $get_linked_surveys;
                             include "../include/dbconnopen.php";
                             $linked_surveys = mysqli_query($cnnLSNA, $get_linked_surveys);
                             $num_surveys = mysqli_num_rows($linked_surveys);
+                            //echo $num_surveys;
                             while ($survey = mysqli_fetch_array($linked_surveys)) {
                                 $date_formatted = explode('-', $survey['Date']);
                                 $date = $date_formatted[1] . '-' . $date_formatted[2] . '-' . $date_formatted[0];
@@ -376,6 +379,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                                     Subcategory_Dates ON (Subcategory_Attendance.Subcategory_Date=Subcategory_Dates.Wright_College_Program_Date_ID)
                                                 WHERE Subcategory_Dates.Subcategory_ID='" . $program->program_id . "'
                                                 AND Subcategory_Attendance.Participant_ID='" . $user['Participant_ID'] . "'";
+                                        //echo $times_attended;
                                         include "../include/dbconnopen.php";
                                         $num = mysqli_query($cnnLSNA, $times_attended);
                                         echo mysqli_num_rows($num);
@@ -390,7 +394,9 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                             date_default_timezone_set('America/Chicago');
                                             while ($date = mysqli_fetch_array($num)) {
                                                 $datetime = new DateTime($date['Date']);
-                                                echo date_format($datetime, 'M d, Y') . "<br>"; 
+                                                //echo $date . "<br>";
+                                                echo date_format($datetime, 'M d, Y') . "<br>";
+                                                //echo $date['Program_Date'] 
                                             }
                                             ?>
                                         </div>
@@ -401,8 +407,10 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                         -->
                                         <?php
                                         $get_linked_surveys = "SELECT * FROM Satisfaction_Surveys WHERE Program_ID='" . $program->program_id . "' AND Participant_ID='" . $user['Participant_ID'] . "'";
+                                        //echo $get_linked_surveys;
                                         include "../include/dbconnopen.php";
                                         $linked_surveys = mysqli_query($cnnLSNA, $get_linked_surveys);
+                                        //echo $num_surveys;
                                         while ($survey = mysqli_fetch_array($linked_surveys)) {
                                             $date_formatted = explode('-', $survey['Date']);
                                             $date = $date_formatted[1] . '-' . $date_formatted[2] . '-' . $date_formatted[0];
@@ -815,6 +823,20 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                             <option value="9">Petitions/Postcards</option>
                                             <option value="10">Other</option>
                                         </select>
+                                     <br /><br /><span class="helptext">Funder:</span>  <select id="funder">
+<option value = "">-----</option>
+<?php
+$institution_list = "SELECT Institution_ID, Institution_Name FROM Institutions LEFT JOIN Institution_Types on Institution_Type = Institution_Type_ID WHERE Institution_Type_Name = 'Funder'";
+include "../include/dbconnopen.php";
+$funders_result_sqlsafe = mysqli_query($cnnLSNA, $institution_list);
+while ($funder = mysqli_fetch_row($funders_result_sqlsafe)){
+    ?>
+    <option value = "<?php echo $funder[0]; ?>"><?php echo $funder[1];?></option>
+<?php
+}
+?>
+                                     </select>
+
                                         <!--Save a new date.  Check to make sure that the campaign doesn't already have an event on this date (deduplicate): -->
                                         <input type="button" value="Save" onclick="
                                             $.post(
@@ -834,6 +856,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                                                     program_id: '<?php echo $program->program_id ?>',
                                                                     date: document.getElementById('new_date').value,
                                                                     name: document.getElementById('date_activity_name').value,
+   funder: document.getElementById('funder').value,
                                                                     type: document.getElementById('date_activity_type').options[document.getElementById('date_activity_type').selectedIndex].value
                                                                 },
                                                         function(response) {
@@ -850,6 +873,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                                                 program_id: '<?php echo $program->program_id ?>',
                                                                 date: document.getElementById('new_date').value,
                                                                 name: document.getElementById('date_activity_name').value,
+   funder: document.getElementById('funder').value,
                                                                 type: document.getElementById('date_activity_type').options[document.getElementById('date_activity_type').selectedIndex].value
                                                             },
                                                     function(response) {
@@ -868,7 +892,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
 ?>
                                 <tr>
                                     <!--Show the schedule: -->
-                                    <th>Delete this Session</th><th>Session/Activity Name</th><th width="10%">Date</th>
+                                    <th>Delete this Session</th><th>Funder</th><th>Session/Activity Name</th><th width="10%">Date</th>
                                     <th width="25%">Participants and Involvement Type</th><th>Session/Activity Type</th>
                                     <th>No. of Participants</th><th>Add/Remove Participants</th>
                                 </tr>
@@ -905,6 +929,8 @@ if ($USER->has_site_access($LSNA_id, $AdminAccess)){
 }
 ?>
 </td>
+<td style="padding-bottom:0;"><?php echo $date['Institution_Name']; ?></td>
+
                                         <td style="padding-bottom:0;"><?php echo $date['Activity_Name']; ?></td>
                                         <td style="padding-bottom:0;"><?php
                                             $array_of_dates[] = $date['Date'];
@@ -1181,6 +1207,19 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                             <option value="9">Petitions/Postcards</option>
                                             <option value="10">Other</option>
                                         </select>
+     <br /><br /><span class="helptext">Funder:</span>  <select id="funder">
+<option value = "">-----</option>
+<?php
+$institution_list = "SELECT Institution_ID, Institution_Name FROM Institutions LEFT JOIN Institution_Types on Institution_Type = Institution_Type_ID WHERE Institution_Type_Name = 'Funder'";
+include "../include/dbconnopen.php";
+$funders_result_sqlsafe = mysqli_query($cnnLSNA, $institution_list);
+while ($funder = mysqli_fetch_row($funders_result_sqlsafe)){
+    ?>
+    <option value = "<?php echo $funder[0]; ?>"><?php echo $funder[1];?></option>
+<?php
+}
+?>
+                                     </select>
                                         <!--Save a new date.  Check to make sure that the campaign doesn't already have an event on this date (deduplicate): -->
                                         <input type="button" value="Save" onclick="
                                             $.post(
@@ -1199,12 +1238,13 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                                                 {
                                                                     program_id: '<?php echo $program->program_id ?>',
                                                                     date: document.getElementById('new_date').value,
-                                                                    name: document.getElementById('date_activity_name').value,
-                                                                    type: document.getElementById('date_activity_type').options[document.getElementById('date_activity_type').selectedIndex].value
+   name: document.getElementById('date_activity_name').value,
+   funder: document.getElementById('funder').value,
+   type: document.getElementById('date_activity_type').options[document.getElementById('date_activity_type').selectedIndex].value
                                                                 },
                                                         function(response) {
                                                             //document.write(response);
-                                                            window.location = 'program_profile.php?schedule=1';
+                                                           window.location = 'program_profile.php?schedule=1';
                                                         }
                                                         );
                                                     }
@@ -1215,12 +1255,12 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                                             {
                                                                 program_id: '<?php echo $program->program_id ?>',
                                                                 date: document.getElementById('new_date').value,
-                                                                name: document.getElementById('date_activity_name').value,
-                                                                type: document.getElementById('date_activity_type').options[document.getElementById('date_activity_type').selectedIndex].value
+name: document.getElementById('date_activity_name').value,
+funder: document.getElementById('funder').value,
+type: document.getElementById('date_activity_type').options[document.getElementById('date_activity_type').selectedIndex].value
                                                             },
                                                     function(response) {
-                                                        //document.write(response);
-                                                        window.location = 'program_profile.php?schedule=1';
+                                                           window.location = 'program_profile.php?schedule=1';
                                                     }
                                                     );
                                                 }
@@ -1235,7 +1275,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                 <tr>
                                     <!-- <th>Date</th><th width="25%">Participants</th><th>No. of Participants</th><th>Add/Remove Participants</th> -->
                                     <!--Show the schedule: -->
-                                    <th>Delete this Session</th><th>Session/Activity Name</th><th width="10%">Date</th>
+                                    <th>Delete this Session</th><th>Session Funder</th><th>Session/Activity Name</th><th width="10%">Date</th>
                                     <th width="25%">Participants and Involvement Type</th><th>Session/Activity Type</th>
                                     <th>No. of Participants</th><th>Add/Remove Participants</th>
                                 </tr>
@@ -1278,7 +1318,9 @@ if ($USER->has_site_access($LSNA_id, $AdminAccess)){
 } //end access check
 ?>
 </td>
+<td style="padding-bottom:0;"><?php echo $date['Institution_Name']; ?></td>
                                         <td style="padding-bottom:0;"><?php echo $date['Activity_Name']; ?></td>
+
                                         <td style="padding-bottom:0;"><?php
                                             $array_of_dates[] = $date['Date'];
                                             $datetime = new DateTime($date['Date']);
@@ -1818,18 +1860,7 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                            "><h4 style="text-align:left;margin-left:20px;background-color:#f2f2f2;padding:2px 5px;border:1px solid #696969;"><?php echo $school['Institution_Name']; ?></h4></a>
                         <div id="school_<?php echo $school['Institution_ID']; ?>_details" class="detail_expand" style="margin-left:25px;">
                             <?php
-                            $get_PMs = "SELECT * FROM Participants INNER JOIN Institutions_Participants ON Institutions_Participants.Participant_ID=Participants.Participant_ID
-                                                            INNER JOIN PM_Years ON Participant=Participant_ID AND School='" . $school['Institution_ID'] . "'
-                                                            WHERE Institutions_Participants.Institution_ID='" . $school['Institution_ID'] . "' AND Institutions_Participants.Is_PM='1'";
-                            $get_PMs = "SELECT * FROM Participants 
-                                                            INNER JOIN Institutions_Participants 
-                                                                    ON Institutions_Participants.Participant_ID=Participants.Participant_ID
-                                                            LEFT JOIN PM_Years ON (Participant=Participants.Participant_ID AND School=Institutions_Participants.Institution_ID)
-                                                                WHERE Institutions_Participants.Institution_ID='" . $school['Institution_ID'] . "'
-                                                                    AND Institutions_Participants.Is_PM='1'
-                                                                    GROUP BY Participants.Participant_ID, Year";
-                            // echo $get_PMs;
-                            // $get_PMs="SELECT * FROM Participants INNER JOIN PM_Years ON Participant=Participant_ID AND School='" . $school['Institution_ID'] . "'";
+                            $get_PMs = "SELECT * FROM Participants INNER JOIN Institutions_Participants ON Institutions_Participants.Participant_ID=Participants.Participant_ID LEFT JOIN PM_Years ON (Participant=Participants.Participant_ID AND School=Institutions_Participants.Institution_ID) WHERE Institutions_Participants.Institution_ID='" . $school['Institution_ID'] . "' AND Institutions_Participants.Is_PM='1' GROUP BY Participants.Participant_ID, Year";
                             $PMs = mysqli_query($cnnLSNA, $get_PMs);
                             while ($PM = mysqli_fetch_array($PMs)) {
                                 /* creates the list of parent mentors for this school, with links to their profiles: */
@@ -2569,3 +2600,4 @@ echo $num_persons[0];
     </table>
 </div>
 <?php include "../../footer.php"; ?>
+

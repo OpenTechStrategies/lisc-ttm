@@ -30,19 +30,15 @@ include "../include/dbconnopen.php";
 $school_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['school']);
 $year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['year']);
 $id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['id']);
-$reset_affiliation="UPDATE PM_Years SET School='".$school_sqlsafe."',
-    Year='".$year_sqlsafe."'
-        WHERE PM_Year_ID='".$id_sqlsafe."'";
-mysqli_query($cnnLSNA, $reset_affiliation);
+$participant_id_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['person']);
+if ( $id_sqlsafe != 0 ) {
+    $reset_affiliation="UPDATE PM_Years SET School='".$school_sqlsafe."',
+        Year='".$year_sqlsafe."' WHERE PM_Year_ID='".$id_sqlsafe."'";
+    mysqli_query($cnnLSNA, $reset_affiliation);
+}
+else {
+    $create_affiliation = "INSERT INTO PM_Years (Participant, School, Year) VALUES ($participant_id_sqlsafe, $school_sqlsafe, $year_sqlsafe)";
+    mysqli_query($cnnLSNA, $create_affiliation);
+}
 include "../include/dbconnclose.php";
-
-/*else{
-$update_inst_link = "UPDATE Institutions_Participants SET Year_" . $_POST['year'] . "=1,
-    Is_PM=1
-    WHERE Institutions_Participants_ID='" . $_POST['link_id'] . "'";
-echo $update_inst_link;
-
-include "../include/dbconnopen.php";
-mysqli_query($cnnLSNA, $update_inst_link);
-include "../include/dbconnclose.php";}*/
 ?>

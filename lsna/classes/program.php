@@ -77,9 +77,7 @@ class Program
      */
     public function get_dates(){
         include "../include/dbconnopen.php";
-        $program_dates_query = "SELECT * FROM Subcategory_Dates LEFT JOIN (Subcategories)
-                                ON (Subcategories.Subcategory_ID=Subcategory_Dates.Subcategory_ID) WHERE Subcategory_Dates.Subcategory_ID='" . $this->program_id . "'
-                                    ORDER BY Date";
+        $program_dates_query = "SELECT * FROM Subcategory_Dates LEFT JOIN (Subcategories) ON (Subcategories.Subcategory_ID=Subcategory_Dates.Subcategory_ID) LEFT JOIN Institutions ON Funder_ID = Institution_ID WHERE Subcategory_Dates.Subcategory_ID='" . $this->program_id . "' ORDER BY Date";
         //echo $program_dates_query;
         $dates = mysqli_query($cnnLSNA, $program_dates_query);
         include "../include/dbconnclose.php";

@@ -37,6 +37,7 @@ if ($_POST['action'] == 'save_note') {
     $program_id_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['program_id']);
     $name_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['name']);
     $type_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['type']);
+    $funder_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['funder']);
     $note_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['note']);
     $date_reformat = explode('-', $_POST['date']);
     $save_date = $date_reformat[2] . '-' . $date_reformat[0] . '-' . $date_reformat[1];
@@ -45,12 +46,13 @@ if ($_POST['action'] == 'save_note') {
                             Date,
                             Activity_Name,
                             Activity_Type, 
-                            Meeting_Note) VALUES (
+                            Meeting_Note, Funder_ID) VALUES (
                             '" . $program_id_sqlsafe . "',
                             '" . $save_date . "',
                             '" . $name_sqlsafe . "',
                             '" . $type_sqlsafe . "',
-                            '" . $note_sqlsafe . "'
+                            '" . $note_sqlsafe . "',
+                            '" . $funder_sqlsafe . "'
                             )";
     mysqli_query($cnnLSNA, $add_date_to_program);
     include "../include/dbconnclose.php";

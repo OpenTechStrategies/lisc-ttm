@@ -40,7 +40,7 @@ user_enforce_has_access($LSNA_id);
 			<td class="menu_item"><!-- Link to programs/campaigns page.  Sets search page cookie, unsets the profile and new cookies. -->
                             <a href="/lsna/programs/programs.php">Issue Areas</a></td>
 			<td class="menu_item">
-                            <a href="/lsna/institutions/institutions.php">Institutions</a></td>
+                            <a href="/lsna/institutions/institutions.php">Institutions/Funders</a></td>
 			<td class="menu_item"><a href="/lsna/reports/reports.php" id="reports_selector">Reports</a></td>
 			<td class="menu_item"><a href="/index.php?action=logout">Log Out</a>
 		</tr>

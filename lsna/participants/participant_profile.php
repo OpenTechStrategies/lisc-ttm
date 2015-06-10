@@ -1305,14 +1305,33 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                         ?><br>
 
                         <?php
-                        $get_years_schools = "SELECT Institution_Name, Year, PM_Year_ID, School FROM PM_Years
-                    INNER JOIN Institutions ON School=Institution_ID WHERE Participant=$parti->participant_id ORDER BY Year;";
+                        $get_years_schools = "SELECT Institution_Name, Year, PM_Year_ID, School FROM PM_Years INNER JOIN Institutions ON School=Institution_ID WHERE Participant=$parti->participant_id ORDER BY Year;";
                         include "../include/dbconnopen.php";
                         $years_schools = mysqli_query($cnnLSNA, $get_years_schools);
-                        while ($yr = mysqli_fetch_row($years_schools)) {
+                        $has_pm_years = mysqli_num_rows($years_schools);
+                        $get_pm_school = "SELECT Institution_Name, NULL, NULL, Institutions_Participants.Institution_ID FROM Institutions INNER JOIN Institutions_Participants ON Institutions.Institution_ID = Institutions_Participants.Institution_ID WHERE Institutions_Participants.Is_PM = 1 AND Participant_ID = $parti->participant_id GROUP BY Institutions_Participants.Institution_ID";
+                        $pm_schools_list = mysqli_query($cnnLSNA, $get_pm_school);
+                        $total_school_list = array();
+                        $school_ids = array();
+                        while ($pm_schools = mysqli_fetch_row($years_schools)){
+                            $school_ids[] = $pm_schools[3];
+                            $total_school_list[] = $pm_schools;
+                        }
+                        while ($pm_schools = mysqli_fetch_row($pm_schools_list)){
+                            if (! in_array($pm_schools[3], $school_ids)){
+                                $school_ids[] = $pm_schools[3];
+                                $total_school_list[] = $pm_schools;
+                            }
+                        }
+                        foreach ( $total_school_list as $yr) {
                             $show_year = str_split($yr[1], 2);
                             /* school  |  school year */
-                            echo $yr[0] . ' &nbsp;&nbsp;|&nbsp;&nbsp; 20', $show_year[0] . '-20' . $show_year[1];
+                            if ($show_year[1]) {
+                                echo $yr[0] . ' &nbsp;&nbsp;|&nbsp;&nbsp; 20', $show_year[0] . '-20' . $show_year[1];
+                            }
+                            else {
+                                echo $yr[0];
+                            }
                             ?>
                                 <!--Edit school and year right here!-->
                                 <a href="javascript:;" onclick="$('#edit_pm_year_<?php echo $yr[2] ?>').toggle();">Edit</a>
@@ -1350,7 +1369,6 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                             <?php
                             ?>
                             <select id="edit_year_<?php echo $yr[2] ?>"><option value="">------</option>
-
                                 <option value="1011" <?php echo ($yr[1] == 1011 ? 'selected=="selected"' : null) ?>>2010-11</option>
                                 <option value="1112" <?php echo ($yr[1] == 1112 ? 'selected=="selected"' : null) ?>>2011-12</option>
                                 <option value="1213" <?php echo ($yr[1] == 1213 ? 'selected=="selected"' : null) ?>>2012-13</option>
@@ -1365,7 +1383,8 @@ if ($USER->has_site_access($LSNA_id, $DataEntryAccess)){
                                 {
                                     school: document.getElementById('edit_school_<?php echo $yr[2] ?>').value,
                                     year: document.getElementById('edit_year_<?php echo $yr[2] ?>').value,
-                                    id: '<?php echo $yr[2]; ?>'
+                                    id: '<?php echo $yr[2]; ?>',
+                                    person: '<?php echo $parti->participant_id; ?>',
                                 },
                         function(response) {
                             //document.write(response);
@@ -2025,7 +2044,94 @@ if ($USER->has_site_access($LSNA_id, $AdminAccess)){
     </table>
 </td>
 </tr>
+<tr>
+ <td>
+ <h4>Services Rendered</h4>
+ <table>
 
+ <tr><th>Issue Area</th><th>Month</th><th>Year</th></tr>
+ <!-- get existing attendance -->
+ <?php
+ $get_issue_attendance="SELECT Issue_Area, Month, Year FROM Issue_Attendance LEFT JOIN Issue_Areas ON Issue_Attendance.Issue_ID=Issue_Areas.Issue_ID "
+ . "WHERE Participant_ID=$parti->participant_id";
+ //echo $get_issue_attendance;
+ include "../include/dbconnopen.php";
+ $issues=mysqli_query($cnnLSNA, $get_issue_attendance);
+ while ($iss=mysqli_fetch_row($issues)){
+ ?>
+ <tr><td><?php echo $iss[0]; ?></td>
+ <td><?php if ($iss[1]==1){ echo "January"; }
+ if ($iss[1]==2){ echo "February"; }
+ if ($iss[1]==3){ echo "March"; }
+ if ($iss[1]==4){ echo "April"; }
+ if ($iss[1]==5){ echo "May"; }
+ if ($iss[1]==6){ echo "June"; }
+ if ($iss[1]==7){ echo "July"; }
+ if ($iss[1]==8){ echo "August"; }
+ if ($iss[1]==9){ echo "September"; }
+ if ($iss[1]==10){ echo "October"; }
+ if ($iss[1]==11){ echo "November"; }
+ if ($iss[1]==12){ echo "December"; }
+
+ ?></td>
+ <td><?php echo $iss[2]; ?></td>
+ </tr>
+ <?php
+ }
+ include "../include/dbconnclose.php";
+
+ ?>
+ <tr><td><select id="issue_area">
+ <option value="">-----</option>
+ <?php
+ $get_areas="SELECT * FROM Issue_Areas";
+ include "../include/dbconnopen.php";
+ $areas=mysqli_query($cnnLSNA, $get_areas);
+while ($area=mysqli_fetch_row($areas)){
+ ?>
+ <option value="<?php echo $area[0];?>"><?php echo $area[1];?></option>
+ <?php
+ }
+ include "../include/dbconnclose.php";
+ ?>
+ </select>
+ </td><td><select id="issue_month">
+ <option value="1">January</option>
+ <option value="2">February</option>
+ <option value="3">March</option>
+ <option value="4">April</option>
+ <option value="5">May</option>
+ <option value="6">June</option>
+ <option value="7">July</option>
+ <option value="8">August</option>
+ <option value="9">September</option>
+ <option value="10">October</option>
+ <option value="11">November</option>
+ <option value="12">December</option>
+
+ </select></td> <td><select id="issue_year">
+ <option>2012</option>
+ <option>2013</option>
+ <option>2014</option>
+ <option>2015</option>
+ <option>2016</option>
+ </select></td>
+ <td><input type="button" value="Save" onclick="$.post(
+     '../reports/add_issue_attendance.php',
+        {
+          issue: document.getElementById('issue_area').value,
+                issue_month: document.getElementById('issue_month').value,
+                issue_year: document.getElementById('issue_year').value,
+                issue_person: '<?php echo $parti->participant_id; ?>'
+                },
+     function (response){
+         //document.write(response);
+         window.location='participant_profile.php';
+     })"</td></tr>
+ </table>
+ </td>
+
+</tr>
     <?php
 /* if this person is a parent mentor, create a graph that shows change over time in the surveys they have completed: */
 

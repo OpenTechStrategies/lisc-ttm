@@ -86,15 +86,31 @@ elseif($_POST['action']=='filter'){
     $issue_year_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['issue_year']);
     if ($_POST['issue_year']!=''){$year_query=" AND Year='".$issue_year_sqlsafe."' ";}
     if ($_POST['issue_month']!=''){$month_query=" AND Month='".$issue_month_sqlsafe."' ";}
-     $ytd_num="SELECT * FROM Issue_Attendance WHERE Issue_ID='".$issue_sqlsafe."' " . $year_query . $month_query;
-     $ytd_num_call=mysqli_query($cnnLSNA, $ytd_num);
-     echo "<br>". mysqli_num_rows($ytd_num_call);
-     include "../include/dbconnclose.php";
+    $ytd_num="SELECT * FROM Issue_Attendance WHERE Issue_ID='".$issue_sqlsafe."' " . $year_query . $month_query;
+    $ytd_num_call=mysqli_query($cnnLSNA, $ytd_num);
+    $participant_total =  mysqli_num_rows($ytd_num_call);
+    $non_parti_total = "SELECT SUM(Number_Served) FROM Issue_Service WHERE Issue_ID = '" . $issue_sqlsafe . "' " . $year_query . $month_query;
+    $non_parti_result = mysqli_query($cnnLSNA, $non_parti_total);
+    $non_parti_row = mysqli_fetch_row($non_parti_result);
+    $non_participant_total = $non_parti_row[0];
+    echo $participant_total + $non_participant_total;
+    include "../include/dbconnclose.php";
 }
 elseif($_POST['action']=='new_service'){
     include "../include/dbconnopen.php";
     $service_name_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['service_name']);
     $query="INSERT INTO Issue_Areas (Issue_Area) VALUES ('".$service_name_sqlsafe."')";
+    mysqli_query($cnnLSNA, $query);
+    include "../include/dbconnclose.php";
+}
+elseif( isset($_POST['save_number'])){
+    include "../include/dbconnopen.php";
+    $num_served_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['num_served']);
+    $save_number_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['save_number']);
+    $issue_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['issue']);
+    $month_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['month_served']);
+    $year_sqlsafe = mysqli_real_escape_string($cnnLSNA, $_POST['year_served']);    
+    $query="INSERT INTO Issue_Service (Number_Served, Issue_ID, Month, Year) VALUES ('" . $num_served_sqlsafe . "', '" . $issue_sqlsafe . "', '" . $month_sqlsafe . "', '" . $year_sqlsafe . "')";
     mysqli_query($cnnLSNA, $query);
     include "../include/dbconnclose.php";
 }
