@@ -918,11 +918,8 @@ $lc_rent = $participant->lc_rent;
 $work_study = $participant->work_study;
 $food_costs = $participant->other_costs;
 ?>
-        <tr>
-            <th>Calculated Field</th>
-        <th>Value</th>
-        </tr>
-        <tr>
+<tr><td rowspan="3">Household</td>
+        
             <th>Dependency Status</th>
             <td>
         <?php
@@ -963,7 +960,26 @@ $food_costs = $participant->other_costs;
         ?>
             </td>
         </tr>
+
         <tr>
+<td></td>
+        <th> </th>
+        <th> </th>
+        </tr>
+        <tr>
+        <td rowspan=4>Cost of Attendance</td>
+        <th>Tuition & Mandatory Fees</th>
+        <td> <?php echo "$" . number_format($participant->tuition, 2); ?></td>
+        </tr>
+        <tr>
+        <th>Food, Transportation and Books</th>
+        <td><?php echo "$" . number_format($participant->other_costs, 2);?></td>
+            </tr>
+            <tr>
+        <th>La Casa Student Housing</th>
+        <td><?php echo "$" . number_format($participant->lc_rent, 2);?></td>
+            </tr>
+            <tr>
             <th>Total costs for the academic year</th>
             <td>
         <?php
@@ -972,17 +988,29 @@ $food_costs = $participant->other_costs;
         ?>
             </td>
         </tr>
-        <tr>
-            <th>Total tuition and fees</th>
-            <td>
-        <?php
-        $tuition_fees = ($participant->tuition + $participant->mandatory_fees);
-        echo "$" . number_format($tuition_fees, 2);
-        ?>
-            </td>
-        </tr>
-        <tr>
-            <th>Total financial aid received</th>
+            <tr>
+        <td rowspan=6>Summary Award</td>
+        <th>Federal Pell Grant</th>
+        <td><?php echo "$" . number_format($participant->pell_grant, 2);?></td>
+            </tr>
+            <tr>
+        <th>Illinois MAP Grant</th>
+        <td><?php echo "$" . number_format($participant->map_grant, 2);?></td>
+            </tr>
+            <tr>
+        <th>College Scholarships</th>
+        <td><?php echo "$" . number_format($participant->university_scholarship, 2);?></td>
+            </tr>
+            <tr>
+        <th>Federal Direct Subsidized Loan</th>
+        <td><?php echo "$" . number_format($participant->subsidized_loan, 2);?></td>
+            </tr>
+            <tr>
+        <th>Federal Direct Unsubsidized Loan</th>
+        <td><?php echo "$" . number_format($participant->unsubsidized_loan, 2);?></td>
+            </tr>
+            <tr>
+        <th>Award Summary Total</th>
             <td>
         <?php
         $total_aid = ($participant->pell_grant + 
@@ -993,33 +1021,53 @@ $food_costs = $participant->other_costs;
         echo "$" . number_format($total_aid, 2);
         ?>
             </td>
-        </tr>
-        <tr>
-            <th>Non school assistance needed</th>
+            </tr>
+            <tr>
+        <td rowspan=4>Anticipated Other Assistance</td>
+        <th>Work-Study or Other Employment</th>
+        <td><?php echo "$" . number_format($participant->work_study, 2);?></td>
+            </tr>
+            <tr>
+        <th>Savings</th>
+        <td><?php echo "$" . number_format($participant->savings, 2);?></td>
+            </tr>
+            <tr>
+        <th>Family/Sponsor/Other</th>
+        <td><?php echo "$" . number_format($participant->family_help, 2);?></td>
+            </tr>
+            <tr>
+        <th>Total Other Assistance</th> 
+<td> 
+        <?php
+        $self_help = ($work_study + $participant->savings + $participant->family_help);
+        echo "$" . number_format($self_help, 2);
+        ?></td>
+            </tr>
+            <tr>
+            <td rowspan=2>Needed Assistance</td>
+        <th>Non-School Assistance Needed (Does not include “Other Assistance”)</th>
             <td> 
         <?php
         $assistance_needed = ($total_costs - $total_aid);
         echo "$" . number_format($assistance_needed, 2);
         ?>
             </td>
-        </tr>
-        <tr>
-            <th>Total self help</th>
-            <td> 
-        <?php
-        $self_help = ($work_study + $participant->savings + $participant->family_help);
-        echo "$" . number_format($self_help, 2);
-        ?></tr>
-        <tr>
-            <th>Total need</th>
+            </tr>
+            <tr>
+        <th>Total Need </th>
              <td> 
         <?php
         $total_need = ($assistance_needed - $self_help);
         echo "$" . number_format($total_need, 2);
         ?>
             </td>
-        </tr>
+            </tr>
         <tr>
+        <td rowspan="2">La Casa</td>
+        <th>La Casa Scholarship</th>
+            <td> <?php echo "$" . number_format($participant->lc_scholarship, 2);?></td>
+            </tr>
+            <tr>
             <th>La Casa rent</th>
             <td> 
         <?php
@@ -1037,25 +1085,6 @@ $food_costs = $participant->other_costs;
         </table>        
 <br />
 <br />
-        <table class="inner_table" style="border: 2px solid #696969;">
-        <tr>
-            <th>Loan Type</th>
-        <th>Loan Amount</th>
-        <th>Term</th>
-        </tr>
-        <?php
-            $loan_info = $participant->get_loans_info($participant->participant_id);
-        foreach ($loan_info as $loan){
-            ?>
-            <tr>
-            <td><strong><?php echo $loan['type']; ?></strong></td>
-            <td><?php echo $loan['amount']; ?></td>
-            <td><?php echo $loan['term']; ?></td>
-            </tr>
-            <?php
-        }
-        ?>
-        </table>        
     </td>
     </tr>
 <tr>
