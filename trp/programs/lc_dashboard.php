@@ -76,8 +76,8 @@ include "../participants/construction_functions.php";
     <td><strong>Date of Birth: </strong></td>
     <td>
     <span class="basic_info_show"><?php echo $DOB; ?></span>
-<input class="basic_info_edit hasDatepickers" id="dob_edit" value="<?php echo $DOB; ?>"/>
-    <span class="basic_info_edit helptext">(MM/DD/YYYY)</span>
+<input class="basic_info_edit date_popout" id="dob_edit" value="<?php echo display_date($DOB); ?>"/>
+    <span class="basic_info_edit helptext">(mm/dd/yyyy)</span>
     </td>
 
     <td><strong>Gender: </strong></td>
@@ -298,13 +298,13 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->service_hours_submi
     </tr>
     <tr>
     <td><strong>Application Received </strong></td>
-    <td> <?php echo  $participant->application_received;
-echo la_casa_edit_data_gen_input($participant->application_received, 'application_received_edit', 'edit_term'); ?></td>
+<td> <?php echo  display_date($participant->application_received);
+echo la_casa_edit_data_gen_input($participant->application_received, 'application_received_edit', 'edit_term date_popout', '(mm/dd/yyyy)'); ?></td>
     </tr>
     <tr>
     <td><strong>Application Completed </strong></td>
-    <td> <?php echo  $participant->application_completed;
-echo la_casa_edit_data_gen_input($participant->application_completed, 'application_completed_edit', 'edit_term'); ?></td>
+<td> <?php echo  display_date($participant->application_completed);
+echo la_casa_edit_data_gen_input($participant->application_completed, 'application_completed_edit', 'edit_term date_popout', '(mm/dd/yyyy)'); ?></td>
     <td><strong>Household Size </strong></td>
     <td> <?php echo  $participant->household_size;
     echo la_casa_edit_data_gen_input($participant->household_size, 'household_size_edit', 'edit_term'); ?></td>
@@ -354,13 +354,13 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->dependency_status, 
     <td><strong>College Grade Level </strong></td>
     <td> <?php echo  $participant->college_grade_level;
 echo la_casa_edit_data_gen_selector($grade_array, $participant->college_grade_level, 'college_grade_level_edit', 'edit_term'); ?></td>
-    <td><strong>Reason Leave </strong></td>
+    <td><strong>Reason to Leave La Casa </strong></td>
     <td> <?php echo  $participant->reason_leave;
     echo la_casa_edit_data_gen_input($participant->reason_leave, 'reason_leave_edit', 'edit_term'); ?></td>
     </tr>
     <tr>
 
-    <td><strong>Reason Stay </strong></td>
+    <td><strong>Reason to Stay at La Casa </strong></td>
     <td> <?php echo  $participant->reason_stay;
     echo la_casa_edit_data_gen_input($participant->reason_stay, 'reason_stay_edit', 'edit_term'); ?></td>
 
@@ -394,11 +394,11 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->first_generation_co
     </tr>
     <tr>
     <td><strong>Move In Date </strong></td>
-    <td> <?php echo  $participant->move_in_date;
-    echo la_casa_edit_data_gen_input($participant->move_in_date, 'move_in_date_edit', 'edit_term'); ?></td>
+<td> <?php echo  display_date($participant->move_in_date);
+echo la_casa_edit_data_gen_input($participant->move_in_date, 'move_in_date_edit', 'edit_term date_popout', '(mm/dd/yyyy)'); ?></td>
     <td><strong>Move Out Date </strong></td>
-    <td> <?php echo  $participant->move_out_date;
-    echo la_casa_edit_data_gen_input($participant->move_out_date, 'move_out_date_edit', 'edit_term'); ?></td>
+<td> <?php echo  display_date($participant->move_out_date);
+echo la_casa_edit_data_gen_input($participant->move_out_date, 'move_out_date_edit', 'edit_term date_popout', '(mm/dd/yyyy)'); ?></td>
     </tr>
     <tr>
 
@@ -492,17 +492,17 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->self_sustaining, 's
     <tr>
 
     <td><strong>Email Pack </strong></td>
-    <td> <?php echo  $participant->email_pack;
-echo la_casa_edit_data_gen_input($participant->email_pack, 'email_pack_edit', 'edit_term date_popout'); ?></td>
+<td> <?php echo  display_date($participant->email_pack);
+echo la_casa_edit_data_gen_input($participant->email_pack, 'email_pack_edit', 'edit_term date_popout date_popout', '(mm/dd/yyyy)'); ?></td>
 
     <td><strong>Email Orientation </strong></td>
-    <td> <?php echo  $participant->email_orientation;
-echo la_casa_edit_data_gen_input($participant->email_orientation, 'email_orientation_edit', 'edit_term date_popout'); ?></td>
+<td> <?php echo  display_date($participant->email_orientation);
+echo la_casa_edit_data_gen_input($participant->email_orientation, 'email_orientation_edit', 'edit_term date_popout date_popout', '(mm/dd/yyyy)'); ?></td>
     </tr>
     <tr>
     <td><strong>Email Roommate </strong></td>
-    <td> <?php echo  $participant->email_roommate;
-echo la_casa_edit_data_gen_input($participant->email_roommate, 'email_roommate_edit', 'edit_term date_popout'); ?></td>
+<td> <?php echo  display_date($participant->email_roommate);
+echo la_casa_edit_data_gen_input($participant->email_roommate, 'email_roommate_edit', 'edit_term date_popout date_popout', '(mm/dd/yyyy)'); ?></td>
 
     <td><strong>Move In Time </strong></td>
     <td> <?php echo  $participant->move_in_time;
@@ -524,8 +524,8 @@ echo la_casa_edit_data_gen_input($participant->email_roommate, 'email_roommate_e
     echo la_casa_edit_data_gen_input($participant->move_in_note, 'move_in_note_edit', 'edit_term'); ?></td>
 
     <td><strong>Orientation Date </strong></td>
-    <td> <?php echo  $participant->orientation_date;
-    echo la_casa_edit_data_gen_input($participant->orientation_date, 'orientation_date_edit', 'edit_term'); ?></td>
+<td> <?php echo  display_date($participant->orientation_date);
+echo la_casa_edit_data_gen_input($participant->orientation_date, 'orientation_date_edit', 'edit_term date_popout', '(mm/dd/yyyy)'); ?></td>
     </tr>
     <tr>
     <td><strong>Orientation Time </strong></td>

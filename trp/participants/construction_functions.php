@@ -115,12 +115,15 @@ function la_casa_edit_data_gen_selector($array_of_options, $existing_value, $id_
  * Returns:
  * A string that can be inserted as html.
 */
-function la_casa_edit_data_gen_input($existing_value, $id_string, $class_string){
+function la_casa_edit_data_gen_input($existing_value, $id_string, $class_string, $helptext=null){
     $result = "<input type=text id=" . $id_string;
     $result .= " class='" . $class_string . "'";
     $result .= " size=5px ";
     $result .= " value='" . $existing_value;
     $result .= "'>";
+    if ($helptext){
+        $result .= "<span class='helptext'> " . $helptext . "</span>";
+    }
     return $result;
 }
 
@@ -137,5 +140,24 @@ function display_selected($select_array, $stored_value){
         return $select_array[$stored_value];
     }
 }
+
+/*
+ * Shows the date in a US format
+ * Takes:
+ * $date: a date string in YYYY-MM-DD format
+ * Returns:
+ * A date string in MM/DD/YYYY format
+ */
+function display_date ($date){
+    $date_pieces = explode('-', $date);
+    if ($date_pieces[2]){
+        $display_date = $date_pieces[1] . "/" . $date_pieces[2] . "/" . $date_pieces[0];
+    }
+    else{
+        $display_date = "";
+    }
+    return $display_date;
+}
+
 
 ?>

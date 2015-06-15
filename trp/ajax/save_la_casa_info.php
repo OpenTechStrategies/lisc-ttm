@@ -1,6 +1,14 @@
 <?php
 include "../include/dbconnopen.php";
 $la_casa_id = 6;
+function format_escape_date($date){
+    include "../include/dbconnopen.php";
+    $date_formatted = explode('/', $date);
+    $date_sqlsafe = mysqli_real_escape_string($cnnTRP, $date_formatted[2]) . "-" . mysqli_real_escape_string($cnnTRP, $date_formatted[0]) . "-" . mysqli_real_escape_string($cnnTRP, $date_formatted[1]);
+    return $date_sqlsafe;
+}
+$DOB_sqlsafe = format_escape_date($_POST['dob']);
+
 //set college id
 if ( isset($_POST['college_name']) && $_POST['college_name'] != ''){
         $insert_new_college = "INSERT INTO Colleges (College_Name, College_Type) VALUES ('" . 
@@ -21,9 +29,6 @@ else{
 
 
 //participant does not exist yet, so we must create him/her
-
-$dob_formatted = explode('/', $_POST['dob']);
-$DOB_sqlsafe = mysqli_real_escape_string($cnnTRP, $dob_formatted[2]) . "-" . mysqli_real_escape_string($cnnTRP, $dob_formatted[0]) . "-" . mysqli_real_escape_string($cnnTRP, $dob_formatted[1]);
 
 $add_participant_query_sqlsafe = "INSERT INTO Participants
      (First_Name,
@@ -171,8 +176,8 @@ Participant_ID
 '" . mysqli_real_escape_string($cnnTRP, $_POST['lcrc_username']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['lcrc_password']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['lcrc_print_code']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['application_received']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['application_completed']) . "',
+'" . format_escape_date($_POST['application_received']) . "',
+'" . format_escape_date($_POST['application_completed']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['household_size']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['parent1_agi']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['parent2_agi']) . "',
@@ -192,8 +197,8 @@ Participant_ID
 '" . mysqli_real_escape_string($cnnTRP, $_POST['persistence_graduation']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['student_high_school']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['ami']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_date']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['move_out_date']) . "',
+'" . format_escape_date($_POST['move_in_date']) . "',
+'" . format_escape_date($_POST['move_out_date']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['mid_twenties']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['masters_degree']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['married']) . "',
@@ -211,14 +216,14 @@ Participant_ID
 '" . mysqli_real_escape_string($cnnTRP, $_POST['lc_scholarship']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['application_source']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['notes']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['email_pack']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['email_orientation']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['email_roommate']) . "',
+'" . format_escape_date($_POST['email_pack']) . "',
+'" . format_escape_date($_POST['email_orientation']) . "',
+'" . format_escape_date($_POST['email_roommate']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_time']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_registration']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_address']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_note']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['orientation_date']) . "',
+'" . format_escape_date($_POST['orientation_date']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['orientation_time']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['work_study']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['other_costs']) . "',
@@ -293,8 +298,8 @@ Service_Hours_Submitted = '" . mysqli_real_escape_string($cnnTRP, $_POST['servic
 LCRC_Username = '" . mysqli_real_escape_string($cnnTRP, $_POST['lcrc_username']) . "',
 LCRC_Password = '" . mysqli_real_escape_string($cnnTRP, $_POST['lcrc_password']) . "',
 LCRC_Print_Code = '" . mysqli_real_escape_string($cnnTRP, $_POST['lcrc_print_code']) . "',
-Application_Received = '" . mysqli_real_escape_string($cnnTRP, $_POST['application_received']) . "',
-Application_Completed = '" . mysqli_real_escape_string($cnnTRP, $_POST['application_completed']) . "',
+Application_Received = '" . format_escape_date($_POST['application_received']) . "',
+Application_Completed = '" . format_escape_date($_POST['application_completed']) . "',
 Household_Size = '" . mysqli_real_escape_string($cnnTRP, $_POST['household_size']) . "',
 Parent1_AGI = '" . mysqli_real_escape_string($cnnTRP, $_POST['parent1_agi']) . "',
 Parent2_AGI = '" . mysqli_real_escape_string($cnnTRP, $_POST['parent2_agi']) . "',
@@ -314,8 +319,8 @@ First_Generation_College_Student = '" . mysqli_real_escape_string($cnnTRP, $_POS
 Persistence_Graduation = '" . mysqli_real_escape_string($cnnTRP, $_POST['persistence_graduation']) . "',
 Student_High_School = '" . mysqli_real_escape_string($cnnTRP, $_POST['student_high_school']) . "',
 AMI = '" . mysqli_real_escape_string($cnnTRP, $_POST['ami']) . "',
-Move_In_Date = '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_date']) . "',
-Move_Out_Date = '" . mysqli_real_escape_string($cnnTRP, $_POST['move_out_date']) . "',
+Move_In_Date = '" . format_escape_date($_POST['move_in_date']) . "',
+Move_Out_Date = '" . format_escape_date($_POST['move_out_date']) . "',
 Mid_Twenties = '" . mysqli_real_escape_string($cnnTRP, $_POST['mid_twenties']) . "',
 Masters_Degree = '" . mysqli_real_escape_string($cnnTRP, $_POST['masters_degree']) . "',
 Married = '" . mysqli_real_escape_string($cnnTRP, $_POST['married']) . "',
@@ -333,14 +338,14 @@ Family_Help = '" . mysqli_real_escape_string($cnnTRP, $_POST['family_help']) . "
 LC_Scholarship = '" . mysqli_real_escape_string($cnnTRP, $_POST['lc_scholarship']) . "',
 Application_Source = '" . mysqli_real_escape_string($cnnTRP, $_POST['application_source']) . "',
 Notes = '" . mysqli_real_escape_string($cnnTRP, $_POST['notes']) . "',
-Email_Pack = '" . mysqli_real_escape_string($cnnTRP, $_POST['email_pack']) . "',
-Email_Orientation = '" . mysqli_real_escape_string($cnnTRP, $_POST['email_orientation']) . "',
-Email_Roommate = '" . mysqli_real_escape_string($cnnTRP, $_POST['email_roommate']) . "',
+Email_Pack = '" . format_escape_date($_POST['email_pack']) . "',
+Email_Orientation = '" . format_escape_date($_POST['email_orientation']) . "',
+Email_Roommate = '" . format_escape_date($_POST['email_roommate']) . "',
 Move_In_Time = '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_time']) . "',
 Move_In_Registration = '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_registration']) . "',
 Move_In_Address = '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_address']) . "',
 Move_In_Note = '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_note']) . "',
-Orientation_Date = '" . mysqli_real_escape_string($cnnTRP, $_POST['orientation_date']) . "',
+Orientation_Date = '" . format_escape_date($_POST['orientation_date']) . "',
 Orientation_Time = '" . mysqli_real_escape_string($cnnTRP, $_POST['orientation_time']) . "',
 Work_Study = '" . mysqli_real_escape_string($cnnTRP, $_POST['work_study']) . "',
 Other_Costs = '" . mysqli_real_escape_string($cnnTRP, $_POST['other_costs']) . "',

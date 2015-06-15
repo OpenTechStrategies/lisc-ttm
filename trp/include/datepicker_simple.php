@@ -42,11 +42,11 @@ user_enforce_has_access($TRP_id);
                 
                 $(".hasDatepick").datepicker({dateFormat: "yy-mm-dd",
                     changeYear: true,
-                yearRange: "1920:2020"});
-                $(".date_popout").datepicker({dateFormat: "yy-mm-dd",
+                    yearRange: "1920:2020"});
+                $(".date_popout").datepicker({
+                    dateFormat: "mm/dd/yy",
                     changeYear: true,
-                yearRange: "2000:2020"});
-
-	});
+                    yearRange: "1990:2020"});
+	        });
         </script>
         
