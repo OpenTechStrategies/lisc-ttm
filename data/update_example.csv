@@ -1,0 +1,7 @@
+servername,server,user,passwd,dbname
+core,localhost,ttmcorerw,TESTPASS,ttm-core
+enlace,localhost,ttmenlacerw,TESTPASS,ttm-enlace
+bickerdike,localhost,ttmbickerdikerw,TESTPASS,ttm-bickerdike
+lsna,localhost,ttmlsnarw,TESTPASS,ttm-lsna
+swop,localhost,ttmswoprw,TESTPASS,ttm-swop
+trp,localhost,ttmtrprw,TESTPASS,ttm-trp

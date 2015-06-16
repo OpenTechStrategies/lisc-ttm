@@ -148,9 +148,7 @@ class User {
         global $AdminAccess;
         if (!is_null($program_access)) {
             $our_program_access = $this->program_access($site_id);
-            if (!in_array($program_access, $our_program_access) &&
-                // 'a' in program access means "has all program access for this site"
-                !in_array('a', $our_program_access)) {
+            if (!in_array($program_access, $our_program_access)) {
                 return array(
                     false,
                     "Sorry!  You don't have permission to access this page.  Please contact your site administrator for more information.");
@@ -170,34 +168,8 @@ class User {
     //
     // Args:
     //  - site: The site ID we are checking this user's program access for
-    //
-    // Returns:
-    //  An array of all program ids that user has access to.
-    //  These correspond to programs within each subsite.
-    //
-    // NOTES:
-    //  - "n" is None, a special case.  The reason for this rather than
-    //    an empty array is that there are some duplicate rows (:\) in
-    //    the db, and "none" takes precedence in case of duplication there.
-    //  - Another special case is 'a', which really means "all access for
-    //    programs on this site".  If we see 'a' we thusly return "just a".
-    //    So if you see 'a' returned from this function, you know the
-    //    user has access to whatever program to some degree.
-    //  - In the future, this code, and the database needs to be updated
-    //    for a many to many relationship.  As it stands, a user can really
-    //    only have one program access per section.
     public function program_access($site) {
-        $program_access_array[] = $this->site_permissions[$site][1];
-        // note that if 'n' is in array, then the logged-in user has access
-        // to no programs, and we delete the rest of the array.  The 'n'
-        // takes precedence over any other entries.
-        if (in_array('n', $program_access_array)) {
-            $program_access_array = array();
-        } else if (in_array('a', $program_access_array)) {
-            $program_access_array = array('a');
-        }
-
-        return $program_access_array;
+        return $this->site_permissions[$site][1];
     }
 
     // Find whether a user has access to any one of an array of programs
@@ -212,12 +184,11 @@ class User {
             global $die_unauthorized;
             $failure_func = $die_unauthorized;
         }
-        if ( 'a' == $this->site_permissions[$site][1] ) {
-            return true;
-            
-        }
-        foreach ($program_array as $program){
-            if ( $program == $this->site_permissions[$site][1] ) {
+
+        $program_access = $this->program_access($site);
+
+        foreach ($program_array as $program) {
+            if (in_array($program, $program_access)) {
                 return true;
             }
         }
@@ -391,15 +362,51 @@ function getAllSiteAccess($user_id) {
     $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
     include $path; //connection to core db
     $user_id_sqlsafe = mysqli_real_escape_string($cnnLISC, $user_id);
-    $find_site_access_sqlsafe = "SELECT Privilege_ID, Site_Privilege_ID, Program_Access FROM Users_Privileges WHERE User_ID =" . $user_id;
+
+    $find_site_access_sqlsafe = "SELECT Privilege_ID, Site_Privilege_ID, Users_Privileges_Id FROM Users_Privileges WHERE User_ID =" . $user_id;
     $access_result = mysqli_query($cnnLISC, $find_site_access_sqlsafe);
     $access_return = array();
     while ($access = mysqli_fetch_row($access_result)) {
-        $access_return[$access[0]] = array($access[1], $access[2]);
+        // site_id is called privilege_id in the database, confusingly
+        $site_id = $access[0];
+        // site_privilege_id is really the permission level
+        $permission_level = $access[1];
+        // id for this row!
+        $users_privileges_id = $access[2];
+
+        // Build up a new list of programs we have access to
+        $program_access = array();
+
+        $find_program_access_sqlsafe = "SELECT Program_Access FROM Users_Program_Access WHERE Users_Privileges_Id =" . mysqli_real_escape_string($cnnLISC, $users_privileges_id);
+        $program_access_result = mysqli_query($cnnLISC, $find_program_access_sqlsafe);
+        while ($program_access_row = mysqli_fetch_row($program_access_result)) {
+            $program_access[] = ($program_access_row[0]);
+        }
+
+        $access_return[$site_id] = array($permission_level, $program_access);
     }
     return $access_return;
 }
-
+// takes an array of programs
+// returns a query to insert rows with those programs into the
+// Users_Program_Access table
+function createProgramQuery($program_array, $user_privileges_id){
+    $program_access_query_sqlsafe = "INSERT INTO Users_Program_Access
+            (Users_Privileges_ID, Program_Access) VALUES";
+    $path =  $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+    include $path; //connection to core db
+    foreach ($program_array as $program){
+        $program_sqlsafe = mysqli_real_escape_string($cnnLISC, $program);
+        if ($counter == (count($program_array) - 1)) {
+            $program_access_query_sqlsafe .= "('" . $user_privileges_id . "', '" . $program_sqlsafe . "');";
+        }
+        else{
+            $program_access_query_sqlsafe .= "('" . $user_privileges_id . "', '" . $program_sqlsafe . "'), ";
+        }
+        $counter ++;
+    }
+    return $program_access_query_sqlsafe;
+}
 ?>
 <script text="javascript">
     function failAlert(){
