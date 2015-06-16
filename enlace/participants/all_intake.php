@@ -737,6 +737,6 @@ if (isset($_GET['assessment'])) {
 <br />
 <br />
 <?php
-} //ends access check if condition
+
  include "../../footer.php"; ?>
 
