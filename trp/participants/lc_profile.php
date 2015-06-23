@@ -602,11 +602,6 @@ echo la_casa_edit_data_gen_input($participant->application_completed, 'applicati
     echo la_casa_edit_data_gen_input($participant->high_school_gpa, 'high_school_gpa_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
-    <td><strong>Dependency Status </strong></td>
-<td> <?php echo  display_selected($yn_status, $participant->dependency_status);
-echo la_casa_edit_data_gen_selector($yn_status, $participant->dependency_status, 'dependency_status_edit', 'edit_term constant'); ?></td>
-    </tr>
-    <tr>
     <td><strong>HS GPA Weighted </strong></td>
     <td> <?php echo  $participant->hs_gpa_weighted;
     echo la_casa_edit_data_gen_input($participant->hs_gpa_weighted, 'hs_gpa_weighted_edit', 'edit_term constant'); ?></td>
@@ -677,49 +672,21 @@ echo la_casa_edit_data_gen_input($participant->move_in_date, 'move_in_date_edit'
 echo la_casa_edit_data_gen_input($participant->move_out_date, 'move_out_date_edit', 'edit_term constant date_popout', '(mm/dd/yyyy)'); ?></td>
     </tr>
     <tr>
-    <td><strong>Mid Twenties </strong></td>
-<td> <?php echo  display_selected($yn_array, $participant->mid_twenties);
-echo la_casa_edit_data_gen_selector($yn_array, $participant->mid_twenties, 'mid_twenties_edit', 'edit_term constant'); ?></td>
-    </tr>
-    <tr>
-    <td><strong>Masters Degree </strong></td>
-<td> <?php echo  display_selected($yn_array, $participant->masters_degree);
-echo la_casa_edit_data_gen_selector($yn_array, $participant->masters_degree, 'masters_degree_edit', 'edit_term constant'); ?></td>
-    </tr>
-    <tr>
-    <td><strong>Married </strong></td>
-<td> <?php echo  display_selected($yn_array, $participant->married);
-echo la_casa_edit_data_gen_selector($yn_array, $participant->married, 'married_edit', 'edit_term constant'); ?></td>
-    </tr>
-    <tr>
-    <td><strong>Military </strong></td>
-<td> <?php echo  display_selected($yn_array, $participant->military);
-echo la_casa_edit_data_gen_selector($yn_array, $participant->military, 'military_edit', 'edit_term constant'); ?></td>
-    </tr>
-    <tr>
-    <td><strong>Has Children </strong></td>
-<td> <?php echo  display_selected($yn_array, $participant->has_children);
-echo la_casa_edit_data_gen_selector($yn_array, $participant->has_children, 'has_children_edit', 'edit_term constant'); ?></td>
-    </tr>
-    <tr>
-    <td><strong>Homeless </strong></td>
-<td> <?php echo  display_selected($yn_array, $participant->homeless);
-echo la_casa_edit_data_gen_selector($yn_array, $participant->homeless, 'homeless_edit', 'edit_term constant'); ?></td>
-    </tr>
-    <tr>
-    <td><strong>Self Sustaining </strong></td>
-<td> <?php echo  display_selected($yn_array, $participant->self_sustaining);
-echo la_casa_edit_data_gen_selector($yn_array, $participant->self_sustaining, 'self_sustaining_edit', 'edit_term constant'); ?></td>
+    <td><strong>Reason for Independent Status:</strong></td>
+    <td>
+    <input type="checkbox" name="independent[]" id="mid_twenties">24 or Older
+<br/>    <input type="checkbox" name="independent[]" id="masters_degree">Master\'s Degree 
+<br/>    <input type="checkbox" name="independent[]" id="married">Married 
+<br/>    <input type="checkbox" name="independent[]" id="military">Military 
+<br/>    <input type="checkbox" name="independent[]" id="has_children">Has Children 
+<br/>    <input type="checkbox" name="independent[]" id="homeless">Homeless 
+<br/>    <input type="checkbox" name="independent[]" id="self_sustaining">Self Sustaining 
+    </td>
     </tr>
     <tr>
     <td><strong>Tax Exemptions </strong></td>
     <td> <?php echo  $participant->tax_exemptions;
     echo la_casa_edit_data_gen_input($participant->tax_exemptions, 'tax_exemptions_edit', 'edit_term constant'); ?></td>
-    </tr>
-    <tr>
-    <td><strong>Household Size TRP </strong></td>
-    <td> <?php echo  $participant->household_size_trp;
-    echo la_casa_edit_data_gen_input($participant->household_size_trp, 'household_size_trp_edit', 'edit_term constant'); ?></td>
     </tr>
     <tr>
     <td><strong>Work Study/Self Help</strong></td>
@@ -773,8 +740,9 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->self_sustaining, 's
     </tr>
     <tr>
     <td><strong>Notes </strong></td>
-    <td> <?php echo  $participant->notes;
-    echo la_casa_edit_data_gen_input($participant->notes, 'notes_edit', 'edit_term constant'); ?></td>
+    <td> <?php echo  $participant->notes; ?>
+    <textarea rows="10" id="notes_edit" class="edit_term constant" value=<?php echo  $participant->notes; ?>></textarea>
+    </td>
     </tr>
     <tr>
     <td><strong>Email Pack </strong></td>
@@ -825,6 +793,27 @@ echo la_casa_edit_data_gen_input($participant->orientation_date, 'orientation_da
     <td>
     <input type="button" value="Edit" onclick="$('.edit_term.constant').toggle()">
     <input type="button" value="Save" onclick="
+if (document.getElementById('mid_twenties').checked == true){
+    var mid_twenties = 1;
+}
+if (document.getElementById('masters_degree').checked == true){
+    var masters_degree = 1;
+}
+if (document.getElementById('married').checked == true){
+    var married = 1;
+}
+if (document.getElementById('military').checked == true){
+    var military = 1;
+}
+if (document.getElementById('has_children').checked == true){
+    var has_children = 1;
+}
+if (document.getElementById('homeless').checked == true){
+    var homeless = 1;
+}
+if (document.getElementById('self_sustaining').checked = true){
+    var self_sustaining = 1;
+}
         $.post(
             '../ajax/save_la_casa_info.php',
             {
@@ -851,7 +840,6 @@ echo la_casa_edit_data_gen_input($participant->orientation_date, 'orientation_da
                 student_agi: document.getElementById('student_agi_edit').value,
                 act_score: document.getElementById('act_score_edit').value,
                 high_school_gpa: document.getElementById('high_school_gpa_edit').value,
-                dependency_status: document.getElementById('dependency_status_edit').value,
                 hs_gpa_weighted: document.getElementById('hs_gpa_weighted_edit').value,
                 graduation_month: document.getElementById('graduation_month_edit').value,
                 expected_graduation_year: document.getElementById('expected_graduation_year_edit').value,
@@ -866,15 +854,14 @@ echo la_casa_edit_data_gen_input($participant->orientation_date, 'orientation_da
                 ami: document.getElementById('ami_edit').value,
                 move_in_date: document.getElementById('move_in_date_edit').value,
                 move_out_date: document.getElementById('move_out_date_edit').value,
-                mid_twenties: document.getElementById('mid_twenties_edit').value,
-                masters_degree: document.getElementById('masters_degree_edit').value,
-                married: document.getElementById('married_edit').value,
-                military: document.getElementById('military_edit').value,
-                has_children: document.getElementById('has_children_edit').value,
-                homeless: document.getElementById('homeless_edit').value,
-                self_sustaining: document.getElementById('self_sustaining_edit').value,
+                mid_twenties: mid_twenties,
+                masters_degree: masters_degree,
+                married: married,
+                military: military,
+                has_children: has_children,
+                homeless: homeless,
+                self_sustaining: self_sustaining,
                 tax_exemptions: document.getElementById('tax_exemptions_edit').value,
-                household_size_trp: document.getElementById('household_size_trp_edit').value,
                 tuition: document.getElementById('tuition_edit').value,
                 mandatory_fees: document.getElementById('mandatory_fees_edit').value,
                 college_cost: document.getElementById('college_cost_edit').value,
