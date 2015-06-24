@@ -663,13 +663,23 @@ echo la_casa_edit_data_gen_selector($yn_array, $participant->first_generation_co
     </tr>
     <tr>
     <td><strong>Move In Date </strong></td>
-<td> <?php echo  display_date($participant->move_in_date);
-echo la_casa_edit_data_gen_input($participant->move_in_date, 'move_in_date_edit', 'edit_term constant date_popout', '(mm/dd/yyyy)'); ?></td>
+    <td> <?php echo  display_date($participant->move_in_date);?> </td>
     </tr>
     <tr>
     <td><strong>Move Out Date </strong></td>
-<td> <?php echo  display_date($participant->move_out_date);
-echo la_casa_edit_data_gen_input($participant->move_out_date, 'move_out_date_edit', 'edit_term constant date_popout', '(mm/dd/yyyy)'); ?></td>
+    <td> <?php echo  display_date($participant->move_out_date);?></td>
+    </tr>
+    <tr>
+    <td><strong>Move In Season and Year </strong></td>
+<td> <?php echo  $participant->move_in_season . " " . $participant->move_in_year;
+echo la_casa_edit_data_gen_selector($season_array, $participant->move_in_season, 'move_in_season_edit', 'edit_term constant'); 
+echo la_casa_edit_data_gen_input($participant->move_in_year, 'move_in_year_edit', 'edit_term constant date_popout', '(year only)'); ?></td>
+    </tr>
+    <tr>
+    <td><strong>Move Out Season and Year </strong></td>
+<td> <?php echo  $participant->move_out_season . " " . $participant->move_out_year;
+echo la_casa_edit_data_gen_selector($season_array, $participant->move_out_season, 'move_out_season_edit', 'edit_term constant'); 
+echo la_casa_edit_data_gen_input($participant->move_out_year, 'move_out_year_edit', 'edit_term constant date_popout', '(year only)'); ?></td>
     </tr>
     <tr>
     <td><strong>Reason for Independent Status:</strong></td>
@@ -852,8 +862,10 @@ if (document.getElementById('self_sustaining').checked = true){
                 first_generation_college_student: document.getElementById('first_generation_college_student_edit').value,
                 student_high_school: document.getElementById('student_high_school_edit').value,
                 ami: document.getElementById('ami_edit').value,
-                move_in_date: document.getElementById('move_in_date_edit').value,
-                move_out_date: document.getElementById('move_out_date_edit').value,
+                move_in_season: document.getElementById('move_in_season_edit').value,
+                move_in_year: document.getElementById('move_in_year_edit').value,
+                move_out_season: document.getElementById('move_out_season_edit').value,
+                move_out_year: document.getElementById('move_out_year_edit').value,
                 mid_twenties: mid_twenties,
                 masters_degree: masters_degree,
                 married: married,

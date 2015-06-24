@@ -112,6 +112,10 @@ class Participant {
         $this->ami = $temp_participant['AMI'];
         $this->move_in_date = $temp_participant['Move_In_Date'];
         $this->move_out_date = $temp_participant['Move_Out_Date'];
+        $this->move_in_season = $temp_participant['Move_In_Season'];
+        $this->move_in_year = $temp_participant['Move_In_Year'];
+        $this->move_out_season = $temp_participant['Move_Out_Season'];
+        $this->move_out_year = $temp_participant['Move_Out_Year'];
         $this->mid_twenties = $temp_participant['Mid_Twenties'];
         $this->masters_degree = $temp_participant['Masters_Degree'];
         $this->married = $temp_participant['Married'];

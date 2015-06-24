@@ -26,3 +26,9 @@ USE ttm-trp;
 
 ALTER TABLE LC_Basics DROP COLUMN Household_Size_TRP;
 ALTER TABLE LC_Basics DROP COLUMN Dependency_Status;
+
+
+ALTER TABLE LC_Basics ADD COLUMN Move_In_Season varchar(45);
+ALTER TABLE LC_Basics ADD COLUMN Move_Out_Season varchar(45);
+ALTER TABLE LC_Basics ADD COLUMN Move_In_Year int(4);
+ALTER TABLE LC_Basics ADD COLUMN Move_Out_Year int(4);
