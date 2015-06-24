@@ -29,7 +29,7 @@ user_enforce_has_access($TRP_id);
 //make arrays for selector functions
 
 
-$school_year_array = array(2013 => '2013', 2014 => '2014', 2015 => '2015', 2016 => '2016', 2017 => '2017'); 
+$school_year_array = array('2013-2014' => '2013-2014', '2014-2015' => '2014-2015', '2015-2016' => '2015-2016', '2016-2017' => '2016-2017', '2017-2018' => '2017-2018'); 
 $get_college_list_sqlsafe = "SELECT * FROM Colleges ORDER BY College_Name";
 include "../include/dbconnopen.php";
 $college_list = mysqli_query($cnnTRP, $get_college_list_sqlsafe);
