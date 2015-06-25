@@ -1,5 +1,6 @@
 <?php
 include "../include/dbconnopen.php";
+include "../participants/construction_functions.php";
 $la_casa_id = 6;
 function format_escape_date($date){
     include "../include/dbconnopen.php";
@@ -10,17 +11,38 @@ function format_escape_date($date){
 $DOB_sqlsafe = format_escape_date($_POST['dob']);
 
 //set college id
-if ( isset($_POST['college_name']) && $_POST['college_name'] != ''){
-        $insert_new_college = "INSERT INTO Colleges (College_Name, College_Type) VALUES ('" . 
-            mysqli_real_escape_string($cnnTRP, $_POST['college_name']) . "', '" . 
-            mysqli_real_escape_string($cnnTRP, $_POST['college_type']) . "')";
+if ( isset($_POST['new_college']) && $_POST['new_college'] != ''){
+        $insert_new_college = "INSERT INTO Colleges (College_Name) VALUES ('" . 
+            mysqli_real_escape_string($cnnTRP, $_POST['new_college']) . "')";
         mysqli_query($cnnTRP, $insert_new_college);
         $college_id_sqlsafe = mysqli_insert_id($cnnTRP);
 }
 else{
         $college_id_sqlsafe = mysqli_real_escape_string($cnnTRP, $_POST['college_id']);
 }
+if ( isset($_POST['new_cohort']) && $_POST['new_cohort'] != ''){
+        $insert_new_cohort = "INSERT INTO Cohorts (Cohort_Name) VALUES ('" . 
+            mysqli_real_escape_string($cnnTRP, $_POST['new_cohort']) . "')";
+        mysqli_query($cnnTRP, $insert_new_cohort);
+        $cohort = mysqli_insert_id($cnnTRP);
+}
+else{
+        $cohort = $_POST['cohort'];
+}
+if ( isset($_POST['new_status']) && $_POST['new_status'] != ''){
+        $insert_new_status = "INSERT INTO Statuses (Status_Name) VALUES ('" . 
+            mysqli_real_escape_string($cnnTRP, $_POST['new_status']) . "')";
+        mysqli_query($cnnTRP, $insert_new_status);
+        $status = mysqli_insert_id($cnnTRP);
+}
+else{
+        $status = $_POST['status'];
+}
 
+
+$school_year = array_add_or_select($_POST['school_year'], $_POST['new_school_year']);
+$major = array_add_or_select($_POST['major'], $_POST['new_major']);
+$minor = array_add_or_select($_POST['minor'], $_POST['new_minor']);
 //set participant id
 if (isset($_POST['id']) && $_POST['id'] != ''){
     $participant_id_sqlsafe = mysqli_real_escape_string($cnnTRP, $_POST['id']);
@@ -85,10 +107,10 @@ $add_college_data_sqlsafe = "INSERT INTO LC_Terms
     $college_id_sqlsafe . "', '" . 
     mysqli_real_escape_string($cnnTRP, $_POST['term_type']) . "', '" . 
     mysqli_real_escape_string($cnnTRP, $_POST['term_id']) . "', '" . 
-    mysqli_real_escape_string($cnnTRP, $_POST['school_year']) . "', '" . 
+    mysqli_real_escape_string($cnnTRP, $school_year) . "', '" . 
     mysqli_real_escape_string($cnnTRP, $_POST['credits']) . "', '" . 
-    mysqli_real_escape_string($cnnTRP, $_POST['major']) . "', '" . 
-    mysqli_real_escape_string($cnnTRP, $_POST['minor']) . "', '" . 
+    mysqli_real_escape_string($cnnTRP, $major) . "', '" . 
+    mysqli_real_escape_string($cnnTRP, $minor) . "', '" . 
     mysqli_real_escape_string($cnnTRP, $_POST['expected_match']) . "', '" . 
     mysqli_real_escape_string($cnnTRP, $_POST['actual_match']) . "', '" . 
     mysqli_real_escape_string($cnnTRP, $_POST['gpa']) . "', '" . 
@@ -164,8 +186,8 @@ Other_Costs,
 LC_Rent,
 Participant_ID
 ) VALUES (
-'" . mysqli_real_escape_string($cnnTRP, $_POST['cohort']) . "',
-'" . mysqli_real_escape_string($cnnTRP, $_POST['status']) . "',
+'" . mysqli_real_escape_string($cnnTRP, $cohort) . "',
+'" . mysqli_real_escape_string($cnnTRP, $status) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['handbook']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['floor']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['pod']) . "',
@@ -236,10 +258,10 @@ if ($_POST['action']=='edit' && $_POST['subject'] == 'college'){
          College_ID = '" . $college_id_sqlsafe . "',
          Term_Type  = '" . mysqli_real_escape_string($cnnTRP, $_POST['term_type']) . "',
          Term  = '" . mysqli_real_escape_string($cnnTRP, $_POST['term_id']) . "',
-         School_Year  = '" . mysqli_real_escape_string($cnnTRP, $_POST['school_year']) . "',
+         School_Year  = '" . mysqli_real_escape_string($cnnTRP, $school_year) . "',
          Credits = '" . mysqli_real_escape_string($cnnTRP, $_POST['credits']) . "',
-         Major  = '" . mysqli_real_escape_string($cnnTRP, $_POST['major']) . "',
-         Minor  = '" . mysqli_real_escape_string($cnnTRP, $_POST['minor']) . "',
+         Major  = '" . mysqli_real_escape_string($cnnTRP, $major) . "',
+         Minor  = '" . mysqli_real_escape_string($cnnTRP, $minor) . "',
          College_GPA = '" . mysqli_real_escape_string($cnnTRP, $_POST['gpa']) . "',
          Actual_Match = '" . mysqli_real_escape_string($cnnTRP, $_POST['actual_match']) . "',
          Expected_Match = '" . mysqli_real_escape_string($cnnTRP, $_POST['expected_match']) . "',
@@ -264,7 +286,7 @@ WHERE Term_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
 }
 
 elseif ($_POST['action'] == 'new' && $_POST['subject'] == 'college'){
-   mysqli_query($cnnTRP, $add_college_data_sqlsafe);
+    mysqli_query($cnnTRP, $add_college_data_sqlsafe);
 }
 
 elseif($_POST['action'] == 'edit' && $_POST['subject'] == 'emergency') {
@@ -286,8 +308,8 @@ elseif ($_POST['action'] == 'edit' && $_POST['subject'] == 'constant'){
     }
     else{
         $edit_constant_data_sqlsafe = "UPDATE LC_Basics SET 
-Cohort = '" . mysqli_real_escape_string($cnnTRP, $_POST['cohort']) . "',
-Status = '" . mysqli_real_escape_string($cnnTRP, $_POST['status']) . "',
+Cohort = '" . mysqli_real_escape_string($cnnTRP, $cohort) . "',
+Status = '" . mysqli_real_escape_string($cnnTRP, $status) . "',
 Handbook = '" . mysqli_real_escape_string($cnnTRP, $_POST['handbook']) . "',
 Floor = '" . mysqli_real_escape_string($cnnTRP, $_POST['floor']) . "',
 Pod = '" . mysqli_real_escape_string($cnnTRP, $_POST['pod']) . "',

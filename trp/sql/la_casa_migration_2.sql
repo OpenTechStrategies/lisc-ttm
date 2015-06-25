@@ -35,3 +35,20 @@ ALTER TABLE LC_Basics ADD COLUMN Move_Out_Year int(4);
 
 
 ALTER TABLE LC_Terms MODIFY School_Year varchar(10);
+
+-- Add existing cohort names:
+INSERT INTO Cohorts (Cohort_Name) VALUES ('Chicago Semester'), ('Casa Norte'), ('Associated Colleges of the Midwest'), ('Does not have one'), ('Missing/Not reported'), ('ARCHEWORKS');
+
+-- Create table for statuses, so that users can add new ones:
+
+DROP TABLE IF EXISTS `Statuses`;
+
+CREATE TABLE `Statuses`
+(
+`Status_ID` int(11) NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (`Status_ID`),
+`Status_Name` varchar(100)
+) ENGINE=InnoDB;
+
+
+INSERT INTO Statuses (Status_Name) VALUES ('Signed'), ('Scheduled to Sign'), ('May Sign'), ('Moved Out'), ('Pending App'), ('Not Admitted'), ('Not Interested');

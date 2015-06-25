@@ -236,13 +236,13 @@ if ($participant->gender == 'm') {
         <tr>
         <td><span class="<?php echo $display_class; ?>"><?php echo $term_array['college_name']; ?></span>
         <span class="<?php echo edit_class; ?>">
-        <?php echo la_casa_edit_data_gen_selector($college_array, $term_array['college_id'], 'edit_college_' . $term_array['term_id'], $edit_class); ?>
+        <?php echo la_casa_edit_data_gen_selector_plus($college_array, $term_array['college_id'], 'edit_college_' . $term_array['term_id'], $edit_class); ?>
         </span>
         </td>
         <td><span class="<?php echo $display_class; ?>"><?php echo display_selected($school_year_array, $term_array['school_year']) . "/ " . display_selected($term_type_array, $term_array['term_type']) . "/ " . display_selected($season_array, $term_array['term']); ?></span>
         <span class="<?php echo $edit_class;?>">
         <?php
-        echo la_casa_edit_data_gen_selector($school_year_array, 
+        echo la_casa_edit_data_gen_selector_plus($school_year_array, 
             $term_array['school_year'], 
             'edit_year_' . $term_array['term_id'], 
             $this_row_class); 
@@ -270,11 +270,11 @@ if ($participant->gender == 'm') {
         <td><span class="<?php echo $display_class; ?>"><?php echo $term_array['major'] . "/ " .  $term_array['minor']; ?></span>
         <span class="<?php echo $edit_class;?>">
         <?php
-        echo la_casa_edit_data_gen_selector($major_array,
+        echo la_casa_edit_data_gen_selector_plus($major_array,
             $term_array['major'],
             'edit_major_' . $term_array['term_id'],
             $this_row_class); 
-        echo la_casa_edit_data_gen_selector($minor_array,
+        echo la_casa_edit_data_gen_selector_plus($minor_array,
             $term_array['minor'],
             'edit_minor_' . $term_array['term_id'],
             $this_row_class); 
@@ -331,12 +331,16 @@ if ($participant->gender == 'm') {
                     subject: 'college',
                     id: '<?php echo $term_array['term_id']; ?>',
                     college_id: document.getElementById('edit_college_<?php echo $term_array['term_id']; ?>').value,
+                    new_college: document.getElementById('edit_college_<?php echo $term_array['term_id']; ?>_new').value,
                     term_type: document.getElementById('edit_season_<?php echo $term_array['term_id']; ?>').value,
                     term: document.getElementById('edit_term_<?php echo $term_array['term_id']; ?>').value,
                     school_year: document.getElementById('edit_year_<?php echo $term_array['term_id']; ?>').value,
+                    new_school_year: document.getElementById('edit_year_<?php echo $term_array['term_id']; ?>_new').value,
                     credits: document.getElementById('edit_credits_<?php echo $term_array['term_id']; ?>').value,
                     major: document.getElementById('edit_major_<?php echo $term_array['term_id']; ?>').value,
+                    new_major: document.getElementById('edit_major_<?php echo $term_array['term_id']; ?>_new').value,
                     minor: document.getElementById('edit_minor_<?php echo $term_array['term_id']; ?>').value,
+                    new_minor: document.getElementById('edit_minor_<?php echo $term_array['term_id']; ?>_new').value,
                     expected_match: '',
                     actual_match: '',
                     gpa: document.getElementById('edit_gpa_<?php echo $term_array['term_id']; ?>').value,
@@ -363,7 +367,7 @@ if ($participant->gender == 'm') {
             <td>
         <span class="<?php echo $edit_class;?>">
         <?php
-        echo la_casa_edit_data_gen_selector($college_array, 
+        echo la_casa_edit_data_gen_selector_plus($college_array, 
             $term_array['college_id'], 
             'edit_college_new', 
             $this_row_class); 
@@ -373,7 +377,7 @@ if ($participant->gender == 'm') {
         <td>
         <span class="<?php echo $edit_class;?>">
         <?php
-        echo la_casa_edit_data_gen_selector($school_year_array, 
+        echo la_casa_edit_data_gen_selector_plus($school_year_array, 
             $term_array['school_year'], 
             'edit_year_new', 
             $this_row_class); 
@@ -401,11 +405,11 @@ if ($participant->gender == 'm') {
         <td>
         <span class="<?php echo $edit_class;?>">
         <?php
-        echo la_casa_edit_data_gen_selector($major_array,
+        echo la_casa_edit_data_gen_selector_plus($major_array,
             $term_array['major'],
             'edit_major_new',
             $this_row_class); 
-        echo la_casa_edit_data_gen_selector($minor_array,
+        echo la_casa_edit_data_gen_selector_plus($minor_array,
             $term_array['minor'],
             'edit_minor_new',
             $this_row_class); 
@@ -462,12 +466,16 @@ if ($participant->gender == 'm') {
                     subject: 'college',
                     id: '<?php echo $participant->participant_id; ?>',
                     college_id: document.getElementById('edit_college_new').value,
+                    new_college: document.getElementById('edit_college_new_new').value,
                     term_type: document.getElementById('edit_season_new').value,
                     term_id: document.getElementById('edit_term_new').value,
                     school_year: document.getElementById('edit_year_new').value,
+                    new_school_year: document.getElementById('edit_year_new_new').value,
                     credits: document.getElementById('edit_credits_new').value,
                     major: document.getElementById('edit_major_new').value,
+                    new_major: document.getElementById('edit_major_new_new').value,
                     minor: document.getElementById('edit_minor_new').value,
+                    new_minor: document.getElementById('edit_minor_new_new').value,
                     expected_match: '',
                     actual_match: '',
                     gpa: document.getElementById('edit_gpa_new').value,
@@ -478,8 +486,7 @@ if ($participant->gender == 'm') {
 
                 },
                 function (response) {
-document.write(response); //testing
-//                    window.location = 'lc_profile.php?id=<?php echo $participant->participant_id; ?>';
+                    window.location = 'lc_profile.php?id=<?php echo $participant->participant_id; ?>';
                 }
                 )
             ">
@@ -499,13 +506,13 @@ document.write(response); //testing
     <tr>
     <td><strong>Cohort </strong></td>
 <td> <?php echo display_selected($cohort_array, $participant->cohort);
-    echo la_casa_edit_data_gen_selector($cohort_array, $participant->cohort, 'edit_cohort', 'edit_term constant');
+    echo la_casa_edit_data_gen_selector_plus($cohort_array, $participant->cohort, 'edit_cohort', 'edit_term constant');
     ?>
     </td>
     <tr>
     <td><strong>Status </strong></td>
 <td> <?php echo display_selected($status_array, $participant->status);
-echo la_casa_edit_data_gen_selector($status_array, $participant->status, 'status_edit', 'edit_term constant'); ?> </td>
+echo la_casa_edit_data_gen_selector_plus($status_array, $participant->status, 'status_edit', 'edit_term constant'); ?> </td>
     </tr>
     <tr>
     <td><strong>Handbook </strong></td>
@@ -831,7 +838,9 @@ if (document.getElementById('self_sustaining').checked = true){
                 subject: 'constant',
                 id: '<?php echo $participant->participant_id; ?>',
                 cohort: document.getElementById('edit_cohort').value,
+                new_cohort: document.getElementById('edit_cohort_new').value,
                 status: document.getElementById('status_edit').value,
+                new_status: document.getElementById('status_edit_new').value,
                 handbook: document.getElementById('handbook_edit').value,
                 floor: document.getElementById('floor_edit').value,
                 pod: document.getElementById('pod_edit').value,
