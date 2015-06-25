@@ -691,13 +691,27 @@ echo la_casa_edit_data_gen_input($participant->move_out_year, 'move_out_year_edi
     <tr>
     <td><strong>Reason for Independent Status:</strong></td>
     <td>
-    <input type="checkbox" name="independent[]" id="mid_twenties">24 or Older
-<br/>    <input type="checkbox" name="independent[]" id="masters_degree">Master\'s Degree 
-<br/>    <input type="checkbox" name="independent[]" id="married">Married 
-<br/>    <input type="checkbox" name="independent[]" id="military">Military 
-<br/>    <input type="checkbox" name="independent[]" id="has_children">Has Children 
-<br/>    <input type="checkbox" name="independent[]" id="homeless">Homeless 
-<br/>    <input type="checkbox" name="independent[]" id="self_sustaining">Self Sustaining 
+    <input type="checkbox" name="independent[]" id="mid_twenties"
+<?php if ($participant->mid_twenties == 1) {echo "checked";} ?>
+>24 or Older
+<br/>    <input type="checkbox" name="independent[]" id="masters_degree"
+<?php if ($participant->masters_degree == 1) {echo "checked";} ?>
+>Master\'s Degree 
+<br/>    <input type="checkbox" name="independent[]" id="married"
+<?php if ($participant->married == 1) {echo "checked";} ?>
+>Married 
+<br/>    <input type="checkbox" name="independent[]" id="military"
+<?php if ($participant->military == 1) {echo "checked";} ?>
+>Military 
+<br/>    <input type="checkbox" name="independent[]" id="has_children"
+<?php if ($participant->has_children == 1) {echo "checked";} ?>
+>Has Children 
+<br/>    <input type="checkbox" name="independent[]" id="homeless"
+<?php if ($participant->homeless == 1) {echo "checked";} ?>
+>Homeless 
+<br/>    <input type="checkbox" name="independent[]" id="self_sustaining"
+<?php if ($participant->self_sustaining == 1) {echo "checked";} ?>
+>Self Sustaining 
     </td>
     </tr>
     <tr>
