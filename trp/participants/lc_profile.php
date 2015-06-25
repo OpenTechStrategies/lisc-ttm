@@ -842,7 +842,7 @@ if (document.getElementById('has_children').checked == true){
 if (document.getElementById('homeless').checked == true){
     var homeless = 1;
 }
-if (document.getElementById('self_sustaining').checked = true){
+if (document.getElementById('self_sustaining').checked == true){
     var self_sustaining = 1;
 }
         $.post(
