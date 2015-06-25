@@ -40,16 +40,11 @@ $has_all_programs = in_array('a', $access_array);
         <option value="0">Show results for all programs</option>-->
     <a href="javascript:;" onclick="$('#program_list').toggle();">Show/hide programs</a>
     <div id="program_list"><?php
-        //if not an administrator
-    if ( ! $has_all_programs) {
-            //get user's programs
-            $get_all_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names INNER JOIN Programs 
-                            ON Session_Names.Program_ID=Programs.Program_ID
-                            WHERE Programs.Program_ID = " . $access_array[0] . " ORDER BY Name";
-        } else {
-            $get_all_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names INNER JOIN Programs 
-                            ON Session_Names.Program_ID=Programs.Program_ID ORDER BY Name";
-        }
+    $program_string = " WHERE Programs.Program_ID = " . $access_array[0];
+    foreach ($access_array as $program){
+        $program_string .= " OR Programs.Program_ID = " . $program;
+    }
+            $get_all_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID " . $program_string . " ORDER BY Name";
 
         include "../include/dbconnopen.php";
         $all_programs = mysqli_query($cnnEnlace, $get_all_programs);
@@ -95,33 +90,15 @@ $has_all_programs = in_array('a', $access_array);
         include "../include/dbconnclose.php";
         ?>
     </select>
-    <input type="submit" value="Show Results" name="submit_btn_assessments"
-    <?php
-    //if not an administrator
-            if ( ! $has_all_programs) {
-        //make sure a checkbox is checked
-        ?>
-               onclick="return test_program_select();"
-               <?php
-           }
-           ?>>
-           <?php
-           //if not an administrator
-if ( ! $has_all_programs) {
-               //make sure a checkbox is checked
-               ?>
+    <input type="submit" value="Show Results" name="submit_btn_assessments" onclick="return test_program_select();">
         <script>
             function test_program_select() {
-                //alert($('[name="program_select[]"]:checked]').length);
                 if ($('[name="program_select[]"]:checked').length < 1) {
                     alert('Please check at least one program.');
                     return false;
                 }
             }
         </script>
-        <?php
-    }
-    ?>
 </form>
 
 <?php

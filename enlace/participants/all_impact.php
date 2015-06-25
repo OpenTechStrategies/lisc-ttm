@@ -21,31 +21,27 @@
 include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 
-user_enforce_has_access($Enlace_id);
-
 include "../../header.php";
 include "../header.php";
 
+user_enforce_has_access($Enlace_id);
 
 /* so allow them in if it's a new survey OR if they have access to all
  * programs ('a') or if they have access to a program that is linked
  * to this...person? or this survey?: */
 
 $access_array = $USER->program_access($Enlace_id);
-$has_all_programs = in_array('a', $access_array);
 
 include "../include/dbconnopen.php";
 $person_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['person']);
 $get_program_list = "SELECT Session_Names.Program_ID FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_ID WHERE Participant_ID = '" . $person_sqlsafe . "'";
 $program_connected = mysqli_query($cnnEnlace, $get_program_list);
-$access_granted = false;
+$program_array = array();
 while ($program_id = mysqli_fetch_row($program_connected)){
-    if (in_array($program_id, $access_array)){
-        $access_granted = true;
-    }
+    $program_array[] = $program_id[0];
 }
+$USER->enforce_access_program_array($Enlace_id, $program_array);
 
-if (!isset($_GET['assessment']) || $has_all_programs || $access_granted){
 
 /*
  * This file is either a new impact survey, an editable impact survey, or a view for the impact survey.
@@ -440,5 +436,4 @@ if (isset($_GET['assessment'])) {
 <br/>
 <br/>
 <?php
-} //ends access check if condition
  include "../../footer.php"; ?>
