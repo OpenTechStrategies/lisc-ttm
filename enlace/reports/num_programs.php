@@ -30,9 +30,9 @@ $program_string = " WHERE Programs.Program_ID = " . $access_array[0];
 foreach ($access_array as $program){
     $program_string .= " OR Programs.Program_ID = " . $program;
 }
-$participant_program_string = " WHERE (Participants_Programs.Program_ID = " . $access_array[0];
+$participant_program_string = " INNER JOIN Session_Names on Participants_Programs.Program_ID = Session_Names.Session_ID WHERE (Session_Names.Program_ID = " . $access_array[0];
 foreach ($access_array as $program){
-    $participant_program_string .= " OR Participants_Programs.Program_ID = " . $program;
+    $participant_program_string .= " OR Session_Names.Program_ID = " . $program;
 }
 $participant_program_string .= ")";
 ?>
@@ -226,12 +226,7 @@ $participant_program_string .= ")";
         $month_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['month_select']);
         $year_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['year_select']);
         //get user's programs
-        $all_progs = "SELECT Name, Session_Name, Session_ID, COUNT(Participant_ID) FROM Session_Names 
-                            INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_ID 
-                            INNER JOIN Programs ON Session_Names.Program_Id = Programs.Program_ID 
-                            " . $participant_program_string . "
-                            AND MONTH(Date_Added) <= '" . $month_select_sqlsafe . "' AND
-                            YEAR(Date_Added) <= '" . $year_select_sqlsafe . "' GROUP BY Session_ID;";
+        $all_progs = "SELECT Name, Session_List.Session_Name, Session_List.Session_ID, COUNT(Participant_ID) FROM Session_Names as Session_List INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_List.Session_ID INNER JOIN Programs ON Session_List.Program_Id = Programs.Program_ID " . $participant_program_string . " AND MONTH(Date_Added) <= '" . $month_select_sqlsafe . "' AND YEAR(Date_Added) <= '" . $year_select_sqlsafe . "' GROUP BY Session_ID;";
         $all_programs = mysqli_query($cnnEnlace, $all_progs);
         while ($program = mysqli_fetch_row($all_programs)) {
             ?>
