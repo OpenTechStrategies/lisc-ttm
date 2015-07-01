@@ -990,15 +990,21 @@ $food_costs = $participant->other_costs;
         <tr>
         <td rowspan=4>Cost of Attendance</td>
         <th>Tuition & Mandatory Fees</th>
-        <td> <?php echo "$" . number_format($participant->tuition, 2); ?></td>
+        <td> <?php echo "$" . number_format($participant->tuition, 2); 
+echo la_casa_edit_data_gen_input($participant->tuition, 'loans_tuition_edit', 'edit_term loans'); 
+?></td>
         </tr>
         <tr>
         <th>Food, Transportation and Books</th>
-        <td><?php echo "$" . number_format($participant->other_costs, 2);?></td>
+        <td><?php echo "$" . number_format($participant->other_costs, 2);
+echo la_casa_edit_data_gen_input($participant->other_costs, 'loans_other_costs_edit', 'edit_term loans'); 
+?></td>
             </tr>
             <tr>
         <th>La Casa Student Housing</th>
-        <td><?php echo "$" . number_format($participant->lc_rent, 2);?></td>
+        <td><?php echo "$" . number_format($participant->lc_rent, 2);
+echo la_casa_edit_data_gen_input($participant->lc_rent, 'loans_lc_rent_edit', 'edit_term loans'); 
+?></td>
             </tr>
             <tr>
             <th>Total costs for the academic year</th>
@@ -1012,23 +1018,33 @@ $food_costs = $participant->other_costs;
             <tr>
         <td rowspan=6>Summary Award</td>
         <th>Federal Pell Grant</th>
-        <td><?php echo "$" . number_format($participant->pell_grant, 2);?></td>
+        <td><?php echo "$" . number_format($participant->pell_grant, 2);
+echo la_casa_edit_data_gen_input($participant->pell_grant, 'loans_pell_grant_edit', 'edit_term loans'); 
+?></td>
             </tr>
             <tr>
         <th>Illinois MAP Grant</th>
-        <td><?php echo "$" . number_format($participant->map_grant, 2);?></td>
+        <td><?php echo "$" . number_format($participant->map_grant, 2);
+echo la_casa_edit_data_gen_input($participant->map_grant, 'loans_map_grant_edit', 'edit_term loans'); 
+?></td>
             </tr>
             <tr>
         <th>College Scholarships</th>
-        <td><?php echo "$" . number_format($participant->university_scholarship, 2);?></td>
+        <td><?php echo "$" . number_format($participant->university_scholarship, 2);
+echo la_casa_edit_data_gen_input($participant->university_scholarship, 'loans_scholarship_edit', 'edit_term loans'); 
+?></td>
             </tr>
             <tr>
         <th>Federal Direct Subsidized Loan</th>
-        <td><?php echo "$" . number_format($participant->subsidized_loan, 2);?></td>
+        <td><?php echo "$" . number_format($participant->subsidized_loan, 2);
+echo la_casa_edit_data_gen_input($participant->subsidized_loan, 'loans_subsidized_loan_edit', 'edit_term loans'); 
+?></td>
             </tr>
             <tr>
         <th>Federal Direct Unsubsidized Loan</th>
-        <td><?php echo "$" . number_format($participant->unsubsidized_loan, 2);?></td>
+        <td><?php echo "$" . number_format($participant->unsubsidized_loan, 2);
+echo la_casa_edit_data_gen_input($participant->unsubsidized_loan, 'loans_unsubsidized_loan_edit', 'edit_term loans'); 
+?></td>
             </tr>
             <tr>
         <th>Award Summary Total</th>
@@ -1046,15 +1062,21 @@ $food_costs = $participant->other_costs;
             <tr>
         <td rowspan=4>Anticipated Other Assistance</td>
         <th>Work-Study or Other Employment</th>
-        <td><?php echo "$" . number_format($participant->work_study, 2);?></td>
+        <td><?php echo "$" . number_format($participant->work_study, 2);
+echo la_casa_edit_data_gen_input($participant->work_study, 'loans_work_study_edit', 'edit_term loans'); 
+?></td>
             </tr>
             <tr>
         <th>Savings</th>
-        <td><?php echo "$" . number_format($participant->savings, 2);?></td>
+        <td><?php echo "$" . number_format($participant->savings, 2);
+echo la_casa_edit_data_gen_input($participant->savings, 'loans_savings_edit', 'edit_term loans'); 
+?></td>
             </tr>
             <tr>
         <th>Family/Sponsor/Other</th>
-        <td><?php echo "$" . number_format($participant->family_help, 2);?></td>
+        <td><?php echo "$" . number_format($participant->family_help, 2);
+echo la_casa_edit_data_gen_input($participant->family_help, 'loans_family_help_edit', 'edit_term loans'); 
+?></td>
             </tr>
             <tr>
         <th>Total Other Assistance</th> 
@@ -1086,7 +1108,9 @@ $food_costs = $participant->other_costs;
         <tr>
         <td rowspan="2">La Casa</td>
         <th>La Casa Scholarship</th>
-            <td> <?php echo "$" . number_format($participant->lc_scholarship, 2);?></td>
+            <td> <?php echo "$" . number_format($participant->lc_scholarship, 2);
+echo la_casa_edit_data_gen_input($participant->lc_scholarship, 'loans_lc_scholarship_edit', 'edit_term loans'); 
+?></td>
             </tr>
             <tr>
             <th>La Casa rent</th>
@@ -1102,6 +1126,36 @@ $food_costs = $participant->other_costs;
         echo "$" . number_format($rent_charged, 2);
         ?>
             </td>
+        </tr>
+        <tr>
+        <td colspan="3">
+            <input type="button" value="Edit" onclick="$('.edit_term.loans').toggle()">
+            <input type="button" value="Save" class="edit_term loans" onclick="
+                $.post(
+                    '../ajax/save_la_casa_info.php',
+                {
+                    action: 'edit',
+                    subject: 'loans',
+                    tuition: document.getElementById('loans_tuition_edit').value,
+                    other_costs: document.getElementById('loans_other_costs_edit').value,
+                    lc_rent: document.getElementById('loans_lc_rent_edit').value,
+                    pell_grant: document.getElementById('loans_pell_grant_edit').value,
+                    map_grant: document.getElementById('loans_map_grant_edit').value,
+                    scholarship: document.getElementById('loans_scholarship_edit').value,
+                    subsidized_loan: document.getElementById('loans_subsidized_loan_edit').value,
+                    unsubsidized_loan: document.getElementById('loans_unsubsidized_loan_edit').value,
+                    work_study: document.getElementById('loans_work_study_edit').value,
+                    savings: document.getElementById('loans_savings_edit').value,
+                    family_help: document.getElementById('loans_family_help_edit').value,
+                    lc_scholarship: document.getElementById('loans_lc_scholarship_edit').value,
+                    participant: '<?php echo $participant->participant_id; ?>'
+                },
+                function (response) {
+document.write(response);
+    //                window.location = 'lc_profile.php?id=<?php echo $participant->participant_id ?>';
+                } );
+">
+        </td>
         </tr>
         </table>        
 <br />

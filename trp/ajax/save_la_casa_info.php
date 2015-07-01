@@ -22,7 +22,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
 user_enforce_has_access($TRP_id, $DataEntryAccess);
-
 include "../include/dbconnopen.php";
 include "../participants/construction_functions.php";
 $la_casa_id = 6;
@@ -311,13 +310,22 @@ if ($_POST['action']=='edit' && $_POST['subject'] == 'college'){
 }
 
 elseif ($_POST['action']=='edit' && $_POST['subject'] == 'loans'){
-   $edit_college_data_sqlsafe = "UPDATE LC_Terms SET 
-         School_Year  = '" . mysqli_real_escape_string($cnnTRP, $_POST['school_year']) . "',
-         Loan_Applications = '" . mysqli_real_escape_string($cnnTRP, $_POST['loan_apps']) . "',
-         Loan_Volume  = '" . mysqli_real_escape_string($cnnTRP, $_POST['loan_volume']) . "',
-         Loans_Received = '" . mysqli_real_escape_string($cnnTRP, $_POST['loans_received']) . "'
-WHERE Term_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
-   mysqli_query($cnnTRP, $edit_college_data_sqlsafe);
+   $edit_financial_data_sqlsafe = "UPDATE LC_Basics SET 
+                    Tuition = '" . mysqli_real_escape_string($cnnTRP, $_POST['tuition']) . "',
+                    Other_Costs = '" . mysqli_real_escape_string($cnnTRP, $_POST['other_costs']) . "',
+                    LC_Rent = '" . mysqli_real_escape_string($cnnTRP, $_POST['lc_rent']) . "',
+                    Pell_Grant = '" . mysqli_real_escape_string($cnnTRP, $_POST['pell_grant']) . "',
+                    MAP_Grant = '" . mysqli_real_escape_string($cnnTRP, $_POST['map_grant']) . "',
+                    Unsubsidized_Loan = '" . mysqli_real_escape_string($cnnTRP, $_POST['unsubsidized_loan']) . "',
+                    Subsidized_Loan = '" . mysqli_real_escape_string($cnnTRP, $_POST['subsidized_loan']) . "',
+                    University_Scholarship = '" . mysqli_real_escape_string($cnnTRP, $_POST['scholarship']) . "',
+                    Work_Study = '" . mysqli_real_escape_string($cnnTRP, $_POST['work_study']) . "',
+                    Savings = '" . mysqli_real_escape_string($cnnTRP, $_POST['savings']) . "',
+                    Family_Help = '" . mysqli_real_escape_string($cnnTRP, $_POST['family_help']) . "',
+                    LC_Scholarship = '" . mysqli_real_escape_string($cnnTRP, $_POST['lc_scholarship']) . "'
+WHERE Participant_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['participant']) . "'";
+   echo $edit_financial_data_sqlsafe;
+   mysqli_query($cnnTRP, $edit_financial_data_sqlsafe);
                               
 }
 
