@@ -448,7 +448,7 @@ Shows all program information.
                         <th>Intake survey completed</th>
                         <?php
                         //if an administrator
-                        if ($access == 'a') {
+                        if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
                             //show delete area
                             ?>
                             <th>Delete</th>
@@ -461,7 +461,7 @@ Shows all program information.
                             ?><tr><td colspan="4"><h5><?php echo $all_p['Session_Name']; ?>
                                         <?php
                                         //if an administrator
-                                        if ($access == 'a') {
+                                        if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
                                             //show delete area
                                             ?>
                                             &nbsp; &nbsp; &nbsp;
@@ -563,7 +563,7 @@ Shows all program information.
                             <td><?php echo ($all_p['COUNT(Assessments.Assessment_ID)'] > 0) ? 'Yes' : 'No'; ?></td>
                                 <?php
                                 //if an administrator
-                                if ($access == 'a') {
+                                if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
                                     //show delete area
                                     ?>
                                 <td>
