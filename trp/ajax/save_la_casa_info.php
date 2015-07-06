@@ -22,11 +22,11 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
 user_enforce_has_access($TRP_id, $DataEntryAccess);
+
 include "../include/dbconnopen.php";
 include "../participants/construction_functions.php";
 $la_casa_id = 6;
 function format_escape_date($date){
-    echo "<br>" . $date;
     include "../include/dbconnopen.php";
     //if there is a /, then explode
     if ( strpos($date, "/")) {
