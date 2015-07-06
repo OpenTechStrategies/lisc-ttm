@@ -147,10 +147,6 @@ class Participant {
         $this->lc_rent = $temp_participant['LC_Rent'];
         $this->graduation_month = $temp_participant['Graduation_Month'];
 
-        $get_participant_info = "SELECT Subsidized_Loan, Unsubsidized_Loan FROM LC_Terms WHERE Participant_ID='$participant_id_sqlsafe' ORDER BY School_Year DESC";
-        $participant_info = mysqli_query($cnnTRP, $get_participant_info);
-        $temp_participant = mysqli_fetch_array($participant_info);
-
         $this->subsidized_loan = $temp_participant['Subsidized_Loan'];
         $this->unsubsidized_loan = $temp_participant['Unsubsidized_Loan'];
     }

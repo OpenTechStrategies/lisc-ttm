@@ -28,8 +28,14 @@ include "../participants/construction_functions.php";
 $la_casa_id = 6;
 function format_escape_date($date){
     include "../include/dbconnopen.php";
-    $date_formatted = explode('/', $date);
-    $date_sqlsafe = mysqli_real_escape_string($cnnTRP, $date_formatted[2]) . "-" . mysqli_real_escape_string($cnnTRP, $date_formatted[0]) . "-" . mysqli_real_escape_string($cnnTRP, $date_formatted[1]);
+    //if there is a /, then explode
+    if ( strpos($date, "/")) {
+        $date_formatted = explode('/', $date);
+        $date_sqlsafe = mysqli_real_escape_string($cnnTRP, $date_formatted[2]) . "-" . mysqli_real_escape_string($cnnTRP, $date_formatted[0]) . "-" . mysqli_real_escape_string($cnnTRP, $date_formatted[1]);
+    }
+    else{
+        $date_sqlsafe = mysqli_real_escape_string($cnnTRP, $date);
+    }
     return $date_sqlsafe;
 }
 $DOB_sqlsafe = format_escape_date($_POST['dob']);
@@ -176,6 +182,8 @@ First_Generation_College_Student,
 Persistence_Graduation,
 Student_High_School,
 AMI,
+Move_In_Date,
+Move_Out_Date,
 Move_In_Season,
 Move_In_Year,
 Move_Out_Season,
@@ -242,6 +250,8 @@ Participant_ID
 '" . mysqli_real_escape_string($cnnTRP, $_POST['persistence_graduation']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['student_high_school']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['ami']) . "',
+'" . format_escape_date($_POST['move_in_date']) . "',
+'" . format_escape_date($_POST['move_out_date']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_season']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['move_in_year']) . "',
 '" . mysqli_real_escape_string($cnnTRP, $_POST['move_out_season']) . "',
@@ -299,13 +309,21 @@ if ($_POST['action']=='edit' && $_POST['subject'] == 'college'){
 }
 
 elseif ($_POST['action']=='edit' && $_POST['subject'] == 'loans'){
-   $edit_college_data_sqlsafe = "UPDATE LC_Terms SET 
-         School_Year  = '" . mysqli_real_escape_string($cnnTRP, $_POST['school_year']) . "',
-         Loan_Applications = '" . mysqli_real_escape_string($cnnTRP, $_POST['loan_apps']) . "',
-         Loan_Volume  = '" . mysqli_real_escape_string($cnnTRP, $_POST['loan_volume']) . "',
-         Loans_Received = '" . mysqli_real_escape_string($cnnTRP, $_POST['loans_received']) . "'
-WHERE Term_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['id']) . "'";
-   mysqli_query($cnnTRP, $edit_college_data_sqlsafe);
+   $edit_financial_data_sqlsafe = "UPDATE LC_Basics SET 
+                    Tuition = '" . mysqli_real_escape_string($cnnTRP, $_POST['tuition']) . "',
+                    Other_Costs = '" . mysqli_real_escape_string($cnnTRP, $_POST['other_costs']) . "',
+                    LC_Rent = '" . mysqli_real_escape_string($cnnTRP, $_POST['lc_rent']) . "',
+                    Pell_Grant = '" . mysqli_real_escape_string($cnnTRP, $_POST['pell_grant']) . "',
+                    MAP_Grant = '" . mysqli_real_escape_string($cnnTRP, $_POST['map_grant']) . "',
+                    Unsubsidized_Loan = '" . mysqli_real_escape_string($cnnTRP, $_POST['unsubsidized_loan']) . "',
+                    Subsidized_Loan = '" . mysqli_real_escape_string($cnnTRP, $_POST['subsidized_loan']) . "',
+                    University_Scholarship = '" . mysqli_real_escape_string($cnnTRP, $_POST['scholarship']) . "',
+                    Work_Study = '" . mysqli_real_escape_string($cnnTRP, $_POST['work_study']) . "',
+                    Savings = '" . mysqli_real_escape_string($cnnTRP, $_POST['savings']) . "',
+                    Family_Help = '" . mysqli_real_escape_string($cnnTRP, $_POST['family_help']) . "',
+                    LC_Scholarship = '" . mysqli_real_escape_string($cnnTRP, $_POST['lc_scholarship']) . "'
+WHERE Participant_ID = '" . mysqli_real_escape_string($cnnTRP, $_POST['participant']) . "'";
+   mysqli_query($cnnTRP, $edit_financial_data_sqlsafe);
                               
 }
 
@@ -364,6 +382,8 @@ First_Generation_College_Student = '" . mysqli_real_escape_string($cnnTRP, $_POS
 Persistence_Graduation = '" . mysqli_real_escape_string($cnnTRP, $_POST['persistence_graduation']) . "',
 Student_High_School = '" . mysqli_real_escape_string($cnnTRP, $_POST['student_high_school']) . "',
 AMI = '" . mysqli_real_escape_string($cnnTRP, $_POST['ami']) . "',
+Move_In_Date = '" . format_escape_date($_POST['move_in_date']) . "',
+Move_Out_Date = '" . format_escape_date($_POST['move_out_date']) . "',
 Move_In_Season = '" . format_escape_date($_POST['move_in_season']) . "',
 Move_In_Year = '" . format_escape_date($_POST['move_in_year']) . "',
 Move_Out_Season = '" . format_escape_date($_POST['move_out_season']) . "',

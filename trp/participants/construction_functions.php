@@ -169,7 +169,7 @@ function la_casa_edit_data_gen_input($existing_value, $id_string, $class_string,
     $result .= " value='" . $existing_value;
     $result .= "'>";
     if ($helptext){
-        $result .= "<span class='helptext " . $class_string .  "'> " . $helptext . "</span>";
+        $result .= "<span class='helptext edit_term'> " . $helptext . "</span>";
     }
     return $result;
 }
