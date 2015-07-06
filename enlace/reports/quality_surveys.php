@@ -36,13 +36,16 @@ $access_array = $USER->program_access($Enlace_id);
 <form action="reports.php" method="post">
     Program:
     <select id="all_programs" name="program_select">
+    <option value="0">Show results for all programs</option>
         <?php
     //get user's programs
-    $program_string = " WHERE Programs.Program_ID = " . $access_array[0];
+    $program_string = " WHERE Program_Surveys.Program_ID = " . $access_array[0];
+    $programs_for_dropdown = " WHERE Programs.Program_ID = " . $access_array[0];
     foreach ($access_array as $program){
-        $program_string .= " OR Programs.Program_ID = " . $program;
+        $program_string .= " OR Program_Surveys.Program_ID = " . $program;
+        $programs_for_dropdown .= " OR Programs.Program_ID = " . $program;
     }
-    $get_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID " . $program_string . " ORDER BY Name";
+    $get_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID " . $programs_for_dropdown . " ORDER BY Name";
 
         include "../include/dbconnopen.php";
         $all_programs = mysqli_query($cnnEnlace, $get_programs);
@@ -113,7 +116,8 @@ if (isset($_POST['submit_quality'])) {
             <tr><th>Question Text</th><th>Question Responses</th><th>Number of each response</th><th>Percent of respondents</th></tr>
             <?php
             /* get denominator for percentages: */
-            $get_denom = "SELECT COUNT(*) FROM Program_Surveys";
+            // assumes that we're looking at all programs the person has access to
+            $get_denom = "SELECT COUNT(*) FROM Program_Surveys " . $program_string;
             if ($_POST['program_select'] != 0) {
                 $get_denom = "SELECT COUNT(*) FROM Program_Surveys WHERE Session_ID='" . $program_select_sqlsafe . "'";
             }
@@ -124,7 +128,7 @@ if (isset($_POST['submit_quality'])) {
             $denominator = $denom[0];
             $current_question = "";
             foreach ($question_text_array as $key => $question) {
-                $get_responses = "SELECT COUNT(*) as count, " . $key . " FROM Program_Surveys GROUP BY " . $key;
+                $get_responses = "SELECT COUNT(*) as count, " . $key . " FROM Program_Surveys " . $program_string . "  GROUP BY " . $key;
                 if ($_POST['program_select'] != 0) {
                     $get_responses = "SELECT COUNT(*) as count, " . $key . " FROM Program_Surveys 
                     WHERE Session_ID='" . $program_select_sqlsafe . "' GROUP BY " . $key;
@@ -152,7 +156,7 @@ if (isset($_POST['submit_quality'])) {
                                 echo 'Strongly agree';
                             }
                             ?></td><td class="all_projects"><?php echo $resp[0]; ?></td>
-                        <td class="all_projects"><?php echo number_format(($resp[0] / $denominator) * 100) . '%'; ?></td></tr>
+                            <td class="all_projects"><?php echo number_format(($resp[0] / $denominator) * 100, 2) . '%'; ?></td></tr>
                     <?php
                 }
             }
@@ -171,10 +175,9 @@ if (isset($_POST['submit_quality'])) {
 
                 <?php
                 /* get answers to the selected question, group count by the answer to the question. */
-                $get_responses = "SELECT COUNT(*) as count, " . $question_select_sqlsafe . " FROM Program_Surveys 
-        GROUP BY " . $question_select_sqlsafe;
+                $get_responses = "SELECT COUNT(*) as count, " . $question_select_sqlsafe . " FROM Program_Surveys " . $program_string . " GROUP BY " . $question_select_sqlsafe;
                 /* get denominator for percentages: */
-                $get_denom = "SELECT COUNT(*) FROM Program_Surveys";
+                $get_denom = "SELECT COUNT(*) FROM Program_Surveys" . $program_string;
 
                 include "../include/dbconnopen.php";
                 $responses = mysqli_query($cnnEnlace, $get_responses);
