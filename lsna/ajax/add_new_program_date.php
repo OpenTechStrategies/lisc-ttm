@@ -41,6 +41,9 @@ if ($_POST['action'] == 'save_note') {
     $note_sqlsafe=mysqli_real_escape_string($cnnLSNA, $_POST['note']);
     $date_reformat = explode('-', $_POST['date']);
     $save_date = $date_reformat[2] . '-' . $date_reformat[0] . '-' . $date_reformat[1];
+    if ($funder_sqlsafe == ""){
+        $funder_sqlsafe = "null";
+    }
     $add_date_to_program = "INSERT INTO Subcategory_Dates (
                             Subcategory_ID,
                             Date,
@@ -52,7 +55,7 @@ if ($_POST['action'] == 'save_note') {
                             '" . $name_sqlsafe . "',
                             '" . $type_sqlsafe . "',
                             '" . $note_sqlsafe . "',
-                            '" . $funder_sqlsafe . "'
+                            " . $funder_sqlsafe . "
                             )";
     mysqli_query($cnnLSNA, $add_date_to_program);
     include "../include/dbconnclose.php";
