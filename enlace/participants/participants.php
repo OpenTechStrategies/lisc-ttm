@@ -138,7 +138,7 @@ include "../header.php";
                                     },
                             function(response) {
                                 document.getElementById('show_results').innerHTML = response;
-                            }).fail(failAlert);"/>
+                            });"/>
                 </td>
             </tr>
         </table>

@@ -220,9 +220,9 @@ if ($_POST['result'] == 'dropdown') {
                                                         //document.write(response);
                                                         window.location = 'participants.php';
                                                     }
-                                                    )
+                                                    ).fail(function() {alert('You do not have permission to perform this action.');});
                                                 }
-                                            }.fail(function() {alert('You do not have permission to perform this action.');})" style="font-size:.8em; color: #f00; font-weight: bold;">X</a>
+                                            }" style="font-size:.8em; color: #f00; font-weight: bold;">X</a>
                     </td>
                     <?php
                 }
