@@ -42,6 +42,15 @@ $survey_date = $survey_date->format('Y-m-d');
 $create_session = "INSERT INTO Session_Names (Session_Name, Program_ID, Start_Date, End_Date, Survey_Due) VALUES ('" . $session_sqlsafe . "',
             $id, '" . $start_sqlsafe . "', '" . $end_sqlsafe . "', '" . $survey_date . "' )";
 mysqli_query($cnnEnlace, $create_session);
+
+/* grant admin users access to this program */
+$get_enlace_admins = "SELECT Users_Privileges_ID FROM Users_Privileges WHERE Site_Privilege_ID = 1 AND Privilege_ID = 6;";
+$enlace_admins = mysqli_query($cnnLISC, $get_enlace_admins);
+while ($admins = mysqli_fetch_array($enlace_admins)) {
+    $grant_program_access = "INSERT INTO Users_Program_Access (Users_Program_Access.Users_Privileges_ID, Users_Program_Access.Program_Access) VALUES (" . $admins[0] . ", $id);";
+    mysqli_query($cnnLISC, $grant_program_access);
+}
+
 include "../include/dbconnclose.php";
 ?>
 
@@ -51,7 +60,7 @@ include "../include/dbconnclose.php";
                 '../ajax/set_program_id.php',
                 {
                     page: 'profile',
-                    id: '<?echo $id;?>'
+                    id: '<?php echo $id;?>'
                 },
         function(response) {
             window.location = 'profile.php';
