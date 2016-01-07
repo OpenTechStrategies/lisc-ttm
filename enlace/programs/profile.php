@@ -811,7 +811,7 @@ $sessions = mysqli_query($cnnEnlace, $related_sessions);
 while ($sess = mysqli_fetch_row($sessions)) {
 
     /* show all sessions for this program: */
-    $get_dates = "SELECT * FROM Program_Dates WHERE Program_ID='" . $sess[0] . "' ORDER BY Date_Listed";
+    $get_dates = "SELECT * FROM Program_Dates WHERE Program_ID='" . $sess[0] . "' ORDER BY Date_Listed DESC";
     include "../include/dbconnopen.php";
     $program_info = mysqli_query($cnnEnlace, $get_dates);
     $current_session = "";

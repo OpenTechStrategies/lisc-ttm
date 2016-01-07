@@ -31,7 +31,9 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
 	$format_dob = explode('/', $_POST['dob']);
         if ($format_dob[1]!='' && $format_dob[2]!=''){
 	$dob_sqlsafe = $format_dob[2] . '-' . $format_dob[0] . '-' . $format_dob[1];}
-        else{$dob_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['dob']);}
+        else{
+            $dob_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['dob']);
+        }
         $get_existing_address="SELECT Address_Num, Address_Dir, Address_Street, Address_Street_Type, Address_City, Address_State, Address_ZIP, Block_Group
             FROM Participants
             WHERE Participant_ID='" . $id_sqlsafe . "'";
@@ -86,7 +88,7 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
 					Day_Phone='" . $day_phone_sqlsafe . "',
 					Evening_Phone='" . $eve_phone_sqlsafe . "',
 					Email='" . $email_sqlsafe . "',
-					DOB='" . $dob . "',
+					DOB='" . $dob_sqlsafe . "',
 					Age='" . $age_sqlsafe . "',
 					Gender='" . $gender_sqlsafe . "',
 					Role='" . $role_sqlsafe . "',
