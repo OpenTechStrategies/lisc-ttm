@@ -34,7 +34,6 @@ if ($_POST['action']=='add'){
     include "../include/dbconnclose.php";
 }
 elseif($_POST['action']=='remove'){
-    user_enforce_has_access($Enlace_id, 1);
     $false_absence="DELETE FROM Absences WHERE Participant_ID='".$user_id_sqlsafe."' AND Program_Date='".$date_sqlsafe."'";
     include "../include/dbconnopen.php";
     mysqli_query($cnnEnlace, $false_absence);
