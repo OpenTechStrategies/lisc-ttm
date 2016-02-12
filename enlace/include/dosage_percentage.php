@@ -95,6 +95,7 @@ function calculate_dosage ( $session, $participant, $start_date, $end_date ) {
         $attended_days=mysqli_query($cnnEnlace, $num_days_attended);
         $num_attended=mysqli_fetch_row($attended_days);
         $total_num_days_attended = $num_attended[0];
+        $enrollees = null;
     }
     else {
         // num participants in session
@@ -103,6 +104,7 @@ function calculate_dosage ( $session, $participant, $start_date, $end_date ) {
         $participants_found = mysqli_query($cnnEnlace, $num_participants_query);
         $num_participants_array=mysqli_fetch_row($participants_found);
         $num_session_participants = $num_participants_array[0];
+        $enrollees = $num_session_participants;
         // num absences
         $session_absences_query = "SELECT COUNT(*) FROM Absences LEFT JOIN Program_Dates ON Program_Date =
             Program_Date_ID WHERE Program_Dates.Program_ID =
@@ -151,7 +153,7 @@ function calculate_dosage ( $session, $participant, $start_date, $end_date ) {
     } else {
         $percentage = 'N/A';
     }
-    return array($total_num_days_attended, $sum_hours, $percentage);
+    return array($total_num_days_attended, $sum_hours, $percentage, $enrollees);
 }
 
 /* End redeclaration-protection wrapper: */

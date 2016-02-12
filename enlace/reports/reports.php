@@ -44,6 +44,7 @@ if (isset($_POST['submit_btn_assessments'])) {
             $('#exports').hide();
             $('#assessments_report').show();
             $('#program_list').hide();
+            $('#attendance').hide();
         });
 
         $(document).ajaxStart(function() {
@@ -68,6 +69,7 @@ if (isset($_POST['submit_btn_assessments'])) {
             $('#program_quality_report').show();
             $('#exports').hide();
             $('#assessments_report').hide();
+            $('#attendance').hide();
         });
 
         $(document).ajaxStart(function() {
@@ -91,6 +93,7 @@ if (isset($_POST['submit_btn_assessments'])) {
             $('#program_quality_report').hide();
             $('#exports').hide();
             $('#assessments_report').hide();
+            $('#attendance').hide();
         });
 
         $(document).ajaxStart(function() {
@@ -99,6 +102,22 @@ if (isset($_POST['submit_btn_assessments'])) {
 
         $(document).ajaxStop(function() {
             $('#ajax_loader').fadeOut('slow');
+        });
+    </script><?php
+}
+elseif (isset($_POST['submit_btn'])) {
+    ?>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#reports_selector').addClass('selected');
+            $('#ajax_loader').hide();
+            $('#add_new').hide();
+            $('#programs_report').hide();
+            $('#referrals_report').hide();
+            $('#program_quality_report').hide();
+            $('#exports').hide();
+            $('#assessments_report').hide();
+            $('#attendance').show();
         });
     </script><?php
 }
@@ -116,6 +135,7 @@ if (isset($_POST['submit_btn_assessments'])) {
             $('#program_quality_report').hide();
             $('#exports').hide();
             $('#assessments_report').hide();
+            $('#attendance').hide();
         });
 
         $(document).ajaxStart(function() {
@@ -139,6 +159,7 @@ if (isset($_POST['submit_btn_assessments'])) {
                         $('#program_quality_report').hide();
                         $('#exports').hide();
                         $('#assessments_report').hide();
+                        $('#attendance').hide();
                    ">Programs</a>
             </td>
             <td>
@@ -148,7 +169,18 @@ if (isset($_POST['submit_btn_assessments'])) {
                         $('#program_quality_report').hide();
                         $('#exports').hide();
                         $('#assessments_report').show();
+                        $('#attendance').hide();
                    ">Assessments</a></td>
+            <td><a href="javascript:;" onclick="
+                    $('#programs_report').hide();
+                    $('#referrals_report').hide();
+                    $('#program_quality_report').hide();
+                    $('#attendance').show();
+                    $('#exports').hide();
+                    $('#assessments_report').hide();
+                    $('#start_date').addClass('addDP');
+                    $('#end_date').addClass('addDP');
+                   ">Attendance</a></td>
 
             <td><a href="javascript:;" onclick="
                     $('#programs_report').hide();
@@ -156,6 +188,7 @@ if (isset($_POST['submit_btn_assessments'])) {
                     $('#program_quality_report').show();
                     $('#exports').hide();
                     $('#assessments_report').hide();
+                    $('#attendance').hide();
                    ">Program Quality</a></td>
             <td><a href="javascript:;" onclick="
                     $('#programs_report').hide();
@@ -163,6 +196,7 @@ if (isset($_POST['submit_btn_assessments'])) {
                     $('#program_quality_report').hide();
                     $('#exports').show();
                     $('#assessments_report').hide();
+                    $('#attendance').hide();
                    ">Exports</a></td>
 <!--  <td><a href="all_exports.php">Exports</a></td>-->
         </tr></table>
@@ -171,6 +205,7 @@ if (isset($_POST['submit_btn_assessments'])) {
     <div id="referrals_report"><?php include "referrals.php"; ?></div>
     <div id="program_quality_report"><?php include "quality_surveys.php"; ?></div>
     <div id="exports"><?php include "production_exports.php"; ?></div>
+    <div id="attendance"><?php include "attendance.php"; ?></div>
     <br/><br/>	
 </div>
 
