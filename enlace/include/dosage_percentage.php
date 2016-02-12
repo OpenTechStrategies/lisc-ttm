@@ -28,18 +28,61 @@
    See issue #34 and issue #35 for more details. */
 if(!function_exists("calculate_dosage")) {
 
-/* This function is referenced in enlace/programs/profile.php and in 
- * reports/production_exports.php.  It takes the session and participant
- * ID's and returns the number of days that this student attended the session,
- * the sum of hours this student spent in this program (if available), and
- * the dosage percentage. */
-function calculate_dosage($session, $participant){
+/* This takes a session ID and, optionally, a participant ID.  If
+ * participant id is *not* provided, then start and end dates *must* be
+ * provided.  If a participant ID is provided, then start and end dates
+ * are unnecessary.  In fact, please *don't* provide them, since they
+ * would affect the dosage percentage in unexpected ways.
+ *
+ * If a participant is provided, it returns the number of days that this
+ * student attended the session, the sum of hours this student spent in
+ * this program (if available), and the dosage percentage. 
+ *
+ * If not, then it returns the number of days that all participants
+ * spent in this program, the sum of hours that all students spent in
+ * this program, and the total dosage percentage across all
+ * students. (Only the sum of hours is used, but the others are included
+ * for compatibility with the existing structure of the function).
+*/
+
+function calculate_dosage ( $session, $participant, $start_date, $end_date ) {
     include $_SERVER['DOCUMENT_ROOT'] . "/enlace/include/dbconnopen.php";
     $session_sqlsafe=mysqli_real_escape_string($cnnEnlace, $session);
     $participant_sqlsafe=mysqli_real_escape_string($cnnEnlace, $participant);
+    $start_sqlsafe = mysqli_real_escape_string($cnnEnlace, $start_date);
+    $end_sqlsafe = mysqli_real_escape_string($cnnEnlace, $end_date);
+    
+    // raise some errors if we get an unexpected combination of inputs
+    if (! $participant_sqlsafe && ! $start_sqlsafe && ! $end_sqlsafe) {
+        echo "<br> ERROR: Please provide either a participant or start and end dates";
+        return null;
+    }
+    if ( (! $start_sqlsafe && $end_sqlsafe ) || ( $start_sqlsafe && ! $end_sqlsafe) ) {
+        echo "<br> ERROR: Please provide both start and end dates";
+        return null;
+    }
+    if ( $participant_sqlsafe &&  ($start_sqlsafe || $end_sqlsafe) ) {
+        echo "<br> WARNING: Start and end dates are not considered when finding an individual's dosage.";
+    }
+    
+
+    /* This select finds the total number of days that this program was 
+     * offered. */
+    if ($start_sqlsafe && $end_sqlsafe) {
+        $get_max_days = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID='$session_sqlsafe' AND Date_Listed > '$start_sqlsafe' AND Date_Listed < '$end_sqlsafe'";
+    }
+    else {
+        $get_max_days = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID='$session_sqlsafe'";
+    }
+    $max_days_obj = mysqli_query($cnnEnlace, $get_max_days);
+    $max = mysqli_fetch_row($max_days_obj);
+    $max_days = $max[0];
+    
     /* This select finds the number of days that the student attended this
      * program. */
-    $num_days_attended = "SELECT COUNT(Program_Date_ID) FROM 
+    $total_num_days_attended = 0;
+    if ($participant) {
+        $num_days_attended = "SELECT COUNT(Program_Date_ID) FROM 
         Participants_Programs
         INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID
         INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
@@ -49,13 +92,28 @@ function calculate_dosage($session, $participant){
         Absences.Participant_ID)
             WHERE Absence_ID IS NULL AND Participants_Programs.Participant_ID='$participant_sqlsafe'
             AND Session_ID='$session_sqlsafe';";
-    $attended_days=mysqli_query($cnnEnlace, $num_days_attended);
-    $num_attended=mysqli_fetch_row($attended_days);
-    /* This select finds the total number of days that this program was 
-     * offered. */
-    $get_max_days = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID='$session_sqlsafe'";
-    $max_days = mysqli_query($cnnEnlace, $get_max_days);
-    $max = mysqli_fetch_row($max_days);
+        $attended_days=mysqli_query($cnnEnlace, $num_days_attended);
+        $num_attended=mysqli_fetch_row($attended_days);
+        $total_num_days_attended = $num_attended[0];
+    }
+    else {
+        // num participants in session
+        $num_participants_query = "SELECT COUNT(*) FROM 
+        Participants_Programs WHERE Program_ID='$session_sqlsafe' AND Participant_ID > 0 ;";
+        $participants_found = mysqli_query($cnnEnlace, $num_participants_query);
+        $num_participants_array=mysqli_fetch_row($participants_found);
+        $num_session_participants = $num_participants_array[0];
+        // num absences
+        $session_absences_query = "SELECT COUNT(*) FROM Absences LEFT JOIN Program_Dates ON Program_Date =
+            Program_Date_ID WHERE Program_Dates.Program_ID =
+            '$session_sqlsafe' and Date_Listed > '$start_sqlsafe' AND
+            Date_Listed < '$end_sqlsafe'";
+        $session_absences_obj = mysqli_query($cnnEnlace, $session_absences_query);
+        $session_absences_array=mysqli_fetch_row($session_absences_obj);
+        $num_session_absences = $session_absences_array[0];
+
+        $total_num_days_attended = ($max_days * $num_session_participants) - $num_session_absences;
+    }
     /* Find the hours this person spent in the program. */
     /* Get daily hours: */
     $program_daily_hours="SELECT Start_Hour, Start_Suffix, End_Hour, End_Suffix,"
@@ -84,17 +142,21 @@ function calculate_dosage($session, $participant){
  if ($daily_hours == 0 || $daily_hours == ''){
      $daily_hours = 2;
  }
- $sum_hours=$num_attended[0]*$daily_hours;
+ $sum_hours=$total_num_days_attended*$daily_hours;
   
     include "dbconnclose.php";
     /* Calculate the dosage percentage based on days attended and total days: */
-    if ($max[0] != 0) {
-        $percentage = number_format(($num_attended[0] / $max[0]) * 100, 2) . '%';
+    if ($max_days != 0) {
+        $percentage = number_format(($total_num_days_attended / $max_days) * 100, 2) . '%';
     } else {
         $percentage = 'N/A';
     }
-    return array($num_attended[0], $sum_hours, $percentage);
+    return array($total_num_days_attended, $sum_hours, $percentage);
 }
 
 /* End redeclaration-protection wrapper: */
 }
+
+//echo "test without participant <br>";
+//echo calculate_dosage ( 39, null, '2015-01-01', '2015-06-05' );
+//echo "<br> expect 4 hrs for session 39 with 1/1/15 - 6/5/15";
