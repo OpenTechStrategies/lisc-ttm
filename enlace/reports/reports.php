@@ -31,6 +31,25 @@ include "../header.php";
 /* if this is the page reloading after the user chose assessment criteria, 
  * hide everything but the assessments page and show results: 
  */
+?>
+<script type="text/javascript">
+function toggleAttendanceCheckboxes() { 
+        if ($('#select_all_attendance_checkboxes').attr('checked')) {
+            console.log("checked");
+            $('input[type=checkbox]').each( function () {
+                $(this).attr('checked', true);
+            });
+        }
+        else {
+            console.log("not checked");
+            $('input[type=checkbox]').each( function () {
+                $(this).attr('checked', false);
+            });
+        }
+    }
+</script>
+
+<?php 
 if (isset($_POST['submit_btn_assessments'])) {
     ?>
     <script type="text/javascript">
@@ -105,10 +124,17 @@ if (isset($_POST['submit_btn_assessments'])) {
         });
     </script><?php
 }
-elseif (isset($_POST['submit_btn'])) {
+elseif (isset($_POST['attendance_submit_btn'])) {
     ?>
     <script type="text/javascript">
         $(document).ready(function() {
+            $('#attendance_sessions').hide();
+            $('#attendance_sessions_toggler').on('click', function () {
+                $('#attendance_sessions').toggle();
+            });
+            $('#select_all_attendance_checkboxes').on('click', function () {
+                toggleAttendanceCheckboxes();
+            });
             $('#reports_selector').addClass('selected');
             $('#ajax_loader').hide();
             $('#add_new').hide();
@@ -180,6 +206,12 @@ elseif (isset($_POST['submit_btn'])) {
                     $('#assessments_report').hide();
                     $('#start_date').addClass('addDP');
                     $('#end_date').addClass('addDP');
+                    $('#attendance_sessions_toggler').on('click', function () {
+                        $('#attendance_sessions').toggle();
+                    });
+                    $('#select_all_attendance_checkboxes').on('click', function () {
+                        toggleAttendanceCheckboxes();
+                    });
                    ">Attendance</a></td>
 
             <td><a href="javascript:;" onclick="

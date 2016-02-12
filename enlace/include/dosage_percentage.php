@@ -54,15 +54,15 @@ function calculate_dosage ( $session, $participant, $start_date, $end_date ) {
     
     // raise some errors if we get an unexpected combination of inputs
     if (! $participant_sqlsafe && ! $start_sqlsafe && ! $end_sqlsafe) {
-        echo "<br> ERROR: Please provide either a participant or start and end dates";
+        // "<br> Please provide start and end dates.";
         return null;
     }
     if ( (! $start_sqlsafe && $end_sqlsafe ) || ( $start_sqlsafe && ! $end_sqlsafe) ) {
-        echo "<br> ERROR: Please provide both start and end dates";
+        // "<br> Please provide both a start and an end date.";
         return null;
     }
     if ( $participant_sqlsafe &&  ($start_sqlsafe || $end_sqlsafe) ) {
-        echo "<br> WARNING: Start and end dates are not considered when finding an individual's dosage.";
+        // "<br> WARNING: Start and end dates are not considered when finding an individual's dosage.";
     }
     
 
