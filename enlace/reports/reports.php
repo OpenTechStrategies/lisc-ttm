@@ -128,13 +128,13 @@ elseif (isset($_POST['attendance_submit_btn'])) {
     ?>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#attendance_sessions').hide();
             $('#attendance_sessions_toggler').on('click', function () {
-                $('#attendance_sessions').toggle();
+                $('.hide_unchecked').toggle();
             });
             $('#select_all_attendance_checkboxes').on('click', function () {
                 toggleAttendanceCheckboxes();
             });
+            $('.hide_unchecked').hide();
             $('#reports_selector').addClass('selected');
             $('#ajax_loader').hide();
             $('#add_new').hide();

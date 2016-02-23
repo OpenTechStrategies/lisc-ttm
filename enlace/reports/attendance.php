@@ -25,6 +25,17 @@ user_enforce_has_access($Enlace_id);
 $program_string ="";
 include_once("../include/dosage_percentage.php");
 ?>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#start_1').on('change', function () {
+        $('#start_2').val($('#start_1').val());
+    });
+    $('#end_1').on('change', function () {
+        $('#end_2').val($('#end_1').val());
+    });
+});
+
+</script>
 <div style="display: none;">
     <?php include_once("../include/datepicker_wtw.php");?>
 </div>
@@ -33,10 +44,20 @@ include_once("../include/dosage_percentage.php");
 <form action="reports.php" method="post">
     <table class="all_projects">
     <tr><td>
-<span id="attendance_sessions_toggler" style="font-weight: bold; text-decoration: underline; cursor: pointer;">
-    Show/hide sessions: </span>
-<div id="attendance_sessions">
- <input type="checkbox" id="select_all_attendance_checkboxes"> <b>Select all</b> <br>
+    <span id="attendance_sessions_toggler" style="font-weight: bold; text-decoration: underline; cursor: pointer;">
+    Show/hide sessions:
+    </span>
+    </td>
+    <th class="hide_unchecked"> Start date: </th>
+    <td class="hide_unchecked"><input type="text" class="addDP" id="start_1" value="<?php echo $_POST['start_date']; ?>"></td>
+    <th class="hide_unchecked"> End date: </th>
+    <td class="hide_unchecked"><input type="text" class="addDP" id="end_1" value="<?php echo $_POST['end_date']; ?>"></td>
+    <td class="hide_unchecked"><input type="submit" value="Search" name="attendance_submit_btn"></td>
+    </tr>
+    <tr>
+    <td> <div id="attendance_sessions"> <br \ >
+    <span class="hide_unchecked"><input type="checkbox" id="select_all_attendance_checkboxes" > <b>Select all</b> <br></span>
+    <br \ >
 <?php
             //get user's programs
          $all_progs = "SELECT Session_ID, Name, Session_Name, COUNT(Participant_ID) FROM Session_Names 
@@ -52,24 +73,32 @@ include_once("../include/dosage_percentage.php");
             $session_array[$program[0]] = array($program[1], $program[2]);
             $checkbox_count++;
             ?>
+            <span <?php if ($_POST['attendance_program_select']) {
+                echo (in_array($program[0], $_POST['attendance_program_select']) ?  null : 'class="hide_unchecked"');
+            } ?>>
             <input type="checkbox" name="attendance_program_select[]" id="checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
             <?php
             if ($_POST['attendance_program_select']) {
                 echo (in_array($program[0], $_POST['attendance_program_select']) ? 'checked="true"' : null);
             }
             ?>><?php
-                   echo "<label for=\"checkbox_" . $checkbox_count . "\">" . $program[1] . "--" . $program[2] . "</label><br>";
+                   echo "<label for=\"checkbox_" . $checkbox_count . "\">" . $program[1] . " -- <b>" . $program[2] . "</b></label><br></span>";
                }
         include "../include/dbconnclose.php";
         ?>
 </div>
 </td>
-<th>Start date: </th>
-<td><input type="text" class="addDP" name="start_date" value="<?php echo $_POST['start_date']; ?>"></td>
-<th> End date: </th>
-<td><input type="text" class="addDP" name="end_date" value="<?php echo $_POST['end_date']; ?>"></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
+<th></th>
+<th>Start date: </th>
+<td><input type="text" class="addDP" name="start_date" id="start_2" value="<?php echo $_POST['start_date']; ?>"></td>
+<th> End date: </th>
+<td><input type="text" class="addDP" name="end_date" id="end_2" value="<?php echo $_POST['end_date']; ?>"></td>
 <td><input type="submit" value="Search" name="attendance_submit_btn"></td>
 </tr>
 </table>
@@ -86,9 +115,9 @@ include_once("../include/dosage_percentage.php");
 ?>
 <table class="all_projects">
         <tr>
-            <th>Program Name</th>
-            <th>Session Name</th>
-            <th>Total enrollment</th>
+            <th>Program name</th>
+            <th>Session name</th>
+            <th>Enrollment per session</th>
             <th>Dosage hours</th>
         </tr>
 <?php
@@ -110,7 +139,7 @@ include_once("../include/dosage_percentage.php");
              <tr>
             <th>Total</th>
             <th></th>
-            <th></th>
+            <th>Unique enrollment: </th>
             <th><?php echo $total_hours; ?></th>
             </tr>
 </table>
