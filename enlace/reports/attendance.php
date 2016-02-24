@@ -22,7 +22,11 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 user_enforce_has_access($Enlace_id);
 //get user's access
-$program_string ="";
+$access_array = $USER->program_access($Enlace_id);
+$program_string = " WHERE Programs.Program_ID = " . $access_array[0];
+foreach ($access_array as $program){
+    $program_string .= " OR Programs.Program_ID = " . $program;
+}
 include_once("../include/dosage_percentage.php");
 ?>
 <script type="text/javascript">
@@ -62,8 +66,9 @@ $(document).ready(function() {
             //get user's programs
          $all_progs = "SELECT Session_ID, Name, Session_Name, COUNT(Participant_ID) FROM Session_Names 
                             INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_ID 
-                            INNER JOIN Programs ON Session_Names.Program_Id = Programs.Program_ID 
-                            GROUP BY Session_ID ORDER BY Name;";
+                            INNER JOIN Programs ON Session_Names.Program_Id = Programs.Program_ID "
+                            . $program_string . 
+                            " GROUP BY Session_ID ORDER BY Name;";
         include "../include/dbconnopen.php";
         $all_programs = mysqli_query($cnnEnlace, $all_progs);
         $checkbox_count = 0;
