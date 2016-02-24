@@ -45,7 +45,7 @@ $(document).ready(function() {
     <table class="all_projects">
     <tr><td>
     <span id="attendance_sessions_toggler" style="font-weight: bold; text-decoration: underline; cursor: pointer;">
-    Show/hide sessions:
+    Show/hide options:
     </span>
     </td>
     <th class="hide_unchecked"> Start date: </th>
@@ -123,7 +123,16 @@ $(document).ready(function() {
 <?php
         // loop through selected sessions here
         $total_hours = 0;
+        $total_enrollment = 0;
+        $session_querystring = " ";
+        $counter = 0;
         foreach ($_POST['attendance_program_select'] as $session ) {
+            if ($counter != 0) {
+                $session_querystring .= " OR Program_ID = " . $session;
+            }
+            else {
+                $session_querystring .= " AND (Program_ID = " . $session;
+            }
             $dosage_array = calculate_dosage($session, null, $_POST['start_date'], $_POST['end_date']);
             ?>
             <tr>
@@ -134,16 +143,49 @@ $(document).ready(function() {
             </tr>
             <?php
             $total_hours = $total_hours + $dosage_array[1];
+            $total_enrollment = $total_enrollment + $dosage_array[3];
+            $counter++;
         }
- ?>
+            if ($session_querystring != " " ) {
+                $session_querystring .= ")";
+            }
+
+if ($_POST['attendance_program_select']) {
+?>
              <tr>
-            <th>Total</th>
-            <th></th>
-            <th>Unique enrollment: </th>
-            <th><?php echo $total_hours; ?></th>
+            <td class="all_projects"></td>
+            <td class="all_projects">Total enrollment: </td>
+            <td class="all_projects"><b><?php echo $total_enrollment; ?></b></td>
+            <td class="all_projects"></td>
             </tr>
+             <tr>
+            <td class="all_projects"></td>
+            <td class="all_projects">Unique enrollment: </td>
+            <td class="all_projects"><b>
+<?php
+$unique_enrollees_query = "select count(distinct Participant_ID) from Participants_Programs WHERE (Date_Added > '" . $_POST['start_date'] . "' and Date_Added < '" . $_POST['end_date'] . "' AND Program_ID is not null and Participant_ID > 0) " . $session_querystring;
+include "../include/dbconnopen.php";
+$unique_enrollees_result = mysqli_query($cnnEnlace, $unique_enrollees_query);
+$unique_enrollees_array=mysqli_fetch_row($unique_enrollees_result);
+$unique_enrollees = $unique_enrollees_array[0];
+echo $unique_enrollees;
+?>
+            </b>
+            </td>
+            </tr>
+             <tr>
+            <td class="all_projects"></td>
+            <td class="all_projects"></td>
+            <td class="all_projects">Total hours:</td>
+            <td class="all_projects"><b> <?php echo $total_hours; ?></b></td>
+</tr>
+<?php
+// end of if-sessions-chosen conditional
+}
+?>
 </table>
 <?php
+
 // end of dates-chosen else
         }
 // end of "POST" if
