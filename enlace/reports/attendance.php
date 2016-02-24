@@ -63,7 +63,6 @@ $(document).ready(function() {
          $all_progs = "SELECT Session_ID, Name, Session_Name, COUNT(Participant_ID) FROM Session_Names 
                             INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_ID 
                             INNER JOIN Programs ON Session_Names.Program_Id = Programs.Program_ID 
-                            " . $program_string . "
                             GROUP BY Session_ID ORDER BY Name;";
         include "../include/dbconnopen.php";
         $all_programs = mysqli_query($cnnEnlace, $all_progs);
@@ -84,7 +83,6 @@ $(document).ready(function() {
             ?>><?php
                    echo "<label for=\"checkbox_" . $checkbox_count . "\">" . $program[1] . " -- <b>" . $program[2] . "</b></label><br></span>";
                }
-        include "../include/dbconnclose.php";
         ?>
 </div>
 </td>
@@ -126,18 +124,21 @@ $(document).ready(function() {
         $total_enrollment = 0;
         $session_querystring = " ";
         $counter = 0;
+        $end_date_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_POST['end_date']);
+        $start_date_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_POST['start_date']);
         foreach ($_POST['attendance_program_select'] as $session ) {
+            $session_sqlsafe=mysqli_real_escape_string($cnnEnlace, $session);
             if ($counter != 0) {
-                $session_querystring .= " OR Program_ID = " . $session;
+                $session_querystring .= " OR Program_ID = " . $session_sqlsafe;
             }
             else {
-                $session_querystring .= " AND (Program_ID = " . $session;
+                $session_querystring .= " AND (Program_ID = " . $session_sqlsafe;
             }
-            $dosage_array = calculate_dosage($session, null, $_POST['start_date'], $_POST['end_date']);
+            $dosage_array = calculate_dosage($session_sqlsafe, null, $start_date_sqlsafe, $end_date_sqlsafe);
             ?>
             <tr>
-            <td><?php echo $session_array[$session][0]; ?></td>
-            <td><?php echo $session_array[$session][1]; ?></td>
+            <td><?php echo $session_array[$session_sqlsafe][0]; ?></td>
+            <td><?php echo $session_array[$session_sqlsafe][1]; ?></td>
             <td><?php echo $dosage_array[3];?></td>
             <td><?php echo $dosage_array[1];?></td>
             </tr>
@@ -163,8 +164,7 @@ if ($_POST['attendance_program_select']) {
             <td class="all_projects">Unique enrollment: </td>
             <td class="all_projects"><b>
 <?php
-$unique_enrollees_query = "select count(distinct Participant_ID) from Participants_Programs WHERE (Date_Added > '" . $_POST['start_date'] . "' and Date_Added < '" . $_POST['end_date'] . "' AND Program_ID is not null and Participant_ID > 0) " . $session_querystring;
-include "../include/dbconnopen.php";
+$unique_enrollees_query = "select count(distinct Participant_ID) from Participants_Programs WHERE (Date_Added > '" . $start_date_sqlsafe . "' and Date_Added < '" . $end_date_sqlsafe . "' AND (Date_Dropped IS NULL or Date_Dropped > '" . $end_date_sqlsafe . "') AND Program_ID is not null and Participant_ID > 0) " . $session_querystring;
 $unique_enrollees_result = mysqli_query($cnnEnlace, $unique_enrollees_query);
 $unique_enrollees_array=mysqli_fetch_row($unique_enrollees_result);
 $unique_enrollees = $unique_enrollees_array[0];
@@ -180,6 +180,8 @@ echo $unique_enrollees;
             <td class="all_projects"><b> <?php echo $total_hours; ?></b></td>
 </tr>
 <?php
+include "../include/dbconnclose.php";
+
 // end of if-sessions-chosen conditional
 }
 ?>

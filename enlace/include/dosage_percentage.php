@@ -101,16 +101,18 @@ function calculate_dosage ( $session, $participant, $start_date, $end_date ) {
         // num participants in session
         $num_participants_query = "SELECT COUNT(*) FROM 
         Participants_Programs WHERE Program_ID='$session_sqlsafe' AND Participant_ID > 0 and Date_Added > '$start_sqlsafe' AND
-            Date_Added < '$end_sqlsafe'";
+            Date_Added < '$end_sqlsafe' AND (Date_Dropped IS NULL or Date_Dropped > '$end_sqlsafe') ";
         $participants_found = mysqli_query($cnnEnlace, $num_participants_query);
         $num_participants_array=mysqli_fetch_row($participants_found);
         $num_session_participants = $num_participants_array[0];
         $enrollees = $num_session_participants;
         // num absences
         $session_absences_query = "SELECT COUNT(*) FROM Absences LEFT JOIN Program_Dates ON Program_Date =
-            Program_Date_ID WHERE Program_Dates.Program_ID =
+            Program_Date_ID LEFT JOIN Participants_Programs on Program_Dates.Program_ID = Participants_Programs.Program_ID
+             WHERE Program_Dates.Program_ID =
             '$session_sqlsafe' and Date_Listed > '$start_sqlsafe' AND
-            Date_Listed < '$end_sqlsafe'";
+            Date_Listed < '$end_sqlsafe' 
+            and (Date_Listed < Date_Dropped OR Date_Dropped IS NULL) group by Absence_ID";
         $session_absences_obj = mysqli_query($cnnEnlace, $session_absences_query);
         $session_absences_array=mysqli_fetch_row($session_absences_obj);
         $num_session_absences = $session_absences_array[0];
