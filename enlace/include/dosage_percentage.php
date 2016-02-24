@@ -100,8 +100,8 @@ function calculate_dosage ( $session, $participant, $start_date, $end_date ) {
     else {
         // num participants in session
         $num_participants_query = "SELECT COUNT(*) FROM 
-        Participants_Programs WHERE Program_ID='$session_sqlsafe' AND Participant_ID > 0 and Date_Added > '$start_sqlsafe' AND
-            Date_Added < '$end_sqlsafe' AND (Date_Dropped IS NULL or Date_Dropped > '$end_sqlsafe') ";
+        Participants_Programs WHERE Program_ID='$session_sqlsafe' AND Participant_ID > 0 and (Date_Added < '$end_sqlsafe' OR Date_Added IS NULL) AND (Date_Dropped IS NULL or Date_Dropped > '$end_sqlsafe') ";
+
         $participants_found = mysqli_query($cnnEnlace, $num_participants_query);
         $num_participants_array=mysqli_fetch_row($participants_found);
         $num_session_participants = $num_participants_array[0];
