@@ -164,7 +164,9 @@ if ($_POST['attendance_program_select']) {
             <td class="all_projects">Unique enrollment: </td>
             <td class="all_projects"><b>
 <?php
-$unique_enrollees_query = "select count(distinct Participant_ID) from Participants_Programs WHERE (Date_Added > '" . $start_date_sqlsafe . "' and Date_Added < '" . $end_date_sqlsafe . "' AND (Date_Dropped IS NULL or Date_Dropped > '" . $end_date_sqlsafe . "') AND Program_ID is not null and Participant_ID > 0) " . $session_querystring;
+$unique_enrollees_query = "select count(distinct Participant_ID) from Participants_Programs WHERE (
+ Program_ID is not null and
+ Participant_ID > 0) " . $session_querystring;
 $unique_enrollees_result = mysqli_query($cnnEnlace, $unique_enrollees_query);
 $unique_enrollees_array=mysqli_fetch_row($unique_enrollees_result);
 $unique_enrollees = $unique_enrollees_array[0];
