@@ -43,9 +43,13 @@ if(!function_exists("calculate_dosage")) {
  * this program, and the total dosage percentage across all
  * students. (Only the sum of hours is used, but the others are included
  * for compatibility with the existing structure of the function).
+ *
+ * Also takes boolean "exclude_dropped."  If it is true, then for a
+ * session-wide dosage calculation only count those participants who had
+ * not dropped before the provided end date.
  */
 
-    function calculate_dosage ( $session, $participant, $start_date, $end_date ) {
+    function calculate_dosage ( $session, $participant, $start_date, $end_date, $exclude_dropped=false ) {
         include $_SERVER['DOCUMENT_ROOT'] . "/enlace/include/dbconnopen.php";
         $session_sqlsafe=mysqli_real_escape_string($cnnEnlace, $session);
         $participant_sqlsafe=mysqli_real_escape_string($cnnEnlace, $participant);
@@ -99,19 +103,41 @@ if(!function_exists("calculate_dosage")) {
         }
         else {
             // num participants in session
-            $num_participants_query = "SELECT COUNT(*) FROM 
-        Participants_Programs WHERE Program_ID='$session_sqlsafe' AND Participant_ID > 0 ";
-
+            if (! $exclude_dropped ) {
+                $num_participants_query = "SELECT COUNT(*) FROM Participants_Programs WHERE
+                    Program_ID='$session_sqlsafe' AND Participant_ID > 0";
+            }
+            else {
+                $num_participants_query = "SELECT COUNT(*) FROM Participants_Programs WHERE
+                    Program_ID='$session_sqlsafe' AND Participant_ID > 0
+                    AND (Date_Dropped IS NULL OR Date_Dropped >
+                    '$end_sqlsafe')";
+            }
             $participants_found = mysqli_query($cnnEnlace, $num_participants_query);
             $num_participants_array=mysqli_fetch_row($participants_found);
             $num_session_participants = $num_participants_array[0];
             $enrollees = $num_session_participants;
             // num absences
-            $session_absences_query = "SELECT COUNT( DISTINCT Absence_ID) FROM Absences LEFT JOIN Program_Dates ON Program_Date =
-            Program_Date_ID LEFT JOIN Participants_Programs on Program_Dates.Program_ID = Participants_Programs.Program_ID
-             WHERE Program_Dates.Program_ID =
-            '$session_sqlsafe' and Date_Listed > '$start_sqlsafe' AND
-            Date_Listed < '$end_sqlsafe' ";
+            if (! $include_dropped ) {
+                $session_absences_query = "SELECT COUNT( DISTINCT
+                    Absence_ID) FROM Absences LEFT JOIN Program_Dates
+                    ON Program_Date = Program_Date_ID WHERE
+                    Program_Dates.Program_ID = '$session_sqlsafe' and
+                    Date_Listed > '$start_sqlsafe' AND Date_Listed <
+                    '$end_sqlsafe'";
+            }
+            else {
+                $session_absences_query = "SELECT COUNT( DISTINCT
+                    Absence_ID) FROM Absences LEFT JOIN Program_Dates
+                    ON Program_Date = Program_Date_ID LEFT JOIN
+                    Participants_Programs on (Program_Dates.Program_ID =
+                    Participants_Programs.Program_ID and
+                    Absences.Participant_ID =
+                    Participants_Programs.Participant_ID) WHERE
+                    Program_Dates.Program_ID = '$session_sqlsafe' and
+                    Date_Listed > '$start_sqlsafe' AND Date_Listed <
+                    '$end_sqlsafe'";
+            }
             // count all dates after a person dropped as if they were absences?
             $session_absences_obj = mysqli_query($cnnEnlace, $session_absences_query);
             $session_absences_array=mysqli_fetch_row($session_absences_obj);

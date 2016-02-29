@@ -37,6 +37,22 @@ $(document).ready(function() {
     $('#end_1').on('change', function () {
         $('#end_2').val($('#end_1').val());
     });
+    $('#dropped_1').on('click', function () {
+        if ($('#dropped_1').attr('checked')) {
+            $('#dropped_2').attr('checked', true);
+        }
+        else {
+            $('#dropped_2').attr('checked', false);
+        }
+    });
+    $('#dropped_2').on('click', function () {
+        if ($('#dropped_2').attr('checked')) {
+            $('#dropped_1').attr('checked', true);
+        }
+        else {
+            $('#dropped_1').attr('checked', false);
+        }
+    });
 });
 
 </script>
@@ -56,6 +72,12 @@ $(document).ready(function() {
     <td class="hide_unchecked"><input type="text" class="addDP" id="start_1" value="<?php echo $_POST['start_date']; ?>"></td>
     <th class="hide_unchecked"> End date: </th>
     <td class="hide_unchecked"><input type="text" class="addDP" id="end_1" value="<?php echo $_POST['end_date']; ?>"></td>
+    <th class="hide_unchecked"> Exclude dropped youth: </th>
+    <td class="hide_unchecked"><input type="checkbox" id="dropped_1" name="dropped" <?php
+    if ($_POST['dropped']) {
+        echo "checked = 'checked'";
+    }
+    ?>></td>
     <td class="hide_unchecked"><input type="submit" value="Search" name="attendance_submit_btn"></td>
     </tr>
     <tr>
@@ -102,6 +124,12 @@ $(document).ready(function() {
 <td><input type="text" class="addDP" name="start_date" id="start_2" value="<?php echo $_POST['start_date']; ?>"></td>
 <th> End date: </th>
 <td><input type="text" class="addDP" name="end_date" id="end_2" value="<?php echo $_POST['end_date']; ?>"></td>
+<th> Exclude dropped youth: </th>
+<td><input type="checkbox" id="dropped_2" name="dropped" <?php
+    if ($_POST['dropped']) {
+        echo "checked = 'checked'";
+    }
+?>></td>
 <td><input type="submit" value="Search" name="attendance_submit_btn"></td>
 </tr>
 </table>
@@ -131,6 +159,9 @@ $(document).ready(function() {
         $counter = 0;
         $end_date_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_POST['end_date']);
         $start_date_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_POST['start_date']);
+        if ($_POST['dropped']) {
+            $dropped_sqlsafe = true;
+        }
         foreach ($_POST['attendance_program_select'] as $session ) {
             $session_sqlsafe=mysqli_real_escape_string($cnnEnlace, $session);
             if ($counter != 0) {
@@ -139,7 +170,7 @@ $(document).ready(function() {
             else {
                 $session_querystring .= " AND (Program_ID = " . $session_sqlsafe;
             }
-            $dosage_array = calculate_dosage($session_sqlsafe, null, $start_date_sqlsafe, $end_date_sqlsafe);
+            $dosage_array = calculate_dosage($session_sqlsafe, null, $start_date_sqlsafe, $end_date_sqlsafe, $dropped_sqlsafe);
             ?>
             <tr>
             <td><?php echo $session_array[$session_sqlsafe][0]; ?></td>
