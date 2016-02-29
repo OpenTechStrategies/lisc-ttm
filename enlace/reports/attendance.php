@@ -80,7 +80,7 @@ $(document).ready(function() {
             <span <?php if ($_POST['attendance_program_select']) {
                 echo (in_array($program[0], $_POST['attendance_program_select']) ?  null : 'class="hide_unchecked"');
             } ?>>
-            <input type="checkbox" name="attendance_program_select[]" id="checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
+            <input type="checkbox" name="attendance_program_select[]" class="attendance_checkbox" id="checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
             <?php
             if ($_POST['attendance_program_select']) {
                 echo (in_array($program[0], $_POST['attendance_program_select']) ? 'checked="true"' : null);

@@ -36,10 +36,14 @@ $has_all_programs = in_array('a', $access_array);
 <span class="helptext">Choose the program you would like to report on, then either export all results or see results by question:</span><br>
 <form action="reports.php" method="post">
     Program:
-    <!--<select id="all_programs" name="program_select">
-        <option value="0">Show results for all programs</option>-->
+
     <a href="javascript:;" onclick="$('#program_list').toggle();">Show/hide programs</a>
-    <div id="program_list"><?php
+    <div id="program_list">
+    <input type="checkbox" id="select_all_assessment_checkboxes"> <b>Select All</b>
+    <br >
+    <br >
+
+<?php
     $program_string = " WHERE Programs.Program_ID = " . $access_array[0];
     foreach ($access_array as $program){
         $program_string .= " OR Programs.Program_ID = " . $program;
@@ -52,13 +56,11 @@ $has_all_programs = in_array('a', $access_array);
         while ($program = mysqli_fetch_row($all_programs)) {
             $checkbox_count++;
             ?>
-            <!--
-            <option value="<?php echo $program[0]; ?>" <?php echo ($_POST['program_select'] == $program[0] ? 'selected=="selected"' : null) ?>><?php echo $program[2] . "--" . $program[1]; ?></option>
-            -->
-            <input type="checkbox" name="program_select[]" id="checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
+
+            <input type="checkbox" name="program_select[]" class="assessment_checkbox" id="checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
             <?php
-            if ($_POST['program_select[]']) {
-                echo (in_array($program[0], $_POST['program_select[]']) ? 'checked="true"' : null);
+            if ($_POST['program_select']) {
+                echo (in_array($program[0], $_POST['program_select']) ? 'checked="true"' : null);
             }
             ?>><?php
                    echo "<label for=\"checkbox_" . $checkbox_count . "\">" . $program[2] . "--" . $program[1] . "</label><br>";
