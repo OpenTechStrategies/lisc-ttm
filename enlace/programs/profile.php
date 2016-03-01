@@ -511,7 +511,7 @@ Shows all program information.
                             <td>
                                 <?php
                                 include "../include/dosage_percentage.php";
-                                $return_array= calculate_dosage($all_p['Session_ID'], $all_p['Participant_ID']);
+                                $return_array= calculate_dosage($all_p['Session_ID'], $all_p['Participant_ID'], null, null, false);
                                 echo $return_array[2];
                                 ?>
                             </td>

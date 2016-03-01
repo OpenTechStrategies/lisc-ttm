@@ -39,7 +39,7 @@ function calculate_dosage_sum($participant){
     
     $total_program_hours = 0;
     while ($session = mysqli_fetch_row($session_list)){
-        $dosage_array = calculate_dosage($session[0], $participant_sqlsafe);
+        $dosage_array = calculate_dosage($session[0], $participant_sqlsafe, null, null, false);
         $total_program_hours += $dosage_array[1];
     }
     // find hours in mentorship
