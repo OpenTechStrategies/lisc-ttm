@@ -33,29 +33,20 @@ include "../header.php";
  */
 ?>
 <script type="text/javascript">
-    function toggleAttendanceCheckboxes() { 
-        if ($('#select_all_assessment_checkboxes').attr('checked')) {
-            $('.assessment_checkbox').each( function () {
-                $(this).attr('checked', true);
-            });
-        }
-        else {
-            $('.assessment_checkbox').each( function () {
-                $(this).attr('checked', false);
-            });
-        }
-        
-        if ($('#select_all_attendance_checkboxes').attr('checked')) {
-            $('.attendance_checkbox').each( function () {
-                $(this).attr('checked', true);
-            });
-        }
-        else {
-            $('.attendance_checkbox').each( function () {
-                $(this).attr('checked', false);
-            });
-        }
-    };
+
+function toggleAssessmentCheckboxes() { 
+    if ($('#select_all_assessment_checkboxes').attr('checked')) {
+        $('.assessment_checkbox').each( function () {
+            $(this).attr('checked', true);
+        });
+    }
+    else {
+        $('.assessment_checkbox').each( function () {
+            $(this).attr('checked', false);
+        });
+    }
+};
+
 </script>
 
 <?php 
@@ -64,7 +55,7 @@ if (isset($_POST['submit_btn_assessments'])) {
     <script type="text/javascript">
         $(document).ready(function() {
             $('#select_all_assessment_checkboxes').on('click', function () {
-                toggleAttendanceCheckboxes();
+                toggleAssessmentCheckboxes();
             });
             $('#reports_selector').addClass('selected');
             $('#ajax_loader').hide();
@@ -140,12 +131,6 @@ elseif (isset($_POST['attendance_submit_btn'])) {
     ?>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#attendance_sessions_toggler').on('click', function () {
-                $('.hide_unchecked').toggle();
-            });
-            $('#select_all_attendance_checkboxes').on('click', function () {
-                toggleAttendanceCheckboxes();
-            });
             $('.hide_unchecked').hide();
             $('#reports_selector').addClass('selected');
             $('#ajax_loader').hide();
@@ -209,7 +194,7 @@ elseif (isset($_POST['attendance_submit_btn'])) {
                         $('#assessments_report').show();
                         $('#attendance').hide();
                     $('#select_all_assessment_checkboxes').on('click', function () {
-                        toggleAttendanceCheckboxes();
+                        toggleAssessmentCheckboxes();
                     });
                    ">Assessments</a></td>
             <td><a href="javascript:;" onclick="
@@ -221,12 +206,6 @@ elseif (isset($_POST['attendance_submit_btn'])) {
                     $('#assessments_report').hide();
                     $('#start_date').addClass('addDP');
                     $('#end_date').addClass('addDP');
-                    $('#attendance_sessions_toggler').on('click', function () {
-                        $('#attendance_sessions').toggle();
-                    });
-                    $('#select_all_attendance_checkboxes').on('click', function () {
-                        toggleAttendanceCheckboxes();
-                    });
                    ">Attendance</a></td>
 
             <td><a href="javascript:;" onclick="

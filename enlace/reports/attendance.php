@@ -30,12 +30,30 @@ foreach ($access_array as $program){
 include_once("../include/dosage_percentage.php");
 ?>
 <script type="text/javascript">
+    function toggleAttendanceCheckboxes() { 
+        if ($('#select_all_attendance_checkboxes').attr('checked')) {
+            $('.attendance_checkbox').each( function () {
+                $(this).attr('checked', true);
+            });
+        }
+        else {
+            $('.attendance_checkbox').each( function () {
+                $(this).attr('checked', false);
+            });
+        }
+    };
 $(document).ready(function() {
     $('#start_1').on('change', function () {
         $('#start_2').val($('#start_1').val());
     });
     $('#end_1').on('change', function () {
         $('#end_2').val($('#end_1').val());
+    });
+    $('#attendance_sessions_toggler').on('click', function () {
+        $('.hide_unchecked').toggle();
+    });
+    $('#select_all_attendance_checkboxes').on('click', function () {
+        toggleAttendanceCheckboxes();
     });
     $('#dropped_1').on('click', function () {
         if ($('#dropped_1').attr('checked')) {
