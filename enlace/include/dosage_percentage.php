@@ -118,13 +118,21 @@ if(!function_exists("calculate_dosage")) {
             $num_session_participants = $num_participants_array[0];
             $enrollees = $num_session_participants;
             // num absences
-            if (! $include_dropped ) {
-                $session_absences_query = "SELECT COUNT( DISTINCT
-                    Absence_ID) FROM Absences LEFT JOIN Program_Dates
-                    ON Program_Date = Program_Date_ID WHERE
+            if ( $exclude_dropped ) {
+                // then do include drops, so be sure that you don't
+                // count the absences of people who've dropped the
+                // program
+                $session_absences_query = "SELECT COUNT( DISTINCT Absence_ID) FROM Absences LEFT JOIN Program_Dates
+                    ON Program_Date = Program_Date_ID LEFT JOIN
+                    Participants_Programs on (Program_Dates.Program_ID =
+                    Participants_Programs.Program_ID and
+                    Absences.Participant_ID =
+                    Participants_Programs.Participant_ID) WHERE
                     Program_Dates.Program_ID = '$session_sqlsafe' and
                     Date_Listed > '$start_sqlsafe' AND Date_Listed <
-                    '$end_sqlsafe'";
+                    '$end_sqlsafe' and
+                    (Participants_Programs.Date_Dropped is null or
+                    Participants_Programs.Date_Dropped > '$end_sqlsafe')";
             }
             else {
                 $session_absences_query = "SELECT COUNT( DISTINCT
