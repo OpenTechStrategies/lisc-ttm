@@ -129,13 +129,6 @@ else if ($_POST['action'] == 'delete_participant') {
     mysqli_query($cnnEnlace, $delete_participant);
     include "../include/dbconnclose.php";
     
-    //delete participant from participants
-    $delete_participant = "DELETE FROM Participants WHERE Participant_ID='" . $participant_id_sqlsafe . "'";
-    echo $delete_participant;
-    include "../include/dbconnopen.php";
-    mysqli_query($cnnEnlace, $delete_participant);
-    include "../include/dbconnclose.php";
-    
     //delete participant from interpersonal violence
     $delete_participant = "DELETE FROM Participants_Interpersonal_Violence WHERE Participant_ID='" . $participant_id_sqlsafe . "'";
     echo $delete_participant;
@@ -170,6 +163,15 @@ else if ($_POST['action'] == 'delete_participant') {
     include "../include/dbconnopen.php";
     mysqli_query($cnnEnlace, $delete_participant);
     include "../include/dbconnclose.php";
+
+    //delete participant from participants
+    $delete_participant = "DELETE FROM Participants WHERE Participant_ID='" . $participant_id_sqlsafe . "'";
+    echo $delete_participant;
+    include "../include/dbconnopen.php";
+    mysqli_query($cnnEnlace, $delete_participant);
+    include "../include/dbconnclose.php";
+    
+
 }
 /* drop from program.  we delete people from participants_programs */ 
 elseif ($_POST['action'] == 'delete_participant_from_program') {
