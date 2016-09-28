@@ -163,14 +163,24 @@ include "../include/dbconnclose.php";
                         <td>
                             <span class="basic_info_show"><?php
                                 if ($person->dob != '' && $person->dob != 0) {
-                                    $entrydate = new DateTime($person->dob);
-                                    echo $entrydate->format('n/j/Y');
+                                    try {
+                                        $entrydate = new DateTime($person->dob);
+                                        echo $entrydate->format('n/j/Y');
+                                    }
+                                    catch (Exception $invalidDate) {
+                                        echo $person->dob;
+                                    }
                                 }
                                 ?></span>
                             <input class="basic_info_edit addDP" id="dob_edit" value="<?php
                             if ($person->dob != '' && $person->dob != 0) {
-                                $entrydate = new DateTime($person->dob);
-                                echo $entrydate->format('Y-m-d');
+                                try {
+                                    $entrydate = new DateTime($person->dob);
+                                    echo $entrydate->format('Y-m-d');
+                                }
+                                catch (Exception $invalidDate) {
+                                    echo $person->dob;
+                                }
                             }
                             ?>" />
                         </td>
