@@ -59,7 +59,6 @@ include "../include/dbconnclose.php";
 <script type="text/javascript">
     $(document).ready(function() {
         $('#participants_selector').addClass('selected');
-        $('#ajax_loader').hide();
         $('#add_date').hide();
         $('#add_referral').hide();
         $('#find_relative').hide();
@@ -68,18 +67,79 @@ include "../include/dbconnclose.php";
         $('#first_program_date').hide();
         $('.youth_info').hide();
         $('.mentorship_edit').hide();
+        $('#ajax_loader').hide();
+        $('.error').hide();
     });
 
-    $(document).ajaxStart(function() {
-        $('#ajax_loader').fadeIn('slow');
-    });
+function checkDOB(dob) {
+    if (dob != '') {
+        console.log(dob);
+        // check day and month for being one digit, prepend 0 if either
+        // is.
+        var date = new Date(dob);
+        if (date == 'Invalid Date') {
+            $('#dob_warning').show();
+            return false;
+        }
+    }
+    return true;
+}
+function saveBasicInfo() {
+    var valid_dob = checkDOB(document.getElementById('dob_edit').value);
+    if (! valid_dob) {
+        return false;
+    }
+    if (document.getElementById('absences').checked == true) {
+        var absences = 1;
+    } else {
+        var absences = 0;
+    }
+    if (document.getElementById('failed').checked == true) {
+        var failed = 1;
+    } else {
+        var failed = 0;
+    }
+    if (document.getElementById('disciplinary').checked == true) {
+        var discipline = 1;
+    } else {
+        var discipline = 0;
+    }
+    $.post(
+        '../ajax/edit_participant.php',
+        {
+          id: '<?php echo $person->participant_id; ?>',
+                name: document.getElementById('first_name_edit').value,
+                surname: document.getElementById('last_name_edit').value,
+                address_num: document.getElementById('st_num_edit').value,
+                address_dir: document.getElementById('st_dir_edit').value,
+                address_name: document.getElementById('st_name_edit').value,
+                address_type: document.getElementById('st_type_edit').value,
+                city: document.getElementById('city_edit').value,
+                state: document.getElementById('state_edit').value,
+                zip: document.getElementById('zip_edit').value,
+                day_phone: document.getElementById('day_phone_edit').value,
+                eve_phone: document.getElementById('eve_phone_edit').value,
+                email: document.getElementById('email_edit').value,
+                dob: document.getElementById('dob_edit').value,
+                age: document.getElementById('age_edit').value,
+                gender: document.getElementById('gender_edit').value,
+                role: document.getElementById('role_edit').value,
+                grade: document.getElementById('grade_edit').value,
+                grade_entered: document.getElementById('enter_grade_year').value,
+                school: document.getElementById('school_edit').value,
+                teacher: document.getElementById('referring_teacher').value,
+                warning_absent: absences,
+                warning_failed: failed,
+                warning_discipline: discipline
+                },
+        function(response) {
+            window.location = 'participant_profile.php?id=<?php echo $person->participant_id; ?>';
+        }
+    ).fail(function() { alert('You do not have permission to perform this action.');});
+};
 
-    $(document).ajaxStop(function() {
-        $('#ajax_loader').fadeOut('slow');
-    });
 </script>
 
-<img src="/images/ajax-loader.gif" width="40" height="40" alt="Loading..." id="ajax_loader" style="position: fixed; top: 0; left: 0;" />
 <div class="content_block">
     <h3>Participant Profile - <?php echo $person->first_name . " " . $person->last_name; ?></h3><hr/><br/>
 
@@ -159,8 +219,9 @@ include "../include/dbconnclose.php";
                     </tr>
                     <tr>
                         <td><strong>Date of Birth: </strong><br>
-                            <span class="helptext">Dates must be entered<br> in YYYY-MM-DD format.</span></td>
+                                    <span class="helptext">Dates must be entered<br> in YYYY-MM-DD format, like 2015-05-01 for May 1st.</span></td>
                         <td>
+                        <span class="error" id="dob_warning">Sorry, this date looks like it has a problem.  Maybe you forgot a zero?</span><br/>
                             <span class="basic_info_show"><?php
                                 if ($person->dob != '' && $person->dob != 0) {
                                     try {
@@ -168,21 +229,24 @@ include "../include/dbconnclose.php";
                                         echo $entrydate->format('n/j/Y');
                                     }
                                     catch (Exception $invalidDate) {
+                                        // show error
                                         echo $person->dob;
                                     }
                                 }
                                 ?></span>
-                            <input class="basic_info_edit addDP" id="dob_edit" value="<?php
-                            if ($person->dob != '' && $person->dob != 0) {
+                        <span class=="basic_info_edit addDP">
+                                    
+                        <?php
                                 try {
                                     $entrydate = new DateTime($person->dob);
-                                    echo $entrydate->format('Y-m-d');
+                                    echo '<input class="basic_info_edit addDP" id="dob_edit" value="' . $person->dob . '" />';
                                 }
                                 catch (Exception $invalidDate) {
-                                    echo $person->dob;
+                                    // show error
+                                    echo '<input class="basic_info_edit addDP" id="dob_edit" value="' . $person->dob . '" />';
                                 }
-                            }
-                            ?>" />
+                        ?>
+                        </span>
                         </td>
                     </tr>
                     <tr>
@@ -278,7 +342,7 @@ include "../include/dbconnclose.php";
             </td>
         </tr>
         <tr>
-            <!--I don't know what this is!-->
+            <!--I don\'t know what this is!-->
             <td><strong>Name of referring teacher</strong></td>
             <td><span class="basic_info_show"><?php echo $person->teacher_reference; ?></span>
                 <input type="text" class="basic_info_edit" value="<?php echo $person->teacher_reference; ?>" id="referring_teacher">
@@ -394,76 +458,7 @@ include "../include/dbconnclose.php";
                     $('.basic_info_show').toggle();
                     $('.basic_info_edit').toggle();
                                " style="margin-left:55px;">Edit...</a>
-                <a href="javascript:;" class="basic_info_edit" onclick="
-                        /* if (document.getElementById('dob_edit').value!=''){
-                         var dob=document.getElementById('dob_edit').value;
-                         if (dob.indexOf('/')==-1){
-                         if(dob.indexOf('-')==-1){
-                         alert('Please enter the date in YYYY-MM-DD format.');
-                         return false;
-                         }
-                         }
-                         }*/
-                        var x = document.getElementById('dob_edit').value;
-                        if (x != '') {
-                            var firstslash = x.indexOf('/');
-                            var lastslash = x.lastIndexOf('/');
-                            var firstdash = x.indexOf('-');
-                            var lastdash = x.lastIndexOf('-');
-                            // alert('open: '+firstdash+' close: '+lastdash);
-                            if ((firstslash != 2 && lastslash != 5) && (firstdash != 4 && lastdash != 7))
-                            {
-                                alert('Not a valid date of birth');
-                                return false;
-                            }
-                        }
-                        if (document.getElementById('absences').checked == true) {
-                            var absences = 1;
-                        } else {
-                            var absences = 0;
-                        }
-                        if (document.getElementById('failed').checked == true) {
-                            var failed = 1;
-                        } else {
-                            var failed = 0;
-                        }
-                        if (document.getElementById('disciplinary').checked == true) {
-                            var discipline = 1;
-                        } else {
-                            var discipline = 0;
-                        }
-                        $.post(
-                                '../ajax/edit_participant.php',
-                                {
-                                    id: '<?php echo $person->participant_id; ?>',
-                                    name: document.getElementById('first_name_edit').value,
-                                    surname: document.getElementById('last_name_edit').value,
-                                    address_num: document.getElementById('st_num_edit').value,
-                                    address_dir: document.getElementById('st_dir_edit').value,
-                                    address_name: document.getElementById('st_name_edit').value,
-                                    address_type: document.getElementById('st_type_edit').value,
-                                    city: document.getElementById('city_edit').value,
-                                    state: document.getElementById('state_edit').value,
-                                    zip: document.getElementById('zip_edit').value,
-                                    day_phone: document.getElementById('day_phone_edit').value,
-                                    eve_phone: document.getElementById('eve_phone_edit').value,
-                                    email: document.getElementById('email_edit').value,
-                                    dob: document.getElementById('dob_edit').value,
-                                    age: document.getElementById('age_edit').value,
-                                    gender: document.getElementById('gender_edit').value,
-                                    role: document.getElementById('role_edit').value,
-                                    grade: document.getElementById('grade_edit').value,
-                                    grade_entered: document.getElementById('enter_grade_year').value,
-                                    school: document.getElementById('school_edit').value,
-                                    teacher: document.getElementById('referring_teacher').value,
-                                    warning_absent: absences,
-                                    warning_failed: failed,
-                                    warning_discipline: discipline
-                                },
-                        function(response) {
-                            window.location = 'participant_profile.php?id=<?php echo $person->participant_id; ?>';
-                        }
-                        ).fail(function() { alert('You do not have permission to perform this action.');});" style="margin-left:55px;">Save!</a>
+                <a href="javascript:;" class="basic_info_edit" onclick="saveBasicInfo()" style="margin-left:55px;">Save!</a>
 
             </td>
         </tr>

@@ -41,6 +41,8 @@ user_enforce_has_access($Enlace_id);
                 $( "#start" ).datepicker();
                 $( "#end" ).datepicker();
                 $('.addDP').datepicker({changeYear: true,
-                yearRange: "1920:2016"});
+                        yearRange: "1920:2016",
+                        dateFormat: "yy-mm-dd"
+                        });
 	});
         </script>

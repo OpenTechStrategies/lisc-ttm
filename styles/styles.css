@@ -88,6 +88,11 @@ a.search_toggle {
 	font-style: italic;
 	font-weight:bold;
 }
+.error {
+    color: red;
+    font-weight:bold;
+    font-size: 12px;
+}
 
 hr {
 	border-style: solid;
