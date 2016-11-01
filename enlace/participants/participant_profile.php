@@ -100,7 +100,7 @@ function checkDOB(dob) {
 }
 function saveBasicInfo() {
     var valid_dob = checkDOB(document.getElementById('dob_edit').value);
-    if (valid_dob == false) {
+    if (valid_dob === false) {
         $('#dob_warning').show();
         $('#basic_info_warning').show();
         return false;
