@@ -73,13 +73,19 @@ include "../include/dbconnclose.php";
 
 function checkDOB(dob) {
     if (dob != '') {
-        console.log(dob);
         var split_dob = dob.split('-');
-        if (split_dob[2] && split_dob[0] > 0 && split_dob[1] > 0 && split_dob[2] > 0) {
-            // Months are zero-indexed in javascript.
-            var date = new Date(split_dob[2], (split_dob[0] - 1), split_dob[1]);
+        if (split_dob[2]) {
+            if ( split_dob[0].length < 2 ) {
+                split_dob[0] = 0 + split_dob[0];
+            }
+            if (split_dob[1].length < 2 ) {
+                split_dob[1] = 0 + split_dob[1];
+            }
             var reformatted_date = split_dob[2] + '-' +  split_dob[0] + '-' + split_dob[1];
-        }
+            // This checks the date for validity, including edge cases
+            // (like Feb 30), but requires double-digit days and months
+            var date = new Date(reformatted_date);
+            }
         else {
             return false;
         }
@@ -87,11 +93,14 @@ function checkDOB(dob) {
             return false;
         }
     }
+    else {
+        return "";
+    }
     return reformatted_date;
 }
 function saveBasicInfo() {
     var valid_dob = checkDOB(document.getElementById('dob_edit').value);
-    if (! valid_dob) {
+    if (valid_dob == false) {
         $('#dob_warning').show();
         $('#basic_info_warning').show();
         return false;
@@ -241,16 +250,16 @@ function saveBasicInfo() {
                                     }
                                 }
                                 ?></span>
-                        <span class=="basic_info_edit addDP">
+                        <span class="basic_info_edit">
                                     
                         <?php
                                 try {
                                     $entrydate = new DateTime($person->dob);
-                                    echo '<input class="basic_info_edit addDP" id="dob_edit" value="' . $entrydate->format('m-d-Y') . '" />';
+                                    echo '<input class="basic_info_edit birthdate" id="dob_edit" value="' . $entrydate->format('m-d-Y') . '" />';
                                 }
                                 catch (Exception $invalidDate) {
                                     // show error
-                                    echo '<input class="basic_info_edit addDP" id="dob_edit" value="' . $person->dob . '" />';
+                                    echo '<input class="basic_info_edit birthdate" id="dob_edit" value="' . $person->dob . '" />';
                                 }
                         ?>
                         </span>
