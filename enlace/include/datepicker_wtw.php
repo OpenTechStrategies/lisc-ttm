@@ -42,7 +42,7 @@ user_enforce_has_access($Enlace_id);
                 $( "#end" ).datepicker();
                 $('.addDP').datepicker({changeYear: true,
                         yearRange: "1920:2016",
-                        dateFormat: "yy-mm-dd"
+                        dateFormat: "mm-dd-yy"
                         });
 	});
         </script>

@@ -74,19 +74,26 @@ include "../include/dbconnclose.php";
 function checkDOB(dob) {
     if (dob != '') {
         console.log(dob);
-        // check day and month for being one digit, prepend 0 if either
-        // is.
-        var date = new Date(dob);
+        var split_dob = dob.split('-');
+        if (split_dob[2] && split_dob[0] > 0 && split_dob[1] > 0 && split_dob[2] > 0) {
+            // Months are zero-indexed in javascript.
+            var date = new Date(split_dob[2], (split_dob[0] - 1), split_dob[1]);
+            var reformatted_date = split_dob[2] + '-' +  split_dob[0] + '-' + split_dob[1];
+        }
+        else {
+            return false;
+        }
         if (date == 'Invalid Date') {
-            $('#dob_warning').show();
             return false;
         }
     }
-    return true;
+    return reformatted_date;
 }
 function saveBasicInfo() {
     var valid_dob = checkDOB(document.getElementById('dob_edit').value);
     if (! valid_dob) {
+        $('#dob_warning').show();
+        $('#basic_info_warning').show();
         return false;
     }
     if (document.getElementById('absences').checked == true) {
@@ -120,7 +127,7 @@ function saveBasicInfo() {
                 day_phone: document.getElementById('day_phone_edit').value,
                 eve_phone: document.getElementById('eve_phone_edit').value,
                 email: document.getElementById('email_edit').value,
-                dob: document.getElementById('dob_edit').value,
+                dob: valid_dob,
                 age: document.getElementById('age_edit').value,
                 gender: document.getElementById('gender_edit').value,
                 role: document.getElementById('role_edit').value,
@@ -219,9 +226,9 @@ function saveBasicInfo() {
                     </tr>
                     <tr>
                         <td><strong>Date of Birth: </strong><br>
-                                    <span class="helptext">Dates must be entered<br> in YYYY-MM-DD format, like 2015-05-01 for May 1st.</span></td>
+                                    <span class="helptext">Dates must be entered<br> in MM-DD-YYYY format, like 05-01-2015 for May 1st.</span></td>
                         <td>
-                        <span class="error" id="dob_warning">Sorry, this date looks like it has a problem.  Maybe you forgot a zero?</span><br/>
+                        <span class="error" id="dob_warning">This date looks like it has a problem.  Check to be sure you used MM-DD-YYYY format.</span><br/>
                             <span class="basic_info_show"><?php
                                 if ($person->dob != '' && $person->dob != 0) {
                                     try {
@@ -239,7 +246,7 @@ function saveBasicInfo() {
                         <?php
                                 try {
                                     $entrydate = new DateTime($person->dob);
-                                    echo '<input class="basic_info_edit addDP" id="dob_edit" value="' . $person->dob . '" />';
+                                    echo '<input class="basic_info_edit addDP" id="dob_edit" value="' . $entrydate->format('m-d-Y') . '" />';
                                 }
                                 catch (Exception $invalidDate) {
                                     // show error
@@ -454,7 +461,9 @@ function saveBasicInfo() {
                 <a href="all_impact.php?person=<?php echo $person->participant_id; ?>">Add New Program Impact Survey</a></td>
         </tr>
         <tr>
-            <td colspan="2"><a href="javascript:;" class="basic_info_show" onclick="
+            <td colspan="2">
+                        <span class="error" id="basic_info_warning">Sorry, something went wrong.  Please see the error(s) above.</span><br/>
+                        <a href="javascript:;" class="basic_info_show" onclick="
                     $('.basic_info_show').toggle();
                     $('.basic_info_edit').toggle();
                                " style="margin-left:55px;">Edit...</a>
