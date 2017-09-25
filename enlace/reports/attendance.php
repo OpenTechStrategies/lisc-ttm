@@ -188,10 +188,12 @@ $(document).ready(function() {
             // is only used to calculate the unique enrollment.
             $include_session = check_session_dates ($session_sqlsafe, $start_date_sqlsafe, $end_date_sqlsafe, $cnnEnlace);
             if ($include_session) {
-                if ($counter != 0) {
+                // if the querystring has begun:
+                if ($session_querystring != " " ) {
                     $session_querystring .= " OR Program_ID = " . $session_sqlsafe;
                 }
                 else {
+                    // The first addition to the querystring:
                     $session_querystring .= " AND (Program_ID = " . $session_sqlsafe;
                 }
                 $dosage_array = calculate_dosage($session_sqlsafe, null, $start_date_sqlsafe, $end_date_sqlsafe, $dropped_sqlsafe);
