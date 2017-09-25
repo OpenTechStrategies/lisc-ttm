@@ -182,23 +182,32 @@ $(document).ready(function() {
         }
         foreach ($_POST['attendance_program_select'] as $session ) {
             $session_sqlsafe=mysqli_real_escape_string($cnnEnlace, $session);
-            if ($counter != 0) {
-                $session_querystring .= " OR Program_ID = " . $session_sqlsafe;
+            // The session's enrollment should only be added to the
+            // total and unique enrollment if the session met during the
+            // selected date range.  See #183.  The $session_querystring
+            // is only used to calculate the unique enrollment.
+            $include_session = check_session_dates ($session_sqlsafe, $start_date_sqlsafe, $end_date_sqlsafe);
+            if ($include_session) {
+                if ($counter != 0) {
+                    $session_querystring .= " OR Program_ID = " . $session_sqlsafe;
+                }
+                else {
+                    $session_querystring .= " AND (Program_ID = " . $session_sqlsafe;
+                }
+                $dosage_array = calculate_dosage($session_sqlsafe, null, $start_date_sqlsafe, $end_date_sqlsafe, $dropped_sqlsafe);
+?>
+                <tr>
+                <td><?php echo $session_array[$session_sqlsafe][0]; ?></td>
+                <td><?php echo $session_array[$session_sqlsafe][1]; ?></td>
+                <td><?php
+                // number of enrolled participants in this session
+                echo $dosage_array[3];?></td>
+                <td><?php echo $dosage_array[1];?></td>
+                </tr>
+<?php
+                $total_hours = $total_hours + $dosage_array[1];
+                $total_enrollment = $total_enrollment + $dosage_array[3];
             }
-            else {
-                $session_querystring .= " AND (Program_ID = " . $session_sqlsafe;
-            }
-            $dosage_array = calculate_dosage($session_sqlsafe, null, $start_date_sqlsafe, $end_date_sqlsafe, $dropped_sqlsafe);
-            ?>
-            <tr>
-            <td><?php echo $session_array[$session_sqlsafe][0]; ?></td>
-            <td><?php echo $session_array[$session_sqlsafe][1]; ?></td>
-            <td><?php echo $dosage_array[3];?></td>
-            <td><?php echo $dosage_array[1];?></td>
-            </tr>
-            <?php
-            $total_hours = $total_hours + $dosage_array[1];
-            $total_enrollment = $total_enrollment + $dosage_array[3];
             $counter++;
         }
             if ($session_querystring != " " ) {
@@ -218,21 +227,33 @@ if ($_POST['attendance_program_select']) {
             <td class="all_projects">Unique enrollment: </td>
             <td class="all_projects"><b>
 <?php
-if (! $dropped_sqlsafe) {
-    $unique_enrollees_query = "SELECT COUNT(DISTINCT Participant_ID) FROM 
+// Only count unique enrollees in sessions that met during the selected
+// date range, which is taken care of in the creation of the
+// $session_querystring created above.  If the session_querystring is
+// empty, then no sessions have been selected or no selected sessions
+// met during the selected date range, so there are no relevant
+// enrollees.
+
+if ( $session_querystring != " ") {
+    if (! $dropped_sqlsafe) {
+        $unique_enrollees_query = "SELECT COUNT(DISTINCT Participant_ID) FROM 
         Participants_Programs WHERE ( Program_ID IS NOT NULL AND
         Participant_ID > 0) " . $session_querystring;
-}
-else {
-    // exclude dropped youth
-    $unique_enrollees_query = "SELECT COUNT(DISTINCT Participant_ID) FROM 
+    }
+    else {
+        // exclude dropped youth
+        $unique_enrollees_query = "SELECT COUNT(DISTINCT Participant_ID) FROM 
         Participants_Programs WHERE ( Program_ID IS NOT NULL AND
         Participant_ID > 0) AND (Date_Dropped IS NULL OR Date_Dropped > 
         '$end_date_sqlsafe') " . $session_querystring;
+    }
+    $unique_enrollees_result = mysqli_query($cnnEnlace, $unique_enrollees_query);
+    $unique_enrollees_array=mysqli_fetch_row($unique_enrollees_result);
+    $unique_enrollees = $unique_enrollees_array[0];
 }
-$unique_enrollees_result = mysqli_query($cnnEnlace, $unique_enrollees_query);
-$unique_enrollees_array=mysqli_fetch_row($unique_enrollees_result);
-$unique_enrollees = $unique_enrollees_array[0];
+else {
+    $unique_enrollees = 0;
+}
 echo $unique_enrollees;
 ?>
             </b>
@@ -257,4 +278,30 @@ include "../include/dbconnclose.php";
         }
 // end of "POST" if
     }
+
+/*
+ * Takes a session and a date range.  Returns a boolean indicating
+ * whether the session had a meeting during that date range.
+*/
+function check_session_dates ( $session_id_sqlsafe, $start_date_sqlsafe, $end_date_sqlsafe ) {
+    // Note: the Program_Dates table has the session_id in the
+    // Program_ID column
+    $count_dates_query = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID =
+                          '$session_id_sqlsafe' AND Date_Listed >=
+                          '$start_date_sqlsafe' AND Date_Listed <=
+                          '$end_date_sqlsafe';";
+    include "../include/dbconnopen.php";
+    $date_count_result = mysqli_query($cnnEnlace, $count_dates_query);
+    $date_count_array=mysqli_fetch_row($date_count_result);
+    $date_count = $date_count_array[0];
+    include "../include/dbconnclose.php";
+    if ( $date_count > 0 ) {
+        return True;
+    }
+    else {
+        return False;
+    }
+    
+}
+
 ?>
