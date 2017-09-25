@@ -1,7 +1,7 @@
 <?php
 /*
  *   TTM is a web application to manage data collected by community organizations.
- *   Copyright (C) 2014, 2015  Local Initiatives Support Corporation (lisc.org)
+ *   Copyright (C) 2014, 2015, 2017  Local Initiatives Support Corporation (lisc.org)
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -186,7 +186,7 @@ $(document).ready(function() {
             // total and unique enrollment if the session met during the
             // selected date range.  See #183.  The $session_querystring
             // is only used to calculate the unique enrollment.
-            $include_session = check_session_dates ($session_sqlsafe, $start_date_sqlsafe, $end_date_sqlsafe);
+            $include_session = check_session_dates ($session_sqlsafe, $start_date_sqlsafe, $end_date_sqlsafe, $cnnEnlace);
             if ($include_session) {
                 if ($counter != 0) {
                     $session_querystring .= " OR Program_ID = " . $session_sqlsafe;
@@ -280,21 +280,22 @@ include "../include/dbconnclose.php";
     }
 
 /*
- * Takes a session and a date range.  Returns a boolean indicating
- * whether the session had a meeting during that date range.
+ * Takes a session, a date range, and a database connection pointer.
+ * Returns a boolean indicating whether the session had a meeting during
+ * that date range.
+ *
+ * This function needs the database connection to be open.  
 */
-function check_session_dates ( $session_id_sqlsafe, $start_date_sqlsafe, $end_date_sqlsafe ) {
+function check_session_dates ( $session_id_sqlsafe, $start_date_sqlsafe, $end_date_sqlsafe, $cnnEnlace ) {
     // Note: the Program_Dates table has the session_id in the
     // Program_ID column
     $count_dates_query = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID =
                           '$session_id_sqlsafe' AND Date_Listed >=
                           '$start_date_sqlsafe' AND Date_Listed <=
                           '$end_date_sqlsafe';";
-    include "../include/dbconnopen.php";
     $date_count_result = mysqli_query($cnnEnlace, $count_dates_query);
     $date_count_array=mysqli_fetch_row($date_count_result);
     $date_count = $date_count_array[0];
-    include "../include/dbconnclose.php";
     if ( $date_count > 0 ) {
         return True;
     }
