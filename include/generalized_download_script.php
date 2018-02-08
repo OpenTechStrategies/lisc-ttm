@@ -1213,12 +1213,12 @@ function generalized_download($download_name, $permissions, $enlace_session_stri
         'titles' => array("Event ID", "Event Name", "Event Date", "Participant ID", "Role")),
 
         'enlace_mentorship_hours'=>array('db'=>'enlace', 'query'=>        
-        'SELECT Participant_ID, Mentorship_Date, Mentorship_Hours_Logged, First_Name, Last_Name, Name FROM Participants_Mentorship INNER JOIN Participants ON Participant_ID=Mentee_ID INNER JOIN Programs ON Program_Id=Mentorship_Program',
-        'titles' => array("Participant ID", "Mentorship Date", "Mentorship Hours", "First_Name", "Last_Name", "Program")),
+        'SELECT Participant_ID, Mentorship_Date, Mentorship_Hours_Logged, First_Name, Last_Name, Session_Name FROM Participants_Mentorship INNER JOIN Participants ON Participant_ID=Mentee_ID INNER JOIN Session_Names ON Session_Id=Mentorship_Program',
+        'titles' => array("Participant ID", "Mentorship Date", "Mentorship Hours", "First_Name", "Last_Name", "Session Name")),
 
         'enlace_mentorship_hours_deid'=>array('db'=>'enlace', 'query'=>        
-        'SELECT Participant_ID, Mentorship_Date, Mentorship_Hours_Logged, Name FROM Participants_Mentorship INNER JOIN Participants ON Participant_ID=Mentee_ID INNER JOIN Programs ON Program_Id=Mentorship_Program',
-        'titles' => array("Participant ID", "Mentorship Date", "Mentorship Hours", "Program")),
+        'SELECT Participant_ID, Mentorship_Date, Mentorship_Hours_Logged, Session_Name FROM Participants_Mentorship INNER JOIN Participants ON Participant_ID=Mentee_ID INNER JOIN Session_Names ON Session_Id=Mentorship_Program',
+        'titles' => array("Participant ID", "Mentorship Date", "Mentorship Hours", "Session Name")),
 
         'enlace_programs'=>array('db'=>'enlace', 'query'=> 
         'SELECT Programs.*, Institution_Name FROM Programs LEFT JOIN Institutions ON Host=Inst_ID',
