@@ -43,7 +43,7 @@ Page that shows Little Village events that aren't connected to a campaign.
 	<?
 	if (isset ($_GET['event'])) {
 ?>
-		$('#event_<?echo $_GET['event'];?>_details').show();
+		$('#event_<?php echo $_GET['event'];?>_details').show();
 <?
 	}
 ?>
@@ -80,7 +80,7 @@ Page that shows Little Village events that aren't connected to a campaign.
     include "../include/dbconnopen.php";
     $events=mysqli_query($cnnEnlace, $all_events);
     while ($type=mysqli_fetch_row($events)){
-        ?><option value="<?echo $type[0]?>"><?echo $type[1];?></option><?
+        ?><option value="<?php echo $type[0]?>"><?php echo $type[1];?></option><?
     }
     include "../include/dbconnclose.php";
     ?>
@@ -135,11 +135,11 @@ Page that shows Little Village events that aren't connected to a campaign.
             Hide the older events - shows only the five most recent.
             -->
             
-	<li <?if ($count_events>5){echo 'class="hide_old_events"';}?>><h4 onclick="$('#event_<?echo $event['Campaign_Event_ID'];?>_details').slideToggle();"><?echo $date." - ".$event['Event_Name'];?></h4>
-		<div class="event_info" style="display:none;" id="event_<?echo $event['Campaign_Event_ID'];?>_details">
+	<li <?php if ($count_events>5){echo 'class="hide_old_events"';}?>><h4 onclick="$('#event_<?php echo $event['Campaign_Event_ID'];?>_details').slideToggle();"><?php echo $date." - ".$event['Event_Name'];?></h4>
+		<div class="event_info" style="display:none;" id="event_<?php echo $event['Campaign_Event_ID'];?>_details">
 			<table class="inner_table">
-				<tr><td><strong>Date: </strong></td><td><?echo $date;?></td></tr>
-				<tr><td><strong>Address: </strong></td><td><?echo $event['Address_Num']." ".$event['Address_Dir']." ".$event['Address_Street']." ".$event['Address_Suffix'];?></td></tr>
+				<tr><td><strong>Date: </strong></td><td><?php echo $date;?></td></tr>
+				<tr><td><strong>Address: </strong></td><td><?php echo $event['Address_Num']." ".$event['Address_Dir']." ".$event['Address_Street']." ".$event['Address_Suffix'];?></td></tr>
 				<tr><td><strong>Type: </strong></td><td></td>
 				<tr><td class="blank"><strong>Attendance: </strong></td>
 					<td class="blank">
@@ -148,7 +148,7 @@ Page that shows Little Village events that aren't connected to a campaign.
 							$attendance = mysqli_query($cnnEnlace, $get_attendance);
 							while ($attendee = mysqli_fetch_array($attendance)) {
 						?>
-							<a href="../participants/participant_profile.php?id=<?echo $attendee['Participant_ID'];?>"><?echo $attendee['First_Name']." ".$attendee['Last_Name'];?></a><br/>
+							<a href="../participants/participant_profile.php?id=<?php echo $attendee['Participant_ID'];?>"><?php echo $attendee['First_Name']." ".$attendee['Last_Name'];?></a><br/>
 						<?
 							}
 						?>
@@ -156,8 +156,8 @@ Page that shows Little Village events that aren't connected to a campaign.
                                                 
                                                 <!--Search the database for attendees here: -->
                                                 
-						<a href="javascript:;" onclick="$('#add_attendance_<?echo $event['Campaign_Event_ID'];?>').toggle();" class="helptext">Add attendee...</a>
-						<div style="display:none;" id="add_attendance_<?echo $event['Campaign_Event_ID'];?>">
+						<a href="javascript:;" onclick="$('#add_attendance_<?php echo $event['Campaign_Event_ID'];?>').toggle();" class="helptext">Add attendee...</a>
+						<div style="display:none;" id="add_attendance_<?php echo $event['Campaign_Event_ID'];?>">
 						<table class="inner_table" id="search_parti_table" style="font-size:.9em;">
 				<tr>
 					<td><strong>First Name: </strong></td>
@@ -199,11 +199,11 @@ Page that shows Little Village events that aren't connected to a campaign.
 									{
 										action: 'link_event',
 										participant: document.getElementById('relative_search').value,
-										event: '<?echo $event['Campaign_Event_ID'];?>'
+										event: '<?php echo $event['Campaign_Event_ID'];?>'
 									},
 									function (response){
 										//document.write(response);
-										window.location='events.php?event=<?echo $event['Campaign_Event_ID'];?>';
+										window.location='events.php?event=<?php echo $event['Campaign_Event_ID'];?>';
 									}
 								).fail(failAlert);" id="add_participant_button" />
 					</td>

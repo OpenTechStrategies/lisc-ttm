@@ -193,7 +193,7 @@ if ($_POST['result'] == 'dropdown') {
             ?>
             <tr>
                 <td class="all_projects"><?php echo $user['Participant_ID']; ?></td>
-                <td class="all_projects" style="text-align:left;"><a href="participant_profile.php?id=<?echo $user['Participant_ID'];?>"><?php echo $user['First_Name'] . " " . $user['Last_Name']; ?></a></td>
+                <td class="all_projects" style="text-align:left;"><a href="participant_profile.php?id=<?php echo $user['Participant_ID'];?>"><?php echo $user['First_Name'] . " " . $user['Last_Name']; ?></a></td>
                 <td class="all_projects"><?php
                     if ($user['DOB'] != '0000-00-00') {
                         echo $display_date;
