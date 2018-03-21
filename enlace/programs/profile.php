@@ -622,6 +622,7 @@ Shows all program information.
                                             '/enlace/ajax/search_participants.php',
                                             {
                                                 result: 'dropdown',
+                                                verbose: 'yes',
                                                 first: document.getElementById('first_name_search').value,
                                                 last: document.getElementById('last_name_search').value,
                                                 dob: document.getElementById('dob_search').value,
