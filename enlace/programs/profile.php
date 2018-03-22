@@ -821,7 +821,30 @@ while ($sess = mysqli_fetch_row($sessions)) {
     if ($sess[1] != $current_session) {
         $current_session = $sess[1];
         ?><tr><td class="all_projects" colspan="2">
-                                    <a href="javascript:;" onclick="$('.toggler_<?php echo $sess[0] ?>').toggle();"><?php echo $current_session; ?></a></td></tr>
+                                    <a href="javascript:;" onclick="$('.toggler_<?php echo $sess[0] ?>').toggle();"><?php echo $current_session; ?></a>
+                                    <?php if(mysqli_num_rows($program_info) == 0 &&
+                                             $sess[3] != '0000-00-00' && $sess[4] != '0000-00-00' &&
+                                             $sess[3] < $sess[4]) { ?>
+                                         (<a href="javascript:;" onclick="
+                                                     if(<?php echo $program->on_at_least_one_day() ? 'true' : 'false' ; ?>) {
+                                                          $.post(
+                                                                 '../ajax/add_date.php',
+                                                                 {
+                                                                     action: 'generate',
+                                                                     session_id: '<?php echo $sess[0] ?>'
+                                                                 },
+                                                          function(response) {
+                                                                 if(confirm('Dates Generated, Refresh to view?')) {
+                                                                      window.location.reload();
+                                                                 }
+                                                          }
+                                                          ).fail(failAlert);
+                                                     }
+                                                     else{
+                                                         alert('Can\'t Generate: Please choose days of week of the program.');
+                                                     }
+                                           ">Generate Attendance Sheets</a>)
+                                     <?php } ?></td></tr>
                             <tr class="toggler_<?php echo $sess[0] ?> hide_dates"><td class="all_projects" ><strong>Dates:</strong> <?php echo $sess[3] . ' --- ' . $sess[4]; ?></td>
                                 <td class="all_projects"><strong>Surveys Due:</strong> <?php echo $sess[5]; ?></td></tr><?php
                         }
