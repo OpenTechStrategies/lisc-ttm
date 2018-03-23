@@ -831,6 +831,10 @@ table.profile_table table.grades_table td {
 	text-align:center;
 }
 
+table.attendance_table td {
+  border:1px solid #696969;
+}
+
 input.gold_score {
 	width: 25px;
 }

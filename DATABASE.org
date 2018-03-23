@@ -9,6 +9,9 @@ Many have the same names, but they often diverge.  When new feature
 requests came in historically, code and structure was copied from
 previous similar features, leading to the present structure.
 
+See MIGRATIONS.md for datestamped migrations needed to upgrade system
+as work is done.
+
 * Which databases have what?
 
 | Table name                           | core | lsna | swop | bickerdike | trp | enlace |
@@ -241,6 +244,7 @@ youth programs.
 | Absence_ID     | int(11) | NO   | PRI | NULL    | auto_increment |
 | Participant_ID | int(11) | YES  | MUL | NULL    |                |
 | Program_Date   | int(11) | YES  |     | NULL    |                |
+| Absent         | int(11) | YES  |     | NULL    |                |
 |----------------+---------+------+-----+---------+----------------|
 
 **** Campaigns
