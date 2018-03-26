@@ -303,6 +303,7 @@ function saveBasicInfo() {
                     <option value="6" <?php echo($person->grade == 6 ? "selected=='selected'" : null); ?>>6</option>
                     <option value="7" <?php echo($person->grade == 7 ? "selected=='selected'" : null); ?>>7</option>
                     <option value="8" <?php echo($person->grade == 8 ? "selected=='selected'" : null); ?>>8</option>
+                    <option value="9" <?php echo($person->grade == 9 ? "selected=='selected'" : null); ?>>9</option>
                 </select>
 
                 <!--They asked for a field to show when the grade was last entered.  (obviously the grade will change from year to year)-->
@@ -379,7 +380,7 @@ function saveBasicInfo() {
         </tr>
         <!--This is meant to remind partners to enter intake information.  If the intake assessment
         is past due, an alert will show up on the homepage.-->
-        <tr <?if ($person->role!=1){echo "class='youth_info'";}?>>
+        <tr <?php if ($person->role!=1){echo "class='youth_info'";}?>>
             <td><strong>Follow-up Date:</strong></td>
             <td><span class="basic_info_show"><?php
                     echo "Intake Assessment Due: " . $followup->format('n/j/Y');
@@ -555,6 +556,7 @@ function saveBasicInfo() {
                                 <option value="6">6</option>
                                 <option value="7">7</option>
                                 <option value="8">8</option>
+                                <option value="9">9</option>
                             </select>
                         </td>
                     </tr>
@@ -1016,6 +1018,7 @@ forms as well.-->
                                     <option value="6">6</option>
                                     <option value="7">7</option>
                                     <option value="8">8</option>
+                                    <option value="9">9</option>
                                 </select>
                             </td>
                         </tr>

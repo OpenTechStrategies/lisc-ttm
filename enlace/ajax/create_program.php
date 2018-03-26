@@ -43,7 +43,7 @@ Name: <input type="text" id="event" ><br>
                 $.post(
                 '../ajax/add_event.php',
                 {
-                    campaign_id: '<?echo $id;?>',
+                    campaign_id: '<?php echo $id;?>',
                     date: document.getElementById('first_program_date').value,
                     event_name: document.getElementById('event').value
                 },
@@ -62,7 +62,7 @@ Or, <a href="javascript:;" onclick="
                                                   $.post(
                                                     '../ajax/set_campaign_id.php',
                                                     {
-                                                        id: '<?echo $id;?>',
+                                                        id: '<?php echo $id;?>',
                                                         page: 'search'
                                                     },
                                                     function (response){

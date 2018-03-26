@@ -89,7 +89,7 @@ Thank you for entering this survey.
                 '../ajax/set_program_id.php',
                 {
                     page: 'profile',
-                    id: '<?echo $_POST['program'];?>'
+                    id: '<?php echo $_POST['program'];?>'
                 },
                 function (response){
                     window.location='profile.php';

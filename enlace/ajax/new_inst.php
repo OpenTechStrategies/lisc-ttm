@@ -58,5 +58,5 @@ mysqli_query($cnnEnlace, $new_inst);
 $id=mysqli_insert_id($cnnEnlace);
 include "../include/dbconnclose.php";
 ?>
-<span style="color:#990000; font-weight:bold;">Thank you for adding  <?echo $_POST['name'];?> to the database.</span><br/>
-<a href="inst_profile.php?inst=<?echo $id;?>">View profile</a>
+<span style="color:#990000; font-weight:bold;">Thank you for adding  <?php echo $_POST['name'];?> to the database.</span><br/>
+<a href="inst_profile.php?inst=<?php echo $id;?>">View profile</a>
