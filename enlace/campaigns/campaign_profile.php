@@ -54,7 +54,7 @@ $campaign->load_with_id($_COOKIE['campaign']);
 
                 <table class="inner_table">
                     <tr><td><strong>Event Name: </strong></td><td><input type="text" id="new_event" ></td></tr>
-                    <tr><td><strong>Date: </strong></td><td><?include "../include/datepicker_wtw.php";?><input type="text" id="new_date" class="addDP" /></td></tr>
+                    <tr><td><strong>Date: </strong></td><td><?php include "../include/datepicker_wtw.php";?><input type="text" id="new_date" class="addDP" /></td></tr>
                     <tr><td><strong>Address: </strong></td><td><input id="st_num_new" style="width:40px;"/> 
                             <input id="st_dir_new" style="width:20px;"/> 
                             <input id="st_name_new"  style="width:100px;"/> 

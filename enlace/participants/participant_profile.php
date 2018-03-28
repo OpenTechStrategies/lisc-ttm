@@ -379,7 +379,7 @@ function saveBasicInfo() {
         </tr>
         <!--This is meant to remind partners to enter intake information.  If the intake assessment
         is past due, an alert will show up on the homepage.-->
-        <tr <?if ($person->role!=1){echo "class='youth_info'";}?>>
+        <tr <?php if ($person->role!=1){echo "class='youth_info'";}?>>
             <td><strong>Follow-up Date:</strong></td>
             <td><span class="basic_info_show"><?php
                     echo "Intake Assessment Due: " . $followup->format('n/j/Y');

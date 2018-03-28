@@ -48,12 +48,12 @@ $prog_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['prog']);
 	});
 </script>
 
-<h3>New Program Quality Survey: <?echo $survey_program->name;?></h3><hr/><br/>
+<h3>New Program Quality Survey: <?php echo $survey_program->name;?></h3><hr/><br/>
     <!--<a href='javascript:;' onclick="$.post(
                 '../ajax/set_program_id.php',
                 {
                     page: 'profile',
-                    id: '<?echo $this_survey[1];?>'
+                    id: '<?php echo $this_survey[1];?>'
                 },
                 function (response){
                     window.location='profile.php';
@@ -71,13 +71,13 @@ $prog_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['prog']);
 </select><br>-->
     <span class="helptext">Please choose the session for which this survey was filled out:</span>
     <select id="surveyed_session"><option value="">-----</option>
-                                                    <?//get sessions
+                                                    <?php //get sessions
                                                     $related_sessions="SELECT * FROM Session_Names WHERE Program_ID='".$prog_sqlsafe."'";
                                                     include "../include/dbconnopen.php";
                                                     $sessions=mysqli_query($cnnEnlace, $related_sessions);
                                                     while ($sess=mysqli_fetch_row($sessions)){
                                                         ?>
-                                                    <option value="<?echo $sess[0];?>"><?echo $sess[1];?></option>
+                                                    <option value="<?php echo $sess[0];?>"><?php echo $sess[1];?></option>
                                                             <?
                                                     }
                                                     include "../include/dbconnclose.php";
@@ -203,7 +203,7 @@ $prog_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['prog']);
                                $.post(
                                 '../ajax/save_progsurv.php',
                                 {
-                                    program: '<?echo $prog_sqlsafe?>',
+                                    program: '<?php echo $prog_sqlsafe?>',
                                     1: document.getElementById('progsurv_1').value,
                                     2: document.getElementById('progsurv_2').value,
                                     3: document.getElementById('progsurv_3').value,
