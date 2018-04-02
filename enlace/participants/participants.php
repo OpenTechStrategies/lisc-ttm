@@ -151,122 +151,124 @@ include "../header.php";
         Needs a correctly-formatted date of birth or no DOB.
         Role is required.
         -->
-        <h4 onclick="$('#add_new').slideToggle();" style="cursor:pointer;">Add New Participant...</h4>
-        <div id="add_new">
-            <table class="search_table" style="border:2px solid #696969;">
-                <tr>
-                    <td><strong>First Name: </strong></td>
-                    <td><input type="text" id="name_new"  style="width:125px;"/></td>
-                    <td><strong>Last Name: </strong></td>
-                    <td><input type="text" id="surname_new"  style="width:125px;"/></td>
-                </tr>
-                <tr>
-                    <td><strong>Date of Birth: </strong></td>
-                    <td><input type="text" id="dob_new" class="addDP" /></td>
-                    <td><strong>Age: </strong></td>
-                    <td><input type="text" id="age_new"  style="width:25px;"/>&nbsp;&nbsp;<span class="helptext">If date of birth is not available</span></td>
-                </tr>
-                <tr>
-                    <td><strong>Daytime Phone: </strong></td>
-                    <td><input type="text" id="day_phone_new"  style="width:100px;"/></td>
-                    <td><strong>Evening Phone: </strong></td>
-                    <td><input type="text" id="evening_phone_new"  style="width:100px;"/></td>
-                </tr>
-                <tr>
-                    <td><strong>Grade Level: </strong></td>
-                    <td><select id="grade_new">
-                            <option value="">----</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                        </select>
-                    </td>
-                    <td><strong>Gender: </strong></td>
-                    <td><select id="gender_new">
-                            <option value="">----</option>
-                            <option value="m">Male</option>
-                            <option value="f">Female</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>School: </strong></td>
-                    <td><select id="school_new">
-                            <option value="">--------</option>
-                            <?php
-                            $get_schools = "SELECT * FROM Institutions WHERE Institution_Type='1' ORDER BY Institution_Name";
-                            include "../include/dbconnopen.php";
-                            $schools = mysqli_query($cnnEnlace, $get_schools);
-                            while ($school = mysqli_fetch_array($schools)) {
-                                ?>
-                                <option value="<?php echo $school['Inst_ID'];?>"><?php echo $school['Institution_Name']; ?></option>
+        <?php if ($USER->has_site_access($Enlace_id, $AdminAccess)) { ?>
+            <h4 onclick="$('#add_new').slideToggle();" style="cursor:pointer;">Add New Participant...</h4>
+            <div id="add_new">
+                <table class="search_table" style="border:2px solid #696969;">
+                    <tr>
+                        <td><strong>First Name: </strong></td>
+                        <td><input type="text" id="name_new"  style="width:125px;"/></td>
+                        <td><strong>Last Name: </strong></td>
+                        <td><input type="text" id="surname_new"  style="width:125px;"/></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Date of Birth: </strong></td>
+                        <td><input type="text" id="dob_new" class="addDP" /></td>
+                        <td><strong>Age: </strong></td>
+                        <td><input type="text" id="age_new"  style="width:25px;"/>&nbsp;&nbsp;<span class="helptext">If date of birth is not available</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Daytime Phone: </strong></td>
+                        <td><input type="text" id="day_phone_new"  style="width:100px;"/></td>
+                        <td><strong>Evening Phone: </strong></td>
+                        <td><input type="text" id="evening_phone_new"  style="width:100px;"/></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Grade Level: </strong></td>
+                        <td><select id="grade_new">
+                                <option value="">----</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                            </select>
+                        </td>
+                        <td><strong>Gender: </strong></td>
+                        <td><select id="gender_new">
+                                <option value="">----</option>
+                                <option value="m">Male</option>
+                                <option value="f">Female</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>School: </strong></td>
+                        <td><select id="school_new">
+                                <option value="">--------</option>
                                 <?php
-                            }
-                            include "../include/dbconnclose.php";
-                            ?>
-                        </select>
-                    </td>
-                    <td><strong>Role: </strong><span class="helptext">(required)</span></td>
-                    <td><select id="role_new">
-                            <option value="">--------</option>
-                            <?php
-                            $get_roles = "SELECT * FROM Roles";
-                            include "../include/dbconnopen.php";
-                            $roles = mysqli_query($cnnEnlace, $get_roles);
-                            while ($role = mysqli_fetch_array($roles)) {
+                                $get_schools = "SELECT * FROM Institutions WHERE Institution_Type='1' ORDER BY Institution_Name";
+                                include "../include/dbconnopen.php";
+                                $schools = mysqli_query($cnnEnlace, $get_schools);
+                                while ($school = mysqli_fetch_array($schools)) {
+                                    ?>
+                                    <option value="<?php echo $school['Inst_ID'];?>"><?php echo $school['Institution_Name']; ?></option>
+                                    <?php
+                                }
+                                include "../include/dbconnclose.php";
                                 ?>
-                                <option value="<?php echo $role['Role_ID']; ?>"><?php echo $role['Role']; ?></option>
+                            </select>
+                        </td>
+                        <td><strong>Role: </strong><span class="helptext">(required)</span></td>
+                        <td><select id="role_new">
+                                <option value="">--------</option>
                                 <?php
-                            }
-                            include "../include/dbconnclose.php";
-                            ?>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="4" style="text-align:center;"><input type="button" onclick="
-                            var x = document.getElementById('dob_new').value;
-                            if (x != '') {
-                                var firstslash = x.indexOf('/');
-                                var lastslash = x.lastIndexOf('/');
-                                var firstdash = x.indexOf('-');
-                                var lastdash = x.lastIndexOf('-');
-                                // alert('open: '+firstdash+' close: '+lastdash);
-                                if ((firstslash != 2 && lastslash != 5) && (firstdash != 4 && lastdash != 7))
-                                {
-                                    alert('Not a valid date of birth');
+                                $get_roles = "SELECT * FROM Roles";
+                                include "../include/dbconnopen.php";
+                                $roles = mysqli_query($cnnEnlace, $get_roles);
+                                while ($role = mysqli_fetch_array($roles)) {
+                                    ?>
+                                    <option value="<?php echo $role['Role_ID']; ?>"><?php echo $role['Role']; ?></option>
+                                    <?php
+                                }
+                                include "../include/dbconnclose.php";
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align:center;"><input type="button" onclick="
+                                var x = document.getElementById('dob_new').value;
+                                if (x != '') {
+                                    var firstslash = x.indexOf('/');
+                                    var lastslash = x.lastIndexOf('/');
+                                    var firstdash = x.indexOf('-');
+                                    var lastdash = x.lastIndexOf('-');
+                                    // alert('open: '+firstdash+' close: '+lastdash);
+                                    if ((firstslash != 2 && lastslash != 5) && (firstdash != 4 && lastdash != 7))
+                                    {
+                                        alert('Not a valid date of birth');
+                                        return false;
+                                    }
+                                }
+                                var role = document.getElementById('role_new').value;
+                                if (role == '') {
+                                    alert('You have not entered a role for this participant.  Please enter a role for this participant and then hit Save again.');
                                     return false;
                                 }
-                            }
-                            var role = document.getElementById('role_new').value;
-                            if (role == '') {
-                                alert('You have not entered a role for this participant.  Please enter a role for this participant and then hit Save again.');
-                                return false;
-                            }
-                            $.post(
-                                    '../ajax/add_participant.php',
-                                    {
-                                        first_name: document.getElementById('name_new').value,
-                                        last_name: document.getElementById('surname_new').value,
-                                        dob: document.getElementById('dob_new').value,
-                                        age: document.getElementById('age_new').value,
-                                        day_phone: document.getElementById('day_phone_new').value,
-                                        evening_phone: document.getElementById('evening_phone_new').value,
-                                        grade: document.getElementById('grade_new').value,
-                                        gender: document.getElementById('gender_new').value,
-                                        school: document.getElementById('school_new').value,
-                                        role: document.getElementById('role_new').value
-                                    },
-                            function(response) {
-                                document.getElementById('confirmation').innerHTML = response;
-                            }
-                            ).fail(function() {alert('You do not have permission to perform this action.');});" value="Save" /></td>
-                </tr>
-            </table>
-            <div id="confirmation" style="text-align:center;"></div>
-        </div>
+                                $.post(
+                                        '../ajax/add_participant.php',
+                                        {
+                                            first_name: document.getElementById('name_new').value,
+                                            last_name: document.getElementById('surname_new').value,
+                                            dob: document.getElementById('dob_new').value,
+                                            age: document.getElementById('age_new').value,
+                                            day_phone: document.getElementById('day_phone_new').value,
+                                            evening_phone: document.getElementById('evening_phone_new').value,
+                                            grade: document.getElementById('grade_new').value,
+                                            gender: document.getElementById('gender_new').value,
+                                            school: document.getElementById('school_new').value,
+                                            role: document.getElementById('role_new').value
+                                        },
+                                function(response) {
+                                    document.getElementById('confirmation').innerHTML = response;
+                                }
+                                ).fail(function() {alert('You do not have permission to perform this action.');});" value="Save" /></td>
+                    </tr>
+                </table>
+                <div id="confirmation" style="text-align:center;"></div>
+            </div>
+        <?php } /* Has Admin Access */ ?>
     </div>
 
 </div>
