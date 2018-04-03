@@ -70,31 +70,36 @@ if(!function_exists("calculate_dosage")) {
         }
     
 
-        /* This select finds the total number of days that this program was 
-         * offered. */
-        if ($start_sqlsafe && $end_sqlsafe) {
-            $get_max_days = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID='$session_sqlsafe' AND Date_Listed > '$start_sqlsafe' AND Date_Listed < '$end_sqlsafe'";
-        }
-        else {
-            $get_max_days = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID='$session_sqlsafe'";
-        }
-        $max_days_obj = mysqli_query($cnnEnlace, $get_max_days);
-        $max = mysqli_fetch_row($max_days_obj);
-        $max_days = $max[0];
-
         /* This select finds the number of days that the student attended this
          * program. */
         $total_num_days_attended = 0;
         if ($participant) {
+
+            /* Max days when there's a participant is the number of days for which any
+             * kind of absence has been recorded, rather than the total number of days */
+            $get_max_days = "SELECT COUNT(Program_Date_ID) FROM 
+        Participants_Programs
+        INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID
+        INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
+        INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID
+        INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID
+        INNER JOIN Absences ON ( Program_Date_ID = Program_Date AND Participants_Programs.Participant_ID=
+        Absences.Participant_ID)
+            WHERE Absences.Absent IS NOT NULL AND Participants_Programs.Participant_ID='$participant_sqlsafe'
+            AND Session_ID='$session_sqlsafe';";
+            $max_days_obj=mysqli_query($cnnEnlace, $get_max_days);
+            $max=mysqli_fetch_row($max_days_obj);
+            $max_days = $max[0];
+
             $num_days_attended = "SELECT COUNT(Program_Date_ID) FROM 
         Participants_Programs
         INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID
         INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
         INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID
         INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID
-        LEFT JOIN Absences ON ( Program_Date_ID = Program_Date AND Participants_Programs.Participant_ID=
+        INNER JOIN Absences ON ( Program_Date_ID = Program_Date AND Participants_Programs.Participant_ID=
         Absences.Participant_ID)
-            WHERE (Absences.Absent = 0 OR Absences.Absence_ID IS NULL) AND Participants_Programs.Participant_ID='$participant_sqlsafe'
+            WHERE Absences.Absent = 0 AND Participants_Programs.Participant_ID='$participant_sqlsafe'
             AND Session_ID='$session_sqlsafe';";
             $attended_days=mysqli_query($cnnEnlace, $num_days_attended);
             $num_attended=mysqli_fetch_row($attended_days);
@@ -102,6 +107,19 @@ if(!function_exists("calculate_dosage")) {
             $enrollees = null;
         }
         else {
+
+            /* This select finds the total number of days that this program was 
+             * offered. */
+            if ($start_sqlsafe && $end_sqlsafe) {
+                $get_max_days = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID='$session_sqlsafe' AND Date_Listed > '$start_sqlsafe' AND Date_Listed < '$end_sqlsafe'";
+            }
+            else {
+                $get_max_days = "SELECT COUNT(*) FROM Program_Dates WHERE Program_ID='$session_sqlsafe'";
+            }
+            $max_days_obj = mysqli_query($cnnEnlace, $get_max_days);
+            $max = mysqli_fetch_row($max_days_obj);
+            $max_days = $max[0];
+
             // num participants in session
             if (! $exclude_dropped ) {
                 $num_participants_query = "SELECT COUNT(*) FROM Participants_Programs WHERE
@@ -122,13 +140,13 @@ if(!function_exists("calculate_dosage")) {
                 // then do include drops, so be sure that you don't
                 // count the absences of people who've dropped the
                 // program
-                $session_absences_query = "SELECT COUNT( DISTINCT Absence_ID) FROM Absences LEFT JOIN Program_Dates
+                $session_attendance_query = "SELECT COUNT( DISTINCT Absence_ID) FROM Absences LEFT JOIN Program_Dates
                     ON Program_Date = Program_Date_ID LEFT JOIN
                     Participants_Programs on (Program_Dates.Program_ID =
                     Participants_Programs.Program_ID and
                     Absences.Participant_ID =
                     Participants_Programs.Participant_ID) WHERE
-                    Absences.Absent = 1 AND
+                    Absences.Absent = 0 AND
                     Program_Dates.Program_ID = '$session_sqlsafe' and
                     Date_Listed > '$start_sqlsafe' AND Date_Listed <
                     '$end_sqlsafe' and
@@ -136,23 +154,22 @@ if(!function_exists("calculate_dosage")) {
                     Participants_Programs.Date_Dropped > '$end_sqlsafe')";
             }
             else {
-                $session_absences_query = "SELECT COUNT( DISTINCT
+                $session_attendance_query = "SELECT COUNT( DISTINCT
                     Absence_ID) FROM Absences LEFT JOIN Program_Dates
                     ON Program_Date = Program_Date_ID LEFT JOIN
                     Participants_Programs on (Program_Dates.Program_ID =
                     Participants_Programs.Program_ID and
                     Absences.Participant_ID =
                     Participants_Programs.Participant_ID) WHERE
-                    Absences.Absent = 1 AND
+                    Absences.Absent = 0 AND
                     Program_Dates.Program_ID = '$session_sqlsafe' and
                     Date_Listed > '$start_sqlsafe' AND Date_Listed <
                     '$end_sqlsafe'";
             }
             // count all dates after a person dropped as if they were absences?
-            $session_absences_obj = mysqli_query($cnnEnlace, $session_absences_query);
-            $session_absences_array=mysqli_fetch_row($session_absences_obj);
-            $num_session_absences = $session_absences_array[0];
-            $total_num_days_attended = ($max_days * $num_session_participants) - $num_session_absences;
+            $session_attendance_obj = mysqli_query($cnnEnlace, $session_attendance_query);
+            $session_attendance_array=mysqli_fetch_row($session_attendance_obj);
+            $total_num_days_attended = $session_attendance_array[0];
         }
         /* Find the hours this person spent in the program. */
         /* Get daily hours: */
