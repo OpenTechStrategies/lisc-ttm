@@ -61,6 +61,14 @@ if ($_POST['action'] == 'link_event') {
     $grade_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['grade']);
     $school_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['school']);
     $role_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['role']);
+
+    if(($dob_sqlsafe == "" && $age_sqlsafe == "") ||
+       $grade_sqlsafe == "" ||
+       $school_sqlsafe == "" ||
+       $gender_sqlsafe == "") {
+       /* Note: This won't be shown to the user, but useful for logs */
+       throw new Exception("Required demographics for adding not included");
+    }
     
     $add_participant = "INSERT INTO Participants (
 		First_Name,
