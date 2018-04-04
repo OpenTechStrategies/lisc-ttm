@@ -105,7 +105,21 @@ if ($_POST['result'] == 'dropdown') {
     <span class="helptext">Select the name of the person you would like to add: </span><select id="relative_search">
         <option value="">-----</option>
         <?php while ($user = mysqli_fetch_array($results)) {
-            ?><option value="<?php echo $user['Participant_ID']?>"><?php echo $user['First_Name'] . " " . $user['Last_Name']; ?></option><?php
+            if (isset($_POST['verbose'])) {
+                $this_date = explode('-', $user['DOB']);
+                if ($user['DOB'] != '0000-00-00' && $this_date[1]) {
+                    date_default_timezone_set('America/Chicago');
+                    $show_date = mktime(0, 0, 0, $this_date[1], $this_date[2], $this_date[0]);
+                    $display_date = "DOB: " . date('n/j/Y', $show_date) . ", ";
+                } else {
+                    $display_date = "";
+                }
+
+                $display = $user['First_Name'] . " " . $user['Last_Name'] . " (" . $display_date . "ID: " . $user['Participant_ID'] . ")";
+            } else {
+                $display = $user['First_Name'] . " " . $user['Last_Name'];
+            }
+            ?><option value="<?php echo $user['Participant_ID']?>"><?php echo $display; ?></option><?php
         }
         ?>
     </select>
