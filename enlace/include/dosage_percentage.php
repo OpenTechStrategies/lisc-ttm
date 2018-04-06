@@ -94,7 +94,7 @@ if(!function_exists("calculate_dosage")) {
         INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID
         LEFT JOIN Absences ON ( Program_Date_ID = Program_Date AND Participants_Programs.Participant_ID=
         Absences.Participant_ID)
-            WHERE Absence_ID IS NULL AND Participants_Programs.Participant_ID='$participant_sqlsafe'
+            WHERE (Absences.Absent = 0 OR Absences.Absence_ID IS NULL) AND Participants_Programs.Participant_ID='$participant_sqlsafe'
             AND Session_ID='$session_sqlsafe';";
             $attended_days=mysqli_query($cnnEnlace, $num_days_attended);
             $num_attended=mysqli_fetch_row($attended_days);
@@ -128,6 +128,7 @@ if(!function_exists("calculate_dosage")) {
                     Participants_Programs.Program_ID and
                     Absences.Participant_ID =
                     Participants_Programs.Participant_ID) WHERE
+                    Absences.Absent = 1 AND
                     Program_Dates.Program_ID = '$session_sqlsafe' and
                     Date_Listed > '$start_sqlsafe' AND Date_Listed <
                     '$end_sqlsafe' and
@@ -142,6 +143,7 @@ if(!function_exists("calculate_dosage")) {
                     Participants_Programs.Program_ID and
                     Absences.Participant_ID =
                     Participants_Programs.Participant_ID) WHERE
+                    Absences.Absent = 1 AND
                     Program_Dates.Program_ID = '$session_sqlsafe' and
                     Date_Listed > '$start_sqlsafe' AND Date_Listed <
                     '$end_sqlsafe'";

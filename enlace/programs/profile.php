@@ -528,7 +528,8 @@ Shows all program information.
         INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
         INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID
         LEFT JOIN Absences ON (Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID=Absences.Participant_ID)
-        WHERE Participants_Programs.Participant_ID='" . $all_p['Participant_ID'] . "' AND Absence_ID IS NULL;";
+        WHERE Participants_Programs.Participant_ID='" . $all_p['Participant_ID'] . "' AND Absences.Absent = 0;";
+    include "../include/dbconnopen.php";
     $dates_attended = mysqli_query($cnnEnlace, $get_progs);
     while ($dates = mysqli_fetch_array($dates_attended)) {
         //get daily hours for each date
@@ -804,9 +805,7 @@ while ($sess = mysqli_fetch_row($sessions)) {
 
                 <h4>Program Dates</h4>
                 <table class="inner_table">
-                    <tr style="font-size:.9em;"><th>Date</th><th>Attendees<br>
-                            <!--Participants are assumed to be present (checked).  Unchecking marks them as absent.-->
-                            <span class="helptext">Uncheck the checkbox next to the participant's name on days when they are absent.</span></th></tr>
+                    <tr style="font-size:.9em;"><th>Date</th><th>Attendees<br></th></tr>
 <?php
 $related_sessions = "SELECT * FROM Session_Names WHERE Program_ID=$program->program_id";
 include "../include/dbconnopen.php";
@@ -873,27 +872,46 @@ while ($sess = mysqli_fetch_row($sessions)) {
                                                     }
                                                     ).fail(failAlert);">Delete this date</a>
                                 </td>
-                                <td class="all_projects"><?php
-                            $get_all_participants = "SELECT * FROM Participants_Programs INNER JOIN Participants
-                    ON Participants.Participant_ID=Participants_Programs.Participant_ID WHERE Program_ID='" . $sess[0] . "' ORDER BY Last_Name";
-                            $all_participants = mysqli_query($cnnEnlace, $get_all_participants);
-                            while ($all_p = mysqli_fetch_array($all_participants)) {
-                                $find_absence = "SELECT COUNT(*) FROM Absences WHERE Participant_ID='" . $all_p['Participant_ID'] . "'
-                        AND Program_Date='" . $temp_program['Program_Date_ID'] . "'";
-                                $absent = mysqli_query($cnnEnlace, $find_absence);
-                                $num_abs = mysqli_fetch_row($absent);
-                                $was_absent = $num_abs[0];
+                                <td class="all_projects">
+                            <?php
+                                $get_all_participants = "SELECT * FROM Participants_Programs INNER JOIN Participants
+                                ON Participants.Participant_ID=Participants_Programs.Participant_ID WHERE Program_ID='" . $sess[0] . "' ORDER BY Last_Name";
+                                $all_participants = mysqli_query($cnnEnlace, $get_all_participants);
 
-                                /* uncheck box to add an absence, and check the box to delete that absence: */
-                                    ?><input type="checkbox" <?php echo($was_absent <= 0 ? 'checked="true"' : null); ?>
-                                               id="date_<?php echo $temp_program['Program_Date_ID']; ?>_person_<?php echo $all_p['Participant_ID'] ?>"
-                                               onchange="handleRole(this, '<?php echo $temp_program['Program_Date_ID']; ?>', '<?php echo $all_p['Participant_ID'] ?>');">
-            <?php echo $all_p['First_Name'] . " " . $all_p['Last_Name'];
-            ?><br><?php
-                                           }
-                                           ?></td></tr><?php
-                                }
-                                include "../include/dbconnclose.php";
+                                if(mysqli_num_rows($all_participants) > 0) {
+                            ?>
+                                <table class="attendance_table">
+                                    <tr><th>Participant</th><th>Attended</th><th>Absent</th></tr>
+                                    <?php
+                                        while ($all_p = mysqli_fetch_array($all_participants)) {
+                                            $find_absence = "SELECT Absent FROM Absences WHERE Participant_ID='" . $all_p['Participant_ID'] . "'
+                                            AND Program_Date='" . $temp_program['Program_Date_ID'] . "'";
+                                            $absent = mysqli_query($cnnEnlace, $find_absence);
+                                            $num_abs = mysqli_fetch_row($absent);
+                                            $was_there = false;
+                                            $was_absent = false;
+                                            if($num_abs) {
+                                                $was_there = $num_abs[0] == 0;
+                                                $was_absent = $num_abs[0] == 1;
+                                        }
+
+                                        /* uncheck box to add an absence, and check the box to delete that absence: */
+                                    ?>
+                                        <tr>
+                                            <td><span style="font-weight:bold"><?php echo $all_p['First_Name'] . " " . $all_p['Last_Name']; ?></span></td>
+                                            <td><input type="checkbox" <?php echo($was_there ? 'checked="true"' : null); ?>
+                                                       id="present_date_<?php echo $temp_program['Program_Date_ID']; ?>_person_<?php echo $all_p['Participant_ID'] ?>"
+                                                       onchange="markPresent(this, '<?php echo $temp_program['Program_Date_ID']; ?>', '<?php echo $all_p['Participant_ID'] ?>');"></td>
+                                            <td><input type="checkbox" <?php echo($was_absent ? 'checked="true"' : null); ?>
+                                                       id="absent_date_<?php echo $temp_program['Program_Date_ID']; ?>_person_<?php echo $all_p['Participant_ID'] ?>"
+                                                       onchange="markAbsent(this, '<?php echo $temp_program['Program_Date_ID']; ?>', '<?php echo $all_p['Participant_ID'] ?>');"></td>
+                                    </tr>
+                                    <?php } ?>
+                                </table>
+                            <?php } /* (mysql_num_rows($all_paritipants) > 0) */ ?>
+                            </td></tr><?php
+                            }
+                            include "../include/dbconnclose.php";
                             }
                             ?>
 
@@ -941,35 +959,33 @@ while ($sess = mysqli_fetch_row($sessions)) {
                 <!--Function for adding and removing absences: -->
                 <script text="javascript">
 
-                    function handleRole(cb, date, user) {
-                        if (cb.checked == true) {
-                            $.post(
-                                    '../ajax/add_absence.php',
-                                    {
-                                        action: 'remove',
-                                        date: date,
-                                        user_id: user
-                                    },
-                            function(response) {
-                                //document.write(response);
-                                //window.location = "profile.php";
-                            }
-                            ).fail(failAlert);
+                    function markAttendance(absence, checked, date, user) {
+                        var action;
+                        if(!checked) {
+                            action = "remove"
+                        } else if(absence) {
+                            document.getElementById("present_date_" + date + "_person_" + user).checked = false;
+                            action = "absent";
+                        } else {
+                            document.getElementById("absent_date_" + date + "_person_" + user).checked = false;
+                            action = "present";
                         }
-                        else if (cb.checked == false) {
-                            $.post(
-                                    '../ajax/add_absence.php',
-                                    {
-                                        action: 'add',
-                                        date: date,
-                                        user_id: user
-                                    },
-                            function(response) {
-                                // document.write(response);
-                                // window.location = "profile.php";
-                            }
-                            ).fail(failAlert);
+                        $.post(
+                                '../ajax/add_absence.php',
+                                {
+                                    action: action,
+                                    date: date,
+                                    user_id: user
+                                },
+                        function(response) {
                         }
+                        ).fail(failAlert);
+                    }
+                    function markPresent(cb, date, user) {
+                        markAttendance(false, cb.checked, date, user);
+                    }
+                    function markAbsent(cb, date, user) {
+                        markAttendance(true, cb.checked, date, user);
                     }
                 </script>
             </td></tr>

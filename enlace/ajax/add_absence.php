@@ -26,11 +26,32 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
     include "../include/dbconnopen.php";
     $user_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['user_id']);
     $date_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['date']);
+    $row_id_select="SELECT Absence_ID FROM Absences WHERE Participant_ID = '$user_id_sqlsafe' AND Program_Date = '$date_sqlsafe'";
 
-if ($_POST['action']=='add'){
-    $new_absence="INSERT INTO Absences (Participant_ID, Program_Date) VALUES ('".$user_id_sqlsafe."', '".$date_sqlsafe."')";
+if ($_POST['action']=='absent'){
     include "../include/dbconnopen.php";
-    mysqli_query($cnnEnlace, $new_absence);
+    $absence_id = mysqli_fetch_row(mysqli_query($cnnEnlace, $row_id_select));
+    if($absence_id) {
+        $update_absence="UPDATE Absences SET Absent = 1 WHERE Participant_ID = '$user_id_sqlsafe' AND Program_Date = '$date_sqlsafe'";
+        mysqli_query($cnnEnlace, $update_absence);
+    }
+    else{
+        $new_absence="INSERT INTO Absences (Participant_ID, Program_Date, Absent) VALUES ('".$user_id_sqlsafe."', '".$date_sqlsafe."', 1)";
+        mysqli_query($cnnEnlace, $new_absence);
+    }
+    include "../include/dbconnclose.php";
+}
+elseif ($_POST['action']=='present'){
+    include "../include/dbconnopen.php";
+    $absence_id = mysqli_fetch_row(mysqli_query($cnnEnlace, $row_id_select));
+    if($absence_id) {
+        $update_absence="UPDATE Absences SET Absent = 0 WHERE Participant_ID = '$user_id_sqlsafe' AND Program_Date = '$date_sqlsafe'";
+        mysqli_query($cnnEnlace, $update_absence);
+    }
+    else{
+        $new_absence="INSERT INTO Absences (Participant_ID, Program_Date, Absent) VALUES ('".$user_id_sqlsafe."', '".$date_sqlsafe."', 0)";
+        mysqli_query($cnnEnlace, $new_absence);
+    }
     include "../include/dbconnclose.php";
 }
 elseif($_POST['action']=='remove'){
