@@ -110,6 +110,21 @@ class Program {
     }
 
     /*
+     * Whether or not the program is on any days of the week
+     */
+
+    public function on_at_least_one_day()  {
+        return
+            $this->monday == 1 ||
+            $this->tuesday == 1 ||
+            $this->wednesday == 1 ||
+            $this->thursday == 1 ||
+            $this->friday == 1 ||
+            $this->saturday == 1 ||
+            $this->sunday == 1;
+    }
+
+    /*
      * Get total number of days per program
      * 
      *  
