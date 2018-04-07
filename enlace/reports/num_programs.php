@@ -82,32 +82,8 @@ $participant_program_string .= ")";
 <!--Div on reports page that shows the program enrollment: -->
 <h3>Program Enrollment</h3>
 <form action="reports.php" method="post" style="text-align:center;">
-    <!--
-    Sort enrollment by month and year (according to when participants where added to the session in the DB)
-    -->
-    <select name="month_select">
-        <option>Select a month</option>
-        <option value="1" <?php echo($_POST['month_select'] == 1 ? 'selected=="selected"' : null) ?>>January</option>
-        <option value="2" <?php echo($_POST['month_select'] == 2 ? 'selected=="selected"' : null) ?>>February</option>
-        <option value="3" <?php echo($_POST['month_select'] == 3 ? 'selected=="selected"' : null) ?>>March</option>
-        <option value="4" <?php echo($_POST['month_select'] == 4 ? 'selected=="selected"' : null) ?>>April</option>
-        <option value="5" <?php echo($_POST['month_select'] == 5 ? 'selected=="selected"' : null) ?>>May</option>
-        <option value="6" <?php echo($_POST['month_select'] == 6 ? 'selected=="selected"' : null) ?>>June</option>
-        <option value="7" <?php echo($_POST['month_select'] == 7 ? 'selected=="selected"' : null) ?>>July</option>
-        <option value="8" <?php echo($_POST['month_select'] == 8 ? 'selected=="selected"' : null) ?>>August</option>
-        <option value="9" <?php echo($_POST['month_select'] == 9 ? 'selected=="selected"' : null) ?>>September</option>
-        <option value="10" <?php echo($_POST['month_select'] == 10 ? 'selected=="selected"' : null) ?>>October</option>
-        <option value="11" <?php echo($_POST['month_select'] == 11 ? 'selected=="selected"' : null) ?>>November</option>
-        <option value="12" <?php echo($_POST['month_select'] == 12 ? 'selected=="selected"' : null) ?>>December</option>
-    </select>
-
-    <select name="year_select">
-        <option>Select a year</option>
-        <option <?php echo($_POST['year_select'] == 2012 ? 'selected=="selected"' : null) ?>>2012</option>
-        <option <?php echo($_POST['year_select'] == 2013 ? 'selected=="selected"' : null) ?>>2013</option>
-        <option <?php echo($_POST['year_select'] == 2014 ? 'selected=="selected"' : null) ?>>2014</option>
-        <option <?php echo($_POST['year_select'] == 2015 ? 'selected=="selected"' : null) ?>>2015</option>
-    </select>
+    Start Date: <input type="text" class="addDP" name="programs_start_date" id="start_4" value="<?php echo $_POST['programs_start_date']; ?>"></td>
+    End Date: <input type="text" class="addDP" name="programs_end_date" id="end_4" value="<?php echo $_POST['programs_end_date']; ?>">
     <?php
         $num_selected = isset($_POST['program_program_select']) ? count($_POST['program_program_select']) : 0;
     ?>
@@ -127,7 +103,7 @@ $participant_program_string .= ")";
     foreach ($access_array as $program){
         $program_string .= " OR Programs.Program_ID = " . $program;
     }
-            $get_all_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID " . $program_string . " ORDER BY Name";
+            $get_all_programs = "SELECT Session_ID, Session_Name, Name, Session_Names.End_Date FROM Session_Names INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID " . $program_string . " ORDER BY Name";
 
         include "../include/dbconnopen.php";
         $all_programs = mysqli_query($cnnEnlace, $get_all_programs);
@@ -139,7 +115,7 @@ $participant_program_string .= ")";
             <input type="checkbox" name="program_program_select[]" class="program_checkbox" id="program_checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
             <?php
             if ($_POST['program_program_select'] && in_array($program[0], $_POST['program_program_select'])) {
-                $checked_programs[$program[0]] = ['name' => $program[2], 'session_name' => $program[1]];
+                $checked_programs[$program[0]] = ['name' => $program[2], 'session_name' => $program[1], 'end_date' => $program[3]];
                 echo 'checked="true"';
             }
             ?>><?php
@@ -152,7 +128,7 @@ $participant_program_string .= ")";
       </div>
       </div>
     </div>
-    <input type="submit" name="program_submitbtn" value="Sort by Month and Year">
+    <input type="submit" name="program_submitbtn" value="Show Results">
 </form>
 
 <!--View results without month and year set: -->
@@ -296,20 +272,41 @@ $participant_program_string .= ")";
     /* see results with month and year selected: */
 } else {
     ?>
-    <h3>Results as of <?php echo $_POST['month_select'] ?>/<?php echo $_POST['year_select'] ?></h3>
+    <?php
+        include "../include/dbconnopen.php";
+        $start_date_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_POST['programs_start_date']);
+        $end_date_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_POST['programs_end_date']);
+
+        $date_select_query_str = '';
+        if($start_date_sqlsafe != '') {
+            if ($end_date_sqlsafe != '') {
+                $results_string = "Results between $start_date_sqlsafe and $end_date_sqlsafe";
+                $date_select_query_str = " AND Session_Names.Start_Date BETWEEN '$start_date_sqlsafe' AND '$end_date_sqlsafe'
+                                          AND Session_Names.End_Date BETWEEN '$start_date_sqlsafe' AND '$end_date_sqlsafe'";
+            }
+            else {
+                $results_string = "Results after $start_date_sqlsafe";
+                $date_select_query_str = " AND Session_Names.Start_Date >= '$start_date_sqlsafe' AND
+                                          Session_Names.End_Date >= '$start_date_sqlsafe'";
+            }
+        }
+        else if ($end_date_sqlsafe != '') {
+            $results_string = "Results before $end_date_sqlsafe";
+            $date_select_query_str = " AND Session_Names.Start_Date <= '$end_date_sqlsafe' AND
+                                      Session_Names.End_Date <= '$end_date_sqlsafe'";
+        }
+    ?>
+    <h3><?php echo $results_string ?></h3>
     <table class="all_projects">
         <tr>
             <th>Program Name</th>
             <th>Session Name</th>
+            <th>Session End Date</th>
             <th>Total enrollment</th>
             <th>Total dropped</th>
             <th>Current enrollment</th>
         </tr>
         <?php
-        //get all programs that existed in the selected month and year
-        include "../include/dbconnopen.php";
-        $month_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['month_select']);
-        $year_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['year_select']);
         //get user's programs culled by inputted program id
 
         $session_querystring = " ";
@@ -328,7 +325,7 @@ $participant_program_string .= ")";
             $session_querystring .= ")";
         }
 
-        $all_progs = "SELECT Name, Session_List.Session_Name, Session_List.Session_ID, COUNT(Participant_ID) FROM Session_Names as Session_List INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_List.Session_ID INNER JOIN Programs ON Session_List.Program_Id = Programs.Program_ID " . $participant_program_string . $session_querystring . " AND MONTH(Date_Added) <= '" . $month_select_sqlsafe . "' AND YEAR(Date_Added) <= '" . $year_select_sqlsafe . "' GROUP BY Session_ID;";
+        $all_progs = "SELECT Name, Session_List.Session_Name, Session_List.Session_ID, Session_List.End_Date FROM Session_Names as Session_List INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_List.Session_ID INNER JOIN Programs ON Session_List.Program_Id = Programs.Program_ID " . $participant_program_string . $session_querystring . $date_select_query_str . " GROUP BY Session_ID;";
 
         $all_programs = mysqli_query($cnnEnlace, $all_progs);
         while ($program = mysqli_fetch_row($all_programs)) {
@@ -337,11 +334,12 @@ $participant_program_string .= ")";
             ?>
             <tr>
                 <td class="all_projects"><?php echo $program[0]; ?></td>
-                <td class="all_projects"><?php echo $program[1] ?></td>
+                <td class="all_projects"><?php echo $program[1]; ?></td>
+                <td class="all_projects"><?php echo $program[3]; ?></td>
                 <td class="all_projects">
                     <?php
             //get user's programs
-            $total_enrolled = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID = " . $program[2]  . " AND MONTH(Date_Added) <= '" . $month_select_sqlsafe . "' AND YEAR(Date_Added) <= '" . $year_select_sqlsafe . "' AND Program_ID = $program[2]";
+            $total_enrolled = "SELECT COUNT(*) FROM Participants_Programs INNER JOIN Session_Names ON Session_Names.Session_ID = Participants_Programs.Program_ID WHERE Participants_Programs.Program_ID = " . $program[2] . $date_select_query_str;
             $all_enrolled = mysqli_query($cnnEnlace, $total_enrolled);
             $enrolled = mysqli_fetch_row($all_enrolled);
             echo $enrolled[0];
@@ -350,7 +348,7 @@ $participant_program_string .= ")";
                 <td class="all_projects">
                     <?php
             //get user's programs
-            $total_dropped = "SELECT COUNT(*) FROM Participants_Programs  WHERE Program_ID = " . $program[2]  . " AND MONTH(Date_Dropped)<='" . $month_select_sqlsafe . "' AND YEAR(Date_Dropped)<='" . $year_select_sqlsafe . "' AND Program_ID=$program[2] AND Date_Dropped IS NOT NULL";
+            $total_dropped = "SELECT COUNT(*) FROM Participants_Programs INNER JOIN Session_Names ON Session_Names.Session_ID = Participants_Programs.Program_ID WHERE Participants_Programs.Program_ID = " . $program[2] . $date_select_query_str . " AND Date_Dropped IS NOT NULL";
             $all_dropped = mysqli_query($cnnEnlace, $total_dropped);
             $dropped = mysqli_fetch_row($all_dropped);
             echo $dropped[0];
@@ -359,7 +357,7 @@ $participant_program_string .= ")";
                 <td class="all_projects">
                     <?php
             //echo total remaining (at the selected month and year)
-            $total_current = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID = " . $program[2]  . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Program_ID=$program[2] AND Date_Dropped IS NULL";
+            $total_current = "SELECT COUNT(*) FROM Participants_Programs INNER JOIN Session_Names ON Session_Names.Session_ID = Participants_Programs.Program_ID WHERE Participants_Programs.Program_ID = " . $program[2] . $date_select_query_str . " AND Date_Dropped IS NULL";
 
             $all_current = mysqli_query($cnnEnlace, $total_current);
             $current = mysqli_fetch_row($all_current);
@@ -374,6 +372,7 @@ $participant_program_string .= ")";
                 <tr>
                     <td class="all_projects"><?php echo $checked_program['name']; ?></td>
                     <td class="all_projects"><?php echo $checked_program['session_name'] ?></td>
+                    <td class="all_projects"><?php echo $checked_program['end_date'] ?></td>
                     <td class="all_projects">0</td>
                     <td class="all_projects">0</td>
                     <td class="all_projects">0</td>
@@ -383,13 +382,13 @@ $participant_program_string .= ")";
         include "../include/dbconnclose.php";
         ?>
         <tr>
-            <td class="all_projects" colspan="2"><strong>Total number of students per category:</strong><br>
+            <td class="all_projects" colspan="3"><strong>Total number of students per category:</strong><br>
                 <span class="helptext">(this row counts each participant only once, no matter how many programs s/he is involved in)</span>
             </td>
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-        $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND YEAR(Date_Added)<='" . $year_select_sqlsafe . "';";
+        $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . ";";
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
                 $num_people = mysqli_num_rows($distinct);
@@ -400,7 +399,7 @@ $participant_program_string .= ")";
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs  " . $participant_program_string . $session_querystring . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Date_Dropped IS NOT NULL;";
+                $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs  " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Date_Dropped IS NOT NULL;";
 
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
@@ -412,7 +411,7 @@ $participant_program_string .= ")";
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Date_Dropped IS NULL;";
+                $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Date_Dropped IS NULL;";
 
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
@@ -423,13 +422,13 @@ $participant_program_string .= ")";
             </td>
         </tr>
         <tr>
-            <td class="all_projects" colspan="2"><strong>Total for all programs:</strong><br>
+            <td class="all_projects" colspan="3"><strong>Total for all programs:</strong><br>
                 <span class="helptext">(this row counts each participant once per program of involvement)</span>
             </td>
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND YEAR(Date_Added)<='" . $year_select_sqlsafe . "';";
+                $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . ";";
 
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
@@ -441,7 +440,7 @@ $participant_program_string .= ")";
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Date_Dropped IS NOT NULL;";
+                $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Date_Dropped IS NOT NULL;";
 
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
@@ -453,7 +452,7 @@ $participant_program_string .= ")";
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . " AND MONTH(Date_Added)<='" . $month_select_sqlsafe . "' AND YEAR(Date_Added)<='" . $year_select_sqlsafe . "' AND Date_Dropped IS NULL;";
+                $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Date_Dropped IS NULL;";
 
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
