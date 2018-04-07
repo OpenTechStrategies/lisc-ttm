@@ -149,6 +149,7 @@ $participant_program_string .= ")";
                             INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_ID 
                             INNER JOIN Programs ON Session_Names.Program_Id = Programs.Program_ID 
                             " . $program_string . "
+                            AND Participant_ID > 0
                             GROUP BY Session_ID;";
         include "../include/dbconnopen.php";
         $all_programs = mysqli_query($cnnEnlace, $all_progs);
@@ -159,7 +160,7 @@ $participant_program_string .= ")";
                 <td class="all_projects">
                     <?php
                     //just get the count of people in this session.
-                    $total_enrolled = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID=$program[2]";
+                    $total_enrolled = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID=$program[2] AND Participant_ID > 0";
                     $all_enrolled = mysqli_query($cnnEnlace, $total_enrolled);
                     $enrolled = mysqli_fetch_row($all_enrolled);
                     echo $enrolled[0];
@@ -168,7 +169,7 @@ $participant_program_string .= ")";
                 <td class="all_projects">
                     <?php
                     //count of people who've dropped
-                    $total_dropped = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID=$program[2] AND Date_Dropped IS NOT NULL";
+                    $total_dropped = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID=$program[2] AND Participant_ID > 0 AND Date_Dropped IS NOT NULL";
                     $all_dropped = mysqli_query($cnnEnlace, $total_dropped);
                     $dropped = mysqli_fetch_row($all_dropped);
                     echo $dropped[0];
@@ -177,7 +178,7 @@ $participant_program_string .= ")";
                 <td class="all_projects">
                     <?php
                     //count of people remaining in the session
-                    $total_current = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID=$program[2] AND Date_Dropped IS NULL";
+                    $total_current = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID=$program[2] AND Participant_ID > 0 AND Date_Dropped IS NULL";
                     $all_current = mysqli_query($cnnEnlace, $total_current);
                     $current = mysqli_fetch_row($all_current);
                     echo $current[0];
@@ -195,7 +196,7 @@ $participant_program_string .= ")";
             <td class="all_projects"><?php
             //get distinct participants, then count rows
             //get user's programs
-            $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs " . $participant_program_string;
+            $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs " . $participant_program_string . " AND Participant_ID > 0";
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
                 $num_people = mysqli_num_rows($distinct);
@@ -205,7 +206,7 @@ $participant_program_string .= ")";
             <td class="all_projects"><?php
                 //get distinct participants, then count rows
                 $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs "
-                            . $participant_program_string . " AND Date_Dropped IS NOT NULL;";
+                            . $participant_program_string . " AND Participant_ID > 0 AND Date_Dropped IS NOT NULL;";
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
                 $num_people = mysqli_num_rows($distinct);
@@ -217,7 +218,7 @@ $participant_program_string .= ")";
                 //get distinct participants, then count rows
                 //get user's programs
                 $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs "
-                            . $participant_program_string . " AND Date_Dropped IS NULL;";
+                            . $participant_program_string . " AND Participant_ID > 0 AND Date_Dropped IS NULL;";
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
                 $num_people = mysqli_num_rows($distinct);
@@ -234,7 +235,7 @@ $participant_program_string .= ")";
                 <?php
                 //get distinct participants, then count rows
                 //get user's programs
-                $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string;
+                $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string . " AND Participant_ID > 0";
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
                 $num_people = mysqli_num_rows($distinct);
@@ -246,7 +247,7 @@ $participant_program_string .= ")";
                 <?php
                 //get distinct participants, then count rows
                 $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string
-                    . " AND Date_Dropped IS NOT NULL;";
+                    . " AND Participant_ID > 0 AND Date_Dropped IS NOT NULL;";
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
                 $num_people = mysqli_num_rows($distinct);
@@ -259,7 +260,7 @@ $participant_program_string .= ")";
                 //get distinct participants, then count rows
                 //get user's programs
                 $distinct_people = "SELECT Participant_ID FROM Participants_Programs "
-                    . $participant_program_string . " AND Date_Dropped IS NULL;";
+                    . $participant_program_string . " AND Participant_ID > 0 AND Date_Dropped IS NULL;";
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
                 $num_people = mysqli_num_rows($distinct);
@@ -325,7 +326,7 @@ $participant_program_string .= ")";
             $session_querystring .= ")";
         }
 
-        $all_progs = "SELECT Name, Session_List.Session_Name, Session_List.Session_ID, Session_List.End_Date FROM Session_Names as Session_List INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_List.Session_ID INNER JOIN Programs ON Session_List.Program_Id = Programs.Program_ID " . $participant_program_string . $session_querystring . $date_select_query_str . " GROUP BY Session_ID;";
+        $all_progs = "SELECT Name, Session_List.Session_Name, Session_List.Session_ID, Session_List.End_Date FROM Session_Names as Session_List INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_List.Session_ID INNER JOIN Programs ON Session_List.Program_Id = Programs.Program_ID " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Participant_ID > 0 GROUP BY Session_ID;";
 
         $all_programs = mysqli_query($cnnEnlace, $all_progs);
         while ($program = mysqli_fetch_row($all_programs)) {
@@ -339,7 +340,7 @@ $participant_program_string .= ")";
                 <td class="all_projects">
                     <?php
             //get user's programs
-            $total_enrolled = "SELECT COUNT(*) FROM Participants_Programs INNER JOIN Session_Names ON Session_Names.Session_ID = Participants_Programs.Program_ID WHERE Participants_Programs.Program_ID = " . $program[2] . $date_select_query_str;
+            $total_enrolled = "SELECT COUNT(*) FROM Participants_Programs INNER JOIN Session_Names ON Session_Names.Session_ID = Participants_Programs.Program_ID WHERE Participants_Programs.Program_ID = " . $program[2] . " AND Participant_ID > 0 " . $date_select_query_str;
             $all_enrolled = mysqli_query($cnnEnlace, $total_enrolled);
             $enrolled = mysqli_fetch_row($all_enrolled);
             echo $enrolled[0];
@@ -348,7 +349,7 @@ $participant_program_string .= ")";
                 <td class="all_projects">
                     <?php
             //get user's programs
-            $total_dropped = "SELECT COUNT(*) FROM Participants_Programs INNER JOIN Session_Names ON Session_Names.Session_ID = Participants_Programs.Program_ID WHERE Participants_Programs.Program_ID = " . $program[2] . $date_select_query_str . " AND Date_Dropped IS NOT NULL";
+            $total_dropped = "SELECT COUNT(*) FROM Participants_Programs INNER JOIN Session_Names ON Session_Names.Session_ID = Participants_Programs.Program_ID WHERE Participants_Programs.Program_ID = " . $program[2] . " AND Participant_ID > 0 " . $date_select_query_str . " AND Date_Dropped IS NOT NULL";
             $all_dropped = mysqli_query($cnnEnlace, $total_dropped);
             $dropped = mysqli_fetch_row($all_dropped);
             echo $dropped[0];
@@ -357,7 +358,7 @@ $participant_program_string .= ")";
                 <td class="all_projects">
                     <?php
             //echo total remaining (at the selected month and year)
-            $total_current = "SELECT COUNT(*) FROM Participants_Programs INNER JOIN Session_Names ON Session_Names.Session_ID = Participants_Programs.Program_ID WHERE Participants_Programs.Program_ID = " . $program[2] . $date_select_query_str . " AND Date_Dropped IS NULL";
+            $total_current = "SELECT COUNT(*) FROM Participants_Programs INNER JOIN Session_Names ON Session_Names.Session_ID = Participants_Programs.Program_ID WHERE Participants_Programs.Program_ID = " . $program[2] . " AND Participant_ID > 0 " . $date_select_query_str . " AND Date_Dropped IS NULL";
 
             $all_current = mysqli_query($cnnEnlace, $total_current);
             $current = mysqli_fetch_row($all_current);
@@ -388,7 +389,7 @@ $participant_program_string .= ")";
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-        $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . ";";
+        $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Participant_ID > 0;";
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
                 $num_people = mysqli_num_rows($distinct);
@@ -399,7 +400,7 @@ $participant_program_string .= ")";
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs  " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Date_Dropped IS NOT NULL;";
+                $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs  " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Participant_ID > 0 AND Date_Dropped IS NOT NULL;";
 
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
@@ -411,7 +412,7 @@ $participant_program_string .= ")";
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Date_Dropped IS NULL;";
+                $distinct_people = "SELECT DISTINCT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Participant_ID > 0 AND Date_Dropped IS NULL;";
 
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
@@ -428,7 +429,7 @@ $participant_program_string .= ")";
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . ";";
+                $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Participant_ID > 0;";
 
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
@@ -440,7 +441,7 @@ $participant_program_string .= ")";
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Date_Dropped IS NOT NULL;";
+                $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Participant_ID > 0 AND Date_Dropped IS NOT NULL;";
 
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
@@ -452,7 +453,7 @@ $participant_program_string .= ")";
             <td class="all_projects">
                 <?php
                 //get distinct participants, then count rows
-                $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Date_Dropped IS NULL;";
+                $distinct_people = "SELECT Participant_ID FROM Participants_Programs " . $participant_program_string . $session_querystring . $date_select_query_str . " AND Participant_ID > 0 AND Date_Dropped IS NULL;";
 
                 include "../include/dbconnopen.php";
                 $distinct = mysqli_query($cnnEnlace, $distinct_people);
