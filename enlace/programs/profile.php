@@ -897,7 +897,8 @@ while ($sess = mysqli_fetch_row($sessions)) {
 
                                         /* uncheck box to add an absence, and check the box to delete that absence: */
                                     ?>
-                                        <tr>
+                                        <tr id="row_date_<?php echo $temp_program['Program_Date_ID']; ?>_person_<?php echo $all_p['Participant_ID'] ?>"
+                                            <?php if(!($was_there || $was_absent)) { echo "class='unmarked'"; } ?>>
                                             <td><span style="font-weight:bold"><?php echo $all_p['First_Name'] . " " . $all_p['Last_Name']; ?></span></td>
                                             <td><input type="checkbox" <?php echo($was_there ? 'checked="true"' : null); ?>
                                                        id="present_date_<?php echo $temp_program['Program_Date_ID']; ?>_person_<?php echo $all_p['Participant_ID'] ?>"
@@ -959,14 +960,18 @@ while ($sess = mysqli_fetch_row($sessions)) {
                 <!--Function for adding and removing absences: -->
                 <script text="javascript">
 
-                    function markAttendance(absence, checked, date, user) {
+                    function markAttendance(absence, checked, date, user, tr) {
+                        tr = document.getElementById("row_date_" + date + "_person_" + user);
                         var action;
                         if(!checked) {
+                            tr.className = "unmarked";
                             action = "remove"
                         } else if(absence) {
+                            tr.className = "";
                             document.getElementById("present_date_" + date + "_person_" + user).checked = false;
                             action = "absent";
                         } else {
+                            tr.className = "";
                             document.getElementById("absent_date_" + date + "_person_" + user).checked = false;
                             action = "present";
                         }
