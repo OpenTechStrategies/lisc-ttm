@@ -181,6 +181,7 @@ $(document).ready(function() {
             $dropped_sqlsafe = true;
         }
         foreach ($_POST['attendance_program_select'] as $session ) {
+            include "../include/dbconnopen.php";
             $session_sqlsafe=mysqli_real_escape_string($cnnEnlace, $session);
             // The session's enrollment should only be added to the
             // total and unique enrollment if the session met during the
