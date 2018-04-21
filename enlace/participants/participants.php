@@ -165,7 +165,7 @@ include "../header.php";
                         <td><strong>Date of Birth: </strong></td>
                         <td><input type="text" id="dob_new" class="addDP" /></td>
                         <td><strong>Age: </strong></td>
-                        <td><input type="text" id="age_new"  style="width:25px;"/>&nbsp;&nbsp;<span class="helptext">If date of birth is not available</span></td>
+                        <td><input type="text" id="age_new"  style="width:25px;"/></td>
                     </tr>
                     <tr>
                         <td><strong>Daytime Phone: </strong></td>
@@ -242,8 +242,19 @@ include "../header.php";
                                     }
                                 }
                                 var role = document.getElementById('role_new').value;
-                                if (role == '') {
-                                    alert('You have not entered a role for this participant.  Please enter a role for this participant and then hit Save again.');
+                                var dob = document.getElementById('dob_new').value;
+                                var age = document.getElementById('age_new').value;
+                                var gender = document.getElementById('gender_new').value;
+                                var grade = document.getElementById('grade_new').value;
+                                var school = document.getElementById('school_new').value;
+                                var errorMessage = '';
+                                errorMessage = role == '' ? 'role' : errorMessage;
+                                errorMessage = grade == '' ? 'grade' : errorMessage;
+                                errorMessage = gender == '' ? 'gender' : errorMessage;
+                                errorMessage = school == '' ? 'school' : errorMessage;
+                                errorMessage = (age == '' && dob == '') ? 'age or date of birth' : errorMessage;
+                                if (errorMessage != '') {
+                                    alert('You have not entered a ' + errorMessage + ' for this participant.  Please enter a ' + errorMessage + ' for this participant and then hit Save again.');
                                     return false;
                                 }
                                 $.post(
@@ -251,14 +262,14 @@ include "../header.php";
                                         {
                                             first_name: document.getElementById('name_new').value,
                                             last_name: document.getElementById('surname_new').value,
-                                            dob: document.getElementById('dob_new').value,
-                                            age: document.getElementById('age_new').value,
+                                            dob: dob,
+                                            age: age,
                                             day_phone: document.getElementById('day_phone_new').value,
                                             evening_phone: document.getElementById('evening_phone_new').value,
-                                            grade: document.getElementById('grade_new').value,
-                                            gender: document.getElementById('gender_new').value,
-                                            school: document.getElementById('school_new').value,
-                                            role: document.getElementById('role_new').value
+                                            grade: grade,
+                                            gender: gender,
+                                            school: school,
+                                            role: role
                                         },
                                 function(response) {
                                     document.getElementById('confirmation').innerHTML = response;
