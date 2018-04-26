@@ -38,6 +38,12 @@ $participant_program_string .= ")";
 ?>
 
 <script type="text/javascript">
+  function update_num_selected() {
+    $(".numselected").each(function (idx, span) {
+      span.innerHTML = $(".program_checkbox:checked").length;
+    });
+  }
+
   $(document).ready(function() {
     $(".popupcontainer .popupclose").each(function(idx, closer) {
       $(closer).on("click", function() {
@@ -45,6 +51,7 @@ $participant_program_string .= ")";
           return false;
       });
     });
+
     $(".popupcontainer .popupdisplay").each(
       function(idx, display) {
         $(display).on("click", function() {
@@ -52,6 +59,8 @@ $participant_program_string .= ")";
           return false;
         });
         });
+
+    $('.program_checkbox').on('click', update_num_selected);
 
     $('#select_all_program_checkboxes').on('click', function () {
         if ($('#select_all_program_checkboxes').attr('checked')) {
@@ -64,6 +73,7 @@ $participant_program_string .= ")";
                 $(this).attr('checked', false);
             });
         }
+        update_num_selected();
     });
   });
 </script>
@@ -99,16 +109,16 @@ $participant_program_string .= ")";
         <option <?php echo($_POST['year_select'] == 2015 ? 'selected=="selected"' : null) ?>>2015</option>
     </select>
     <?php
-        $button_text = (isset($_POST['program_program_select']) && count($_POST['program_program_select']) > 0) ? "View / Edit Programs" : "Select Programs";
+        $num_selected = isset($_POST['program_program_select']) ? count($_POST['program_program_select']) : 0;
     ?>
     <div class="popupcontainer popupcontainer-hidden programspopupcontainer">
-    <button class="popupdisplay"><?php echo $button_text; ?></button>
-      <div class="popupinner programspopup">
-        <div class="programspopupheader">
-          <div class="popupclose x-closer">X</div>
-          <button class="popupclose"><?php echo $button_text; ?></button>
-        </div>
-      <div>
+    <button class="popupdisplay">Select Programs (<span class="numselected"><?php echo $num_selected; ?></span> Selected)</button>
+    <div class="popupinner programspopup">
+      <div class="programspopupheader">
+        <div class="popupclose x-closer">X</div>
+        <button class="popupclose">Select Programs (<span class="numselected"><?php echo $num_selected; ?></span> Selected)</button>
+      </div>
+    <div>
 
     <input type="checkbox" id="select_all_program_checkboxes"> <b>Select All</b><br>
 <?php
