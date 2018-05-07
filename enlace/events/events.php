@@ -40,11 +40,11 @@ Page that shows Little Village events that aren't connected to a campaign.
 		$('#add_date').hide();
 		$('#add_participant_button').hide();
                 $('.hide_old_events').hide();
-	<?
+	<?php
 	if (isset ($_GET['event'])) {
 ?>
 		$('#event_<?php echo $_GET['event'];?>_details').show();
-<?
+<?php
 	}
 ?>
 	});
@@ -75,12 +75,12 @@ Page that shows Little Village events that aren't connected to a campaign.
         							<input id="st_type_new" style="width:35px;"/></td></tr>
 			<tr><td style="vertical-align:middle;"><strong>Type: </strong></td><td><select id="new_event_type">
     <option value="">-----</option>
-    <?
+    <?php
     $all_events="SELECT * FROM Event_Types ORDER BY Type";
     include "../include/dbconnopen.php";
     $events=mysqli_query($cnnEnlace, $all_events);
     while ($type=mysqli_fetch_row($events)){
-        ?><option value="<?php echo $type[0]?>"><?php echo $type[1];?></option><?
+        ?><option value="<?php echo $type[0]?>"><?php echo $type[1];?></option><?php
     }
     include "../include/dbconnclose.php";
     ?>
@@ -121,7 +121,7 @@ Page that shows Little Village events that aren't connected to a campaign.
             <!--List of already added events.-->
             
 	<ul id="events_list">
-<?
+<?php
 	$get_events = "SELECT * FROM Campaigns_Events WHERE Campaign_ID='0' ORDER BY Event_Date DESC";
 	include "../include/dbconnopen.php";
 	$events = mysqli_query($cnnEnlace, $get_events);
@@ -143,13 +143,13 @@ Page that shows Little Village events that aren't connected to a campaign.
 				<tr><td><strong>Type: </strong></td><td></td>
 				<tr><td class="blank"><strong>Attendance: </strong></td>
 					<td class="blank">
-						<?
+						<?php
 							$get_attendance = "SELECT * FROM Participants_Events INNER JOIN Participants ON Participants_Events.Participant_ID=Participants.Participant_ID WHERE Participants_Events.Event_ID='".$event['Campaign_Event_ID']."' ORDER BY Participants.Last_Name";
 							$attendance = mysqli_query($cnnEnlace, $get_attendance);
 							while ($attendee = mysqli_fetch_array($attendance)) {
 						?>
 							<a href="../participants/participant_profile.php?id=<?php echo $attendee['Participant_ID'];?>"><?php echo $attendee['First_Name']." ".$attendee['Last_Name'];?></a><br/>
-						<?
+						<?php
 							}
 						?>
 						<br/>
@@ -216,7 +216,7 @@ Page that shows Little Village events that aren't connected to a campaign.
 			</table>
 		</div>
 	</li>
-<?
+<?php
 	}
 	include "../include/dbconnclose.php";
 ?>
@@ -229,6 +229,6 @@ Page that shows Little Village events that aren't connected to a campaign.
 
 </div>
 <br/><br/>
-<?
+<?php
 	include "../../footer.php";
 ?>

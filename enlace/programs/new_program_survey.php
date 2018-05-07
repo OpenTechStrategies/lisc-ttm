@@ -78,7 +78,7 @@ $prog_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['prog']);
                                                     while ($sess=mysqli_fetch_row($sessions)){
                                                         ?>
                                                     <option value="<?php echo $sess[0];?>"><?php echo $sess[1];?></option>
-                                                            <?
+                                                            <?php
                                                     }
                                                     include "../include/dbconnclose.php";
                                                     ?></select>
@@ -232,6 +232,6 @@ $prog_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['prog']);
 <div id="progsurv_response"></div>
 <br/><br/>
 
-<?
+<?php
 	include "../../footer.php";
 ?>
