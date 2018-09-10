@@ -29,3 +29,24 @@ mysql -ss -u root -p ttm-enlace -e "SELECT Program_Date_ID, Program_ID FROM Prog
 done
 
 ```
+
+## Issue 218 - Enlace - Hiding past data - September 2018
+
+Adds a settings table for the enlace subsystem.  This is a generic placeholder for any settings that can be updated by administrators that affect how the application works.  The relevant page is system/settings.php
+
+### SQL for Table Creation
+```
+USE ttm-enlace
+CREATE TABLE `System_Settings` (
+    `Setting_Name` varchar(255) NOT NULL UNIQUE,
+    `Setting_Type` enum('integer', 'string') NOT NULL,
+    `Setting_Value` varchar(255)
+);
+```
+
+### num_days_hidden setting
+This setting affects what programs/sessions are visible in different pages.  If a program has no sessions more recent than num_days_hidden ago, it will be hidden from lists.  This also affects session displays on certain pages.
+```
+USE ttm-enlace
+INSERT INTO System_Settings VALUES ('num_days_hidden', 'integer', '365');
+```

@@ -26,9 +26,11 @@ user_enforce_has_access($Enlace_id, $ReadOnlyAccess, $_COOKIE['program']);
 include "../../header.php";
 include "../header.php";
 include "../classes/program.php";
+include "../include/settings.php";
 require_once("../classes/assessment.php");
 $program = new Program();
 $program->load_with_program_id($_COOKIE['program']);
+$num_days_hidden = get_setting($NumDaysHiddenSetting);
 
 ?>
 <!--
@@ -46,6 +48,9 @@ Shows all program information.
         $('#search_parti_table').hide();
         $('.hide_dates').hide();
         $('.add_new_person_to_session').hide();
+        $('tr.oldsession').hide();
+        $('tr.oldsession_surveys').hide();
+        $('tr.oldsession_program_dates').hide();
     });</script>
 
 <div class="content_block">
@@ -297,14 +302,17 @@ Shows all program information.
                 -->
                 <table class="inner_table">
                     <tr><th>Session</th><th>Number Surveys Completed / Number Participants in the Session</th><th>Percent Surveys Completed</th></tr>
+                    <tr><td colspan="4"><h5 onclick="$('.oldsession_surveys').toggle();" style="cursor:pointer;">Old Sessions<span class="oldsession_surveys"> (Hidden)</span></h5></td></tr>
                     <?php
                     //get each session
                     $get_sessions = "SELECT * FROM Session_Names WHERE Program_ID='$program->program_id'";
                     include "../include/dbconnopen.php";
                     $sessions = mysqli_query($cnnEnlace, $get_sessions);
-                    while ($sesh = mysqli_fetch_row($sessions)) {
+                    while ($sesh = mysqli_fetch_array($sessions)) {
+                        $old = (strtotime($sesh['End_Date']) < strtotime("-$num_days_hidden days"));
                         ?>
-                        <tr><td><?php echo $sesh[0] . ": " . $sesh[1]; ?></td>
+                        <tr <?php if($old) { ?>class="oldsession_surveys"<?php } ?>>
+                            <td><?php echo $sesh[0] . ": " . $sesh[1]; ?></td>
                             <td>
                                 <?php
                                 //get count of participants in this session
@@ -429,7 +437,7 @@ Shows all program information.
                 <!--List of participants in this program, sorted by session:-->
                 <h4>Participants</h4>
                 <?php
-                $get_all_participants = "SELECT Session_Names.Session_ID, Session_Names.Session_Name, Participants.Participant_ID, Participants_Programs.Date_Dropped, Participant_Program_ID, Participants.First_Name, Participants.Last_Name, COUNT(Assessments.Assessment_ID) FROM Participants_Programs INNER JOIN Participants ON Participants.Participant_ID=Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_ID LEFT JOIN Assessments ON (Participants.Participant_ID = Assessments.Participant_ID AND Session_Names.Session_ID = Assessments.Session_ID) WHERE Session_Names.Program_ID='$program->program_id' GROUP BY Session_Names.Session_ID, Participants.Participant_ID ORDER BY Session_Names.Session_ID, Participants.Last_Name";
+                $get_all_participants = "SELECT Session_Names.Session_ID, Session_Names.Session_Name, Session_Names.End_Date, Participants.Participant_ID, Participants_Programs.Date_Dropped, Participant_Program_ID, Participants.First_Name, Participants.Last_Name, COUNT(Assessments.Assessment_ID) FROM Participants_Programs INNER JOIN Participants ON Participants.Participant_ID=Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_ID LEFT JOIN Assessments ON (Participants.Participant_ID = Assessments.Participant_ID AND Session_Names.Session_ID = Assessments.Session_ID) WHERE Session_Names.Program_ID='$program->program_id' GROUP BY Session_Names.Session_ID, Participants.Participant_ID ORDER BY Session_Names.Session_ID, Participants.Last_Name";
 
                 include "../include/dbconnopen.php";
                 $all_participants = mysqli_query($cnnEnlace, $get_all_participants);
@@ -455,10 +463,13 @@ Shows all program information.
                             <?php
                         }
                         ?>
-                    </tr><?php
+                    </tr>
+                    <tr><td colspan="4"><h5 onclick="$('.oldsession').toggle();" style="cursor:pointer;">Old Sessions<span class="oldsession"> (Hidden)</span></h5></td></tr>
+                    <?php
                     while ($all_p = mysqli_fetch_array($all_participants)) {
+                        $old = (strtotime($all_p['End_Date']) < strtotime("-$num_days_hidden days"));
                         if ($all_p['Session_Name'] != $current_session) {
-                            ?><tr><td colspan="4"><h5><?php echo $all_p['Session_Name']; ?>
+                        ?><tr <?php if($old) { ?>class="oldsession"<?php } ?>><td colspan="4"><h5><?php echo $all_p['Session_Name']; ?>
                                         <?php
                                         //if an administrator
                                         if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
@@ -487,7 +498,7 @@ Shows all program information.
                             $current_session = $all_p['Session_Name'];
                         }
                         ?>
-                        <tr>
+                        <tr <?php if($old) { ?>class="oldsession"<?php } ?>>
                             <td> <a href='../participants/participant_profile.php?id=<?php echo $all_p['Participant_ID']; ?>'><?php echo $all_p['First_Name'] . " " . $all_p['Last_Name'];
                         ?></a> -                         
                                 <?php if ($all_p['Date_Dropped'] === null) { ?>
@@ -817,11 +828,13 @@ while ($sess = mysqli_fetch_row($sessions)) {
                 <h4>Program Dates</h4>
                 <table class="inner_table">
                     <tr style="font-size:.9em;"><th>Date</th><th>Attendees<br></th></tr>
+                    <tr><td colspan="4"><h5 onclick="$('.oldsession_program_dates').toggle();" style="cursor:pointer;">Old Sessions<span class="oldsession_program_dates"> (Hidden)</span></h5></td></tr>
 <?php
 $related_sessions = "SELECT * FROM Session_Names WHERE Program_ID=$program->program_id";
 include "../include/dbconnopen.php";
 $sessions = mysqli_query($cnnEnlace, $related_sessions);
-while ($sess = mysqli_fetch_row($sessions)) {
+while ($sess = mysqli_fetch_array($sessions)) {
+    $old = (strtotime($sess['End_Date']) < strtotime("-$num_days_hidden days"));
 
     /* show all sessions for this program: */
     $get_dates = "SELECT * FROM Program_Dates WHERE Program_ID='" . $sess[0] . "' ORDER BY Date_Listed DESC";
@@ -830,7 +843,7 @@ while ($sess = mysqli_fetch_row($sessions)) {
     $current_session = "";
     if ($sess[1] != $current_session) {
         $current_session = $sess[1];
-        ?><tr><td class="all_projects" colspan="2">
+        ?><tr <?php if($old) { ?>class="oldsession_program_dates"<?php } ?>><td class="all_projects" colspan="2">
                                     <a href="javascript:;" onclick="$('.toggler_<?php echo $sess[0] ?>').toggle();"><?php echo $current_session; ?></a>
                                     <?php if(mysqli_num_rows($program_info) == 0 &&
                                              $sess[3] != '0000-00-00' && $sess[4] != '0000-00-00' &&

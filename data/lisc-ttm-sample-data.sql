@@ -4214,6 +4214,31 @@ INSERT INTO `Session_Names` VALUES (1,'',2,NULL,NULL,NULL),(3,'Spring 2013',2,NU
 UNLOCK TABLES;
 
 --
+-- Table structure for table `System_Settings`
+--
+
+DROP TABLE IF EXISTS `System_Settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `System_Settings` (
+  `Setting_Name` varchar(255) NOT NULL,
+  `Setting_Type` enum('integer','string') NOT NULL,
+  `Setting_Value` varchar(255) DEFAULT NULL,
+  UNIQUE KEY `Setting_Name` (`Setting_Name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `System_Settings`
+--
+
+LOCK TABLES `System_Settings` WRITE;
+/*!40000 ALTER TABLE `System_Settings` DISABLE KEYS */;
+INSERT INTO `System_Settings` VALUES ('num_days_hidden','integer','365');
+/*!40000 ALTER TABLE `System_Settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Current Database: `ttm-lsna`
 --
 

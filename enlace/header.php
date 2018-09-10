@@ -32,7 +32,7 @@
     <table width="100%">
         <tr>
             <td rowspan="2" id="logo" width="13%"><a href="/enlace/index.php"><img src="/enlace/images/logo-enlace.png" /></a></td>
-            <td colspan="7"><h2>Little Village: Enlace Chicago</h2></td>
+            <td colspan="8"><h2>Little Village: Enlace Chicago</h2></td>
         </tr>
         <tr>
             <td class="menu_item"><a href="/enlace/participants/participants.php" id="participants_selector">Participants</a></td>
@@ -41,10 +41,13 @@
             <td class="menu_item"><a href="/enlace/campaigns/campaigns.php" id="campaigns_selector">Campaigns</a></td>
             <td class="menu_item"><a href="/enlace/events/events.php" id="events_selector">Events</a></td>
             <td class="menu_item"><a href="/enlace/reports/reports.php" id="reports_selector">Reports</a></td>
+            <?php if ($USER->has_site_access($Enlace_id, $AdminAccess)) { ?>
+                <td class="menu_item"><a href="/enlace/system/settings.php" id="settings_selector">Settings</a>
+            <?php } ?>
             <td class="menu_item"><a href="/index.php?action=logout">Log Out</a>
         </tr>
         <tr>
-            <td colspan="8"><hr/></td>
+            <td colspan="9"><hr/></td>
         </tr>
     </table>	
 </div>
