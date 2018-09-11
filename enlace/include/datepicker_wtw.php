@@ -21,7 +21,6 @@
 include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
-user_enforce_has_access($Enlace_id);
 ?>
         <link href="/include/jquery/1.9.1/css/redmond/jquery-ui-1.8.23.custom.css" rel="stylesheet" type="text/css" />
         <script src="/include/jquery/1.9.1/js/jquery-1.8.2.js" type="text/javascript"></script>

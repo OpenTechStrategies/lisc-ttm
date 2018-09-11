@@ -20,55 +20,75 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+include "../include/survey_entry_point.php";
 
 include "../../header.php";
-include "../header.php";
 
-user_enforce_has_access($Enlace_id);
-
-/* so allow them in if it's a new survey OR if they have access to all
- * programs ('a') or if they have access to a program that is linked
- * to this...person? or this survey?: */
-
-$access_array = $USER->program_access($Enlace_id);
-
+$anonymous_entry = false;
 include "../include/dbconnopen.php";
 $person_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['person']);
-$get_program_list = "SELECT Session_Names.Program_ID FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_ID WHERE Participant_ID = '" . $person_sqlsafe . "'";
-$program_connected = mysqli_query($cnnEnlace, $get_program_list);
-$program_array = array();
-while ($program_id = mysqli_fetch_row($program_connected)){
-    $program_array[] = $program_id[0];
+include "../include/dbconnopen.php";
+
+if (isset($_GET['code'])) {
+    include "../include/dbconnopen.php";
+    $code_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_GET['code']);
+    include "../include/dbconnclose.php";
+    $lookup_result = lookup_and_validate_survey_entry_code($code_sqlsafe, 2);
+
+    $session_id_safe = $lookup_result['Session_ID'];
+    $person_sqlsafe = $lookup_result['Participant_ID'];
+    $anonymous_entry = true;
 }
-$USER->enforce_access_program_array($Enlace_id, $program_array);
+
+if(!$anonymous_entry) {
+    include "../header.php";
+    user_enforce_has_access($Enlace_id);
+}
+
+if(!$anonymous_entry) {
+    /* so allow them in if it's a new survey OR if they have access to all
+     * programs ('a') or if they have access to a program that is linked
+     * to this...person? or this survey?: */
+
+    $access_array = $USER->program_access($Enlace_id);
+
+    include "../include/dbconnopen.php";
+    $get_program_list = "SELECT Session_Names.Program_ID FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_ID WHERE Participant_ID = '" . $person_sqlsafe . "'";
+    $program_connected = mysqli_query($cnnEnlace, $get_program_list);
+    $program_array = array();
+    while ($program_id = mysqli_fetch_row($program_connected)){
+        $program_array[] = $program_id[0];
+    }
+    $USER->enforce_access_program_array($Enlace_id, $program_array);
 
 
-/*
- * This file is either a new impact survey, an editable impact survey, or a view for the impact survey.
- * The responses to questions are shown if they have been answered, and are always editable.
- */
+    /*
+     * This file is either a new impact survey, an editable impact survey, or a view for the impact survey.
+     * The responses to questions are shown if they have been answered, and are always editable.
+     */
 
-//get participant info
-include "../classes/participant.php";
+    //get participant info
+    include_once "../classes/participant.php";
 
-include "../include/dbconnopen.php";
-$id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['assessment']);
-$person_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['person']);
-/* if the assessment is not new, then Get['assessment'] exists, and this query returns the entered responses. */
-$get_assessment_info = "SELECT * FROM Assessments 
-                        LEFT JOIN Participants_Caring_Adults ON Caring_Id=Caring_Adults_ID
-                        LEFT JOIN Participants_Future_Expectations ON Future_Id=Future_Expectations_ID
-                        LEFT JOIN Participants_Interpersonal_Violence ON Violence_Id=Interpersonal_Violence_ID
-                        LEFT JOIN Programs ON Participants_Future_Expectations.Program=Programs.Program_ID
-                        WHERE Assessment_ID='" . $id_sqlsafe . "'";
-$get_assessment = mysqli_query($cnnEnlace, $get_assessment_info);
-$assessment_info = mysqli_fetch_array($get_assessment);
-$caring_id = $assessment_info['Caring_ID'];
-$baseline_id = $assessment_info['Baseline_ID'];
-$future_id = $assessment_info['Future_ID'];
-$violence_id = $assessment_info['Violence_ID'];
-$person = new Participant();
-$person->load_with_participant_id($assessment_info[1]);
+    include "../include/dbconnopen.php";
+    $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['assessment']);
+    $person_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_GET['person']);
+    /* if the assessment is not new, then Get['assessment'] exists, and this query returns the entered responses. */
+    $get_assessment_info = "SELECT * FROM Assessments
+                            LEFT JOIN Participants_Caring_Adults ON Caring_Id=Caring_Adults_ID
+                            LEFT JOIN Participants_Future_Expectations ON Future_Id=Future_Expectations_ID
+                            LEFT JOIN Participants_Interpersonal_Violence ON Violence_Id=Interpersonal_Violence_ID
+                            LEFT JOIN Programs ON Participants_Future_Expectations.Program=Programs.Program_ID
+                            WHERE Assessment_ID='" . $id_sqlsafe . "'";
+    $get_assessment = mysqli_query($cnnEnlace, $get_assessment_info);
+    $assessment_info = mysqli_fetch_array($get_assessment);
+    $caring_id = $assessment_info['Caring_ID'];
+    $baseline_id = $assessment_info['Baseline_ID'];
+    $future_id = $assessment_info['Future_ID'];
+    $violence_id = $assessment_info['Violence_ID'];
+    $person = new Participant();
+    $person->load_with_participant_id($assessment_info[1]);
+}
 
 /* if it IS a new assessment, then we get the person from the get[person]: */
 if (!isset($_GET['assessment'])) {
@@ -76,27 +96,50 @@ if (!isset($_GET['assessment'])) {
     $person->load_with_participant_id($person_sqlsafe);
 }
 
-/* create a dropdown of the programs/sessions that the person is involved in. */
-$get_programs = "SELECT * FROM Participants_Programs
-            INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID 
-            INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID
-            WHERE Participants_Programs.Participant_ID='" . $person->participant_id . "'";
-$programs = mysqli_query($cnnEnlace, $get_programs);
+if (!$anonymous_entry) {
+    /* create a dropdown of the programs/sessions that the person is involved in. */
+    $get_programs = "SELECT * FROM Participants_Programs
+                INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID
+                INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID
+                WHERE Participants_Programs.Participant_ID='" . $person->participant_id . "'";
+    include "../include/dbconnopen.php";
+    $programs = mysqli_query($cnnEnlace, $get_programs);
+}
 ?>
-<h4>Program Impact Survey - <?php echo $person->first_name . " " . $person->last_name; ?></h4>
+<h4>Program Impact Survey -
+    <?php
+        if($anonymous_entry) {
+            echo "Participant #$person_sqlsafe";
+        } else {
+            echo $person->first_name . " " . $person->last_name;
+        }
+   ?>
+</h4>
 
 <div style="text-align:center;"><span class="helptext">Program: </span>
-    <select id="program">
-        <option value="">-------</option>
-        <?php
-        while ($program = mysqli_fetch_array($programs)) {
-            ?>
-            <option value="<?php echo $program['Session_ID']; ?>" <?php echo($assessment_info['Program_ID'] == $program['Session_ID'] ? 'selected="selected"' : null); ?>><?php echo $program['Name'] . ' -- ' . $program['Session_Name']; ?></option>
+    <?php
+        if ($anonymous_entry) {
+            $get_program = "SELECT Name, Session_Name FROM Session_Names " .
+                "LEFT JOIN Programs ON Programs.Program_ID = Session_Names.Program_ID " .
+                "WHERE Session_ID = '$session_id_safe'";
+            include "../include/dbconnopen.php";
+            $program_info = mysqli_fetch_array(mysqli_query($cnnEnlace, $get_program));
+
+            echo $program_info["Name"] . " -- " . $program_info["Session_Name"];
+        } else {
+    ?>
+        <select id="program">
+            <option value="">-------</option>
             <?php
-        }
-        include "../include/dbconnclose.php";
-        ?>
-    </select>
+            while ($program = mysqli_fetch_array($programs)) {
+                ?>
+                <option value="<?php echo $program['Session_ID']; ?>" <?php echo($assessment_info['Program_ID'] == $program['Session_ID'] ? 'selected="selected"' : null); ?>><?php echo $program['Name'] . ' -- ' . $program['Session_Name']; ?></option>
+                <?php
+            }
+            include "../include/dbconnclose.php";
+            ?>
+        </select>
+    <?php } ?>
     <br />
     <br />
 </div>
@@ -369,19 +412,39 @@ if (isset($_GET['assessment'])) {
                 yearRange: "1920:2030"});
 	});
         </script>
-        
-        Date completed: <input type="text" id="admin_date" class="addDP" value="<?php echo date("Y-m-d"); ?>">
+
+        Date completed:
+
+        <?php
+            if($anonymous_entry) {
+                date_default_timezone_set('America/Chicago');
+                $date = date("Y-m-d");
+            ?>
+                <input type="hidden" id="admin_date" value="<?php echo $date; ?>">
+            <?php
+                echo $date;
+            } else {
+            ?>
+                <input type="text" id="admin_date" class="addDP" value="<?php echo date("Y-m-d"); ?>">
+            <?php
+            }
+        ?>
+
+
     &nbsp; &nbsp; &nbsp;
     <input type="button" value="Save" onclick="
-        var chosen_program = document.getElementById('program').value;
-        if (chosen_program == '') {
-            alert('Please choose a program and then hit Save again.');
-            return false;
-        }
+        <?php if(!$anonymous_entry) { ?>
+            var chosen_program = document.getElementById('program').value;
+            if (chosen_program == '') {
+                alert('Please choose a program and then hit Save again.');
+                return false;
+            }
+        <?php } ?>
         // start caring adult post
         $.post(
                 '../ajax/save_assessments.php',
                 {
+                    <?php if ($anonymous_entry) { echo "code: '" . $_GET['code'] . "',"; } ?>
                     baseline_id: '<?php echo $baseline_id; ?>',
                     action_2: 'caring',
                     person: '<?php echo $person->participant_id; ?>',
@@ -393,7 +456,9 @@ if (isset($_GET['assessment'])) {
                     advice: document.getElementById('advice').value,
                     know: document.getElementById('know_you').value,
                     important: document.getElementById('important').value,
-                    program: document.getElementById('program').value,
+                    program: <?php if ($anonymous_entry) {
+                                  echo "'$session_id_safe'";
+                             } else { ?> document.getElementById('program').value <?php } ?>,
                     pre_post: 2,
                     caring_id: '<?php echo $caring_id ?>',
                     action_3: 'future',
@@ -436,4 +501,7 @@ if (isset($_GET['assessment'])) {
 <br/>
 <br/>
 <?php
- include "../../footer.php"; ?>
+if (!$anonymous_entry) {
+    include "../../footer.php";
+}
+ ?>

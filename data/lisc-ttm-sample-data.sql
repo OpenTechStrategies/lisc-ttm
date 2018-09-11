@@ -4234,7 +4234,7 @@ CREATE TABLE `System_Settings` (
 
 LOCK TABLES `System_Settings` WRITE;
 /*!40000 ALTER TABLE `System_Settings` DISABLE KEYS */;
-INSERT INTO `System_Settings` VALUES ('num_days_hidden','integer','365');
+INSERT INTO `System_Settings` VALUES ('num_days_hidden','integer','365'),('survey_entry_point_salt','string','defaultsalt');
 /*!40000 ALTER TABLE `System_Settings` ENABLE KEYS */;
 UNLOCK TABLES;
 

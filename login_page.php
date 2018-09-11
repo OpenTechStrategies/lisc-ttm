@@ -29,7 +29,7 @@
                 </td>
             </tr>
             <tr>
-                <td>
+                <td width="100" align="right">
                     Username:
                 </td>
                 <td>
@@ -37,13 +37,13 @@
                 </td>
             </tr>
             <tr>
-                <td>
+                <td width="100" align="right">
                     Password:
                 </td>
                 <td>
                     <input type="password" name="password" id="password" maxlength="50" />
                 </td>
-                <td>
+                <td width=150>
                     <!--
                     Link to page where users can reset their own passwords.
                     -->
@@ -54,6 +54,33 @@
                 <td colspan="2" align="center">
                     <div id="login_error" style="color: #ff0000;"></div>
                     <input type="submit" value="Log In" id="login_submit_button"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+<br/>
+<br/>
+
+    <form action="/enlace/participants/survey.php" method="get">
+        <table>
+            <tr>
+                <td colspan="2" align="center">
+                    <h3>Take a Survey</h3>
+                </td>
+            </tr>
+            <tr>
+                <td width="100" align="right">
+                    Survey Code:
+                </td>
+                <td>
+                    <input type="text" name="code" id="code" maxlength="50" />
+                </td>
+                <td width=150></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" value="Take Survey">
                 </td>
             </tr>
         </table>

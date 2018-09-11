@@ -20,13 +20,27 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
+include "../include/survey_entry_point.php";
 
-user_enforce_has_access($Enlace_id, $DataEntryAccess);
+include "../include/dbconnopen.php";
+$person_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['person']);
+$pre_post_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['pre_post']);
+$program_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['program']);
+include "../include/dbconnclose.php";
+
+$anonymous_entry = false;
+if ($_POST['edited'] != 1 && isset($_POST['code'])) {
+    $lookup_result = lookup_and_validate_survey_entry_code($_POST['code'], $pre_post_sqlsafe);
+    $person_sqlsafe = $lookup_result['Participant_ID'];
+    $program_sqlsafe = $lookup_result['Session_ID'];
+    $anonymous_entry = true;
+} else {
+    user_enforce_has_access($Enlace_id, $DataEntryAccess);
+}
 
 /* save new or edited assessments. */
 /*escape all posted variables:*/
 include "../include/dbconnopen.php";
-$person_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['person']);
 $attn_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['attn']);
 $check_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['check']);
 $praise_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['praise']);
@@ -35,8 +49,6 @@ $crisis_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['crisis']);
 $advice_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['advice']);
 $know_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['know']);
 $important_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['important']);
-$program_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['program']);
-$pre_post_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['pre_post']);
 
 $fear_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['fear']);
 $prevent_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['prevent']);

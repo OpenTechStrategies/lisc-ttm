@@ -50,3 +50,31 @@ This setting affects what programs/sessions are visible in different pages.  If 
 USE ttm-enlace
 INSERT INTO System_Settings VALUES ('num_days_hidden', 'integer', '365');
 ```
+
+## Issue 221 - Enlace - Add survey entry point link - create table with codes for assessments.
+
+Adds a table for storing unique codes that allow a user to bypass authentication to take a distinct survey.
+
+### SQL for Assessments_Codes
+
+```
+USE ttm-enlace
+CREATE TABLE `Assessments_Codes` (
+  `Assessment_Code_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Participant_ID` int NOT NULL,
+  `Session_ID` int NOT NULL,
+  `Pre_Post` int NOT NULL,
+  `Code` char(8) NOT NULL,
+  PRIMARY KEY (`Assessment_Code_ID`));
+```
+
+
+## Issue 221 - Enlace - Add survey entry point link - Add survey_entry_point_salt - September 2018
+
+Adds a setting for the entry_point_salt, which is used to generate a hash for a way to enter surveys without a login.  This should not be used for anything truly secure (like passwords), but is useful for the purpose
+
+### SQL for survey_entry_point_salt setting
+```
+USE ttm-enlace
+INSERT INTO System_Settings VALUES ('survey_entry_point_salt', 'string', 'defaultsalt');
+```
