@@ -166,6 +166,7 @@ $(document).ready(function() {
         <tr>
             <th>Program name</th>
             <th>Session name</th>
+            <th>Missing Attendance</th>
             <th>Enrollment per session</th>
             <th>Dosage hours</th>
         </tr>
@@ -199,9 +200,10 @@ $(document).ready(function() {
                 }
                 $dosage_array = calculate_dosage($session_sqlsafe, null, $start_date_sqlsafe, $end_date_sqlsafe, $dropped_sqlsafe);
 ?>
-                <tr>
+                <tr <?php if ($dosage_array[4] != 0) { ?>class="unmarked"<?php } ?>>
                 <td><?php echo $session_array[$session_sqlsafe][0]; ?></td>
                 <td><?php echo $session_array[$session_sqlsafe][1]; ?></td>
+                <td><?php echo $dosage_array[4];?></td>
                 <td><?php
                 // number of enrolled participants in this session
                 echo $dosage_array[3];?></td>
@@ -221,11 +223,14 @@ if ($_POST['attendance_program_select']) {
 ?>
              <tr>
             <td class="all_projects"></td>
+            <td class="all_projects"></td>
+            <td class="all_projects"></td>
             <td class="all_projects">Total enrollment: </td>
             <td class="all_projects"><b><?php echo $total_enrollment; ?></b></td>
-            <td class="all_projects"></td>
             </tr>
              <tr>
+            <td class="all_projects"></td>
+            <td class="all_projects"></td>
             <td class="all_projects"></td>
             <td class="all_projects">Unique enrollment: </td>
             <td class="all_projects"><b>
@@ -250,6 +255,7 @@ if ( $session_querystring != " ") {
         Participant_ID > 0) AND (Date_Dropped IS NULL OR Date_Dropped > 
         '$end_date_sqlsafe') " . $session_querystring;
     }
+    include "../include/dbconnopen.php";
     $unique_enrollees_result = mysqli_query($cnnEnlace, $unique_enrollees_query);
     $unique_enrollees_array=mysqli_fetch_row($unique_enrollees_result);
     $unique_enrollees = $unique_enrollees_array[0];
@@ -263,6 +269,7 @@ echo $unique_enrollees;
             </td>
             </tr>
              <tr>
+            <td class="all_projects"></td>
             <td class="all_projects"></td>
             <td class="all_projects"></td>
             <td class="all_projects">Total hours:</td>

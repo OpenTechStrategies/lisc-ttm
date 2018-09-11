@@ -170,6 +170,23 @@ if(!function_exists("calculate_dosage")) {
             $session_attendance_obj = mysqli_query($cnnEnlace, $session_attendance_query);
             $session_attendance_array=mysqli_fetch_row($session_attendance_obj);
             $total_num_days_attended = $session_attendance_array[0];
+
+            $session_missing_attendance_query =
+            "SELECT COUNT(*) FROM Program_Dates
+                LEFT JOIN Participants_Programs on (Program_Dates.Program_ID = Participants_Programs.Program_ID)
+                LEFT JOIN Absences ON (Program_Date = Program_Date_ID AND Absences.Participant_ID = Participants_Programs.Participant_ID)
+                WHERE Absences.Absence_ID IS NULL AND
+                Participants_Programs.Participant_ID != 0 AND
+                Program_Dates.Program_ID = '$session_sqlsafe' and
+                Date_Listed > '$start_sqlsafe' AND Date_Listed <
+                '$end_sqlsafe' and
+                (Participants_Programs.Date_Dropped is null or
+                Participants_Programs.Date_Dropped > '$end_sqlsafe')";
+
+            $session_missing_attendance_obj = mysqli_query($cnnEnlace, $session_missing_attendance_query);
+            $session_missing_attendance_array=mysqli_fetch_row($session_missing_attendance_obj);
+            $total_missed_attendance = $session_missing_attendance_array[0];
+
         }
         /* Find the hours this person spent in the program. */
         /* Get daily hours: */
@@ -208,7 +225,7 @@ if(!function_exists("calculate_dosage")) {
         } else {
             $percentage = 'N/A';
         }
-        return array($total_num_days_attended, $sum_hours, $percentage, $enrollees);
+        return array($total_num_days_attended, $sum_hours, $percentage, $enrollees, $total_missed_attendance);
     }
 
 /* End redeclaration-protection wrapper: */
