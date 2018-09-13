@@ -1055,6 +1055,10 @@ div#enlace_participants table.search_table td {
 	padding: 3px 8px;
 }
 
+table.enlace_session_edit td {
+  border:1px solid black;
+}
+
 tr.unmarked {
   background-color:#FF9;
 }

@@ -69,6 +69,7 @@ Shows all program information.
         $('.edit_program').hide();
         $('#add_participant_button').hide();
         $('#search_parti_table').hide();
+        $('#edit_session').hide();
         $('.hide_dates').hide();
         $('.add_new_person_to_session').hide();
         $('tr.oldsession').hide();
@@ -77,7 +78,129 @@ Shows all program information.
         $('div.middlepopup div.x-closer').on("click", function() {
             $('div.middlepopup').hide();
         });
-    });</script>
+        $('#add_session_container').hide();
+    });
+
+    function editSession() {
+        if(document.getElementById('edited_session').value == '') {
+            $('#edit_session').hide();
+        } else {
+            $.post(
+                "../ajax/session_info.php",
+                {
+                    id: document.getElementById('edited_session').value
+                },
+            function(response) {
+                $('#edited_session_name').val(response.name);
+                $('#edit_session').show();
+                $('#session_mon').prop("checked", response.monday == '1');
+                $('#session_tues').prop("checked", response.tuesday == '1');
+                $('#session_weds').prop("checked", response.wednesday == '1');
+                $('#session_thurs').prop("checked", response.thursday == '1');
+                $('#session_fri').prop("checked", response.friday == '1');
+                $('#session_sat').prop("checked", response.saturday == '1');
+                $('#session_sun').prop("checked", response.sunday == '1');
+                $('#session_start_hour').val(response.start_hour);
+                if(response.start_suffix == 'am' && response.start_hour == '12') {
+                    $('#session_start_suffix').prop('selectedIndex', 3);
+                } else if (response.start_suffix == 'am') {
+                    $('#session_start_suffix').prop('selectedIndex', 1);
+                } else if (response.start_suffix == 'pm') {
+                    $('#session_start_suffix').prop('selectedIndex', 2);
+                } else {
+                    $('#session_start_suffix').prop('selectedIndex', 0);
+                }
+                $('#session_end_hour').val(response.end_hour);
+                if(response.end_suffix == 'am' && response.end_hour == '12') {
+                    $('#session_end_suffix').prop('selectedIndex', 3);
+                } else if (response.end_suffix == 'am') {
+                    $('#session_end_suffix').prop('selectedIndex', 1);
+                } else if (response.end_suffix == 'pm') {
+                    $('#session_end_suffix').prop('selectedIndex', 2);
+                } else {
+                    $('#session_end_suffix').prop('selectedIndex', 0);
+                }
+            });
+        }
+    }
+
+    function saveEditedSession() {
+        //  alert(document.getElementById('new_session_name').value);
+        $.post(
+                '../ajax/edit_program.php',
+                {
+                    action: 'edit_session',
+                    id: document.getElementById('edited_session').value,
+                    name: document.getElementById('edited_session_name').value,
+                    mon: document.getElementById('session_mon').checked ? '1' : '0',
+                    tue: document.getElementById('session_tues').checked ? '1' : '0',
+                    wed: document.getElementById('session_weds').checked ? '1' : '0',
+                    thur: document.getElementById('session_thurs').checked ? '1' : '0',
+                    fri: document.getElementById('session_fri').checked ? '1' : '0',
+                    sat: document.getElementById('session_sat').checked ? '1' : '0',
+                    sun: document.getElementById('session_sun').checked ? '1' : '0',
+                    start_hour: document.getElementById('session_start_hour').value,
+                    start_suffix: document.getElementById('session_start_suffix').value,
+                    end_hour: document.getElementById('session_end_hour').value,
+                    end_suffix: document.getElementById('session_end_suffix').value
+                },
+        function(response) {
+            // document.write(response);
+            window.location = 'profile.php';
+        }
+        ).fail(failAlert);
+    }
+
+    function saveNewSession() {
+        $.post(
+            '../ajax/edit_program.php',
+            {
+                action: 'new_session',
+                name: document.getElementById('new_session_name').value,
+                program: '<?php echo $program->program_id; ?>',
+                start: document.getElementById('new_session_start').value,
+                end: document.getElementById('new_session_end').value,
+                mon: document.getElementById('new_session_mon').checked ? '1' : '0',
+                tue: document.getElementById('new_session_tues').checked ? '1' : '0',
+                wed: document.getElementById('new_session_weds').checked ? '1' : '0',
+                thur: document.getElementById('new_session_thurs').checked ? '1' : '0',
+                fri: document.getElementById('new_session_fri').checked ? '1' : '0',
+                sat: document.getElementById('new_session_sat').checked ? '1' : '0',
+                sun: document.getElementById('new_session_sun').checked ? '1' : '0',
+                start_hour: document.getElementById('new_session_start_hour').value,
+                start_suffix: document.getElementById('new_session_start_suffix').value,
+                end_hour: document.getElementById('new_session_end_hour').value,
+                end_suffix: document.getElementById('new_session_end_suffix').value
+                        //survey: document.getElementById('new_session_survey').value
+            },
+            function(response) {
+                // document.write(response);
+                document.getElementById('save_new_session').innerHTML = 'Thank you for adding this session (refresh to view).';
+            }
+        ).fail(failAlert);
+    }
+
+    function checkNewSessionNameAndSave() {
+        //first check whether a session with this name already exists:
+        $.post(
+            '../ajax/edit_program.php',
+            {
+                action: 'deduplicate_sessions',
+                name: document.getElementById('new_session_name').value,
+                program: '<?php echo $program->program_id; ?>'
+            },
+            function(response) {
+                if (response != 0) {
+                    alert('This program already has a session with this name.  Please choose a different name.');
+                    return false;
+                } else {
+                    saveNewSession();
+                }
+            }
+        ).fail(failAlert);
+    }
+
+</script>
 
 
 <div class="content_block">
@@ -149,7 +272,7 @@ Shows all program information.
                         </td></tr>
 
 
-                    <tr><td><strong>Days per week:</strong></td><td>
+                    <tr><td><strong>Default Days per week:</strong></td><td>
                             <div class="display_program">
                                 <?php
                                 if ($program->monday == 1) {
@@ -185,7 +308,7 @@ Shows all program information.
                         </td></tr>
 
                     <!--Start and end times are used to calculate maximum hours (if necessary) to show total dosage.-->
-                    <tr><td><strong>Daily start time:</strong></td><td><span class="display_program"><?php echo $program->begin; ?></span>
+                    <tr><td><strong>Default Daily start time:</strong></td><td><span class="display_program"><?php echo $program->begin; ?></span>
 			    <?php $program_begin_option= '0';
 				  $program_begin_am='';
 				  if($program->begin != '0') {
@@ -209,7 +332,7 @@ Shows all program information.
                             <select id="start_suffix" class="edit_program"><option value="-----"<?php if($program_begin_am == '') echo 'selected="selected"'; ?>>-----</option>
                                 <option value="am" <?php if($program_begin_am == 'AM') echo 'selected="selected"';?>>AM</option><option value="pm" <?php if($program_begin_am == 'PM') echo 'selected="selected"';?>>PM</option><option value="am"  <?php if($program_begin_am == 'Noon') echo 'selected="selected"';?>>Noon</option></select>
                         </td></tr>
-                    <tr><td><strong>Daily end time:</strong></td><td><span class="display_program"><?php echo $program->finish; ?></span>
+                    <tr><td><strong>Default Daily end time:</strong></td><td><span class="display_program"><?php echo $program->finish; ?></span>
 			      <?php $program_end_option= '0';
 				   $program_end_am='';
 				  if($program->finish != 0) {
@@ -382,54 +505,102 @@ Shows all program information.
             <td>
 
                 <!--Create a new session: -->
-                <h4>Add New Session</h4>
-                <span class="helptext">Adding a new session of the program allows you to add a new set of participants and dates.  It's appropriate for 
-                    adding spring and fall versions of a program, or a new year altogether.  Be sure to title the session clearly - "Spring 2013" is better than "Spring."</span>
-                <br/><br/>
-                <table class="inner_table" style="width:350px;">
-                    <tr><td><strong>Name: </strong></td><td><input type="text" id="new_session_name" style="width:150px;"></td></tr>
-                    <tr><td><strong>Start Date: </strong></td><td><input type="text" id="new_session_start" class="addDP"></td></tr>
-                    <tr><td><strong>End Date: </strong></td><td><input type="text" id="new_session_end" class="addDP"></td></tr>
-                    <tr><td colspan="2" class="blank"><input type="button" onclick="
-                            //first check whether a session with this name already exists:
-                            $.post(
-                                    '../ajax/edit_program.php',
-                                    {
-                                        action: 'deduplicate_sessions',
-                                        name: document.getElementById('new_session_name').value,
-                                        program: '<?php echo $program->program_id; ?>'
-                                    },
-                            function(response) {
-                                if (response != 0) {
-                                    alert('This program already has a session with this name.  Please choose a different name.');
-                                    return false;
-                                } else {
-                                    $.post(
-                                            '../ajax/edit_program.php',
-                                            {
-                                                action: 'new_session',
-                                                session: document.getElementById('new_session_name').value,
-                                                program: '<?php echo $program->program_id; ?>',
-                                                start: document.getElementById('new_session_start').value,
-                                                end: document.getElementById('new_session_end').value
-                                                        //survey: document.getElementById('new_session_survey').value
-                                            },
-                                    function(response) {
-                                        // document.write(response);
-                                        document.getElementById('save_new_session').innerHTML = 'Thank you for adding this session (refresh to view).';
-                                    }).fail(failAlert);
-                                }
-                            }).fail(failAlert);
-                                                             " value="Save Session">
-                            <div id="save_new_session" style="font-weight: bold;"></div></td></tr>
-                </table>
+                <h4 style="cursor:pointer" onclick="$('#add_session_container').slideToggle()">Add New Session</h4>
+                <div id="add_session_container">
+                    <span class="helptext">Adding a new session of the program allows you to add a new set of participants and dates.  It's appropriate for 
+                        adding spring and fall versions of a program, or a new year altogether.  Be sure to title the session clearly - "Spring 2013" is better than "Spring."</span>
+                    <br/><br/>
+                    <table class="enlace_session_edit" style="width:350px;">
+                        <tr><td><strong>Name: </strong></td><td><input type="text" id="new_session_name" style="width:150px;"></td></tr>
+                        <tr><td><strong>Start Date: </strong></td><td><input type="text" id="new_session_start" class="addDP"></td></tr>
+                        <tr><td><strong>End Date: </strong></td><td><input type="text" id="new_session_end" class="addDP"></td></tr>
+
+                        <tr><td><strong>Days per week:</strong></td>
+                            <td>
+                                <input type="checkbox" id="new_session_mon"  <?php echo($program->monday == 1 ? "checked=true" : null); ?>> Monday <br>
+                                <input type="checkbox" id="new_session_tues" <?php echo($program->tuesday == 1 ? "checked=true" : null); ?>> Tuesday <br>
+                                <input type="checkbox" id="new_session_weds" <?php echo($program->wednesday == 1 ? "checked=true" : null); ?>> Wednesday <br>
+                                <input type="checkbox" id="new_session_thurs" <?php echo($program->thursday == 1 ? "checked=true" : null); ?>> Thursday <br>
+                                <input type="checkbox" id="new_session_fri" <?php echo($program->friday == 1 ? "checked=true" : null); ?>> Friday <br>
+                                <input type="checkbox" id="new_session_sat"  <?php echo($program->saturday == 1 ? "checked=true" : null); ?>> Saturday <br>
+                                <input type="checkbox" id="new_session_sun" <?php echo($program->sunday == 1 ? "checked=true" : null); ?>> Sunday <br></div>
+                            </td>
+                        </tr>
+
+                    <!--Start and end times are used to calculate maximum hours (if necessary) to show total dosage.-->
+                    <tr><td><strong>Daily start time:</strong></td>
+                        <td>
+			                <?php
+                                $program_begin_option= '0';
+				                $program_begin_am='';
+				                if($program->begin != '0') {
+				  	                 list($program_begin_option, $program_begin_am) = preg_split(' /\s+/',$program->begin);}
+                            ?>
+                                <select id="new_session_start_hour">
+			                        <option value="-----" <?php if($program_begin_option == '0') echo 'selected="selected"'; ?>>-----</option>
+                                    <option value="1" <?php if($program_begin_option == '1') echo 'selected="selected'; ?>>1</option>
+                                    <option value="2" <?php if($program_begin_option == '2') echo 'selected="selected"'; ?>>2</option>
+                                    <option value="3" <?php if($program_begin_option == '3') echo 'selected="selected"'; ?>>3</option>
+                                    <option value="4" <?php if($program_begin_option == '4') echo 'selected="selected"'; ?>>4</option>
+                                    <option value="5" <?php if($program_begin_option == '5') echo 'selected="selected"'; ?>>5</option>
+                                    <option value="6"<?php if($program_begin_option == '6') echo 'selected="selected"'; ?>>6</option>
+                                    <option value="7" <?php if($program_begin_option == '7') echo 'selected="selected"'; ?>>7</option>
+                                    <option value="8" <?php if($program_begin_option == '8') echo 'selected="selected"'; ?>>8</option>
+                                    <option value="9" <?php if($program_begin_option == '9') echo 'selected="selected"'; ?>>9</option>
+                                    <option value="10" <?php if($program_begin_option == '10') echo 'selected="selected"'; ?>>10</option>
+                                    <option value="11" <?php if($program_begin_option == '11') echo 'selected="selected"'; ?>>11</option>
+                                    <option value="12" <?php if($program_begin_option == '12') echo 'selected="selected"'; ?>>12</option>
+                                </select>
+                                <select id="new_session_start_suffix">
+                                    <option value="-----"<?php if($program_begin_am == '') echo 'selected="selected"'; ?>>-----</option>
+                                    <option value="am" <?php if($program_begin_am == 'AM') echo 'selected="selected"';?>>AM</option>
+                                    <option value="pm" <?php if($program_begin_am == 'PM') echo 'selected="selected"';?>>PM</option>
+                                    <option value="am" <?php if($program_begin_am == 'Noon') echo 'selected="selected"';?>>Noon</option>
+                                </select>
+                        </td>
+                    </tr>
+                    <tr><td><strong>Daily end time:</strong></td>
+                        <td>
+			                 <?php
+                                 $program_end_option= '0';
+				                 $program_end_am='';
+				                 if($program->finish != 0) {
+				  	                  list($program_end_option, $program_end_am) = preg_split(' /\s+/',$program->finish);}
+                             ?>
+                                 <select id="new_session_end_hour">
+                                     <option value="-----" <?php if($program_end_option == '0') echo 'selected="selected"'; ?>>-----</option>
+                                     <option value="1" <?php if($program_end_option == '1') echo 'selected="selected'; ?>>1</option>
+                                     <option value="2" <?php if($program_end_option == '2') echo 'selected="selected"'; ?>>2</option>
+                                     <option value="3" <?php if($program_end_option == '3') echo 'selected="selected"'; ?>>3</option>
+                                     <option value="4" <?php if($program_end_option == '4') echo 'selected="selected"'; ?>>4</option>
+                                     <option value="5" <?php if($program_end_option == '5') echo 'selected="selected"'; ?>>5</option>
+                                     <option value="6"<?php if($program_end_option == '6') echo 'selected="selected"'; ?>>6</option>
+                                     <option value="7" <?php if($program_end_option == '7') echo 'selected="selected"'; ?>>7</option>
+                                     <option value="8" <?php if($program_end_option == '8') echo 'selected="selected"'; ?>>8</option>
+                                     <option value="9" <?php if($program_end_option == '9') echo 'selected="selected"'; ?>>9</option>
+                                     <option value="10" <?php if($program_end_option == '10') echo 'selected="selected"'; ?>>10</option>
+                                     <option value="11" <?php if($program_end_option == '11') echo 'selected="selected"'; ?>>11</option>
+                                     <option value="12" <?php if($program_end_option == '12') echo 'selected="selected"'; ?>>12</option>
+                                 </select>
+                                 <select id="new_session_end_suffix">
+                                     <option value="-----"<?php if($program_end_am == '') echo 'selected="selected"'; ?>>-----</option>
+                                     <option value="am" <?php if($program_end_am == 'AM') echo 'selected="selected"';?>>AM</option>
+                                     <option value="pm" <?php if($program_end_am == 'PM') echo 'selected="selected"';?>>PM</option>
+                                     <option value="am" <?php if($program_end_am == 'Noon') echo 'selected="selected"';?>>Noon</option>
+                                 </select>
+                        </td></tr>
+
+                        <tr><td colspan="2" class="blank"><input type="button" onclick="checkNewSessionNameAndSave();" value="Save Session">
+                                <div id="save_new_session" style="font-weight: bold;"></div></td></tr>
+                    </table>
+                </div>
                 <br>
                 <br>
 
                 <!-- Choose a session from a dropdown menu and edit its name. -->
-                <h4>Edit Session Name</h4>
+                <h4>Edit Session</h4>
                 <br/><br/>
-                1. Choose session:  <select id="edited_session"><option value="">-----</option>
+                Session:  <select id="edited_session" onchange="editSession();" ><option value="">-----</option>
                     <?php
                     //get sessions
                     $related_sessions = "SELECT * FROM Session_Names WHERE Program_ID='" . $program->program_id . "'";
@@ -442,22 +613,77 @@ Shows all program information.
                     }
                     include "../include/dbconnclose.php";
                     ?></select>
-                <br>
-                2. Enter new name: <input type="text" id="edited_session_name"><br>
-                3. Save changes: <input type="button" value="Save" onclick="
-                        //  alert(document.getElementById('new_session_name').value);
-                        $.post(
-                                '../ajax/edit_program.php',
-                                {
-                                    action: 'edit_session',
-                                    id: document.getElementById('edited_session').value,
-                                    new_name: document.getElementById('edited_session_name').value
-                                },
-                        function(response) {
-                            // document.write(response);
-                            window.location = 'profile.php';
-                        }
-                        ).fail(failAlert);">
+                <table class="enlace_session_edit" id="edit_session">
+                    <tr><td><strong>Name:</strong></td><td><input type="text" id="edited_session_name"></td></tr>
+                    <tr>
+                        <td><strong>Days per week:</strong></td>
+                        <td><input type="checkbox" id="session_mon"> Monday <br>
+                            <input type="checkbox" id="session_tues"> Tuesday <br>
+                            <input type="checkbox" id="session_weds"> Wednesday <br>
+                            <input type="checkbox" id="session_thurs"> Thursday <br>
+                            <input type="checkbox" id="session_fri"> Friday <br>
+                            <input type="checkbox" id="session_sat"> Saturday <br>
+                            <input type="checkbox" id="session_sun"> Sunday <br></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Daily start time:</strong></td>
+                        <td>
+                            <select id="session_start_hour">
+			                    <option value="-----">-----</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+
+                            </select>
+                            <select id="session_start_suffix">
+                                <option value="-----">-----</option>
+                                <option value="am">AM</option>
+                                <option value="pm">PM</option>
+                                <option value="am">Noon</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Daily end time:</strong></td>
+                        <td>
+                            <select id="session_end_hour">
+			                    <option value="-----">-----</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+
+                            </select>
+                            <select id="session_end_suffix">
+                                <option value="-----">-----</option>
+                                <option value="am">AM</option>
+                                <option value="pm">PM</option>
+                                <option value="am">Noon</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan=2><input type="button" value="Save Session" onclick="saveEditedSession()"></td>
+                    </tr>
+                </table>
 
                 <br/><br/>
 

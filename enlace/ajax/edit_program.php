@@ -35,8 +35,32 @@ if ($_POST['action'] == 'new_session') {
     $end_session = new DateTime($end_sqlsafe);
     $survey_date = $end_session->sub(new DateInterval('P7D'));
     $survey_date = $survey_date->format('Y-m-d');
-    $new_session = "INSERT INTO Session_Names (Session_Name, Program_ID, Start_Date, End_Date, Survey_Due) VALUES ('" . $_POST['session'] . "', 
-        '" . $program_sqlsafe . "', '" . $start_sqlsafe . "', '" . $end_sqlsafe . "', '" . $survey_date . "')";
+
+    $name_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['name']);
+
+    $start_hour_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['start_hour']);
+    $end_hour_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['end_hour']);
+    $start_suffix_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['start_suffix']);
+    $end_suffix_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['end_suffix']);
+
+    $mon_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['mon']);
+    $tue_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['tue']);
+    $wed_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['wed']);
+    $thur_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['thur']);
+    $fri_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['fri']);
+    $sat_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['sat']);
+    $sun_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['sun']);
+
+    $new_session = "INSERT INTO Session_Names " .
+        " (Session_Name, Program_ID, Start_Date, End_Date, Survey_Due, ".
+        "  Start_Hour, Start_Suffix, End_Hour, End_Suffix, Monday," .
+        "  Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)" .
+        " VALUES" .
+        " ('$name_sqlsafe', '$program_sqlsafe', '$start_sqlsafe', '$end_sqlsafe', '$survey_date', " .
+        "  '$start_hour_sqlsafe', '$start_suffix_sqlsafe', '$end_hour_sqlsafe', '$end_suffix_sqlsafe', " .
+        "  '$mon_sqlsafe', '$tue_sqlsafe', '$wed_sqlsafe', '$thur_sqlsafe', '$fri_sqlsafe', " .
+        "  '$sat_sqlsafe', '$sun_sqlsafe')";
+
     echo $new_session;
     mysqli_query($cnnEnlace, $new_session);
     include "../include/dbconnclose.php";
@@ -55,10 +79,37 @@ if ($_POST['action'] == 'new_session') {
 }
 /* change a session name: */ elseif ($_POST['action'] == 'edit_session') {
     include "../include/dbconnopen.php";
-    $new_name_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['new_name']);
     $id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['id']);
-    $edit_session = "UPDATE Session_Names SET Session_Name='" . $_POST['new_name'] . "' WHERE Session_ID='" . $_POST['id'] . "'";
-    echo $edit_session;
+
+    $name_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['name']);
+
+    $start_hour_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['start_hour']);
+    $end_hour_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['end_hour']);
+    $start_suffix_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['start_suffix']);
+    $end_suffix_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['end_suffix']);
+
+    $mon_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['mon']);
+    $tue_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['tue']);
+    $wed_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['wed']);
+    $thur_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['thur']);
+    $fri_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['fri']);
+    $sat_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['sat']);
+    $sun_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['sun']);
+
+    $edit_session = "UPDATE Session_Names " .
+      " SET Session_Name='$name_sqlsafe'," .
+      "     Start_Hour='$start_hour_sqlsafe'," .
+      "     Start_Suffix='$start_suffix_sqlsafe'," .
+      "     End_Hour='$end_hour_sqlsafe'," .
+      "     End_Suffix='$end_suffix_sqlsafe'," .
+      "     Monday='$mon_sqlsafe'," .
+      "     Tuesday='$tue_sqlsafe'," .
+      "     Wednesday='$wed_sqlsafe'," .
+      "     Thursday='$thur_sqlsafe'," .
+      "     Friday='$fri_sqlsafe'," .
+      "     Saturday='$sat_sqlsafe'," .
+      "     Sunday='$sun_sqlsafe'" .
+      " WHERE Session_ID='" . $_POST['id'] . "'";
     mysqli_query($cnnEnlace, $edit_session);
     include "../include/dbconnclose.php";
 }
