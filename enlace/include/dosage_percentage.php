@@ -190,7 +190,7 @@ if(!function_exists("calculate_dosage")) {
         }
         /* Find the hours this person spent in the program. */
         /* Get daily hours: */
-        $program_daily_hours="SELECT Start_Hour, Start_Suffix, End_Hour, End_Suffix,"
+        $program_daily_hours="SELECT Session_Names.Start_Hour, Session_Names.Start_Suffix, Session_Names.End_Hour, Session_Names.End_Suffix,"
             . " Max_Hours FROM Programs INNER JOIN Session_Names "
             . " ON Session_Names.Program_ID=Programs.Program_ID WHERE Session_ID='$session_sqlsafe'";
         $program_hours_per_day = mysqli_query($cnnEnlace, $program_daily_hours);
