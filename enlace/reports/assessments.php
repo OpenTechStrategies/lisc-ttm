@@ -74,7 +74,7 @@ $has_all_programs = in_array('a', $access_array);
     <select id="assessment_questions" style="width:500px;" name="question_select">
         <option value="0"><b>Show results for all questions</b></option>
         <?php
-        $get_baseline_questions = "SELECT * FROM Baseline_Assessment_Questions ORDER BY In_Table";
+        $get_baseline_questions = "SELECT * FROM Baseline_Assessment_Questions ORDER BY In_Table, Question_Order";
         include "../include/dbconnopen.php";
         $all_questions = mysqli_query($cnnEnlace, $get_baseline_questions);
         $current_table = "";
@@ -110,7 +110,7 @@ if (isset($_POST['submit_btn_assessments'])) {
     //here it is:
     if ($_POST['question_select'] == '0') {
         //get question text:
-        $get_baseline_questions = "SELECT * FROM Baseline_Assessment_Questions ORDER BY In_Table";
+        $get_baseline_questions = "SELECT * FROM Baseline_Assessment_Questions ORDER BY In_Table, Question_Order";
         include "../include/dbconnopen.php";
         $all_questions = mysqli_query($cnnEnlace, $get_baseline_questions);
         ?>

@@ -1980,7 +1980,7 @@ LEFT JOIN
         $legend_array = $download_list_array[$download_name]['legend'];
 
         if ($download_name == 'enlace_new_surveys_deid' || $download_name == 'enlace_new_surveys' || $download_name == 'enlace_intake_assessments_deid' || $download_name == 'enlace_intake_assessments'){
-        $get_pre_questions = "SELECT Baseline_Assessment_Question_ID, Question FROM Baseline_Assessment_Questions ORDER BY In_Table";
+        $get_pre_questions = "SELECT Baseline_Assessment_Question_ID, Question FROM Baseline_Assessment_Questions ORDER BY In_Table, Question_Order";
         $all_pre_questions = mysqli_query($cnnEnlace, $get_pre_questions);
         while ($q = mysqli_fetch_row($all_pre_questions)) {
             $title_array[] = "Pre: " . $q[1];
@@ -1994,7 +1994,7 @@ LEFT JOIN
         }
         }
         if ($download_name == 'enlace_new_surveys_deid' || $download_name == 'enlace_new_surveys' || $download_name == 'enlace_impact_surveys_deid' || $download_name == 'enlace_impact_surveys'){
-        $get_questions = "SELECT Baseline_Assessment_Question_ID, Question FROM Baseline_Assessment_Questions WHERE In_Table!='Participants_Baseline_Assessments' ORDER BY In_Table";
+        $get_questions = "SELECT Baseline_Assessment_Question_ID, Question FROM Baseline_Assessment_Questions WHERE In_Table!='Participants_Baseline_Assessments' ORDER BY In_Table, Question_Order";
         $all_questions = mysqli_query($cnnEnlace, $get_questions);
         while ($q = mysqli_fetch_row($all_questions)) {
             $title_array[] = "Post: " . $q[1];

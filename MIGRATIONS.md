@@ -115,3 +115,21 @@ UPDATE `Session_Names` SET `Friday` = (SELECT `Friday` FROM `Programs` WHERE `Pr
 UPDATE `Session_Names` SET `Saturday` = (SELECT `Saturday` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
 UPDATE `Session_Names` SET `Sunday` = (SELECT `Sunday` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
 ```
+
+# Issue 224 - Enlace - Change the format of survey forms
+
+The surveys are ordered by the ntural order of entry, and instead need to be configured in the database.  A column is needed to handle that.
+
+### SQL for column addition
+```
+USE ttm-enlace
+ALTER TABLE `Baseline_Assessment_Questions` ADD COLUMN `Question_Order` int(11) NOT NULL DEFAULT 0;
+```
+
+### SQL for initial ordering
+Just doing it by 10s, using the natural order, so that things can me moved around by simple updates.
+```
+USE ttm-enlace
+SET @initial_order = 0;
+UPDATE `Baseline_Assessment_Questions` SET `Question_Order` = @initial_order := @initial_order + 10;
+```
