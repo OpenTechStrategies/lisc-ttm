@@ -107,6 +107,14 @@ $violence_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['violence_id']
 $future_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['future_id']);
 $assessment_id_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_POST['assessment_id']);
 
+date_default_timezone_set('America/Chicago');
+$entered_date = strtotime($base_date_sqlsafe);
+if($_POST['base_date'] == '' || $entered_date > strtotime('now') || $entered_date < strtotime('-6 weeks')) {
+    header('HTTP/1.0 400 Bad error');
+    echo "bad_date";
+    die;
+}
+
 //find whether this person already has an assessment
 if ($_POST['edited'] != 1) {
     /* so this is a new assessment: */
