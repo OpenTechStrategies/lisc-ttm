@@ -27,6 +27,7 @@ include "../../header.php";
 include "../header.php";
 include "../classes/program.php";
 include "../include/settings.php";
+include "../include/attendance.php";
 require_once("../classes/assessment.php");
 $program = new Program();
 $program->load_with_program_id($_COOKIE['program']);
@@ -1252,9 +1253,11 @@ while ($sess = mysqli_fetch_array($sessions)) {
                                             <?php if(!($was_there || $was_absent)) { echo "class='unmarked'"; } ?>>
                                             <td><span style="font-weight:bold"><?php echo $all_p['First_Name'] . " " . $all_p['Last_Name']; ?></span></td>
                                             <td><input type="checkbox" <?php echo($was_there ? 'checked="true"' : null); ?>
+                                                <?php if(invalid_attendance_date($show_date)) { ?>disabled="disabled" <?php } ?>
                                                        id="present_date_<?php echo $temp_program['Program_Date_ID']; ?>_person_<?php echo $all_p['Participant_ID'] ?>"
                                                        onchange="markPresent(this, '<?php echo $temp_program['Program_Date_ID']; ?>', '<?php echo $all_p['Participant_ID'] ?>');"></td>
                                             <td><input type="checkbox" <?php echo($was_absent ? 'checked="true"' : null); ?>
+                                                <?php if(invalid_attendance_date($show_date)) { ?>disabled="disabled" <?php } ?>
                                                        id="absent_date_<?php echo $temp_program['Program_Date_ID']; ?>_person_<?php echo $all_p['Participant_ID'] ?>"
                                                        onchange="markAbsent(this, '<?php echo $temp_program['Program_Date_ID']; ?>', '<?php echo $all_p['Participant_ID'] ?>');"></td>
                                     </tr>

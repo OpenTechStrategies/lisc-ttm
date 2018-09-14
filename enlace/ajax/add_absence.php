@@ -22,11 +22,20 @@ include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php";
 user_enforce_has_access($Enlace_id, $DataEntryAccess);
 
+include "../include/attendance.php";
+
 /*basic adding and removing of absences*/
     include "../include/dbconnopen.php";
     $user_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['user_id']);
     $date_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['date']);
     $row_id_select="SELECT Absence_ID FROM Absences WHERE Participant_ID = '$user_id_sqlsafe' AND Program_Date = '$date_sqlsafe'";
+
+$program_date_query = "SELECT Date_Listed FROM Program_Dates WHERE Program_Date_ID = '$date_sqlsafe'";
+$date = mysqli_fetch_row(mysqli_query($cnnEnlace, $program_date_query))[0];
+
+if(invalid_attendance_date(strtotime($date))) {
+    throw new Exception("Can't edit this date, which should have been disabled on page");
+}
 
 if ($_POST['action']=='absent'){
     include "../include/dbconnopen.php";
