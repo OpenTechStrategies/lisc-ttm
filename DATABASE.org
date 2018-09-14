@@ -520,6 +520,7 @@ here, but it's a multiple choice survey.
 | Violence_ID    | int(11)   | YES  |     | NULL              |                |
 | Pre_Post       | int(11)   | YES  |     | NULL              |                |
 | Date_Logged    | timestamp | YES  |     | CURRENT_TIMESTAMP |                |
+| Draft          | int(11)   | NO   |     | 0                 |                |
 |----------------+-----------+------+-----+-------------------+----------------+
 
 **** Baseline_Assessment_Questions

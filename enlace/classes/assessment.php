@@ -24,7 +24,7 @@ class Assessment {
 	
 	const INTAKE_TYPE = 1;
 	const IMPACT_TYPE = 2;
-	
+
 	/**
 	 * Enlace Assessment empty constructor.
 	 *
@@ -69,6 +69,7 @@ class Assessment {
 		$this->pre_post = $temp_survey["Pre_Post"];
 		$this->date_logged = $temp_survey["Date_Logged"];
 		$this->session_id = $temp_survey["Session_ID"];
+		$this->draft = $temp_survey["Draft"];
 	}
 	
 	/**
@@ -96,12 +97,20 @@ class Assessment {
 	*/
 	public function save() {
 		if ($this->assessment_id) {
-			$update_assessment = "UPDATE Assessments SET Participant_ID= '" . $this->participant_id . "', Baseline_ID= '" . $this->baseline_id . "', Caring_ID = '" . $this->caring_id . "', Future_ID= '" . $this->future_id . "', Violence_ID= '" . $this->violance_id . "', Pre_Post= '" . $this->pre_post . "', Date_Logged = '" . $this->date_logged . "', Session_ID = '" . $this->session_id . "' WHERE Assessment_ID= '" . $assessment_id . "'";
+            $draft_in_db_sql = "SELECT Draft FROM Assessments WHERE Assessment_ID = '" . $this->assessment_id . "'";
 			include "../include/dbconnopen.php";
-			mysqli_query($cnnEnlace, $update_assessment);
-			include "../include/dbconnclose.php";
+            $draft_in_db = mysqli_fetch_row(mysqli_query($draft_in_db_sql))[0];
+            
+            if($draft_in_db == '0') {
+                throw new Exception("Can't save already completed surveys");
+            } else {
+                $update_assessment = "UPDATE Assessments SET Participant_ID= '" . $this->participant_id . "', Baseline_ID= '" . $this->baseline_id . "', Caring_ID = '" . $this->caring_id . "', Future_ID= '" . $this->future_id . "', Violence_ID= '" . $this->violance_id . "', Pre_Post= '" . $this->pre_post . "', Date_Logged = '" . $this->date_logged . "', Session_ID = '" . $this->session_id . "', Draft = '" . $this->draft . "' WHERE Assessment_ID= '" . $assessment_id . "'";
+			    include "../include/dbconnopen.php";
+			    mysqli_query($cnnEnlace, $update_assessment);
+			    include "../include/dbconnclose.php";
+            }
 		} else {
-			$create_assessment = "INSERT INTO Assessments (Participant_ID, Baseline_ID, Caring_ID, Future_ID, Violence_ID, Pre_Post, Date_Logged, Session_ID) VALUES ('" . $this->participant_id . "', '" . $this->baseline_id . "', '" . $this->caring_id . "','" . $this->future_id . "', '" . $this->violance_id . "', '" . $this->pre_post . "', '" . $this->date_logged . "', '" . $this->session_id . "')";
+            $create_assessment = "INSERT INTO Assessments (Participant_ID, Baseline_ID, Caring_ID, Future_ID, Violence_ID, Pre_Post, Session_ID, Draft) VALUES ('" . $this->participant_id . "', '" . $this->baseline_id . "', '" . $this->caring_id . "','" . $this->future_id . "', '" . $this->violance_id . "', '" . $this->pre_post . "', '" . $this->session_id . "', '" . $this->draft . "')";
 			include "../include/dbconnopen.php";
 			mysqli_query($cnnEnlace, $create_assessment);
 			include "../include/dbconnclose.php";

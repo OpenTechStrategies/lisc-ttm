@@ -106,6 +106,7 @@ $caring_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['caring_id']);
 $violence_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['violence_id']);
 $future_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['future_id']);
 $assessment_id_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_POST['assessment_id']);
+$draft_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['draft']);
 
 date_default_timezone_set('America/Chicago');
 $entered_date = strtotime($base_date_sqlsafe);
@@ -237,12 +238,19 @@ if ($_POST['edited'] != 1) {
     }
 
     $insert_as_assessment = "INSERT INTO Assessments (Participant_ID, Baseline_ID, Caring_ID, Future_ID, Violence_ID, 
-            Pre_Post, Session_ID) VALUES ('" . $person_sqlsafe . "', '$baseline_id', '$caring_id', '$future_id', '$violence_id', '" . $pre_post_sqlsafe . "', '" . $program_sqlsafe . "')";
+            Pre_Post, Session_ID, Draft) VALUES ('" . $person_sqlsafe . "', '$baseline_id', '$caring_id', '$future_id', '$violence_id', '" . $pre_post_sqlsafe . "', '" . $program_sqlsafe . "', '" . $draft_sqlsafe . "')";
     //echo $insert_as_assessment;
     include "../include/dbconnopen.php";
     mysqli_query($cnnEnlace, $insert_as_assessment);
     include "../include/dbconnclose.php";
 } else {
+    $draft_in_db_sql = "SELECT Draft FROM Assessments WHERE Assessment_ID = '$assessment_id_sqlsafe'";
+    include "../include/dbconnopen.php";
+    $draft_in_db = mysqli_fetch_row(mysqli_query($cnnEnlace, $draft_in_db_sql))[0];
+    if($draft_in_db == '0') {
+        throw new Exception("Can't save already completed surveys");
+    }
+
     //this is an edited assessment
     $save_these = "UPDATE Participants_Baseline_Assessments
                           Participants_Baseline_Assessments SET
@@ -316,7 +324,7 @@ Participant_ID='" . $person_sqlsafe . "',
         Date_Logged = '" . $base_date_sqlsafe . "'
             WHERE Future_Expectations_ID='" . $future_id_sqlsafe . "'";
 
-    $update_assessments = "UPDATE Assessments SET Date_Logged = '" . $base_date_sqlsafe . "', Session_ID = '" . $program_sqlsafe . "' WHERE Assessment_ID = '" . $assessment_id_sqlsafe . "'";
+    $update_assessments = "UPDATE Assessments SET Date_Logged = '" . $base_date_sqlsafe . "', Session_ID = '" . $program_sqlsafe . "', Draft = '" . $draft_sqlsafe . "' WHERE Assessment_ID = '" . $assessment_id_sqlsafe . "'";
 
 //EDITED QUERIES
     include "../include/dbconnopen.php";

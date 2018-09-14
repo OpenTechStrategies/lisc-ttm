@@ -1063,6 +1063,20 @@ tr.unmarked {
   background-color:#FF9;
 }
 
+div.floating_draft {
+  position:fixed;
+  bottom:0px;
+  padding:15px;
+  background-color:white;
+  border:1px solid black;
+  z-index:4;
+}
+
+div.unfloating_draft {
+  padding-right:10px;
+  float:left;
+}
+
 input.hasDatepicker {
 	width:65px;
 }

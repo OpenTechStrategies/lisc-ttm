@@ -408,7 +408,7 @@ function saveBasicInfo() {
                     <?php
                     //get assessments:
                     $query = "SELECT MONTH(Participants_Caring_Adults.Date_Logged), DAY(Participants_Caring_Adults.Date_Logged), YEAR(Participants_Caring_Adults.Date_Logged), 
-                Assessments.Pre_Post, Programs.Name, Assessment_ID FROM Assessments
+                Assessments.Pre_Post, Programs.Name, Assessment_ID, Draft FROM Assessments
                 LEFT JOIN Participants_Caring_Adults ON Caring_Id=Caring_Adults_ID
                 LEFT JOIN Participants_Future_Expectations ON Future_Id=Future_Expectations_ID
                 LEFT JOIN Participants_Interpersonal_Violence ON Violence_Id=Interpersonal_Violence_ID
@@ -427,7 +427,9 @@ function saveBasicInfo() {
                             $page = 'error';
                         }
                         ?>
-                        <tr><td><a href="<?php echo $page; ?>.php?person=<?php echo $person->participant_id; ?>&assessment=<?php echo $row[5]; ?>">
+                        <tr <?php if($row[6] == '1') { ?>class="unmarked"<?php } ?>>
+                            <td>
+                                <a href="<?php echo $page; ?>.php?person=<?php echo $person->participant_id; ?>&assessment=<?php echo $row[5]; ?>">
                                     <?php
                                     echo $row[0] .'/'. $row[1] .'/'. $row[2];
                                     ?>
@@ -436,6 +438,9 @@ function saveBasicInfo() {
                                     echo 'Impact';
                                 } elseif ($row[3] == 1) {
                                     echo 'Intake';
+                                }
+                                if ($row[6] == 1) {
+                                    echo ' (Draft)';
                                 }
                                 ?></td><td><?php echo $row[4]; ?></td>
                             <td>
