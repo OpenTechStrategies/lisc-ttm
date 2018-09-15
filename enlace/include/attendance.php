@@ -29,8 +29,8 @@ if (!function_exists("invalid_attendance_date")) {
     }
     
     function invalid_attendance_date ( $date ) {
-        global $earliest_acceptable_attendance_date;
-        return $date < $earliest_acceptable_attendance_date;
+        global $earliest_acceptable_attendance_date, $USER, $Enlace_id, $AdminAccess;
+        return (!$USER->has_site_access($Enlace_id, $AdminAccess) && ($date < $earliest_acceptable_attendance_date));
     }
 }
 ?>    
