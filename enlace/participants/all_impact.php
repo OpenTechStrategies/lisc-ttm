@@ -91,7 +91,7 @@ if(!$anonymous_entry) {
     $person = new Participant();
     $person->load_with_participant_id($assessment_info[1]);
 
-    $editable = $assessment_info['Draft'] != '0';
+    $editable = $USER->has_site_access($Enlace_id, $AdminAccess) || $assessment_info['Draft'] != '0';
 }
 
 /* if it IS a new assessment, then we get the person from the get[person]: */

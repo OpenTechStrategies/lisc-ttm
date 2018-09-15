@@ -246,11 +246,13 @@ if ($_POST['edited'] != 1) {
     mysqli_query($cnnEnlace, $insert_as_assessment);
     include "../include/dbconnclose.php";
 } else {
-    $draft_in_db_sql = "SELECT Draft FROM Assessments WHERE Assessment_ID = '$assessment_id_sqlsafe'";
-    include "../include/dbconnopen.php";
-    $draft_in_db = mysqli_fetch_row(mysqli_query($cnnEnlace, $draft_in_db_sql))[0];
-    if($draft_in_db == '0') {
-        throw new Exception("Can't save already completed surveys");
+    if(!$USER->has_site_access($Enlace_id, $AdminAccess)) {
+        $draft_in_db_sql = "SELECT Draft FROM Assessments WHERE Assessment_ID = '$assessment_id_sqlsafe'";
+        include "../include/dbconnopen.php";
+        $draft_in_db = mysqli_fetch_row(mysqli_query($cnnEnlace, $draft_in_db_sql))[0];
+        if($draft_in_db == '0') {
+            throw new Exception("Can't save already completed surveys");
+        }
     }
 
     //this is an edited assessment
