@@ -37,6 +37,12 @@ if ($_POST['action'] == 'new_session') {
     $survey_date = $survey_date->format('Y-m-d');
 
     $name_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['name']);
+    $session_year_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['session_year']);
+    $session_type_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['session_type']);
+    $session_name =
+        ($session_year_sqlsafe != '' ? "FY$session_year_sqlsafe-" : "") .
+        ($session_type_sqlsafe != '' ? "$session_type_sqlsafe-" : "") .
+        $name_sqlsafe;
 
     $start_hour_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['start_hour']);
     $end_hour_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['end_hour']);
@@ -56,7 +62,7 @@ if ($_POST['action'] == 'new_session') {
         "  Start_Hour, Start_Suffix, End_Hour, End_Suffix, Monday," .
         "  Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)" .
         " VALUES" .
-        " ('$name_sqlsafe', '$program_sqlsafe', '$start_sqlsafe', '$end_sqlsafe', '$survey_date', " .
+        " ('$session_name', '$program_sqlsafe', '$start_sqlsafe', '$end_sqlsafe', '$survey_date', " .
         "  '$start_hour_sqlsafe', '$start_suffix_sqlsafe', '$end_hour_sqlsafe', '$end_suffix_sqlsafe', " .
         "  '$mon_sqlsafe', '$tue_sqlsafe', '$wed_sqlsafe', '$thur_sqlsafe', '$fri_sqlsafe', " .
         "  '$sat_sqlsafe', '$sun_sqlsafe')";

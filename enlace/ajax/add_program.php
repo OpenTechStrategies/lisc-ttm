@@ -33,13 +33,19 @@ $id = mysqli_insert_id($cnnEnlace);
 date_default_timezone_set('America/Chicago');
 $end_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['end']);
 $session_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['session']);
+$session_year_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['session_year']);
+$session_type_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['session_type']);
+$session_name =
+    ($session_year_sqlsafe != '' ? "FY$session_year_sqlsafe-" : "") .
+    ($session_type_sqlsafe != '' ? "$session_type_sqlsafe-" : "") .
+    $session_sqlsafe;
 $start_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['start']);
 $end_session = new DateTime($_POST['end']);
 $survey_date = $end_session->sub(new DateInterval('P7D'));
 $survey_date = $survey_date->format('Y-m-d');
 
 /* make a new session, because every program has to have a session. */
-$create_session = "INSERT INTO Session_Names (Session_Name, Program_ID, Start_Date, End_Date, Survey_Due) VALUES ('" . $session_sqlsafe . "',
+$create_session = "INSERT INTO Session_Names (Session_Name, Program_ID, Start_Date, End_Date, Survey_Due) VALUES ('" . $session_name . "',
             $id, '" . $start_sqlsafe . "', '" . $end_sqlsafe . "', '" . $survey_date . "' )";
 mysqli_query($cnnEnlace, $create_session);
 
