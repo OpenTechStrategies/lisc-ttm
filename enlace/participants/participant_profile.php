@@ -127,6 +127,9 @@ function saveBasicInfo() {
                 grade: document.getElementById('grade_edit').value,
                 grade_entered: document.getElementById('enter_grade_year').value,
                 school: document.getElementById('school_edit').value,
+                home_lang: document.getElementById('home_lang_edit').value,
+                ethnicity: document.getElementById('ethnicity_edit').value,
+                race: document.getElementById('race_edit').value,
                 recruitment: document.getElementById('recruitment_edit').value,
                 youth_behavioral: document.getElementById('youth_behavioral_edit').value
                 },
@@ -291,6 +294,48 @@ function saveBasicInfo() {
         ?>
         </select>
         </td>
+        </tr>
+        <tr>
+            <td><strong>Home Language</strong></td>
+            <td>
+                <span class="basic_info_show"><?php echo $home_lang_options[$person->home_lang]; ?></span>
+                <select class="basic_info_edit" id="home_lang_edit"/>
+                    <?php
+                        foreach($home_lang_options as $value => $display) {
+                            $selected = $value == $person->home_lang ? " selected='selected'" : "";
+                            echo "<option value='$value'$selected>$display</option>";
+                        }
+                    ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Ethnicity</strong></td>
+            <td>
+                <span class="basic_info_show"><?php echo $ethnicity_options[$person->ethnicity]; ?></span>
+                <select class="basic_info_edit" id="ethnicity_edit"/>
+                    <?php
+                        foreach($ethnicity_options as $value => $display) {
+                            $selected = $value == $person->ethnicity ? " selected='selected'" : "";
+                            echo "<option value='$value'$selected>$display</option>";
+                        }
+                    ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Race</strong></td>
+            <td>
+                <span class="basic_info_show"><?php echo $race_options[$person->race]; ?></span>
+                <select class="basic_info_edit" id="race_edit"/>
+                    <?php
+                        foreach($race_options as $value => $display) {
+                            $selected = $value == $person->race ? " selected='selected'" : "";
+                            echo "<option value='$value'$selected>$display</option>";
+                        }
+                    ?>
+                </select>
+            </td>
         </tr>
         <tr>
             <td><strong>Recruitment Method</strong></td>

@@ -46,6 +46,40 @@ $youth_behavioral_options = Array(
     "7" => "Other"
 );
 
+$ethnicity_options = array(
+    "0" => "N/A",
+    "1" => "No, not of Hispanic, Latino, or Spanish origin",
+    "2" => "Yes, Mexican, Mexican-American, Chicano",
+    "3" => "Yes, Puerto Rican",
+    "4" => "Yes, Cuban",
+    "5" => "Yes, another Hispanic, Latino, or Spanish origin ",
+);
+
+$race_options = Array(
+    "0" => "N/A",
+    "1" => "White",
+    "2" => "Black, African American, or Negro",
+    "3" => "American Indian or Alaska Native",
+    "4" => "Asian Indian",
+    "5" => "Chinese",
+    "6" => "Filipino",
+    "7" => "Japanese",
+    "8" => "Korean",
+    "9" => "Vietnamese",
+    "10" => "Other Asian",
+    "11" => "Native Hawaiian",
+    "12" => "Guamanian or Chamorro",
+    "13" => "Samoan",
+    "14" => "Other Pacific Islander",
+    "15" => "Some other race"
+);
+
+$home_lang_options = Array(
+    "0" => "N/A",
+    "1" => "Spanish",
+    "2" => "Other"
+);
+
 class Participant {
 
     public $participant_id; //contact id.
@@ -97,6 +131,9 @@ class Participant {
         $this->schoolid = $temp_participant['School'];
         $this->recruitment = $temp_participant['Recruitment'];
         $this->youth_behavioral = $temp_participant['Youth_Behavioral'];
+        $this->ethnicity = $temp_participant['Ethnicity'];
+        $this->home_lang = $temp_participant['Home_Language'];
+        $this->race = $temp_participant['Race'];
     }
 
     /*
@@ -146,9 +183,6 @@ class Participant {
         include "../include/dbconnclose.php";
 
         $this->baseline_date = $baseline['Date_Logged'];
-        $this->home_lang = $baseline['Home_Language'];
-        $this->country_origin = $baseline['US_Born'];
-        $this->race_base = $baseline['Race'];
         $this->bys1 = $baseline['BYS_1'];
         $this->bys2 = $baseline['BYS_2'];
         $this->bys3 = $baseline['BYS_3'];

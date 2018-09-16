@@ -183,48 +183,6 @@ Show tables of survey questions and response options.  The chosen response is se
             }
         ?>
     </caption>
-    <tr><td width="20%">Do you speak languages other than English at home?</td><td width="20%"><select id="language_home" <?php if(!$editable) {?> disabled='disabled'<?php } ?>>
-                <option value="0" <?php echo($assessment_info['Home_Language'] == 0 ? 'selected=="selected"' : null); ?>>N/A</option>
-                <option value="1" <?php echo($assessment_info['Home_Language'] == 1 ? 'selected=="selected"' : null); ?>>Spanish</option>
-                <option value="2" <?php echo($assessment_info['Home_Language'] == 2 ? 'selected=="selected"' : null); ?>>Other</option>
-            </select></td>
-        <td width="40%">Are you of Hispanic, Latino, or Spanish origin?</td>
-        <td style="text-align:left;">
-            <select id="ethnicity" style="width: 300px"<?php if(!$editable) {?> disabled='disabled'<?php } ?>>
-                <option value="0" <?php echo($assessment_info['Ethnicity'] == 0 ? 'selected=="selected"' : null); ?>>N/A</option>
-                <option value="1" <?php echo($assessment_info['Ethnicity'] == 1 ? 'selected=="selected"' : null); ?>>No, not of Hispanic, Latino, or Spanish origin</option>
-                <option value="2" <?php echo($assessment_info['Ethnicity'] == 2 ? 'selected=="selected"' : null); ?>>Yes, Mexican, Mexican-American, Chicano</option>
-                <option value="3" <?php echo($assessment_info['Ethnicity'] == 3 ? 'selected=="selected"' : null); ?>>Yes, Puerto Rican</option>
-                <option value="4" <?php echo($assessment_info['Ethnicity'] == 4 ? 'selected=="selected"' : null); ?>>Yes, Cuban</option>
-                <option value="5" <?php echo($assessment_info['Ethnicity'] == 5 ? 'selected=="selected"' : null); ?>>Yes, another Hispanic, Latino, or Spanish origin </option>
-            </select>
-        </td></tr><tr><td width="40%">What is your race?</td>
-        <td style="text-align:left;">
-            <select id="race"<?php if(!$editable) {?> disabled='disabled'<?php } ?>>
-                <option value="0" <?php echo($assessment_info['Race'] == 0 ? 'selected=="selected"' : null); ?>>N/A</option>
-                <option value="1" <?php echo($assessment_info['Race'] == 1 ? 'selected=="selected"' : null); ?>>White</option>
-                <option value="2" <?php echo($assessment_info['Race'] == 2 ? 'selected=="selected"' : null); ?>>Black, African American, or Negro</option>
-                <option value="3" <?php echo($assessment_info['Race'] == 3 ? 'selected=="selected"' : null); ?>>American Indian or Alaska Native</option>
-                <option value="4" <?php echo($assessment_info['Race'] == 4 ? 'selected=="selected"' : null); ?>>Asian Indian</option>
-                <option value="5" <?php echo($assessment_info['Race'] == 5 ? 'selected=="selected"' : null); ?>>Chinese</option>
-                <option value="6" <?php echo($assessment_info['Race'] == 6 ? 'selected=="selected"' : null); ?>>Filipino</option>
-                <option value="7" <?php echo($assessment_info['Race'] == 7 ? 'selected=="selected"' : null); ?>>Japanese</option>
-                <option value="8" <?php echo($assessment_info['Race'] == 8 ? 'selected=="selected"' : null); ?>>Korean</option>
-                <option value="9" <?php echo($assessment_info['Race'] == 9 ? 'selected=="selected"' : null); ?>>Vietnamese</option>
-                <option value="10" <?php echo($assessment_info['Race'] == 10 ? 'selected=="selected"' : null); ?>>Other Asian</option>
-                <option value="11" <?php echo($assessment_info['Race'] == 11 ? 'selected=="selected"' : null); ?>>Native Hawaiian</option>
-                <option value="12" <?php echo($assessment_info['Race'] == 12 ? 'selected=="selected"' : null); ?>>Guamanian or Chamorro</option>
-                <option value="13" <?php echo($assessment_info['Race'] == 13 ? 'selected=="selected"' : null); ?>>Samoan</option>
-                <option value="14" <?php echo($assessment_info['Race'] == 14 ? 'selected=="selected"' : null); ?>>Other Pacific Islander</option>
-                <option value="15" <?php echo($assessment_info['Race'] == 15 ? 'selected=="selected"' : null); ?>>Some other race</option>
-            </select>
-        </td>
-        <td>OPTIONAL: Were you born in the United States?</td>
-        <td><select id="birth_country"<?php if(!$editable) {?> disabled='disabled'<?php } ?>><option value="0">-----</option>
-                <option value="1" <?php echo($assessment_info['US_Born'] == 1 ? 'selected=="selected"' : null); ?>>Yes</option>
-                <option value="2" <?php echo($assessment_info['US_Born'] == 2 ? 'selected=="selected"' : null); ?>>No</option>
-            </select></td>
-    </tr>
     <tr style="background-color:#F2F2F2;"><td colspan="2"><strong style="font-size:1em;">From the 2008 Boston Youth Survey:</strong></td>
         <td colspan="2"><strong style="font-size:1em;">JVQ-R2, Reduced Item Version, Youth Lifetime Form</strong></td>
     </tr>
@@ -745,10 +703,6 @@ Show tables of survey questions and response options.  The chosen response is se
                         action: 'baseline',
                         person: '<?php echo $person->participant_id ?>',
                         base_date: document.getElementById('admin_date').value,
-                        home_lang: document.getElementById('language_home').value,
-                        ethnicity: document.getElementById('ethnicity').value,
-                        pays_origin: document.getElementById('birth_country').value,
-                        race: document.getElementById('race').value,
                         bys_1: document.getElementById('BYS_1').value,
                         bys_2: document.getElementById('BYS_2').value,
                         bys_3: document.getElementById('BYS_3').value,
