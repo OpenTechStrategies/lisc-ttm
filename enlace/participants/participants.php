@@ -25,6 +25,7 @@ user_enforce_has_access($Enlace_id);
 
 include "../../header.php";
 include "../header.php";
+include "../classes/participant.php";
 ?>
 <!--Search participants and add a new participant (at bottom).-->
 
@@ -226,6 +227,29 @@ include "../header.php";
                             </select>
                         </td>
                     </tr>
+
+                    <tr>
+                        <td><strong>Recruitment Method:</strong></td>
+                        <td>
+                            <select id="recruitment_new"/>
+                                <?php
+                                    foreach($recruitment_options as $value => $display) {
+                                        echo "<option value='$value'$selected>$display</option>";
+                                    }
+                                ?>
+                            </select>
+                        </td>
+                        <td><strong>Justice System History:</strong></td>
+                        <td>
+                            <select id="justice_system_new"/>
+                                <?php
+                                    foreach($justice_system_options as $value => $display) {
+                                        echo "<option value='$value'$selected>$display</option>";
+                                    }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
                     <tr>
                         <td colspan="4" style="text-align:center;"><input type="button" onclick="
                                 var x = document.getElementById('dob_new').value;
@@ -266,6 +290,8 @@ include "../header.php";
                                             age: age,
                                             day_phone: document.getElementById('day_phone_new').value,
                                             evening_phone: document.getElementById('evening_phone_new').value,
+                                            recruitment: document.getElementById('recruitment_new').value,
+                                            justice_system: document.getElementById('justice_system_new').value,
                                             grade: grade,
                                             gender: gender,
                                             school: school,

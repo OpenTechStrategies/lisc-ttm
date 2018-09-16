@@ -23,6 +23,28 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
 require_once("assessment.php");
 
+
+$recruitment_options = Array(
+    "0" => "N/A",
+    "1" => "School Referral",
+    "2" => "Partner Org Referral",
+    "3" => "Justice System Referral",
+    "4" => "In-House Recruitment",
+    "5" => "Walk-in/Self-Referral",
+    "6" => "Other"
+);
+
+$justice_system_options = Array(
+    "0" => "N/A",
+    "1" => "Has been arrested",
+    "2" => "Has had minimal interactions",
+    "3" => "Has received 'station adjustment'",
+    "4" => "No Interaction",
+    "5" => "Has received 'citation'",
+    "6" => "School official interaction (Behavioral Incidents)",
+    "7" => "Other"
+);
+
 class Participant {
 
     public $participant_id; //contact id.
@@ -79,6 +101,8 @@ class Participant {
         $this->failed = $temp_participant['Early_Warning_Failed'];
         $this->discipline = $temp_participant['Early_Warning_Discipline'];
         $this->teacher = $temp_participant['Referring_Teacher'];
+        $this->recruitment = $temp_participant['Recruitment'];
+        $this->justice_system = $temp_participant['Justice_System'];
     }
 
     /*

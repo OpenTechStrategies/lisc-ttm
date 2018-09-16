@@ -69,6 +69,8 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
         $grade_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['grade']);
         $grade_entered_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['grade_entered']);
         $school_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['school']);
+        $recruitment_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['recruitment']);
+        $justice_system_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['justice_system']);
         $warning_absent_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['warning_absent']);
         $warning_failed_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['warning_failed']);
         $warning_discipline_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['warning_discipline']);
@@ -91,6 +93,8 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
 					DOB='" . $dob_sqlsafe . "',
 					Age='" . $age_sqlsafe . "',
 					Gender='" . $gender_sqlsafe . "',
+					Recruitment='" . $recruitment_sqlsafe . "',
+					Justice_System='" . $justice_system_sqlsafe . "',
 					Role='" . $role_sqlsafe . "',
                                             Grade='" . $grade_sqlsafe . "',
                                             Grade_Entered='".$grade_entered_sqlsafe."',

@@ -61,6 +61,8 @@ if ($_POST['action'] == 'link_event') {
     $grade_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['grade']);
     $school_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['school']);
     $role_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['role']);
+    $recruitment_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['recruitment']);
+    $justice_system_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['justice_system']);
 
     if(($dob_sqlsafe == "" && $age_sqlsafe == "") ||
        $grade_sqlsafe == "" ||
@@ -80,6 +82,8 @@ if ($_POST['action'] == 'link_event') {
 		Gender,
 		Grade,
 		School,
+        Recruitment,
+        Justice_System,
 		Role
 	) VALUES (
 		'" . $first_name_sqlsafe . "',
@@ -91,6 +95,8 @@ if ($_POST['action'] == 'link_event') {
 		'" . $gender_sqlsafe . "',
 		'" . $grade_sqlsafe . "',
 		'" . $school_sqlsafe . "',
+		'" . $recruitment_sqlsafe . "',
+		'" . $justice_system_sqlsafe . "',
 		'" . $role_sqlsafe . "'	
 	)";
     mysqli_query($cnnEnlace, $add_participant);
