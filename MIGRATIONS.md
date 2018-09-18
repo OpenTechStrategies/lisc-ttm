@@ -271,4 +271,18 @@ foreach ($counts as $name => $val) {
     echo"$name: $val\n";
 }
 ?>
+
+## Issue 237 - Delete Absences for Dropped Participants - September 2018
+
+For Participants that have dropped out, we should no longer track attendance, and disable that functionality for the site.  In order to support this change, we need to delete records that no longer match this model.
+
+### SQL needed to delete
+```
+USE ttm-enlace
+DELETE Absences FROM Absences
+    INNER JOIN Program_Dates ON Absences.Program_Date = Program_Dates.Program_Date_ID
+    INNER JOIN Participants_Programs ON
+        (Absences.Participant_ID = Participants_Programs.Participant_ID AND
+         Participants_Programs.Program_ID = Program_Dates.Program_ID)
+    WHERE Participants_Programs.Date_Dropped < Program_Dates.Date_Listed;
 ```

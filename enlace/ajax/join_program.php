@@ -197,6 +197,35 @@ elseif ($_POST['action'] == 'drop') {
     mysqli_query($cnnEnlace, $drop_from_program);
     include "../include/dbconnclose.php";
 }
+/* re_enroll in the program. */ 
+elseif ($_POST['action'] == 're_enroll') {
+    include "../include/dbconnopen.php";
+    $link_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['link_id']);
+
+    $re_enroll_in_program = "UPDATE Participants_Programs SET Date_Dropped=NULL WHERE Participant_Program_ID='" . $link_id_sqlsafe . "'";
+    echo $re_enroll_in_program;
+    mysqli_query($cnnEnlace, $re_enroll_in_program);
+    include "../include/dbconnclose.php";
+}
+elseif ($_POST['action'] == 'change_drop_date') {
+    include "../include/dbconnopen.php";
+    $link_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['link_id']);
+    $new_drop_date_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['new_date']);
+
+    $change_drop_date = "UPDATE Participants_Programs SET Date_Dropped='" . $new_drop_date_sqlsafe . "' WHERE Participant_Program_ID='" . $link_id_sqlsafe . "'";
+    $drop_attendance_dates = "DELETE Absences FROM Absences
+        INNER JOIN Program_Dates ON Absences.Program_Date = Program_Dates.Program_Date_ID
+        INNER JOIN Participants_Programs ON
+            (Absences.Participant_ID = Participants_Programs.Participant_ID AND
+             Participants_Programs.Program_ID = Program_Dates.Program_ID)
+        WHERE Participants_Programs.Date_Dropped IS NOT NULL
+            AND Participants_Programs.Date_Dropped < Program_Dates.Date_Listed
+            AND Participant_Program_ID = '$link_id_sqlsafe'";
+
+    mysqli_query($cnnEnlace, $change_drop_date);
+    mysqli_query($cnnEnlace, $drop_attendance_dates);
+    include "../include/dbconnclose.php";
+}
 /* or, add someone to a program!  which I believe is actually adding them to a session. */
 else {
     include "../include/dbconnopen.php";

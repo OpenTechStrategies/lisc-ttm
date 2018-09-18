@@ -846,6 +846,43 @@ Shows all program information.
                                         <?php
                                     } else {
                                         echo 'Dropped: ' . $all_p['Date_Dropped'];
+                                        if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
+                                            $drop_date = $all_p['Date_Dropped'];
+                                        ?>
+                                            <div>
+                                                <a href="javascript:;" onclick="
+                                                    $.post(
+                                                            '../ajax/join_program.php',
+                                                            {
+                                                                action: 're_enroll',
+                                                                link_id: '<?php echo $all_p['Participant_Program_ID']; ?>'
+                                                            },
+                                                    function(response) {
+                                                       // document.write(response);
+                                                       window.location='profile.php';
+                                                    }
+                                                    ).fail(failAlert);">Re-enroll</a> or
+                                                <input
+                                                    type="text"
+                                                    class="addDP"
+                                                    id="change_drop_date_<?php echo $all_p['Participant_Program_ID']; ?>"
+                                                    value='<?php echo $drop_date; ?>'>
+                                                <input type="button" value="Change" onclick="
+                                                    $.post(
+                                                            '../ajax/join_program.php',
+                                                            {
+                                                                action: 'change_drop_date',
+                                                                new_date: $('#change_drop_date_<?php echo $all_p['Participant_Program_ID']; ?>').val(),
+                                                                link_id: '<?php echo $all_p['Participant_Program_ID']; ?>'
+                                                            },
+                                                    function(response) {
+                                                       // document.write(response);
+                                                       window.location='profile.php';
+                                                    }
+                                                    ).fail(failAlert);">
+                                            </div>
+                                        <?php
+                                        }
                                     }
                                     ?></td>
                             <td>
@@ -1309,6 +1346,9 @@ while ($sess = mysqli_fetch_array($sessions)) {
                                     <tr><th>Participant</th><th>Attended</th><th>Absent</th></tr>
                                     <?php
                                         while ($all_p = mysqli_fetch_array($all_participants)) {
+                                            $dropped =
+                                               $all_p['Date_Dropped'] != null &&
+                                               strtotime($all_p['Date_Dropped']) < $show_date;
                                             $find_absence = "SELECT Absent FROM Absences WHERE Participant_ID='" . $all_p['Participant_ID'] . "'
                                             AND Program_Date='" . $temp_program['Program_Date_ID'] . "'";
                                             $absent = mysqli_query($cnnEnlace, $find_absence);
@@ -1323,14 +1363,20 @@ while ($sess = mysqli_fetch_array($sessions)) {
                                         /* uncheck box to add an absence, and check the box to delete that absence: */
                                     ?>
                                         <tr id="row_date_<?php echo $temp_program['Program_Date_ID']; ?>_person_<?php echo $all_p['Participant_ID'] ?>"
-                                            <?php if(!($was_there || $was_absent)) { echo "class='unmarked'"; } ?>>
-                                            <td><span style="font-weight:bold"><?php echo $all_p['First_Name'] . " " . $all_p['Last_Name']; ?></span></td>
+                                            <?php
+                                                if(!($was_there || $was_absent) && !$dropped) {
+                                                   echo "class='unmarked'";
+                                                } else if ($dropped) {
+                                                   echo "class='dropped'";
+                                                }
+                                            ?>>
+                                            <td><span style="font-weight:bold"><?php echo $all_p['First_Name'] . " " . $all_p['Last_Name'] . ($dropped ? " (Dropped)" : ""); ?></span></td>
                                             <td><input type="checkbox" <?php echo($was_there ? 'checked="true"' : null); ?>
-                                                <?php if(invalid_attendance_date($show_date)) { ?>disabled="disabled" <?php } ?>
+                                                <?php if(invalid_attendance_date($show_date) || $dropped) { ?>disabled="disabled" <?php } ?>
                                                        id="present_date_<?php echo $temp_program['Program_Date_ID']; ?>_person_<?php echo $all_p['Participant_ID'] ?>"
                                                        onchange="markPresent(this, '<?php echo $temp_program['Program_Date_ID']; ?>', '<?php echo $all_p['Participant_ID'] ?>');"></td>
                                             <td><input type="checkbox" <?php echo($was_absent ? 'checked="true"' : null); ?>
-                                                <?php if(invalid_attendance_date($show_date)) { ?>disabled="disabled" <?php } ?>
+                                                <?php if(invalid_attendance_date($show_date) || $dropped) { ?>disabled="disabled" <?php } ?>
                                                        id="absent_date_<?php echo $temp_program['Program_Date_ID']; ?>_person_<?php echo $all_p['Participant_ID'] ?>"
                                                        onchange="markAbsent(this, '<?php echo $temp_program['Program_Date_ID']; ?>', '<?php echo $all_p['Participant_ID'] ?>');"></td>
                                     </tr>
