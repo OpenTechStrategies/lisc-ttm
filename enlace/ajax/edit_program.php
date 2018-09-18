@@ -49,6 +49,15 @@ if ($_POST['action'] == 'new_session') {
     $start_suffix_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['start_suffix']);
     $end_suffix_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['end_suffix']);
 
+    $class_act_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['class_act']);
+    $mental_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['mental']);
+    $referrals_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['referrals']);
+    $community_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['community']);
+    $counseling_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['counseling']);
+    $sports_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['sports']);
+    $mentoring_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['mentors']);
+    $service_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['service']);
+
     $mon_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['mon']);
     $tue_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['tue']);
     $wed_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['wed']);
@@ -60,12 +69,15 @@ if ($_POST['action'] == 'new_session') {
     $new_session = "INSERT INTO Session_Names " .
         " (Session_Name, Program_ID, Start_Date, End_Date, Survey_Due, ".
         "  Start_Hour, Start_Suffix, End_Hour, End_Suffix, Monday," .
-        "  Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)" .
+        "  Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday," .
+        "  Activity_Class, Activity_Clinic, Activity_Referrals, Activity_Community," .
+        "  Activity_Counseling, Activity_Sports, Activity_Mentor, Activity_Service)" .
         " VALUES" .
         " ('$session_name', '$program_sqlsafe', '$start_sqlsafe', '$end_sqlsafe', '$survey_date', " .
         "  '$start_hour_sqlsafe', '$start_suffix_sqlsafe', '$end_hour_sqlsafe', '$end_suffix_sqlsafe', " .
         "  '$mon_sqlsafe', '$tue_sqlsafe', '$wed_sqlsafe', '$thur_sqlsafe', '$fri_sqlsafe', " .
-        "  '$sat_sqlsafe', '$sun_sqlsafe')";
+        "  '$sat_sqlsafe', '$sun_sqlsafe', '$class_act_sqlsafe', '$mental_sqlsafe', '$referrals_sqlsafe', " .
+        "  '$community_sqlsafe', '$counseling_sqlsafe', '$sports_sqlsafe', '$mentoring_sqlsafe', '$service_sqlsafe')";
 
     echo $new_session;
     mysqli_query($cnnEnlace, $new_session);
@@ -102,12 +114,29 @@ if ($_POST['action'] == 'new_session') {
     $sat_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['sat']);
     $sun_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['sun']);
 
+    $class_act_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['class_act']);
+    $mental_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['mental']);
+    $referrals_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['referrals']);
+    $community_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['community']);
+    $counseling_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['counseling']);
+    $sports_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['sports']);
+    $mentoring_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['mentors']);
+    $service_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['service']);
+
     $edit_session = "UPDATE Session_Names " .
       " SET Session_Name='$name_sqlsafe'," .
       "     Start_Hour='$start_hour_sqlsafe'," .
       "     Start_Suffix='$start_suffix_sqlsafe'," .
       "     End_Hour='$end_hour_sqlsafe'," .
       "     End_Suffix='$end_suffix_sqlsafe'," .
+      "     Activity_Class='$class_act_sqlsafe'," .
+      "     Activity_Clinic='$mental_sqlsafe'," .
+      "     Activity_Referrals='$referrals_sqlsafe'," .
+      "     Activity_Community='$community_sqlsafe'," .
+      "     Activity_Counseling='$counseling_sqlsafe'," .
+      "     Activity_Sports='$sports_sqlsafe'," .
+      "     Activity_Mentor='$mentoring_sqlsafe'," .
+      "     Activity_Service='$service_sqlsafe'," .
       "     Monday='$mon_sqlsafe'," .
       "     Tuesday='$tue_sqlsafe'," .
       "     Wednesday='$wed_sqlsafe'," .

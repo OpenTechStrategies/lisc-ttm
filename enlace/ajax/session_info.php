@@ -44,7 +44,15 @@ if($session_id_sqlsafe != '') {
       'thursday' => $session_info['Thursday'],
       'friday' => $session_info['Friday'],
       'saturday' => $session_info['Saturday'],
-      'sunday' => $session_info['Sunday']
+      'sunday' => $session_info['Sunday'],
+      'class_act' => $session_info['Activity_Class'],
+      'mental' => $session_info['Activity_Clinic'],
+      'referrals' => $session_info['Activity_Referrals'],
+      'community' => $session_info['Activity_Community'],
+      'counseling' => $session_info['Activity_Counseling'],
+      'sport' => $session_info['Activity_Sports'],
+      'mentors' => $session_info['Activity_Mentor'],
+      'service' => $session_info['Activity_Service']
     ));
 }
 ?>

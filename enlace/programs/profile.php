@@ -107,6 +107,15 @@ Shows all program information.
                 $('#session_sat').prop("checked", response.saturday == '1');
                 $('#session_sun').prop("checked", response.sunday == '1');
                 $('#session_start_hour').val(response.start_hour);
+                $('#session_class').prop("checked", response.class_act == '1');
+                $('#session_mental').prop("checked", response.mental == '1');
+                $('#session_referrals').prop("checked", response.referrals == '1');
+                $('#session_community').prop("checked", response.community == '1');
+                $('#session_counseling').prop("checked", response.counseling == '1');
+                $('#session_sports').prop("checked", response.sport == '1');
+                $('#session_mentors').prop("checked", response.mentors == '1');
+                $('#session_service').prop("checked", response.service == '1');
+
                 if(response.start_suffix == 'am' && response.start_hour == '12') {
                     $('#session_start_suffix').prop('selectedIndex', 3);
                 } else if (response.start_suffix == 'am') {
@@ -145,6 +154,14 @@ Shows all program information.
                     fri: document.getElementById('session_fri').checked ? '1' : '0',
                     sat: document.getElementById('session_sat').checked ? '1' : '0',
                     sun: document.getElementById('session_sun').checked ? '1' : '0',
+                    class_act: document.getElementById('session_class').checked ? '1' : '0',
+                    mental: document.getElementById('session_mental').checked ? '1' : '0',
+                    referrals: document.getElementById('session_referrals').checked ? '1' : '0',
+                    community: document.getElementById('session_community').checked ? '1' : '0',
+                    counseling: document.getElementById('session_counseling').checked ? '1' : '0',
+                    sports: document.getElementById('session_sports').checked ? '1' : '0',
+                    mentors: document.getElementById('session_mentors').checked ? '1' : '0',
+                    service: document.getElementById('session_service').checked ? '1' : '0',
                     start_hour: document.getElementById('session_start_hour').value,
                     start_suffix: document.getElementById('session_start_suffix').value,
                     end_hour: document.getElementById('session_end_hour').value,
@@ -175,6 +192,14 @@ Shows all program information.
                 fri: document.getElementById('new_session_fri').checked ? '1' : '0',
                 sat: document.getElementById('new_session_sat').checked ? '1' : '0',
                 sun: document.getElementById('new_session_sun').checked ? '1' : '0',
+                class_act: document.getElementById('new_session_class').checked ? '1' : '0',
+                mental: document.getElementById('new_session_mental').checked ? '1' : '0',
+                referrals: document.getElementById('new_session_referrals').checked ? '1' : '0',
+                community: document.getElementById('new_session_community').checked ? '1' : '0',
+                counseling: document.getElementById('new_session_counseling').checked ? '1' : '0',
+                sports: document.getElementById('new_session_sports').checked ? '1' : '0',
+                mentors: document.getElementById('new_session_mentors').checked ? '1' : '0',
+                service: document.getElementById('new_session_service').checked ? '1' : '0',
                 start_hour: document.getElementById('new_session_start_hour').value,
                 start_suffix: document.getElementById('new_session_start_suffix').value,
                 end_hour: document.getElementById('new_session_end_hour').value,
@@ -193,6 +218,16 @@ Shows all program information.
         alertMsg = document.getElementById('new_session_name').value == '' ? "Session must have a name" : alertMsg;
         alertMsg = document.getElementById('new_session_start').value == '' ? "Session must have a start date" : alertMsg;
         alertMsg = document.getElementById('new_session_end').value == '' ? "Session must have a end date" : alertMsg;
+        alertMsg = !(document.getElementById('new_session_class').checked ||
+                    document.getElementById('new_session_mental').checked ||
+                    document.getElementById('new_session_referrals').checked ||
+                    document.getElementById('new_session_community').checked ||
+                    document.getElementById('new_session_counseling').checked ||
+                    document.getElementById('new_session_sports').checked ||
+                    document.getElementById('new_session_mentors').checked ||
+                    document.getElementById('new_session_service').checked) ?
+                   "Session must have at least one activity selected" :
+                   alertMsg;
         alertMsg = !(document.getElementById('new_session_mon').checked ||
                     document.getElementById('new_session_tues').checked ||
                     document.getElementById('new_session_weds').checked ||
@@ -567,6 +602,19 @@ Shows all program information.
                             </td></tr>
                         <tr><td><strong>Start Date: </strong></td><td><input type="text" id="new_session_start" class="addDP"></td></tr>
                         <tr><td><strong>End Date: </strong></td><td><input type="text" id="new_session_end" class="addDP"></td></tr>
+                        <tr><td><strong>Activities:</strong></td>
+                            <td>
+                                <input type="checkbox" id="new_session_class" <?php echo($program->class_act == 1 ? "checked=true" : null); ?>>Classroom Activities<br>
+                                <input type="checkbox" id="new_session_mental" <?php echo($program->clinic == 1 ? "checked=true" : null); ?>>Mental Health Clinic<br>
+                                <input type="checkbox" id="new_session_referrals"  <?php echo($program->referrals == 1 ? "checked=true" : null); ?>>Referrals to mental health counseling<br>
+                                <input type="checkbox" id="new_session_community"  <?php echo($program->community == 1 ? "checked=true" : null); ?>> Community building <br>
+                                <input type="checkbox" id="new_session_counseling"  <?php echo($program->counseling == 1 ? "checked=true" : null); ?>> Counseling <br>
+                                <input type="checkbox" id="new_session_sports"  <?php echo($program->sport == 1 ? "checked=true" : null); ?>> Sports and play <br>
+                                <input type="checkbox" id="new_session_mentors" <?php echo($program->mentor == 1 ? "checked=true" : null); ?>> Mentorship <br>
+                                <input type="checkbox" id="new_session_service"  <?php echo($program->service == 1 ? "checked=true" : null); ?>> Community Service <br>
+                            </td></tr>
+                            </td>
+                        </tr>
 
                         <tr><td><strong>Days per week:</strong></td>
                             <td>
@@ -668,6 +716,19 @@ Shows all program information.
                     ?></select>
                 <table class="enlace_session_edit" id="edit_session">
                     <tr><td><strong>Name:</strong></td><td><input type="text" id="edited_session_name"></td></tr>
+                    <tr><td><strong>Activities:</strong></td>
+                        <td>
+                            <input type="checkbox" id="session_class"> Classroom Activities<br>
+                            <input type="checkbox" id="session_mental"> Mental Health Clinic<br>
+                            <input type="checkbox" id="session_referrals"> Referrals to mental health counseling<br>
+                            <input type="checkbox" id="session_community"> Community building <br>
+                            <input type="checkbox" id="session_counseling"> Counseling <br>
+                            <input type="checkbox" id="session_sports"> Sports and play <br>
+                            <input type="checkbox" id="session_mentors"> Mentorship <br>
+                            <input type="checkbox" id="session_service"> Community Service <br>
+                        </td></tr>
+                        </td>
+                    </tr>
                     <tr>
                         <td><strong>Days per week:</strong></td>
                         <td><input type="checkbox" id="session_mon"> Monday <br>
