@@ -1024,6 +1024,16 @@ table#edit_dropdowns td.dropdown_name {
 
 /* Enlace-specific style rules */
 
+div.warnings {
+  border: 1px solid #A44;
+  padding: 5px;
+  margin: 2px;
+}
+
+div.warnings h5 {
+  color:red;
+}
+
 div#enlace_header td.menu_item a {
 	text-decoration: none;
 	color: #696969;

@@ -1366,7 +1366,45 @@ while ($sess = mysqli_fetch_array($sessions)) {
                                     echo ")";
                                     }
                                     ?>
-    </td></tr>
+                                     <?php
+
+                                     if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
+                                     ?>
+                                     <br/>
+                                     <br/>
+                                     <a href="attendance_report.php?session_id=<?php echo $sess[0] ?>">Download CSV</a>
+                                     <br/>
+                                     <input type="file" id="attendance_file_<?php echo $sess[0] ?>">
+                                     <input type="button" value="Upload CSV" onclick="
+                                         $('#warnings_<?php echo $sess[0]; ?>').hide();
+                                         var file_data = $('#attendance_file_<?php echo $sess[0] ?>').prop('files')[0];
+                                         var form_data = new FormData();
+                                         form_data.append('session_id', <?php echo $sess[0] ?>);
+                                         form_data.append('file', file_data);
+                                         $.ajax({
+                                             url: 'upload_attendance_report.php',
+                                             dataType: 'json',
+                                             contentType: false,
+                                             processData: false,
+                                             data: form_data,
+                                             type: 'post',
+                                             success: function(response) {
+                                                 $('#warnings_<?php echo $sess[0]; ?>').show();
+                                                 if(response.warnings.length > 0) {
+                                                     $('#warnings_<?php echo $sess[0]; ?>').html(
+                                                         '<h5>Upload Warnings:</h5><ul>' +
+                                                            response.warnings.map(function (warning) {
+                                                                return '<li>' + warning + '';
+                                                            }).join('') + '</ul>');
+                                                 }
+                                             }});
+                                     ">
+                                     <?php
+                                     }
+                                     ?>
+
+                                     <div id="warnings_<?php echo $sess[0]; ?>" class="warnings" style="display:none" ></div>
+                                     </td></tr>
                             <tr class="toggler_<?php echo $sess[0] ?> hide_dates"><td class="all_projects" ><strong>Dates:</strong> <?php echo $sess[3] . ' --- ' . $sess[4]; ?></td>
                                 <td class="all_projects"><strong>Surveys Due:</strong> <?php echo $sess[5]; ?></td></tr><?php
                         }
