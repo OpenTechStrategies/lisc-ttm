@@ -29,47 +29,136 @@ $access_array = $USER->program_access($Enlace_id);
 $has_all_programs = in_array('a', $access_array);
 ?>
 
+<script type="text/javascript">
+  function update_assessment_num_selected() {
+    $(".numassessmentselected").each(function (idx, span) {
+      span.innerHTML = $(".recent_assessment_program_checkbox:checked").length + $(".old_assessment_program_checkbox:checked").length;
+    });
+  }
+
+  $(document).ready(function() {
+    $(".popupcontainer .popupclose").each(function(idx, closer) {
+      $(closer).on("click", function() {
+          $(closer).closest(".popupcontainer").addClass("popupcontainer-hidden");
+          return false;
+      });
+    });
+
+    $(".popupcontainer .popupdisplay").each(
+      function(idx, display) {
+        $(display).on("click", function() {
+          $(display).closest(".popupcontainer").removeClass("popupcontainer-hidden");
+          return false;
+        });
+        });
+
+    $('.recent_assessment_program_checkbox').on('click', update_assessment_num_selected);
+    $('.old_assessment_program_checkbox').on('click', update_assessment_num_selected);
+
+    $('#select_all_recent_assessment_program_checkboxes').on('click', function () {
+        if ($('#select_all_recent_assessment_program_checkboxes').attr('checked')) {
+            $('.recent_assessment_program_checkbox').each( function () {
+                $(this).attr('checked', true);
+            });
+        }
+        else {
+            $('.recent_assessment_program_checkbox').each( function () {
+                $(this).attr('checked', false);
+            });
+        }
+        update_assessment_num_selected();
+    });
+
+    $('#select_all_old_assessment_program_checkboxes').on('click', function () {
+        if ($('#select_all_old_assessment_program_checkboxes').attr('checked')) {
+            $('.old_assessment_program_checkbox').each( function () {
+                $(this).attr('checked', true);
+            });
+        }
+        else {
+            $('.old_assessment_program_checkbox').each( function () {
+                $(this).attr('checked', false);
+            });
+        }
+        update_assessment_num_selected();
+    });
+  });
+</script>
+
+
 <!--Div on reports page that shows the assessment responses:  -->
 <h3>Assessments Report</h3>
 <!--First choose a program (or all programs) and a question (or all questions) from the intake and impact surveys: -->
 
 <span class="helptext">Choose the program you would like to report on, then either export all results or see results by question:</span><br>
 <form action="reports.php" method="post">
-    Program:
 
-    <a href="javascript:;" onclick="$('#program_list').toggle();">Show/hide programs</a>
-    <div id="program_list">
-    <input type="checkbox" id="select_all_assessment_checkboxes"> <b>Select All</b>
-    <br >
-    <br >
+    <?php
+        $num_selected = isset($_POST['program_select']) ? count($_POST['program_select']) : 0;
+    ?>
+    <div class="popupcontainer popupcontainer-hidden programspopupcontainer">
+    <button class="popupdisplay">Select Programs (<span class="numassessmentselected"><?php echo $num_selected; ?></span> Selected)</button>
+    <div class="popupinner programspopup">
+      <div class="programspopupheader">
+        <div class="popupclose x-closer">X</div>
+        <button class="popupclose">Select Programs (<span class="numassessmentselected"><?php echo $num_selected; ?></span> Selected)</button>
+      </div>
+      <div>
 
+    <input type="checkbox" id="select_all_recent_assessment_program_checkboxes"> <b>Select All Recent</b><br>
 <?php
-    $program_string = " WHERE Programs.Program_ID = " . $access_array[0];
+    $program_string = " WHERE (Programs.Program_ID = " . $access_array[0];
     foreach ($access_array as $program){
         $program_string .= " OR Programs.Program_ID = " . $program;
     }
-            $get_all_programs = "SELECT Session_ID, Session_Name, Name FROM Session_Names INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID " . $program_string . " ORDER BY Name";
+    $program_string .= ")";
+    $old_date = date("Y-m-d", strtotime("-$num_days_hidden days"));
+    $get_all_programs_recent = "SELECT Session_ID, Session_Name, Name, Session_Names.End_Date FROM Session_Names INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID " . $program_string . " AND Session_Names.End_Date > '$old_date' ORDER BY Name";
 
-        include "../include/dbconnopen.php";
-        $all_programs = mysqli_query($cnnEnlace, $get_all_programs);
-        $checkbox_count = 0;
-        while ($program = mysqli_fetch_row($all_programs)) {
-            $checkbox_count++;
-            ?>
+    include "../include/dbconnopen.php";
+    $all_programs = mysqli_query($cnnEnlace, $get_all_programs_recent);
+    $checkbox_count = 0;
+    while ($program = mysqli_fetch_row($all_programs)) {
+        $checkbox_count++;
+        ?>
 
-            <input type="checkbox" name="program_select[]" class="assessment_checkbox" id="checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
-            <?php
-            if ($_POST['program_select']) {
-                echo (in_array($program[0], $_POST['program_select']) ? 'checked="true"' : null);
-            }
-            ?>><?php
-                   echo "<label for=\"checkbox_" . $checkbox_count . "\">" . $program[2] . "--" . $program[1] . "</label><br>";
-               }
-               include "../include/dbconnclose.php";
-               ?>
+        <input type="checkbox" name="program_select[]" class="recent_assessment_program_checkbox" id="program_checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
+        <?php
+        if ($_POST['program_select'] && in_array($program[0], $_POST['program_select'])) {
+            echo 'checked="true"';
+        }
+        ?>><?php
+               echo "<label for=\"program_checkbox_" . $checkbox_count . "\">" . $program[2] . "--" . $program[1] . "</label><br>";
+           }
+           include "../include/dbconnclose.php";
+
+    ?>
+    <hr>
+    <input type="checkbox" id="select_all_old_assessment_program_checkboxes"> <b>Select All Old</b><br>
+    <?php
+    $get_all_programs_old = "SELECT Session_ID, Session_Name, Name, Session_Names.End_Date FROM Session_Names INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID " . $program_string . " AND Session_Names.End_Date <= '$old_date' ORDER BY Name";
+
+    include "../include/dbconnopen.php";
+    $all_programs = mysqli_query($cnnEnlace, $get_all_programs_old);
+    while ($program = mysqli_fetch_row($all_programs)) {
+        $checkbox_count++;
+        ?>
+
+        <input type="checkbox" name="program_select[]" class="old_assessment_program_checkbox" id="program_checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
+        <?php
+        if ($_POST['program_select'] && in_array($program[0], $_POST['program_select'])) {
+            echo 'checked="true"';
+        }
+        ?>><?php
+               echo "<label for=\"program_checkbox_" . $checkbox_count . "\">" . $program[2] . "--" . $program[1] . "</label><br>";
+           }
+           include "../include/dbconnclose.php";
+           ?>
+
     </div>
-    <!--</select>-->
-    <br>
+    </div>
+    </div>
+
     Question:
     <select id="assessment_questions" style="width:500px;" name="question_select">
         <option value="0"><b>Show results for all questions</b></option>
