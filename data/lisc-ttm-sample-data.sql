@@ -4197,6 +4197,17 @@ CREATE TABLE `Session_Names` (
   `Start_Date` date DEFAULT NULL,
   `End_Date` date DEFAULT NULL,
   `Survey_Due` date DEFAULT NULL,
+  `Start_Hour` int(11) DEFAULT NULL,
+  `Start_Suffix` varchar(45) DEFAULT NULL,
+  `End_Hour` int(11) DEFAULT NULL,
+  `End_Suffix` varchar(45) DEFAULT NULL,
+  `Monday` int(11) DEFAULT NULL,
+  `Tuesday` int(11) DEFAULT NULL,
+  `Wednesday` int(11) DEFAULT NULL,
+  `Thursday` int(11) DEFAULT NULL,
+  `Friday` int(11) DEFAULT NULL,
+  `Saturday` int(11) DEFAULT NULL,
+  `Sunday` int(11) DEFAULT NULL,
   PRIMARY KEY (`Session_ID`),
   KEY `FK_Session_Names__Programs__Program_ID_idx` (`Program_ID`),
   CONSTRAINT `FK_Session_Names__Programs__Program_ID` FOREIGN KEY (`Program_ID`) REFERENCES `Programs` (`Program_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -4209,7 +4220,7 @@ CREATE TABLE `Session_Names` (
 
 LOCK TABLES `Session_Names` WRITE;
 /*!40000 ALTER TABLE `Session_Names` DISABLE KEYS */;
-INSERT INTO `Session_Names` VALUES (1,'',2,NULL,NULL,NULL),(3,'Spring 2013',2,NULL,NULL,NULL),(4,'Fall 2013',2,NULL,NULL,NULL),(5,'Summer 2013',8,NULL,NULL,NULL),(6,'Fall Semester 2013',6,'2013-08-26','2013-12-20','2014-01-10'),(7,'Summer 2013: Never Doubted For a Moment',13,'2013-06-10','2013-08-23','2013-09-20'),(8,'Fall 2013',1,'0000-00-00','0000-00-00','0000-00-00'),(9,'Spring-Summer 2012',3,'0000-00-00','0000-00-00','0000-00-00'),(10,'Beta Edition',4,'0000-00-00','0000-00-00','2013-08-10'),(11,'Welcome Autumn, 2013',5,'0000-00-00','0000-00-00','0000-00-00'),(12,'2013 Meetings',7,'0000-00-00','0000-00-00','0000-00-00'),(13,'Spring 2013',9,'0000-00-00','0000-00-00','0000-00-00'),(14,'Summer 2013 Camp Session',11,'0000-00-00','0000-00-00','0000-00-00'),(15,'Final Test Session (not really though)',10,'0000-00-00','0000-00-00','0000-00-00'),(16,'Spring 2013',11,'2013-07-01','2013-08-31','2013-08-19'),(17,'2012 Mentorship Setup',7,'2012-08-01','2012-11-30','2012-11-23'),(18,'Fall 2013',15,'2013-09-03','2013-12-20','0000-00-00'),(19,'Fall 2013',16,'2013-09-09','2013-12-13','2013-12-06'),(20,'Session Whatever',17,'0000-00-00','0000-00-00','2013-08-28'),(25,'Autumn 2013',13,'0000-00-00','0000-00-00','2013-09-16'),(26,'Fall 2013 - Alternates',1,'0000-00-00','0000-00-00','2013-09-17'),(30,'SSSSSSSSSSSS',19,'2014-02-04','2014-02-27','2014-02-20');
+INSERT INTO `Session_Names` VALUES (1,'',2,NULL,NULL,NULL,8,'am',12,'am',0,1,0,1,0,0,0),(3,'Spring 2013',2,NULL,NULL,NULL,8,'am',12,'am',0,1,0,1,0,0,0),(4,'Fall 2013',2,NULL,NULL,NULL,8,'am',12,'am',0,1,0,1,0,0,0),(5,'Summer 2013',8,NULL,NULL,NULL,0,'',0,'',1,0,1,0,1,0,0),(6,'Fall Semester 2013',6,'2013-08-26','2013-12-20','2014-01-10',0,'',0,'',0,0,0,0,0,0,0),(7,'Summer 2013: Never Doubted For a Moment',13,'2013-06-10','2013-08-23','2013-09-20',0,'',0,'',0,0,0,0,0,0,0),(8,'Fall 2013',1,'0000-00-00','0000-00-00','0000-00-00',4,'pm',6,'pm',0,1,0,1,0,1,0),(9,'Spring-Summer 2012',3,'0000-00-00','0000-00-00','0000-00-00',0,'',0,'',1,0,0,0,0,0,0),(10,'Beta Edition',4,'0000-00-00','0000-00-00','2013-08-10',12,'am',4,'pm',1,0,1,0,0,0,0),(11,'Welcome Autumn, 2013',5,'0000-00-00','0000-00-00','0000-00-00',0,'',0,'',0,0,0,0,0,0,0),(12,'2013 Meetings',7,'0000-00-00','0000-00-00','0000-00-00',0,'',0,'',1,0,1,0,1,0,0),(13,'Spring 2013',9,'0000-00-00','0000-00-00','0000-00-00',6,'pm',8,'pm',0,0,1,0,1,0,0),(14,'Summer 2013 Camp Session',11,'0000-00-00','0000-00-00','0000-00-00',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(15,'Final Test Session (not really though)',10,'0000-00-00','0000-00-00','0000-00-00',0,'',0,'',0,0,0,0,0,0,0),(16,'Spring 2013',11,'2013-07-01','2013-08-31','2013-08-19',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(17,'2012 Mentorship Setup',7,'2012-08-01','2012-11-30','2012-11-23',0,'',0,'',1,0,1,0,1,0,0),(18,'Fall 2013',15,'2013-09-03','2013-12-20','0000-00-00',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(19,'Fall 2013',16,'2013-09-09','2013-12-13','2013-12-06',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(20,'Session Whatever',17,'0000-00-00','0000-00-00','2013-08-28',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(25,'Autumn 2013',13,'0000-00-00','0000-00-00','2013-09-16',0,'',0,'',0,0,0,0,0,0,0),(26,'Fall 2013 - Alternates',1,'0000-00-00','0000-00-00','2013-09-17',4,'pm',6,'pm',0,1,0,1,0,1,0),(30,'SSSSSSSSSSSS',19,'2014-02-04','2014-02-27','2014-02-20',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `Session_Names` ENABLE KEYS */;
 UNLOCK TABLES;
 

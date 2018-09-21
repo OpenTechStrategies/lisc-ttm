@@ -1168,7 +1168,33 @@ while ($sess = mysqli_fetch_array($sessions)) {
                                                          alert('Can\'t Generate: Please choose days of week of the program.');
                                                      }
                                            ">Generate Attendance Sheets</a>)
-                                     <?php } ?></td></tr>
+                                     <?php } ?>
+                                    <?php
+                                    $days = Array();
+                                    if($sess["Monday"]) { $days[] = "Mon"; }
+                                    if($sess["Tuesday"]) { $days[] = "Tue"; }
+                                    if($sess["Wednesday"]) { $days[] = "Wed"; }
+                                    if($sess["Thursday"]) { $days[] = "Thur"; }
+                                    if($sess["Friday"]) { $days[] = "Fri"; }
+                                    if($sess["Saturday"]) { $days[] = "Sat"; }
+                                    if($sess["Sunday"]) { $days[] = "Sun"; }
+
+                                    if(sizeof($days) > 0) {
+                                    echo "<br/>(";
+                                    echo join("/", $days);
+
+                                    if($sess["Start_Hour"]) {
+                                        echo ", ";
+                                        echo $sess["Start_Hour"];
+                                        echo $sess["Start_Suffix"];
+                                        echo " - ";
+                                        echo $sess["End_Hour"];
+                                        echo $sess["End_Suffix"];
+                                    }
+                                    echo ")";
+                                    }
+                                    ?>
+    </td></tr>
                             <tr class="toggler_<?php echo $sess[0] ?> hide_dates"><td class="all_projects" ><strong>Dates:</strong> <?php echo $sess[3] . ' --- ' . $sess[4]; ?></td>
                                 <td class="all_projects"><strong>Surveys Due:</strong> <?php echo $sess[5]; ?></td></tr><?php
                         }
