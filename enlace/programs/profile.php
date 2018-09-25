@@ -188,7 +188,29 @@ Shows all program information.
         ).fail(failAlert);
     }
 
-    function checkNewSessionNameAndSave() {
+    function checkNewSessionDataAndSave() {
+        var alertMsg = false;
+        alertMsg = document.getElementById('new_session_name').value == '' ? "Session must have a name" : alertMsg;
+        alertMsg = document.getElementById('new_session_start').value == '' ? "Session must have a start date" : alertMsg;
+        alertMsg = document.getElementById('new_session_end').value == '' ? "Session must have a end date" : alertMsg;
+        alertMsg = !(document.getElementById('new_session_mon').checked ||
+                    document.getElementById('new_session_tues').checked ||
+                    document.getElementById('new_session_weds').checked ||
+                    document.getElementById('new_session_thurs').checked ||
+                    document.getElementById('new_session_fri').checked ||
+                    document.getElementById('new_session_sat').checked ||
+                    document.getElementById('new_session_sun').checked) ?
+                   "Session must have at least one day of week selected" :
+                   alertMsg;
+        alertMsg = document.getElementById('new_session_start_hour').value == '-----' ? "Session must have a start time" : alertMsg;
+        alertMsg = document.getElementById('new_session_start_suffix').value == '-----' ? "Session must have a start time" : alertMsg;
+        alertMsg = document.getElementById('new_session_end_hour').value == '-----' ? "Session must have an end time" : alertMsg;
+        alertMsg = document.getElementById('new_session_end_suffix').value == '-----' ? "Session must have an end time" : alertMsg;
+
+        if(alertMsg) {
+            alert(alertMsg);
+            return;
+        }
         //first check whether a session with this name already exists:
         $.post(
             '../ajax/edit_program.php',
@@ -621,7 +643,7 @@ Shows all program information.
                                  </select>
                         </td></tr>
 
-                        <tr><td colspan="2" class="blank"><input type="button" onclick="checkNewSessionNameAndSave();" value="Save Session">
+                        <tr><td colspan="2" class="blank"><input type="button" onclick="checkNewSessionDataAndSave();" value="Save Session">
                                 <div id="save_new_session" style="font-weight: bold;"></div></td></tr>
                     </table>
                 </div>
