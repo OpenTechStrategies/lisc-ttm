@@ -146,7 +146,7 @@ PRIMARY KEY (`Cohort_ID`),
 LOCK TABLES `Cohorts` WRITE;
 /*!40000 ALTER TABLE `Cohorts` DISABLE KEYS */;
 INSERT INTO `Cohorts` VALUES (1,'TestCohort'),(2, 'AnotherCohort');
-/*!40000 ALTER TABLE `Colleges` ENABLE KEYS */;
+/*!40000 ALTER TABLE `Cohorts` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
