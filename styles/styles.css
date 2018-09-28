@@ -363,6 +363,21 @@ table.search_table{
 	margin-right:auto;
 }
 
+table.settings_table{
+	font-size: .9em;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+table.settings_table td.all_projects{
+  padding:10px;
+}
+
+table.settings_table p{
+  width:400px;
+  text-align:left;
+}
+
 table.trp_add_table{
 	font-size: .9em;
 	margin-left:auto;

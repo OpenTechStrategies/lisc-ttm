@@ -146,7 +146,7 @@ PRIMARY KEY (`Cohort_ID`),
 LOCK TABLES `Cohorts` WRITE;
 /*!40000 ALTER TABLE `Cohorts` DISABLE KEYS */;
 INSERT INTO `Cohorts` VALUES (1,'TestCohort'),(2, 'AnotherCohort');
-/*!40000 ALTER TABLE `Colleges` ENABLE KEYS */;
+/*!40000 ALTER TABLE `Cohorts` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -4211,6 +4211,31 @@ LOCK TABLES `Session_Names` WRITE;
 /*!40000 ALTER TABLE `Session_Names` DISABLE KEYS */;
 INSERT INTO `Session_Names` VALUES (1,'',2,NULL,NULL,NULL),(3,'Spring 2013',2,NULL,NULL,NULL),(4,'Fall 2013',2,NULL,NULL,NULL),(5,'Summer 2013',8,NULL,NULL,NULL),(6,'Fall Semester 2013',6,'2013-08-26','2013-12-20','2014-01-10'),(7,'Summer 2013: Never Doubted For a Moment',13,'2013-06-10','2013-08-23','2013-09-20'),(8,'Fall 2013',1,'0000-00-00','0000-00-00','0000-00-00'),(9,'Spring-Summer 2012',3,'0000-00-00','0000-00-00','0000-00-00'),(10,'Beta Edition',4,'0000-00-00','0000-00-00','2013-08-10'),(11,'Welcome Autumn, 2013',5,'0000-00-00','0000-00-00','0000-00-00'),(12,'2013 Meetings',7,'0000-00-00','0000-00-00','0000-00-00'),(13,'Spring 2013',9,'0000-00-00','0000-00-00','0000-00-00'),(14,'Summer 2013 Camp Session',11,'0000-00-00','0000-00-00','0000-00-00'),(15,'Final Test Session (not really though)',10,'0000-00-00','0000-00-00','0000-00-00'),(16,'Spring 2013',11,'2013-07-01','2013-08-31','2013-08-19'),(17,'2012 Mentorship Setup',7,'2012-08-01','2012-11-30','2012-11-23'),(18,'Fall 2013',15,'2013-09-03','2013-12-20','0000-00-00'),(19,'Fall 2013',16,'2013-09-09','2013-12-13','2013-12-06'),(20,'Session Whatever',17,'0000-00-00','0000-00-00','2013-08-28'),(25,'Autumn 2013',13,'0000-00-00','0000-00-00','2013-09-16'),(26,'Fall 2013 - Alternates',1,'0000-00-00','0000-00-00','2013-09-17'),(30,'SSSSSSSSSSSS',19,'2014-02-04','2014-02-27','2014-02-20');
 /*!40000 ALTER TABLE `Session_Names` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `System_Settings`
+--
+
+DROP TABLE IF EXISTS `System_Settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `System_Settings` (
+  `Setting_Name` varchar(255) NOT NULL,
+  `Setting_Type` enum('integer','string') NOT NULL,
+  `Setting_Value` varchar(255) DEFAULT NULL,
+  UNIQUE KEY `Setting_Name` (`Setting_Name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `System_Settings`
+--
+
+LOCK TABLES `System_Settings` WRITE;
+/*!40000 ALTER TABLE `System_Settings` DISABLE KEYS */;
+INSERT INTO `System_Settings` VALUES ('num_days_hidden','integer','365');
+/*!40000 ALTER TABLE `System_Settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

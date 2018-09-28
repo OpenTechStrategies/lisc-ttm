@@ -26,6 +26,8 @@ user_enforce_has_access($Enlace_id);
 include "../../header.php";
 include "../header.php";
 
+include "../include/settings.php";
+
 ?>
 <div style="display:none"><?php include "../include/datepicker_wtw.php"; ?></div>
 
@@ -39,6 +41,7 @@ List of all programs, and, at the bottom, a place to add a new program.
         $('#ajax_loader').hide();
         $('#add_new').hide();
         $('#add_new_program').hide();
+        $('#inactive_programs').hide();
     });
 
     $(document).ajaxStart(function() {
@@ -52,6 +55,7 @@ List of all programs, and, at the bottom, a place to add a new program.
 
 <div class="content_block">
     <h3>Programs</h3><hr/><br/>
+    <h4>Active Programs</h4>
     <table class="inner_table" style="margin-left:auto;margin-right:auto;width:60%;">
         <!--List of programs.  Each name links to the program it refers to.  -->
         <tr>
@@ -74,9 +78,17 @@ List of all programs, and, at the bottom, a place to add a new program.
             ?>
         </tr>
         <?php
-        $get_program_info = "SELECT * FROM Programs LEFT JOIN Institutions ON Host = Inst_ID ORDER BY Name";
+        $num_days_hidden = get_setting($NumDaysHiddenSetting);
+
+        $get_active_program_info = "SELECT Programs.Program_ID, Name, Institution_Name, MAX(Session_Names.End_Date) AS max_end_date FROM Programs " .
+            "LEFT JOIN Institutions ON Host = Inst_ID " .
+            "INNER JOIN Session_Names ON Session_Names.Program_ID = Programs.Program_ID " .
+            "           AND Session_Names.End_Date > NOW() - INTERVAL $num_days_hidden DAY " .
+            "GROUP BY Programs.Program_ID " .
+            "ORDER BY Name";
+
         include "../include/dbconnopen.php";
-        $program_info = mysqli_query($cnnEnlace, $get_program_info);
+        $program_info = mysqli_query($cnnEnlace, $get_active_program_info);
         while ($temp_program = mysqli_fetch_array($program_info)) {
             ?><tr>
                 <td><a href="javascript:;" onclick="$.post(
@@ -124,6 +136,88 @@ List of all programs, and, at the bottom, a place to add a new program.
         include "../include/dbconnclose.php";
         ?>
     </table>
+    <br/><br/>
+    <h4 onclick="$('#inactive_programs').slideToggle();" style="cursor:pointer;">Inactive Programs</h4>
+    <div id="inactive_programs">
+    <table class="inner_table" style="margin-left:auto;margin-right:auto;width:60%;">
+        <!--List of programs.  Each name links to the program it refers to.  -->
+        <tr>
+            <td>
+                <h4>Program</h4>
+            </td>
+            <td>
+                <h4>Host Organization</h4>
+            </td>
+            <?php
+            //if an administrator
+        if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
+                //show delete area
+                ?>
+                <td>
+                    <h4>Delete</h4>
+                </td>
+                <?php
+            }
+            ?>
+        </tr>
+        <?php
+        $get_inactive_program_info = "SELECT Programs.Program_ID, Name, Institution_Name, MAX(Session_Names.End_Date) AS max_end_date FROM Programs " .
+            "LEFT JOIN Institutions ON Host = Inst_ID " .
+            "INNER JOIN Session_Names ON Session_Names.Program_ID = Programs.Program_ID " .
+            "           AND Session_Names.End_Date <= NOW() - INTERVAL $num_days_hidden DAY " .
+            "GROUP BY Programs.Program_ID " .
+            "ORDER BY Name";
+
+        include "../include/dbconnopen.php";
+        $program_info = mysqli_query($cnnEnlace, $get_inactive_program_info);
+        while ($temp_program = mysqli_fetch_array($program_info)) {
+            ?><tr>
+                <td><a href="javascript:;" onclick="$.post(
+                                '../ajax/set_program_id.php',
+                                {
+                                    page: 'profile',
+                                    id: '<?php echo $temp_program['Program_ID']; ?>'
+                                },
+                        function(response) {
+                            window.location = 'profile.php';
+                        }
+                        ).fail(failAlert);"><?php echo $temp_program['Name']; ?></a>
+                </td>
+                <td>
+                    <?php echo $temp_program['Institution_Name']; ?>
+                </td>
+                <?php
+                //if an administrator
+            if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
+                    //show delete area
+                    ?>
+                    <td style="text-align: center;">
+                        <a href="javascript:;" onclick="
+                                            if (confirm('ARE YOU SURE YOU WANT TO DELETE THIS PROGRAM?')) {
+                                                if (confirm('ARE YOU SURE YOU WANT TO DELETE THIS PROGRAM?\r\nNOTE: This will remove all session data as well.')) {
+                                                    $.post(
+                                                            '../ajax/delete_program.php',
+                                                            {
+                                                                action: 'delete_program',
+                                                                program_id: '<?php echo $temp_program['Program_ID']; ?>'
+                                                            },
+                                                    function(response) {
+                                                        //document.write(response);
+                                                        window.location='programs.php';
+                                                    }
+                                                    ).fail(failAlert);
+                                                }
+                                            }" style="font-size: .8em; color: #f00; font-weight: bold;">X</a>
+                    </td>
+                    <?php
+                }
+                ?>
+            </tr><?php
+        }
+        include "../include/dbconnclose.php";
+        ?>
+    </table>
+    </div>
     <br/><br/>
 
     <!--

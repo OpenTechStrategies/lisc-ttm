@@ -2,7 +2,7 @@ Description of the database layout.
 
 * Overview
 
-There are 6 main databases, and a large (137) number of uniquely named
+There are 6 main databases, and a large (138) number of uniquely named
 tables.
 
 Many have the same names, but they often diverge.  When new feature
@@ -146,6 +146,7 @@ as work is done.
 | Subcategories                        |      | X    |      |            |     |        |
 | Subcategory_Attendance               |      | X    |      |            |     |        |
 | Subcategory_Dates                    |      | X    |      |            |     |        |
+| System_Settings                      |      |      |      |            |     | X      |
 | Teacher_Exchange_Rooms               |      |      |      |            | X   |        |
 | Teachers                             |      |      |      |            | X   |        |
 | User_Established_Activities          |      |      |      | X          |     |        |
@@ -703,6 +704,14 @@ here, but it's a multiple choice survey.
 | Date_Dropped           | date      | YES  |     | NULL              |                |
 |------------------------+-----------+------+-----+-------------------+----------------+
 
+**** System_Settings
++---------------+--------------------------+------+-----+---------+-------+
+| Field         | Type                     | Null | Key | Default | Extra |
++---------------+--------------------------+------+-----+---------+-------+
+| Setting_Name  | varchar(255)             | NO   | PRI | NULL    |       |
+| Setting_Type  | enum('integer','string') | NO   |     | NULL    |       |
+| Setting_Value | varchar(255)             | YES  |     | NULL    |       |
++---------------+--------------------------+------+-----+---------+-------+
 
 ** LSNA
 ** SWOP

@@ -23,6 +23,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 
 user_enforce_has_access($Enlace_id);
 
+include "../include/settings.php";
+
+$num_days_hidden = get_setting($NumDaysHiddenSetting);
 //get user's access
 
 $access_array = $USER->program_access($Enlace_id);
@@ -40,7 +43,7 @@ $participant_program_string .= ")";
 <script type="text/javascript">
   function update_num_selected() {
     $(".numselected").each(function (idx, span) {
-      span.innerHTML = $(".program_checkbox:checked").length;
+      span.innerHTML = $(".recent_program_checkbox:checked").length + $(".old_program_checkbox:checked").length;
     });
   }
 
@@ -60,16 +63,31 @@ $participant_program_string .= ")";
         });
         });
 
-    $('.program_checkbox').on('click', update_num_selected);
+    $('.recent_program_checkbox').on('click', update_num_selected);
+    $('.old_program_checkbox').on('click', update_num_selected);
 
-    $('#select_all_program_checkboxes').on('click', function () {
-        if ($('#select_all_program_checkboxes').attr('checked')) {
-            $('.program_checkbox').each( function () {
+    $('#select_all_recent_program_checkboxes').on('click', function () {
+        if ($('#select_all_recent_program_checkboxes').attr('checked')) {
+            $('.recent_program_checkbox').each( function () {
                 $(this).attr('checked', true);
             });
         }
         else {
-            $('.program_checkbox').each( function () {
+            $('.recent_program_checkbox').each( function () {
+                $(this).attr('checked', false);
+            });
+        }
+        update_num_selected();
+    });
+
+    $('#select_all_old_program_checkboxes').on('click', function () {
+        if ($('#select_all_old_program_checkboxes').attr('checked')) {
+            $('.old_program_checkbox').each( function () {
+                $(this).attr('checked', true);
+            });
+        }
+        else {
+            $('.old_program_checkbox').each( function () {
                 $(this).attr('checked', false);
             });
         }
@@ -96,33 +114,58 @@ $participant_program_string .= ")";
       </div>
     <div>
 
-    <input type="checkbox" id="select_all_program_checkboxes"> <b>Select All</b><br>
+    <input type="checkbox" id="select_all_recent_program_checkboxes"> <b>Select All Recent</b><br>
 <?php
     $checked_programs = [];
-    $program_string = " WHERE Programs.Program_ID = " . $access_array[0];
+    $program_string = " WHERE (Programs.Program_ID = " . $access_array[0];
     foreach ($access_array as $program){
         $program_string .= " OR Programs.Program_ID = " . $program;
     }
-            $get_all_programs = "SELECT Session_ID, Session_Name, Name, Session_Names.End_Date FROM Session_Names INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID " . $program_string . " ORDER BY Name";
+    $program_string .= ")";
+    $old_date = date("Y-m-d", strtotime("-$num_days_hidden days"));
+    $get_all_programs_recent = "SELECT Session_ID, Session_Name, Name, Session_Names.End_Date FROM Session_Names INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID " . $program_string . " AND Session_Names.End_Date > '$old_date' ORDER BY Name";
 
-        include "../include/dbconnopen.php";
-        $all_programs = mysqli_query($cnnEnlace, $get_all_programs);
-        $checkbox_count = 0;
-        while ($program = mysqli_fetch_row($all_programs)) {
-            $checkbox_count++;
-            ?>
+    include "../include/dbconnopen.php";
+    $all_programs = mysqli_query($cnnEnlace, $get_all_programs_recent);
+    $checkbox_count = 0;
+    while ($program = mysqli_fetch_row($all_programs)) {
+        $checkbox_count++;
+        ?>
 
-            <input type="checkbox" name="program_program_select[]" class="program_checkbox" id="program_checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
-            <?php
-            if ($_POST['program_program_select'] && in_array($program[0], $_POST['program_program_select'])) {
-                $checked_programs[$program[0]] = ['name' => $program[2], 'session_name' => $program[1], 'end_date' => $program[3]];
-                echo 'checked="true"';
-            }
-            ?>><?php
-                   echo "<label for=\"program_checkbox_" . $checkbox_count . "\">" . $program[2] . "--" . $program[1] . "</label><br>";
-               }
-               include "../include/dbconnclose.php";
-               ?>
+        <input type="checkbox" name="program_program_select[]" class="recent_program_checkbox" id="program_checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
+        <?php
+        if ($_POST['program_program_select'] && in_array($program[0], $_POST['program_program_select'])) {
+            $checked_programs[$program[0]] = ['name' => $program[2], 'session_name' => $program[1], 'end_date' => $program[3]];
+            echo 'checked="true"';
+        }
+        ?>><?php
+               echo "<label for=\"program_checkbox_" . $checkbox_count . "\">" . $program[2] . "--" . $program[1] . "</label><br>";
+           }
+           include "../include/dbconnclose.php";
+
+    ?>
+    <hr>
+    <input type="checkbox" id="select_all_old_program_checkboxes"> <b>Select All Old</b><br>
+    <?php
+    $get_all_programs_old = "SELECT Session_ID, Session_Name, Name, Session_Names.End_Date FROM Session_Names INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID " . $program_string . " AND Session_Names.End_Date <= '$old_date' ORDER BY Name";
+
+    include "../include/dbconnopen.php";
+    $all_programs = mysqli_query($cnnEnlace, $get_all_programs_old);
+    while ($program = mysqli_fetch_row($all_programs)) {
+        $checkbox_count++;
+        ?>
+
+        <input type="checkbox" name="program_program_select[]" class="old_program_checkbox" id="program_checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
+        <?php
+        if ($_POST['program_program_select'] && in_array($program[0], $_POST['program_program_select'])) {
+            $checked_programs[$program[0]] = ['name' => $program[2], 'session_name' => $program[1], 'end_date' => $program[3]];
+            echo 'checked="true"';
+        }
+        ?>><?php
+               echo "<label for=\"program_checkbox_" . $checkbox_count . "\">" . $program[2] . "--" . $program[1] . "</label><br>";
+           }
+           include "../include/dbconnclose.php";
+           ?>
 
 
       </div>
@@ -145,7 +188,7 @@ $participant_program_string .= ")";
         </tr>
         <?php
             //get user's programs
-         $all_progs = "SELECT Name, Session_Name, Session_ID, COUNT(Participant_ID) FROM Session_Names 
+         $all_progs = "SELECT Name, Session_Name, Session_ID, COUNT(Participant_ID), Session_Names.End_Date FROM Session_Names
                             INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_ID 
                             INNER JOIN Programs ON Session_Names.Program_Id = Programs.Program_ID 
                             " . $program_string . "
@@ -154,38 +197,40 @@ $participant_program_string .= ")";
         include "../include/dbconnopen.php";
         $all_programs = mysqli_query($cnnEnlace, $all_progs);
         while ($program = mysqli_fetch_row($all_programs)) {
+            if(strtotime($program[4]) > strtotime("-$num_days_hidden days")) {
             ?>
-            <tr><td class="all_projects"><?php echo $program[0] ?></td>
-                <td class="all_projects"><?php echo $program[1] ?></td>
-                <td class="all_projects">
-                    <?php
-                    //just get the count of people in this session.
-                    $total_enrolled = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID=$program[2] AND Participant_ID > 0";
-                    $all_enrolled = mysqli_query($cnnEnlace, $total_enrolled);
-                    $enrolled = mysqli_fetch_row($all_enrolled);
-                    echo $enrolled[0];
-                    ?>
-                </td>
-                <td class="all_projects">
-                    <?php
-                    //count of people who've dropped
-                    $total_dropped = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID=$program[2] AND Participant_ID > 0 AND Date_Dropped IS NOT NULL";
-                    $all_dropped = mysqli_query($cnnEnlace, $total_dropped);
-                    $dropped = mysqli_fetch_row($all_dropped);
-                    echo $dropped[0];
-                    ?>
-                </td>
-                <td class="all_projects">
-                    <?php
-                    //count of people remaining in the session
-                    $total_current = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID=$program[2] AND Participant_ID > 0 AND Date_Dropped IS NULL";
-                    $all_current = mysqli_query($cnnEnlace, $total_current);
-                    $current = mysqli_fetch_row($all_current);
-                    echo $current[0];
-                    ?>
-                </td>
-            </tr>
+                <tr><td class="all_projects"><?php echo $program[0] ?></td>
+                    <td class="all_projects"><?php echo $program[1] ?></td>
+                    <td class="all_projects">
+                        <?php
+                        //just get the count of people in this session.
+                        $total_enrolled = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID=$program[2] AND Participant_ID > 0";
+                        $all_enrolled = mysqli_query($cnnEnlace, $total_enrolled);
+                        $enrolled = mysqli_fetch_row($all_enrolled);
+                        echo $enrolled[0];
+                        ?>
+                    </td>
+                    <td class="all_projects">
+                        <?php
+                        //count of people who've dropped
+                        $total_dropped = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID=$program[2] AND Participant_ID > 0 AND Date_Dropped IS NOT NULL";
+                        $all_dropped = mysqli_query($cnnEnlace, $total_dropped);
+                        $dropped = mysqli_fetch_row($all_dropped);
+                        echo $dropped[0];
+                        ?>
+                    </td>
+                    <td class="all_projects">
+                        <?php
+                        //count of people remaining in the session
+                        $total_current = "SELECT COUNT(*) FROM Participants_Programs WHERE Program_ID=$program[2] AND Participant_ID > 0 AND Date_Dropped IS NULL";
+                        $all_current = mysqli_query($cnnEnlace, $total_current);
+                        $current = mysqli_fetch_row($all_current);
+                        echo $current[0];
+                        ?>
+                    </td>
+                </tr>
             <?php
+            }
         }
         include "../include/dbconnclose.php";
         ?>
