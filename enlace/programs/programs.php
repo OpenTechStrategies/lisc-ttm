@@ -55,13 +55,13 @@ List of all programs, and, at the bottom, a place to add a new program.
 </script>
 
 <div class="content_block">
-    <h3>Programs</h3><hr/><br/>
-    <h4>Active Programs</h4>
+    <h3>Program Site/Orgs</h3><hr/><br/>
+    <h4>Active Program Site/Orgs</h4>
     <table class="inner_table" style="margin-left:auto;margin-right:auto;width:60%;">
         <!--List of programs.  Each name links to the program it refers to.  -->
         <tr>
             <td>
-                <h4>Program</h4>
+                <h4>Program Site/Org</h4>
             </td>
             <td>
                 <h4>Host Organization</h4>
@@ -138,13 +138,13 @@ List of all programs, and, at the bottom, a place to add a new program.
         ?>
     </table>
     <br/><br/>
-    <h4 onclick="$('#inactive_programs').slideToggle();" style="cursor:pointer;">Inactive Programs</h4>
+    <h4 onclick="$('#inactive_programs').slideToggle();" style="cursor:pointer;">Inactive Program Site/Orgs</h4>
     <div id="inactive_programs">
     <table class="inner_table" style="margin-left:auto;margin-right:auto;width:60%;">
         <!--List of programs.  Each name links to the program it refers to.  -->
         <tr>
             <td>
-                <h4>Program</h4>
+                <h4>Program Site/Org</h4>
             </td>
             <td>
                 <h4>Host Organization</h4>
@@ -225,10 +225,10 @@ List of all programs, and, at the bottom, a place to add a new program.
     Add new program here.
     -->
 
-    <h4 onclick="$('#add_new_program').slideToggle();" style="cursor:pointer;">Add New Program...</h4>
+    <h4 onclick="$('#add_new_program').slideToggle();" style="cursor:pointer;">Add New Program Site/Org...</h4>
     <div id="add_new_program"><table class="search_table"  style="border:2px solid #696969;font-size:.8em;">
             <tr>
-                <td><strong>Program Name:</strong></td>
+                <td><strong>Progra Site/Orgm Name:</strong></td>
                 <td><input type="text" id="new_name"/></td>
             </tr>
             <tr>

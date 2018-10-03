@@ -48,7 +48,7 @@ include "../include/dbconnclose.php";
 Shows basic institution information
 -->
 
-<h3>Institution Profile: <?php echo $inst['Institution_Name']; ?></h3><hr/><br/>
+<h3>Organization Profile: <?php echo $inst['Institution_Name']; ?></h3><hr/><br/>
 <table class="profile_table" >
     <tr><td width="50%">
             <table class="inner_table" style="border: 2px solid #696969;">
@@ -147,7 +147,7 @@ Shows basic institution information
             List of all related programs.  can't add new programs here.
             -->
 
-        </td><td><div style="margin-left:50px;"><h4>Related Programs</h4>
+        </td><td><div style="margin-left:50px;"><h4>Related Program Site/Orgs</h4>
                 <?php
                 //get all programs administered by this institution
                 include "../include/dbconnopen.php";

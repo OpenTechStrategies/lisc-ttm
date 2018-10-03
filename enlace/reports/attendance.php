@@ -185,8 +185,8 @@ $(document).ready(function() {
 ?>
 <table class="all_projects">
         <tr>
-            <th>Program name</th>
-            <th>Session name</th>
+            <th>Program Site/Org</th>
+            <th>Program</th>
             <th>Missing Attendance</th>
             <th>Enrollment per session</th>
             <th>Dosage hours</th>

@@ -156,7 +156,7 @@ elseif ($_POST['action'] == 'find_sessions') {
     $get_sessions = "SELECT * FROM Session_Names WHERE Program_Id='" . $_POST['program'] . "'";
     $sessions = mysqli_query($cnnEnlace, $get_sessions);
     ?>
-    <span class="helptext">Choose session:</span><br>
+    <span class="helptext">Choose program:</span><br>
     <select id="choose_session_new">
         <option value="">----</option>
     <?php

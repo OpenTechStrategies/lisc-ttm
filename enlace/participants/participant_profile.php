@@ -809,7 +809,7 @@ forms as well.-->
 
             <!--Add to new session here:-->
 
-            <td><span class="helptext">Add to program:</span><br/>
+            <td><span class="helptext">Add to program site/org:</span><br/>
                 <select id="programs" onchange="
                         var selected_prog = this.value;
                         $.post(

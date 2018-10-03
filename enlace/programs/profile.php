@@ -270,11 +270,11 @@ Shows all program information.
 
 
 <div class="content_block">
-    <h3>Program Profile: <?php echo $program->name; ?></h3>
+    <h3>Program Site/Org Profile: <?php echo $program->name; ?></h3>
     <?php if($_GET['includeold']) { ?>
-        <h4>Currently viewing all Sessions: <a href='profile.php'>View only Recent Sessions</a></h4>
+        <h4>Currently viewing all Programs: <a href='profile.php'>View only Recent Programs</a></h4>
     <?php } else { ?>
-        <h4>Currently viewing only Recent Sessions: <a href='?includeold=1'>View with Older Sessions</a></h4>
+        <h4>Currently viewing only Recent Programs: <a href='?includeold=1'>View with Older Programs</a></h4>
     <?php } ?>
     </hr>
     <hr/><br/>
@@ -284,7 +284,7 @@ Shows all program information.
                 <!--Basic information: -->
                 <table class="inner_table" style="border: 2px solid #696969;">
                     <tr>
-                        <td><strong>Program Name:</strong></td>
+                        <td><strong>Program Site/Org Name:</strong></td>
                         <td><input type="text" value="<?php echo $program->name; ?>" class="edit_program" id="program_name_edit">
                             <span class="display_program"><?php echo $program->name; ?></span></td>
                     </tr>
@@ -524,7 +524,7 @@ Shows all program information.
                 percentage completed per session.
                 -->
                 <table class="inner_table">
-                    <tr><th>Session</th><th>Number Surveys Completed / Number Participants in the Session</th><th>Percent Surveys Completed</th></tr>
+                    <tr><th>Program</th><th>Number Surveys Completed / Number Participants in the Program</th><th>Percent Surveys Completed</th></tr>
                     <?php
                     //get each session
                     $get_sessions = "SELECT * FROM Session_Names WHERE Program_ID='$program->program_id' $old_session_name_query";
@@ -576,7 +576,7 @@ Shows all program information.
             <td>
 
                 <!--Create a new session: -->
-                <h4 style="cursor:pointer" onclick="$('#add_session_container').slideToggle()">Add New Session</h4>
+                <h4 style="cursor:pointer" onclick="$('#add_session_container').slideToggle()">Add New Program</h4>
                 <div id="add_session_container">
                     <span class="helptext">Adding a new session of the program allows you to add a new set of participants and dates.  It's appropriate for 
                         adding spring and fall versions of a program, or a new year altogether.  Be sure to title the session clearly - "Spring 2013" is better than "Spring."</span>
@@ -692,7 +692,7 @@ Shows all program information.
                                  </select>
                         </td></tr>
 
-                        <tr><td colspan="2" class="blank"><input type="button" onclick="checkNewSessionDataAndSave();" value="Save Session">
+                        <tr><td colspan="2" class="blank"><input type="button" onclick="checkNewSessionDataAndSave();" value="Save Program">
                                 <div id="save_new_session" style="font-weight: bold;"></div></td></tr>
                     </table>
                 </div>
@@ -700,9 +700,9 @@ Shows all program information.
                 <br>
 
                 <!-- Choose a session from a dropdown menu and edit its name. -->
-                <h4>Edit Session</h4>
+                <h4>Edit Program</h4>
                 <br/><br/>
-                Session:  <select id="edited_session" onchange="editSession();" ><option value="">-----</option>
+                Program:  <select id="edited_session" onchange="editSession();" ><option value="">-----</option>
                     <?php
                     //get sessions
                     $related_sessions = "SELECT * FROM Session_Names WHERE Program_ID='" . $program->program_id . "'";
@@ -796,7 +796,7 @@ Shows all program information.
                         </td>
                     </tr>
                     <tr>
-                        <td colspan=2><input type="button" value="Save Session" onclick="saveEditedSession()"></td>
+                        <td colspan=2><input type="button" value="Save Program" onclick="saveEditedSession()"></td>
                     </tr>
                 </table>
 

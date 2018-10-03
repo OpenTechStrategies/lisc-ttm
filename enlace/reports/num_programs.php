@@ -181,8 +181,8 @@ $participant_program_string .= ")";
     <h4>Results based on the current database information</h4>
     <table class="all_projects">
         <tr>
-            <th>Program Name</th>
-            <th>Session Name</th>
+            <th>Program Site/Org</th>
+            <th>Program</th>
             <th>Total enrollment</th>
             <th>Total dropped</th>
             <th>Current enrollment</th>
