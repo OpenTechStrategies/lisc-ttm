@@ -318,4 +318,19 @@ UPDATE `Session_Names` SET `Activity_Mentor` = (SELECT `Activity_Mentor` FROM `P
 UPDATE `Session_Names` SET `Activity_Service` = (SELECT `Activity_Service` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
 ```
 
+## Issue 253 - Remove Unused Demographics - October 2018
 
+Certain demographic information is no longer needed for Participants, and may have never been useful.  This removes them from the database.
+
+### SQL for column additions
+```
+USE ttm-enlace
+ALTER TABLE `Participants`
+    DROP `Day_Phone`,
+    DROP `Evening_Phone`,
+    DROP `Email`,
+    DROP `Early_Warning_Absences`,
+    DROP `Early_Warning_Failed`,
+    DROP `Early_Warning_Discipline`,
+    DROP `Referring_Teacher`;
+```

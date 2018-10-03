@@ -77,8 +77,6 @@ class Participant {
 
         $this->first_name = $temp_participant['First_Name'];
         $this->last_name = $temp_participant['Last_Name'];
-        $this->day_phone = $temp_participant['Day_Phone'];
-        $this->evening_phone = $temp_participant['Evening_Phone'];
         $this->role = $temp_participant['Role'];
         $this->full_address = $temp_participant['Address_Num'] . " " . $temp_participant['Address_Dir'] . " " .
                 $temp_participant['Address_Street'] . " " . $temp_participant['Address_Street_Type'] . "<br> " .
@@ -96,12 +94,7 @@ class Participant {
         $this->grade = $temp_participant['Grade'];
         $this->grade_entered = $temp_participant['Grade_Entered'];
         $this->date_entered = $temp_participant['Date_Entered'];
-        $this->email = $temp_participant['Email'];
         $this->schoolid = $temp_participant['School'];
-        $this->absences = $temp_participant['Early_Warning_Absences'];
-        $this->failed = $temp_participant['Early_Warning_Failed'];
-        $this->discipline = $temp_participant['Early_Warning_Discipline'];
-        $this->teacher = $temp_participant['Referring_Teacher'];
         $this->recruitment = $temp_participant['Recruitment'];
         $this->justice_system = $temp_participant['Justice_System'];
     }
