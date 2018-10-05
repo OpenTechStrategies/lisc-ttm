@@ -234,11 +234,11 @@ include "../classes/participant.php";
                                 ?>
                             </select>
                         </td>
-                        <td><strong>Justice System History:</strong></td>
+                        <td><strong>Youth Behavioral History:</strong></td>
                         <td>
-                            <select id="justice_system_new"/>
+                            <select id="youth_behavioral_new"/>
                                 <?php
-                                    foreach($justice_system_options as $value => $display) {
+                                    foreach($youth_behavioral_options as $value => $display) {
                                         echo "<option value='$value'$selected>$display</option>";
                                     }
                                 ?>
@@ -284,7 +284,7 @@ include "../classes/participant.php";
                                             dob: dob,
                                             age: age,
                                             recruitment: document.getElementById('recruitment_new').value,
-                                            justice_system: document.getElementById('justice_system_new').value,
+                                            youth_behavioral: document.getElementById('youth_behavioral_new').value,
                                             grade: grade,
                                             gender: gender,
                                             school: school,

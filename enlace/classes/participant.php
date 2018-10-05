@@ -35,7 +35,7 @@ $recruitment_options = Array(
     "6" => "Other"
 );
 
-$justice_system_options = Array(
+$youth_behavioral_options = Array(
     "0" => "N/A",
     "1" => "Has been arrested",
     "2" => "Has had minimal interactions",
@@ -96,7 +96,7 @@ class Participant {
         $this->date_entered = $temp_participant['Date_Entered'];
         $this->schoolid = $temp_participant['School'];
         $this->recruitment = $temp_participant['Recruitment'];
-        $this->justice_system = $temp_participant['Justice_System'];
+        $this->youth_behavioral = $temp_participant['Youth_Behavioral'];
     }
 
     /*
