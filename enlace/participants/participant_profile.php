@@ -296,7 +296,7 @@ function saveBasicInfo() {
         </td>
         </tr>
         <tr>
-            <td><strong>Home Language</strong></td>
+            <td><strong>Home Language other than English</strong></td>
             <td>
                 <span class="basic_info_show"><?php echo $home_lang_options[$person->home_lang]; ?></span>
                 <select class="basic_info_edit" id="home_lang_edit"/>
