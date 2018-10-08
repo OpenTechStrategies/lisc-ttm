@@ -790,7 +790,13 @@ if (isset($_GET['assessment'])) {
                 },
         function(response) {
             document.getElementById('show_intake_response').innerHTML += response;
-        }).fail(function() {alert('You do not have permission to perform this action.');});">
+        }).fail(function(response) {
+            if(response.responseText == 'bad_date') {
+                alert('Please enter a date completed within last six weeks.');
+            } else {
+                alert('You do not have permission to perform this action.');
+            }
+        });">
 
 <div id="show_intake_response"></div>
 <br />
