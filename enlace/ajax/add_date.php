@@ -37,11 +37,9 @@ else if ($_POST['action']=='generate'){
     include "../include/dbconnopen.php";
     $session_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['session_id']);
     $session_query = "SELECT * FROM Session_Names WHERE Session_ID='$session_id_sqlsafe'";
-    $session_info = mysqli_fetch_row(mysqli_query($cnnEnlace, $session_query));
+    $session_info = mysqli_fetch_array(mysqli_query($cnnEnlace, $session_query));
     if($session_info !== FALSE && $session_info[3] != '0000-00-00' && $session_info[4] != '0000-00-00' &&
        $session_info[3] < $session_info[4]) {
-        $program_query = "SELECT * FROM Programs WHERE Program_ID='".$session_info[2]."'";
-        $program_info = mysqli_fetch_array(mysqli_query($cnnEnlace, $program_query));
         date_default_timezone_set('America/Chicago');
         $session_start = new DateTime($session_info[3]);
         $session_end = new DateTime($session_info[4]);
@@ -52,7 +50,7 @@ else if ($_POST['action']=='generate'){
             // want to count on it.
             $days = array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 
-            if($program_info[$days[$date_to_add->format('w')]] == 1) {
+            if($session_info[$days[$date_to_add->format('w')]] == 1) {
                 $new_date="INSERT INTO Program_Dates (Program_ID, Date_Listed) VALUES
                     ('".$session_id_sqlsafe."', '".$date_to_add->format('Y-m-d')."')";
                 mysqli_query($cnnEnlace, $new_date);

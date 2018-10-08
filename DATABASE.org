@@ -457,6 +457,17 @@ youth programs.
 | Start_Date   | date        | YES  |     | NULL    |                |
 | End_Date     | date        | YES  |     | NULL    |                |
 | Survey_Due   | date        | YES  |     | NULL    |                |
+| Start_Hour   | int(11)     | YES  |     | NULL    |                |
+| Start_Suffix | varchar(45) | YES  |     | NULL    |                |
+| End_Hour     | int(11)     | YES  |     | NULL    |                |
+| End_Suffix   | varchar(45) | YES  |     | NULL    |                |
+| Monday       | int(11)     | YES  |     | NULL    |                |
+| Tuesday      | int(11)     | YES  |     | NULL    |                |
+| Wednesday    | int(11)     | YES  |     | NULL    |                |
+| Thursday     | int(11)     | YES  |     | NULL    |                |
+| Friday       | int(11)     | YES  |     | NULL    |                |
+| Saturday     | int(11)     | YES  |     | NULL    |                |
+| Sunday       | int(11)     | YES  |     | NULL    |                |
 |--------------+-------------+------+-----+---------+----------------+
 
 

@@ -78,3 +78,40 @@ Adds a setting for the entry_point_salt, which is used to generate a hash for a 
 USE ttm-enlace
 INSERT INTO System_Settings VALUES ('survey_entry_point_salt', 'string', 'defaultsalt');
 ```
+
+# Issue 222 - Enlace - Sessions have their own Days of week and Daily Start and End hours - September 2018
+
+Adds days of week, start, and end times to the Session_Names table, so that there's greater flexibility in the application for how different sessions in different times of the year.  This will affect how session dates get populated, and how the dosage calculations work.  We keep the Programs values around in order provide defaults.
+
+### SQL for column additions
+```
+USE ttm-enlace
+ALTER TABLE `Session_Names`
+    ADD COLUMN `Start_Hour` int(11),
+    ADD COLUMN `Start_Suffix` varchar(45),
+    ADD COLUMN `End_Hour` int(11),
+    ADD COLUMN `End_Suffix` varchar(45),
+    ADD COLUMN `Monday` int(11),
+    ADD COLUMN `Tuesday` int(11),
+    ADD COLUMN `Wednesday` int(11),
+    ADD COLUMN `Thursday` int(11),
+    ADD COLUMN `Friday` int(11),
+    ADD COLUMN `Saturday` int(11),
+    ADD COLUMN `Sunday` int(11);
+```
+
+### SQL for backfilling old sessions
+```
+USE ttm-enlace
+UPDATE `Session_Names` SET `Start_Hour` = (SELECT `Start_Hour` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Start_Suffix` = (SELECT `Start_Suffix` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `End_Hour` = (SELECT `End_Hour` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `End_Suffix` = (SELECT `End_Suffix` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Monday` = (SELECT `Monday` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Tuesday` = (SELECT `Tuesday` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Wednesday` = (SELECT `Wednesday` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Thursday` = (SELECT `Thursday` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Friday` = (SELECT `Friday` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Saturday` = (SELECT `Saturday` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Sunday` = (SELECT `Sunday` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+```
