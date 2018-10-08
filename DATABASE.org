@@ -668,6 +668,8 @@ here, but it's a multiple choice survey.
 | Early_Warning_Failed     | int(11)     | YES  |     | NULL              |                |
 | Early_Warning_Discipline | int(11)     | YES  |     | NULL              |                |
 | Referring_Teacher        | int(11)     | YES  |     | NULL              |                |
+| Recruitment              | int(11)     | YES  |     | 0                 |                |
+| Justice_System           | int(11)     | YES  |     | 0                 |                |
 |--------------------------+-------------+------+-----+-------------------+----------------+
 
 **** Participants_Consent

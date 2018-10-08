@@ -29,6 +29,7 @@ include "../classes/program.php";
 include "../include/settings.php";
 include "../include/attendance.php";
 require_once("../classes/assessment.php");
+require_once("../classes/participant.php");
 $program = new Program();
 $program->load_with_program_id($_COOKIE['program']);
 
@@ -1091,6 +1092,28 @@ while ($sess = mysqli_fetch_row($sessions)) {
                     </td>
                 </tr>
                 <tr>
+                    <td><strong>Recruitment Method:</strong></td>
+                    <td>
+                        <select id="recruitment_new"/>
+                            <?php
+                                foreach($recruitment_options as $value => $display) {
+                                    echo "<option value='$value'$selected>$display</option>";
+                                }
+                            ?>
+                        </select>
+                    </td>
+                    <td><strong>Justice System History:</strong></td>
+                    <td>
+                        <select id="justice_system_new"/>
+                            <?php
+                                foreach($justice_system_options as $value => $display) {
+                                    echo "<option value='$value'$selected>$display</option>";
+                                }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="4" style="text-align:center;"><input type="button" onclick="
                             var x = document.getElementById('dob_new').value;
                             if (x != '') {
@@ -1140,6 +1163,8 @@ while ($sess = mysqli_fetch_row($sessions)) {
                                         grade: grade,
                                         gender: gender,
                                         school: school,
+                                        recruitment: document.getElementById('recruitment_new').value,
+                                        justice_system: document.getElementById('justice_system_new').value,
                                         role: role
                                     },
                             function(response) {

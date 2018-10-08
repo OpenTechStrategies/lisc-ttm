@@ -125,3 +125,15 @@ Adds a column for saving as draft.
 USE ttm-enlace
 ALTER TABLE Assessments ADD COLUMN Draft int(11) NOT NULL DEFAULT 0;
 ```
+
+## Issue 245 - Add new demographic information - September 2018
+
+Two new demographics, related to youth recruitment, and the justice system, were needed to keep in line with recent additions to the surveys.
+
+### SQL needed to add columns
+```
+USE ttm-enlace
+ALTER TABLE `Participants`
+    ADD COLUMN `Recruitment` int(11) DEFAULT 0,
+    ADD COLUMN `Justice_System` int(11) DEFAULT 0;
+```

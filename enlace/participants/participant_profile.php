@@ -54,6 +54,7 @@ if ($this_role = mysqli_query($cnnEnlace, $get_role)) {
     $role = mysqli_fetch_array($this_role);
 }
 include "../include/dbconnclose.php";
+
 ?>
 
 <script type="text/javascript">
@@ -143,6 +144,8 @@ function saveBasicInfo() {
                 grade: document.getElementById('grade_edit').value,
                 grade_entered: document.getElementById('enter_grade_year').value,
                 school: document.getElementById('school_edit').value,
+                recruitment: document.getElementById('recruitment_edit').value,
+                justice_system: document.getElementById('justice_system_edit').value,
                 teacher: document.getElementById('referring_teacher').value,
                 warning_absent: absences,
                 warning_failed: failed,
@@ -330,6 +333,34 @@ function saveBasicInfo() {
         ?>
         </select>
         </td>
+        </tr>
+        <tr>
+            <td><strong>Recruitment Method</strong></td>
+            <td>
+                <span class="basic_info_show"><?php echo $recruitment_options[$person->recruitment]; ?></span>
+                <select class="basic_info_edit" id="recruitment_edit"/>
+                    <?php
+                        foreach($recruitment_options as $value => $display) {
+                            $selected = $value == $person->recruitment ? " selected='selected'" : "";
+                            echo "<option value='$value'$selected>$display</option>";
+                        }
+                    ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Justice System History</strong></td>
+            <td>
+                <span class="basic_info_show"><?php echo $justice_system_options[$person->justice_system]; ?></span>
+                <select class="basic_info_edit" id="justice_system_edit"/>
+                    <?php
+                        foreach($justice_system_options as $value => $display) {
+                            $selected = $value == $person->justice_system ? " selected='selected'" : "";
+                            echo "<option value='$value'$selected>$display</option>";
+                        }
+                    ?>
+                </select>
+            </td>
         </tr>
         <tr <?php
         /* These only show up for youths.  People without roles won't see them either, so new participants must specifically be added as youths. */
