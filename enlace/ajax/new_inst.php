@@ -49,7 +49,7 @@ $new_inst="INSERT INTO Institutions (Institution_Name, Institution_Type, Address
     '".$dir_sqlsafe."',
     '".$street_sqlsafe."',
     '".$suff_sqlsafe."',
-        $block_group,
+        '$block_group',
     '".$person_sqlsafe."',
     '".$phone_sqlsafe."',
     '".$email_sqlsafe."'
