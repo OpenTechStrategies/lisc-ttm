@@ -2,6 +2,7 @@
 /*
  *   TTM is a web application to manage data collected by community organizations.
  *   Copyright (C) 2014, 2015, 2017  Local Initiatives Support Corporation (lisc.org)
+ *   Copyright (C) 2018 Open Tech Strategies, LLC
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
