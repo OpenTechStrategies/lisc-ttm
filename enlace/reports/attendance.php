@@ -21,6 +21,9 @@
 include_once($_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/core/include/setup_user.php");
 user_enforce_has_access($Enlace_id);
+include "../include/settings.php";
+
+$num_days_hidden = get_setting($NumDaysHiddenSetting);
 //get user's access
 $access_array = $USER->program_access($Enlace_id);
 $program_string = " WHERE Programs.Program_ID = " . $access_array[0];
@@ -30,46 +33,57 @@ foreach ($access_array as $program){
 include_once("../include/dosage_percentage.php");
 ?>
 <script type="text/javascript">
-    function toggleAttendanceCheckboxes() { 
-        if ($('#select_all_attendance_checkboxes').attr('checked')) {
-            $('.attendance_checkbox').each( function () {
+  function update_attendance_num_selected() {
+    $(".numattendanceselected").each(function (idx, span) {
+      span.innerHTML = $(".recent_attendance_program_checkbox:checked").length + $(".old_attendance_program_checkbox:checked").length;
+    });
+  }
+
+$(document).ready(function() {
+    $(".popupcontainer .popupclose").each(function(idx, closer) {
+      $(closer).on("click", function() {
+          $(closer).closest(".popupcontainer").addClass("popupcontainer-hidden");
+          return false;
+      });
+    });
+
+    $(".popupcontainer .popupdisplay").each(
+      function(idx, display) {
+        $(display).on("click", function() {
+          $(display).closest(".popupcontainer").removeClass("popupcontainer-hidden");
+          return false;
+        });
+        });
+
+    $('.recent_attendance_program_checkbox').on('click', update_attendance_num_selected);
+    $('.old_attendance_program_checkbox').on('click', update_attendance_num_selected);
+
+    $('#select_all_recent_attendance_checkboxes').on('click', function () {
+        if ($('#select_all_recent_attendance_checkboxes').attr('checked')) {
+            $('.recent_attendance_program_checkbox').each( function () {
                 $(this).attr('checked', true);
             });
         }
         else {
-            $('.attendance_checkbox').each( function () {
+            $('.recent_attendance_program_checkbox').each( function () {
                 $(this).attr('checked', false);
             });
         }
-    };
-$(document).ready(function() {
-    $('#start_1').on('change', function () {
-        $('#start_2').val($('#start_1').val());
+        update_attendance_num_selected();
     });
-    $('#end_1').on('change', function () {
-        $('#end_2').val($('#end_1').val());
-    });
-    $('#attendance_sessions_toggler').on('click', function () {
-        $('.hide_unchecked').toggle();
-    });
-    $('#select_all_attendance_checkboxes').on('click', function () {
-        toggleAttendanceCheckboxes();
-    });
-    $('#dropped_1').on('click', function () {
-        if ($('#dropped_1').attr('checked')) {
-            $('#dropped_2').attr('checked', true);
+
+    $('#select_all_old_attendance_checkboxes').on('click', function () {
+        if ($('#select_all_old_attendance_checkboxes').attr('checked')) {
+            $('.old_attendance_program_checkbox').each( function () {
+                $(this).attr('checked', true);
+            });
         }
         else {
-            $('#dropped_2').attr('checked', false);
+            $('.old_attendance_program_checkbox').each( function () {
+                $(this).attr('checked', false);
+            });
         }
-    });
-    $('#dropped_2').on('click', function () {
-        if ($('#dropped_2').attr('checked')) {
-            $('#dropped_1').attr('checked', true);
-        }
-        else {
-            $('#dropped_1').attr('checked', false);
-        }
+        update_attendance_num_selected();
     });
 });
 
@@ -79,78 +93,84 @@ $(document).ready(function() {
 </div>
 
 <h3>Attendance Hours</h3>
-<form action="reports.php" method="post">
-    <table class="all_projects">
-    <tr><td>
-    <span id="attendance_sessions_toggler" style="font-weight: bold; text-decoration: underline; cursor: pointer;">
-    Show/hide options:
-    </span>
-    </td>
-    <th class="hide_unchecked"> Start date: </th>
-    <td class="hide_unchecked"><input type="text" class="addDP" id="start_1" value="<?php echo $_POST['start_date']; ?>"></td>
-    <th class="hide_unchecked"> End date: </th>
-    <td class="hide_unchecked"><input type="text" class="addDP" id="end_1" value="<?php echo $_POST['end_date']; ?>"></td>
-    <th class="hide_unchecked"> Exclude dropped youth: </th>
-    <td class="hide_unchecked"><input type="checkbox" id="dropped_1" name="dropped" <?php
-    if ($_POST['dropped']) {
-        echo "checked = 'checked'";
-    }
-    ?>></td>
-    <td class="hide_unchecked"><input type="submit" value="Search" name="attendance_submit_btn"></td>
-    </tr>
-    <tr>
-    <td> <div id="attendance_sessions"> <br \ >
-    <span class="hide_unchecked"><input type="checkbox" id="select_all_attendance_checkboxes" > <b>Select all</b> <br></span>
-    <br \ >
+<form action="reports.php" method="post" style="text-align:center;">
+
+    Start Date: <input type="text" class="addDP" name="start_date" value="<?php echo $_POST['start_date']; ?>"></td>
+    End Date: <input type="text" class="addDP" name="end_date" value="<?php echo $_POST['end_date']; ?>">
+    <?php
+        $num_selected = isset($_POST['attendance_program_select']) ? count($_POST['attendance_program_select']) : 0;
+    ?>
+    <div class="popupcontainer popupcontainer-hidden programspopupcontainer">
+    <button class="popupdisplay">Select Programs (<span class="numattendanceselected"><?php echo $num_selected; ?></span> Selected)</button>
+    <div class="popupinner programspopup">
+      <div class="programspopupheader">
+        <div class="popupclose x-closer">X</div>
+        <button class="popupclose">Select Programs (<span class="numattendanceselected"><?php echo $num_selected; ?></span> Selected)</button>
+      </div>
+    <div>
+
+    <input type="checkbox" id="select_all_recent_attendance_checkboxes"> <b>Select All Recent</b><br>
 <?php
-            //get user's programs
-         $all_progs = "SELECT Session_ID, Name, Session_Name, COUNT(Participant_ID) FROM Session_Names 
-                            INNER JOIN Participants_Programs ON Participants_Programs.Program_ID = Session_ID 
-                            INNER JOIN Programs ON Session_Names.Program_Id = Programs.Program_ID "
-                            . $program_string . 
-                            " GROUP BY Session_ID ORDER BY Name;";
+    $session_array = [];
+    $program_string = " WHERE (Programs.Program_ID = " . $access_array[0];
+    foreach ($access_array as $program){
+        $program_string .= " OR Programs.Program_ID = " . $program;
+    }
+    $program_string .= ")";
+    $old_date = date("Y-m-d", strtotime("-$num_days_hidden days"));
+        $get_recent_programs = "SELECT Session_ID, Session_Name, Name, Session_Names.End_Date FROM Session_Names INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID " . $program_string . " AND Session_Names.End_Date > '$old_date' ORDER BY Name";
+
         include "../include/dbconnopen.php";
-        $all_programs = mysqli_query($cnnEnlace, $all_progs);
+        $all_programs = mysqli_query($cnnEnlace, $get_recent_programs);
         $checkbox_count = 0;
-        $session_array = [];
         while ($program = mysqli_fetch_row($all_programs)) {
             $session_array[$program[0]] = array($program[1], $program[2]);
             $checkbox_count++;
             ?>
-            <span <?php if ($_POST['attendance_program_select']) {
-                echo (in_array($program[0], $_POST['attendance_program_select']) ?  null : 'class="hide_unchecked"');
-            } ?>>
-            <input type="checkbox" name="attendance_program_select[]" class="attendance_checkbox" id="checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
+
+            <input type="checkbox" name="attendance_program_select[]" class="recent_attendance_program_checkbox" id="program_checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
             <?php
-            if ($_POST['attendance_program_select']) {
-                echo (in_array($program[0], $_POST['attendance_program_select']) ? 'checked="true"' : null);
+            if ($_POST['attendance_program_select'] && in_array($program[0], $_POST['attendance_program_select'])) {
+                echo 'checked="true"';
             }
             ?>><?php
-                   echo "<label for=\"checkbox_" . $checkbox_count . "\">" . $program[1] . " -- <b>" . $program[2] . "</b></label><br></span>";
+                   echo "<label for=\"program_checkbox_" . $checkbox_count . "\">" . $program[2] . "--" . $program[1] . "</label><br>";
                }
-        ?>
-</div>
-</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<th></th>
-<th>Start date: </th>
-<td><input type="text" class="addDP" name="start_date" id="start_2" value="<?php echo $_POST['start_date']; ?>"></td>
-<th> End date: </th>
-<td><input type="text" class="addDP" name="end_date" id="end_2" value="<?php echo $_POST['end_date']; ?>"></td>
-<th> Exclude dropped youth: </th>
-<td><input type="checkbox" id="dropped_2" name="dropped" <?php
-    if ($_POST['dropped']) {
-        echo "checked = 'checked'";
+               include "../include/dbconnclose.php";
+               ?>
+    <hr>
+    <input type="checkbox" id="select_all_old_attendance_checkboxes"> <b>Select All Old</b><br>
+<?php
+    $program_string = " WHERE (Programs.Program_ID = " . $access_array[0];
+    foreach ($access_array as $program){
+        $program_string .= " OR Programs.Program_ID = " . $program;
     }
-?>></td>
-<td><input type="submit" value="Search" name="attendance_submit_btn"></td>
-</tr>
-</table>
+    $program_string .= ")";
+        $get_old_programs = "SELECT Session_ID, Session_Name, Name, Session_Names.End_Date FROM Session_Names INNER JOIN Programs ON Session_Names.Program_ID=Programs.Program_ID " . $program_string . " AND Session_Names.End_Date <= '$old_date' ORDER BY Name";
+
+        include "../include/dbconnopen.php";
+        $all_programs = mysqli_query($cnnEnlace, $get_old_programs);
+        $checkbox_count = 0;
+        while ($program = mysqli_fetch_row($all_programs)) {
+            $session_array[$program[0]] = array($program[1], $program[2]);
+            $checkbox_count++;
+            ?>
+
+            <input type="checkbox" name="attendance_program_select[]" class="old_attendance_program_checkbox" id="program_checkbox_<?php echo $checkbox_count; ?>" value="<?php echo $program[0]; ?>"
+            <?php
+            if ($_POST['attendance_program_select'] && in_array($program[0], $_POST['attendance_program_select'])) {
+                echo 'checked="true"';
+            }
+            ?>><?php
+                   echo "<label for=\"program_checkbox_" . $checkbox_count . "\">" . $program[2] . "--" . $program[1] . "</label><br>";
+               }
+               include "../include/dbconnclose.php";
+               ?>
+      </div>
+      </div>
+    </div>
+    Exclude dropped youth: <input type="checkbox" name="dropped" name="dropped" <?php if ($_POST['dropped']) { echo "checked = 'checked'"; } ?>>
+    <input type="submit" value="Search" name="attendance_submit_btn"></td>
 </form>
 &nbsp
 <?php
@@ -176,6 +196,7 @@ $(document).ready(function() {
         $total_enrollment = 0;
         $session_querystring = " ";
         $counter = 0;
+        include "../include/dbconnopen.php";
         $end_date_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_POST['end_date']);
         $start_date_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_POST['start_date']);
         if ($_POST['dropped']) {
