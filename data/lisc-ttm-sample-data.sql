@@ -3716,7 +3716,7 @@ CREATE TABLE `Participants` (
   `Role` int(11) DEFAULT NULL,
   `Date_Entered` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `Recruitment` int(11) DEFAULT '0',
-  `Justice_System` int(11) DEFAULT '0',
+  `Youth_Behavioral` int(11) DEFAULT NULL,
   PRIMARY KEY (`Participant_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;

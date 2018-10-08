@@ -334,3 +334,13 @@ ALTER TABLE `Participants`
     DROP `Early_Warning_Discipline`,
     DROP `Referring_Teacher`;
 ```
+
+## Issue 245 - Change Justice System History to Youth Behavioral History - October 2018
+
+Justice System was an older terminology, and the correct one is youth behavioral, so the database should be changed to reflect that.
+
+### SQL needed to add columns
+```
+USE ttm-enlace
+ALTER TABLE `Participants` CHANGE `Justice_System` `Youth_Behavioral` int;
+```

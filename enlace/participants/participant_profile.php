@@ -128,7 +128,7 @@ function saveBasicInfo() {
                 grade_entered: document.getElementById('enter_grade_year').value,
                 school: document.getElementById('school_edit').value,
                 recruitment: document.getElementById('recruitment_edit').value,
-                justice_system: document.getElementById('justice_system_edit').value
+                youth_behavioral: document.getElementById('youth_behavioral_edit').value
                 },
         function(response) {
             window.location = 'participant_profile.php?id=<?php echo $person->participant_id; ?>';
@@ -307,13 +307,13 @@ function saveBasicInfo() {
             </td>
         </tr>
         <tr>
-            <td><strong>Justice System History</strong></td>
+            <td><strong>Youth Behavioral History</strong></td>
             <td>
-                <span class="basic_info_show"><?php echo $justice_system_options[$person->justice_system]; ?></span>
-                <select class="basic_info_edit" id="justice_system_edit"/>
+                <span class="basic_info_show"><?php echo $youth_behavioral_options[$person->youth_behavioral]; ?></span>
+                <select class="basic_info_edit" id="youth_behavioral_edit"/>
                     <?php
-                        foreach($justice_system_options as $value => $display) {
-                            $selected = $value == $person->justice_system ? " selected='selected'" : "";
+                        foreach($youth_behavioral_options as $value => $display) {
+                            $selected = $value == $person->youth_behavioral ? " selected='selected'" : "";
                             echo "<option value='$value'$selected>$display</option>";
                         }
                     ?>
