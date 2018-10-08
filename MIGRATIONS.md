@@ -115,3 +115,13 @@ UPDATE `Session_Names` SET `Friday` = (SELECT `Friday` FROM `Programs` WHERE `Pr
 UPDATE `Session_Names` SET `Saturday` = (SELECT `Saturday` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
 UPDATE `Session_Names` SET `Sunday` = (SELECT `Sunday` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
 ```
+
+# Issue 226 - Enlace - Add Save as Draft to Assessments - September 2018
+
+Adds a column for saving as draft.
+
+### SQL 
+```
+USE ttm-enlace
+ALTER TABLE Assessments ADD COLUMN Draft int(11) NOT NULL DEFAULT 0;
+```
