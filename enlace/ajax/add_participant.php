@@ -60,6 +60,9 @@ if ($_POST['action'] == 'link_event') {
     $grade_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['grade']);
     $school_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['school']);
     $role_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['role']);
+    $home_lang_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['home_lang']);
+    $ethnicity_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['ethnicity']);
+    $race_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['race']);
     $recruitment_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['recruitment']);
     $youth_behavioral_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['youth_behavioral']);
 
@@ -79,6 +82,9 @@ if ($_POST['action'] == 'link_event') {
 		Gender,
 		Grade,
 		School,
+        Home_Language,
+        Ethnicity,
+        Race,
         Recruitment,
         Youth_Behavioral,
 		Role
@@ -90,6 +96,9 @@ if ($_POST['action'] == 'link_event') {
 		'" . $gender_sqlsafe . "',
 		'" . $grade_sqlsafe . "',
 		'" . $school_sqlsafe . "',
+		'" . $home_lang_sqlsafe . "',
+		'" . $ethnicity_sqlsafe . "',
+		'" . $race_sqlsafe . "',
 		'" . $recruitment_sqlsafe . "',
 		'" . $youth_behavioral_sqlsafe . "',
 		'" . $role_sqlsafe . "'	

@@ -73,10 +73,6 @@ $interesting_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['interesting']
 $parents_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['parents']);
 $finish_hs_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['finish_hs']);
 
-$home_lang_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['home_lang']);
-$pays_origin_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['pays_origin']);
-$ethnicity_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['ethnicity']);
-$race_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['race']);
 $bys_1_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['bys_1']);
 $bys_2_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['bys_2']);
 $bys_3_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['bys_3']);
@@ -197,15 +193,11 @@ if ($_POST['edited'] != 1) {
         <?php
     }
     if ($_POST['action'] == 'baseline') {
-        $save_these = "INSERT INTO Participants_Baseline_Assessments (Participant_ID, Program, Home_Language, US_Born,
-    Ethnicity, Race, BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_T, BYS_E,
+        $save_these = "INSERT INTO Participants_Baseline_Assessments (Participant_ID, Program, 
+    BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_T, BYS_E,
     JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_T, JVQ_E, JVQ_12, Date_Logged) VALUES (
     '" . $person_sqlsafe . "',
     '" . $program_sqlsafe . "',
-    '" . $home_lang_sqlsafe . "',
-    '" . $pays_origin_sqlsafe . "',
-    '" . $ethnicity_sqlsafe . "',
-    '" . $race_sqlsafe . "',
     '" . $bys_1_sqlsafe . "',
     '" . $bys_2_sqlsafe . "',
     '" . $bys_3_sqlsafe . "',
@@ -261,9 +253,6 @@ if ($_POST['edited'] != 1) {
                           Participants_Baseline_Assessments SET
 Participant_ID='" . $person_sqlsafe . "',
     Program='" . $program_sqlsafe . "',
-    Home_Language='" . $home_lang_sqlsafe . "',
-        US_Born='" . $pays_origin_sqlsafe . "',
-    Race='" . $race_sqlsafe . "',
     BYS_1='" . $bys_1_sqlsafe . "', BYS_2='" . $bys_2_sqlsafe . "', BYS_3='" . $bys_3_sqlsafe . "',
     BYS_4='" . $bys_4_sqlsafe . "', BYS_5='" . $bys_5_sqlsafe . "', BYS_6='" . $bys_6_sqlsafe . "',
     BYS_7='" . $bys_7_sqlsafe . "', BYS_8='" . $bys_8_sqlsafe . "', BYS_9='" . $bys_9_sqlsafe . "',

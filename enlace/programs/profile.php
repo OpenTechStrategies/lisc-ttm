@@ -1229,6 +1229,41 @@ while ($sess = mysqli_fetch_row($sessions)) {
                     </td>
                 </tr>
                 <tr>
+                    <td><strong>Home Language other than English:</strong></td>
+                    <td>
+                        <select id="home_lang_new"/>
+                            <?php
+                                foreach($home_lang_options as $value => $display) {
+                                    echo "<option value='$value'$selected>$display</option>";
+                                }
+                            ?>
+                        </select>
+                    </td>
+                    <td><strong>Ethnicity:</strong></td>
+                    <td>
+                        <select id="ethnicity_new"/>
+                            <?php
+                                foreach($ethnicity_options as $value => $display) {
+                                    echo "<option value='$value'$selected>$display</option>";
+                                }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><strong>Race:</strong></td>
+                    <td>
+                        <select id="race_new"/>
+                            <?php
+                                foreach($race_options as $value => $display) {
+                                    echo "<option value='$value'$selected>$display</option>";
+                                }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="4" style="text-align:center;"><input type="button" onclick="
                             var x = document.getElementById('dob_new').value;
                             if (x != '') {
@@ -1276,6 +1311,9 @@ while ($sess = mysqli_fetch_row($sessions)) {
                                         grade: grade,
                                         gender: gender,
                                         school: school,
+                                        home_lang: document.getElementById('home_lang_new').value,
+                                        ethnicity: document.getElementById('ethnicity_new').value,
+                                        race: document.getElementById('race_new').value,
                                         recruitment: document.getElementById('recruitment_new').value,
                                         youth_behavioral: document.getElementById('youth_behavioral_new').value,
                                         role: role

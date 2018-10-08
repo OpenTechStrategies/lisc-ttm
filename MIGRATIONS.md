@@ -344,3 +344,36 @@ Justice System was an older terminology, and the correct one is youth behavioral
 USE ttm-enlace
 ALTER TABLE `Participants` CHANGE `Justice_System` `Youth_Behavioral` int;
 ```
+
+# Issue 232 - Move Demographics from Participants from Baseline Assessments - October 2018
+
+The demographic information being in Participants_Baseline_Assessments makes it so intake surveys are repetitive, and makes it challenging to display the fields on the participants page.  This moves that information over, from the most recent Participants_Baseline_Assessments.  At the same time, US_Born was determined not to be a demographic to be collected anymore, so that doesn't make the transition.
+
+### SQL to add columns to Participants
+```
+USE ttm-enlace
+ALTER TABLE `Participants`
+    ADD COLUMN `Home_Language` int(11) DEFAULT NULL,
+    ADD COLUMN `Ethnicity` int(11) DEFAULT NULL,
+    ADD COLUMN `Race` int(11) DEFAULT NULL;
+```
+
+### SQL to move data from Participants_Baseline_Assessments to Participants
+```
+USE ttm-enlace
+UPDATE `Participants` p, `Participants_Baseline_Assessments` PBA
+   SET p.Home_Language = PBA.Home_Language,
+       p.Ethnicity = PBA.Ethnicity,
+       p.Race = PBA.Race
+   WHERE PBA.`Participant_ID` = p.`Participant_ID`;
+```
+
+### SQL to delete columns from Participants_Baseline_Assessments
+```
+USE ttm-enlace
+ALTER TABLE `Participants_Baseline_Assessments`
+    DROP COLUMN `Home_Language`,
+    DROP COLUMN `US_Born`,
+    DROP COLUMN `Ethnicity`,
+    DROP COLUMN `Race`;
+```

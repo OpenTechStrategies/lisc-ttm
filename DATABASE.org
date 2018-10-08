@@ -549,10 +549,6 @@ here, but it's a multiple choice survey.
 | Baseline_Assessment_ID | int(11)   | NO   | PRI | NULL              | auto_increment |
 | Participant_ID         | int(11)   | YES  |     | NULL              |                |
 | Program                | int(11)   | YES  |     | NULL              |                |
-| Home_Language          | int(11)   | YES  |     | NULL              |                |
-| US_Born                | int(11)   | YES  |     | NULL              |                |
-| Ethnicity              | int(11)   | YES  |     | NULL              |                |
-| Race                   | int(11)   | YES  |     | NULL              |                |
 | BYS_1                  | int(11)   | YES  |     | NULL              |                |
 | BYS_2                  | int(11)   | YES  |     | NULL              |                |
 | BYS_3                  | int(11)   | YES  |     | NULL              |                |
@@ -671,6 +667,9 @@ here, but it's a multiple choice survey.
 | Date_Entered             | timestamp   | YES  |     | CURRENT_TIMESTAMP |                |
 | Recruitment              | int(11)     | YES  |     | 0                 |                |
 | Youth_Behavioral         | int(11)     | YES  |     | 0                 |                |
+| Home_Language            | int(11)     | YES  |     | NULL              |                |
+| Ethnicity                | int(11)     | YES  |     | NULL              |                |
+| Race                     | int(11)     | YES  |     | NULL              |                |
 |--------------------------+-------------+------+-----+-------------------+----------------+
 
 **** Participants_Consent

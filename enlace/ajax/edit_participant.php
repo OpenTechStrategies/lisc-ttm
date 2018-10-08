@@ -69,6 +69,9 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
         $school_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['school']);
         $recruitment_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['recruitment']);
         $youth_behavioral_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['youth_behavioral']);
+        $home_lang_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['home_lang']);
+        $ethnicity_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['ethnicity']);
+        $race_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['race']);
         
 	$edit_info = "UPDATE Participants SET 
 					First_Name='" . $name_sqlsafe . "',
@@ -86,6 +89,9 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
 					Gender='" . $gender_sqlsafe . "',
 					Recruitment='" . $recruitment_sqlsafe . "',
 					Youth_Behavioral='" . $youth_behavioral_sqlsafe . "',
+					Home_Language='" . $home_lang_sqlsafe . "',
+					Ethnicity='" . $ethnicity_sqlsafe . "',
+					Race='" . $race_sqlsafe . "',
 					Role='" . $role_sqlsafe . "',
                                             Grade='" . $grade_sqlsafe . "',
                                             Grade_Entered='".$grade_entered_sqlsafe."',
