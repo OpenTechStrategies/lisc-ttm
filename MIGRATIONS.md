@@ -286,3 +286,36 @@ DELETE Absences FROM Absences
          Participants_Programs.Program_ID = Program_Dates.Program_ID)
     WHERE Participants_Programs.Date_Dropped < Program_Dates.Date_Listed;
 ```
+
+## Issue 238 - Add Activities to Session - September 2018
+
+Adds all the activies to the Session_Names table.  This doesn't actually affect anything other than tracking and display right now.  We keep the Programs values around in order provide defaults.
+
+### SQL for column additions
+```
+USE ttm-enlace
+ALTER TABLE `Session_Names`
+    ADD COLUMN `Activity_Class` int(11),
+    ADD COLUMN `Activity_Clinic` int(11),
+    ADD COLUMN `Activity_Referrals` int(11),
+    ADD COLUMN `Activity_Community` int(11),
+    ADD COLUMN `Activity_Counseling` int(11),
+    ADD COLUMN `Activity_Sports` int(11),
+    ADD COLUMN `Activity_Mentor` int(11),
+    ADD COLUMN `Activity_Service` int(11);
+```
+
+### SQL for backfilling old sessions
+```
+USE ttm-enlace
+UPDATE `Session_Names` SET `Activity_Class` = (SELECT `Activity_Class` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Activity_Clinic` = (SELECT `Activity_Clinic` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Activity_Referrals` = (SELECT `Activity_Referrals` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Activity_Community` = (SELECT `Activity_Community` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Activity_Counseling` = (SELECT `Activity_Counseling` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Activity_Sports` = (SELECT `Activity_Sports` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Activity_Mentor` = (SELECT `Activity_Mentor` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+UPDATE `Session_Names` SET `Activity_Service` = (SELECT `Activity_Service` FROM `Programs` WHERE `Programs`.`Program_ID` = `Session_Names`.`Program_ID`);
+```
+
+
