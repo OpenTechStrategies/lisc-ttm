@@ -170,12 +170,6 @@ include "../classes/participant.php";
                         <td><input type="text" id="age_new"  style="width:25px;"/></td>
                     </tr>
                     <tr>
-                        <td><strong>Daytime Phone: </strong></td>
-                        <td><input type="text" id="day_phone_new"  style="width:100px;"/></td>
-                        <td><strong>Evening Phone: </strong></td>
-                        <td><input type="text" id="evening_phone_new"  style="width:100px;"/></td>
-                    </tr>
-                    <tr>
                         <td><strong>Grade Level: </strong></td>
                         <td><select id="grade_new">
                                 <option value="">----</option>
@@ -289,8 +283,6 @@ include "../classes/participant.php";
                                             last_name: document.getElementById('surname_new').value,
                                             dob: dob,
                                             age: age,
-                                            day_phone: document.getElementById('day_phone_new').value,
-                                            evening_phone: document.getElementById('evening_phone_new').value,
                                             recruitment: document.getElementById('recruitment_new').value,
                                             justice_system: document.getElementById('justice_system_new').value,
                                             grade: grade,

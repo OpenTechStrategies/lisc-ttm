@@ -61,9 +61,6 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
         $city_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['city']);
         $state_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['state']);
         $zip_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['zip']);
-        $day_phone_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['day_phone']);
-        $eve_phone_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['eve_phone']);
-        $email_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['email']);
         $age_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['age']);
         $gender_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['gender']);
         $role_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['role']);
@@ -72,10 +69,6 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
         $school_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['school']);
         $recruitment_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['recruitment']);
         $justice_system_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['justice_system']);
-        $warning_absent_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['warning_absent']);
-        $warning_failed_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['warning_failed']);
-        $warning_discipline_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['warning_discipline']);
-        $teacher_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['teacher']);
         
 	$edit_info = "UPDATE Participants SET 
 					First_Name='" . $name_sqlsafe . "',
@@ -88,9 +81,6 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
 					Address_State='" .$state_sqlsafe . "',
 					Address_ZIP='" .$zip_sqlsafe . "',
                                             Block_Group='$block_group',
-					Day_Phone='" . $day_phone_sqlsafe . "',
-					Evening_Phone='" . $eve_phone_sqlsafe . "',
-					Email='" . $email_sqlsafe . "',
 					DOB='" . $dob_sqlsafe . "',
 					Age='" . $age_sqlsafe . "',
 					Gender='" . $gender_sqlsafe . "',
@@ -99,11 +89,7 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
 					Role='" . $role_sqlsafe . "',
                                             Grade='" . $grade_sqlsafe . "',
                                             Grade_Entered='".$grade_entered_sqlsafe."',
-                                            School='" . $school_sqlsafe . "',
-                                            Early_Warning_Absences='" . $warning_absent_sqlsafe . "',
-                                            Early_Warning_Failed='" . $warning_failed_sqlsafe . "',
-                                            Early_Warning_Discipline='" . $warning_discipline_sqlsafe . "',
-                                            Referring_Teacher='" . $teacher_sqlsafe . "'
+                                            School='" . $school_sqlsafe . "'
 					WHERE Participant_ID='" . $id_sqlsafe . "'";			
 	mysqli_query($cnnEnlace, $edit_info);
 	include "../include/dbconnclose.php";

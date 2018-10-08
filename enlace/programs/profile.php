@@ -1154,12 +1154,6 @@ while ($sess = mysqli_fetch_row($sessions)) {
                     <td><input type="text" id="age_new"  style="width:25px;"/>&nbsp;&nbsp;<span class="helptext">If date of birth is not available</span></td>
                 </tr>
                 <tr>
-                    <td><strong>Daytime Phone: </strong></td>
-                    <td><input type="text" id="day_phone_new"  style="width:100px;"/></td>
-                    <td><strong>Evening Phone: </strong></td>
-                    <td><input type="text" id="evening_phone_new"  style="width:100px;"/></td>
-                </tr>
-                <tr>
                     <td><strong>Grade Level: </strong></td>
                     <td><select id="grade_new">
                             <option value="">----</option>
@@ -1279,8 +1273,6 @@ while ($sess = mysqli_fetch_row($sessions)) {
                                         last_name: document.getElementById('surname_new').value,
                                         dob: dob,
                                         age: age,
-                                        day_phone: document.getElementById('day_phone_new').value,
-                                        evening_phone: document.getElementById('evening_phone_new').value,
                                         grade: grade,
                                         gender: gender,
                                         school: school,

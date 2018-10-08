@@ -107,21 +107,6 @@ function saveBasicInfo() {
         $('#basic_info_warning').show();
         return false;
     }
-    if (document.getElementById('absences').checked == true) {
-        var absences = 1;
-    } else {
-        var absences = 0;
-    }
-    if (document.getElementById('failed').checked == true) {
-        var failed = 1;
-    } else {
-        var failed = 0;
-    }
-    if (document.getElementById('disciplinary').checked == true) {
-        var discipline = 1;
-    } else {
-        var discipline = 0;
-    }
     $.post(
         '../ajax/edit_participant.php',
         {
@@ -135,9 +120,6 @@ function saveBasicInfo() {
                 city: document.getElementById('city_edit').value,
                 state: document.getElementById('state_edit').value,
                 zip: document.getElementById('zip_edit').value,
-                day_phone: document.getElementById('day_phone_edit').value,
-                eve_phone: document.getElementById('eve_phone_edit').value,
-                email: document.getElementById('email_edit').value,
                 dob: valid_dob,
                 age: document.getElementById('age_edit').value,
                 gender: document.getElementById('gender_edit').value,
@@ -146,11 +128,7 @@ function saveBasicInfo() {
                 grade_entered: document.getElementById('enter_grade_year').value,
                 school: document.getElementById('school_edit').value,
                 recruitment: document.getElementById('recruitment_edit').value,
-                justice_system: document.getElementById('justice_system_edit').value,
-                teacher: document.getElementById('referring_teacher').value,
-                warning_absent: absences,
-                warning_failed: failed,
-                warning_discipline: discipline
+                justice_system: document.getElementById('justice_system_edit').value
                 },
         function(response) {
             window.location = 'participant_profile.php?id=<?php echo $person->participant_id; ?>';
@@ -214,27 +192,6 @@ function saveBasicInfo() {
                                 <input id="zip_edit" value="<?php echo $person->zip; ?>" style="width:40px;"/> <br/>
                                 <span class="helptext">e.g. 2756 S Harding Ave<br/>Chicago, IL 60623</span>
                             </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Day Phone: </strong></td>
-                        <td>
-                            <span class="basic_info_show"><?php echo $person->day_phone; ?></span>
-                            <input class="basic_info_edit" id="day_phone_edit" value="<?php echo $person->day_phone; ?>"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Evening Phone: </strong></td>
-                        <td>
-                            <span class="basic_info_show"><?php echo $person->evening_phone; ?></span>
-                            <input class="basic_info_edit" id="eve_phone_edit" value="<?php echo $person->evening_phone; ?>"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>E-mail Address: </strong></td>
-                        <td>
-                            <span class="basic_info_show"><?php echo $person->email; ?></span>
-                            <input class="basic_info_edit" id="email_edit" value="<?php echo $person->email; ?>"/>
                         </td>
                     </tr>
                     <tr>
@@ -362,40 +319,6 @@ function saveBasicInfo() {
                     ?>
                 </select>
             </td>
-        </tr>
-        <tr <?php
-        /* These only show up for youths.  People without roles won't see them either, so new participants must specifically be added as youths. */
-        if ($person->role != 1) {
-            echo "class='youth_info'";
-        }
-        ?>>
-            <td><strong>Early Warning Indicator(s):</strong>
-            </td>
-            <td style="font-size:.9em;">
-                <div class="basic_info_show">
-                    <?php
-                    if ($person->absences == 1) {
-                        echo "Missed 20+ days of school<br/>";
-                    }
-                    if ($person->failed == 1) {
-                        echo "Failed core course (reading or math)<br/>";
-                    }
-                    if ($person->discipline == 1) {
-                        echo "Recorded disciplinary incident<br/>";
-                    }
-                    ?>
-                </div>
-                <div class="basic_info_edit"><input type="checkbox" id="absences" <?php echo($person->absences == 1 ? "checked" : null); ?>>Missed 20+ days of school<br>
-                    <input type="checkbox" id="failed" <?php echo($person->failed == 1 ? "checked" : null); ?>>Failed core course (reading or math)<br>
-                    <input type="checkbox" id="disciplinary" <?php echo($person->discipline == 1 ? "checked" : null); ?>>Recorded disciplinary incident<br></div>
-            </td>
-        </tr>
-        <tr>
-            <!--I don\'t know what this is!-->
-            <td><strong>Name of referring teacher</strong></td>
-            <td><span class="basic_info_show"><?php echo $person->teacher_reference; ?></span>
-                <input type="text" class="basic_info_edit" value="<?php echo $person->teacher_reference; ?>" id="referring_teacher">
-            </td> 
         </tr>
         <tr>
             <td><strong>Enrolled in a program?</strong></td>

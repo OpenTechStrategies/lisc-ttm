@@ -54,8 +54,6 @@ if ($_POST['action'] == 'link_event') {
     include "../include/dbconnopen.php";
     $first_name_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['first_name']);
     $last_name_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['last_name']);
-    $day_phone_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['day_phone']);
-    $evening_phone_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['evening_phone']);
     $dob_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['dob']);
     $age_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['age']);
     $gender_sqlsafe=  mysqli_real_escape_string($cnnEnlace, $_POST['gender']);
@@ -76,8 +74,6 @@ if ($_POST['action'] == 'link_event') {
     $add_participant = "INSERT INTO Participants (
 		First_Name,
 		Last_Name,
-		Day_Phone,
-		Evening_Phone,
 		DOB,
 		Age,
 		Gender,
@@ -89,8 +85,6 @@ if ($_POST['action'] == 'link_event') {
 	) VALUES (
 		'" . $first_name_sqlsafe . "',
 		'" . $last_name_sqlsafe . "',
-		'" . $day_phone_sqlsafe . "',
-		'" . $evening_phone_sqlsafe . "',
 		'" . $dob_sqlsafe . "',
 		'" . $age_sqlsafe . "',
 		'" . $gender_sqlsafe . "',

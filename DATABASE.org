@@ -653,8 +653,6 @@ here, but it's a multiple choice survey.
 | Participant_ID           | int(11)     | NO   | PRI | NULL              | auto_increment |
 | First_Name               | varchar(45) | YES  |     | NULL              |                |
 | Last_Name                | varchar(45) | YES  |     | NULL              |                |
-| Day_Phone                | varchar(45) | YES  |     | NULL              |                |
-| Evening_Phone            | varchar(45) | YES  |     | NULL              |                |
 | Address_Num              | int(11)     | YES  |     | NULL              |                |
 | Address_Dir              | varchar(2)  | YES  |     | NULL              |                |
 | Address_Street           | varchar(45) | YES  |     | NULL              |                |
@@ -671,11 +669,6 @@ here, but it's a multiple choice survey.
 | School                   | int(11)     | YES  |     | NULL              |                |
 | Role                     | int(11)     | YES  |     | NULL              |                |
 | Date_Entered             | timestamp   | YES  |     | CURRENT_TIMESTAMP |                |
-| Email                    | varchar(45) | YES  |     | NULL              |                |
-| Early_Warning_Absences   | int(11)     | YES  |     | NULL              |                |
-| Early_Warning_Failed     | int(11)     | YES  |     | NULL              |                |
-| Early_Warning_Discipline | int(11)     | YES  |     | NULL              |                |
-| Referring_Teacher        | int(11)     | YES  |     | NULL              |                |
 | Recruitment              | int(11)     | YES  |     | 0                 |                |
 | Justice_System           | int(11)     | YES  |     | 0                 |                |
 |--------------------------+-------------+------+-----+-------------------+----------------+
