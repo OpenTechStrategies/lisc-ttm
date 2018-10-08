@@ -177,7 +177,7 @@ Show tables of survey questions and response options.  The chosen response is se
                 echo $date;
             } else {
             ?>
-                <input type="text" id="admin_date" class="addDP" value="<?php $print_date = explode(" ", $assessment_info[19]); echo $print_date[0]; ?>">
+                <input type="text" id="admin_date" class="addDP" value="<?php $print_date = explode(" ", $assessment_info[20]); echo $print_date[0]; ?>">
             <?php
             }
         ?>
