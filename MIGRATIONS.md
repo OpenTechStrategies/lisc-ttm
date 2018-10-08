@@ -137,3 +137,138 @@ ALTER TABLE `Participants`
     ADD COLUMN `Recruitment` int(11) DEFAULT 0,
     ADD COLUMN `Justice_System` int(11) DEFAULT 0;
 ```
+
+## Issue #243 - Clean up survey data - September 2018
+
+The intake survey data was corrupted by the duplication process, for as long as the duplication has been a part of the codebase.  This is a php script to fix that.
+
+### PHP needed to run
+
+Run this script from the root directory of the project so that you use the connection information you've already set up.  It should dump out the number of rows that were added to make things work.
+
+```php
+<?php
+$counts = [];
+
+$_SERVER['DOCUMENT_ROOT'] = '.';
+include $_SERVER['DOCUMENT_ROOT'] . "/include/dbconnopen.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/enlace/include/dbconnopen.php";
+
+function mismatch($assessment_array, $related_table_array) {
+    return
+        (isset($related_table_array["Pre_Post"]) && $assessment_array["Pre_Post"] != $related_table_array["Pre_Post"]) ||
+        $assessment_array["Session_ID"] != $related_table_array["Program"];
+}
+
+function deep_copy_or_create($assessment_array, $table_name, $table_primary_key, $original_id) {
+    global $cnnEnlace, $counts;
+    if(!isset($counts[$table_name])) {
+        $counts[$table_name] = 0;
+    }
+
+    $date_logged = $assessment_array["Date_Logged"];
+    $session_id = $assessment_array["Session_ID"];
+    $participant_id = $assessment_array["Participant_ID"];
+    $result = mysqli_query($cnnEnlace, "SELECT * FROM $table_name WHERE $table_primary_key = $original_id");
+    if(mysqli_num_rows($result) == 0) {
+        $counts[$table_name]++;
+        $pre_post_name = '';
+        $pre_post_value = '';
+        if($table_name != "Participants_Baseline_Assessments") {
+            $pre_post_name = ', Pre_Post';
+            $pre_post_value = ', 1';
+        }
+        mysqli_query($cnnEnlace,
+            "INSERT INTO $table_name " .
+            " (Date_Logged, Program, Participant_ID $pre_post_name) " .
+            " VALUES ('$date_logged', $session_id, $participant_id $pre_post_value)");
+
+        $new_id = mysqli_insert_id($cnnEnlace);
+
+        //This happened because the data is even more corrupted than you'd think.
+        //There are links from assessments to rows that no longer exist
+        if($new_id != 0) {
+            $new_row = mysqli_fetch_array(
+                mysqli_query($cnnEnlace, "SELECT * FROM $table_name WHERE $table_primary_key = $new_id"),
+                MYSQLI_ASSOC);
+
+            $sets = array();
+            foreach ($new_row as $column_name => $column_value) {
+                if($column_value != null) {
+                    array_push($sets, "$column_name = 0");
+                }
+            }
+
+            $sets_str = implode(", ", $sets);
+            $insert_query_str = "UPDATE $table_name SET $sets_str WHERE $table_primary_key = $new_id";
+            mysqli_query($cnnEnlace, $insert_query_str);
+        }
+
+        return $new_id;
+    } else {
+        $db_values = mysqli_fetch_array($result, MYSQLI_ASSOC);
+
+        if(mismatch($assessment_array, $db_values)) {
+            $columns = array();
+            $values = array();
+            foreach ($db_values as $column_name => $column_value) {
+                if($column_name != $table_primary_key) {
+                    array_push($columns, $column_name);
+                    if($column_name == "Date_Logged") {
+                        array_push($values, "'$date_logged'");
+                    } else if ($column_name == "Program") {
+                        array_push($values, $session_id);
+                    } else if ($column_name == "Pre_Post") {
+                        array_push($values, '1');
+                    } else {
+                        $column_value_safe = mysqli_real_escape_string($cnnEnlace, $column_value);
+                        array_push($values, "'$column_value_safe'");
+                    }
+                }
+            }
+            $column_str = implode(", ", $columns);
+            $value_str = implode(", ", $values);
+            $insert_query_str = "INSERT INTO $table_name ($column_str) VALUES ($value_str)";
+            $counts[$table_name]++;
+            mysqli_query($cnnEnlace, $insert_query_str);
+            return mysqli_insert_id($cnnEnlace);
+        }
+    }
+    return $original_id;
+}
+
+function update_assessment($assessment_array) {
+    global $cnnEnlace;
+
+    $assessment_id = $assessment_array["Assessment_ID"];
+    $baseline_id = $assessment_array["Baseline_ID"];
+    $caring_id = $assessment_array["Caring_ID"];
+    $future_id = $assessment_array["Future_ID"];
+    $violence_id = $assessment_array["Violence_ID"];
+
+    $baseline_id = deep_copy_or_create($assessment_array, "Participants_Baseline_Assessments", "Baseline_Assessment_ID", $baseline_id);
+    $caring_id = deep_copy_or_create($assessment_array, "Participants_Caring_Adults", "Caring_Adults_ID", $caring_id);
+    $future_id = deep_copy_or_create($assessment_array, "Participants_Future_Expectations", "Future_Expectations_ID", $future_id);
+    $violence_id = deep_copy_or_create($assessment_array, "Participants_Interpersonal_Violence", "Interpersonal_Violence_ID", $violence_id);
+
+    $create_assessment = "UPDATE Assessments SET " .
+        "     Baseline_ID = $baseline_id, " .
+        "     Caring_ID = $caring_id, " . 
+        "     Future_ID = $future_id, " .
+        "     Violence_ID = $violence_id " .
+        " WHERE Assessment_ID = $assessment_id";
+
+    mysqli_query($cnnEnlace, $create_assessment);
+}
+
+// The only duplicated assessments were intakes
+$assessment_result = mysqli_query($cnnEnlace, "SELECT * FROM Assessments WHERE Pre_Post = 1 AND Session_ID IS NOT NULL");
+while($assessment_array = mysqli_fetch_array($assessment_result)) {
+    update_assessment($assessment_array);
+}
+
+foreach ($counts as $name => $val) {
+    echo"$name: $val\n";
+}
+?>
+```
