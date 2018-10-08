@@ -27,6 +27,62 @@ user_enforce_has_access($Enlace_id);
 $access_array = $USER->program_access($Enlace_id);
 
 $has_all_programs = in_array('a', $access_array);
+
+function generate_date_inner_join($table, $start_date_sqlsafe, $end_date_sqlsafe) {
+    if($end_date_sqlsafe != '' || $start_date_sqlsafe != '') {
+        $column_of_interest = '';
+        switch ($table) {
+            case 'Participants_Baseline_Assessments':
+                $assessment_column_of_interest = 'Baseline_ID';
+                $table_column_of_interest = 'Baseline_Assessment_ID';
+                break;
+            case 'Participants_Caring_Adults':
+                $assessment_column_of_interest = 'Caring_ID';
+                $table_column_of_interest = 'Caring_Adults_ID';
+                break;
+            case 'Participants_Interpersonal_Violence':
+                $assessment_column_of_interest = 'Violence_ID';
+                $table_column_of_interest = 'Interpersonal_Violence_ID';
+                break;
+            case 'Participants_Future_Expectations':
+                $assessment_column_of_interest = 'Future_ID';
+                $table_column_of_interest = 'Future_Expectations_ID';
+                break;
+        }
+
+        if($table == 'Participants_Baseline_Assessments') {
+           return " INNER JOIN Assessments ON Assessments.$assessment_column_of_interest = $table.$table_column_of_interest ";
+        }
+        else {
+           return " INNER JOIN Assessments ON
+             (Assessments.$assessment_column_of_interest = $table.$table_column_of_interest AND
+              Assessments.Pre_Post = $table.Pre_Post)";
+        }
+    }
+    else {
+        return '';
+    }
+}
+
+function generate_date_where_clause($table, $start_date_sqlsafe, $end_date_sqlsafe) {
+    // This date subselect depends on the fact that all the assessment question subtables
+    // have a column called Date_Logged.  If you add a new assessment question where there is no Date_Logged,
+    // then this may not work as one would think (or at all).  In the case that new assessment question
+    // category/tables are created, they must continue to have a Date_Logged, or please refactor to
+    // update Baseline_Assessment_Questions to have a Date_Logged_Column next to In_Table
+    $date_where_clause = '';
+    if($end_date_sqlsafe != '' && $start_date_sqlsafe != '') {
+      $date_where_clause = " AND cast($table.Date_Logged as date) BETWEEN '$start_date_sqlsafe' AND '$end_date_sqlsafe'";
+    }
+    else if($start_date_sqlsafe != ''){
+      $date_where_clause = " AND cast($table.Date_Logged as date) >= '$start_date_sqlsafe'";
+    }
+    else if($end_date_sqlsafe != ''){
+      $date_where_clause = " AND cast($table.Date_Logged as date) <= '$end_date_sqlsafe'";
+    }
+    return $date_where_clause;
+}
+
 ?>
 
 <script type="text/javascript">
@@ -159,6 +215,11 @@ $has_all_programs = in_array('a', $access_array);
     </div>
     </div>
 
+    <!--</select>-->
+    <br>
+    Start Date: <input type="text" class="addDP" name="assessments_start_date" id="start_3" value="<?php echo $_POST['assessments_start_date']; ?>"></td>
+    End Date: <input type="text" class="addDP" name="assessments_end_date" id="end_3" value="<?php echo $_POST['assessments_end_date']; ?>">
+    <br>
     Question:
     <select id="assessment_questions" style="width:500px;" name="question_select">
         <option value="0"><b>Show results for all questions</b></option>
@@ -198,9 +259,12 @@ if (isset($_POST['submit_btn_assessments'])) {
     //remember we have to account for the "show all questions" possibility
     //here it is:
     if ($_POST['question_select'] == '0') {
+        include "../include/dbconnopen.php";
+        $start_date_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_POST['assessments_start_date']);
+        $end_date_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_POST['assessments_end_date']);
+
         //get question text:
         $get_baseline_questions = "SELECT * FROM Baseline_Assessment_Questions ORDER BY In_Table";
-        include "../include/dbconnopen.php";
         $all_questions = mysqli_query($cnnEnlace, $get_baseline_questions);
         ?>
         <!--Show results in a table: -->
@@ -228,16 +292,20 @@ if (isset($_POST['submit_btn_assessments'])) {
                     $pre_post = "";
                     $pre_post_denom = "";
                 } else {
-                    $pre_post = "Pre_Post,";
-                    $pre_post_denom = " GROUP BY Pre_Post";
+                    $pre_post = "$table.Pre_Post,";
+                    $pre_post_denom = " GROUP BY $table.Pre_Post";
                 }
+
+                $date_inner_join = generate_date_inner_join($table, $start_date_sqlsafe, $end_date_sqlsafe);
+                $date_where_clause = generate_date_where_clause($table, $start_date_sqlsafe, $end_date_sqlsafe);
 
                 //if no program selected, then certainly don't try to pull from the database based on the program:
                 //if ($_POST['program_select']==0){
                 if (!isset($_POST['program_select'])) {
                     $get_results = "SELECT COUNT(*) as count, " . $question[0] . ", $pre_post Response_Text FROM " . $table . "
-                            INNER JOIN Assessment_Responses ON Response_Select=" . $question[0] . " 
-                                WHERE Question_ID='" . $question[0] . "'
+                            INNER JOIN Assessment_Responses ON Response_Select=" . $question[0] .
+                            $date_inner_join . "
+                                WHERE Question_ID='" . $question[0] . "'" . $date_where_clause . "
                                     GROUP BY $pre_post " . $question[0] . "";
                 }
                 /* if program selected, pull only assessments from people in that program: */ else {
@@ -256,8 +324,9 @@ if (isset($_POST['submit_btn_assessments'])) {
                         }
                     }
                     $get_results = "SELECT COUNT(*) as count, " . $question[0] . ", $pre_post Response_Text FROM " . $table . "
-                            INNER JOIN Assessment_Responses ON Response_Select=" . $question[0] . " 
-                                WHERE " . $program_string . " AND Question_ID='" . $question[0] . "'
+                            INNER JOIN Assessment_Responses ON Response_Select=" . $question[0] .
+                            $date_inner_join . "
+                                WHERE " . $program_string . $date_where_clause . " AND Question_ID='" . $question[0] . "'
                                     GROUP BY $pre_post " . $question[0] . "";
                 }
                 $show_results = mysqli_query($cnnEnlace, $get_results);
@@ -267,20 +336,17 @@ if (isset($_POST['submit_btn_assessments'])) {
                     //need to find the denominator based on pre/post and program (and whether those are applicable)
                     //so far so reasonably good, but it doesn't really work for the pre/post/null denominators.  need to differentiate those earlier.
                     //if ($_POST['program_select']==0){
-                    $program_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['program_select']);
                     if (!isset($_POST['program_select'])) {
                         if ($table != 'Participants_Baseline_Assessments') {
-                            $get_denom = "SELECT COUNT(*) FROM $table WHERE Pre_Post=" . $result[2];
+                            $get_denom = "SELECT COUNT(*) FROM $table WHERE Pre_Post=" . $result[2] . $date_where_clause;
                         } else {
-                            $get_denom = "SELECT COUNT(*) FROM $table";
+                            $get_denom = "SELECT COUNT(*) FROM $table" . str_replace("AND", "WHERE", $date_where_clause);
                         }
                     } else {
                         if ($table != 'Participants_Baseline_Assessments') {
-                            $get_denom = "SELECT COUNT(*) FROM $table WHERE Program=" . $program_select_sqlsafe . " AND Pre_Post=" . $result[2];
-                            $get_denom = "SELECT COUNT(*) FROM $table WHERE " . $program_string . " AND Pre_Post=" . $result[2];
+                            $get_denom = "SELECT COUNT(*) FROM $table WHERE " . $program_string . " AND Pre_Post=" . $result[2] . $date_where_clause;
                         } else {
-                            $get_denom = "SELECT COUNT(*) FROM $table WHERE Program=" . $program_select_sqlsafe . "";
-                            $get_denom = "SELECT COUNT(*) FROM $table WHERE " . $program_string . "";
+                            $get_denom = "SELECT COUNT(*) FROM $table WHERE " . $program_string . $date_where_clause;
                         }
                     }
                     $denom_ct = mysqli_query($cnnEnlace, $get_denom);
@@ -358,15 +424,17 @@ if (isset($_POST['submit_btn_assessments'])) {
             $pre_post = "Pre_Post,";
             $pre_post_denom = " GROUP BY Pre_Post";
         }
+        $date_where_clause = generate_date_where_clause($table, $start_date_sqlsafe, $end_date_sqlsafe);
 
         //if no program selected, then certainly don't try to pull from the database based on the program:
         //if ($_POST['program_select']==0){
         if (!isset($_POST['program_select'])) {
             $get_results = "SELECT COUNT(*) as count, " . $question_select_sqlsafe . ", $pre_post Response_Text FROM " . $table . "
-        INNER JOIN Assessment_Responses ON Response_Select=" . $question_select_sqlsafe . " 
-            WHERE Question_ID='" . $question_select_sqlsafe . "'
+        INNER JOIN Assessment_Responses ON Response_Select=" . $question_select_sqlsafe .
+        $date_inner_join . "
+            WHERE Question_ID='" . $question_select_sqlsafe . "'" . $date_where_clause . "
                 GROUP BY $pre_post " . $question_select_sqlsafe . "";
-            $get_denom = "SELECT COUNT(*) FROM " . $table . " $pre_post_denom";
+            $get_denom = "SELECT COUNT(*) FROM $table " . str_replace("AND", "WHERE", $date_where_clause) . " $pre_post_denom";
             $denom_ct = mysqli_query($cnnEnlace, $get_denom);
             /* $this_denom=mysqli_fetch_row($denom_ct);
               $denom=$this_denom[0]; */
@@ -374,7 +442,8 @@ if (isset($_POST['submit_btn_assessments'])) {
                 $this_denom = mysqli_fetch_row($denom_ct);
                 $denom = $this_denom[0];
             } else {
-                $get_denom = "SELECT COUNT(*), Pre_Post FROM $table  $pre_post_denom ";
+                $get_denom = "SELECT COUNT(*), Pre_Post FROM $table " . $date_inner_join .
+                            str_replace("AND", "WHERE", $date_where_clause) . " $pre_post_denom";
                 $denom_ct = mysqli_query($cnnEnlace, $get_denom);
                 while ($this_denom = mysqli_fetch_row($denom_ct)) {
                     if ($this_denom[1] == '1') {
@@ -387,8 +456,9 @@ if (isset($_POST['submit_btn_assessments'])) {
         }
         /* if a program is selected: */ else {
             $get_results = "SELECT COUNT(*) as count, " . $question_select_sqlsafe . ", $pre_post Response_Text FROM " . $table . "
-        INNER JOIN Assessment_Responses ON Response_Select=" . $question_select_sqlsafe . " 
-            WHERE Program=" . $program_select_sqlsafe . " AND Question_ID='" . $question_select_sqlsafe . "'
+        INNER JOIN Assessment_Responses ON Response_Select=" . $question_select_sqlsafe .
+        $date_inner_join . "
+            WHERE Program=" . $program_select_sqlsafe . $date_where_clause . " AND Question_ID='" . $question_select_sqlsafe . "'
                 GROUP BY $pre_post " . $question_select_sqlsafe . "";
             $program_string = "(Program=";
             $counter = 0;
@@ -402,21 +472,22 @@ if (isset($_POST['submit_btn_assessments'])) {
                 }
             }
             $get_results = "SELECT COUNT(*) as count, " . $question_select_sqlsafe . ", $pre_post Response_Text FROM " . $table . "
-        INNER JOIN Assessment_Responses ON Response_Select=" . $question_select_sqlsafe . " 
-            WHERE " . $program_string . " AND Question_ID='" . $question_select_sqlsafe . "'
+        INNER JOIN Assessment_Responses ON Response_Select=" . $question_select_sqlsafe .
+        $date_inner_join . "
+            WHERE " . $program_string . $date_where_clause . " AND Question_ID='" . $question_select_sqlsafe . "'
                 GROUP BY $pre_post " . $question_select_sqlsafe . "";
 
             /* get the denominator for these results (in order to show the percentage) */
-            $get_denom = "SELECT COUNT(*) FROM $table WHERE Program=" . $program_select_sqlsafe . " $pre_post_denom ";
-            $get_denom = "SELECT COUNT(*) FROM $table WHERE " . $program_string . " $pre_post_denom ";
+            $get_denom = "SELECT COUNT(*) FROM $table $date_inner_join WHERE Program=" . $program_select_sqlsafe . $date_where_clause . " $pre_post_denom ";
+            $get_denom = "SELECT COUNT(*) FROM $table $date_inner_join WHERE " . $program_string . $date_where_clause . " $pre_post_denom ";
 
             $denom_ct = mysqli_query($cnnEnlace, $get_denom);
             if ($table == 'Participants_Baseline_Assessments') {
                 $this_denom = mysqli_fetch_row($denom_ct);
                 $denom = $this_denom[0];
             } else {
-                $get_denom = "SELECT COUNT(*), Pre_Post FROM $table WHERE Program=" . $program_select_sqlsafe . " $pre_post_denom ";
-                $get_denom = "SELECT COUNT(*), Pre_Post FROM $table WHERE " . $program_string . " $pre_post_denom ";
+                $get_denom = "SELECT COUNT(*), Pre_Post FROM $table $date_inner_join WHERE Program=" . $program_select_sqlsafe . $date_where_clause . " $pre_post_denom ";
+                $get_denom = "SELECT COUNT(*), Pre_Post FROM $table $date_inner_join WHERE " . $program_string . $date_where_clause .  " $pre_post_denom ";
                 $denom_ct = mysqli_query($cnnEnlace, $get_denom);
                 while ($this_denom = mysqli_fetch_row($denom_ct)) {
                     if ($this_denom[1] == '1') {
