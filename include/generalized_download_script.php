@@ -1126,7 +1126,7 @@ function generalized_download($download_name, $permissions, $enlace_session_stri
                 INNER JOIN Campaigns ON Campaigns_Institutions.Campaign_ID = 
                 Campaigns.Campaign_ID
                 INNER JOIN Institutions ON Institution_ID = Inst_ID',
-            'titles'=>array("Campaign_Name", "Institution Name")),
+            'titles'=>array("Campaign_Name", "Organization Name")),
         
         'enlace_campaigns'=>array('db'=>'enlace', 'query'=>
             'SELECT * FROM Campaigns',
@@ -1136,7 +1136,7 @@ function generalized_download($download_name, $permissions, $enlace_session_stri
             'SELECT Institution_Name, Type, Block_Group, Phone, Email 
             FROM Institutions INNER JOIN Institution_Types
             ON Institution_Type = Inst_Type_ID',
-            'titles'=>array("Institution Name", "Institution Type", "Block Group",
+            'titles'=>array("Organization Name", "Organization Type", "Block Group",
             "Phone", "Email")),
 
         
@@ -1164,8 +1164,8 @@ function generalized_download($download_name, $permissions, $enlace_session_stri
         'non_admin_string2' => $enlace_session_string,
         'add_access' => 1,
         'query2' => ' WHERE Assessments.Pre_Post = 1 ',
-        'titles' => array("Assessment ID", "Participant ID", "First_Name", "Last_Name", "Session ID (of program)", "Session Name",  "Program Name", "DOB", "Age", "Grade", "School", "Home Language", "Ethnicity", "Race", "Recruitment Method", "Juvenile Justice System History", "US Born", "Pre or Post", "Date Logged", "Date Administered"),
-        'legend' => array("(id)", "(id)", "(name)", "(name)", "(id)", "session", "(program)", "(date)", "", "", "(school)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race", "0=N/A; 1=School Referral; 2=Partner Org Referral; 3=Justice System Referral; 4=In-House Recruitment; 5=Walk-in/Self-Referral", "0=N/A; 1=Has been arrested; 2=Has had minimal interactions; 3=Has received 'station adjustment'; 4=No Interaction; 5=Has received 'citation'; 6=School official interaction (Behavioral Incidents)", "","(pre or post)", "(date)", "(date)")),
+        'titles' => array("Assessment ID", "Participant ID", "First_Name", "Last_Name", "Program ID", "Program Name",  "Program Site/Org", "DOB", "Age", "Grade", "School", "Home Language", "Ethnicity", "Race", "Recruitment Method", "Juvenile Justice System History", "US Born", "Pre or Post", "Date Logged", "Date Administered"),
+        'legend' => array("(id)", "(id)", "(name)", "(name)", "(id)", "", "", "(date)", "", "", "(school)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race", "0=N/A; 1=School Referral; 2=Partner Org Referral; 3=Justice System Referral; 4=In-House Recruitment; 5=Walk-in/Self-Referral", "0=N/A; 1=Has been arrested; 2=Has had minimal interactions; 3=Has received 'station adjustment'; 4=No Interaction; 5=Has received 'citation'; 6=School official interaction (Behavioral Incidents)", "","(pre or post)", "(date)", "(date)")),
 
         'enlace_intake_assessments_deid'=>array('db'=>'enlace', 'query'=>
         'SELECT Assessment_ID, Assessments.Participant_ID, Participants_Caring_Adults.Program, Session_Names.Session_Name, Programs.Name, DOB, Age, Grade, Institution_Name, Home_Language, Ethnicity, Race, Recruitment, Justice_System, US_Born, Assessments.Pre_Post, Assessments.Date_Logged, DATE(Participants_Caring_Adults.Date_Logged), BYS_1, BYS_2, BYS_3, BYS_4, BYS_5, BYS_6, BYS_7, BYS_8, BYS_9, BYS_E, BYS_T, JVQ_1, JVQ_2, JVQ_3, JVQ_4, JVQ_5, JVQ_6, JVQ_7, JVQ_8, JVQ_9, JVQ_E, JVQ_T, JVQ_12, US_Born, Check_In, Know_You, Compliment, Crisis_Help, Pay_Attention, KnowImportance, Personal_Advice, Upset_Discussion, Friends, Finish_HS, Stay_Safe, Alive_Well, Happy_Life, Manage_Work, Proud_Parents, Solve_Problems, Interesting_Life, Coping, Cowardice, Self_Care, Anger_Mgmt, Negotiation, Self_Defense, Handle_Others, Self_Awareness, Parent_Approval, Parent_Disapproval, Teasing_Prevention FROM Assessments LEFT JOIN Participants_Baseline_Assessments ON Baseline_Assessment_ID = Baseline_ID LEFT JOIN Participants_Caring_Adults ON Caring_ID = Caring_Adults_ID LEFT JOIN Participants_Future_Expectations ON Future_Id = Future_Expectations_ID LEFT JOIN Participants_Interpersonal_Violence ON Violence_ID = Interpersonal_Violence_ID LEFT JOIN Participants ON Assessments.Participant_Id = Participants.Participant_ID LEFT JOIN Participants_Programs ON Participants.Participant_ID = Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID = Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_ID = Programs.Program_ID ',
@@ -1173,7 +1173,7 @@ function generalized_download($download_name, $permissions, $enlace_session_stri
         'non_admin_string2' => $enlace_session_string,
         'add_access' => 1,
         'query2' => ' WHERE Assessments.Pre_Post = 1 ',
-        'titles' => array("Assessment ID", "Participant ID", "Session ID (of program)", "Session Name",  "Program Name", "DOB", "Age", "Grade", "School", "Home Language", "Ethnicity", "Race", "Recruitment Method", "Juvenile Justice System History", "US Born", "Pre or Post", "Date Logged", "Date Administered"),
+        'titles' => array("Assessment ID", "Participant ID", "Program ID", "Program Name",  "Program Site/Org", "DOB", "Age", "Grade", "School", "Home Language", "Ethnicity", "Race", "Recruitment Method", "Juvenile Justice System History", "US Born", "Pre or Post", "Date Logged", "Date Administered"),
         'legend' => array("(id)", "(id)", "(id)", "session", "(program)", "(date)", "", "", "(school)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race", "0=N/A; 1=School Referral; 2=Partner Org Referral; 3=Justice System Referral; 4=In-House Recruitment; 5=Walk-in/Self-Referral", "0=N/A; 1=Has been arrested; 2=Has had minimal interactions; 3=Has received 'station adjustment'; 4=No Interaction; 5=Has received 'citation'; 6=School official interaction (Behavioral Incidents)", "", "(pre or post)", "(date)", "(date)")),
 
 
@@ -1183,7 +1183,7 @@ function generalized_download($download_name, $permissions, $enlace_session_stri
         'non_admin_string2' => $enlace_session_string,
         'add_access' => 1,
         'query2' => ' WHERE Assessments.Pre_Post = 2 ',
-        'titles' => array("Assessment ID", "Participant ID", "First Name", "Last Name", "Session ID (of program)", "Session Name",  "Program Name", "Pre or Post", "Date Logged", "Date Administered"),
+        'titles' => array("Assessment ID", "Participant ID", "First Name", "Last Name", "Program ID", "Program Name",  "Program Site/Org", "Pre or Post", "Date Logged", "Date Administered"),
         'legend' => array("(id)", "(id)", "(name)", "(name)", "(id)", "session", "(program)", "(pre or post)", "(date)", "(date)")),
 
         'enlace_impact_surveys_deid'=>array('db'=>'enlace', 'query'=>
@@ -1215,11 +1215,11 @@ function generalized_download($download_name, $permissions, $enlace_session_stri
 
         'enlace_mentorship_hours'=>array('db'=>'enlace', 'query'=>        
         'SELECT Participant_ID, Mentorship_Date, Mentorship_Hours_Logged, First_Name, Last_Name, Session_Name FROM Participants_Mentorship INNER JOIN Participants ON Participant_ID=Mentee_ID INNER JOIN Session_Names ON Session_Id=Mentorship_Program',
-        'titles' => array("Participant ID", "Mentorship Date", "Mentorship Hours", "First_Name", "Last_Name", "Session Name")),
+        'titles' => array("Participant ID", "Mentorship Date", "Mentorship Hours", "First_Name", "Last_Name", "Program Name")),
 
         'enlace_mentorship_hours_deid'=>array('db'=>'enlace', 'query'=>        
         'SELECT Participant_ID, Mentorship_Date, Mentorship_Hours_Logged, Session_Name FROM Participants_Mentorship INNER JOIN Participants ON Participant_ID=Mentee_ID INNER JOIN Session_Names ON Session_Id=Mentorship_Program',
-        'titles' => array("Participant ID", "Mentorship Date", "Mentorship Hours", "Session Name")),
+        'titles' => array("Participant ID", "Mentorship Date", "Mentorship Hours", "Program Name")),
 
         'enlace_programs'=>array('db'=>'enlace', 'query'=> 
         'SELECT Programs.*, Institution_Name FROM Programs LEFT JOIN Institutions ON Host=Inst_ID',
@@ -1227,11 +1227,11 @@ function generalized_download($download_name, $permissions, $enlace_session_stri
 
         'enlace_program_participation'=>array('db'=>'enlace', 'query'=> 
         'SELECT DISTINCT Participant_Program_ID, Participants_Programs.Participant_ID, First_Name, Last_Name, Session_Name, Name, Date_Dropped FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID',
-        'titles' => array("Participant_Program Link ID", "Participant ID", "First_Name", "Last_Name", "Session", "Program", "Date Dropped")),
+        'titles' => array("Participant_Program Link ID", "Participant ID", "First_Name", "Last_Name", "Program", "Program Site/Org", "Date Dropped")),
 
         'enlace_program_participation_deid'=>array('db'=>'enlace', 'query'=> 
         'SELECT DISTINCT Participant_Program_ID, Participants_Programs.Participant_ID,  Session_Name, Name, Date_Dropped FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID',
-        'titles' => array("Participant_Program Link ID", "Participant ID", "Session", "Program", "Date Dropped")),
+        'titles' => array("Participant_Program Link ID", "Participant ID", "Program", "Program Site/Org", "Date Dropped")),
 
         'enlace_session_attendance'=>array('db'=>'enlace', 'query'=> 
         'SELECT Participants_Programs.Participant_ID, First_Name, Last_Name, Date_Listed, Session_Name, Name, Absences.Absent FROM Participants_Programs INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID= Absences.Participant_ID)',
@@ -1239,7 +1239,7 @@ function generalized_download($download_name, $permissions, $enlace_session_stri
         'non_admin_string2' => $enlace_session_string,
         'query2' => ' WHERE Participants_Programs.Participant_Program_ID IS NOT NULL ',
         'add_access' => 1,
-        'titles' => array("Participant ID", "First_Name", "Last_Name", "Date_Listed", "Session_Name", "Program", "Present (0), Absent (1), or Not Entered (NULL)")),
+        'titles' => array("Participant ID", "First_Name", "Last_Name", "Date_Listed", "Program_Name", "Program Site/Org", "Present (0), Absent (1), or Not Entered (NULL)")),
 
         'enlace_session_attendance_deid'=>array('db'=>'enlace', 'query'=> 
         'SELECT Participants_Programs.Participant_ID, Date_Listed, Session_Name, Name, Absences.Absent FROM Participants_Programs INNER JOIN Program_Dates ON Participants_Programs.Program_ID=Program_Dates.Program_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID LEFT JOIN Absences ON ( Program_Date_ID=Program_Date AND Participants_Programs.Participant_ID= Absences.Participant_ID)', 
@@ -1247,7 +1247,7 @@ function generalized_download($download_name, $permissions, $enlace_session_stri
         'non_admin_string2' => $enlace_session_string,
         'query2' => ' WHERE Participants_Programs.Participant_Program_ID IS NOT NULL ',
         'add_access' => 1,
-        'titles' => array("Participant ID", "Date_Listed", "Session_Name", "Program", "Present (0), Absent (1), or Not Entered (NULL)")), 
+        'titles' => array("Participant ID", "Date_Listed", "Program_Name", "Program Site/Org", "Present (0), Absent (1), or Not Entered (NULL)")), 
 
         'enlace_session_surveys'=>array('db'=>'enlace', 'query'=> 
 'SELECT Program_Surveys.*, Session_Name, Name FROM Program_Surveys inner join Session_Names ON Program_Surveys.Session_ID=Session_Names.Session_ID INNER JOIN Programs ON Programs.Program_ID=Session_Names.Program_ID', 
@@ -1255,7 +1255,7 @@ function generalized_download($download_name, $permissions, $enlace_session_stri
         'non_admin_string2' => $enlace_session_string,
         'query2' => ' WHERE Program_Surveys.Program_Survey_ID IS NOT NULL ',
         'add_access' => 1,
-        'titles' => array("Participant_Program Link ID", "Program ID", "Question 1", "Question 2", "Question 3", "Question 4", "Question 5", "Question 6", "Question 7", "Question 8", "Question 9", "Question 10", "Question 11", "Question 12", "Question 13", "Question 14", "Question 15", "Question 16", "Date Added", "Session ID", "Session", "Program")),
+        'titles' => array("Participant_Program Link ID", "Program ID", "Question 1", "Question 2", "Question 3", "Question 4", "Question 5", "Question 6", "Question 7", "Question 8", "Question 9", "Question 10", "Question 11", "Question 12", "Question 13", "Question 14", "Question 15", "Question 16", "Date Added", "Session ID", "Program", "Program Site/Org")),
 
         'enlace_sessions'=>array('db'=>'enlace', 'query'=> 
 'SELECT Session_Names.*, Name FROM Session_Names
@@ -1264,7 +1264,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         'non_admin_string2' => $enlace_session_string,
         'query2' => ' WHERE Program_Surveys.Program_Survey_ID IS NOT NULL ',
         'add_access' => 1,
-        'titles' => array("Session ID", "Session Name", "Program  ID", "Start Date", "End Date", "Survey Due Date", "Program")),
+        'titles' => array("Program ID", "Program Name", "Program Site/Org ID", "Start Date", "End Date", "Survey Due Date", "Program Site/Org")),
         
         'enlace_referrals'=>array('db'=>'enlace', 'query'=> 
 'SELECT Referral_ID, Referrals.Participant_ID, referrees.First_Name, referrees.Last_Name, referrers.First_Name, referrers.Last_Name, Institution_Name, origin.Name, destination.Name, Referrals.Date_Logged FROM Referrals LEFT JOIN Participants AS referrees ON Referrals.Participant_Id=referrees.Participant_ID LEFT JOIN Participants AS referrers ON Referrals.Referrer_Person=referrers.Participant_ID LEFT JOIN Institutions ON Referrer_Institution=Inst_ID LEFT JOIN Programs as origin ON Referrer_Program=origin.Program_ID LEFT JOIN Programs as destination ON Program_Referred=destination.Program_ID', 
@@ -1279,12 +1279,12 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         'non_admin_string' => ' WHERE Participant_Program_ID IS NOT NULL ' . $enlace_session_string,
         'add_access' => '1',
         'query2' => ' GROUP BY Session_ID, Participants.Participant_ID',
-        'titles' => array("Participant ID", "Session ID", "First Name", "Last Name", "Program ID", "Program Name", "Session Name", "Number of days attended", "Sum of hours for this session", "Dosage percentage for this session")),
+        'titles' => array("Participant ID", "Session ID", "First Name", "Last Name", "Program ID", "Program Site/Org", "Program Name", "Number of days attended", "Sum of hours for this session", "Dosage percentage for this session")),
 
         'enlace_participant_dosage_deid' => array('db'=>'enlace', 'query'=> 
         'SELECT Participants_Programs.Participant_ID,  Session_ID, Programs.Program_ID, Name, Session_Name FROM Participants_Programs INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_Names.Session_ID INNER JOIN Programs ON Session_Names.Program_Id=Programs.Program_ID INNER JOIN Participants ON Participants_Programs.Participant_ID=Participants.Participant_ID',
         'query2' => ' GROUP BY Session_ID, Participants.Participant_ID',
-        'titles' => array("Participant ID", "Session ID", "Program ID", "Program Name",  "Session Name",
+        'titles' => array("Participant ID", "Session ID", "Program ID", "Program Site/Org",  "Program Name",
                 "Number of days attended",
         "Sum of hours for this session", "Dosage percentage for this session")),
 
@@ -1310,7 +1310,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         'add_access' => '1',
         'query2' => ' WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL AND Post_Assessments.Pre_Post=2 AND Pre_Assessments.Date_Logged IN ( SELECT  MAX(Date_Logged) FROM Assessments WHERE Pre_Post =1 GROUP BY Session_ID, Participant_ID) AND  Post_Assessments.Date_Logged IN ( SELECT  MAX(Date_Logged) FROM Assessments WHERE Pre_Post =2 GROUP BY Session_ID, Participant_ID)  ',
         'query3' => ' GROUP BY Pre_Assessments.Assessment_ID ',
-        'titles' => array("Participant ID", "First Name", "Last Name", "Session ID (of program)", "Session Name",  "Program Name", "Date Entered, Pre Survey", "Date Administered, Pre Survey", "Date Entered, Post Survey", "Date Administered, Post Survey", "DOB", "Age", "Grade", "School", "Home Language", "Ethnicity", "Race", "Recruitment Method", "Juvenile Justice System History"),
+        'titles' => array("Participant ID", "First Name", "Last Name", "Program ID", "Program Name",  "Program Site/Org", "Date Entered, Pre Survey", "Date Administered, Pre Survey", "Date Entered, Post Survey", "Date Administered, Post Survey", "DOB", "Age", "Grade", "School", "Home Language", "Ethnicity", "Race", "Recruitment Method", "Juvenile Justice System History"),
         'legend' => array("(id)", "(name)", "(name)", "(id)", "session", "(program)", "date entered, pre survey", "date administered, pre survey", "date entered, post survey", "date administered, post survey", "DOB", "Age", "Grade", "School", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race", "0=N/A; 1=School Referral; 2=Partner Org Referral; 3=Justice System Referral; 4=In-House Recruitment; 5=Walk-in/Self-Referral", "0=N/A; 1=Has been arrested; 2=Has had minimal interactions; 3=Has received 'station adjustment'; 4=No Interaction; 5=Has received 'citation'; 6=School official interaction (Behavioral Incidents)")), 
 
         'enlace_new_surveys_deid' => array('db'=>'enlace', 'query'=> 
@@ -1320,7 +1320,7 @@ INNER JOIN Programs ON Programs.Program_Id=Session_Names.Program_ID',
         'add_access' => '1',
         'query2' => ' WHERE  Pre_Assessments.Pre_Post=1 AND Post_Caring.Caring_Adults_ID IS NOT NULL AND Post_Assessments.Pre_Post=2 AND Pre_Assessments.Date_Logged IN ( SELECT  MAX(Date_Logged) FROM Assessments WHERE Pre_Post =1 GROUP BY Session_ID, Participant_ID) AND  Post_Assessments.Date_Logged IN ( SELECT  MAX(Date_Logged) FROM Assessments WHERE Pre_Post =2 GROUP BY Session_ID, Participant_ID) ',
         'query3' => ' GROUP BY Pre_Assessments.Assessment_ID ',
-        'titles' => array("Participant ID", "Session ID (of program)", "Session Name", "Program Name", "Date Entered, Pre Survey", "Date Administered, Pre Survey", "Date Entered, Post Survey", "Date Administered, Post Survey", "DOB", "Age", "Grade", "School", "Home Language", "Ethnicity", "Race", "Recruitment Method", "Juvenile Justice System History"),
+        'titles' => array("Participant ID", "Program ID", "Program Name", "Program Site/Org", "Date Entered, Pre Survey", "Date Administered, Pre Survey", "Date Entered, Post Survey", "Date Administered, Post Survey", "DOB", "Age", "Grade", "School", "Home Language", "Ethnicity", "Race", "Recruitment Method", "Juvenile Justice System History"),
         'legend' => array("(id)", "(id)", "session", "(program)", "date entered, pre survey", "date administered, pre survey", "date entered, post survey", "date administered, post survey", "(date)", "", "", "(school)", "0=N/A; 1=Spanish; 2=Other", "0=N/A; 1=Not Hispanic/Latino/Spanish; 2=Yes, Mexican, Mexican-American, Chicago; 3=Yes, Puerto Rican; 4=Yes, Cuban; 5=Yes, Other Hispanic/Latino/Spanish", "0=N/A; 1=White; 2=Black, African-American; 3=American Indian; 4=Asian Indian; 5=Chinese; 6=Filipino; 7=Japanese; 8=Korean; 9=Vietnamese; 10=Other Asian; 11=Native Hawaiian; 12=Guamanian or Chamorro; 13=Samoan; 14=Other Pacific Islander; 15=Some other race", "0=N/A; 1=School Referral; 2=Partner Org Referral; 3=Justice System Referral; 4=In-House Recruitment; 5=Walk-in/Self-Referral", "0=N/A; 1=Has been arrested; 2=Has had minimal interactions; 3=Has received 'station adjustment'; 4=No Interaction; 5=Has received 'citation'; 6=School official interaction (Behavioral Incidents)")), 
 
         

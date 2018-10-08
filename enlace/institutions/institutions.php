@@ -45,7 +45,7 @@ include "../header.php";
 </script>
 
 <div class="content_block">
-<h3>Institutions</h3><hr/><br/>
+<h3>Organizations</h3><hr/><br/>
 
 <!--
 List of institutions that have been added to the database.
@@ -92,7 +92,7 @@ include "../include/dbconnclose.php";
         Add new institution here: 
         -->
         
-            <h4 onclick="$('#add_inst').slideToggle();" style="cursor:pointer;">Add New Institution...</h4>
+            <h4 onclick="$('#add_inst').slideToggle();" style="cursor:pointer;">Add New Organization...</h4>
             <div id="add_inst"><table class="inner_table" style="border:2px solid #696969;font-size:.9em;width:50%;margin-left:auto;margin-right:auto;">
                 <tr><td><strong>Name:</strong></td><td><input type="text" id="new_name"></td></tr>
                 <tr><td><strong>Address:</strong></td><td><input id="st_num_new" style="width:40px;"/> 
@@ -147,7 +147,7 @@ include "../include/dbconnclose.php";
                     </td></tr>
                 <tr><td><strong>Contact phone:</strong></td><td><input type="text" id="new_phone"></td></tr>
                 <tr><td><strong>Contact Email:</strong></td><td><input type="text" id="new_email"></td></tr>
-                <tr><td colspan="2"><input type="button" value="Add Institution" onclick="
+                <tr><td colspan="2"><input type="button" value="Add Organization" onclick="
                     if (document.getElementById('relative_search')){var point=document.getElementById('relative_search').value;}
                     else{var point='';}
                     //alert(point);

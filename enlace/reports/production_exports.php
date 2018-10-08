@@ -44,7 +44,7 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
 
     <tr bgcolor="#cccccc">
         <td class="all_projects">
-            All campaigns that are associated with an institution.
+            All campaigns that are associated with an organization.
         </td>
         <td class="all_projects">
             <a href="/include/generalized_download_script.php?download_name=enlace_inst_campaigns">
@@ -68,7 +68,7 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
 
     <tr bgcolor="#cccccc">
         <td class="all_projects">
-            All institutions.
+            All organizations.
         </td>
         <td class="all_projects">
             <a href="/include/generalized_download_script.php?download_name=enlace_institutions_deid">
@@ -169,7 +169,7 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
 
     <tr>
         <td class="all_projects">
-            All programs.
+            All program site/orgs.
         </td>
         <td class="all_projects">
             <a href="/include/generalized_download_script.php?download_name=enlace_programs">
@@ -228,7 +228,7 @@ user_enforce_has_access($Enlace_id, $DataEntryAccess);
 
     <tr>
         <td class="all_projects">
-            All sessions (by program).
+            All programs (by program site/org).
         </td>
         <td class="all_projects">
             <a href="/include/generalized_download_script.php?download_name=enlace_sessions">Download.</a>
