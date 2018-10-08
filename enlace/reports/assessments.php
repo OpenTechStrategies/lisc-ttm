@@ -264,6 +264,28 @@ if (isset($_POST['submit_btn_assessments'])) {
                 $current_question = "";
                 $current_timing = "";
                 while ($result = mysqli_fetch_row($show_results)) {
+                    //need to find the denominator based on pre/post and program (and whether those are applicable)
+                    //so far so reasonably good, but it doesn't really work for the pre/post/null denominators.  need to differentiate those earlier.
+                    //if ($_POST['program_select']==0){
+                    $program_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['program_select']);
+                    if (!isset($_POST['program_select'])) {
+                        if ($table != 'Participants_Baseline_Assessments') {
+                            $get_denom = "SELECT COUNT(*) FROM $table WHERE Pre_Post=" . $result[2];
+                        } else {
+                            $get_denom = "SELECT COUNT(*) FROM $table";
+                        }
+                    } else {
+                        if ($table != 'Participants_Baseline_Assessments') {
+                            $get_denom = "SELECT COUNT(*) FROM $table WHERE Program=" . $program_select_sqlsafe . " AND Pre_Post=" . $result[2];
+                            $get_denom = "SELECT COUNT(*) FROM $table WHERE " . $program_string . " AND Pre_Post=" . $result[2];
+                        } else {
+                            $get_denom = "SELECT COUNT(*) FROM $table WHERE Program=" . $program_select_sqlsafe . "";
+                            $get_denom = "SELECT COUNT(*) FROM $table WHERE " . $program_string . "";
+                        }
+                    }
+                    $denom_ct = mysqli_query($cnnEnlace, $get_denom);
+                    $this_denom = mysqli_fetch_row($denom_ct);
+                    $denom = $this_denom[0];
                     ?><tr>
                         <td class="all_projects"><?php
                             /* If question has changed, show new question */
@@ -279,15 +301,22 @@ if (isset($_POST['submit_btn_assessments'])) {
                                 $current_timing = $result[2];
                                 if ($current_timing == 1) {
                                     ?>
-                                <tr><td class="all_projects" colspan="2"><i>Pre-test</i></td></tr>
+                                <tr><td class="all_projects" colspan="2"><i>Pre-test (total: <?php echo $denom ?>)</i></td></tr>
                                 <?php
-                            } elseif ($current_timing == 2) {
+                                } elseif ($current_timing == 2) {
+                                    ?>
+                                    <tr><td class="all_projects" colspan="2"><i>Post-test (total: <?php echo $denom ?>)</i></td></tr>
+                                    <?php
+                                }
+                            }
+                        } else {
+                            if ($current_timing == "") {
+                                $current_timing = "Baseline";
                                 ?>
-                                <tr><td class="all_projects" colspan="2"><i>Post-test</i></td></tr>
+                                    <tr><td class="all_projects" colspan="2"><i>Baseline (total: <?php echo $denom ?>)</i></td></tr>
                                 <?php
                             }
                         }
-                    }
                     ?><tr><td class="all_projects"></td>
                         <td class="all_projects"><?php
                             /* show pre/post, unless still in baseline assessment, which is only pre */
@@ -299,28 +328,6 @@ if (isset($_POST['submit_btn_assessments'])) {
                             ?></td>
                         <td class="all_projects"><?php echo $result[0]; ?></td>
                         <td class="all_projects"><?php
-                            //need to find the denominator based on pre/post and program (and whether those are applicable)
-                            //so far so reasonably good, but it doesn't really work for the pre/post/null denominators.  need to differentiate those earlier.
-                            //if ($_POST['program_select']==0){
-                            $program_select_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['program_select']);
-                            if (!isset($_POST['program_select'])) {
-                                if ($table != 'Participants_Baseline_Assessments') {
-                                    $get_denom = "SELECT COUNT(*) FROM $table WHERE Pre_Post=" . $result[2];
-                                } else {
-                                    $get_denom = "SELECT COUNT(*) FROM $table";
-                                }
-                            } else {
-                                if ($table != 'Participants_Baseline_Assessments') {
-                                    $get_denom = "SELECT COUNT(*) FROM $table WHERE Program=" . $program_select_sqlsafe . " AND Pre_Post=" . $result[2];
-                                    $get_denom = "SELECT COUNT(*) FROM $table WHERE " . $program_string . " AND Pre_Post=" . $result[2];
-                                } else {
-                                    $get_denom = "SELECT COUNT(*) FROM $table WHERE Program=" . $program_select_sqlsafe . "";
-                                    $get_denom = "SELECT COUNT(*) FROM $table WHERE " . $program_string . "";
-                                }
-                            }
-                            $denom_ct = mysqli_query($cnnEnlace, $get_denom);
-                            $this_denom = mysqli_fetch_row($denom_ct);
-                            $denom = $this_denom[0];
                             if ($denom != 0) {
                                 echo number_format(($result[0] / $denom) * 100) . "%";
                             } else {
@@ -455,13 +462,20 @@ if (isset($_POST['submit_btn_assessments'])) {
                         $current_timing = $result[2];
                         if ($current_timing == 1) {
                             ?>
-                            <tr><td class="all_projects" colspan="2"><i>Pre-test</i></td></tr>
+                            <tr><td class="all_projects" colspan="2"><i>Pre-test (total: <?php echo $pre_denom ?>)</i></td></tr>
                             <?php
                         } elseif ($current_timing == 2) {
                             ?>
-                            <tr><td class="all_projects" colspan="2"><i>Post-test</i></td></tr>
+                            <tr><td class="all_projects" colspan="2"><i>Post-test (total: <?php echo $post_denom ?>)</i></td></tr>
                             <?php
                         }
+                    }
+                } else {
+                    if ($current_timing == "") {
+                        $current_timing = "Baseline";
+                        ?>
+                            <tr><td class="all_projects" colspan="2"><i>Baseline (total: <?php echo $denom ?>)</i></td></tr>
+                        <?php
                     }
                 }
                 ?>
