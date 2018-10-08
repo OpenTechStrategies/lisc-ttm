@@ -37,10 +37,33 @@ $num_days_hidden = get_setting($NumDaysHiddenSetting);
 Shows all program information.
 -->
 
+<div class="middlepopup">
+    <div class="x-closer">X</div>
+    <h2>Link for Survey</h2>
+    <p>Participant can enter the following code to fill out the survey from the login screen (case doesn't matter):</p>
+    <p class="survey-code code">CODE</p>
+    <p>Or copy and paste the following link:</p>
+    <p class="survey-code"><a href="link">Link</a></p>
+</div>
 <div style="display:none;">
     <?php include "../include/datepicker_wtw.php"; ?></div>
 
 <script type="text/javascript">
+    function show_survey_code(participant_id, session_id, pre_post) {
+        $.post(
+            "../ajax/survey_code.php",
+            {
+                participant_id: participant_id,
+                session_id: session_id,
+                pre_post: pre_post
+            },
+            function(response) {
+                $('div.middlepopup p.code').html(response.code);
+                $('div.middlepopup a').prop('href', '../participants/survey.php?code=' + response.code);
+                $('div.middlepopup').show();
+            });
+    }
+
     $(document).ready(function() {
         $('#programs_selector').addClass('selected');
         $('.edit_program').hide();
@@ -51,7 +74,11 @@ Shows all program information.
         $('tr.oldsession').hide();
         $('tr.oldsession_surveys').hide();
         $('tr.oldsession_program_dates').hide();
+        $('div.middlepopup div.x-closer').on("click", function() {
+            $('div.middlepopup').hide();
+        });
     });</script>
+
 
 <div class="content_block">
     <h3>Program Profile: <?php echo $program->name; ?></h3><hr/><br/>
@@ -437,7 +464,31 @@ Shows all program information.
                 <!--List of participants in this program, sorted by session:-->
                 <h4>Participants</h4>
                 <?php
-                $get_all_participants = "SELECT Session_Names.Session_ID, Session_Names.Session_Name, Session_Names.End_Date, Participants.Participant_ID, Participants_Programs.Date_Dropped, Participant_Program_ID, Participants.First_Name, Participants.Last_Name, COUNT(Assessments.Assessment_ID) FROM Participants_Programs INNER JOIN Participants ON Participants.Participant_ID=Participants_Programs.Participant_ID INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_ID LEFT JOIN Assessments ON (Participants.Participant_ID = Assessments.Participant_ID AND Session_Names.Session_ID = Assessments.Session_ID) WHERE Session_Names.Program_ID='$program->program_id' GROUP BY Session_Names.Session_ID, Participants.Participant_ID ORDER BY Session_Names.Session_ID, Participants.Last_Name";
+                $get_all_participants =
+                     "SELECT Session_Names.Session_ID, " .
+                     "       Session_Names.Session_Name, " .
+                     "       Session_Names.End_Date, " .
+                     "       Participants.Participant_ID, " .
+                     "       Participants_Programs.Date_Dropped, " .
+                     "       Participant_Program_ID, " .
+                     "       Participants.First_Name, " .
+                     "       Participants.Last_Name, " .
+                     "       COUNT(IntakeAssessments.Assessment_ID) AS Num_Intake_Assessments, " .
+                     "       COUNT(ImpactAssessments.Assessment_ID) AS Num_Impact_Assessments " .
+                     "FROM Participants_Programs " .
+                     "INNER JOIN Participants ON Participants.Participant_ID=Participants_Programs.Participant_ID " .
+                     "INNER JOIN Session_Names ON Participants_Programs.Program_ID=Session_ID " .
+                     "LEFT JOIN Assessments AS IntakeAssessments ON " .
+                     "          (Participants.Participant_ID = IntakeAssessments.Participant_ID " .
+                     "          AND Session_Names.Session_ID = IntakeAssessments.Session_ID  " .
+                     "          AND IntakeAssessments.Pre_Post = 1) " .
+                     "LEFT JOIN Assessments AS ImpactAssessments ON " .
+                     "          (Participants.Participant_ID = ImpactAssessments.Participant_ID " .
+                     "          AND Session_Names.Session_ID = ImpactAssessments.Session_ID  " .
+                     "          AND ImpactAssessments.Pre_Post = 2) " .
+                     "WHERE Session_Names.Program_ID='$program->program_id' " .
+                     "GROUP BY Session_Names.Session_ID, Participants.Participant_ID " .
+                     "ORDER BY Session_Names.Session_ID, Participants.Last_Name";
 
                 include "../include/dbconnopen.php";
                 $all_participants = mysqli_query($cnnEnlace, $get_all_participants);
@@ -450,10 +501,10 @@ Shows all program information.
                     -->
                     <tr style="font-size:.9em;">
                         <th style="width:45%">Participant</th>
-                        <th>Dosage Percentage</th>
-                        <th>Total hours in this program</th>
-                        <th>Total hours across funded programs</th>
-                        <th>Intake survey completed</th>
+                        <th>Dosage %</th>
+                        <th>Total hrs<br/>in this<br/>program</th>
+                        <th>Total hrs<br/>across<br/>programs</th>
+                        <th>Survey<br/>completed</th>
                         <?php
                         //if an administrator
                         if ($USER->has_site_access($Enlace_id, $AdminAccess)) {
@@ -572,7 +623,31 @@ Shows all program information.
     echo $all_hours;
     ?>
                             </td>
-                            <td><?php echo ($all_p['COUNT(Assessments.Assessment_ID)'] > 0) ? 'Yes' : 'No'; ?></td>
+                            <td>
+                                Intake:
+                                <?php if ($all_p['Num_Intake_Assessments'] > 0) { ?>
+                                    Yes
+                                <?php } else { ?>
+                                    No (<a href='javascript:;' onclick="
+                                           show_survey_code(
+                                             <?php echo $all_p["Participant_ID"]; ?>,
+                                             <?php echo $all_p["Session_ID"]; ?>,
+                                             1);
+                                        ">link</a>)
+                                <?php } ?>
+                                <br>
+                                Impact:
+                                <?php if ($all_p['Num_Impact_Assessments'] > 0) { ?>
+                                    Yes
+                                <?php } else { ?>
+                                    No (<a href='javascript:;' onclick="
+                                           show_survey_code(
+                                             <?php echo $all_p["Participant_ID"]; ?>,
+                                             <?php echo $all_p["Session_ID"]; ?>,
+                                             2);
+                                        ">link</a>)
+                                <?php } ?>
+                            </td>
                                 <?php
                                 //if an administrator
                                 if ($USER->has_site_access($Enlace_id, $AdminAccess)) {

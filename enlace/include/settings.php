@@ -27,6 +27,7 @@ if (!function_exists("get_setting")) {
      */
 
     $NumDaysHiddenSetting = "num_days_hidden";
+    $SurveyEntryPointSalt = "survey_entry_point_salt";
 
     function get_setting_tuple ( $setting_name ) {
         include $_SERVER['DOCUMENT_ROOT'] . "/enlace/include/dbconnopen.php";

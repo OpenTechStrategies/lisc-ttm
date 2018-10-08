@@ -41,7 +41,7 @@
             <td class="menu_item"><a href="/enlace/campaigns/campaigns.php" id="campaigns_selector">Campaigns</a></td>
             <td class="menu_item"><a href="/enlace/events/events.php" id="events_selector">Events</a></td>
             <td class="menu_item"><a href="/enlace/reports/reports.php" id="reports_selector">Reports</a></td>
-            <?php if ($USER->has_site_access($Enlace_id, $AdminAccess)) { ?>
+            <?php if ($USER && $USER->has_site_access($Enlace_id, $AdminAccess)) { ?>
                 <td class="menu_item"><a href="/enlace/system/settings.php" id="settings_selector">Settings</a>
             <?php } ?>
             <td class="menu_item"><a href="/index.php?action=logout">Log Out</a>
