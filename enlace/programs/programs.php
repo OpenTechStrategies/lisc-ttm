@@ -252,7 +252,23 @@ List of all programs, and, at the bottom, a place to add a new program.
             -->
             <tr><td><strong>Name a session:</strong><br>
                     <span class="helptext">You must include a first session name<br> or the program will not display correctly</span></td>
-                <td><input type="text" id="new_session_name"></td></tr>
+                <td>
+                    <select id="new_session_name_year">
+                        <?php
+                            $last_year = (int)date('Y') - 1;
+                            for($i = 0 ; $i < 5 ; $i++) {
+                                $year = $i + $last_year;
+                                echo "<option value=\"$year\">$year</option>";
+                            }
+                        ?>
+                        <option value="">N/A</option>
+                    </select>
+                    <select id="new_session_name_type">
+                        <option value="School">School</option>
+                        <option value="Summer">Summer</option>
+                        <option value="">N/A</option>
+                    </select>
+                    <input type="text" id="new_session_name"></td></tr>
             <tr><td><strong>Session Start:</strong></td><td><input type="text" id="new_session_start" class="addDP"></td></tr>
             <tr><td><strong>Session End:</strong></td><td><input type="text" id="new_session_end" class="addDP"></td></tr>
             <tr><td><strong>Session Surveys Due:</strong></td><td><span class="helptext">Surveys will be due one week before the entered end date for this session.</span>
@@ -271,6 +287,8 @@ List of all programs, and, at the bottom, a place to add a new program.
                                                            name: document.getElementById('new_name').value,
                                                            host: document.getElementById('new_host').value,
                                                            session: document.getElementById('new_session_name').value,
+                                                           session_year: document.getElementById('new_session_name_year').value,
+                                                           session_type: document.getElementById('new_session_name_type').value,
                                                            start: document.getElementById('new_session_start').value,
                                                            end: document.getElementById('new_session_end').value
                                                                    // survey: document.getElementById('new_session_surveys_due').value

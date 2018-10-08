@@ -162,6 +162,8 @@ Shows all program information.
             {
                 action: 'new_session',
                 name: document.getElementById('new_session_name').value,
+                session_year: document.getElementById('new_session_name_year').value,
+                session_type: document.getElementById('new_session_name_type').value,
                 program: '<?php echo $program->program_id; ?>',
                 start: document.getElementById('new_session_start').value,
                 end: document.getElementById('new_session_end').value,
@@ -520,8 +522,26 @@ Shows all program information.
                     <span class="helptext">Adding a new session of the program allows you to add a new set of participants and dates.  It's appropriate for 
                         adding spring and fall versions of a program, or a new year altogether.  Be sure to title the session clearly - "Spring 2013" is better than "Spring."</span>
                     <br/><br/>
-                    <table class="enlace_session_edit" style="width:350px;">
-                        <tr><td><strong>Name: </strong></td><td><input type="text" id="new_session_name" style="width:150px;"></td></tr>
+                    <table class="enlace_session_edit" style="width:550px;">
+                        <tr><td><strong>Name: </strong></td>
+                            <td>
+                                <select id="new_session_name_year">
+                                    <?php
+                                        $last_year = (int)date('Y') - 1;
+                                        for($i = 0 ; $i < 5 ; $i++) {
+                                            $year = $i + $last_year;
+                                            echo "<option value=\"$year\">$year</option>";
+                                        }
+                                    ?>
+                                    <option value="">N/A</option>
+                                </select>
+                                <select id="new_session_name_type">
+                                    <option value="School">School</option>
+                                    <option value="Summer">Summer</option>
+                                    <option value="">N/A</option>
+                                </select>
+                                <input type="text" id="new_session_name" style="width:150px;">
+                            </td></tr>
                         <tr><td><strong>Start Date: </strong></td><td><input type="text" id="new_session_start" class="addDP"></td></tr>
                         <tr><td><strong>End Date: </strong></td><td><input type="text" id="new_session_end" class="addDP"></td></tr>
 
