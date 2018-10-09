@@ -54,14 +54,24 @@ while($row = mysqli_fetch_row($db_attendance_data)) {
 }
 
 $program_date_ids_sql = "SELECT Program_Date_ID FROM Program_Dates WHERE Program_ID = '$session_id_sqlsafe' ORDER BY Date_Listed ASC"; 
-$program_date_ids = mysqli_fetch_all(mysqli_query($cnnEnlace, $program_date_ids_sql), MYSQLI_ASSOC);
+
+$program_date_ids = [];
+$program_date_ids_result = mysqli_query($cnnEnlace, $program_date_ids_sql);
+while($row = mysqli_fetch_array($program_date_ids_result, MYSQLI_ASSOC)) {
+   array_push($program_date_ids, $row);
+}
 
 $participants_sql = "SELECT Participants.Participant_ID, Participants.Last_Name, Participants.First_Name, DATE(Participants_Programs.Date_Dropped) AS Date_Dropped " .
     "FROM Participants_Programs " .
     "LEFT JOIN Participants ON Participants.Participant_ID = Participants_Programs.Participant_ID " . 
     "WHERE Program_ID = '$session_id_sqlsafe' AND Participants.Participant_ID > 0 " .
     "ORDER BY Participants.Last_Name ASC"; 
-$participants = mysqli_fetch_all(mysqli_query($cnnEnlace, $participants_sql), MYSQLI_ASSOC);
+
+$participants = [];
+$participants_result = mysqli_query($cnnEnlace, $participants_sql);
+while($row = mysqli_fetch_array($participants_result, MYSQLI_ASSOC)) {
+   array_push($participants, $row);
+}
 
 header('Content-Type: text/csv; charset=utf-8');
 header("Content-Disposition: attachment; filename=$download_name.csv");
