@@ -105,7 +105,7 @@ $future_id_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['future_id']);
 $assessment_id_sqlsafe = mysqli_real_escape_string($cnnEnlace, $_POST['assessment_id']);
 $draft_sqlsafe=mysqli_real_escape_string($cnnEnlace, $_POST['draft']);
 
-if (!$USER->has_site_access($Enlace_id, $AdminAccess)) {
+if ($anonymous_entry || !$USER->has_site_access($Enlace_id, $AdminAccess)) {
     date_default_timezone_set('America/Chicago');
     $entered_date = strtotime($base_date_sqlsafe);
     if($_POST['base_date'] == '' || $entered_date > strtotime('now') || $entered_date < strtotime('-6 weeks')) {
